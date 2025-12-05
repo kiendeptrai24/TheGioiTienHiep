@@ -15,14 +15,14 @@ public class ActorController : TGTHNetworkBehaviour
     [SerializeField] private float turnSpeed = 10f;
     [SerializeField] private float moveSpeed = 5f;
     private ICharacterRotation characterRotation;
-    private List<Inputable> inputables = new();
+    private Inputable inputable;
     public IMoveable moveable;
     protected override void Awake()
     {
         if (currentState == ActorState.TopDown)
         {
             characterRotation = new TopDownRotation();
-            inputables.Add(new KeyboardInput(new InputHandler()));
+            inputable = new KeyboardInput(new InputHandler());
             moveable = new TopDownMovement();
         }
     }
@@ -35,28 +35,18 @@ public class ActorController : TGTHNetworkBehaviour
 
     private void TopDownControl()
     {
-        Vector2 inputDirection = Vector2.zero;
-        foreach (var inputResult in inputables)
-        {
-            if (inputResult.GetInputDirection().magnitude > 0)
-                inputDirection = inputResult.GetInputDirection();
-        }
+        Vector2 inputDirection = inputable.GetInputDirection();
         characterRotation.Rotate(transform, new Vector3(inputDirection.x, 0, inputDirection.y), turnSpeed);
         moveable.Move(transform, inputDirection, moveSpeed);
     }
 
     private void OnEnable()
     {
-        foreach (var inputable in inputables)
-        {
-            inputable.EnableInput();
-        }
+        
+        inputable.EnableInput();
     }
     private void OnDisable()
     {
-        foreach (var inputable in inputables)
-        {
-            inputable.DisableInput();
-        }
+        inputable.DisableInput();
     }
 }

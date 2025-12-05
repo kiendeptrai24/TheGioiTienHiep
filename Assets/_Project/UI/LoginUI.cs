@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class LoginUI : MonoBehaviour
 {
     private NetworkManager networkManager;
+    [SerializeField] private GameObject inGamePanel;
     [SerializeField] private Button startClientBtn;
     [SerializeField] private Button startHostBtn;
     [SerializeField] private Button startServerBtn;
@@ -52,17 +53,11 @@ public class LoginUI : MonoBehaviour
             ShowLoginPanel(false);
         }
     }
-
-    private void ShowDisconnectButton(bool show)
-    {
-        disconnectBtn.gameObject.SetActive(show);
-    }
-
     private void ShowLoginPanel(bool show)
     {
         startClientBtn.gameObject.SetActive(show);
         startHostBtn.gameObject.SetActive(show);
         startServerBtn.gameObject.SetActive(show);
-        ShowDisconnectButton(!show);
+        inGamePanel.SetActive(!show);
     }
 }
