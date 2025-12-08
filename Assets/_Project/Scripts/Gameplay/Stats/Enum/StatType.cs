@@ -15,6 +15,7 @@ public enum StatType
     MagicalDefense,     // Kháng phép / spiritual defense
     SpiritDefense,      // Kháng tinh thần / mind defense
 
+
     // Xuyên
     SpiritPenetration,  // Xuyên phòng ngự tinh thần
     MindPenetration,    // Nếu bạn muốn tách riêng Mind / Spirit
@@ -29,8 +30,9 @@ public enum StatType
     SkillPoints,    // Điểm kỹ năng
     CombatPower,    // Lực chiến / Battle Power
 
-    // Nếu vẫn dùng
-    CritChance,
-    CritPower,
-    Evasion
+    SpiritRange,    // Phạm vi linh thức điểm (Spirit Range / Tầm linh thức)
+    
+    CritChance, // Tỷ lệ chí mạng
+    CritPower, //Sát thương chí mạng
+    Evasion, //Né tránh
 }

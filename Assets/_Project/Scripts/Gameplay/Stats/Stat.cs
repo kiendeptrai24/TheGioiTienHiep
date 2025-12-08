@@ -11,19 +11,12 @@ public class Stat
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
-    public NetworkVariable<StatType> StatTypeNet = new NetworkVariable<StatType>(
-        0,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server
-    );
-
-
     [SerializeField] private float baseValue;
     public StatType statType;
     public NetworkList<int> modifiers = new NetworkList<int>(
-        new List<int>(),                        // initial values
-        NetworkVariableReadPermission.Everyone, // read
-        NetworkVariableWritePermission.Server   // write
+        new List<int>(),
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server  
     );
 
 
