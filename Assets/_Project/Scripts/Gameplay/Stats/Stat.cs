@@ -13,8 +13,9 @@ public class Stat
     );
     [SerializeField] private float baseValue;
     public StatType statType;
-    public NetworkList<int> modifiers = new NetworkList<int>(
-        new List<int>(),
+    public List<float> modifiers = new List<float>();
+    public NetworkList<float> Modifiers = new NetworkList<float>(
+        new List<float>(),
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server  
     );
@@ -40,17 +41,19 @@ public class Stat
         }
         return finalValue;
     }
-    public void SetDefaultValue(StatType _type, int value)
+    public void SetDefaultValue(StatType _type, float value)
     {
         statType = _type;
         baseValue = value;
     }
-    public void AddModifier(int _modifier)
+    public void AddModifier(float _modifier)
     {
         modifiers.Add(_modifier);
+        Modifiers.Add(_modifier);
     }
-    public void RemoveModifier(int _modifier)
+    public void RemoveModifier(float _modifier)
     {
         modifiers.Remove(_modifier);
+        Modifiers.Remove(_modifier);
     }
 }

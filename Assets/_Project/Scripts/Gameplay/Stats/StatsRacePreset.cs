@@ -1,11 +1,12 @@
 
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using UnityEditor;
 #endif
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewStatsPreset", menuName = "RPG/Stats/Stats Race Preset")]
-public class StatsRacePreset : ScriptableObject
+public class StatsRacePreset : ScriptableObject , IStatProvider
 {
     [Header("Race type")]
     public RaceType raceType;
@@ -130,5 +131,32 @@ public class StatsRacePreset : ScriptableObject
         // Speed / Range
         spiritRange   = new Stat(StatType.SpiritRange,   spiritRangeMul);
         movementSpeed = new Stat(StatType.MovementSpeed, moveSpeedMul);
+    }
+
+    public void ApplyStats(Dictionary<StatType, Stat> stats)
+    {
+        stats.TryGetValue(StatType.Health, out Stat healthStat);
+        stats.TryGetValue(StatType.Mana, out Stat manaStat);
+        stats.TryGetValue(StatType.Spirit, out Stat spiritStat);
+        stats.TryGetValue(StatType.PhysicalDamage, out Stat physicalDamageStat);
+        stats.TryGetValue(StatType.MagicalDamage, out Stat magicalDamageStat);
+        stats.TryGetValue(StatType.SpiritDamage, out Stat spiritDamageStat);
+        stats.TryGetValue(StatType.PhysicalDefense, out Stat physicalDefenseStat);
+        stats.TryGetValue(StatType.MagicalDefense, out Stat magicalDefenseStat);
+        stats.TryGetValue(StatType.SpiritDefense, out Stat spiritDefenseStat);
+        stats.TryGetValue(StatType.MovementSpeed, out Stat movementSpeedStat);
+        stats.TryGetValue(StatType.SpiritRange, out Stat spiritRangeStat);
+
+        healthStat.AddModifier(healthStat.GetValue() * health.GetValue());
+        manaStat.AddModifier(manaStat.GetValue() * mana.GetValue());
+        spiritStat.AddModifier(spiritStat.GetValue() * spirit.GetValue());
+        physicalDamageStat.AddModifier(physicalDamageStat.GetValue() * physicalDamage.GetValue());
+        magicalDamageStat.AddModifier(magicalDamageStat.GetValue() * magicalDamage.GetValue());
+        spiritDamageStat.AddModifier(spiritDamageStat.GetValue() * spiritDamage.GetValue());
+        physicalDefenseStat.AddModifier(physicalDefenseStat.GetValue() * physicalDefense.GetValue());
+        magicalDefenseStat.AddModifier(magicalDefenseStat.GetValue() * magicalDefense.GetValue());
+        spiritDefenseStat.AddModifier(spiritDefenseStat.GetValue() * spiritDefense.GetValue());
+        movementSpeedStat.AddModifier(movementSpeedStat.GetValue() * movementSpeed.GetValue());
+        spiritRangeStat.AddModifier(spiritRangeStat.GetValue() * spiritRange.GetValue());
     }
 }

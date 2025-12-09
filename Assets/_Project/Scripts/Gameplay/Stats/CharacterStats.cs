@@ -1,13 +1,17 @@
 
 
+using System;
 using System.Collections.Generic;
-using NUnit.Framework;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class CharacterStats : TGTHNetworkBehaviour
 {
     [Header("Preset base stats")]
-    public StatsRealmPreset statsPreset;
+    public StatsRealmPreset statsRealmPreset;
+    public StatsRacePreset statsRacePreset;
+    public StatsCultivationPathPreset StatsCultivationPathPreset;
 
     // Dictionary runtime chứa toàn bộ Stat
     private Dictionary<StatType, Stat> stats = new Dictionary<StatType, Stat>();
@@ -32,53 +36,29 @@ public class CharacterStats : TGTHNetworkBehaviour
     public float CombatPower => GetStatValue(StatType.CombatPower);
     protected override void Awake()
     {
-        InitStatsFromPreset();
+        InitStatsPreset();
     }
 
-    private void InitStatsFromPreset()
+    private void InitStatsPreset()
+    {
+        ResetStatsModifiers();
+        AddStatsFromPreset();
+    }
+    [ContextMenu("Reset Stats Modifiers")]
+    private void ResetStatsModifiers()
     {
         stats.Clear();
-
-        if (statsPreset == null)
+        foreach (StatType type in Enum.GetValues(typeof(StatType)))
         {
-            Debug.LogWarning($"{name} chưa gán StatsPreset!");
-            return;
+            stats.Add(type, new Stat(type, 0f));
         }
-
-        // Tạo Stat từ preset (base value)
-        stats.Add(StatType.Health, new Stat(StatType.Health, statsPreset.health));
-        stats.Add(StatType.Mana, new Stat(StatType.Mana, statsPreset.mana));
-        stats.Add(StatType.Spirit, new Stat(StatType.Spirit, statsPreset.spirit));
-
-        stats.Add(StatType.PhysicalDamage, new Stat(StatType.PhysicalDamage, statsPreset.physicalDamage));
-        stats.Add(StatType.MagicalDamage, new Stat(StatType.MagicalDamage, statsPreset.magicalDamage));
-        stats.Add(StatType.SpiritDamage, new Stat(StatType.SpiritDamage, statsPreset.spiritDamage));
-        stats.Add(StatType.CritChance, new Stat(StatType.CritChance, statsPreset.critChance));
-        stats.Add(StatType.CritPower, new Stat(StatType.CritPower, statsPreset.critPower));
-
-        stats.Add(StatType.PhysicalDefense, new Stat(StatType.PhysicalDefense, statsPreset.physicalDefense));
-        stats.Add(StatType.MagicalDefense, new Stat(StatType.MagicalDefense, statsPreset.magicalDefense));
-        stats.Add(StatType.SpiritDefense, new Stat(StatType.SpiritDefense, statsPreset.spiritDefense));
-        stats.Add(StatType.Evasion, new Stat(StatType.Evasion, statsPreset.evasion));
-        stats.Add(StatType.SpiritPenetration, new Stat(StatType.SpiritPenetration, statsPreset.spiritPenetration));
-        stats.Add(StatType.MindPenetration, new Stat(StatType.MindPenetration, statsPreset.mindPenetration));
-
-        stats.Add(StatType.MovementSpeed, new Stat(StatType.MovementSpeed, statsPreset.movementSpeed));
-        stats.Add(StatType.AttackSpeed, new Stat(StatType.AttackSpeed, statsPreset.attackSpeed));
-        stats.Add(StatType.CastSpeed, new Stat(StatType.CastSpeed, statsPreset.castSpeed));
-
-        stats.Add(StatType.Potential, new Stat(StatType.Potential, statsPreset.potential));
-        stats.Add(StatType.SkillPoints, new Stat(StatType.SkillPoints, statsPreset.skillPoints));
-        stats.Add(StatType.CombatPower, new Stat(StatType.CombatPower, statsPreset.combatPower));
-
-        // Nếu muốn đảm bảo mọi StatType đều tồn tại (kể cả chưa set trong preset)
-        foreach (StatType type in System.Enum.GetValues(typeof(StatType)))
-        {
-            if (!stats.ContainsKey(type))
-            {
-                stats.Add(type, new Stat(type, 0f));
-            }
-        }
+    }
+    [ContextMenu("Add Stats From Preset")]
+    private void AddStatsFromPreset()
+    {
+        statsRealmPreset.ApplyStats(stats);
+        statsRacePreset.ApplyStats(stats);
+        StatsCultivationPathPreset.ApplyStats(stats);
     }
     public float GetStatValue(StatType type)
     {
@@ -98,5 +78,6 @@ public class CharacterStats : TGTHNetworkBehaviour
             debugMsg += $"{stat.Key}: {stat.Value.GetValue()}\n";
         }
         Debug.Log(debugMsg);
+
     }
 }

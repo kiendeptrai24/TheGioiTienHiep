@@ -1,10 +1,11 @@
 
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using UnityEditor;
 #endif
 using UnityEngine;
 [CreateAssetMenu(fileName = "NewStatsPreset", menuName = "RPG/Stats/Stats Cultivation Path Preset")]
-public class StatsCultivationPathPreset : ScriptableObject
+public class StatsCultivationPathPreset : ScriptableObject , IStatProvider
 {
     [Header("Main cultivation type")]
     public EssenceType essenceType;
@@ -139,5 +140,42 @@ public class StatsCultivationPathPreset : ScriptableObject
         // Counter info
         counterEssenceType = counterType;
         counterPercentage  = counterPercent;
+    }
+
+    public void ApplyStats(Dictionary<StatType, Stat> stats)
+    {
+        stats.TryGetValue(StatType.Health, out Stat healthStat);
+        stats.TryGetValue(StatType.Mana, out Stat manaStat);
+        stats.TryGetValue(StatType.Spirit, out Stat spiritStat);
+
+        stats.TryGetValue(StatType.PhysicalDamage, out Stat physicalDamageStat);
+        stats.TryGetValue(StatType.MagicalDamage, out Stat magicalDamageStat);
+        stats.TryGetValue(StatType.SpiritDamage, out Stat spiritDamageStat);
+
+        stats.TryGetValue(StatType.PhysicalDefense, out Stat physicalDefenseStat);
+        stats.TryGetValue(StatType.MagicalDefense, out Stat magicalDefenseStat);
+        stats.TryGetValue(StatType.SpiritDefense, out Stat spiritDefenseStat);
+
+        stats.TryGetValue(StatType.MovementSpeed, out Stat movementSpeedStat);
+        stats.TryGetValue(StatType.SpiritRange, out Stat spiritRangeStat);
+
+        // Resources
+        healthStat.AddModifier(health.GetValue());
+        manaStat.AddModifier(mana.GetValue());
+        spiritStat.AddModifier(spirit.GetValue());
+
+        // Offensive
+        physicalDamageStat.AddModifier(physicalDamage.GetValue());
+        magicalDamageStat.AddModifier(magicalDamage.GetValue());
+        spiritDamageStat.AddModifier(spiritDamage.GetValue());
+
+        // Defensive
+        physicalDefenseStat.AddModifier(physicalDefense.GetValue());
+        magicalDefenseStat.AddModifier(magicalDefense.GetValue());
+        spiritDefenseStat.AddModifier(spiritDefense.GetValue());
+
+        // Speed / Range
+        movementSpeedStat.AddModifier(movementSpeed.GetValue());
+        spiritRangeStat.AddModifier(spiritRange.GetValue());
     }
 }

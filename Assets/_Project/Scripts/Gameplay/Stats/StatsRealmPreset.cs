@@ -1,11 +1,12 @@
 
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using UnityEditor;
 #endif
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewStatsPreset", menuName = "RPG/Stats/Stats Realm Preset")]
-public class StatsRealmPreset : ScriptableObject
+public class StatsRealmPreset : ScriptableObject , IStatProvider
 {
     [Header("Cultivation Realm")]
     public CultivationStage cultivationStage;
@@ -69,55 +70,55 @@ public class StatsRealmPreset : ScriptableObject
             case CultivationStage.LuyenKhi_1:
                 ApplyBaseStats(100f, 100f, 100f, 10f, 10f, 10f,
                                5f, 5f, 5f,
-                               10f, 1f, 5f, 3f, 10f);
+                               10f, 4f, 5f, 3f, 10f);
                 break;
 
             case CultivationStage.LuyenKhi_2:
                 ApplyBaseStats(110f, 110f, 110f, 11f, 11f, 11f,
                                6f, 6f, 6f,
-                               10f, 1f, 5f, 3f, 20f);
+                               10f, 4f, 5f, 3f, 20f);
                 break;
 
             case CultivationStage.LuyenKhi_3:
                 ApplyBaseStats(120f, 120f, 120f, 12f, 12f, 12f,
                                6f, 6f, 6f,
-                               10f, 1f, 5f, 3f, 40f);
+                               10f, 4f, 5f, 3f, 40f);
                 break;
 
             case CultivationStage.LuyenKhi_4:
                 ApplyBaseStats(130f, 130f, 130f, 13f, 13f, 13f,
                                7f, 7f, 7f,
-                               10f, 1f, 5f, 3f, 80f);
+                               10f, 4f, 5f, 3f, 80f);
                 break;
 
             case CultivationStage.LuyenKhi_5:
                 ApplyBaseStats(140f, 140f, 140f, 14f, 14f, 14f,
                                7f, 7f, 7f,
-                               10f, 1f, 5f, 3f, 150f);
+                               10f, 4f, 5f, 3f, 150f);
                 break;
 
             case CultivationStage.LuyenKhi_6:
                 ApplyBaseStats(150f, 150f, 150f, 15f, 15f, 15f,
                                8f, 8f, 8f,
-                               10f, 1f, 5f, 3f, 300f);
+                               10f, 4f, 5f, 3f, 300f);
                 break;
 
             case CultivationStage.LuyenKhi_7:
                 ApplyBaseStats(160f, 160f, 160f, 16f, 16f, 16f,
                                8f, 8f, 8f,
-                               10f, 1f, 5f, 3f, 500f);
+                               10f, 4f, 5f, 3f, 500f);
                 break;
 
             case CultivationStage.LuyenKhi_8:
                 ApplyBaseStats(170f, 170f, 170f, 17f, 17f, 17f,
                                9f, 9f, 9f,
-                               10f, 1f, 5f, 3f, 1000f);
+                               10f, 4f, 5f, 3f, 1000f);
                 break;
 
             case CultivationStage.LuyenKhi_9:
                 ApplyBaseStats(180f, 180f, 180f, 18f, 18f, 18f,
                                9f, 9f, 9f,
-                               10f, 1f, 5f, 3f, 1400f);
+                               10f, 4f, 5f, 3f, 1400f);
                 break;
 
             // ===== C2 Trúc Cơ =====
@@ -338,5 +339,50 @@ public class StatsRealmPreset : ScriptableObject
         if (attackSpeed == null) attackSpeed = new Stat(StatType.AttackSpeed, 1f);
         if (castSpeed == null) castSpeed = new Stat(StatType.CastSpeed, 1f);
         if (mindPenetration == null) mindPenetration = new Stat(StatType.MindPenetration, 0f);
+    }
+
+    public void ApplyStats(Dictionary<StatType, Stat> stats)
+    {
+        stats.TryGetValue(StatType.Health, out Stat healthStat);
+        stats.TryGetValue(StatType.Mana, out Stat manaStat);
+        stats.TryGetValue(StatType.Spirit, out Stat spiritStat);
+        stats.TryGetValue(StatType.PhysicalDamage, out Stat physicalDamageStat);
+        stats.TryGetValue(StatType.MagicalDamage, out Stat magicalDamageStat);
+        stats.TryGetValue(StatType.SpiritDamage, out Stat spiritDamageStat);
+        stats.TryGetValue(StatType.PhysicalDefense, out Stat physicalDefenseStat);
+        stats.TryGetValue(StatType.MagicalDefense, out Stat magicalDefenseStat);
+        stats.TryGetValue(StatType.SpiritDefense, out Stat spiritDefenseStat);
+        stats.TryGetValue(StatType.MovementSpeed, out Stat movementSpeedStat);
+        stats.TryGetValue(StatType.SpiritRange, out Stat spiritRangeStat);
+        stats.TryGetValue(StatType.Potential, out Stat potentialStat);
+        stats.TryGetValue(StatType.SkillPoints, out Stat skillPointsStat);
+        stats.TryGetValue(StatType.CombatPower, out Stat combatPowerStat);
+        stats.TryGetValue(StatType.CritChance, out Stat critChanceStat);
+        stats.TryGetValue(StatType.CritPower, out Stat critPowerStat);
+        stats.TryGetValue(StatType.Evasion, out Stat evasionStat);
+        stats.TryGetValue(StatType.AttackSpeed, out Stat attackSpeedStat);
+        stats.TryGetValue(StatType.CastSpeed, out Stat castSpeedStat);
+        stats.TryGetValue(StatType.MindPenetration, out Stat mindPenetrationStat);
+
+        healthStat.AddModifier(health.GetValue());
+        manaStat.AddModifier(mana.GetValue());
+        spiritStat.AddModifier(spirit.GetValue());
+        physicalDamageStat.AddModifier(physicalDamage.GetValue());
+        magicalDamageStat.AddModifier(magicalDamage.GetValue());
+        spiritDamageStat.AddModifier(spiritDamage.GetValue());
+        physicalDefenseStat.AddModifier(physicalDefense.GetValue());
+        magicalDefenseStat.AddModifier(magicalDefense.GetValue());
+        spiritDefenseStat.AddModifier(spiritDefense.GetValue());
+        movementSpeedStat.AddModifier(movementSpeed.GetValue());
+        spiritRangeStat.AddModifier(spiritRange.GetValue());
+        potentialStat.AddModifier(potential.GetValue());
+        skillPointsStat.AddModifier(skillPoints.GetValue());
+        combatPowerStat.AddModifier(combatPower.GetValue());
+        critChanceStat.AddModifier(critChance.GetValue());
+        critPowerStat.AddModifier(critPower.GetValue());
+        evasionStat.AddModifier(evasion.GetValue());
+        attackSpeedStat.AddModifier(attackSpeed.GetValue());
+        castSpeedStat.AddModifier(castSpeed.GetValue());
+        mindPenetrationStat.AddModifier(mindPenetration.GetValue());
     }
 }

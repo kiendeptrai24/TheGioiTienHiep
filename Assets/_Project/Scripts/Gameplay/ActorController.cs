@@ -1,5 +1,6 @@
 
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 public enum ActorState
@@ -10,6 +11,7 @@ public enum ActorState
 }
 public class ActorController : TGTHNetworkBehaviour
 {
+    private CharacterStats stats;
     public ActorState currentState = ActorState.TopDown;
     [Header("Components")]
     [SerializeField] private float turnSpeed = 10f;
@@ -19,12 +21,18 @@ public class ActorController : TGTHNetworkBehaviour
     public IMoveable moveable;
     protected override void Awake()
     {
+        LoadComponent();
         if (currentState == ActorState.TopDown)
         {
             characterRotation = new TopDownRotation();
             inputable = new KeyboardInput(new InputHandler());
             moveable = new TopDownMovement();
         }
+    }
+    protected override void Start()
+    {
+        base.Start();
+        moveSpeed = stats.GetStatValue(StatType.MovementSpeed);
     }
     private void Update()
     {
@@ -48,5 +56,10 @@ public class ActorController : TGTHNetworkBehaviour
     private void OnDisable()
     {
         inputable.DisableInput();
+    }
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        stats = GetComponent<CharacterStats>();
     }
 }
