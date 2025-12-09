@@ -5,6 +5,7 @@ public class PlayerStateFactory : IStateFactory
 {
     private readonly PlayerController _player;
     private readonly IStateMachine _machine;
+    
     public PlayerStateFactory(PlayerController player, IStateMachine machine)
     {
         _player = player;

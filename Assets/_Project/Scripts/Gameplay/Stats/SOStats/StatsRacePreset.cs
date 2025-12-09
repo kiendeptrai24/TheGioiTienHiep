@@ -1,9 +1,9 @@
 
 #if UNITY_EDITOR
-using System.Collections.Generic;
 using UnityEditor;
 #endif
 using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "NewStatsPreset", menuName = "RPG/Stats/Stats Race Preset")]
 public class StatsRacePreset : ScriptableObject , IStatProvider
@@ -12,23 +12,23 @@ public class StatsRacePreset : ScriptableObject , IStatProvider
     public RaceType raceType;
 
     [Header("Resources (multipliers or % as you like)")]
-    public Stat health;   // Sinh lực
-    public Stat mana;     // Linh lực
-    public Stat spirit;   // Linh thức
+    public Stat health;
+    public Stat mana;
+    public Stat spirit;
 
     [Header("Offensive Stats")]
-    public Stat physicalDamage; // Sát thương linh thể
-    public Stat magicalDamage;  // Sát thương linh lực
-    public Stat spiritDamage;   // Sát thương linh thức
+    public Stat physicalDamage;
+    public Stat magicalDamage;
+    public Stat spiritDamage;
 
     [Header("Defensive Stats")]
-    public Stat physicalDefense; // Phòng ngự linh thể
-    public Stat magicalDefense;  // Phòng ngự linh lực
-    public Stat spiritDefense;   // Phòng ngự linh thức
+    public Stat physicalDefense;
+    public Stat magicalDefense;
+    public Stat spiritDefense;
 
     [Header("Speed / Range")]
-    public Stat spiritRange;     // Phạm vi linh thức
-    public Stat movementSpeed;   // Tddc
+    public Stat spiritRange;
+    public Stat movementSpeed;
 
 #if UNITY_EDITOR
     private void OnValidate()
@@ -51,8 +51,6 @@ public class StatsRacePreset : ScriptableObject , IStatProvider
     {
         switch (raceType)
         {
-            // Tộc Nhân
-            // 10% 50% 20% | 10% 10% 10% | 10% 10% 10% | 0% 0%
             case RaceType.Human:
                 ApplyRaceRow(
                     healthMul: 0.10f, manaMul: 0.50f, spiritMul: 0.20f,
@@ -62,8 +60,6 @@ public class StatsRacePreset : ScriptableObject , IStatProvider
                 );
                 break;
 
-            // Tộc Yêu
-            // 50% 0% 0% | 0% 0% 0% | 50% 50% 50% | 0% 0%
             case RaceType.Beast:
                 ApplyRaceRow(
                     healthMul: 0.50f, manaMul: 0.0f,  spiritMul: 0.0f,
@@ -73,8 +69,6 @@ public class StatsRacePreset : ScriptableObject , IStatProvider
                 );
                 break;
 
-            // Tộc Thiên
-            // 0% 0% 50% | 0% 0% 0% | 0% 0% 0% | 50% 0%
             case RaceType.Celestial:
                 ApplyRaceRow(
                     healthMul: 0.0f,  manaMul: 0.0f, spiritMul: 0.50f,
@@ -84,8 +78,6 @@ public class StatsRacePreset : ScriptableObject , IStatProvider
                 );
                 break;
 
-            // Tộc Ma
-            // 30% 10% 10% | 50% 50% 50% | 0% 0% 0% | 0% 0%
             case RaceType.Demon:
                 ApplyRaceRow(
                     healthMul: 0.30f, manaMul: 0.10f, spiritMul: 0.10f,
@@ -95,7 +87,6 @@ public class StatsRacePreset : ScriptableObject , IStatProvider
                 );
                 break;
 
-            // Tộc Chung - Tộc
             case RaceType.General:
                 ApplyRaceRow(
                     healthMul: 0.0f, manaMul: 0.0f, spiritMul: 0.0f,

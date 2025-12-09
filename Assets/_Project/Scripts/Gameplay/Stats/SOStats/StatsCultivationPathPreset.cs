@@ -1,8 +1,8 @@
 
 #if UNITY_EDITOR
-using System.Collections.Generic;
 using UnityEditor;
 #endif
+using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(fileName = "NewStatsPreset", menuName = "RPG/Stats/Stats Cultivation Path Preset")]
 public class StatsCultivationPathPreset : ScriptableObject , IStatProvider
@@ -58,46 +58,38 @@ public class StatsCultivationPathPreset : ScriptableObject , IStatProvider
     {
         switch (essenceType)
         {
-            // Chủ tu - Linh thể
-            // 10 5 5 | 1 0 0 | 1 0 0 | 1 1 | -20% pngu linh thức
             case EssenceType.Physical:
                 ApplyRow(
                     sinhLuc: 10f, linhLuc: 5f,  linhThuc: 5f,
                     satThuongLinhThe: 1f, satThuongLinhLuc: 0f, satThuongLinhThuc: 0f,
                     phongNguLinhThe: 1f, phongNguLinhLuc: 0f, phongNguLinhThuc: 0f,
                     phamViLinhThuc: 1f, tocDoDiChuyen: 1f,
-                    counterType: EssenceType.Spirit,   // khắc chế linh thức
-                    counterPercent: 0.20f              // 20%
+                    counterType: EssenceType.Spirit,
+                    counterPercent: 0.20f
                 );
                 break;
-
-            // Chủ tu - Linh lực
-            // 5 10 5 | 0 1 0 | 0 1 0 | 1 1 | -20% pngu linh thể
             case EssenceType.Magical:
                 ApplyRow(
                     sinhLuc: 5f, linhLuc: 10f, linhThuc: 5f,
                     satThuongLinhThe: 0f, satThuongLinhLuc: 1f, satThuongLinhThuc: 0f,
                     phongNguLinhThe: 0f, phongNguLinhLuc: 1f, phongNguLinhThuc: 0f,
                     phamViLinhThuc: 1f, tocDoDiChuyen: 1f,
-                    counterType: EssenceType.Physical, // khắc chế linh thể
+                    counterType: EssenceType.Physical,
                     counterPercent: 0.20f
                 );
                 break;
 
-            // Chủ tu - Linh thức
-            // 5 5 10 | 0 0 1 | 0 0 1 | 1 1 | -20% pngu linh lực
             case EssenceType.Spirit:
                 ApplyRow(
                     sinhLuc: 5f, linhLuc: 5f, linhThuc: 10f,
                     satThuongLinhThe: 0f, satThuongLinhLuc: 0f, satThuongLinhThuc: 1f,
                     phongNguLinhThe: 0f, phongNguLinhLuc: 0f, phongNguLinhThuc: 1f,
                     phamViLinhThuc: 1f, tocDoDiChuyen: 1f,
-                    counterType: EssenceType.Magical,  // khắc chế linh lực
+                    counterType: EssenceType.Magical,
                     counterPercent: 0.20f
                 );
                 break;
 
-            // Chủ tu - Chung (tất cả 0, không khắc chế)
             case EssenceType.General:
                 ApplyRow(
                     sinhLuc: 0f, linhLuc: 0f, linhThuc: 0f,

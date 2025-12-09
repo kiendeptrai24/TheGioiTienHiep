@@ -17,6 +17,7 @@ public abstract class PlayerState : IState
         m_animName = animName;
         m_anim = player.anim;
     }
+    
     public virtual void Enter()
     {
         m_stateTimer = 0;

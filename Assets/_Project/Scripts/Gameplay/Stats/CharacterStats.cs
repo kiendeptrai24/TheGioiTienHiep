@@ -30,6 +30,7 @@ public class CharacterStats : TGTHNetworkBehaviour
     public int CastSpeed => GetStatValue(StatType.CastSpeed);
 
     public int CombatPower => GetStatValue(StatType.CombatPower);
+    
     protected override void Awake()
     {
         InitStatsPreset();
@@ -40,6 +41,7 @@ public class CharacterStats : TGTHNetworkBehaviour
         ResetStatsModifiers();
         AddStatsFromPreset();
     }
+    
     [ContextMenu("Reset Stats Modifiers")]
     private void ResetStatsModifiers()
     {
@@ -49,6 +51,7 @@ public class CharacterStats : TGTHNetworkBehaviour
             stats.Add(type, new Stat(type, 0f));
         }
     }
+    
     [ContextMenu("Add Stats From Preset")]
     private void AddStatsFromPreset()
     {
@@ -56,6 +59,7 @@ public class CharacterStats : TGTHNetworkBehaviour
         StatsCultivationPathPreset.ApplyStats(stats);
         statsRacePreset.ApplyStats(stats);
     }
+
     public int GetStatValue(StatType type)
     {
         if (stats.TryGetValue(type, out Stat stat))
@@ -66,6 +70,7 @@ public class CharacterStats : TGTHNetworkBehaviour
         Debug.LogWarning($"Stat {type} không tồn tại trên {name}!");
         return 0;
     }
+
     protected override void Start()
     {
         string debugMsg = $"{name} Stats:\n";

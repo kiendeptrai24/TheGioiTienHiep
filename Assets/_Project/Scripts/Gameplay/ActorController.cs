@@ -1,7 +1,3 @@
-
-
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 public enum ActorState
 {
@@ -16,7 +12,7 @@ public class ActorController : TGTHNetworkBehaviour
     [Header("Components")]
     [SerializeField] private float turnSpeed = 10f;
     [SerializeField] private float moveSpeed = 5f;
-    private ICharacterRotation characterRotation;
+    private IRotable characterRotation;
     private Inputable inputable;
     public IMoveable moveable;
     protected override void Awake()
@@ -34,7 +30,7 @@ public class ActorController : TGTHNetworkBehaviour
         base.Start();
         moveSpeed = stats.GetStatValue(StatType.MovementSpeed);
     }
-    private void Update()
+    private void FixedUpdate()
     {
         if (!IsOwner) return;
         if (currentState == ActorState.TopDown)
@@ -50,7 +46,7 @@ public class ActorController : TGTHNetworkBehaviour
 
     private void OnEnable()
     {
-        
+
         inputable.EnableInput();
     }
     private void OnDisable()

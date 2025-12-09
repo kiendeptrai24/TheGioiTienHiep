@@ -6,7 +6,7 @@ public class TopDownMovement : IMoveable
     public void Move(Transform transform, Vector2 direction, float speed)
     {
         inputDirection = direction;
-        Vector3 move = new Vector3(inputDirection.x, 0, inputDirection.y) * speed * Time.deltaTime;
+        Vector3 move = new Vector3(inputDirection.x, 0, inputDirection.y) * speed * Time.fixedDeltaTime;
         transform.position += move;
     }
 

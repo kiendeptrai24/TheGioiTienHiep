@@ -10,6 +10,7 @@ public class MoveState_Player : GroundState_Player
     {
         base.Enter();
     }
+    
     public override void Excute()
     {
         base.Excute();

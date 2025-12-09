@@ -6,20 +6,9 @@ using UnityEngine;
 [System.Serializable]
 public class Stat 
 {
-    public NetworkVariable<float> BaseValue = new NetworkVariable<float>(
-        0f,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server
-    );
     [SerializeField] private float baseValue;
     public StatType statType;
     public List<float> modifiers = new List<float>();
-    public NetworkList<float> Modifiers = new NetworkList<float>(
-        new List<float>(),
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server  
-    );
-
 
     public Stat(){}
     public Stat(StatType _type, float _value)
@@ -49,11 +38,9 @@ public class Stat
     public void AddModifier(float _modifier)
     {
         modifiers.Add(_modifier);
-        Modifiers.Add(_modifier);
     }
     public void RemoveModifier(float _modifier)
     {
         modifiers.Remove(_modifier);
-        Modifiers.Remove(_modifier);
     }
 }

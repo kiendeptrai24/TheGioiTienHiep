@@ -2,7 +2,7 @@ using UnityEngine;
 
 
 
-public class TopDownRotation : ICharacterRotation
+public class TopDownRotation : IRotable
 {
     public void Rotate(Transform character, Vector3 inputDirection, float rotationSpeed = 10f)
     {

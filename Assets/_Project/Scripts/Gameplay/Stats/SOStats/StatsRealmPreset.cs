@@ -1,9 +1,9 @@
 
 #if UNITY_EDITOR
-using System.Collections.Generic;
 using UnityEditor;
 #endif
 using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "NewStatsPreset", menuName = "RPG/Stats/Stats Realm Preset")]
 public class StatsRealmPreset : ScriptableObject , IStatProvider

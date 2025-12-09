@@ -9,10 +9,12 @@ public class GroundState_Player : PlayerState
     {
         base.Enter();
     }
+    
     public override void Excute()
     {
         base.Excute();
     }
+
     public override void Exit()
     {
         base.Exit();

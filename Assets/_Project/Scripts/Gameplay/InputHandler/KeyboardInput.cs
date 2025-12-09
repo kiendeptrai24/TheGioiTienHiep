@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class KeyboardInput : Inputable
 {
+    private Vector2 inputDirection;
+    public InputHandler inputAction;
     public KeyboardInput(InputHandler inputAction)
     {
         this.inputAction = inputAction;
         ProcessInput();
     }
-    private Vector2 inputDirection;
-    public InputHandler inputAction;
 
     public Vector2 GetInputDirection()
     {
