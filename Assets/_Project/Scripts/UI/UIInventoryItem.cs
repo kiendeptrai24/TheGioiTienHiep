@@ -11,6 +11,8 @@ using UnityEngine.EventSystems;
         private Image itemImage;
         [SerializeField]
         private TMP_Text quantityTxt;
+        [SerializeField]
+        private TMP_Text nameTxt;
 
         [SerializeField]
         private Image borderImage;
@@ -20,7 +22,7 @@ using UnityEngine.EventSystems;
             OnRightMouseBtnClick;
 
         private bool empty = true;
-        public Item item;
+        public InventoryItem item;
         public void Awake()
         {
             ResetData();
@@ -36,7 +38,7 @@ using UnityEngine.EventSystems;
         {
             borderImage.enabled = false;
         }
-        public void SetItem(Item newItem)
+        public void SetItem(InventoryItem newItem)
         {
             item = newItem;
             if(item == null)
@@ -44,13 +46,14 @@ using UnityEngine.EventSystems;
                 ResetData();
                 return;
             }
-            SetData(item.itemIcon, item.maxStack);
+            SetData(item.data.itemIcon, item.stackSize, item.data.itemName);
         }
-        public void SetData(Sprite sprite, int quantity)
+        public void SetData(Sprite sprite, int quantity, string name)
         {
             itemImage.gameObject.SetActive(true);
             itemImage.sprite = sprite;
             quantityTxt.text = quantity + "";
+            nameTxt.text = name;
             empty = false;
         }
 
