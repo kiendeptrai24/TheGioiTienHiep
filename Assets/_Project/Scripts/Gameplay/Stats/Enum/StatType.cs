@@ -84,4 +84,5 @@ public enum StatType
     SpiritRange,    // Phạm vi linh thức điểm (Spirit Range / Tầm linh thức)
     
     Evasion, //Né tránh
+    CounterPercentage,
 }

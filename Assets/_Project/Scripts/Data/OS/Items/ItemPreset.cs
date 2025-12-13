@@ -20,7 +20,7 @@ public class ItemPreset : ScriptableObject
         itemId = AssetDatabase.AssetPathToGUID(path);
 #endif
     }
-    public ItemData GetItemData()
+    public virtual ItemData GetItemData()
     {
         ItemData data = new ItemData();
         data.itemId = itemId;

@@ -1,24 +1,26 @@
+using System;
 
+[Serializable]
 public class StatsRaceData
 {
     //Race type
     public RaceType raceType;
 
     //Resources (multipliers or % as you like)
-    public int health;
-    public int mana;
-    public int spirit;
+    public float health;
+    public float mana;
+    public float spirit;
     //Offensive Stats
-    public int physicalDamage;
-    public int magicalDamage;
-    public int spiritDamage;
+    public float physicalDamage;
+    public float magicalDamage;
+    public float spiritDamage;
 
     //Defensive Stats
-    public int physicalDefense;
-    public int magicalDefense;
-    public int spiritDefense;
+    public float physicalDefense;
+    public float magicalDefense;
+    public float spiritDefense;
 
     //Speed / Range
-    public int spiritRange;
-    public int movementSpeed;
+    public float spiritRange;
+    public float movementSpeed;
 }

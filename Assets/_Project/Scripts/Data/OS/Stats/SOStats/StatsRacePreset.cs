@@ -6,29 +6,29 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "NewStatsPreset", menuName = "RPG/Stats/Stats Race Preset")]
-public class StatsRacePreset : ScriptableObject , IStatProvider
+public class StatsRacePreset : ScriptableObject 
 {
     [Header("Race type")]
     public RaceType raceType;
 
     [Header("Resources (multipliers or % as you like)")]
-    public Stat health;
-    public Stat mana;
-    public Stat spirit;
+    public float health;
+    public float mana;
+    public float spirit;
 
     [Header("Offensive Stats")]
-    public Stat physicalDamage;
-    public Stat magicalDamage;
-    public Stat spiritDamage;
+    public float physicalDamage;
+    public float magicalDamage;
+    public float spiritDamage;
 
     [Header("Defensive Stats")]
-    public Stat physicalDefense;
-    public Stat magicalDefense;
-    public Stat spiritDefense;
+    public float physicalDefense;
+    public float magicalDefense;
+    public float spiritDefense;
 
     [Header("Speed / Range")]
-    public Stat spiritRange;
-    public Stat movementSpeed;
+    public float spiritRange;
+    public float movementSpeed;
 
 #if UNITY_EDITOR
     private void OnValidate()
@@ -105,66 +105,40 @@ public class StatsRacePreset : ScriptableObject , IStatProvider
         float spiritRangeMul, float moveSpeedMul)
     {
         // Resources
-        health = new Stat(StatType.Health, healthMul);
-        mana   = new Stat(StatType.Mana,   manaMul);
-        spirit = new Stat(StatType.Spirit, spiritMul);
+        health = healthMul;
+        mana   = manaMul;
+        spirit = spiritMul;
 
         // Offensive
-        physicalDamage = new Stat(StatType.PhysicalDamage, physDmgMul);
-        magicalDamage  = new Stat(StatType.MagicalDamage,  magDmgMul);
-        spiritDamage   = new Stat(StatType.SpiritDamage,   spiritDmgMul);
+        physicalDamage = physDmgMul;
+        magicalDamage  = magDmgMul;
+        spiritDamage   = spiritDmgMul;
 
         // Defensive
-        physicalDefense = new Stat(StatType.PhysicalDefense, physDefMul);
-        magicalDefense  = new Stat(StatType.MagicalDefense,  magDefMul);
-        spiritDefense   = new Stat(StatType.SpiritDefense,   spiritDefMul);
+        physicalDefense = physDefMul;
+        magicalDefense  = magDefMul;
+        spiritDefense   = spiritDefMul;
 
         // Speed / Range
-        spiritRange   = new Stat(StatType.SpiritRange,   spiritRangeMul);
-        movementSpeed = new Stat(StatType.MovementSpeed, moveSpeedMul);
+        spiritRange   = spiritRangeMul;
+        movementSpeed = moveSpeedMul;
     }
 
-    public void ApplyStats(Dictionary<StatType, Stat> stats)
-    {
-        stats.TryGetValue(StatType.Health, out Stat healthStat);
-        stats.TryGetValue(StatType.Mana, out Stat manaStat);
-        stats.TryGetValue(StatType.Spirit, out Stat spiritStat);
-        stats.TryGetValue(StatType.PhysicalDamage, out Stat physicalDamageStat);
-        stats.TryGetValue(StatType.MagicalDamage, out Stat magicalDamageStat);
-        stats.TryGetValue(StatType.SpiritDamage, out Stat spiritDamageStat);
-        stats.TryGetValue(StatType.PhysicalDefense, out Stat physicalDefenseStat);
-        stats.TryGetValue(StatType.MagicalDefense, out Stat magicalDefenseStat);
-        stats.TryGetValue(StatType.SpiritDefense, out Stat spiritDefenseStat);
-        stats.TryGetValue(StatType.MovementSpeed, out Stat movementSpeedStat);
-        stats.TryGetValue(StatType.SpiritRange, out Stat spiritRangeStat);
-
-        healthStat.AddModifier(healthStat.GetValue() * health.GetValue());
-        manaStat.AddModifier(manaStat.GetValue() * mana.GetValue());
-        spiritStat.AddModifier(spiritStat.GetValue() * spirit.GetValue());
-        physicalDamageStat.AddModifier(physicalDamageStat.GetValue() * physicalDamage.GetValue());
-        magicalDamageStat.AddModifier(magicalDamageStat.GetValue() * magicalDamage.GetValue());
-        spiritDamageStat.AddModifier(spiritDamageStat.GetValue() * spiritDamage.GetValue());
-        physicalDefenseStat.AddModifier(physicalDefenseStat.GetValue() * physicalDefense.GetValue());
-        magicalDefenseStat.AddModifier(magicalDefenseStat.GetValue() * magicalDefense.GetValue());
-        spiritDefenseStat.AddModifier(spiritDefenseStat.GetValue() * spiritDefense.GetValue());
-        movementSpeedStat.AddModifier(movementSpeedStat.GetValue() * movementSpeed.GetValue());
-        spiritRangeStat.AddModifier(spiritRangeStat.GetValue() * spiritRange.GetValue());
-    }
     public StatsRaceData GetStats()
     {
         StatsRaceData data = new StatsRaceData();
         data.raceType = raceType;
-        data.health = Mathf.RoundToInt(health.GetValue());
-        data.mana = Mathf.RoundToInt(mana.GetValue());
-        data.spirit = Mathf.RoundToInt(spirit.GetValue());
-        data.physicalDamage = Mathf.RoundToInt(physicalDamage.GetValue());
-        data.magicalDamage = Mathf.RoundToInt(magicalDamage.GetValue());
-        data.spiritDamage = Mathf.RoundToInt(spiritDamage.GetValue());
-        data.physicalDefense = Mathf.RoundToInt(physicalDefense.GetValue());
-        data.magicalDefense = Mathf.RoundToInt(magicalDefense.GetValue());
-        data.spiritDefense = Mathf.RoundToInt(spiritDefense.GetValue());
-        data.movementSpeed = Mathf.RoundToInt(movementSpeed.GetValue());
-        data.spiritRange = Mathf.RoundToInt(spiritRange.GetValue());
+        data.health = health;
+        data.mana = mana;
+        data.spirit = spirit;
+        data.physicalDamage = physicalDamage;
+        data.magicalDamage = magicalDamage;
+        data.spiritDamage = spiritDamage;
+        data.physicalDefense = physicalDefense;
+        data.magicalDefense = magicalDefense;
+        data.spiritDefense = spiritDefense;
+        data.movementSpeed = movementSpeed;
+        data.spiritRange = spiritRange;
         return data;
     }
 

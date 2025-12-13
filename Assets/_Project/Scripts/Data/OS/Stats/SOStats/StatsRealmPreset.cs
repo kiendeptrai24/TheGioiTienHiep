@@ -7,40 +7,40 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 [CreateAssetMenu(fileName = "NewStatsPreset", menuName = "RPG/Stats/Stats Realm Preset")]
-public class StatsRealmPreset : ScriptableObject , IStatProvider
+public class StatsRealmPreset : ScriptableObject
 {
     [Header("Cultivation Realm")]
     public CultivationStage cultivationStage;
     [Header("Resources")]
-    public Stat health;
-    public Stat mana;
-    public Stat spirit;
+    public float mana;
+    public float health;
+    public float spirit;
 
     [Header("Offensive Stats")]
-    public Stat physicalDamage;
-    public Stat magicalDamage;
-    public Stat spiritDamage;
-    public Stat critChance;
-    public Stat critPower;
+    public float physicalDamage;
+    public float magicalDamage;
+    public float spiritDamage;
+    public float critChance;
+    public float critPower;
 
     [Header("Defensive Stats")]
-    public Stat physicalDefense;
-    public Stat magicalDefense;
-    public Stat spiritDefense;
-    public Stat evasion;
-    public Stat spiritPenetration;
+    public float physicalDefense;
+    public float magicalDefense;
+    public float spiritDefense;
+    public float evasion;
+    public float spiritPenetration;
 
     [Header("Speed Stats")]
-    public Stat movementSpeed;
-    public Stat attackSpeed;
-    public Stat castSpeed;
+    public float movementSpeed;
+    public float attackSpeed;
+    public float castSpeed;
 
     [Header("Progression Stats")]
-    public Stat potential;
-    public Stat skillPoints;
-    public Stat combatPower;
+    public float potential;
+    public float skillPoints;
+    public float combatPower;
     [Header("Critical Stats")]
-    public Stat spiritRange;
+    public float spiritRange;
 #if UNITY_EDITOR
     private void OnValidate() {
         string stageName = cultivationStage.ToString();
@@ -313,102 +313,60 @@ public class StatsRealmPreset : ScriptableObject , IStatProvider
         float tiemNang, float phapKyDiem, float power)
     {
 
-        health = new Stat(StatType.Health, sinhLuc);
-        mana = new Stat(StatType.Mana, linhLuc);
-        spirit = new Stat(StatType.Spirit, linhThuc);
+        health = sinhLuc;
+        mana = linhLuc;
+        spirit = linhThuc;
 
-        physicalDamage = new Stat(StatType.PhysicalDamage, satThuongLinhThe);
-        magicalDamage = new Stat(StatType.MagicalDamage, satThuongLinhLuc);
-        spiritDamage = new Stat(StatType.SpiritDamage, satThuongLinhThuc);
+        physicalDamage = satThuongLinhThe;
+        magicalDamage = satThuongLinhLuc;
+        spiritDamage = satThuongLinhThuc;
 
-        physicalDefense = new Stat(StatType.PhysicalDefense, phongNguLinhThe);
-        magicalDefense = new Stat(StatType.MagicalDefense, phongNguLinhLuc);
-        spiritDefense = new Stat(StatType.SpiritDefense, phongNguLinhThuc);
+        physicalDefense = phongNguLinhThe;
+        magicalDefense = phongNguLinhLuc;
+        spiritDefense = phongNguLinhThuc;
 
-        spiritPenetration = new Stat(StatType.SpiritRange, pvLinhThuc);
-        movementSpeed = new Stat(StatType.MovementSpeed, tocDoDiChuyen);
+        spiritPenetration = pvLinhThuc;
+        movementSpeed = tocDoDiChuyen;
 
-        potential = new Stat(StatType.Potential, tiemNang);
-        skillPoints = new Stat(StatType.SkillPoints, phapKyDiem);
-        combatPower = new Stat(StatType.CombatPower, power);
+        potential = tiemNang;
+        skillPoints = phapKyDiem;
+        combatPower = power;
 
         // các stats không có trong bảng: set default 1 lần, bạn tự chỉnh nếu muốn scale theo cảnh giới
-        if (critChance == null) critChance = new Stat(StatType.CritChance, 5f);
-        if (critPower == null) critPower = new Stat(StatType.CritPower, 150f);
-        if (evasion == null) evasion = new Stat(StatType.Evasion, 2f);
-        if (attackSpeed == null) attackSpeed = new Stat(StatType.AttackSpeed, 1f);
-        if (castSpeed == null) castSpeed = new Stat(StatType.CastSpeed, 1f);
+        critChance = 5f;
+        critPower = 150f;
+        evasion = 2f;
+        attackSpeed = 1f;
+        castSpeed = 1f;
     }
 
-    public void ApplyStats(Dictionary<StatType, Stat> stats)
-    {
-        stats.TryGetValue(StatType.Health, out Stat healthStat);
-        stats.TryGetValue(StatType.Mana, out Stat manaStat);
-        stats.TryGetValue(StatType.Spirit, out Stat spiritStat);
-        stats.TryGetValue(StatType.PhysicalDamage, out Stat physicalDamageStat);
-        stats.TryGetValue(StatType.MagicalDamage, out Stat magicalDamageStat);
-        stats.TryGetValue(StatType.SpiritDamage, out Stat spiritDamageStat);
-        stats.TryGetValue(StatType.PhysicalDefense, out Stat physicalDefenseStat);
-        stats.TryGetValue(StatType.MagicalDefense, out Stat magicalDefenseStat);
-        stats.TryGetValue(StatType.SpiritDefense, out Stat spiritDefenseStat);
-        stats.TryGetValue(StatType.MovementSpeed, out Stat movementSpeedStat);
-        stats.TryGetValue(StatType.SpiritRange, out Stat spiritRangeStat);
-        stats.TryGetValue(StatType.Potential, out Stat potentialStat);
-        stats.TryGetValue(StatType.SkillPoints, out Stat skillPointsStat);
-        stats.TryGetValue(StatType.CombatPower, out Stat combatPowerStat);
-        stats.TryGetValue(StatType.CritChance, out Stat critChanceStat);
-        stats.TryGetValue(StatType.CritPower, out Stat critPowerStat);
-        stats.TryGetValue(StatType.Evasion, out Stat evasionStat);
-        stats.TryGetValue(StatType.AttackSpeed, out Stat attackSpeedStat);
-        stats.TryGetValue(StatType.CastSpeed, out Stat castSpeedStat);
-
-        healthStat.AddModifier(health.GetValue());
-        manaStat.AddModifier(mana.GetValue());
-        spiritStat.AddModifier(spirit.GetValue());
-        physicalDamageStat.AddModifier(physicalDamage.GetValue());
-        magicalDamageStat.AddModifier(magicalDamage.GetValue());
-        spiritDamageStat.AddModifier(spiritDamage.GetValue());
-        physicalDefenseStat.AddModifier(physicalDefense.GetValue());
-        magicalDefenseStat.AddModifier(magicalDefense.GetValue());
-        spiritDefenseStat.AddModifier(spiritDefense.GetValue());
-        movementSpeedStat.AddModifier(movementSpeed.GetValue());
-        spiritRangeStat.AddModifier(spiritRange.GetValue());
-        potentialStat.AddModifier(potential.GetValue());
-        skillPointsStat.AddModifier(skillPoints.GetValue());
-        combatPowerStat.AddModifier(combatPower.GetValue());
-        critChanceStat.AddModifier(critChance.GetValue());
-        critPowerStat.AddModifier(critPower.GetValue());
-        evasionStat.AddModifier(evasion.GetValue());
-        attackSpeedStat.AddModifier(attackSpeed.GetValue());
-        castSpeedStat.AddModifier(castSpeed.GetValue());
-    }
     public StatsRealmData GetStats()
     {
         StatsRealmData data = new StatsRealmData();
         data.cultivationStage = cultivationStage;
         
-        data.health = Mathf.RoundToInt(health.GetValue());
-        data.mana = Mathf.RoundToInt(mana.GetValue());
-        data.spirit = Mathf.RoundToInt(spirit.GetValue());
+        data.health = Mathf.RoundToInt(health);
+        data.mana = Mathf.RoundToInt(mana);
+        data.spirit = Mathf.RoundToInt(spirit);
 
-        data.physicalDamage = Mathf.RoundToInt(physicalDamage.GetValue());
-        data.magicalDamage = Mathf.RoundToInt(magicalDamage.GetValue());
-        data.spiritDamage = Mathf.RoundToInt(spiritDamage.GetValue());
+        data.physicalDamage = Mathf.RoundToInt(physicalDamage);
+        data.magicalDamage = Mathf.RoundToInt(magicalDamage);
+        data.spiritDamage = Mathf.RoundToInt(spiritDamage);
 
-        data.physicalDefense = Mathf.RoundToInt(physicalDefense.GetValue());
-        data.magicalDefense = Mathf.RoundToInt(magicalDefense.GetValue());
-        data.spiritDefense = Mathf.RoundToInt(spiritDefense.GetValue());
-        data.movementSpeed = Mathf.RoundToInt(movementSpeed.GetValue());
-        data.spiritRange = Mathf.RoundToInt(spiritRange.GetValue());
-        data.potential = Mathf.RoundToInt(potential.GetValue());
-        data.skillPoints = Mathf.RoundToInt(skillPoints.GetValue());
-        data.combatPower = Mathf.RoundToInt(combatPower.GetValue());
-        data.critChance = Mathf.RoundToInt(critChance.GetValue());
-        data.critPower = Mathf.RoundToInt(critPower.GetValue());
-        data.evasion = Mathf.RoundToInt(evasion.GetValue());
-        data.attackSpeed = Mathf.RoundToInt(attackSpeed.GetValue());
-        data.castSpeed = Mathf.RoundToInt(castSpeed.GetValue());
-        data.spiritPenetration = Mathf.RoundToInt(spiritPenetration.GetValue());
+        data.physicalDefense = Mathf.RoundToInt(physicalDefense);
+        data.magicalDefense = Mathf.RoundToInt(magicalDefense);
+        data.spiritDefense = Mathf.RoundToInt(spiritDefense);
+        data.movementSpeed = Mathf.RoundToInt(movementSpeed);
+        data.spiritRange = Mathf.RoundToInt(spiritRange);
+        data.potential = Mathf.RoundToInt(potential);
+        data.skillPoints = Mathf.RoundToInt(skillPoints);
+        data.combatPower = Mathf.RoundToInt(combatPower);
+        data.critChance = Mathf.RoundToInt(critChance);
+        data.critPower = Mathf.RoundToInt(critPower);
+        data.evasion = Mathf.RoundToInt(evasion);
+        data.attackSpeed = Mathf.RoundToInt(attackSpeed);
+        data.castSpeed = Mathf.RoundToInt(castSpeed);
+        data.spiritPenetration = Mathf.RoundToInt(spiritPenetration);
 
         return data;
     }

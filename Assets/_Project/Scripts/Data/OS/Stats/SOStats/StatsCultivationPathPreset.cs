@@ -5,7 +5,7 @@ using UnityEditor;
 using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(fileName = "NewStatsPreset", menuName = "RPG/Stats/Stats Cultivation Path Preset")]
-public class StatsCultivationPathPreset : ScriptableObject , IStatProvider
+public class StatsCultivationPathPreset : ScriptableObject
 {
     [Header("Main cultivation type")]
     public EssenceType essenceType;
@@ -18,23 +18,23 @@ public class StatsCultivationPathPreset : ScriptableObject , IStatProvider
     public float counterPercentage;
 
     [Header("Resources (per point)")]
-    public Stat health;
-    public Stat mana;
-    public Stat spirit;
+    public float health;
+    public float mana;
+    public float spirit;
 
     [Header("Offensive Stats (per point)")]
-    public Stat physicalDamage;
-    public Stat magicalDamage;
-    public Stat spiritDamage;
+    public float physicalDamage;
+    public float magicalDamage;
+    public float spiritDamage;
 
     [Header("Defensive Stats (per point)")]
-    public Stat physicalDefense;
-    public Stat magicalDefense;
-    public Stat spiritDefense;
+    public float physicalDefense;
+    public float magicalDefense;
+    public float spiritDefense;
 
     [Header("Speed / Range (per point)")]
-    public Stat movementSpeed;
-    public Stat spiritRange;
+    public float movementSpeed;
+    public float spiritRange;
 
 #if UNITY_EDITOR
     private void OnValidate()
@@ -111,64 +111,27 @@ public class StatsCultivationPathPreset : ScriptableObject , IStatProvider
         EssenceType counterType, float counterPercent)
     {
         // Resources
-        health = new Stat(StatType.Health, sinhLuc);
-        mana   = new Stat(StatType.Mana,   linhLuc);
-        spirit = new Stat(StatType.Spirit, linhThuc);
+        health = sinhLuc;
+        mana   = linhLuc;
+        spirit = linhThuc;
 
         // Offensive
-        physicalDamage = new Stat(StatType.PhysicalDamage, satThuongLinhThe);
-        magicalDamage  = new Stat(StatType.MagicalDamage,  satThuongLinhLuc);
-        spiritDamage   = new Stat(StatType.SpiritDamage,   satThuongLinhThuc);
+        physicalDamage = satThuongLinhThe;
+        magicalDamage  = satThuongLinhLuc;
+        spiritDamage   = satThuongLinhThuc;
 
         // Defensive
-        physicalDefense = new Stat(StatType.PhysicalDefense, phongNguLinhThe);
-        magicalDefense  = new Stat(StatType.MagicalDefense,  phongNguLinhLuc);
-        spiritDefense   = new Stat(StatType.SpiritDefense,   phongNguLinhThuc);
+        physicalDefense = phongNguLinhThe;
+        magicalDefense  = phongNguLinhLuc;
+        spiritDefense   = phongNguLinhThuc;
 
         // Speed / Range
-        movementSpeed = new Stat(StatType.MovementSpeed, tocDoDiChuyen);
-        spiritRange   = new Stat(StatType.SpiritRange,   phamViLinhThuc);
+        movementSpeed = tocDoDiChuyen;
+        spiritRange   = phamViLinhThuc;
 
         // Counter info
         counterEssenceType = counterType;
         counterPercentage  = counterPercent;
-    }
-
-    public void ApplyStats(Dictionary<StatType, Stat> stats)
-    {
-        stats.TryGetValue(StatType.Health, out Stat healthStat);
-        stats.TryGetValue(StatType.Mana, out Stat manaStat);
-        stats.TryGetValue(StatType.Spirit, out Stat spiritStat);
-
-        stats.TryGetValue(StatType.PhysicalDamage, out Stat physicalDamageStat);
-        stats.TryGetValue(StatType.MagicalDamage, out Stat magicalDamageStat);
-        stats.TryGetValue(StatType.SpiritDamage, out Stat spiritDamageStat);
-
-        stats.TryGetValue(StatType.PhysicalDefense, out Stat physicalDefenseStat);
-        stats.TryGetValue(StatType.MagicalDefense, out Stat magicalDefenseStat);
-        stats.TryGetValue(StatType.SpiritDefense, out Stat spiritDefenseStat);
-
-        stats.TryGetValue(StatType.MovementSpeed, out Stat movementSpeedStat);
-        stats.TryGetValue(StatType.SpiritRange, out Stat spiritRangeStat);
-
-        // Resources
-        healthStat.AddModifier(health.GetValue());
-        manaStat.AddModifier(mana.GetValue());
-        spiritStat.AddModifier(spirit.GetValue());
-
-        // Offensive
-        physicalDamageStat.AddModifier(physicalDamage.GetValue());
-        magicalDamageStat.AddModifier(magicalDamage.GetValue());
-        spiritDamageStat.AddModifier(spiritDamage.GetValue());
-
-        // Defensive
-        physicalDefenseStat.AddModifier(physicalDefense.GetValue());
-        magicalDefenseStat.AddModifier(magicalDefense.GetValue());
-        spiritDefenseStat.AddModifier(spiritDefense.GetValue());
-
-        // Speed / Range
-        movementSpeedStat.AddModifier(movementSpeed.GetValue());
-        spiritRangeStat.AddModifier(spiritRange.GetValue());
     }
     public StatsCultivationPathData GetStats()
     {
@@ -176,17 +139,17 @@ public class StatsCultivationPathPreset : ScriptableObject , IStatProvider
         data.essenceType = essenceType;
         data.counterEssenceType = counterEssenceType;
         data.counterPercentage = counterPercentage;
-        data.health = Mathf.RoundToInt(health.GetValue());
-        data.mana = Mathf.RoundToInt(mana.GetValue());
-        data.spirit = Mathf.RoundToInt(spirit.GetValue());
-        data.physicalDamage = Mathf.RoundToInt(physicalDamage.GetValue());
-        data.magicalDamage = Mathf.RoundToInt(magicalDamage.GetValue());
-        data.spiritDamage = Mathf.RoundToInt(spiritDamage.GetValue());
-        data.physicalDefense = Mathf.RoundToInt(physicalDefense.GetValue());
-        data.magicalDefense = Mathf.RoundToInt(magicalDefense.GetValue());
-        data.spiritDefense = Mathf.RoundToInt(spiritDefense.GetValue());
-        data.movementSpeed = Mathf.RoundToInt(movementSpeed.GetValue());
-        data.spiritRange = Mathf.RoundToInt(spiritRange.GetValue());
+        data.health = Mathf.RoundToInt(health);
+        data.mana = Mathf.RoundToInt(mana);
+        data.spirit = Mathf.RoundToInt(spirit);
+        data.physicalDamage = Mathf.RoundToInt(physicalDamage);
+        data.magicalDamage = Mathf.RoundToInt(magicalDamage);
+        data.spiritDamage = Mathf.RoundToInt(spiritDamage);
+        data.physicalDefense = Mathf.RoundToInt(physicalDefense);
+        data.magicalDefense = Mathf.RoundToInt(magicalDefense);
+        data.spiritDefense = Mathf.RoundToInt(spiritDefense);
+        data.movementSpeed = Mathf.RoundToInt(movementSpeed);
+        data.spiritRange = Mathf.RoundToInt(spiritRange);
         return data;
     }
 }

@@ -1,7 +1,9 @@
 
 
 using UnityEngine;
+using System;
 
+[Serializable]
 public class ItemEquitmentData : ItemData
 {
     [Header("Equipment Type")]
@@ -10,7 +12,6 @@ public class ItemEquitmentData : ItemData
     public QualityType qualityType;
     public RaceType raceType; 
     public ElementType elementType;
-
 
     // ============================
     // 1. DAMAGE STATS
@@ -27,7 +28,6 @@ public class ItemEquitmentData : ItemData
     public float armorPenetration;      // Xuyên phòng ngự / xuyên giáp
     public float lifeSteal;             // Hút sinh lực (%)
     public float attackSpeed;           // Tốc độ đánh
-
 
     // ============================
     // 2. DEFENSE STATS
@@ -55,7 +55,6 @@ public class ItemEquitmentData : ItemData
 
     public float reflectDamage;         // Phản đòn (% gây ngược lại)
     public float moveSpeed;             // Tốc độ di chuyển
-
 
     // ============================
     // 3. STATUS EFFECT & IMMUNITY

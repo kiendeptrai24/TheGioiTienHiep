@@ -1,4 +1,7 @@
 
+using System;
+
+[Serializable]
 public class StatsCultivationPathData
 {
     //Main cultivation type

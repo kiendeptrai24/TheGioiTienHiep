@@ -2,13 +2,17 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterStats : TGTHNetworkBehaviour
+public class CharacterStats : TGTHNetworkBehaviour , ISaveManager
 {
     [Header("Preset base stats")]
     public StatsRealmPreset statsRealmPreset;
     public StatsRacePreset statsRacePreset;
     public StatsCultivationPathPreset StatsCultivationPathPreset;
 
+    public StatsRaceData statsRaceData;
+    public StatsCultivationPathData statsCultivationPathData;
+    public StatsRealmData statsRealmData;
+    private StatsModifier statsModifier = new StatsModifier();
     private Dictionary<StatType, Stat> stats = new Dictionary<StatType, Stat>();
 
     #region Health
@@ -16,7 +20,6 @@ public class CharacterStats : TGTHNetworkBehaviour
     public int Mana => GetStatValue(StatType.Mana);
     public int Spirit => GetStatValue(StatType.Spirit);
     #endregion
-
     #region Damage
     public int PhysicalDamage => GetStatValue(StatType.PhysicalDamage);
     public int MagicalDamage => GetStatValue(StatType.MagicalDamage);
@@ -37,9 +40,6 @@ public class CharacterStats : TGTHNetworkBehaviour
     public float CritDamageReduction => GetStatValue(StatType.CritDamageReduction);
     public float PenetrationDamageReduction => GetStatValue(StatType.PenetrationDamageReduction);
     public float TrueDamageReduction => GetStatValue(StatType.TrueDamageReduction);
-    #endregion
-    #region 
-        
     #endregion
     #region Regen & Ally Regen
     public float HealthRegen => GetStatValue(StatType.HealthRegen);
@@ -92,7 +92,6 @@ public class CharacterStats : TGTHNetworkBehaviour
     private void InitStatsPreset()
     {
         ResetStatsModifiers();
-        AddStatsFromPreset();
     }
     
     [ContextMenu("Reset Stats Modifiers")]
@@ -103,14 +102,6 @@ public class CharacterStats : TGTHNetworkBehaviour
         {
             stats.Add(type, new Stat(type, 0f));
         }
-    }
-    
-    [ContextMenu("Add Stats From Preset")]
-    private void AddStatsFromPreset()
-    {
-        statsRealmPreset.ApplyStats(stats);
-        StatsCultivationPathPreset.ApplyStats(stats);
-        statsRacePreset.ApplyStats(stats);
     }
 
     public int GetStatValue(StatType type)
@@ -124,7 +115,7 @@ public class CharacterStats : TGTHNetworkBehaviour
         return 0;
     }
 
-    protected override void Start()
+    private void ShowStas()
     {
         string debugMsg = $"{name} Stats:\n";
         foreach (var stat in stats)
@@ -132,6 +123,22 @@ public class CharacterStats : TGTHNetworkBehaviour
             debugMsg += $"{stat.Key}: {stat.Value.GetValue()}\n";
         }
         Debug.Log(debugMsg);
+    }
 
+    public void LoadData(GameData _data)
+    {
+        ResetStatsModifiers();
+        statsRaceData = _data.statsRaceData;
+        statsCultivationPathData = _data.statsCultivationPathData;
+        statsRealmData = _data.statsRealmData;
+        statsModifier.AddStatsRaceData(stats, statsRaceData);
+        statsModifier.AddStatsRealmData(stats, statsRealmData);
+        statsModifier.AddStatsCultivationPathData(stats, statsCultivationPathData);
+        ShowStas();
+    }
+
+    public void SaveGame(ref GameData _data)
+    {
+        if(!IsServer) return;
     }
 }
