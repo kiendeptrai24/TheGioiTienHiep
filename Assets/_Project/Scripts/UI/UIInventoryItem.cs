@@ -1,98 +1,56 @@
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using System;
-using UnityEngine.EventSystems;
 
-    public class UIInventoryItem : MonoBehaviour, IPointerClickHandler,
-        IBeginDragHandler, IEndDragHandler, IDropHandler, IDragHandler
+/// <summary>
+/// Inventory slot implementation
+/// </summary>
+public class UIInventoryItem : UIItemSlotBase
+{
+    protected override void Awake()
     {
-        [SerializeField]
-        private Image itemImage;
-        [SerializeField]
-        private TMP_Text quantityTxt;
-        [SerializeField]
-        private TMP_Text nameTxt;
+        base.Awake();
+        uiInventoryType = UIInventoryType.Inventory;
 
-        [SerializeField]
-        private Image borderImage;
+    }
+    public override bool HasItem()
+    {
+        return inventoryItem != null;
+    }
 
-        public event Action<UIInventoryItem> OnItemClicked,
-            OnItemDroppedOn, OnItemBeginDrag, OnItemEndDrag,
-            OnRightMouseBtnClick;
+    public override void SetItem(InventoryItem newItem)
+    {
+        inventoryItem = newItem;
 
-        private bool empty = true;
-        public InventoryItem item;
-        public void Awake()
+        if (inventoryItem == null)
         {
             ResetData();
-            Deselect();
-        }
-        public void ResetData()
-        {
-            item = null;
-            itemImage.gameObject.SetActive(false);
-            empty = true;
-        }
-        public void Deselect()
-        {
-            borderImage.enabled = false;
-        }
-        public void SetItem(InventoryItem newItem)
-        {
-            item = newItem;
-            if(item == null)
-            {
-                ResetData();
-                return;
-            }
-            SetData(item.data.itemIcon, item.stackSize, item.data.itemName);
-        }
-        public void SetData(Sprite sprite, int quantity, string name)
-        {
-            itemImage.gameObject.SetActive(true);
-            itemImage.sprite = sprite;
-            quantityTxt.text = quantity + "";
-            nameTxt.text = name;
-            empty = false;
+            return;
         }
 
-        public void Select()
-        {
-            borderImage.enabled = true;
-        }
+        SetData(
+            inventoryItem.data.itemIcon,
+            inventoryItem.stackSize,
+            inventoryItem.data.itemName
+        );
+    }
 
-        public void OnPointerClick(PointerEventData pointerData)
+    public override bool CanReceive(ItemDragContext ctx)
+    {
+        if(ctx.From.GetUIInventoryType() == ctx.To.GetUIInventoryType() 
+            && ctx.From.GetUIInventoryType() == UIInventoryType.Inventory)
+            return true;
+        
+        if(ctx.ItemOfTo != null)
         {
-            if (pointerData.button == PointerEventData.InputButton.Right)
+            if(ctx.ItemOfTo.data is ItemEquitmentData eq)
             {
-                OnRightMouseBtnClick?.Invoke(this);
+                var eqItemFrom = ctx.ItemOfFrom.data as ItemEquitmentData;
+                return eqItemFrom.equipmentType == eq.equipmentType;
             }
             else
             {
-                OnItemClicked?.Invoke(this);
+                return false;
             }
         }
-
-        public void OnEndDrag(PointerEventData eventData)
-        {
-            OnItemEndDrag?.Invoke(this);
-        }
-
-        public void OnBeginDrag(PointerEventData eventData)
-        {
-            if (empty)
-                return;
-            OnItemBeginDrag?.Invoke(this);
-        }
-
-        public void OnDrop(PointerEventData eventData)
-        {
-            OnItemDroppedOn?.Invoke(this);
-        }
-
-        public void OnDrag(PointerEventData eventData)
-        {
-            Debug.Log("Drag");
-        }
+        return true;
     }
+}

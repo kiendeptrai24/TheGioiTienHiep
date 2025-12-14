@@ -11,13 +11,11 @@ public class InventoryPageView : MonoBehaviour
     public Toggle descriptionTg;
     public GameObject descriptionPanel;
     public RectTransform contentPanel;
-
     public UIInventoryItem itemPrefab;
     public UIInventoryDescription itemDescription;
     public MouseFollower mouseFollower;
-
-    [HideInInspector]
-    public List<UIInventoryItem> listOfUIItems = new List<UIInventoryItem>();
+    [SerializeField] private GameObject quitmentContent;
+    public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
 
     public event Action<bool> OnDescriptionToggle;
     public event Action OnRefreshClicked;
@@ -76,10 +74,27 @@ public class InventoryPageView : MonoBehaviour
             UIInventoryItem uiItem = Instantiate(itemPrefab, contentPanel);
             listOfUIItems.Add(uiItem);
         }
+        listOfUIItems.AddRange(quitmentContent.GetComponentsInChildren<UIItemSlotBase>());
+
+    }
+    public void DeselectItem(UIItemSlotBase uiItem)
+    {
+        if (uiItem)
+        {
+            uiItem.Deselect();
+            uiItem = null;
+        }
+    }
+    public void SelectUIItem(UIItemSlotBase uiItemOld, UIItemSlotBase uiItemNew)
+    {
+        if (uiItemOld != null)
+            uiItemOld.Deselect();
+        uiItemOld = uiItemNew;
+        uiItemOld.Select();
     }
     public void ShowAllItems(List<InventoryItem> listItemDatas)
     {
-        if(listOfUIItems.Count < listItemDatas.Count) return;
+        if (listOfUIItems.Count < listItemDatas.Count) return;
         for (int i = 0; i < listItemDatas.Count; i++)
         {
             listOfUIItems[i].SetItem(listItemDatas[i]);

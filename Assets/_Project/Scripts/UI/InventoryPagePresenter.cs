@@ -1,18 +1,22 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class InventoryPagePresenter : MonoBehaviour
+public class InventoryPagePresenter : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private InventoryPageView view;
 
     private List<InventoryItem> listItemDatas;
+    private UIItemSlotBase currentItemClick;
     private int currentlyDraggedItemIndex = -1;
 
     public event Action<int> OnDescriptionRequested;
     public event Action<int> OnItemActionRequested;
     public event Action<int> OnStartDragging;
-    public event Action<int, int> OnSwapItems;
+    private bool isSWapped = false;
+
 
     private void Awake()
     {
@@ -61,24 +65,25 @@ public class InventoryPagePresenter : MonoBehaviour
             view.SetItem(i, listItemDatas[i]);
     }
 
-    private void HandleItemClicked(UIInventoryItem uiItem)
+    private void HandleItemClicked(UIItemSlotBase uiItem)
     {
         int index = view.listOfUIItems.IndexOf(uiItem);
         if (index < 0) return;
 
-        var item = view.listOfUIItems[index].item;
+        var item = view.listOfUIItems[index].inventoryItem;
         if (item != null)
         {
             view.SetDescription(item.data.itemIcon, item.data.itemName, item.data.itemDescription);
         }
 
-        view.DeselectAll();
-        uiItem.Select();
+        view.DeselectItem(currentItemClick);
+        view.SelectUIItem(currentItemClick, uiItem);
+        currentItemClick = uiItem;
 
         OnDescriptionRequested?.Invoke(index);
     }
 
-    private void HandleItemRightClick(UIInventoryItem uiItem)
+    private void HandleItemRightClick(UIItemSlotBase uiItem)
     {
         int index = view.listOfUIItems.IndexOf(uiItem);
         if (index < 0) return;
@@ -86,14 +91,14 @@ public class InventoryPagePresenter : MonoBehaviour
         OnItemActionRequested?.Invoke(index);
     }
 
-    private void HandleBeginDrag(UIInventoryItem uiItem)
+    private void HandleBeginDrag(UIItemSlotBase uiItem)
     {
         int index = view.listOfUIItems.IndexOf(uiItem);
         if (index < 0) return;
 
         currentlyDraggedItemIndex = index;
 
-        var item = uiItem.item;
+        var item = uiItem.inventoryItem;
         if (item == null) return;
 
         view.ToggleMouseFollower(true);
@@ -102,31 +107,41 @@ public class InventoryPagePresenter : MonoBehaviour
         OnStartDragging?.Invoke(index);
     }
 
-    private void HandleEndDrag(UIInventoryItem uiItem)
+    private void HandleEndDrag(UIItemSlotBase uiItem)
     {
         ResetDrag();
     }
 
-    private void HandleItemDropped(UIInventoryItem uiItem)
+    private void HandleItemDropped(UIItemSlotBase uiItem)
     {
         if (currentlyDraggedItemIndex == -1) return;
-
         int dropIndex = view.listOfUIItems.IndexOf(uiItem);
+        UIItemSlotBase curUIItem = view.listOfUIItems[currentlyDraggedItemIndex];
+        //
+
         if (dropIndex == -1) return;
 
-        OnSwapItems?.Invoke(currentlyDraggedItemIndex, dropIndex);
-
-        // swap UI
         SwapItemsUI(currentlyDraggedItemIndex, dropIndex);
-
-        HandleItemClicked(uiItem);
+        if (isSWapped)
+            HandleItemClicked(uiItem);
+        else
+            HandleItemClicked(curUIItem);
     }
 
     private void SwapItemsUI(int from, int to)
     {
-        var temp = view.listOfUIItems[from].item;
-        view.listOfUIItems[from].SetItem(view.listOfUIItems[to].item);
-        view.listOfUIItems[to].SetItem(temp);
+        var fromSlot = view.listOfUIItems[from];
+        var toSlot = view.listOfUIItems[to];
+        var ctx = new ItemDragContext(fromSlot, toSlot);
+
+        if (!toSlot.CanReceive(ctx) || !toSlot.CanReceive(ctx))
+        {
+            isSWapped = false;
+            return;
+        }
+        isSWapped = true;
+
+        fromSlot.SwapWith(toSlot);
     }
 
     private void ResetDrag()
@@ -139,10 +154,13 @@ public class InventoryPagePresenter : MonoBehaviour
     {
         List<InventoryItem> tempList = new List<InventoryItem>();
 
-        foreach (var slot in view.listOfUIItems)
+        List<UIInventoryItem> inventoryItems =
+            view.listOfUIItems.OfType<UIInventoryItem>().ToList();
+
+        foreach (var slot in inventoryItems)
         {
-            if (slot.item != null)
-                tempList.Add(slot.item);
+            if (slot.inventoryItem != null)
+                tempList.Add(slot.inventoryItem);
 
             slot.ResetData();
             slot.Deselect();
@@ -163,5 +181,10 @@ public class InventoryPagePresenter : MonoBehaviour
     {
         view.Hide();
         ResetDrag();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        view.DeselectItem(currentItemClick);
     }
 }
