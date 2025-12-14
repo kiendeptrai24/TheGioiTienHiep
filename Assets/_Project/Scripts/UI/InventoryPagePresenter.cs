@@ -9,7 +9,7 @@ public class InventoryPagePresenter : MonoBehaviour, IPointerClickHandler
     [SerializeField] private InventoryPageView view;
 
     private List<InventoryItem> listItemDatas;
-    private UIItemSlotBase currentItemClick;
+    private UIItemSlotBase currentItemSelect;
     private int currentlyDraggedItemIndex = -1;
 
     public event Action<int> OnDescriptionRequested;
@@ -76,9 +76,9 @@ public class InventoryPagePresenter : MonoBehaviour, IPointerClickHandler
             view.SetDescription(item.data.itemIcon, item.data.itemName, item.data.itemDescription);
         }
 
-        view.DeselectItem(currentItemClick);
-        view.SelectUIItem(currentItemClick, uiItem);
-        currentItemClick = uiItem;
+        view.DeselectItem(currentItemSelect);
+        view.SelectUIItem(currentItemSelect, uiItem);
+        currentItemSelect = uiItem;
 
         OnDescriptionRequested?.Invoke(index);
     }
@@ -169,6 +169,24 @@ public class InventoryPagePresenter : MonoBehaviour, IPointerClickHandler
         for (int i = 0; i < tempList.Count; i++)
             view.SetItem(i, tempList[i]);
     }
+    [ContextMenu("Add")]
+    public void AddItem()
+    {
+        if(currentItemSelect == null) return;
+        currentItemSelect.inventoryItem.AddStack();
+        currentItemSelect.SetItem(currentItemSelect.inventoryItem);
+    }
+    [ContextMenu("Remove")]
+    public void RemoveItem()
+    {
+        if(currentItemSelect == null) return;
+        currentItemSelect.inventoryItem.RemoveStack();
+        currentItemSelect.SetItem(currentItemSelect.inventoryItem);
+    }
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        view.DeselectItem(currentItemSelect);
+    }
 
     public void Show()
     {
@@ -181,10 +199,5 @@ public class InventoryPagePresenter : MonoBehaviour, IPointerClickHandler
     {
         view.Hide();
         ResetDrag();
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        view.DeselectItem(currentItemClick);
     }
 }

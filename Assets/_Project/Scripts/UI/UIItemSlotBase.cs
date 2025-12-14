@@ -54,7 +54,6 @@ public abstract class UIItemSlotBase : MonoBehaviour,
         nameTxt.text = string.Empty;
         inventoryItem = null;
     }
-    public abstract void SetItem(InventoryItem newItem);
     public virtual void SetData(Sprite sprite, int quantity, string name)
     {
         empty = false;
@@ -64,7 +63,7 @@ public abstract class UIItemSlotBase : MonoBehaviour,
         nameTxt.text = name;
     }
 
-    public abstract bool CanReceive(ItemDragContext ctx);
+    
     public virtual void SwapWith(UIItemSlotBase other)
     {
         var temp = inventoryItem;
@@ -116,9 +115,8 @@ public abstract class UIItemSlotBase : MonoBehaviour,
     #endregion
 
     #region Abstract
-    /// <summary>
-    /// Each slot type decides how to accept data
-    /// </summary>
+    public abstract bool CanReceive(ItemDragContext ctx);
+    public abstract void SetItem(InventoryItem newItem);
     public abstract bool HasItem();
     #endregion
 }

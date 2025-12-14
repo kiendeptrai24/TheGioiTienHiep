@@ -9,8 +9,16 @@ public class InventoryItem
     public InventoryItem(ItemData _newItem)
     {
         data = _newItem;
-        AddStack();
+        stackSize = data.currentstack;
     }
-    public void AddStack() => stackSize++;
-    public void RemoveStack() => stackSize--;
+    public void AddStack()
+    {
+        stackSize++;
+        data.currentstack = stackSize;
+    }
+    public void RemoveStack() 
+    {
+        stackSize--;
+        data.currentstack = stackSize;
+    }
 }
