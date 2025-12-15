@@ -17,10 +17,6 @@ public class ItemEquitmentData : ItemData
     // 1. DAMAGE STATS
     // ============================
     [Header("Damage Stats")]
-    public float physicalDamage;        // Sát thương linh thể cơ bản
-    public float magicalDamage;         // Sát thương linh lực cơ bản
-    public float spiritDamage;          // Sát thương linh thức cơ bản
-
     public float criticalDamage;        // Sát thương chí mạng (%)
     public float criticalRate;          // Tỷ lệ chí mạng (%)
 
@@ -36,10 +32,6 @@ public class ItemEquitmentData : ItemData
     public float maxHealth;             // Sinh lực
     public float maxMana;               // Linh lực
     public float maxSpirit;             // Linh thức
-
-    public float physicalDefense;       // Phòng ngự linh thể
-    public float magicalDefense;        // Phòng ngự linh lực
-    public float mentalDefense;         // Phòng ngự linh thức
 
     public float healthRegen;           // Hồi sinh lực
     public float manaRegen;             // Hồi linh lực

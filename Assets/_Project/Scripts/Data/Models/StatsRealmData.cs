@@ -1,7 +1,7 @@
 using System;
 
 [Serializable]
-public class StatsRealmData 
+public class StatsRealmData : ItemData
 {
     //Cultivation Realm
     public CultivationStage cultivationStage;
@@ -11,16 +11,10 @@ public class StatsRealmData
     public int spirit;
 
     //Offensive Stats
-    public int physicalDamage;
-    public int magicalDamage;
-    public int spiritDamage;
     public int critChance;
     public int critPower;
 
     //Defensive Stats
-    public int physicalDefense;
-    public int magicalDefense;
-    public int spiritDefense;
     public int evasion;
     public int spiritPenetration;
 

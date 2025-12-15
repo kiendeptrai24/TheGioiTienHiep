@@ -30,7 +30,7 @@ public class ItemEquipmentPreset : ItemPreset
 
     public float physicalDefense;
     public float magicalDefense;
-    public float mentalDefense;
+    public float spiritDefense;
 
     public float healthRegen;
     public float manaRegen;
@@ -107,7 +107,7 @@ public class ItemEquipmentPreset : ItemPreset
             maxSpirit = maxSpirit,
             physicalDefense = physicalDefense,
             magicalDefense = magicalDefense,
-            mentalDefense = mentalDefense,
+            spiritDefense = spiritDefense,
             healthRegen = healthRegen,
             manaRegen = manaRegen,
             spiritRegen = spiritRegen,

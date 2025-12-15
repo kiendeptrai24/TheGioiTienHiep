@@ -12,7 +12,7 @@ public class ItemPreset : ScriptableObject
     public Sprite itemIcon;
     public string itemDescription;
     public int currentstack;
-
+    
     private void OnValidate()
     {
 #if UNITY_EDITOR

@@ -2,7 +2,7 @@
 
 using UnityEngine;
 [System.Serializable]
-public class ItemData
+public class ItemData  
 {
     public string itemId;
     public ItemType itemType;
@@ -10,4 +10,13 @@ public class ItemData
     public Sprite itemIcon;
     public string itemDescription;
     public int currentstack;
+    //Offensive Stats
+    public float physicalDamage;
+    public float magicalDamage;
+    public float spiritDamage;
+
+    //Defensive Stats
+    public float physicalDefense;
+    public float magicalDefense;
+    public float spiritDefense;
 }

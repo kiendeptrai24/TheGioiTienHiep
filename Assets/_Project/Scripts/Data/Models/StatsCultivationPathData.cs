@@ -2,7 +2,7 @@
 using System;
 
 [Serializable]
-public class StatsCultivationPathData
+public class StatsCultivationPathData : ItemData
 {
     //Main cultivation type
     public EssenceType essenceType;
@@ -18,16 +18,6 @@ public class StatsCultivationPathData
     public int health;
     public int mana;
     public int spirit;
-
-    //Offensive Stats (per point)
-    public int physicalDamage;
-    public int magicalDamage;
-    public int spiritDamage;
-
-    //Defensive Stats (per point)
-    public int physicalDefense;
-    public int magicalDefense;
-    public int spiritDefense;
 
     //Speed / Range (per point)
     public int movementSpeed;
