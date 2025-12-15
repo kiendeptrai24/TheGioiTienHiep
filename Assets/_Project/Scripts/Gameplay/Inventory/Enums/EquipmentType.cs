@@ -12,4 +12,5 @@ public enum EquipmentType
     Ring,
     Necklace,
     Bracelet,
+    Pet,
 }
