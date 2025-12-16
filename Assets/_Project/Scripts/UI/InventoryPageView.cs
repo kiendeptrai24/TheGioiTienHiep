@@ -47,9 +47,9 @@ public class InventoryPageView : MonoBehaviour
         mouseFollower.Toggle(enable);
     }
 
-    public void SetFollowerData(Sprite sprite, int quantity, string name)
+    public void SetFollowerData(Sprite sprite, int quantity)
     {
-        mouseFollower.SetData(sprite, quantity, name);
+        mouseFollower.SetData(sprite, quantity);
     }
 
     public void ClearAllSlots()
@@ -107,7 +107,7 @@ public class InventoryPageView : MonoBehaviour
 
     public void SetItemData(int index, Sprite sprite, int qty, string name)
     {
-        listOfUIItems[index].SetData(sprite, qty, name);
+        listOfUIItems[index].SetData(sprite, qty);
     }
 
     public void Show()

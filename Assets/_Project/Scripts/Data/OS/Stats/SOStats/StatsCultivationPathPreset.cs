@@ -2,8 +2,8 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using System.Collections.Generic;
 using UnityEngine;
+
 [CreateAssetMenu(fileName = "NewStatsPreset", menuName = "RPG/Stats/Stats Cultivation Path Preset")]
 public class StatsCultivationPathPreset : ScriptableObject
 {

@@ -102,7 +102,7 @@ public class InventoryPagePresenter : MonoBehaviour, IPointerClickHandler
         if (item == null) return;
 
         view.ToggleMouseFollower(true);
-        view.SetFollowerData(item.data.itemIcon, item.data.currentstack, item.data.itemName);
+        view.SetFollowerData(item.data.itemIcon, item.data.currentstack);
 
         OnStartDragging?.Invoke(index);
     }

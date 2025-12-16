@@ -28,8 +28,7 @@ public class UIInventoryItem : UIItemSlotBase
 
         SetData(
             inventoryItem.data.itemIcon,
-            inventoryItem.stackSize,
-            inventoryItem.data.itemName
+            inventoryItem.stackSize
         );
     }
 

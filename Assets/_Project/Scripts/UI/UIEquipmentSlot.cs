@@ -33,8 +33,7 @@ public class UIEquipmentSlot : UIItemSlotBase
         emtpySlot.gameObject.SetActive(false);
         SetData(
             inventoryItem.data.itemIcon,
-            inventoryItem.stackSize,
-            inventoryItem.data.itemName
+            inventoryItem.stackSize
         );
     }
     public override bool CanReceive(ItemDragContext ctx)

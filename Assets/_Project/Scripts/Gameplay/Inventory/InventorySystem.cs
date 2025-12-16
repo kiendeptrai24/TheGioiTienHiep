@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventorySystem : TGTHMonoBehaviour, ISaveManager
+public class InventorySystem : TGTHMonoBehaviour, ISaveable
 {
     [SerializeField] private InventoryPagePresenter inventoryPage;
     [SerializeField] private List<InventoryItem> listItemDatas;
@@ -18,6 +18,6 @@ public class InventorySystem : TGTHMonoBehaviour, ISaveManager
 
     public void SaveGame(ref GameData _data)
     {
-        
+
     }
 }

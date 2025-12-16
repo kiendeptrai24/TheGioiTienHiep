@@ -3,66 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class SaveLoadOS : MonoBehaviour
+public class SaveLoadOS : ISaveManager
 {
-    [SerializeField] private StatsCultivationPathPreset statsCultivationPathPreset;
-    [SerializeField] private StatsRacePreset statsRacePreset;
-    [SerializeField] private StatsRealmPreset statsRealmPreset;
-    [SerializeField] private List<ItemPreset> listItemPreset;
     private GameData gameData;
-    private List<ISaveManager> saveManagers = new List<ISaveManager>();
-
-
-    private void Awake() 
+    private List<ISaveable> saveables = new List<ISaveable>();
+    public SaveLoadOS(GameData gameData, List<ISaveable> saveables)
     {
-        LoadOSToGameData();
+        this.gameData = gameData;
+        this.saveables = saveables;
+    }
+    public void Register(ISaveable saveManager)
+    {
+        saveables.Add(saveManager);
+        saveManager.LoadData(gameData);
+    }
+    public void Unregister(ISaveable saveManager)
+    {
+        saveManager.SaveGame(ref gameData);
+        saveables.Remove(saveManager);
     }
 
-    private void Start() {
-        saveManagers = FindAllSaveManagers();
-        LoadGame();
-    }
     public void LoadGame()
     {
-        LoadOSToGameData();
-        if(this.gameData == null)
+        if (this.gameData == null)
         {
             Debug.Log("No saved data found!");
         }
-
-        foreach (ISaveManager saveManager in saveManagers)
+        foreach (ISaveable saveManager in saveables)
         {
             saveManager.LoadData(gameData);
         }
     }
-    
+
     public void SaveGame()
     {
-        foreach(ISaveManager saveManager in saveManagers)
+        foreach (ISaveable saveManager in saveables)
         {
             saveManager.SaveGame(ref gameData);
-        }
-    }
-    private void OnApplicationQuit() 
-    {
-        //SaveGame();
-    }
-    private List<ISaveManager> FindAllSaveManagers()
-    {
-        IEnumerable<ISaveManager> saveManagers = Resources.FindObjectsOfTypeAll<MonoBehaviour>().OfType<ISaveManager>();
-        
-        return new List<ISaveManager>(saveManagers);
-    }
-
-    private void LoadOSToGameData()
-    {
-        gameData = new GameData();
-        gameData.statsCultivationPathData = statsCultivationPathPreset.GetStats();
-        gameData.statsRaceData = statsRacePreset.GetStats();
-        gameData.statsRealmData = statsRealmPreset.GetStats();
-        foreach (var itemData in listItemPreset)
-        {
-            gameData.itemDatas.Add(itemData.GetItemData());
         }
     }
 }

@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
-public class CharacterStats : TGTHNetworkBehaviour , ISaveManager
+public class CharacterStats : TGTHNetworkBehaviour, ISaveable
 {
     [Header("Preset base stats")]
-    public StatsRealmPreset statsRealmPreset;
-    public StatsRacePreset statsRacePreset;
-    public StatsCultivationPathPreset StatsCultivationPathPreset;
-
     public StatsRaceData statsRaceData;
     public StatsCultivationPathData statsCultivationPathData;
     public StatsRealmData statsRealmData;
@@ -28,7 +25,7 @@ public class CharacterStats : TGTHNetworkBehaviour , ISaveManager
     public float TrueDamage => GetStatValue(StatType.TrueDamage);
     public float ArmorPenetration => GetStatValue(StatType.ArmorPenetration);
     public float SpiritPenetration => GetStatValue(StatType.SpiritPenetration);
-    public float LifeSteal => GetStatValue(StatType.LifeSteal);    
+    public float LifeSteal => GetStatValue(StatType.LifeSteal);
     #endregion
     #region Defense & Damage Reduction
     public int PhysicalDefense => GetStatValue(StatType.PhysicalDefense);
@@ -69,12 +66,12 @@ public class CharacterStats : TGTHNetworkBehaviour , ISaveManager
     public float Paralyze => GetStatValue(StatType.Paralyze);
     public float Root => GetStatValue(StatType.Root);
     public float Stun => GetStatValue(StatType.Stun);
-    public float Silence => GetStatValue(StatType.Silence);     
+    public float Silence => GetStatValue(StatType.Silence);
     #endregion
     #region reaction and reduction of effects
-    public float CCDurationReduction => GetStatValue(StatType.CCDurationReduction);     
-    public float CCResistance => GetStatValue(StatType.CCResistance);     
-    
+    public float CCDurationReduction => GetStatValue(StatType.CCDurationReduction);
+    public float CCResistance => GetStatValue(StatType.CCResistance);
+
     #endregion
     #region Speed
     public int MovementSpeed => GetStatValue(StatType.MovementSpeed);
@@ -83,17 +80,26 @@ public class CharacterStats : TGTHNetworkBehaviour , ISaveManager
     #endregion
 
     public int CombatPower => GetStatValue(StatType.CombatPower);
-    
+
     protected override void Awake()
     {
         InitStatsPreset();
+        SaveLoadManager.Instance.saveManager.Register(this);
     }
 
+    protected override void Start()
+    {
+        base.Start();
+    }
+    new private void OnDestroy()
+    {
+        SaveLoadManager.Instance.saveManager.Unregister(this);
+    }
     private void InitStatsPreset()
     {
         ResetStatsModifiers();
     }
-    
+
     [ContextMenu("Reset Stats Modifiers")]
     private void ResetStatsModifiers()
     {
@@ -135,10 +141,11 @@ public class CharacterStats : TGTHNetworkBehaviour , ISaveManager
         statsModifier.AddStatsRealmData(stats, statsRealmData);
         statsModifier.AddStatsCultivationPathData(stats, statsCultivationPathData);
         ShowStas();
+        Debug.Log("Load stats done");
     }
 
     public void SaveGame(ref GameData _data)
     {
-        if(!IsServer) return;
+        if (!IsServer) return;
     }
 }

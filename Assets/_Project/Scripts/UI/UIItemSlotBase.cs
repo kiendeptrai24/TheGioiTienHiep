@@ -23,7 +23,6 @@ public abstract class UIItemSlotBase : MonoBehaviour,
     [Header("UI References")]
     [SerializeField] protected Image itemImage;
     [SerializeField] protected TMP_Text quantityTxt;
-    [SerializeField] protected TMP_Text nameTxt;
     [SerializeField] protected Image borderImage;
     public InventoryItem inventoryItem;
     protected bool empty = true;
@@ -51,16 +50,14 @@ public abstract class UIItemSlotBase : MonoBehaviour,
         empty = true;
         itemImage.gameObject.SetActive(false);
         quantityTxt.text = string.Empty;
-        nameTxt.text = string.Empty;
         inventoryItem = null;
     }
-    public virtual void SetData(Sprite sprite, int quantity, string name)
+    public virtual void SetData(Sprite sprite, int quantity)
     {
         empty = false;
         itemImage.gameObject.SetActive(true);
         itemImage.sprite = sprite;
         quantityTxt.text = quantity > 1 ? quantity.ToString() : string.Empty;
-        nameTxt.text = name;
     }
 
     
