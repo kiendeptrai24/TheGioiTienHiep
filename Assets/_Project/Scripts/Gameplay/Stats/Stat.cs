@@ -7,7 +7,7 @@ public class Stat
     [SerializeField] private float baseValue;
     public StatType statType;
     public List<float> modifiers = new List<float>();
-
+    public List<float> modifiersPercent = new List<float>();
     public Stat(){}
     public Stat(StatType _type, float _value)
     {
@@ -22,10 +22,18 @@ public class Stat
     public float GetValue()
     {
         float finalValue = baseValue;
+
         foreach (int modifier in modifiers)
-        {
             finalValue += modifier;
-        }
+
+        float totalPercent = 0;
+        foreach (float modifier in modifiersPercent)
+            totalPercent += modifier;
+
+        totalPercent = Mathf.Max(totalPercent, -0.99f);
+        
+        finalValue *= 1f + totalPercent;
+
         return finalValue;
     }
     public void SetDefaultValue(StatType _type, float value)
@@ -40,5 +48,13 @@ public class Stat
     public void RemoveModifier(float _modifier)
     {
         modifiers.Remove(_modifier);
+    }
+    public void AddModifierPercent(float _modifier)
+    {
+        modifiersPercent.Add(_modifier);
+    }
+    public void RemoveModifierPercent(float _modifier)
+    {
+        modifiersPercent.Remove(_modifier);
     }
 }

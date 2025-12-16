@@ -10,7 +10,7 @@ public class CharacterStats : TGTHNetworkBehaviour, ISaveable
     public StatsCultivationPathData statsCultivationPathData;
     public StatsRealmData statsRealmData;
     private StatsModifier statsModifier = new StatsModifier();
-    private Dictionary<StatType, Stat> stats = new Dictionary<StatType, Stat>();
+    public Dictionary<StatType, Stat> stats = new Dictionary<StatType, Stat>();
 
     #region Health
     public int Health => GetStatValue(StatType.Health);
@@ -120,7 +120,7 @@ public class CharacterStats : TGTHNetworkBehaviour, ISaveable
         Debug.LogWarning($"Stat {type} không tồn tại trên {name}!");
         return 0;
     }
-
+    [ContextMenu("Show Stats")]
     private void ShowStas()
     {
         string debugMsg = $"{name} Stats:\n";

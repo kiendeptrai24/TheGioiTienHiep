@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 
 public class UIEquipmentSlot : UIItemSlotBase
 {
     public EquipmentType equipmentType;
     [SerializeField] private Image emtpySlot;
+    public Action<InventoryItem, InventoryItem> OnEquippedChanged;
     protected override void Awake()
     {
         base.Awake();
@@ -23,8 +25,11 @@ public class UIEquipmentSlot : UIItemSlotBase
     }
     public override void SetItem(InventoryItem newItem)
     {
-
+        var oldItem = inventoryItem;
         inventoryItem = newItem;
+        
+        OnEquippedChanged?.Invoke(oldItem, inventoryItem);
+
         if (inventoryItem == null)
         {
             ResetData();
