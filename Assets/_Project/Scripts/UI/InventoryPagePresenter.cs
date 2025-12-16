@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class InventoryPagePresenter : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private InventoryPageView view;
-
+    
     private List<InventoryItem> listItemDatas;
     private UIItemSlotBase currentItemSelect;
     private int currentlyDraggedItemIndex = -1;

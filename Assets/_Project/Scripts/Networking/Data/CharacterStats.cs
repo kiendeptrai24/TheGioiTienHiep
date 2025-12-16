@@ -141,7 +141,6 @@ public class CharacterStats : TGTHNetworkBehaviour, ISaveable
         statsModifier.AddStatsRealmData(stats, statsRealmData);
         statsModifier.AddStatsCultivationPathData(stats, statsCultivationPathData);
         ShowStas();
-        Debug.Log("Load stats done");
     }
 
     public void SaveGame(ref GameData _data)
