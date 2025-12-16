@@ -170,7 +170,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7750147909419816387
 RectTransform:
   m_ObjectHideFlags: 0
@@ -514,11 +514,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af4af2478be8ee342a99205d0465d092, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIInventoryItem
+  uiInventoryType: 0
   itemImage: {fileID: 7514312595105001226}
   quantityTxt: {fileID: 6623499288574652026}
-  nameTxt: {fileID: 1123013302340090074}
   borderImage: {fileID: 5567280066191522921}
-  item:
+  inventoryItem:
     data:
       itemId: 
       itemType: 0
@@ -526,4 +526,10 @@ MonoBehaviour:
       itemIcon: {fileID: 0}
       itemDescription: 
       currentstack: 0
+      physicalDamage: 0
+      magicalDamage: 0
+      spiritDamage: 0
+      physicalDefense: 0
+      magicalDefense: 0
+      spiritDefense: 0
     stackSize: 0
