@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,12 +34,15 @@ public class InventoryPageView : MonoBehaviour
     public void ResetDescriptionUI()
     {
         itemDescription.ResetDescription();
+        itemDescription.SetInvenotoryItem(null);
+    }
+    public void SetItemDescription(InventoryItem inventoryItem)
+    {
+        itemDescription.SetInvenotoryItem(inventoryItem);
+        itemDescription.SetDescription(inventoryItem.data.itemIcon, inventoryItem.data.itemName, inventoryItem.data.itemDescription);
+        itemDescription.SetButtonDescriptionInventory();
     }
 
-    public void SetDescription(Sprite icon, string name, string desc)
-    {
-        itemDescription.SetDescription(icon, name, desc);
-    }
 
     public void ToggleMouseFollower(bool enable)
     {

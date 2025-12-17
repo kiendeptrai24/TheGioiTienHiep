@@ -71,9 +71,10 @@ public class InventoryPagePresenter : MonoBehaviour, IPointerClickHandler
         if (index < 0) return;
 
         var item = view.listOfUIItems[index].inventoryItem;
-        if (item != null)
+        if (item != null && uiItem is UIInventoryItem)
         {
-            view.SetDescription(item.data.itemIcon, item.data.itemName, item.data.itemDescription);
+            //view.SetDescription(item.data.itemIcon, item.data.itemName, item.data.itemDescription);
+            view.SetItemDescription(item);
         }
 
         view.DeselectItem(currentItemSelect);
