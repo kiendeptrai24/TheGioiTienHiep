@@ -15,6 +15,10 @@ public class EquipmentSystem : TGTHMonoBehaviour
         if (item.data is not ItemEquitmentData data) return;
 
         // ===== DAMAGE =====
+        AddPercent(StatType.CritPower, data.physicalDamage);
+        AddPercent(StatType.CritPower, data.magicalDamage);
+        AddPercent(StatType.CritPower, data.spiritDamage);
+
         AddPercent(StatType.CritPower, data.criticalDamage);
         AddPercent(StatType.CritChance, data.criticalRate);
 
@@ -23,6 +27,11 @@ public class EquipmentSystem : TGTHMonoBehaviour
         AddPercent(StatType.LifeSteal, data.lifeSteal);
 
         AddPercent(StatType.AttackSpeed, data.attackSpeed);
+
+        // ===== DEFENSE ====
+        AddPercent(StatType.PhysicalDefense, data.physicalDefense);
+        AddPercent(StatType.MagicalDefense, data.magicalDefense);
+        AddPercent(StatType.SpiritDefense, data.spiritDefense);
 
         // ===== RESOURCE =====
         AddPercent(StatType.Health, data.maxHealth);
@@ -79,6 +88,9 @@ public class EquipmentSystem : TGTHMonoBehaviour
         if (item.data is not ItemEquitmentData data) return;
 
         // ===== DAMAGE =====
+        RemovePercent(StatType.CritPower, data.physicalDamage);
+        RemovePercent(StatType.CritPower, data.magicalDamage);
+        RemovePercent(StatType.CritPower, data.spiritDamage);
         RemovePercent(StatType.CritPower, data.criticalDamage);
         RemovePercent(StatType.CritChance, data.criticalRate);
 
@@ -87,7 +99,12 @@ public class EquipmentSystem : TGTHMonoBehaviour
         RemovePercent(StatType.LifeSteal, data.lifeSteal);
 
         RemovePercent(StatType.AttackSpeed, data.attackSpeed);
-
+        
+        // ===== DEFENSE ====
+        RemovePercent(StatType.PhysicalDefense, data.physicalDefense);
+        RemovePercent(StatType.MagicalDefense, data.magicalDefense);
+        RemovePercent(StatType.SpiritDefense, data.spiritDefense);
+        
         // ===== RESOURCE =====
         RemovePercent(StatType.Health, data.maxHealth);
         RemovePercent(StatType.Mana, data.maxMana);
@@ -141,7 +158,6 @@ public class EquipmentSystem : TGTHMonoBehaviour
 
         if (charStats.stats.TryGetValue(type, out Stat stat))
             stat.AddModifierPercent(percent);
-        Debug.Log(stat.GetValue());
     }
     private void RemovePercent(StatType type, float percent)
     {   
@@ -149,7 +165,6 @@ public class EquipmentSystem : TGTHMonoBehaviour
 
         if (charStats.stats.TryGetValue(type, out Stat stat))
             stat.RemoveModifierPercent(percent);
-        Debug.Log(stat.GetValue());
     }   
 
     protected override void LoadComponent()

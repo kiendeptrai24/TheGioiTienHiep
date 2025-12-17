@@ -11,6 +11,6 @@ public enum EquipmentType
     Boots,
     Ring,
     Necklace,
-    Bracelet,
+    Gloves,
     Pet,
 }

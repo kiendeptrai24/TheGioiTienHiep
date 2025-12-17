@@ -1,7 +1,8 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewEquipmentPreset", menuName = "RPG/Items/Equipment Preset")]
-public class ItemEquipmentPreset : ItemPreset
+public class ItemEquipmentPreset : ItemStatsPreset
 {
     [Header("Equipment Type")]
     public EquipmentType equipmentType;
@@ -11,10 +12,6 @@ public class ItemEquipmentPreset : ItemPreset
     public ElementType elementType;
 
     [Header("Damage Stats")]
-    public float physicalDamage;
-    public float magicalDamage;
-    public float spiritDamage;
-
     public float criticalDamage;
     public float criticalRate;
 
@@ -27,10 +24,6 @@ public class ItemEquipmentPreset : ItemPreset
     public float maxHealth;
     public float maxMana;
     public float maxSpirit;
-
-    public float physicalDefense;
-    public float magicalDefense;
-    public float spiritDefense;
 
     public float healthRegen;
     public float manaRegen;
@@ -70,6 +63,7 @@ public class ItemEquipmentPreset : ItemPreset
 
     public float reduceEffectDuration;
     public float effectResistance;
+
 
     public override ItemData GetItemData()
     {
