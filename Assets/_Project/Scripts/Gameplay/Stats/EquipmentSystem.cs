@@ -7,7 +7,7 @@ public class EquipmentSystem : TGTHMonoBehaviour
     private EquipmentPresenter equipmentPresenter;
     protected override void Awake() {
         LoadComponent();
-        equipmentPresenter.SetEquipmentSystem(this);
+        equipmentPresenter?.SetEquipmentSystem(this);
     }
     public void Equip(InventoryItem item)
     {
