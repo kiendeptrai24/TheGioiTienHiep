@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 public abstract class ActionButton : TGTHMonoBehaviour
 {
-    private Button m_Button;
     [SerializeField] protected ScreenManager m_ScreenManager;
+    private Button m_Button;
 
     protected override void Awake()
     {
