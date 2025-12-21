@@ -20,8 +20,6 @@ public abstract class ScreenManager : TGTHMonoBehaviour
     }
     protected override void Start()
     {
-    }
-    private void OnEnable() {
         StartUI(defaultScreen);
     }
     protected void StartUI(string defaultScreen)
