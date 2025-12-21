@@ -6,6 +6,7 @@ public class CharacterScreenManager : ScreenManager
     [SerializeField] private GameObject m_StatsScreen;
     [SerializeField] private GameObject m_SkillsScreen;
     [SerializeField] private GameObject m_TechniqueScreen;
+    [SerializeField] private GameObject m_TechniqueDetailScreen;
     protected override void Awake()
     {
         base.Awake();
@@ -13,6 +14,7 @@ public class CharacterScreenManager : ScreenManager
         m_Screens.Add(m_StatsScreen.gameObject.name, m_StatsScreen);
         m_Screens.Add(m_SkillsScreen.gameObject.name, m_SkillsScreen);
         m_Screens.Add(m_TechniqueScreen.gameObject.name, m_TechniqueScreen);
+        m_Screens.Add(m_TechniqueDetailScreen.gameObject.name, m_TechniqueDetailScreen);
         defaultScreen = m_CharacterScreen.gameObject.name;
     }
     protected override void Start() 
