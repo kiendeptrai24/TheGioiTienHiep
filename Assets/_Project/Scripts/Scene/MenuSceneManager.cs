@@ -13,6 +13,7 @@ public class MenuSceneManager :  ScreenManager
     [SerializeField] private GameObject m_InventoryScreen;
     [SerializeField] private GameObject m_ItemDetailScreen;
     [SerializeField] private GameObject m_HeroesScreen;
+    [SerializeField] private GameObject m_HeroeDetailScreen;
     [SerializeField] private GameObject m_ShopScreen;
     [SerializeField] private GameObject m_SettingScreen;
     [SerializeField] private GameObject m_HistoryScreen;
@@ -26,6 +27,7 @@ public class MenuSceneManager :  ScreenManager
         m_Screens.Add(m_ItemDetailScreen.gameObject.name, m_ItemDetailScreen);
         
         m_Screens.Add(m_HeroesScreen.gameObject.name, m_HeroesScreen);
+        m_Screens.Add(m_HeroeDetailScreen.gameObject.name, m_HeroeDetailScreen);
         m_Screens.Add(m_ShopScreen.gameObject.name, m_ShopScreen);
         // m_Screens.Add(MenuScreenType.Setting.ToString(), m_SettingScreen);
         // m_Screens.Add(MenuScreenType.History.ToString(), m_HistoryScreen);  
