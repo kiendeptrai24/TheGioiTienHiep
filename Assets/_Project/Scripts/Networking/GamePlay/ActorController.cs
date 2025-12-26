@@ -27,7 +27,7 @@ public class ActorController : TGTHNetworkBehaviour
     protected override void Start()
     {
         base.Start();
-        moveSpeed = stats.GetStatValue(StatType.MovementSpeed);
+        //moveSpeed = stats.GetStatValue(StatType.MovementSpeed);
     }
     private void FixedUpdate()
     {
