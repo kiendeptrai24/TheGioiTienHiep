@@ -45,6 +45,8 @@ public abstract class ScreenManager : TGTHMonoBehaviour
             OnStackChanged();
         }
     }
+    public GameObject GetCurrentScreen() => m_CurrentScreen;
+
     [ContextMenu("Hide UI")]
     public void HideUI()
     {
@@ -93,7 +95,7 @@ public abstract class ScreenManager : TGTHMonoBehaviour
         return null;
     }
     public int GetStackSize() => m_NavigationStack.Count;
-    public string GetCurrentScreen() => m_CurrentScreen.gameObject.name;
+    public string GetCurrentScreenName() => m_CurrentScreen?.gameObject.name;
     private void Show(GameObject gameObject) => gameObject.SetActive(true);
     private void Hide(GameObject gameObject) => gameObject.SetActive(false);
 }

@@ -2,10 +2,13 @@ using UnityEngine;
 
 public class CloseButton : ActionButton
 {
-    [SerializeField] private UIPanelManager m_PanelManager;
+    protected override void Awake() {
+        base.Awake();
+        m_ScreenManager = FindAnyObjectByType<GameUIScreenManager>();
+    }
 
     public override void OnClick()
     {
-        m_PanelManager.HideMenuPanel();
+        m_ScreenManager.NavigateTo("IngameUI");
     }
 }
