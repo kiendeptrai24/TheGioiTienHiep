@@ -8,7 +8,7 @@ public class InventorySystem : TGTHMonoBehaviour, ISaveable
 {
     [SerializeField] private InventoryPagePresenter inventoryPage;
     [SerializeField] private List<InventoryItem> listItemDatas;
-    protected override void Awake()
+    protected override void Start()
     {
         inventoryPage?.SetInventoryData(listItemDatas);
     }
