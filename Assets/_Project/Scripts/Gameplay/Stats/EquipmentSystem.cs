@@ -1,5 +1,7 @@
 using UnityEditor.ShortcutManagement;
 using UnityEngine;
+using System.Collections.Generic;
+using TGTH.PC;
 
 public class EquipmentSystem : TGTHMonoBehaviour
 {

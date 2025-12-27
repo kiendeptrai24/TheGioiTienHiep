@@ -1,13 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 using System;
 
 
 public class UIEquipmentSlot : UIItemSlotBase
 {
     public EquipmentType equipmentType;
-    [SerializeField] private Image emtpySlot;
+    [SerializeField] private Image emptySlot;
     public Action<InventoryItem, InventoryItem> OnEquippedChanged;
     protected override void Awake()
     {
@@ -17,7 +16,7 @@ public class UIEquipmentSlot : UIItemSlotBase
     public override void ResetData()
     {
         base.ResetData();
-        emtpySlot.gameObject.SetActive(true);
+        emptySlot.gameObject.SetActive(true);
     }
     public override bool HasItem()
     {
@@ -35,7 +34,7 @@ public class UIEquipmentSlot : UIItemSlotBase
             ResetData();
             return;
         }
-        emtpySlot.gameObject.SetActive(false);
+        emptySlot.gameObject.SetActive(false);
         SetData(
             inventoryItem.data.itemIcon,
             inventoryItem.stackSize

@@ -19,6 +19,7 @@ public abstract class UIItemSlotBase : MonoBehaviour,
     IDropHandler,
     IDragHandler
 {
+    public NavigationItemDetail navigationItemDetail;
     [SerializeField] protected UIInventoryType uiInventoryType;
     [Header("UI References")]
     [SerializeField] protected Image itemImage;
@@ -39,6 +40,7 @@ public abstract class UIItemSlotBase : MonoBehaviour,
     {
         ResetData();
         Deselect();
+        navigationItemDetail = GetComponent<NavigationItemDetail>();
     }
     public UIInventoryType GetUIInventoryType()
     {
@@ -82,7 +84,6 @@ public abstract class UIItemSlotBase : MonoBehaviour,
     public virtual void OnPointerClick(PointerEventData eventData)
     {
         if (empty) return;
-
         if (eventData.button == PointerEventData.InputButton.Right)
             OnRightMouseBtnClick?.Invoke(this);
         else

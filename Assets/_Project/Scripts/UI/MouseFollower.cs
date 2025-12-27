@@ -11,7 +11,7 @@ public class MouseFollower : MonoBehaviour
     public void Awake()
     {
         canvas = transform.root.GetComponent<Canvas>();
-        item = GetComponentInChildren<UIInventoryItem>();
+        item = GetComponentInChildren<UIInventoryItem>(true);
     }
 
     public void SetData(Sprite sprite, int quantity)
