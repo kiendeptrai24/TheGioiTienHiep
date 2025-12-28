@@ -16,7 +16,7 @@ namespace TGTH.Mobile
 
         public event Action<int> OnItemActionRequested;
         public event Action<int> OnStartDragging;
-
+        private bool isDraging = false;
         private bool isSWapped = false;
         private void Awake()
         {
@@ -58,6 +58,11 @@ namespace TGTH.Mobile
 
         private void HandleItemClicked(UIItemSlotBase uiItem)
         {
+            if(isDraging)
+            {
+                isDraging = false;
+                return;
+            }
             ItemClicked(uiItem);
             uiItem?.navigationItemDetail.OnClick();
         }
@@ -84,6 +89,7 @@ namespace TGTH.Mobile
 
         private void HandleBeginDrag(UIItemSlotBase uiItem)
         {
+            isDraging = true;
             int index = view.listOfUIItems.IndexOf(uiItem);
             if (index < 0) return;
 
@@ -100,6 +106,7 @@ namespace TGTH.Mobile
 
         private void HandleEndDrag(UIItemSlotBase uiItem)
         {
+            isDraging = false;
             ResetDrag();
         }
 
