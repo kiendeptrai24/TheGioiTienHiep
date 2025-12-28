@@ -1,21 +1,20 @@
+
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterStats : TGTHNetworkBehaviour, ISaveable
-{   
-    [Header("Preset base stats")]
+public class StatsManager : TGTHMonoBehaviour, ISaveable
+{
+     [Header("Preset base stats")]
     public StatsRaceData statsRaceData;
     public StatsCultivationPathData statsCultivationPathData;
     public StatsRealmData statsRealmData;
     private StatsModifier statsModifier = new StatsModifier();
     public Dictionary<StatType, Stat> stats = new Dictionary<StatType, Stat>();
-
-    #region Health
     public int Health => GetStatValue(StatType.Health);
     public int Mana => GetStatValue(StatType.Mana);
     public int Spirit => GetStatValue(StatType.Spirit);
-    #endregion
     #region Damage
     public int PhysicalDamage => GetStatValue(StatType.PhysicalDamage);
     public int MagicalDamage => GetStatValue(StatType.MagicalDamage);
@@ -77,12 +76,13 @@ public class CharacterStats : TGTHNetworkBehaviour, ISaveable
     public int AttackSpeed => GetStatValue(StatType.AttackSpeed);
     public int CastSpeed => GetStatValue(StatType.CastSpeed);
     #endregion
+
     public int CombatPower => GetStatValue(StatType.CombatPower);
 
     protected override void Awake()
     {
         InitStatsPreset();
-        SaveLoadManager.Instance.saveManager.Register(this);
+        //SaveLoadManager.Instance.saveManager.Register(this);
     }
 
     protected override void Start()
@@ -91,7 +91,7 @@ public class CharacterStats : TGTHNetworkBehaviour, ISaveable
     }
     new private void OnDestroy()
     {
-        SaveLoadManager.Instance.saveManager.Unregister(this);
+        //SaveLoadManager.Instance.saveManager.Unregister(this);
     }
     private void InitStatsPreset()
     {
@@ -143,6 +143,5 @@ public class CharacterStats : TGTHNetworkBehaviour, ISaveable
 
     public void SaveGame(ref GameData _data)
     {
-        if (!IsServer) return;
     }
 }

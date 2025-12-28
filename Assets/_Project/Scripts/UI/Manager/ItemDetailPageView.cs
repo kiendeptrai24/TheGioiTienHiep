@@ -36,7 +36,7 @@ public class ItemDetailPageView : TGTHMonoBehaviour
        
         itemNameTxt.text = inventoryItem.data.itemName;
         qualityTypeTxt.text = inventoryItem.data.qualityType.ToString();
-        realmTxt.text = inventoryItem.data.cultivationStage.ToString();
+        //realmTxt.text = inventoryItem.data.cultivationStage.ToString();
         itemIconImge.sprite = inventoryItem.data.itemIcon;
         if(inventoryItem.data is ItemEquitmentData itemEquitmentData)
         {

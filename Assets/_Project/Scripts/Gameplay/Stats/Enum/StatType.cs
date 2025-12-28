@@ -85,4 +85,5 @@ public enum StatType
     
     Evasion, //Né tránh
     CounterPercentage,
+    CultivationStage,
 }

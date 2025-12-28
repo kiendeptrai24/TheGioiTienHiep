@@ -10,7 +10,7 @@ public class ItemData
     public Sprite itemIcon;
     public string itemDescription;
     public int currentstack;
-    public CultivationStage cultivationStage;
+   // public CultivationStage cultivationStage;
     public QualityType qualityType;
 
     
