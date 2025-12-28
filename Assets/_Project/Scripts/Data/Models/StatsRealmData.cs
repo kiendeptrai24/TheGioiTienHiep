@@ -4,8 +4,6 @@ using System;
 public class StatsRealmData : ItemData
 {
     //Cultivation Realm
-    public CultivationStage cultivationStage;
-    //Resources
     public int health;
     public int mana;
     public int spirit;

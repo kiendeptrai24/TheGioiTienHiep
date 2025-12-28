@@ -17,58 +17,58 @@ public class SkillPreset : ItemPreset
 
     [Header("Meta")]
     public SkillType skillType;
-    public QualityType qualityType;     
-    public int enhanceLevel;             
-    public RaceType raceType;            
-    public EssenceType mainEssence;      
-    public ElementType elementType;      
-    public CultivationStage realm;       
+    public QualityType qualityType;
+    public int enhanceLevel;
+    public RaceType raceType;
+    public EssenceType mainEssence;
+    public ElementType elementType;
+    public CultivationStage realm;
 
     [Header("Combat")]
-    public float attackRange;            
-    public float cooldown;               
+    public float attackRange;
+    public float cooldown;
     [TextArea] public string specialEffect;
 
     [Header("Resource Cost")]
-    public float healthCost;             
-    public float manaCost;               
-    public float spiritCost;             
+    public float healthCost;
+    public float manaCost;
+    public float spiritCost;
 
     [Header("Learn Conditions")]
-    public int requiredCharacterLevel;   
-    public string learnCondition;        
-    public string otherNote;             
+    public int requiredCharacterLevel;
+    public string learnCondition;
+    public string otherNote;
 
     [Header("Upgrade Materials")]
-    public float powerCost;              
-    public float lthaoCost;              
-    public float mineralCost;            
-    public float demonCoreCost;          
-    public float devilCoreCost;          
-    public float spiritStoneCost;        
-    public float itemCost;               
+    public float powerCost;
+    public float lthaoCost;
+    public float mineralCost;
+    public float demonCoreCost;
+    public float devilCoreCost;
+    public float spiritStoneCost;
+    public float itemCost;
 
     [Header("Bonus Stats (%)")]
-    public float critDamage;             
-    public float critRate;               
+    public float critDamage;
+    public float critRate;
 
-    public float armorPenetration;       
-    public float trueDamage;             
-    public float lifeSteal;              
-    public float attackSpeed;            
+    public float armorPenetration;
+    public float trueDamage;
+    public float lifeSteal;
+    public float attackSpeed;
 
     [Header("Damage Reduction (%)")]
-    public float penetrationReduction;   
-    public float critDamageReduction;    
-    public float trueDamageReduction;    
+    public float penetrationReduction;
+    public float critDamageReduction;
+    public float trueDamageReduction;
 
     [Header("Resource Bonus (%)")]
-    public float bonusHealth;            
-    public float bonusMana;              
-    public float bonusSpirit;            
+    public float bonusHealth;
+    public float bonusMana;
+    public float bonusSpirit;
 
     [Header("Summary")]
-    public float totalQualityAndLevel;   
+    public float totalQualityAndLevel;
     public int statCount;
 
     [ContextMenu("Reset To Default")]
@@ -420,8 +420,8 @@ public class SkillPreset : ItemPreset
             spiritDefense = spiritDefense,
 
             // meta
-            kyNangId = itemId,
-            kyNangName = itemName,
+            SkillId = itemId,
+            SkillName = itemName,
             skillType = skillType,
             qualityType = qualityType,
             enhanceLevel = enhanceLevel,

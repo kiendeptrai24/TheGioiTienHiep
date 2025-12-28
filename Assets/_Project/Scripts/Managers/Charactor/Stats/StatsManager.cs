@@ -78,20 +78,9 @@ public class StatsManager : TGTHMonoBehaviour, ISaveable
     #endregion
 
     public int CombatPower => GetStatValue(StatType.CombatPower);
-
-    protected override void Awake()
-    {
-        InitStatsPreset();
-        //SaveLoadManager.Instance.saveManager.Register(this);
-    }
-
     protected override void Start()
     {
         base.Start();
-    }
-    new private void OnDestroy()
-    {
-        //SaveLoadManager.Instance.saveManager.Unregister(this);
     }
     private void InitStatsPreset()
     {

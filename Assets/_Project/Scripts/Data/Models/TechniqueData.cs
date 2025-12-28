@@ -9,11 +9,10 @@ public class TechniqueTechniqueData : ItemData
     // META INFO
     // ============================
     [Header("Meta")]
-    public string congPhapId;
-    public string congPhapName;
-
+    public string techniqueId;
+    public string techniqueName;
+    public bool hasLearned;
     public TechniqueType techniqueType;
-    public QualityType qualityType;     // Phẩm
     public int enhanceLevel;             // Cường hóa
     public RaceType raceType;            // Tộc
     public EssenceType mainEssence;      // Chủ tu
