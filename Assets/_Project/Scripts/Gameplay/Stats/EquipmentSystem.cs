@@ -1,13 +1,12 @@
-using UnityEditor.ShortcutManagement;
-using UnityEngine;
-using System.Collections.Generic;
-using TGTH.PC;
+using TGTH.Mobile;
 
 public class EquipmentSystem : TGTHMonoBehaviour
 {
-    private CharacterStats charStats;
+    // private CharacterStats charStats;
+    private StatsManager statsManager;
     private EquipmentPresenter equipmentPresenter;
-    protected override void Awake() {
+    protected override void Awake()
+    {
         LoadComponent();
         equipmentPresenter?.SetEquipmentSystem(this);
     }
@@ -86,7 +85,7 @@ public class EquipmentSystem : TGTHMonoBehaviour
     {
         if (item == null)
             return;
-            
+
         if (item.data is not ItemEquitmentData data) return;
 
         // ===== DAMAGE =====
@@ -101,12 +100,12 @@ public class EquipmentSystem : TGTHMonoBehaviour
         RemovePercent(StatType.LifeSteal, data.lifeSteal);
 
         RemovePercent(StatType.AttackSpeed, data.attackSpeed);
-        
+
         // ===== DEFENSE ====
         RemovePercent(StatType.PhysicalDefense, data.physicalDefense);
         RemovePercent(StatType.MagicalDefense, data.magicalDefense);
         RemovePercent(StatType.SpiritDefense, data.spiritDefense);
-        
+
         // ===== RESOURCE =====
         RemovePercent(StatType.Health, data.maxHealth);
         RemovePercent(StatType.Mana, data.maxMana);
@@ -158,21 +157,21 @@ public class EquipmentSystem : TGTHMonoBehaviour
     {
         if (percent == 0) return;
 
-        if (charStats.stats.TryGetValue(type, out Stat stat))
+        if (statsManager.stats.TryGetValue(type, out Stat stat))
             stat.AddModifierPercent(percent);
     }
     private void RemovePercent(StatType type, float percent)
-    {   
+    {
         if (percent == 0) return;
 
-        if (charStats.stats.TryGetValue(type, out Stat stat))
+        if (statsManager.stats.TryGetValue(type, out Stat stat))
             stat.RemoveModifierPercent(percent);
-    }   
+    }
 
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        charStats = GetComponent<CharacterStats>();
+        statsManager = GetComponent<StatsManager>();
         equipmentPresenter = FindAnyObjectByType<EquipmentPresenter>();
     }
 }

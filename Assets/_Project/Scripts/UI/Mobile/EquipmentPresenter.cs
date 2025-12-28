@@ -9,11 +9,10 @@ namespace TGTH.Mobile
     {
         [SerializeField] private EquitmentPageView view;
         [SerializeField] private ItemDetailPageView itemDetailPageView;
-
+        private EquipmentSystem equipmentSystem;
         private List<InventoryItem> listItemDatas;
         private UIItemSlotBase currentItemSelect;
         private int currentlyDraggedItemIndex = -1;
-
         public event Action<int> OnItemActionRequested;
         public event Action<int> OnStartDragging;
         private bool isDraging = false;
@@ -23,7 +22,7 @@ namespace TGTH.Mobile
             view.OnRefreshClicked += SortItems;
 
             view.ToggleMouseFollower(false);
-            InitializeInventoryUI(50);
+            InitializeInventoryUI(50); 
         }
         private void InitializeInventoryUI(int amount)
         {
@@ -37,6 +36,23 @@ namespace TGTH.Mobile
                 uiItem.OnItemEndDrag += HandleEndDrag;
                 uiItem.OnRightMouseBtnClick += HandleItemRightClick;
             }
+            foreach (var item in view.listOfEquitmentItems)
+            {
+                if (item is UIEquipmentSlot uIEquipmentSlot)
+                {
+                    uIEquipmentSlot.OnEquippedChanged += HandleEquippedChanged;
+                }
+            }
+        }
+        public void SetEquipmentSystem(EquipmentSystem system)
+        {
+            equipmentSystem = system;
+        }
+        private void HandleEquippedChanged(InventoryItem item1, InventoryItem item2)
+        {
+            if (equipmentSystem == null) return;
+            equipmentSystem.Unequip(item1);
+            equipmentSystem.Equip(item2);
         }
 
         public void SetInventoryData(List<InventoryItem> items)
@@ -58,7 +74,7 @@ namespace TGTH.Mobile
 
         private void HandleItemClicked(UIItemSlotBase uiItem)
         {
-            if(isDraging)
+            if (isDraging)
             {
                 isDraging = false;
                 return;

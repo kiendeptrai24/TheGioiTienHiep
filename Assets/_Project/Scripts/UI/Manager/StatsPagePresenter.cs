@@ -13,5 +13,8 @@ public class StatsPagePresenter : TGTHMonoBehaviour
         view.SetStatsData(statsManager.stats);
         view.ShowCharactorIdentifyData(characterIdentity);
     }
-
+    private void OnEnable() {
+        view.SetStatsData(statsManager.stats);
+        view.ShowCharactorIdentifyData(characterIdentity);
+    }
 }
