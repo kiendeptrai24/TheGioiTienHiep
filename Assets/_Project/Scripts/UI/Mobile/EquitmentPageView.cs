@@ -74,6 +74,7 @@ namespace TGTH.Mobile
         }
         public void ShowAllItems(List<InventoryItem> listItemDatas)
         {
+            if (listItemDatas == null) return;
             if (listOfUIItems.Count < listItemDatas.Count) return;
             for (int i = 0; i < listItemDatas.Count; i++)
             {

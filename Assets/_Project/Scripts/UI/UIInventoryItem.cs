@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -5,9 +6,11 @@ using UnityEngine;
 /// </summary>
 public class UIInventoryItem : UIItemSlotBase
 {
+    [SerializeField] protected TextMeshProUGUI quantityTxt;
     protected override void Awake()
     {
         base.Awake();
+        navigation = GetComponent<NavigationItemDetail>();
         uiInventoryType = UIInventoryType.Inventory;
 
     }
@@ -31,7 +34,16 @@ public class UIInventoryItem : UIItemSlotBase
             inventoryItem.stackSize
         );
     }
-
+    public override void ResetData()
+    {
+        base.ResetData();
+        quantityTxt.text = string.Empty;
+    }
+    public override void SetData(Sprite sprite, int quantity)
+    {
+        base.SetData(sprite, quantity);
+        quantityTxt.text = quantity > 1 ? quantity.ToString() : string.Empty;
+    }
     public override bool CanReceive(ItemDragContext ctx)
     {
         if(ctx.From.GetUIInventoryType() == ctx.To.GetUIInventoryType() 

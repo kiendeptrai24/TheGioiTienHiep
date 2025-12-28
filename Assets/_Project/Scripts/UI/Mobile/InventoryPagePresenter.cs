@@ -23,6 +23,7 @@ namespace TGTH.Mobile
 
             view.ToggleMouseFollower(false);
             InitializeInventoryUI(50);
+            ShowAllItems();
         }
         private void InitializeInventoryUI(int amount)
         {
@@ -57,13 +58,13 @@ namespace TGTH.Mobile
 
         private void HandleItemClicked(UIItemSlotBase uiItem)
         {
-            if(isDraging)
+            if (isDraging)
             {
                 isDraging = false;
                 return;
             }
             ItemClicked(uiItem);
-            uiItem?.navigationItemDetail.OnClick();
+            uiItem?.navigation.OnClick();
         }
         private void ItemClicked(UIItemSlotBase uiItem)
         {
@@ -123,7 +124,7 @@ namespace TGTH.Mobile
         {
             var fromSlot = view.listOfUIItems[from];
             var toSlot = view.listOfUIItems[to];
-            if(fromSlot == toSlot)
+            if (fromSlot == toSlot)
             {
                 ResetDrag();
                 return;

@@ -423,10 +423,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af4af2478be8ee342a99205d0465d092, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIInventoryItem
-  navigationItemDetail: {fileID: 0}
+  navigation: {fileID: 8399350311711493931}
   uiInventoryType: 0
   itemImage: {fileID: 2770298862685003647}
-  quantityTxt: {fileID: 7161141097290606751}
   borderImage: {fileID: 6643775912954256070}
   inventoryItem:
     data:
@@ -436,6 +435,7 @@ MonoBehaviour:
       itemIcon: {fileID: 0}
       itemDescription: 
       currentstack: 0
+      cultivationStage: 0
       qualityType: 0
       physicalDamage: 0
       magicalDamage: 0
@@ -444,6 +444,7 @@ MonoBehaviour:
       magicalDefense: 0
       spiritDefense: 0
     stackSize: 0
+  quantityTxt: {fileID: 7161141097290606751}
 --- !u!114 &8399350311711493931
 MonoBehaviour:
   m_ObjectHideFlags: 0

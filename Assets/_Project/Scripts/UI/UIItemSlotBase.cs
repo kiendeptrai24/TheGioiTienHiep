@@ -19,11 +19,10 @@ public abstract class UIItemSlotBase : MonoBehaviour,
     IDropHandler,
     IDragHandler
 {
-    public NavigationItemDetail navigationItemDetail;
+    public ActionNavigation navigation  ;
     [SerializeField] protected UIInventoryType uiInventoryType;
     [Header("UI References")]
     [SerializeField] protected Image itemImage;
-    [SerializeField] protected TMP_Text quantityTxt;
     [SerializeField] protected Image borderImage;
     public InventoryItem inventoryItem;
     protected bool empty = true;
@@ -40,7 +39,6 @@ public abstract class UIItemSlotBase : MonoBehaviour,
     {
         ResetData();
         Deselect();
-        navigationItemDetail = GetComponent<NavigationItemDetail>();
     }
     public UIInventoryType GetUIInventoryType()
     {
@@ -51,7 +49,6 @@ public abstract class UIItemSlotBase : MonoBehaviour,
     {
         empty = true;
         itemImage.gameObject.SetActive(false);
-        quantityTxt.text = string.Empty;
         inventoryItem = null;
     }
     public virtual void SetData(Sprite sprite, int quantity)
@@ -59,10 +56,10 @@ public abstract class UIItemSlotBase : MonoBehaviour,
         empty = false;
         itemImage.gameObject.SetActive(true);
         itemImage.sprite = sprite;
-        quantityTxt.text = quantity > 1 ? quantity.ToString() : string.Empty;
+
     }
 
-    
+
     public virtual void SwapWith(UIItemSlotBase other)
     {
         var temp = inventoryItem;

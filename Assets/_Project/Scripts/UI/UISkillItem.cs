@@ -3,14 +3,16 @@ using UnityEngine.UI;
 using System;
 
 
-public class UISkillSlot : UIItemSlotBase
+public class UISkillItem : UIItemSlotBase
 {
     public EquipmentType equipmentType;
+    public int skillIndex;
     [SerializeField] private Image emptySlot;
     public Action<InventoryItem, InventoryItem> OnEquippedChanged;
     protected override void Awake()
     {
         base.Awake();
+        navigation = GetComponent<NavigationSkillDetail>();
         uiInventoryType = UIInventoryType.Equipment;
     }
     public override void ResetData()

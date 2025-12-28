@@ -85,5 +85,8 @@ public enum StatType
     
     Evasion, //Né tránh
     CounterPercentage,
-    CultivationStage,
+    AttackRange, // tầm đánh
+    BonusHealth,
+    BonusMana,
+    BonusSpirit,
 }

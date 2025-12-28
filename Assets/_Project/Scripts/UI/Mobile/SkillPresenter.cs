@@ -7,11 +7,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 namespace TGTH.Mobile
 {
-    public class SkillPresenter : TGTHMonoBehaviour 
+    public class SkillPresenter : TGTHMonoBehaviour
     {
-        [SerializeField] private EquitmentPageView view;
-        [SerializeField] private ItemDetailPageView itemDetailPageView;
-        private EquipmentSystem equipmentSystem;
+        [SerializeField] private SkillPageView view;
+        [SerializeField] private ItemSkillDetailPageView itemSkillDetailPageView;
+        private SkillSystem skillSystem;
         private List<InventoryItem> listItemDatas;
         private UIItemSlotBase currentItemSelect;
         private int currentlyDraggedItemIndex = -1;
@@ -24,7 +24,8 @@ namespace TGTH.Mobile
             view.OnRefreshClicked += SortItems;
 
             view.ToggleMouseFollower(false);
-            InitializeInventoryUI(50); 
+            InitializeInventoryUI(50);
+            ShowAllItems();
         }
         private void InitializeInventoryUI(int amount)
         {
@@ -40,26 +41,31 @@ namespace TGTH.Mobile
             }
             foreach (var item in view.listOfEquitmentItems)
             {
-                if (item is UIEquipmentSlot uIEquipmentSlot)
+                if (item is UISkillItem uiSkillSlot)
                 {
-                    uIEquipmentSlot.OnEquippedChanged += HandleEquippedChanged;
+                    uiSkillSlot.OnEquippedChanged += HandleEquippedChanged;
                 }
             }
         }
-        public void SetEquipmentSystem(EquipmentSystem system)
+        public void SetEquipmentSystem(SkillSystem system)
         {
-            equipmentSystem = system;
+            skillSystem = system;
         }
         private void HandleEquippedChanged(InventoryItem item1, InventoryItem item2)
         {
-            if (equipmentSystem == null) return;
-            equipmentSystem.Unequip(item1);
-            equipmentSystem.Equip(item2);
+            if (skillSystem == null) return;
+            skillSystem.Unequip(item1);
+            skillSystem.Equip(item2);
         }
 
         public void SetInventoryData(List<InventoryItem> items)
         {
             listItemDatas = items;
+            ShowAllItems();
+        }
+        public void SetSkillData(InventoryItem items)
+        {
+            listItemDatas.Add(items);
             ShowAllItems();
         }
 
@@ -82,7 +88,7 @@ namespace TGTH.Mobile
                 return;
             }
             ItemClicked(uiItem);
-            uiItem?.navigationItemDetail.OnClick();
+            uiItem?.navigation.OnClick();
         }
         private void ItemClicked(UIItemSlotBase uiItem)
         {
@@ -94,7 +100,7 @@ namespace TGTH.Mobile
 
             currentItemSelect = uiItem;
             ResetDrag();
-            itemDetailPageView.HandleItemClicked(uiItem.inventoryItem);
+            itemSkillDetailPageView.HandleItemClicked(uiItem.inventoryItem);
         }
 
         private void HandleItemRightClick(UIItemSlotBase uiItem)

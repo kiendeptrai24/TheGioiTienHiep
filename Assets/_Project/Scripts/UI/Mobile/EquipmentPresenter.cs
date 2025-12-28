@@ -22,7 +22,8 @@ namespace TGTH.Mobile
             view.OnRefreshClicked += SortItems;
 
             view.ToggleMouseFollower(false);
-            InitializeInventoryUI(50); 
+            InitializeInventoryUI(50);
+            ShowAllItems();
         }
         private void InitializeInventoryUI(int amount)
         {
@@ -80,7 +81,7 @@ namespace TGTH.Mobile
                 return;
             }
             ItemClicked(uiItem);
-            uiItem?.navigationItemDetail.OnClick();
+            uiItem?.navigation.OnClick();
         }
         private void ItemClicked(UIItemSlotBase uiItem)
         {

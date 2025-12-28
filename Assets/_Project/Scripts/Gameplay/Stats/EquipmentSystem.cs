@@ -1,16 +1,15 @@
 using TGTH.Mobile;
 
-public class EquipmentSystem : TGTHMonoBehaviour
+public class EquipmentSystem : StatsSystem
 {
     // private CharacterStats charStats;
-    private StatsManager statsManager;
     private EquipmentPresenter equipmentPresenter;
     protected override void Awake()
     {
-        LoadComponent();
+        base.Awake();
         equipmentPresenter?.SetEquipmentSystem(this);
     }
-    public void Equip(InventoryItem item)
+    public override void Equip(InventoryItem item)
     {
         if (item == null) return;
         if (item.data is not ItemEquitmentData data) return;
@@ -81,7 +80,7 @@ public class EquipmentSystem : TGTHMonoBehaviour
         AddPercent(StatType.CCDurationReduction, data.reduceEffectDuration);
         AddPercent(StatType.CCResistance, data.effectResistance);
     }
-    public void Unequip(InventoryItem item)
+    public override void Unequip(InventoryItem item)
     {
         if (item == null)
             return;
@@ -153,25 +152,9 @@ public class EquipmentSystem : TGTHMonoBehaviour
         RemovePercent(StatType.CCDurationReduction, data.reduceEffectDuration);
         RemovePercent(StatType.CCResistance, data.effectResistance);
     }
-    private void AddPercent(StatType type, float percent)
-    {
-        if (percent == 0) return;
-
-        if (statsManager.stats.TryGetValue(type, out Stat stat))
-            stat.AddModifierPercent(percent);
-    }
-    private void RemovePercent(StatType type, float percent)
-    {
-        if (percent == 0) return;
-
-        if (statsManager.stats.TryGetValue(type, out Stat stat))
-            stat.RemoveModifierPercent(percent);
-    }
-
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        statsManager = GetComponent<StatsManager>();
         equipmentPresenter = FindAnyObjectByType<EquipmentPresenter>();
     }
 }

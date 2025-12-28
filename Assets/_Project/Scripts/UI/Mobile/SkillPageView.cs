@@ -6,14 +6,14 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace TGTH.Mobile
 {
-    public class SkillPageView : TGTHMonoBehaviour 
+    public class SkillPageView : TGTHMonoBehaviour
     {
         [Header("UI References")]
-        public Button refreshBtn;
+        //public Button refreshBtn;
         public RectTransform contentPanel;
-        public UIInventoryItem itemPrefab;
+        public UIItemSlotBase itemPrefab;
         public MouseFollower mouseFollower;
-        public List<UIEquipmentSlot> listOfEquitmentItems = new List<UIEquipmentSlot>();    
+        public List<UISkillItem> listOfEquitmentItems = new List<UISkillItem>();
 
         public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
         public event Action<bool> OnDescriptionToggle;
@@ -21,7 +21,7 @@ namespace TGTH.Mobile
 
         protected override void Awake()
         {
-            refreshBtn.onClick.AddListener(() => OnRefreshClicked?.Invoke());
+            //refreshBtn.onClick.AddListener(() => OnRefreshClicked?.Invoke());
         }
         public void ToggleMouseFollower(bool enable)
         {
@@ -52,7 +52,7 @@ namespace TGTH.Mobile
         {
             for (int i = 0; i < amount; i++)
             {
-                UIInventoryItem uiItem = Instantiate(itemPrefab, contentPanel);
+                UIItemSlotBase uiItem = Instantiate(itemPrefab, contentPanel);
                 listOfUIItems.Add(uiItem);
             }
             listOfUIItems.AddRange(listOfEquitmentItems);
@@ -74,10 +74,11 @@ namespace TGTH.Mobile
         }
         public void ShowAllItems(List<InventoryItem> listItemDatas)
         {
+            if (listItemDatas == null) return;
             if (listOfUIItems.Count < listItemDatas.Count) return;
             for (int i = 0; i < listItemDatas.Count; i++)
             {
-                if(i >= 50) return;
+                if (i >= 50) return;
                 listOfUIItems[i].SetItem(listItemDatas[i]);
             }
         }

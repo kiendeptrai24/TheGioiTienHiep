@@ -11,6 +11,7 @@ public class UIEquipmentSlot : UIItemSlotBase
     protected override void Awake()
     {
         base.Awake();
+        navigation = GetComponent<NavigationItemDetail>();
         uiInventoryType = UIInventoryType.Equipment;
     }
     public override void ResetData()
