@@ -9,7 +9,6 @@
         [Header("Equipment Type")]
         public EquipmentType equipmentType;
         public int level;
-        public QualityType qualityType;
         public RaceType raceType; 
         public ElementType elementType;
 
