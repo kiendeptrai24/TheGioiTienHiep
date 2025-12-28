@@ -8,7 +8,7 @@ namespace TGTH.Mobile
     public class InventoryPagePresenter : MonoBehaviour, IPointerClickHandler, IEndDragHandler
     {
         [SerializeField] private InventoryPageView view;
-
+        [SerializeField] private ItemDetailPageView itemDetailPageView;
         private List<InventoryItem> listItemDatas;
         private UIItemSlotBase currentItemSelect;
         private int currentlyDraggedItemIndex = -1;
@@ -70,6 +70,7 @@ namespace TGTH.Mobile
 
             currentItemSelect = uiItem;
             ResetDrag();
+            itemDetailPageView.HandleItemClicked(uiItem.inventoryItem);
         }
         private void HandleItemRightClick(UIItemSlotBase uiItem)
         {

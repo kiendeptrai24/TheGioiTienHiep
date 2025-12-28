@@ -10,6 +10,10 @@ public class ItemData
     public Sprite itemIcon;
     public string itemDescription;
     public int currentstack;
+    public CultivationStage cultivationStage;
+    public QualityType qualityType;
+
+    
     //Offensive Stats
     public float physicalDamage;
     public float magicalDamage;
