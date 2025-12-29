@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class TechniqueTechniqueData : ItemData
+public class TechniqueData : ItemData
 {
     // ============================
     // META INFO

@@ -164,55 +164,55 @@ public class TechniquePreset : ItemPreset
         {
             case CultivationStage.LuyenKhi_9:
                 bonusHealth = 20;
-                bonusMana   = 20;
+                bonusMana = 20;
                 enhanceLevel = 1;
                 break;
 
             case CultivationStage.TrucCo_SK:
                 bonusHealth = 30;
-                bonusMana   = 30;
+                bonusMana = 30;
                 enhanceLevel = 2;
                 break;
 
             case CultivationStage.KetDan_SK:
                 bonusHealth = 50;
-                bonusMana   = 50;
+                bonusMana = 50;
                 enhanceLevel = 3;
                 break;
 
             case CultivationStage.NguyenAnh_SK:
                 bonusHealth = 70;
-                bonusMana   = 70;
+                bonusMana = 70;
                 enhanceLevel = 4;
                 break;
 
             case CultivationStage.HoaThan_SK:
                 bonusHealth = 90;
-                bonusMana   = 90;
+                bonusMana = 90;
                 enhanceLevel = 5;
                 break;
 
             case CultivationStage.HopThe_SK:
                 bonusHealth = 110;
-                bonusMana   = 110;
+                bonusMana = 110;
                 enhanceLevel = 6;
                 break;
 
             case CultivationStage.DoKiep_SK:
                 bonusHealth = 130;
-                bonusMana   = 130;
+                bonusMana = 130;
                 enhanceLevel = 7;
                 break;
 
             case CultivationStage.DaiThua_SK:
                 bonusHealth = 160;
-                bonusMana   = 160;
+                bonusMana = 160;
                 enhanceLevel = 8;
                 break;
 
             case CultivationStage.PhiThang:
                 bonusHealth = 210;
-                bonusMana   = 210;
+                bonusMana = 210;
                 enhanceLevel = 9;
                 break;
         }
@@ -226,22 +226,22 @@ public class TechniquePreset : ItemPreset
         {
             case CultivationStage.LuyenKhi_9:
                 physicalDefense = 5;
-                magicalDefense  = 5;
-                bonusHealth     = 20;
+                magicalDefense = 5;
+                bonusHealth = 20;
                 enhanceLevel = 1;
                 break;
 
             case CultivationStage.TrucCo_SK:
                 physicalDefense = 7.5f;
-                magicalDefense  = 7.5f;
-                bonusHealth     = 30;
+                magicalDefense = 7.5f;
+                bonusHealth = 30;
                 enhanceLevel = 2;
                 break;
 
             case CultivationStage.KetDan_SK:
                 physicalDefense = 12.5f;
-                magicalDefense  = 12.5f;
-                bonusHealth     = 50;
+                magicalDefense = 12.5f;
+                bonusHealth = 50;
                 enhanceLevel = 3;
                 break;
         }
@@ -255,19 +255,19 @@ public class TechniquePreset : ItemPreset
         {
             case CultivationStage.LuyenKhi_9:
                 magicalDamage = 10;
-                bonusHealth   = 20;
+                bonusHealth = 20;
                 enhanceLevel = 1;
                 break;
 
             case CultivationStage.TrucCo_SK:
                 magicalDamage = 15;
-                bonusHealth   = 30;
+                bonusHealth = 30;
                 enhanceLevel = 2;
                 break;
 
             case CultivationStage.KetDan_SK:
                 magicalDamage = 25;
-                bonusHealth   = 50;
+                bonusHealth = 50;
                 enhanceLevel = 3;
                 break;
         }
@@ -281,23 +281,23 @@ public class TechniquePreset : ItemPreset
         switch (realm)
         {
             case CultivationStage.LuyenKhi_9:
-                physicalDamage  = 5;
+                physicalDamage = 5;
                 physicalDefense = 5;
-                bonusHealth     = 20;
+                bonusHealth = 20;
                 enhanceLevel = 1;
                 break;
 
             case CultivationStage.TrucCo_SK:
-                physicalDamage  = 10;
+                physicalDamage = 10;
                 physicalDefense = 5;
-                bonusHealth     = 30;
+                bonusHealth = 30;
                 enhanceLevel = 2;
                 break;
 
             case CultivationStage.KetDan_SK:
-                physicalDamage  = 20;
+                physicalDamage = 20;
                 physicalDefense = 5;
-                bonusHealth     = 50;
+                bonusHealth = 50;
                 enhanceLevel = 3;
                 break;
         }
@@ -306,6 +306,79 @@ public class TechniquePreset : ItemPreset
         statCount = 3;
     }
 
+    public override ItemData GetItemData()
+    {
+        return new TechniqueData
+        {
+            // base
+            itemId = itemId,
+            itemName = itemName,
+            itemType = itemType,
+            itemIcon = itemIcon,
+            itemDescription = itemDescription,
+            currentstack = currentstack,
 
+            // base stats trong ItemData
+            physicalDamage = physicalDamage,
+            magicalDamage = magicalDamage,
+            spiritDamage = spiritDamage,
+            physicalDefense = physicalDefense,
+            magicalDefense = magicalDefense,
+            spiritDefense = spiritDefense,
+
+            // meta
+            techniqueId = itemId,
+            techniqueName = itemName,
+            qualityType = qualityType,
+            enhanceLevel = enhanceLevel,
+            raceType = raceType,
+            mainEssence = mainEssence,
+            elementType = elementType,
+            realm = realm,
+
+            // combat
+            attackRange = attackRange,
+            cooldown = cooldown,
+            specialEffect = specialEffect,
+
+            // costs
+            healthCost = healthCost,
+            manaCost = manaCost,
+            spiritCost = spiritCost,
+
+            // learn
+            requiredCharacterLevel = requiredCharacterLevel,
+            learnCondition = learnCondition,
+
+            // materials
+            powerCost = powerCost,
+            lthaoCost = lthaoCost,
+            mineralCost = mineralCost,
+            demonCoreCost = demonCoreCost,
+            devilCoreCost = devilCoreCost,
+            spiritStoneCost = spiritStoneCost,
+            itemCost = itemCost,
+
+            // bonus
+            critDamage = critDamage,
+            critRate = critRate,
+            armorPenetration = armorPenetration,
+            trueDamage = trueDamage,
+            lifeSteal = lifeSteal,
+            attackSpeed = attackSpeed,
+
+            penetrationReduction = penetrationReduction,
+            critDamageReduction = critDamageReduction,
+            trueDamageReduction = trueDamageReduction,
+
+            bonusHealth = bonusHealth,
+            bonusMana = bonusMana,
+            bonusSpirit = bonusSpirit,
+
+            totalQualityAndLevel = totalQualityAndLevel,
+            statCount = statCount
+        };
+
+    }
 
 }

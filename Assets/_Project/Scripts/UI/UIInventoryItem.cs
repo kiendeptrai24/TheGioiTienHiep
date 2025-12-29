@@ -10,7 +10,7 @@ public class UIInventoryItem : UIItemSlotBase
     protected override void Awake()
     {
         base.Awake();
-        navigation = GetComponent<NavigationItemDetail>();
+        navigation = GetComponent<ActionNavigation>();
         uiInventoryType = UIInventoryType.Inventory;
 
     }
@@ -46,15 +46,15 @@ public class UIInventoryItem : UIItemSlotBase
     }
     public override bool CanReceive(ItemDragContext ctx)
     {
-        if(ctx.From.GetUIInventoryType() == ctx.To.GetUIInventoryType() 
+        if (ctx.From.GetUIInventoryType() == ctx.To.GetUIInventoryType()
             && ctx.From.GetUIInventoryType() == UIInventoryType.Inventory)
             return true;
-        
-        if(ctx.ItemOfTo != null)
+
+        if (ctx.ItemOfTo != null)
         {
-            if(ctx.ItemOfTo.data is ItemEquitmentData eq)
+            if (ctx.ItemOfTo.data is EquitmentData eq)
             {
-                var eqItemFrom = ctx.ItemOfFrom.data as ItemEquitmentData;
+                var eqItemFrom = ctx.ItemOfFrom.data as EquitmentData;
                 return eqItemFrom.equipmentType == eq.equipmentType;
             }
             else

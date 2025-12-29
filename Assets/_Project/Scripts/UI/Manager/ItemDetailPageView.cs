@@ -33,16 +33,24 @@ public class ItemDetailPageView : TGTHMonoBehaviour
 
     private void SetData(InventoryItem inventoryItem)
     {
-       
+
         itemNameTxt.text = inventoryItem.data.itemName;
         qualityTypeTxt.text = inventoryItem.data.qualityType.ToString();
         //realmTxt.text = inventoryItem.data.cultivationStage.ToString();
         itemIconImge.sprite = inventoryItem.data.itemIcon;
-        if(inventoryItem.data is ItemEquitmentData itemEquitmentData)
+        if (inventoryItem.data is EquitmentData itemEquitmentData)
         {
             SetItemEquipmentData(itemEquitmentData);
         }
-        else if(inventoryItem.data is ItemData itemData)
+        else if (inventoryItem.data is TechniqueData itemTechniqueData)
+        {
+            SetItemTechniqueData(itemTechniqueData);
+        }
+        else if (inventoryItem.data is SkillData itemSkillData)
+        {
+            SetItemSkillData(itemSkillData);
+        }
+        else if (inventoryItem.data is ItemData itemData)
         {
             SetItemData(itemData);
         }
@@ -57,7 +65,7 @@ public class ItemDetailPageView : TGTHMonoBehaviour
         CreateItemDescriptionDetail(SetColor("Increase Magical Defense", itemData.magicalDefense.ToString()));
         CreateItemDescriptionDetail(SetColor("Increase Spirit Defense", itemData.spiritDefense.ToString()));
     }
-    public void SetItemEquipmentData(ItemEquitmentData itemEquipmentData)
+    public void SetItemEquipmentData(EquitmentData itemEquipmentData)
     {
         CreateItemDescriptionDetail(SetColor("Increase Physical Damage", itemEquipmentData.physicalDamage.ToString()));
         CreateItemDescriptionDetail(SetColor("Increase Magical Damage", itemEquipmentData.magicalDamage.ToString()));
@@ -114,15 +122,190 @@ public class ItemDetailPageView : TGTHMonoBehaviour
         CreateItemDescriptionDetail(SetColor("Increase Reduce Effect Duration", itemEquipmentData.reduceEffectDuration.ToString()));
         CreateItemDescriptionDetail(SetColor("Increase Effect Resistance", itemEquipmentData.effectResistance.ToString()));
     }
+    public void SetItemTechniqueData(TechniqueData itemTechniqueData)
+    {
+        // Meta
+        // CreateItemDescriptionDetail(SetColor("Quality Type", itemTechniqueData.qualityType.ToString()));
+        // CreateItemDescriptionDetail(SetColor("Enhance Level", itemTechniqueData.enhanceLevel.ToString()));
+        // CreateItemDescriptionDetail(SetColor("Realm", itemTechniqueData.realm.ToString()));
+
+        // Combat
+        CreateItemDescriptionDetail(SetColor("Attack Range", itemTechniqueData.attackRange.ToString()));
+        CreateItemDescriptionDetail(SetColor("Cooldown", itemTechniqueData.cooldown.ToString()));
+        // CreateItemDescriptionDetail(SetColor("Special Effect", itemTechniqueData.specialEffect));
+
+        // Resource Cost
+        CreateItemDescriptionDetail(SetColor("Health Cost", itemTechniqueData.healthCost.ToString()));
+        CreateItemDescriptionDetail(SetColor("Mana Cost", itemTechniqueData.manaCost.ToString()));
+        CreateItemDescriptionDetail(SetColor("Spirit Cost", itemTechniqueData.spiritCost.ToString()));
+
+        // Learn Conditions
+        CreateItemDescriptionDetail(SetColor("Required Character Level", itemTechniqueData.requiredCharacterLevel.ToString()));
+        CreateItemDescriptionDetail(SetColor("Learn Condition", itemTechniqueData.learnCondition));
+
+        // Upgrade Materials
+        CreateItemDescriptionDetail(SetColor("Power Cost", itemTechniqueData.powerCost.ToString()));
+        CreateItemDescriptionDetail(SetColor("Linh Thao Cost", itemTechniqueData.lthaoCost.ToString()));
+        CreateItemDescriptionDetail(SetColor("Mineral Cost", itemTechniqueData.mineralCost.ToString()));
+        CreateItemDescriptionDetail(SetColor("Demon Core Cost", itemTechniqueData.demonCoreCost.ToString()));
+        CreateItemDescriptionDetail(SetColor("Devil Core Cost", itemTechniqueData.devilCoreCost.ToString()));
+        CreateItemDescriptionDetail(SetColor("Spirit Stone Cost", itemTechniqueData.spiritStoneCost.ToString()));
+        CreateItemDescriptionDetail(SetColor("Item Cost", itemTechniqueData.itemCost.ToString()));
+
+        // Offensive Stats Bonus
+        CreateItemDescriptionDetail(SetColor("Increase Physical Damage", itemTechniqueData.physicalDamage.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Magical Damage", itemTechniqueData.magicalDamage.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Spirit Damage", itemTechniqueData.spiritDamage.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Physical Defense", itemTechniqueData.physicalDefense.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Magical Defense", itemTechniqueData.magicalDefense.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Spirit Defense", itemTechniqueData.spiritDefense.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Crit Damage", itemTechniqueData.critDamage.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Crit Rate", itemTechniqueData.critRate.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Armor Penetration", itemTechniqueData.armorPenetration.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase True Damage", itemTechniqueData.trueDamage.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Life Steal", itemTechniqueData.lifeSteal.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Attack Speed", itemTechniqueData.attackSpeed.ToString()));
+
+        // Defensive Stats Bonus
+        CreateItemDescriptionDetail(SetColor("Reduce Penetration Damage", itemTechniqueData.penetrationReduction.ToString()));
+        CreateItemDescriptionDetail(SetColor("Reduce Crit Damage", itemTechniqueData.critDamageReduction.ToString()));
+        CreateItemDescriptionDetail(SetColor("Reduce True Damage", itemTechniqueData.trueDamageReduction.ToString()));
+
+        // Resource Bonus
+        CreateItemDescriptionDetail(SetColor("Bonus Health", itemTechniqueData.bonusHealth.ToString()));
+        CreateItemDescriptionDetail(SetColor("Bonus Mana", itemTechniqueData.bonusMana.ToString()));
+        CreateItemDescriptionDetail(SetColor("Bonus Spirit", itemTechniqueData.bonusSpirit.ToString()));
+
+        // Summary
+        CreateItemDescriptionDetail(SetColor("Total Quality And Level", itemTechniqueData.totalQualityAndLevel.ToString()));
+        CreateItemDescriptionDetail(SetColor("Stat Count", itemTechniqueData.statCount.ToString()));
+    }
+
+    public void SetItemSkillData(SkillData itemSkillData)
+    {
+        // Meta
+        // CreateItemDescriptionDetail(SetColor("Skill Name", itemSkillData.itemName));
+        // CreateItemDescriptionDetail(SetColor("Skill Type", itemSkillData.skillType.ToString()));
+        // CreateItemDescriptionDetail(SetColor("Quality Type", itemSkillData.qualityType.ToString()));
+        CreateItemDescriptionDetail(SetColor("Enhance Level", itemSkillData.enhanceLevel.ToString()));
+        // CreateItemDescriptionDetail(SetColor("Race Type", itemSkillData.raceType.ToString()));
+        // CreateItemDescriptionDetail(SetColor("Main Essence", itemSkillData.mainEssence.ToString()));
+        // CreateItemDescriptionDetail(SetColor("Element Type", itemSkillData.elementType.ToString()));
+        // CreateItemDescriptionDetail(SetColor("Realm", itemSkillData.realm.ToString()));
+
+        // Combat
+        CreateItemDescriptionDetail(SetColor("Attack Range", itemSkillData.attackRange.ToString()));
+        CreateItemDescriptionDetail(SetColor("Cooldown", itemSkillData.cooldown.ToString()));
+        // CreateItemDescriptionDetail(SetColor("Special Effect", itemSkillData.specialEffect));
+
+        // Resource Cost
+        CreateItemDescriptionDetail(SetColor("Health Cost", itemSkillData.healthCost.ToString()));
+        CreateItemDescriptionDetail(SetColor("Mana Cost", itemSkillData.manaCost.ToString()));
+        CreateItemDescriptionDetail(SetColor("Spirit Cost", itemSkillData.spiritCost.ToString()));
+
+        // Learn Conditions
+        CreateItemDescriptionDetail(SetColor("Required Character Level", itemSkillData.requiredCharacterLevel.ToString()));
+        CreateItemDescriptionDetail(SetColor("Learn Condition", itemSkillData.learnCondition));
+        CreateItemDescriptionDetail(SetColor("Other Note", itemSkillData.otherNote));
+
+        // Upgrade Materials
+        CreateItemDescriptionDetail(SetColor("Power Cost", itemSkillData.powerCost.ToString()));
+        CreateItemDescriptionDetail(SetColor("Linh Thao Cost", itemSkillData.lthaoCost.ToString()));
+        CreateItemDescriptionDetail(SetColor("Mineral Cost", itemSkillData.mineralCost.ToString()));
+        CreateItemDescriptionDetail(SetColor("Demon Core Cost", itemSkillData.demonCoreCost.ToString()));
+        CreateItemDescriptionDetail(SetColor("Devil Core Cost", itemSkillData.devilCoreCost.ToString()));
+        CreateItemDescriptionDetail(SetColor("Spirit Stone Cost", itemSkillData.spiritStoneCost.ToString()));
+        CreateItemDescriptionDetail(SetColor("Item Cost", itemSkillData.itemCost.ToString()));
+
+        // Damage Bonus
+        CreateItemDescriptionDetail(SetColor("Increase Physical Damage", itemSkillData.physicalDamage.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Magical Damage", itemSkillData.magicalDamage.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Spirit Damage", itemSkillData.spiritDamage.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Physical Defense", itemSkillData.physicalDefense.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Magical Defense", itemSkillData.magicalDefense.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Spirit Defense", itemSkillData.spiritDefense.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Crit Damage", itemSkillData.critDamage.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Crit Rate", itemSkillData.critRate.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Armor Penetration", itemSkillData.armorPenetration.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase True Damage", itemSkillData.trueDamage.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Life Steal", itemSkillData.lifeSteal.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Attack Speed", itemSkillData.attackSpeed.ToString()));
+
+        // Defense Bonus
+        CreateItemDescriptionDetail(SetColor("Reduce Penetration Damage", itemSkillData.penetrationReduction.ToString()));
+        CreateItemDescriptionDetail(SetColor("Reduce Crit Damage", itemSkillData.critDamageReduction.ToString()));
+        CreateItemDescriptionDetail(SetColor("Reduce True Damage", itemSkillData.trueDamageReduction.ToString()));
+
+        // Resource Bonus
+        CreateItemDescriptionDetail(SetColor("Bonus Health", itemSkillData.bonusHealth.ToString()));
+        CreateItemDescriptionDetail(SetColor("Bonus Mana", itemSkillData.bonusMana.ToString()));
+        CreateItemDescriptionDetail(SetColor("Bonus Spirit", itemSkillData.bonusSpirit.ToString()));
+
+        // Summary
+        CreateItemDescriptionDetail(SetColor("Total Quality And Level", itemSkillData.totalQualityAndLevel.ToString()));
+        CreateItemDescriptionDetail(SetColor("Stat Count", itemSkillData.statCount.ToString()));
+    }
+    // Bảng chuyển đổi tiếng Việt cho các label
+    private static readonly System.Collections.Generic.Dictionary<string, string> labelVi = new System.Collections.Generic.Dictionary<string, string>()
+    {
+        {"Increase Physical Damage", "Tăng sát thương vật lý"},
+        {"Increase Magical Damage", "Tăng sát thương phép"},
+        {"Increase Spirit Damage", "Tăng sát thương linh lực"},
+        {"Increase Physical Defense", "Tăng phòng thủ vật lý"},
+        {"Increase Magical Defense", "Tăng phòng thủ phép"},
+        {"Increase Spirit Defense", "Tăng phòng thủ linh lực"},
+        {"Increase Crit Damage", "Tăng sát thương chí mạng"},
+        {"Increase Crit Rate", "Tăng tỉ lệ chí mạng"},
+        {"Increase Armor Penetration", "Tăng xuyên giáp"},
+        {"Increase True Damage", "Tăng sát thương chuẩn"},
+        {"Increase Life Steal", "Tăng hút máu"},
+        {"Increase Attack Speed", "Tăng tốc độ đánh"},
+        {"Reduce Penetration Damage", "Giảm sát thương xuyên giáp"},
+        {"Reduce Crit Damage", "Giảm sát thương chí mạng"},
+        {"Reduce True Damage", "Giảm sát thương chuẩn"},
+        {"Bonus Health", "Tăng sinh lực"},
+        {"Bonus Mana", "Tăng linh lực"},
+        {"Bonus Spirit", "Tăng linh thức"},
+        {"Total Quality And Level", "Tổng phẩm + cấp"},
+        {"Stat Count", "Số chỉ số kích hoạt"},
+        {"Skill Name", "Tên kỹ năng"},
+        {"Skill Type", "Loại kỹ năng"},
+        {"Skill Power", "Sức mạnh kỹ năng"},
+        {"Mana Cost", "Tiêu hao linh lực"},
+        {"Cooldown", "Thời gian hồi chiêu"},
+        {"Technique Name", "Tên công pháp"},
+        {"Technique Type", "Loại công pháp"},
+        {"Quality Type", "Phẩm chất"},
+        {"Enhance Level", "Cường hóa"},
+        {"Race Type", "Chủng tộc"},
+        {"Main Essence", "Chủ tu"},
+        {"Element Type", "Ngũ hành"},
+        {"Realm", "Cảnh giới"},
+        {"Attack Range", "Tầm đánh"},
+        {"Special Effect", "Hiệu ứng đặc biệt"},
+        {"Health Cost", "Tiêu hao sinh lực"},
+        {"Spirit Cost", "Tiêu hao linh thức"},
+        {"Required Character Level", "Cấp nhân vật yêu cầu"},
+        {"Learn Condition", "Điều kiện học"},
+        {"Other Note", "Ghi chú khác"},
+        {"Power Cost", "Tiêu hao Power"},
+        {"Linh Thao Cost", "Tiêu hao Linh Thảo"},
+        {"Mineral Cost", "Tiêu hao Khoáng Thạch"},
+        {"Demon Core Cost", "Tiêu hao Yêu Đan"},
+        {"Devil Core Cost", "Tiêu hao Ma Hạch"},
+        {"Spirit Stone Cost", "Tiêu hao Linh Thạch"},
+        {"Item Cost", "Tiêu hao vật phẩm khác"},
+    };
+
     private string SetColor(string label, string value)
     {
-        // string result =$"<color=#00FF00>{value}:</color> {data}<color=#00FF00>%</color>";
-        string result =$"{label}: <color=#00FF00>{value}%</color>";
+        string viLabel = labelVi.ContainsKey(label) ? labelVi[label] : label;
+        string result = $"{viLabel}: <color=#00FF00>{value}%</color>";
         return result;
     }
     private void CreateItemDescriptionDetail(string description)
     {
-        ItemDescriptionDetail itemdetail = Instantiate(itemDescriptionDetailPrefab,content);
+        ItemDescriptionDetail itemdetail = Instantiate(itemDescriptionDetailPrefab, content);
         itemdetail.SetDescription(description);
     }
 }

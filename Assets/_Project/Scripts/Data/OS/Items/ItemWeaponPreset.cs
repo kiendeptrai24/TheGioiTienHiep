@@ -10,7 +10,7 @@ using UnityEngine;
 public class ItemWeaponPreset : ItemEquipmentPreset
 {
     public WeaponType weaponType;
-       [ContextMenu("Reset To Default")]
+    [ContextMenu("Reset To Default")]
     public void ResetToDefault()
     {
         equipmentType = EquipmentType.Weapon;
@@ -328,35 +328,35 @@ public class ItemWeaponPreset : ItemEquipmentPreset
             return false;
 
         // Apply: convert % -> decimal
-        physicalDamage   = P(row.physPct);
-        magicalDamage    = P(row.magPct);
-        spiritDamage     = P(row.sprPct);
+        physicalDamage = P(row.physPct);
+        magicalDamage = P(row.magPct);
+        spiritDamage = P(row.sprPct);
 
-        criticalDamage   = P(row.critDmgPct);
-        criticalRate     = P(row.critRatePct);
+        criticalDamage = P(row.critDmgPct);
+        criticalRate = P(row.critRatePct);
 
-        trueDamage       = P(row.trueDmgPct);
+        trueDamage = P(row.trueDmgPct);
         armorPenetration = P(row.armorPenPct);
-        lifeSteal        = P(row.lifeStealPct);
-        attackSpeed      = P(row.atkSpeedPct);
+        lifeSteal = P(row.lifeStealPct);
+        attackSpeed = P(row.atkSpeedPct);
 
-        maxHealth        = P(row.maxHpPct);
-        maxMana          = P(row.maxManaPct);
-        maxSpirit        = P(row.maxSpiritPct);
+        maxHealth = P(row.maxHpPct);
+        maxMana = P(row.maxManaPct);
+        maxSpirit = P(row.maxSpiritPct);
 
-        physicalDefense  = P(row.physDefPct);
-        magicalDefense   = P(row.magDefPct);
-        spiritDefense    = P(row.sprDefPct);
+        physicalDefense = P(row.physDefPct);
+        magicalDefense = P(row.magDefPct);
+        spiritDefense = P(row.sprDefPct);
 
-        moveSpeed        = P(row.moveSpeedPct);
-        reflectDamage    = P(row.reflectPct);
+        moveSpeed = P(row.moveSpeedPct);
+        reflectDamage = P(row.reflectPct);
 
         return true;
     }
 
     public override ItemData GetItemData()
     {
-        return new ItemEquitmentData
+        return new EquitmentData
         {
             // base
             itemId = itemId,

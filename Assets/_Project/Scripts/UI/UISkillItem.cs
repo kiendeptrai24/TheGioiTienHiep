@@ -5,7 +5,6 @@ using System;
 
 public class UISkillItem : UIItemSlotBase
 {
-    public EquipmentType equipmentType;
     public int skillIndex;
     [SerializeField] private Image emptySlot;
     public Action<InventoryItem, InventoryItem> OnEquippedChanged;

@@ -3,21 +3,18 @@ using UnityEngine.UI;
 using System;
 
 
-public class UIEquipmentSlot : UIItemSlotBase
+public class UITechniqueItem : UIItemSlotBase
 {
-    public EquipmentType equipmentType;
-    [SerializeField] private Image emptySlot;
     public Action<InventoryItem, InventoryItem> OnEquippedChanged;
     protected override void Awake()
     {
         base.Awake();
-        navigation = GetComponent<NavigationItemDetail>();
+        navigation = GetComponent<NavigationTechniqueDetail>();
         uiInventoryType = UIInventoryType.Equipment;
     }
     public override void ResetData()
     {
         base.ResetData();
-        emptySlot.gameObject.SetActive(true);
     }
     public override bool HasItem()
     {
@@ -27,7 +24,7 @@ public class UIEquipmentSlot : UIItemSlotBase
     {
         var oldItem = inventoryItem;
         inventoryItem = newItem;
-
+        
         OnEquippedChanged?.Invoke(oldItem, inventoryItem);
 
         if (inventoryItem == null)
@@ -35,7 +32,6 @@ public class UIEquipmentSlot : UIItemSlotBase
             ResetData();
             return;
         }
-        emptySlot.gameObject.SetActive(false);
         SetData(
             inventoryItem.data.itemIcon,
             inventoryItem.stackSize
@@ -43,10 +39,10 @@ public class UIEquipmentSlot : UIItemSlotBase
     }
     public override bool CanReceive(ItemDragContext ctx)
     {
-        // chỉ nhận item equipment đúng slot
-        if (ctx.ItemOfFrom.data is EquitmentData eq)
-            return eq.equipmentType == equipmentType;
-
+        if (ctx.ItemOfFrom.data is TechniqueData techniqueData)
+        {
+            return true;
+        }
         return false;
     }
 }

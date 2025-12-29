@@ -67,7 +67,7 @@ public class ItemEquipmentPreset : ItemStatsPreset
 
     public override ItemData GetItemData()
     {
-        return new ItemEquitmentData
+        return new EquitmentData
         {
             // base
             itemId = itemId,

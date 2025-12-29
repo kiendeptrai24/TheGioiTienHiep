@@ -12,7 +12,7 @@ public class EquipmentSystem : StatsSystem
     public override void Equip(InventoryItem item)
     {
         if (item == null) return;
-        if (item.data is not ItemEquitmentData data) return;
+        if (item.data is not EquitmentData data) return;
 
         // ===== DAMAGE =====
         AddPercent(StatType.CritPower, data.physicalDamage);
@@ -85,7 +85,7 @@ public class EquipmentSystem : StatsSystem
         if (item == null)
             return;
 
-        if (item.data is not ItemEquitmentData data) return;
+        if (item.data is not EquitmentData data) return;
 
         // ===== DAMAGE =====
         RemovePercent(StatType.CritPower, data.physicalDamage);

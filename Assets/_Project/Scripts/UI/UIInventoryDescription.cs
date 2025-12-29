@@ -43,9 +43,9 @@ public class UIInventoryDescription : MonoBehaviour
     }
     public void SetButtonDescriptionInventory()
     {
-        if(inventoryItem == null) return;
+        if (inventoryItem == null) return;
 
-        if (inventoryItem.data is ItemEquitmentData)
+        if (inventoryItem.data is EquitmentData)
         {
             cancleBtn.gameObject.SetActive(true);
             acceptBtn.gameObject.SetActive(true);
@@ -60,8 +60,8 @@ public class UIInventoryDescription : MonoBehaviour
     }
     public void SetButtonDescriptionEquipment()
     {
-        if(inventoryItem == null || inventoryItem.data is not ItemEquitmentData) return;
-        
+        if (inventoryItem == null || inventoryItem.data is not EquitmentData) return;
+
         cancleBtn.gameObject.SetActive(true);
         acceptBtn.gameObject.SetActive(true);
         acceptBtn.GetComponentInChildren<TextMeshProUGUI>().text = "UnEquip";
