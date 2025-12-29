@@ -1,9 +1,10 @@
 using TGTH.Mobile;
+using UnityEngine;
 
 public class EquipmentSystem : StatsSystem
 {
     // private CharacterStats charStats;
-    private EquipmentPresenter equipmentPresenter;
+    [SerializeField] private EquipmentPresenter equipmentPresenter;
     protected override void Awake()
     {
         base.Awake();
@@ -11,16 +12,17 @@ public class EquipmentSystem : StatsSystem
     }
     public override void Equip(InventoryItem item)
     {
+        Debug.Log("Equip");
         if (item == null) return;
         if (item.data is not EquitmentData data) return;
-
+        Debug.Log("Equip");
         // ===== DAMAGE =====
-        AddPercent(StatType.CritPower, data.physicalDamage);
-        AddPercent(StatType.CritPower, data.magicalDamage);
-        AddPercent(StatType.CritPower, data.spiritDamage);
+        AddPercent(StatType.PhysicalDamage, data.physicalDamage);
+        AddPercent(StatType.MagicalDamage, data.magicalDamage);
+        AddPercent(StatType.SpiritDamage, data.spiritDamage);
 
-        AddPercent(StatType.CritPower, data.criticalDamage);
-        AddPercent(StatType.CritChance, data.criticalRate);
+        AddPercent(StatType.CritPower, data.critDamage);
+        AddPercent(StatType.CritChance, data.critRate);
 
         AddPercent(StatType.TrueDamage, data.trueDamage);
         AddPercent(StatType.ArmorPenetration, data.armorPenetration);
@@ -48,9 +50,9 @@ public class EquipmentSystem : StatsSystem
         AddPercent(StatType.AllySpiritRegen, data.allySpiritRegen);
 
         // ===== DEFENSE REDUCTION =====
-        AddPercent(StatType.CritDamageReduction, data.reduceCritDamage);
-        AddPercent(StatType.PenetrationDamageReduction, data.reduceArmorPen);
-        AddPercent(StatType.TrueDamageReduction, data.reduceTrueDamage);
+        AddPercent(StatType.CritDamageReduction, data.critDamageReduction);
+        AddPercent(StatType.PenetrationDamageReduction, data.armorPenetrationReduction);
+        AddPercent(StatType.TrueDamageReduction, data.trueDamageReduction);
 
         AddPercent(StatType.ReflectDamage, data.reflectDamage);
         AddPercent(StatType.MovementSpeed, data.moveSpeed);
@@ -86,13 +88,15 @@ public class EquipmentSystem : StatsSystem
             return;
 
         if (item.data is not EquitmentData data) return;
+        Debug.Log("UnEquip");
 
         // ===== DAMAGE =====
-        RemovePercent(StatType.CritPower, data.physicalDamage);
-        RemovePercent(StatType.CritPower, data.magicalDamage);
-        RemovePercent(StatType.CritPower, data.spiritDamage);
-        RemovePercent(StatType.CritPower, data.criticalDamage);
-        RemovePercent(StatType.CritChance, data.criticalRate);
+        RemovePercent(StatType.PhysicalDamage, data.physicalDamage);
+        RemovePercent(StatType.MagicalDamage, data.magicalDamage);
+        RemovePercent(StatType.SpiritDamage, data.spiritDamage);
+
+        RemovePercent(StatType.CritPower, data.critDamage);
+        RemovePercent(StatType.CritChance, data.critRate);
 
         RemovePercent(StatType.TrueDamage, data.trueDamage);
         RemovePercent(StatType.ArmorPenetration, data.armorPenetration);
@@ -120,9 +124,9 @@ public class EquipmentSystem : StatsSystem
         RemovePercent(StatType.AllySpiritRegen, data.allySpiritRegen);
 
         // ===== DEFENSE REDUCTION =====
-        RemovePercent(StatType.CritDamageReduction, data.reduceCritDamage);
-        RemovePercent(StatType.PenetrationDamageReduction, data.reduceArmorPen);
-        RemovePercent(StatType.TrueDamageReduction, data.reduceTrueDamage);
+        RemovePercent(StatType.CritDamageReduction, data.critDamageReduction);
+        RemovePercent(StatType.PenetrationDamageReduction, data.armorPenetrationReduction);
+        RemovePercent(StatType.TrueDamageReduction, data.trueDamageReduction);
 
         AddPercent(StatType.ReflectDamage, data.reflectDamage);
         AddPercent(StatType.MovementSpeed, data.moveSpeed);
@@ -155,6 +159,5 @@ public class EquipmentSystem : StatsSystem
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        equipmentPresenter = FindAnyObjectByType<EquipmentPresenter>();
     }
 }

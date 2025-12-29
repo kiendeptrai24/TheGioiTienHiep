@@ -420,8 +420,6 @@ public class SkillPreset : ItemPreset
             spiritDefense = spiritDefense,
 
             // meta
-            SkillId = itemId,
-            SkillName = itemName,
             skillType = skillType,
             qualityType = qualityType,
             enhanceLevel = enhanceLevel,

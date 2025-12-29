@@ -60,7 +60,6 @@ public class TechniqueData : ItemData
     [Header("Damage Bonus")]
     public float critDamage;              // Sát thương chí mạng
     public float critRate;                // Tỷ lệ chí mạng
-
     public float armorPenetration;        // Xuyên phòng ngự
     public float trueDamage;              // Sát thương chuẩn
     public float lifeSteal;               // Hút sinh lực
@@ -70,7 +69,6 @@ public class TechniqueData : ItemData
     // DEFENSIVE STATS BONUS
     // ============================
     [Header("Defense Bonus")]
-
     public float penetrationReduction;   // Giảm sát thương xuyên phòng ngự
     public float critDamageReduction;     // Giảm sát thương chí mạng
     public float trueDamageReduction;     // Giảm sát thương chuẩn

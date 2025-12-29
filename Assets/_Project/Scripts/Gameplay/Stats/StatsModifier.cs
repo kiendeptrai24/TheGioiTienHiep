@@ -4,7 +4,7 @@ public class StatsModifier
 {
     public void AddStatsRaceData(Dictionary<StatType, Stat> stats, StatsRaceData data)
     {
-        if(data == null) return;
+        if (data == null) return;
         stats.TryGetValue(StatType.Health, out Stat healthStat);
         stats.TryGetValue(StatType.Mana, out Stat manaStat);
         stats.TryGetValue(StatType.Spirit, out Stat spiritStat);
@@ -17,9 +17,9 @@ public class StatsModifier
         stats.TryGetValue(StatType.MovementSpeed, out Stat movementSpeedStat);
         stats.TryGetValue(StatType.SpiritRange, out Stat spiritRangeStat);
 
-        healthStat.AddModifier(data.health);
-        manaStat.AddModifier(data.mana);
-        spiritStat.AddModifier(data.spirit);
+        healthStat.AddModifier(data.maxHealth);
+        manaStat.AddModifier(data.maxMana);
+        spiritStat.AddModifier(data.maxSpirit);
         physicalDamageStat.AddModifier(data.physicalDamage);
         magicalDamageStat.AddModifier(data.magicalDamage);
         spiritDamageStat.AddModifier(data.spiritDamage);
@@ -31,15 +31,15 @@ public class StatsModifier
     }
     public void AddStatsRealmData(Dictionary<StatType, Stat> stats, StatsRealmData data)
     {
-        if(data == null) return;
+        if (data == null) return;
         stats.TryGetValue(StatType.Health, out Stat healthStat);
         stats.TryGetValue(StatType.Mana, out Stat manaStat);
         stats.TryGetValue(StatType.Spirit, out Stat spiritStat);
 
-        stats.TryGetValue(StatType.CritChance, out Stat critChanceStat);
-        stats.TryGetValue(StatType.CritPower, out Stat critPowerStat);
+        stats.TryGetValue(StatType.CritPower, out Stat critRateStat);
+        stats.TryGetValue(StatType.CritChance, out Stat critDamageStat);
 
-        stats.TryGetValue(StatType.SpiritPenetration, out Stat spiritPenetrationStat);
+        stats.TryGetValue(StatType.ArmorPenetration, out Stat armorPenetrationStat);
 
         stats.TryGetValue(StatType.PhysicalDamage, out Stat physicalDamageStat);
         stats.TryGetValue(StatType.MagicalDamage, out Stat magicalDamageStat);
@@ -60,23 +60,23 @@ public class StatsModifier
         stats.TryGetValue(StatType.SpiritRange, out Stat spiritRangeStat);
         stats.TryGetValue(StatType.Evasion, out Stat evasionStat);
 
-        healthStat.AddModifier(data.health);
-        manaStat.AddModifier(data.mana);
-        spiritStat.AddModifier(data.spirit);
+        healthStat.AddModifier(data.maxHealth);
+        manaStat.AddModifier(data.maxMana);
+        spiritStat.AddModifier(data.maxSpirit);
 
-        critChanceStat.AddModifier(data.critChance);
-        critPowerStat.AddModifier(data.critPower);
+        critRateStat.AddModifier(data.critRate);
+        critDamageStat.AddModifier(data.critDamage);
 
-        spiritPenetrationStat.AddModifier(data.spiritPenetration);
+        armorPenetrationStat.AddModifier(data.armorPenetration);
 
         physicalDamageStat.AddModifier(data.physicalDamage);
         magicalDamageStat.AddModifier(data.magicalDamage);
         spiritDamageStat.AddModifier(data.spiritDamage);
-        
+
         physicalDefenseStat.AddModifier(data.physicalDefense);
         magicalDefenseStat.AddModifier(data.magicalDefense);
         spiritDefenseStat.AddModifier(data.spiritDefense);
-        
+
         potentialStat.AddModifier(data.potential);
         skillPointsStat.AddModifier(data.skillPoints);
 
@@ -91,7 +91,7 @@ public class StatsModifier
     }
     public void AddStatsCultivationPathData(Dictionary<StatType, Stat> stats, StatsCultivationPathData data)
     {
-        if(data == null) return;
+        if (data == null) return;
         stats.TryGetValue(StatType.Health, out Stat healthStat);
         stats.TryGetValue(StatType.Mana, out Stat manaStat);
         stats.TryGetValue(StatType.Spirit, out Stat spiritStat);
@@ -109,14 +109,14 @@ public class StatsModifier
 
         stats.TryGetValue(StatType.CounterPercentage, out Stat counterPercentageStat);
 
-        healthStat.AddModifier(data.health);
-        manaStat.AddModifier(data.mana);
-        spiritStat.AddModifier(data.spirit);
-        
+        healthStat.AddModifier(data.maxHealth);
+        manaStat.AddModifier(data.maxMana);
+        spiritStat.AddModifier(data.maxSpirit);
+
         physicalDamageStat.AddModifier(data.physicalDamage);
         magicalDamageStat.AddModifier(data.magicalDamage);
         spiritDamageStat.AddModifier(data.spiritDamage);
-        
+
         physicalDefenseStat.AddModifier(data.physicalDefense);
         magicalDefenseStat.AddModifier(data.magicalDefense);
         spiritDefenseStat.AddModifier(data.spiritDefense);
@@ -125,6 +125,6 @@ public class StatsModifier
         spiritRangeStat.AddModifier(data.spiritRange);
 
         counterPercentageStat.AddModifier(data.counterPercentage);
-    
+
     }
 }

@@ -1,9 +1,10 @@
 
 using TGTH.Mobile;
+using UnityEngine;
 
 public class TechniqueSystem : StatsSystem
 {
-    private TechniquePresenter techniquePresenter;
+    [SerializeField] private TechniquePresenter techniquePresenter;
     protected override void Awake()
     {
         base.Awake();
@@ -13,7 +14,6 @@ public class TechniqueSystem : StatsSystem
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        techniquePresenter = FindAnyObjectByType<TechniquePresenter>();
     }
 
     public override void Equip(InventoryItem item)

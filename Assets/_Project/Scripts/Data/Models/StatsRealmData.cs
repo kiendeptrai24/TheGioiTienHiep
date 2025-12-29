@@ -4,17 +4,17 @@ using System;
 public class StatsRealmData : ItemData
 {
     //Cultivation Realm
-    public int health;
-    public int mana;
-    public int spirit;
+    public int maxHealth;
+    public int maxMana;
+    public int maxSpirit;
 
     //Offensive Stats
-    public int critChance;
-    public int critPower;
+    public int critRate;
+    public int critDamage;
 
     //Defensive Stats
     public int evasion;
-    public int spiritPenetration;
+    public int armorPenetration;
 
     //Speed Stats
     public int movementSpeed;

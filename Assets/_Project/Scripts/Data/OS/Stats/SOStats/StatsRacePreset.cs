@@ -128,9 +128,9 @@ public class StatsRacePreset : ScriptableObject
     {
         StatsRaceData data = new StatsRaceData();
         data.raceType = raceType;
-        data.health = health;
-        data.mana = mana;
-        data.spirit = spirit;
+        data.maxHealth = health;
+        data.maxMana = mana;
+        data.maxSpirit = spirit;
         data.physicalDamage = physicalDamage;
         data.magicalDamage = magicalDamage;
         data.spiritDamage = spiritDamage;

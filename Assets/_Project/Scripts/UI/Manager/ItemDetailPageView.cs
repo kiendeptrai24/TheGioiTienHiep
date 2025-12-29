@@ -75,8 +75,8 @@ public class ItemDetailPageView : TGTHMonoBehaviour
         CreateItemDescriptionDetail(SetColor("Increase Magical Defense", itemEquipmentData.magicalDefense.ToString()));
         CreateItemDescriptionDetail(SetColor("Increase Spirit Defense", itemEquipmentData.spiritDefense.ToString()));
 
-        CreateItemDescriptionDetail(SetColor("Increase Critical Damage", itemEquipmentData.criticalDamage.ToString()));
-        CreateItemDescriptionDetail(SetColor("Increase Critical Rate", itemEquipmentData.criticalRate.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Critical Damage", itemEquipmentData.critDamage.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Critical Rate", itemEquipmentData.critRate.ToString()));
         CreateItemDescriptionDetail(SetColor("Increase Life Steal", itemEquipmentData.lifeSteal.ToString()));
         CreateItemDescriptionDetail(SetColor("Increase Attack Speed", itemEquipmentData.attackSpeed.ToString()));
 
@@ -92,9 +92,9 @@ public class ItemDetailPageView : TGTHMonoBehaviour
         CreateItemDescriptionDetail(SetColor("Increase Ally Mana Regen", itemEquipmentData.allyManaRegen.ToString()));
         CreateItemDescriptionDetail(SetColor("Increase Ally Spirit Regen", itemEquipmentData.allySpiritRegen.ToString()));
 
-        CreateItemDescriptionDetail(SetColor("Increase Reduce Critical Damage", itemEquipmentData.reduceCritDamage.ToString()));
-        CreateItemDescriptionDetail(SetColor("Increase Reduce Armor Penetration", itemEquipmentData.reduceArmorPen.ToString()));
-        CreateItemDescriptionDetail(SetColor("Increase Reduce True Damage", itemEquipmentData.reduceTrueDamage.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Reduce Critical Damage", itemEquipmentData.critDamageReduction.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Reduce Armor Penetration", itemEquipmentData.armorPenetrationReduction.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Reduce True Damage", itemEquipmentData.trueDamageReduction.ToString()));
 
         CreateItemDescriptionDetail(SetColor("Increase Reflect Damage", itemEquipmentData.reflectDamage.ToString()));
         CreateItemDescriptionDetail(SetColor("Increase Move Speed", itemEquipmentData.moveSpeed.ToString()));

@@ -345,9 +345,9 @@ public class StatsRealmPreset : ScriptableObject
         StatsRealmData data = new StatsRealmData();
         data.cultivationStage = cultivationStage;
         
-        data.health = Mathf.RoundToInt(health);
-        data.mana = Mathf.RoundToInt(mana);
-        data.spirit = Mathf.RoundToInt(spirit);
+        data.maxHealth = Mathf.RoundToInt(health);
+        data.maxMana = Mathf.RoundToInt(mana);
+        data.maxSpirit = Mathf.RoundToInt(spirit);
 
         data.physicalDamage = Mathf.RoundToInt(physicalDamage);
         data.magicalDamage = Mathf.RoundToInt(magicalDamage);
@@ -361,12 +361,12 @@ public class StatsRealmPreset : ScriptableObject
         data.potential = Mathf.RoundToInt(potential);
         data.skillPoints = Mathf.RoundToInt(skillPoints);
         data.combatPower = Mathf.RoundToInt(combatPower);
-        data.critChance = Mathf.RoundToInt(critChance);
-        data.critPower = Mathf.RoundToInt(critPower);
+        data.critDamage = Mathf.RoundToInt(critChance);
+        data.critRate = Mathf.RoundToInt(critPower);
         data.evasion = Mathf.RoundToInt(evasion);
         data.attackSpeed = Mathf.RoundToInt(attackSpeed);
         data.castSpeed = Mathf.RoundToInt(castSpeed);
-        data.spiritPenetration = Mathf.RoundToInt(spiritPenetration);
+        data.armorPenetration = Mathf.RoundToInt(spiritPenetration);
 
         return data;
     }

@@ -84600,6 +84600,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8656670261938603213, guid: 44564d31c40ea5e4c8f3e39b540ff1f2,
         type: 3}
+      propertyPath: statsRealmPreset
+      value: 
+      objectReference: {fileID: 11400000, guid: 7ac479347e94c5a469153544db712748,
+        type: 2}
+    - target: {fileID: 8656670261938603213, guid: 44564d31c40ea5e4c8f3e39b540ff1f2,
+        type: 3}
       propertyPath: listItemPreset.Array.size
       value: 31
       objectReference: {fileID: 0}
@@ -135492,9 +135498,9 @@ MonoBehaviour:
     magicalDefense: 0
     spiritDefense: 0
     raceType: 0
-    health: 0
-    mana: 0
-    spirit: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
     spiritRange: 0
     movementSpeed: 0
   statsCultivationPathData:
@@ -135515,9 +135521,9 @@ MonoBehaviour:
     essenceType: 0
     counterEssenceType: 0
     counterPercentage: 0
-    health: 0
-    mana: 0
-    spirit: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
     movementSpeed: 0
     spiritRange: 0
   statsRealmData:
@@ -135535,13 +135541,13 @@ MonoBehaviour:
     physicalDefense: 0
     magicalDefense: 0
     spiritDefense: 0
-    health: 0
-    mana: 0
-    spirit: 0
-    critChance: 0
-    critPower: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    critRate: 0
+    critDamage: 0
     evasion: 0
-    spiritPenetration: 0
+    armorPenetration: 0
     movementSpeed: 0
     attackSpeed: 0
     castSpeed: 0
@@ -233703,9 +233709,9 @@ MonoBehaviour:
     magicalDefense: 0
     spiritDefense: 0
     raceType: 0
-    health: 0
-    mana: 0
-    spirit: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
     spiritRange: 0
     movementSpeed: 0
   statsCultivationPathData:
@@ -233726,9 +233732,9 @@ MonoBehaviour:
     essenceType: 0
     counterEssenceType: 0
     counterPercentage: 0
-    health: 0
-    mana: 0
-    spirit: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
     movementSpeed: 0
     spiritRange: 0
   statsRealmData:
@@ -233746,13 +233752,13 @@ MonoBehaviour:
     physicalDefense: 0
     magicalDefense: 0
     spiritDefense: 0
-    health: 0
-    mana: 0
-    spirit: 0
-    critChance: 0
-    critPower: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    critRate: 0
+    critDamage: 0
     evasion: 0
-    spiritPenetration: 0
+    armorPenetration: 0
     movementSpeed: 0
     attackSpeed: 0
     castSpeed: 0
@@ -233787,6 +233793,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe8bd853a33a877408df300b19f6ebc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentSystem
+  statsManager: {fileID: 0}
+  equipmentPresenter: {fileID: 901400513}
 --- !u!114 &2105827623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233799,6 +233807,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d17ee63e636c674aa243b0dbc6ff243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkillSystem
+  statsManager: {fileID: 0}
+  skillPresenter: {fileID: 1737768917}
 --- !u!114 &2105827624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233811,6 +233821,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43d116ac2ab5e4b479cdc29d79de070e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TechniqueSystem
+  statsManager: {fileID: 0}
+  techniquePresenter: {fileID: 674114793}
 --- !u!1 &2105866098
 GameObject:
   m_ObjectHideFlags: 0

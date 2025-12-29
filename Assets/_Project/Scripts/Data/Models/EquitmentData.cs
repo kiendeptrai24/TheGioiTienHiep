@@ -16,8 +16,8 @@ public class EquitmentData : ItemData
     // 1. DAMAGE STATS
     // ============================
     [Header("Damage Stats")]
-    public float criticalDamage;        // Sát thương chí mạng (%)
-    public float criticalRate;          // Tỷ lệ chí mạng (%)
+    public float critDamage;        // Sát thương chí mạng (%)
+    public float critRate;          // Tỷ lệ chí mạng (%)
 
     public float trueDamage;            // Sát thương chuẩn
     public float armorPenetration;      // Xuyên phòng ngự / xuyên giáp
@@ -40,9 +40,9 @@ public class EquitmentData : ItemData
     public float allyManaRegen;         // Hồi linh lực cho đồng minh
     public float allySpiritRegen;       // Hồi linh thức cho đồng minh
 
-    public float reduceCritDamage;      // Giảm sát thương chí mạng
-    public float reduceArmorPen;        // Giảm xuyên giáp
-    public float reduceTrueDamage;      // Giảm sát thương chuẩn
+    public float critDamageReduction;      // Giảm sát thương chí mạng
+    public float armorPenetrationReduction;        // Giảm xuyên giáp
+    public float trueDamageReduction;      // Giảm sát thương chuẩn
 
     public float reflectDamage;         // Phản đòn (% gây ngược lại)
     public float moveSpeed;             // Tốc độ di chuyển

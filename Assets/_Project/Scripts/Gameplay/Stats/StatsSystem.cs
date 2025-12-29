@@ -1,9 +1,10 @@
 using TGTH.Mobile;
+using UnityEngine;
 
 public abstract class StatsSystem : TGTHMonoBehaviour
 {
     // private CharacterStats charStats;
-    private StatsManager statsManager;
+    [SerializeField] private StatsManager statsManager;
     protected override void Awake()
     {
         LoadComponent();

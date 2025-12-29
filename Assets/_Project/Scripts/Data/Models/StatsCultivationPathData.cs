@@ -15,9 +15,9 @@ public class StatsCultivationPathData : ItemData
     public float counterPercentage;
 
     //Resources (per point)
-    public int health;
-    public int mana;
-    public int spirit;
+    public int maxHealth;
+    public int maxMana;
+    public int maxSpirit;
 
     //Speed / Range (per point)
     public int movementSpeed;
