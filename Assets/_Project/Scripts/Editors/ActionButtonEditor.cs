@@ -10,7 +10,7 @@ public class ActionButtonEditor : Editor
     private void OnEnable()
     {
         actionMode = serializedObject.FindProperty("actionMode");
-        screenManager = serializedObject.FindProperty("m_ScreenManager");
+        screenManager = serializedObject.FindProperty("screenManager");
         m_ScreenName = serializedObject.FindProperty("m_ScreenName");
     }
 

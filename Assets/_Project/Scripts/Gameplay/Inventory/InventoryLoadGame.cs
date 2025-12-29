@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using TGTH.Mobile;
 
-public class InventorySystem : TGTHMonoBehaviour, ISaveable
+public class InventoryLoadGame : TGTHMonoBehaviour, ISaveable
 {
-    [SerializeField] private InventoryPagePresenter inventoryPage;
+    [SerializeField] private InventoryPagePresenter presenter;
     [SerializeField] private List<InventoryItem> listItemDatas;
     protected override void Start()
     {
-        inventoryPage?.SetInventoryData(listItemDatas);
+        presenter?.SetInventoryData(listItemDatas);
     }
     public void LoadData(GameData _data)
     {
@@ -18,9 +18,8 @@ public class InventorySystem : TGTHMonoBehaviour, ISaveable
         {
             listItemDatas.Add(new InventoryItem(item));
         }
-        inventoryPage?.SetInventoryData(listItemDatas);
+        presenter?.SetInventoryData(listItemDatas);
     }
-
     public void SaveGame(ref GameData _data)
     {
 

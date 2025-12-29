@@ -57,7 +57,10 @@ namespace TGTH.Mobile
             skillSystem.Unequip(item1);
             skillSystem.Equip(item2);
         }
-
+        public void Refesh()
+        {
+            view.RefreshInventory(listItemDatas);
+        }
         public void SetInventoryData(List<InventoryItem> items)
         {
             listItemDatas = items;

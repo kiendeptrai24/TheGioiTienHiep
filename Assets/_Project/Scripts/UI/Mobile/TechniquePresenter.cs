@@ -63,17 +63,30 @@ namespace TGTH.Mobile
             listItemDatas = items;
             ShowAllItems();
         }
+        public bool AddItemData(ItemData data)
+        {
+            if (data is TechniqueData)
+            {
+                listItemDatas.Add(new InventoryItem(data));
+                ShowAllItems();
+                return true;
+            }
+            return false;
+        }
         public void SetSkillData(InventoryItem items)
         {
             listItemDatas.Add(items);
             ShowAllItems();
         }
 
-        private void ShowAllItems()
+        public void ShowAllItems()
         {
             view.ShowAllItems(listItemDatas);
         }
-
+        public void Refesh()
+        {
+            view.RefreshInventory(listItemDatas);
+        }
         public void RefreshInventory()
         {
             for (int i = 0; i < listItemDatas.Count; i++)
@@ -206,7 +219,6 @@ namespace TGTH.Mobile
         {
             view.DeselectItem(currentItemSelect);
         }
-
         public void Show()
         {
             view.Show();

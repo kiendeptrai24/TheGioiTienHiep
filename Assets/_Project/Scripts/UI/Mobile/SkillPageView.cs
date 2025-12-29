@@ -14,7 +14,7 @@ namespace TGTH.Mobile
         public UIItemSlotBase itemPrefab;
         public MouseFollower mouseFollower;
         public List<UISkillItem> listOfEquitmentItems = new List<UISkillItem>();
-
+        public List<UIItemSlotBase> listOfUIItemsInInventory = new List<UIItemSlotBase>();
         public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
         public event Action<bool> OnDescriptionToggle;
         public event Action OnRefreshClicked;
@@ -54,6 +54,7 @@ namespace TGTH.Mobile
             {
                 UIItemSlotBase uiItem = Instantiate(itemPrefab, contentPanel);
                 listOfUIItems.Add(uiItem);
+                listOfUIItemsInInventory.Add(uiItem);
             }
             listOfUIItems.AddRange(listOfEquitmentItems);
         }
@@ -80,6 +81,70 @@ namespace TGTH.Mobile
             {
                 if (i >= 50) return;
                 listOfUIItems[i].SetItem(listItemDatas[i]);
+            }
+        }
+        public void RefreshInventory(List<InventoryItem> listItemDatas)
+        {
+            #region Sort
+                
+            // // 1️⃣ Lấy danh sách item đang equip
+            // HashSet<InventoryItem> equippedItems = new HashSet<InventoryItem>();
+
+            // foreach (var slot in listOfEquitmentItems)
+            // {
+            //     if (slot.inventoryItem != null)
+            //         equippedItems.Add(slot.inventoryItem);
+            // }
+
+            // // 2️⃣ Tạo list hiển thị (không ảnh hưởng data gốc)
+            // List<InventoryItem> displayList = new List<InventoryItem>();
+
+            // foreach (var item in listItemDatas)
+            // {
+            //     if (!equippedItems.Contains(item))
+            //         displayList.Add(item);
+            // }
+
+            // // 3️⃣ Cập nhật UI
+            // for (int i = 0; i < listOfUIItemsInInventory.Count; i++)
+            // {
+            //     if (i < displayList.Count)
+            //         listOfUIItemsInInventory[i].SetItem(displayList[i]);
+            //     else
+            //         listOfUIItemsInInventory[i].ResetData();
+            // }
+            #endregion
+
+            // 1️⃣ Tập item đang equip
+            HashSet<InventoryItem> equippedItems = new HashSet<InventoryItem>();
+
+            foreach (var slot in listOfEquitmentItems)
+            {
+                if (slot.inventoryItem != null)
+                    equippedItems.Add(slot.inventoryItem);
+            }
+
+            // 2️⃣ Duyệt theo index – GIỮ NGUYÊN VỊ TRÍ
+            for (int i = 0; i < listOfUIItemsInInventory.Count; i++)
+            {
+                // Không có item ở index này
+                if (i >= listItemDatas.Count)
+                {
+                    listOfUIItemsInInventory[i].ResetData();
+                    continue;
+                }
+
+                InventoryItem item = listItemDatas[i];
+
+                // Item đang equip → slot trống
+                if (equippedItems.Contains(item))
+                {
+                    listOfUIItemsInInventory[i].ResetData();
+                }
+                else
+                {
+                    listOfUIItemsInInventory[i].SetItem(item);
+                }
             }
         }
         public void SetItem(int index, InventoryItem item)

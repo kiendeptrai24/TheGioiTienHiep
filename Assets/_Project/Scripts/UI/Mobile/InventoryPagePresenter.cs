@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 namespace TGTH.Mobile
 {
     public class InventoryPagePresenter : MonoBehaviour, IPointerClickHandler, IEndDragHandler
     {
         [SerializeField] private InventoryPageView view;
         [SerializeField] private ItemDetailPageView itemDetailPageView;
+        [SerializeField] private InventoryUseSystem inventoryUseSystem;
         private List<InventoryItem> listItemDatas;
         private UIItemSlotBase currentItemSelect;
         private int currentlyDraggedItemIndex = -1;
@@ -64,8 +66,52 @@ namespace TGTH.Mobile
                 return;
             }
             ItemClicked(uiItem);
+            Navigation(uiItem);
+        }
+
+        private void Navigation(UIItemSlotBase uiItem)
+        {
+            if(uiItem.inventoryItem.data is TechniqueData)
+            {
+                var popup = PopupManager.Instance.GetPopup<UseItemPopup>();
+                BaseSetupData data = new BaseSetupData("Bạn có muốn sử dụng công pháp này không?");
+
+                if (popup != null)
+                {
+                    popup.ShowPopup(data,
+                    onConfirm: (BasePopupData result) =>
+                    {
+                        inventoryUseSystem.UseItem(uiItem);
+                    },
+                    onCancel: () =>
+                    {
+                        // inventoryUseSystem.UseItem()
+                    });
+                }
+                return;
+            }
+            else if(uiItem.inventoryItem.data is SkillData)
+            {
+                var popup = PopupManager.Instance.GetPopup<UseItemPopup>();
+                BaseSetupData data = new BaseSetupData("Bạn có muốn sử dụng kỹ năng này không?");
+
+                if (popup != null)
+                {
+                    popup.ShowPopup(data,
+                    onConfirm: (BasePopupData result) =>
+                    {
+                        inventoryUseSystem.UseItem(uiItem);
+                    },
+                    onCancel: () =>
+                    {
+                        // inventoryUseSystem.UseItem()
+                    });
+                }
+                return;
+            }
             uiItem?.navigation.OnClick();
         }
+
         private void ItemClicked(UIItemSlotBase uiItem)
         {
             int index = view.listOfUIItems.IndexOf(uiItem);
