@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class StatsManager : TGTHMonoBehaviour, ISaveable
 {
-     [Header("Preset base stats")]
+    public event Action OnValueChanged;
+
+    [Header("Preset base stats")]
     public StatsRaceData statsRaceData;
     public StatsCultivationPathData statsCultivationPathData;
     public StatsRealmData statsRealmData;
@@ -107,6 +109,14 @@ public class StatsManager : TGTHMonoBehaviour, ISaveable
         Debug.LogWarning($"Stat {type} không tồn tại trên {name}!");
         return 0;
     }
+    public Stat GetStat(StatType type)
+    {
+        if (stats.TryGetValue(type, out Stat stat))
+        {
+            return stat;
+        }
+        return null;
+    }
     [ContextMenu("Show Stats")]
     private void ShowStas()
     {
@@ -129,7 +139,10 @@ public class StatsManager : TGTHMonoBehaviour, ISaveable
         statsModifier.AddStatsCultivationPathData(stats, statsCultivationPathData);
         ShowStas();
     }
-
+    public void StatChange()
+    {
+        OnValueChanged.Invoke();
+    }
     public void SaveGame(ref GameData _data)
     {
     }

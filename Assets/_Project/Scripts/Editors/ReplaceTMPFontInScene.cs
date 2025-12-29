@@ -8,7 +8,10 @@ public class ReplaceTMPFontInScene : MonoBehaviour
     [ContextMenu("Replace All TMP Fonts")]
     void ReplaceFonts()
     {
-        var texts = FindObjectsOfType<TextMeshProUGUI>(true);
+        var texts = FindObjectsByType<TextMeshProUGUI>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None
+        );
         foreach (var t in texts)
         {
             t.font = newFont;

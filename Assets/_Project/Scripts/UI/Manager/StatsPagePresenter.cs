@@ -12,8 +12,14 @@ public class StatsPagePresenter : TGTHMonoBehaviour
         base.Awake();
         view.SetStatsData(statsManager.stats);
         view.ShowCharactorIdentifyData(characterIdentity);
+        statsManager.OnValueChanged += UpdateDataItem;
     }
-    private void OnEnable() {
+    private void OnEnable()
+    {
+        UpdateDataItem();
+    }
+    public void UpdateDataItem()
+    {
         view.SetStatsData(statsManager.stats);
         view.ShowCharactorIdentifyData(characterIdentity);
     }
