@@ -8,20 +8,23 @@ public class TechniqueManager : TGTHMonoBehaviour
 {
     [SerializeField] private TechniquePresenter presenter;
     [SerializeField] private List<InventoryItem> listItemDatas;
-    private List<InventoryItem> listItemUsed = new List<InventoryItem>();
+    [SerializeField] private List<InventoryItem> listItemUsed = new List<InventoryItem>();
     public bool isAwake = false;
     protected override void Awake()
     {
         base.Awake();
         isAwake = true;
+
     }
     public void SetInventoryData(List<InventoryItem> items)
     {
         listItemDatas = items;
         listItemDatas.AddRange(listItemUsed);
+        presenter?.ShowAllItems();
     }
-    private void OnEnable() {
-        presenter?.Refesh();
+    private void OnEnable()
+    {
+        presenter?.ShowAllItems();
     }
     public bool AddItemData(ItemData data)
     {
@@ -39,5 +42,5 @@ public class TechniqueManager : TGTHMonoBehaviour
         }
         return false;
     }
-    
+
 }

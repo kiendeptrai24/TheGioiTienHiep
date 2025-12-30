@@ -55,7 +55,7 @@ namespace TGTH.Mobile
                 UIItemSlotBase uiItem = Instantiate(itemPrefab, contentPanel);
                 listOfUIItems.Add(uiItem);
                 listOfUIItemsInInventory.Add(uiItem);
-            
+
             }
             listOfUIItems.AddRange(listOfEquitmentItems);
         }
@@ -74,49 +74,8 @@ namespace TGTH.Mobile
             uiItemOld = uiItemNew;
             uiItemOld.Select();
         }
-        public void ShowAllItems(List<InventoryItem> listItemDatas)
+        public void ShowInventory(List<InventoryItem> listItemDatas)
         {
-            if (listItemDatas == null) return;
-            if (listOfUIItems.Count < listItemDatas.Count) return;
-            for (int i = 0; i < listItemDatas.Count; i++)
-            {
-                if (i >= 50) return;
-                listOfUIItems[i].SetItem(listItemDatas[i]);
-            }
-        }
-        public void RefreshInventory(List<InventoryItem> listItemDatas)
-        {
-            #region Sort
-                
-            // // 1️⃣ Lấy danh sách item đang equip
-            // HashSet<InventoryItem> equippedItems = new HashSet<InventoryItem>();
-
-            // foreach (var slot in listOfEquitmentItems)
-            // {
-            //     if (slot.inventoryItem != null)
-            //         equippedItems.Add(slot.inventoryItem);
-            // }
-
-            // // 2️⃣ Tạo list hiển thị (không ảnh hưởng data gốc)
-            // List<InventoryItem> displayList = new List<InventoryItem>();
-
-            // foreach (var item in listItemDatas)
-            // {
-            //     if (!equippedItems.Contains(item))
-            //         displayList.Add(item);
-            // }
-
-            // // 3️⃣ Cập nhật UI
-            // for (int i = 0; i < listOfUIItemsInInventory.Count; i++)
-            // {
-            //     if (i < displayList.Count)
-            //         listOfUIItemsInInventory[i].SetItem(displayList[i]);
-            //     else
-            //         listOfUIItemsInInventory[i].ResetData();
-            // }
-            #endregion
-
-            // 1️⃣ Tập item đang equip
             HashSet<InventoryItem> equippedItems = new HashSet<InventoryItem>();
 
             foreach (var slot in listOfEquitmentItems)
@@ -125,10 +84,8 @@ namespace TGTH.Mobile
                     equippedItems.Add(slot.inventoryItem);
             }
 
-            // 2️⃣ Duyệt theo index – GIỮ NGUYÊN VỊ TRÍ
             for (int i = 0; i < listOfUIItemsInInventory.Count; i++)
             {
-                // Không có item ở index này
                 if (i >= listItemDatas.Count)
                 {
                     listOfUIItemsInInventory[i].ResetData();
@@ -137,7 +94,6 @@ namespace TGTH.Mobile
 
                 InventoryItem item = listItemDatas[i];
 
-                // Item đang equip → slot trống
                 if (equippedItems.Contains(item))
                 {
                     listOfUIItemsInInventory[i].ResetData();
@@ -146,6 +102,37 @@ namespace TGTH.Mobile
                 {
                     listOfUIItemsInInventory[i].SetItem(item);
                 }
+            }
+        }
+        public void SortInventory(List<InventoryItem> listItemDatas)
+        {
+            // 1) Build set item đang equip
+            HashSet<InventoryItem> equippedItems = new HashSet<InventoryItem>();
+            foreach (var slot in listOfEquitmentItems)
+            {
+                if (slot.inventoryItem != null)
+                    equippedItems.Add(slot.inventoryItem);
+            }
+
+            // 2) Sort: chưa equip trước, đang equip sau
+            // Nếu bạn không muốn thay đổi list gốc, hãy tạo copy rồi sort copy.
+            listItemDatas.Sort((a, b) =>
+            {
+                bool aEq = equippedItems.Contains(a);
+                bool bEq = equippedItems.Contains(b);
+                return aEq.CompareTo(bEq); // false < true => non-equip lên trước
+            });
+
+            // 3) Render UI theo list đã sort
+            for (int i = 0; i < listOfUIItemsInInventory.Count; i++)
+            {
+                if (i >= listItemDatas.Count)
+                {
+                    listOfUIItemsInInventory[i].ResetData();
+                    continue;
+                }
+
+                listOfUIItemsInInventory[i].SetItem(listItemDatas[i]);
             }
         }
         public void SetItem(int index, InventoryItem item)

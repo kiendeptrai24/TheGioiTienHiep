@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,18 +8,30 @@ namespace TGTH.Mobile
 {
     public class InventoryPageView : MonoBehaviour
     {
+        public enum InventoryItemType
+        {
+            item,
+            Equipment,
+            Orther
+        }
         [Header("UI References")]
-        public Button refreshBtn;
+        public Button sortBtn;
+        public Button showAllItemsBtn;
+        public TMP_Dropdown itemtypeDrop;
+        public TMP_Dropdown qualityTypeDrop;
+
         public RectTransform contentPanel;
         public UIInventoryItem itemPrefab;
         public MouseFollower mouseFollower;
         public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
         public event Action<bool> OnDescriptionToggle;
+        public event Action OnSortClicked;
         public event Action OnRefreshClicked;
 
         private void Awake()
         {
-            refreshBtn.onClick.AddListener(() => OnRefreshClicked?.Invoke());
+            showAllItemsBtn.onClick.AddListener(() => OnRefreshClicked?.Invoke());
+            sortBtn.onClick.AddListener(() => OnSortClicked?.Invoke());
         }
         public void ToggleMouseFollower(bool enable)
         {
@@ -73,11 +86,13 @@ namespace TGTH.Mobile
         {
             if (listItemDatas == null) return;
             if (listOfUIItems.Count < listItemDatas.Count) return;
+            ClearAllSlots();
             for (int i = 0; i < listItemDatas.Count; i++)
             {
                 listOfUIItems[i].SetItem(listItemDatas[i]);
             }
         }
+
         public void SetItem(int index, InventoryItem item)
         {
             listOfUIItems[index].SetItem(item);

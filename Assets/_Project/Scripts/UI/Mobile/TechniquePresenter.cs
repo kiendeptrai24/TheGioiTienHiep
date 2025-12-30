@@ -29,6 +29,7 @@ namespace TGTH.Mobile
         }
         private void InitializeInventoryUI(int amount)
         {
+            Debug.Log("InitializeInventoryUI");
             view.CreateInventorySlots(amount);
 
             foreach (var uiItem in view.listOfUIItems)
@@ -63,17 +64,7 @@ namespace TGTH.Mobile
             listItemDatas = items;
             ShowAllItems();
         }
-        public bool AddItemData(ItemData data)
-        {
-            if (data is TechniqueData)
-            {
-                listItemDatas.Add(new InventoryItem(data));
-                ShowAllItems();
-                return true;
-            }
-            return false;
-        }
-        public void SetSkillData(InventoryItem items)
+        public void SetTechniqueData(InventoryItem items)
         {
             listItemDatas.Add(items);
             ShowAllItems();
@@ -81,11 +72,11 @@ namespace TGTH.Mobile
 
         public void ShowAllItems()
         {
-            view.ShowAllItems(listItemDatas);
+            view.ShowInventory(listItemDatas);
         }
-        public void Refesh()
+        public void SortAllItems()
         {
-            view.RefreshInventory(listItemDatas);
+            view.SortInventory(listItemDatas);
         }
         public void RefreshInventory()
         {
