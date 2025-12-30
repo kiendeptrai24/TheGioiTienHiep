@@ -73,11 +73,9 @@ namespace TGTH.Mobile
                 .ThenByDescending(item => item.data.qualityType)
                 .ToList();
 
-            // Nếu không lọc được gì thì giữ nguyên
             if (sortedList.Count == 0)
-                sortedList = listItemDatas;
+                sortedList = new();
 
-            // Hiển thị lại danh sách đã sắp xếp
             view.ShowAllItems(sortedList);
 
         }

@@ -1,6 +1,9 @@
 
 public enum ItemType
 {
+    Material = 0,
     Equipment,
-    Material,
+    Technique,
+    Skill,
+    Other
 }

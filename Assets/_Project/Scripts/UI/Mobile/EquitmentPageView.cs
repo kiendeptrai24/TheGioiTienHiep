@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 namespace TGTH.Mobile
@@ -9,19 +10,26 @@ namespace TGTH.Mobile
     public class EquitmentPageView : MonoBehaviour 
     {
         [Header("UI References")]
-        public Button refreshBtn;
+        public Button sortBtn;
+        public Button showAllItemsBtn;
+        public TMP_Dropdown eqipmenttypeDrop;
+        public TMP_Dropdown qualityTypeDrop;
+
         public RectTransform contentPanel;
         public UIInventoryItem itemPrefab;
         public MouseFollower mouseFollower;
         public List<UIEquipmentSlot> listOfEquitmentItems = new List<UIEquipmentSlot>();    
+        public List<UIItemSlotBase> listOfUIItemsInInventory = new List<UIItemSlotBase>();
 
         public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
         public event Action<bool> OnDescriptionToggle;
         public event Action OnRefreshClicked;
+        public event Action OnSortClicked;
 
         private void Awake()
         {
-            refreshBtn.onClick.AddListener(() => OnRefreshClicked?.Invoke());
+            sortBtn.onClick.AddListener(() => OnSortClicked?.Invoke());
+            showAllItemsBtn.onClick.AddListener(() => OnRefreshClicked?.Invoke());
         }
         public void ToggleMouseFollower(bool enable)
         {
@@ -54,6 +62,7 @@ namespace TGTH.Mobile
             {
                 UIInventoryItem uiItem = Instantiate(itemPrefab, contentPanel);
                 listOfUIItems.Add(uiItem);
+                listOfUIItemsInInventory.Add(uiItem);
             }
             listOfUIItems.AddRange(listOfEquitmentItems);
         }
@@ -80,6 +89,22 @@ namespace TGTH.Mobile
             {
                 if(i >= 50) return;
                 listOfUIItems[i].SetItem(listItemDatas[i]);
+            }
+        }
+        public void ShowAllItemInInventory(List<InventoryItem> listItemDatas)
+        {
+            if (listItemDatas == null) return;
+            if (listOfUIItems.Count < listItemDatas.Count) return;
+            for (int i = 0; i < listOfUIItemsInInventory.Count; i++)
+            {
+                if(i < listItemDatas.Count)
+                {
+                    listOfUIItemsInInventory[i].SetItem(listItemDatas[i]);
+                }
+                else
+                {
+                    listOfUIItemsInInventory[i].ResetData();
+                }
             }
         }
         public void SetItem(int index, InventoryItem item)
