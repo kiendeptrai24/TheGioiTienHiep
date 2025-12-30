@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
 public struct NavigationData
@@ -36,7 +35,14 @@ public abstract class ScreenManager : TGTHMonoBehaviour
         m_NavigationStack.Push(new NavigationData { ScreenName = screenName, Data = data });
         OnStackChanged();
     }
-
+    public void SwitchTo(string screenName, object data = null)
+    {
+        if (m_NavigationStack.Count > 0)
+        {
+            m_NavigationStack.Pop();
+        }
+        NavigateTo(screenName, data);
+    }
     public void NavigateBack()
     {
         if (m_NavigationStack.Count > 0)

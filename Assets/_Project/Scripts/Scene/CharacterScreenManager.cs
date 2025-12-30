@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CharacterScreenManager : ScreenManager
@@ -23,8 +24,7 @@ public class CharacterScreenManager : ScreenManager
         m_Screens.Add(m_ItemDetailScreen.gameObject.name, m_ItemDetailScreen);
         defaultScreen = m_CharacterScreen.gameObject.name;
     }
-    protected override void Start() 
-    {
-        base.Start();
+    private void OnEnable() {
+        StartUI(defaultScreen);
     }
 }

@@ -10,7 +10,6 @@ public class ScreenCopy : TGTHMonoBehaviour
     protected override void Awake()
     {
         base.Awake();
-
     }
     private void OnEnable() {
         pageRoot.SetActive(true);
