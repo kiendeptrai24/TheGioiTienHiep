@@ -9,12 +9,15 @@ public class TechniqueManager : TGTHMonoBehaviour
     [SerializeField] private TechniquePresenter presenter;
     [SerializeField] private List<InventoryItem> listItemDatas;
     [SerializeField] private List<InventoryItem> listItemUsed = new List<InventoryItem>();
+    [SerializeField] private CharacterIdentity characterIdentity;
     public bool isAwake = false;
     protected override void Awake()
     {
         base.Awake();
         isAwake = true;
-
+    }
+    protected override void Start() {
+        UnLockTechnique();
     }
     public void SetInventoryData(List<InventoryItem> items)
     {
@@ -42,5 +45,8 @@ public class TechniqueManager : TGTHMonoBehaviour
         }
         return false;
     }
-
+    private void UnLockTechnique()
+    {
+        presenter.UnlockItem(1);
+    }
 }

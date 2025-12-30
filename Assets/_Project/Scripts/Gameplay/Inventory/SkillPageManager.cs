@@ -14,6 +14,7 @@ public class SkillPageManager : TGTHMonoBehaviour
     {
         base.Awake();
         isAwake = true;
+        UnLockTechnique();
     }
     public void SetInventoryData(List<InventoryItem> items)
     {
@@ -39,5 +40,9 @@ public class SkillPageManager : TGTHMonoBehaviour
         }
         return false;
     }
-    
+    private void UnLockTechnique()
+    {
+        presenter.UnlockItem(1);
+    }
+
 }

@@ -3,9 +3,12 @@ using UnityEngine.UI;
 using System;
 
 
-public class UITechniqueItem : UIItemSlotBase
+public class UITechniqueItem : UIItemSlotBase, ILockable
 {
     public Action<InventoryItem, InventoryItem> OnEquippedChanged;
+    [SerializeField] private Image lockIcon;
+    public bool IsLocked => isLocked;
+    private bool isLocked = true;
     protected override void Awake()
     {
         base.Awake();
@@ -22,6 +25,7 @@ public class UITechniqueItem : UIItemSlotBase
     }
     public override void SetItem(InventoryItem newItem)
     {
+
         var oldItem = inventoryItem;
         inventoryItem = newItem;
         
@@ -39,10 +43,23 @@ public class UITechniqueItem : UIItemSlotBase
     }
     public override bool CanReceive(ItemDragContext ctx)
     {
-        if (ctx.ItemOfFrom.data is TechniqueData techniqueData)
+        if(IsLocked)
+            return false;
+        if (ctx.ItemOfFrom.data is TechniqueData)
         {
             return true;
         }
         return false;
+    }
+
+    public void Lock()
+    {
+        isLocked = true;
+    }
+
+    public void Unlock()
+    {
+        lockIcon.gameObject.SetActive(false);
+        isLocked = false;
     }
 }

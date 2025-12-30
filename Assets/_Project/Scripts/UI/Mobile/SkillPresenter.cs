@@ -27,6 +27,15 @@ namespace TGTH.Mobile
             InitializeInventoryUI(50);
             ShowAllItems();
         }
+        public void UnlockItem(int count)
+        {
+            for (int i = 0; i < view.listOfEquitmentItems.Count; i++)
+            {
+                if(i >= count)
+                    break;
+                view.listOfEquitmentItems[i].Unlock();
+            }
+        }
         private void InitializeInventoryUI(int amount)
         {
             view.CreateInventorySlots(amount);

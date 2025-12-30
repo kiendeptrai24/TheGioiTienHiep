@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 namespace TGTH.Mobile
 {
     public class TechniquePageView : TGTHMonoBehaviour
