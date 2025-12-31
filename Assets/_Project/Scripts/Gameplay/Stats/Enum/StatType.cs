@@ -89,4 +89,12 @@ public enum StatType
     BonusHealth,
     BonusMana,
     BonusSpirit,
+    
+    PhicialDamagePoint,
+    MagicalDamagePoint,
+    SpiritDamagePoint,
+
+    PhicialDefensePoint,
+    MagicalDefensePoint,
+    SpiritDefensePoint,
 }

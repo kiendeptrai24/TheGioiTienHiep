@@ -12,7 +12,7 @@ public abstract class ItemPreset : ScriptableObject
     public Sprite itemIcon;
     public string itemDescription;
     public int currentstack;
-    
+    public QualityType qualityType;
     private void OnValidate()
     {
 #if UNITY_EDITOR

@@ -26,7 +26,18 @@ public abstract class StatsSystem : TGTHMonoBehaviour
         if (statsManager.stats.TryGetValue(type, out Stat stat))
             stat.RemoveModifierPercent(percent);
     }
-
+    protected void AddValue(StatType type, float value)
+    {
+        if (value == 0) return;
+        if (statsManager.stats.TryGetValue(type, out Stat stat))
+            stat.AddModifier(value);
+    }
+    protected void RemoveValue(StatType type, float value)
+    {
+        if (value == 0) return;
+        if (statsManager.stats.TryGetValue(type, out Stat stat))
+            stat.RemoveModifier(value);
+    }
     protected override void LoadComponent()
     {
         base.LoadComponent();
