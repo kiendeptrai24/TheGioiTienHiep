@@ -17,7 +17,6 @@ public class SkillPreset : ItemPreset
 
     [Header("Meta")]
     public SkillType skillType;
-    public QualityType qualityType;
     public int enhanceLevel;
     public RaceType raceType;
     public EssenceType mainEssence;

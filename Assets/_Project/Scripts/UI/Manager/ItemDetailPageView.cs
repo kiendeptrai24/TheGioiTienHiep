@@ -50,10 +50,15 @@ public class ItemDetailPageView : TGTHMonoBehaviour
         {
             SetItemSkillData(itemSkillData);
         }
+        else if (inventoryItem.data is HeroData itemHeroData)
+        {
+            SetItemHeroData(itemHeroData);
+        }
         else if (inventoryItem.data is ItemData itemData)
         {
             SetItemData(itemData);
         }
+        
     }
     public void SetItemData(ItemData itemData)
     {
@@ -179,6 +184,30 @@ public class ItemDetailPageView : TGTHMonoBehaviour
         // Summary
         CreateItemDescriptionDetail(SetColor("Total Quality And Level", itemTechniqueData.totalQualityAndLevel.ToString()));
         CreateItemDescriptionDetail(SetColor("Stat Count", itemTechniqueData.statCount.ToString()));
+    }
+    public void SetItemHeroData(HeroData itemHeroData)
+    {
+        CreateItemDescriptionDetail(SetColor("Level", itemHeroData.level.ToString()));
+        CreateItemDescriptionDetail(SetColor("Attack Range", itemHeroData.attackRange.ToString()));
+        CreateItemDescriptionDetail(SetColor("Health", itemHeroData.health.ToString()));
+        CreateItemDescriptionDetail(SetColor("Mana", itemHeroData.mana.ToString()));
+        CreateItemDescriptionDetail(SetColor("Spirit", itemHeroData.spirit.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Physical Damage", itemHeroData.physicalDamage.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Magical Damage", itemHeroData.magicalDamage.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Spirit Damage", itemHeroData.spiritDamage.ToString()));
+        CreateItemDescriptionDetail(SetColor("Physical Damage Point", itemHeroData.physicalDamagePoint.ToString()));
+        CreateItemDescriptionDetail(SetColor("Magical Damage Point", itemHeroData.magicalDamagePoint.ToString()));
+        CreateItemDescriptionDetail(SetColor("Spirit Damage Point", itemHeroData.spiritDamagePoint.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Physical Defense", itemHeroData.physicalDefense.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Magical Defense", itemHeroData.magicalDefense.ToString()));
+        CreateItemDescriptionDetail(SetColor("Increase Spirit Defense", itemHeroData.spiritDefense.ToString()));
+        CreateItemDescriptionDetail(SetColor("Physical Defense Point", itemHeroData.physicalDefensePoint.ToString()));
+        CreateItemDescriptionDetail(SetColor("Magical Defense Point", itemHeroData.magicalDefensePoint.ToString()));
+        CreateItemDescriptionDetail(SetColor("Spirit Defense Point", itemHeroData.spiritDefensePoint.ToString()));
+        CreateItemDescriptionDetail(SetColor("Race Type", itemHeroData.raceType.ToString()));
+        CreateItemDescriptionDetail(SetColor("Essence Type", itemHeroData.essenceType.ToString()));
+        CreateItemDescriptionDetail(SetColor("Element Type", itemHeroData.elementType.ToString()));
+        // Nếu muốn hiển thị thêm danh sách kỹ năng hoặc công pháp, có thể lặp qua skillDatas/techniqueDatas ở đây
     }
 
     public void SetItemSkillData(SkillData itemSkillData)

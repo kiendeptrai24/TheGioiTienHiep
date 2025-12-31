@@ -18,7 +18,6 @@ public class TechniquePreset : ItemPreset
     public float spiritDefense;
 
     public TechniqueType techniqueType;
-    public QualityType qualityType;     // Phẩm
     public int enhanceLevel;             // Cường hóa
     public RaceType raceType;            // Tộc
     public EssenceType mainEssence;      // Chủ tu
