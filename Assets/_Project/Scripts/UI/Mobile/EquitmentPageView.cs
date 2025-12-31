@@ -22,7 +22,6 @@ namespace TGTH.Mobile
         public List<UIItemSlotBase> listOfUIItemsInInventory = new List<UIItemSlotBase>();
 
         public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
-        public event Action<bool> OnDescriptionToggle;
         public event Action OnRefreshClicked;
         public event Action OnSortClicked;
 

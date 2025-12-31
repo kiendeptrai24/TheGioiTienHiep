@@ -3,16 +3,14 @@ using UnityEngine.UI;
 using System;
 
 
-public class UITechniqueItem : UIItemSlotBase, ILockable
+public class UITechniqueItem : UIItemSlotLockable
 {
     public Action<InventoryItem, InventoryItem> OnEquippedChanged;
     [SerializeField] private Image lockIcon;
-    public bool IsLocked => isLocked;
-    private bool isLocked = true;
     protected override void Awake()
     {
         base.Awake();
-        navigation = GetComponent<NavigationTechniqueDetail>();
+        LoadComponent();
         uiInventoryType = UIInventoryType.Equipment;
     }
     public override void ResetData()
@@ -43,7 +41,7 @@ public class UITechniqueItem : UIItemSlotBase, ILockable
     }
     public override bool CanReceive(ItemDragContext ctx)
     {
-        if(IsLocked)
+        if(base.CanReceive(ctx) == false)
             return false;
         if (ctx.ItemOfFrom.data is TechniqueData)
         {
@@ -51,15 +49,20 @@ public class UITechniqueItem : UIItemSlotBase, ILockable
         }
         return false;
     }
-
-    public void Lock()
+    public override void Lock()
     {
-        isLocked = true;
+        base.Lock();
+        lockIcon.gameObject.SetActive(true);
     }
 
-    public void Unlock()
+    public override void Unlock()
     {
+        base.Unlock();
         lockIcon.gameObject.SetActive(false);
-        isLocked = false;
+    }
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        navigation = GetComponent<NavigationTechniqueDetail>();
     }
 }

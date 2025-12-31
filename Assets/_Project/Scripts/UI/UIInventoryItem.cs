@@ -10,7 +10,7 @@ public class UIInventoryItem : UIItemSlotBase
     protected override void Awake()
     {
         base.Awake();
-        navigation = GetComponent<ActionNavigation>();
+        LoadComponent();
         uiInventoryType = UIInventoryType.Inventory;
 
     }
@@ -63,5 +63,10 @@ public class UIInventoryItem : UIItemSlotBase
             }
         }
         return true;
+    }
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        navigation = GetComponent<ActionNavigation>();
     }
 }

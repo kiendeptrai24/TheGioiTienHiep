@@ -12,7 +12,7 @@ public enum UIInventoryType
 /// Base abstract class for all item UI slots
 /// (Inventory, Equipment, Storage, Shop...)
 /// </summary>
-public abstract class UIItemSlotBase : MonoBehaviour,
+public abstract class UIItemSlotBase : TGTHMonoBehaviour,
     IPointerClickHandler,
     IBeginDragHandler,
     IEndDragHandler,
@@ -35,7 +35,7 @@ public abstract class UIItemSlotBase : MonoBehaviour,
     public event Action<UIItemSlotBase> OnRightMouseBtnClick;
     #endregion
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
         ResetData();
         Deselect();

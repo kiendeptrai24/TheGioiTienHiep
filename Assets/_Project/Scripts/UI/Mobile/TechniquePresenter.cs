@@ -21,8 +21,6 @@ namespace TGTH.Mobile
         private bool isSWapped = false;
         protected override void Awake()
         {
-            view.OnRefreshClicked += SortItems;
-
             view.ToggleMouseFollower(false);
             InitializeInventoryUI(50);
             ShowAllItems();

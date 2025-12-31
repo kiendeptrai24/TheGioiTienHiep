@@ -47,6 +47,6 @@ public class TechniqueManager : TGTHMonoBehaviour
     }
     private void UnLockTechnique()
     {
-        presenter.UnlockItem(1);
+        presenter.UnlockItem(2);
     }
 }

@@ -126,7 +126,6 @@ public class CharacterStats : TGTHNetworkBehaviour, ISaveable
         {
             debugMsg += $"{stat.Key}: {stat.Value.GetValue()}\n";
         }
-        Debug.Log(debugMsg);
     }
 
     public void LoadData(GameData _data)

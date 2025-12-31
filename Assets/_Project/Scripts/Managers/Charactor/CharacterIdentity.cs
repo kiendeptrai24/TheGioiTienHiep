@@ -22,7 +22,6 @@ public class CharacterIdentity : MonoBehaviour, ISaveable
         cultivationStage = statsRealmData.cultivationStage;
         essenceType = statsCultivationPathData.essenceType;
         raceType = statsRaceData.raceType;
-        Debug.Log(cultivationStage.ToString()+ " " + essenceType.ToString() + " " + raceType.ToString());
     }
 
     public void SaveGame(ref GameData _data)

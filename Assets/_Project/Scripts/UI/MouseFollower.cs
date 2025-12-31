@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MouseFollower : MonoBehaviour
+public class MouseFollower : TGTHMonoBehaviour
 {
     [SerializeField]
     private Canvas canvas;
@@ -8,12 +8,16 @@ public class MouseFollower : MonoBehaviour
     private InputManager inputManager;
     private UIInventoryItem item;
 
-    public void Awake()
+    protected override void Awake()
+    {
+        LoadComponent();
+    }
+
+    protected override void LoadComponent()
     {
         canvas = transform.root.GetComponent<Canvas>();
         item = GetComponentInChildren<UIInventoryItem>(true);
     }
-
     public void SetData(Sprite sprite, int quantity)
     {
         item.SetData(sprite, quantity);

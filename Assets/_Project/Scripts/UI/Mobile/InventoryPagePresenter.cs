@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 namespace TGTH.Mobile
 {
-    public class InventoryPagePresenter : MonoBehaviour, IPointerClickHandler, IEndDragHandler
+    public class InventoryPagePresenter : TGTHMonoBehaviour, IPointerClickHandler, IEndDragHandler
     {
         [SerializeField] private InventoryPageView view;
         [SerializeField] private ItemDetailPageView itemDetailPageView;
@@ -17,7 +17,7 @@ namespace TGTH.Mobile
         public event Action<int> OnStartDragging;
         private bool isDraging = false;
 
-        private void Awake()
+        protected override void Awake()
         {
             view.OnRefreshClicked += ShowItem;
             view.OnSortClicked += SortInventory;
@@ -244,6 +244,12 @@ namespace TGTH.Mobile
         public void OnEndDrag(PointerEventData eventData)
         {
             ResetDrag();
+        }
+        protected override void LoadComponent()
+        {
+            base.LoadComponent();
+            view = GetComponent<InventoryPageView>();
+            inventoryUseSystem = GetComponent<InventoryUseSystem>();
         }
     }
 }

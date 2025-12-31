@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 namespace TGTH.Mobile
 {
-    public class EquipmentPresenter : MonoBehaviour, IEndDragHandler
+    public class EquipmentPresenter : TGTHMonoBehaviour, IEndDragHandler
     {
         [SerializeField] private EquitmentPageView view;
         [SerializeField] private ItemDetailPageView itemDetailPageView;
@@ -17,7 +17,7 @@ namespace TGTH.Mobile
         public event Action<int> OnStartDragging;
         private bool isDraging = false;
         private bool isSWapped = false;
-        private void Awake()
+        protected override void Awake()
         {
             view.OnRefreshClicked += ShowAllItemsInInventory;
             view.OnSortClicked += SortInventory;
@@ -98,7 +98,7 @@ namespace TGTH.Mobile
 
             // get equipment item 
             var equip = GetListItemEquipment();
-            
+
             // create list item dont have item is equipment
             List<InventoryItem> filteredList = new();
             foreach (var item in listItemDatas)
@@ -122,7 +122,7 @@ namespace TGTH.Mobile
             // if sortlist dont have item return empty list
             if (sortedList.Count == 0)
                 sortedList = new();
-            
+
             // show in ui
             view.ShowAllItemInInventory(sortedList);
         }

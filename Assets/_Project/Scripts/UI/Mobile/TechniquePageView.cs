@@ -15,13 +15,6 @@ namespace TGTH.Mobile
         public List<UITechniqueItem> listOfEquitmentItems = new List<UITechniqueItem>();
         public List<UIItemSlotBase> listOfUIItemsInInventory = new List<UIItemSlotBase>();
         public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
-        public event Action<bool> OnDescriptionToggle;
-        public event Action OnRefreshClicked;
-
-        protected override void Awake()
-        {
-            //refreshBtn.onClick.AddListener(() => OnRefreshClicked?.Invoke());
-        }
         public void ToggleMouseFollower(bool enable)
         {
             mouseFollower.Toggle(enable);

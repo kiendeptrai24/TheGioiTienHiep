@@ -7,6 +7,7 @@ using TGTH.Mobile;
 public class InventoryLoadGame : TGTHMonoBehaviour, ISaveable
 {
     [SerializeField] private InventoryPagePresenter presenter;
+    [SerializeField] private InventoryUseSystem inventoryUseSystem;
     [SerializeField] private List<InventoryItem> listItemDatas;
     protected override void Start()
     {
@@ -19,9 +20,16 @@ public class InventoryLoadGame : TGTHMonoBehaviour, ISaveable
             listItemDatas.Add(new InventoryItem(item));
         }
         presenter?.SetInventoryData(listItemDatas);
+        inventoryUseSystem.SetInventoryData(listItemDatas);
     }
     public void SaveGame(ref GameData _data)
     {
 
+    }
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        presenter = GetComponent<InventoryPagePresenter>();
+        inventoryUseSystem = GetComponent<InventoryUseSystem>();
     }
 }

@@ -11,7 +11,7 @@ public class UIEquipmentSlot : UIItemSlotBase
     protected override void Awake()
     {
         base.Awake();
-        navigation = GetComponent<NavigationItemDetail>();
+        LoadComponent();
         uiInventoryType = UIInventoryType.Equipment;
     }
     public override void ResetData()
@@ -48,5 +48,10 @@ public class UIEquipmentSlot : UIItemSlotBase
             return eq.equipmentType == equipmentType;
 
         return false;
+    }
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        navigation = GetComponent<NavigationItemDetail>();
     }
 }

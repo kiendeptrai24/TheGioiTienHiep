@@ -24,7 +24,6 @@ namespace TGTH.Mobile
         public UIInventoryItem itemPrefab;
         public MouseFollower mouseFollower;
         public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
-        public event Action<bool> OnDescriptionToggle;
         public event Action OnSortClicked;
         public event Action OnRefreshClicked;
 
