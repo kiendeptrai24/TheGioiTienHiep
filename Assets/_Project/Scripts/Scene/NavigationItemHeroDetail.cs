@@ -1,17 +1,14 @@
 
 
-using UnityEngine;
-
-public class NavigationItemDetail : ActionNavigation
+public class NavigationItemHeroDetail : ActionNavigation
 {
     protected override void Awake()
     {
         base.Awake();
-        m_ScreenName = "ItemDetail";
+        m_ScreenName = "HeroDetail";
     }
     public override void OnClick()
     {
-        Debug.Log("OnClick");
         m_ScreenManager.NavigateTo(m_ScreenName);
     }
 }

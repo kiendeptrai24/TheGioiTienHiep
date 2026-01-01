@@ -5,6 +5,8 @@ using UnityEngine;
 public class HeroPreset : ItemStatsPreset
 {
     public StatsRealmPreset statsRealmPreset;
+    public StatsRacePreset statsRacePreset;
+    public StatsCultivationPathPreset statsCultivationPathPreset;
     public RaceType raceType;
     public EssenceType essenceType;
     public ElementType elementType;
@@ -32,9 +34,7 @@ public class HeroPreset : ItemStatsPreset
             itemIcon = itemIcon,
             itemDescription = itemDescription,
             currentstack = currentstack,
-            raceType = raceType,
-            essenceType = essenceType,
-            elementType = elementType,
+            
             level = level,
             attackRange = attackRange,
             health = health,
@@ -49,6 +49,11 @@ public class HeroPreset : ItemStatsPreset
             qualityType = qualityType,
         };
         heroPreset.statsRealmData = statsRealmPreset.GetStats();
+        heroPreset.statsRaceData = statsRacePreset.GetStats();
+        heroPreset.statsCultivationPathData = statsCultivationPathPreset.GetStats();
+
+        heroPreset.essenceType = essenceType;
+        heroPreset.elementType = elementType;
         heroPreset.equitmentDatas = GetEquitmentDatas();
         heroPreset.skillDatas = GetSkillDatas();
         heroPreset.techniqueDatas = GetTechniqueDatas();

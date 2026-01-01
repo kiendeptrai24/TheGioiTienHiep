@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CharacterIdentity : MonoBehaviour, ISaveable
 {
+    [SerializeField] private bool canLoadData = true;
     [Header("Cultivation")]
     public CultivationStage cultivationStage;
 
@@ -12,9 +13,15 @@ public class CharacterIdentity : MonoBehaviour, ISaveable
     public StatsRaceData statsRaceData;
     public StatsCultivationPathData statsCultivationPathData;
     public StatsRealmData statsRealmData;
-
+    public void Setup(StatsCultivationPathData statsCultivationPathData, StatsRealmData statsRealmData, StatsRaceData statsRaceData)
+    {
+        this.statsCultivationPathData = statsCultivationPathData;
+        this.statsRealmData = statsRealmData;
+        this.statsRaceData = statsRaceData;
+    }
     public void LoadData(GameData _data)
     {
+        if (!canLoadData) return;
         statsRaceData = _data.statsRaceData;
         statsCultivationPathData = _data.statsCultivationPathData;
         statsRealmData = _data.statsRealmData;

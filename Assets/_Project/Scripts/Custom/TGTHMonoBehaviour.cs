@@ -10,6 +10,9 @@ public class TGTHMonoBehaviour : MonoBehaviour {
     {
 
     }
+    private void Reset() {
+        LoadComponent();
+    }
     protected virtual void LoadComponent()
     {
 

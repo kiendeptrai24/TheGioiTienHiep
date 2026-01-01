@@ -8,7 +8,7 @@ namespace TGTH.Mobile
     public class HeroPresenter : TGTHMonoBehaviour, IPointerClickHandler, IEndDragHandler
     {
         [SerializeField] private HeroPageView view;
-        [SerializeField] private ItemDetailPageView itemDetailPageView;
+        [SerializeField] private IItemDetailPageView itemDetailPageView;
         private List<InventoryItem> listItemDatas;
         private UIItemSlotBase currentItemSelect;
         private int currentlyDraggedItemIndex = -1;
@@ -57,17 +57,16 @@ namespace TGTH.Mobile
         }
         public void SortInventory()
         {
-            int type = view.itemtypeDrop.value;
+            int type = view.itemtypeDrop.value + 1;
             int quality = view.qualityTypeDrop.value;
             Debug.Log(type);
             // Lấy enum từ dropdown value
-            ItemType selectedType = (ItemType)type;
+            RaceType selectedType = (RaceType)type;
             QualityType selectedQuality = (QualityType)quality;
-            Debug.Log(selectedType.ToString());
-            Debug.Log(selectedQuality.ToString());
             // Lọc và sắp xếp danh sách
+            if (listItemDatas == null || listItemDatas.Count == 0) return;
             var sortedList = listItemDatas
-                .Where(item => (item.data.itemType == selectedType) && (item.data.qualityType == selectedQuality))
+                .Where(item => (((HeroData)item.data).raceType == selectedType) && (item.data.qualityType == selectedQuality))
                 .OrderBy(item => item.data.itemType)
                 .ThenByDescending(item => item.data.qualityType)
                 .ToList();

@@ -27,7 +27,6 @@ public class UIEquipmentSlot : UIItemSlotBase
     {
         var oldItem = inventoryItem;
         inventoryItem = newItem;
-
         OnEquippedChanged?.Invoke(oldItem, inventoryItem);
 
         if (inventoryItem == null)
@@ -35,11 +34,15 @@ public class UIEquipmentSlot : UIItemSlotBase
             ResetData();
             return;
         }
-        emptySlot.gameObject.SetActive(false);
         SetData(
             inventoryItem.data.itemIcon,
             inventoryItem.stackSize
         );
+    }
+    public override void SetData(Sprite sprite, int quantity)
+    {
+        base.SetData(sprite, quantity);
+        emptySlot.gameObject.SetActive(false);
     }
     public override bool CanReceive(ItemDragContext ctx)
     {

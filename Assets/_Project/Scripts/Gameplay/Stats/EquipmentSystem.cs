@@ -12,10 +12,8 @@ public class EquipmentSystem : StatsSystem
     }
     public override void Equip(InventoryItem item)
     {
-        Debug.Log("Equip");
         if (item == null) return;
         if (item.data is not EquitmentData data) return;
-        Debug.Log("Equip");
         // ===== DAMAGE =====
         AddPercent(StatType.PhysicalDamage, data.physicalDamage);
         AddPercent(StatType.MagicalDamage, data.magicalDamage);

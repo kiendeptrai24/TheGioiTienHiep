@@ -19,7 +19,8 @@ public abstract class UIItemSlotBase : TGTHMonoBehaviour,
     IDropHandler,
     IDragHandler
 {
-    public ActionNavigation navigation  ;
+    public ActionNavigation navigation;
+    [SerializeField] private bool resetDataOnAwake = true;
     [SerializeField] protected UIInventoryType uiInventoryType;
     [Header("UI References")]
     [SerializeField] protected Image itemImage;
@@ -37,7 +38,8 @@ public abstract class UIItemSlotBase : TGTHMonoBehaviour,
 
     protected override void Awake()
     {
-        ResetData();
+        if(resetDataOnAwake)
+            ResetData();
         Deselect();
     }
     public UIInventoryType GetUIInventoryType()

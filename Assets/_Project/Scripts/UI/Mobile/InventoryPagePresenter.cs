@@ -8,7 +8,7 @@ namespace TGTH.Mobile
     public class InventoryPagePresenter : TGTHMonoBehaviour, IPointerClickHandler, IEndDragHandler
     {
         [SerializeField] private InventoryPageView view;
-        [SerializeField] private ItemDetailPageView itemDetailPageView;
+        [SerializeField] private IItemDetailPageView itemDetailPageView;
         [SerializeField] private InventoryUseSystem inventoryUseSystem;
         private List<InventoryItem> listItemDatas;
         private UIItemSlotBase currentItemSelect;

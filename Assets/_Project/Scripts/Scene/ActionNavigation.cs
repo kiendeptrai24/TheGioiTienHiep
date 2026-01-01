@@ -4,7 +4,6 @@ public abstract class ActionNavigation : TGTHMonoBehaviour
 {
     [SerializeField] protected ScreenManager m_ScreenManager;
     [SerializeField] protected string m_ScreenName;
-
     protected override void Awake()
     {
         base.Awake();

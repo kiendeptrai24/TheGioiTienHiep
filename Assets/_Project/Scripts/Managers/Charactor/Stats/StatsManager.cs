@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class StatsManager : TGTHMonoBehaviour, ISaveable
 {
+    [SerializeField] private bool canLoadData = true;
     public event Action OnValueChanged;
 
     [Header("Preset base stats")]
@@ -17,6 +18,7 @@ public class StatsManager : TGTHMonoBehaviour, ISaveable
     public int Health => GetStatValue(StatType.Health);
     public int Mana => GetStatValue(StatType.Mana);
     public int Spirit => GetStatValue(StatType.Spirit);
+
     #region Damage
     public int PhysicalDamage => GetStatValue(StatType.PhysicalDamage);
     public int MagicalDamage => GetStatValue(StatType.MagicalDamage);
@@ -98,7 +100,11 @@ public class StatsManager : TGTHMonoBehaviour, ISaveable
             stats.Add(type, new Stat(type, 0f));
         }
     }
-
+    public void ResetStats()
+    {
+        ResetStatsModifiers();
+        StatChange();
+    }
     public int GetStatValue(StatType type)
     {
         if (stats.TryGetValue(type, out Stat stat))
@@ -127,21 +133,25 @@ public class StatsManager : TGTHMonoBehaviour, ISaveable
         }
         Debug.Log(debugMsg);
     }
-
-    public void LoadData(GameData _data)
-    {
-        ResetStatsModifiers();
-        statsRaceData = _data.statsRaceData;
-        statsCultivationPathData = _data.statsCultivationPathData;
-        statsRealmData = _data.statsRealmData;
+    public void Setup(StatsCultivationPathData statsCultivationPathData, StatsRealmData statsRealmData, StatsRaceData statsRaceData)
+    { 
+        this.statsCultivationPathData = statsCultivationPathData;
+        this.statsRealmData = statsRealmData;
+        this.statsRaceData = statsRaceData;
         statsModifier.AddStatsRaceData(stats, statsRaceData);
         statsModifier.AddStatsRealmData(stats, statsRealmData);
         statsModifier.AddStatsCultivationPathData(stats, statsCultivationPathData);
+    }
+    public void LoadData(GameData _data)
+    {
+        if(!canLoadData) return;
+        ResetStatsModifiers();
+        Setup(_data.statsCultivationPathData, _data.statsRealmData, _data.statsRaceData);
         ShowStas();
     }
     public void StatChange()
     {
-        OnValueChanged.Invoke();
+        OnValueChanged?.Invoke();
     }
     public void SaveGame(ref GameData _data)
     {
