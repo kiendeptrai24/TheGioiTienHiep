@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ItemSkillDetailPageView : TGTHMonoBehaviour
+public class ItemSkillDetailPageView : IItemDetailPageView
 {
     [SerializeField] private Image itemIcon;
     [SerializeField] private TextMeshProUGUI skillnameTxt;
@@ -21,14 +21,14 @@ public class ItemSkillDetailPageView : TGTHMonoBehaviour
     {
         base.Awake();
     }
-    public void HandleItemClicked(InventoryItem inventoryItem)
+    public override void HandleItemClicked(InventoryItem inventoryItem)
     {
-        if(inventoryItem.data is SkillData skill)
+        if (inventoryItem.data is SkillData skill)
         {
             itemIcon.sprite = skill.itemIcon;
             skillnameTxt.text = skill.itemName;
             realmTxt.text = skill.realm + "";
-            effectDescriptionTxt.text ="+ " + skill.specialEffect;
+            effectDescriptionTxt.text = "+ " + skill.specialEffect;
         }
     }
 

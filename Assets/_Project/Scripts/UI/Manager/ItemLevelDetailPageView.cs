@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ItemTechniqueDetailPageView : IItemDetailPageView
+public class ItemLevelDetailPageView : IItemDetailPageView
 {
     [SerializeField] private Image itemIcon;
     [SerializeField] private TextMeshProUGUI techniquenameTxt;

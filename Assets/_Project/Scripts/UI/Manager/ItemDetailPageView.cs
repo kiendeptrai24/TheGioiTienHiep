@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ItemDetailPageView : TGTHMonoBehaviour
+public class ItemDetailPageView : IItemDetailPageView
 {
     [Header("Content")]
     [SerializeField] private TextMeshProUGUI itemNameTxt;
@@ -17,7 +17,7 @@ public class ItemDetailPageView : TGTHMonoBehaviour
     {
         base.Awake();
     }
-    public void HandleItemClicked(InventoryItem inventoryItem)
+    public override void HandleItemClicked(InventoryItem inventoryItem)
     {
         ResetItemDescription();
         SetData(inventoryItem);
@@ -281,11 +281,11 @@ public class ItemDetailPageView : TGTHMonoBehaviour
     private static readonly System.Collections.Generic.Dictionary<string, string> labelVi = new System.Collections.Generic.Dictionary<string, string>()
     {
         {"Increase Physical Damage", "Tăng sát thương Linh Thể"},
-        {"Increase Magical Damage", "Tăng sát thương Linh Lực"},
-        {"Increase Spirit Damage", "Tăng sát thương Linh Thức"},
+        {"Increase Magical Damage", "Tăng sát thương phép"},
+        {"Increase Spirit Damage", "Tăng sát thương linh lực"},
         {"Increase Physical Defense", "Tăng phòng thủ Linh Thể"},
-        {"Increase Magical Defense", "Tăng phòng thủ Linh Lực"},
-        {"Increase Spirit Defense", "Tăng phòng thủ Linh Thức"},
+        {"Increase Magical Defense", "Tăng phòng thủ phép"},
+        {"Increase Spirit Defense", "Tăng phòng thủ linh lực"},
         {"Increase Crit Damage", "Tăng sát thương chí mạng"},
         {"Increase Crit Rate", "Tăng tỉ lệ chí mạng"},
         {"Increase Armor Penetration", "Tăng xuyên giáp"},

@@ -8,7 +8,7 @@ namespace TGTH.Mobile
     public class EquipmentPresenter : TGTHMonoBehaviour, IEndDragHandler
     {
         [SerializeField] private EquitmentPageView view;
-        [SerializeField] private ItemDetailPageView itemDetailPageView;
+        [SerializeField] private IItemDetailPageView itemDetailPageView;
         private EquipmentSystem equipmentSystem;
         private List<InventoryItem> listItemDatas;
         private UIItemSlotBase currentItemSelect;
