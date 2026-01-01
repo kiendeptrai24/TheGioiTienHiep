@@ -35,8 +35,8 @@ public class ItemDetailPageView : TGTHMonoBehaviour
     {
 
         itemNameTxt.text = inventoryItem.data.itemName;
-        qualityTypeTxt.text = inventoryItem.data.qualityType.ToString();
-        //realmTxt.text = inventoryItem.data.cultivationStage.ToString();
+        qualityTypeTxt.text = EnumTranslator.ToVietnamese(inventoryItem.data.qualityType);
+        realmTxt.text = EnumTranslator.ToVietnamese(inventoryItem.data.cultivationStage);
         itemIconImge.sprite = inventoryItem.data.itemIcon;
         if (inventoryItem.data is EquitmentData itemEquitmentData)
         {
@@ -187,27 +187,30 @@ public class ItemDetailPageView : TGTHMonoBehaviour
     }
     public void SetItemHeroData(HeroData itemHeroData)
     {
-        CreateItemDescriptionDetail(SetColor("Level", itemHeroData.level.ToString()));
-        CreateItemDescriptionDetail(SetColor("Attack Range", itemHeroData.attackRange.ToString()));
-        CreateItemDescriptionDetail(SetColor("Health", itemHeroData.health.ToString()));
-        CreateItemDescriptionDetail(SetColor("Mana", itemHeroData.mana.ToString()));
-        CreateItemDescriptionDetail(SetColor("Spirit", itemHeroData.spirit.ToString()));
+        CreateItemDescriptionDetail(SetColor("Level", itemHeroData.level.ToString(), false));
+        CreateItemDescriptionDetail(SetColor("Race Type", EnumTranslator.ToVietnamese(itemHeroData.raceType), false));
+        CreateItemDescriptionDetail(SetColor("Essence Type", EnumTranslator.ToVietnamese(itemHeroData.essenceType), false));
+        CreateItemDescriptionDetail(SetColor("Element Type", EnumTranslator.ToVietnamese(itemHeroData.elementType), false));
+        
+        CreateItemDescriptionDetail(SetColor("Attack Range", itemHeroData.attackRange.ToString(), false));
+        CreateItemDescriptionDetail(SetColor("Bonus Health", itemHeroData.health.ToString()));
+        CreateItemDescriptionDetail(SetColor("Bonus Mana", itemHeroData.mana.ToString()));
+        CreateItemDescriptionDetail(SetColor("Bonus Spirit", itemHeroData.spirit.ToString()));
+
+        CreateItemDescriptionDetail(SetColor("Increase Physical Damage Point", itemHeroData.physicalDamagePoint.ToString(), false));
+        CreateItemDescriptionDetail(SetColor("Increase Magical Damage Point", itemHeroData.magicalDamagePoint.ToString(), false));
+        CreateItemDescriptionDetail(SetColor("Increase Spirit Damage Point", itemHeroData.spiritDamagePoint.ToString(), false));
+        CreateItemDescriptionDetail(SetColor("Increase Physical Defense Point", itemHeroData.physicalDefensePoint.ToString(), false));
+        CreateItemDescriptionDetail(SetColor("Increase Magical Defense Point", itemHeroData.magicalDefensePoint.ToString(), false));
+        CreateItemDescriptionDetail(SetColor("Increase Spirit Defense Point", itemHeroData.spiritDefensePoint.ToString(), false));
+
         CreateItemDescriptionDetail(SetColor("Increase Physical Damage", itemHeroData.physicalDamage.ToString()));
         CreateItemDescriptionDetail(SetColor("Increase Magical Damage", itemHeroData.magicalDamage.ToString()));
         CreateItemDescriptionDetail(SetColor("Increase Spirit Damage", itemHeroData.spiritDamage.ToString()));
-        CreateItemDescriptionDetail(SetColor("Physical Damage Point", itemHeroData.physicalDamagePoint.ToString()));
-        CreateItemDescriptionDetail(SetColor("Magical Damage Point", itemHeroData.magicalDamagePoint.ToString()));
-        CreateItemDescriptionDetail(SetColor("Spirit Damage Point", itemHeroData.spiritDamagePoint.ToString()));
         CreateItemDescriptionDetail(SetColor("Increase Physical Defense", itemHeroData.physicalDefense.ToString()));
         CreateItemDescriptionDetail(SetColor("Increase Magical Defense", itemHeroData.magicalDefense.ToString()));
         CreateItemDescriptionDetail(SetColor("Increase Spirit Defense", itemHeroData.spiritDefense.ToString()));
-        CreateItemDescriptionDetail(SetColor("Physical Defense Point", itemHeroData.physicalDefensePoint.ToString()));
-        CreateItemDescriptionDetail(SetColor("Magical Defense Point", itemHeroData.magicalDefensePoint.ToString()));
-        CreateItemDescriptionDetail(SetColor("Spirit Defense Point", itemHeroData.spiritDefensePoint.ToString()));
-        CreateItemDescriptionDetail(SetColor("Race Type", itemHeroData.raceType.ToString()));
-        CreateItemDescriptionDetail(SetColor("Essence Type", itemHeroData.essenceType.ToString()));
-        CreateItemDescriptionDetail(SetColor("Element Type", itemHeroData.elementType.ToString()));
-        // Nếu muốn hiển thị thêm danh sách kỹ năng hoặc công pháp, có thể lặp qua skillDatas/techniqueDatas ở đây
+
     }
 
     public void SetItemSkillData(SkillData itemSkillData)
@@ -277,12 +280,12 @@ public class ItemDetailPageView : TGTHMonoBehaviour
     // Bảng chuyển đổi tiếng Việt cho các label
     private static readonly System.Collections.Generic.Dictionary<string, string> labelVi = new System.Collections.Generic.Dictionary<string, string>()
     {
-        {"Increase Physical Damage", "Tăng sát thương vật lý"},
-        {"Increase Magical Damage", "Tăng sát thương phép"},
-        {"Increase Spirit Damage", "Tăng sát thương linh lực"},
-        {"Increase Physical Defense", "Tăng phòng thủ vật lý"},
-        {"Increase Magical Defense", "Tăng phòng thủ phép"},
-        {"Increase Spirit Defense", "Tăng phòng thủ linh lực"},
+        {"Increase Physical Damage", "Tăng sát thương Linh Thể"},
+        {"Increase Magical Damage", "Tăng sát thương Linh Lực"},
+        {"Increase Spirit Damage", "Tăng sát thương Linh Thức"},
+        {"Increase Physical Defense", "Tăng phòng thủ Linh Thể"},
+        {"Increase Magical Defense", "Tăng phòng thủ Linh Lực"},
+        {"Increase Spirit Defense", "Tăng phòng thủ Linh Thức"},
         {"Increase Crit Damage", "Tăng sát thương chí mạng"},
         {"Increase Crit Rate", "Tăng tỉ lệ chí mạng"},
         {"Increase Armor Penetration", "Tăng xuyên giáp"},
@@ -308,7 +311,6 @@ public class ItemDetailPageView : TGTHMonoBehaviour
         {"Enhance Level", "Cường hóa"},
         {"Race Type", "Chủng tộc"},
         {"Main Essence", "Chủ tu"},
-        {"Element Type", "Ngũ hành"},
         {"Realm", "Cảnh giới"},
         {"Attack Range", "Tầm đánh"},
         {"Special Effect", "Hiệu ứng đặc biệt"},
@@ -324,12 +326,25 @@ public class ItemDetailPageView : TGTHMonoBehaviour
         {"Devil Core Cost", "Tiêu hao Ma Hạch"},
         {"Spirit Stone Cost", "Tiêu hao Linh Thạch"},
         {"Item Cost", "Tiêu hao vật phẩm khác"},
+        {"Level", "Cấp"},
+        {"Increase Physical Damage Point", "Tăng sát thương Điểm Linh Thể"},
+        {"Increase Magical Damage Point", "Tăng sát thương Điểm Linh Lực"},
+        {"Increase Spirit Damage Point", "Tăng sát thương Điểm Linh Thức"},
+        {"Increase Physical Defense Point", "Tăng phòng thủ Điểm Linh Thể"},
+        {"Increase Magical Defense Point", "Tăng phòng thủ Điểm Linh Lực"},
+        {"Increase Spirit Defense Point", "Tăng phòng thủ Điểm Linh Thức"},
+        {"Essence Type", "Chủ tu"},
+        {"Element Type", "Hệ"},
     };
 
-    private string SetColor(string label, string value)
+    private string SetColor(string label, string value,bool isPersent = true)
     {
         string viLabel = labelVi.ContainsKey(label) ? labelVi[label] : label;
-        string result = $"{viLabel}: <color=#00FF00>{value}%</color>";
+        string result;
+        if(isPersent)
+            result = $"{viLabel}: <color=#00FF00>{value}%</color>";
+        else
+            result = $"{viLabel}: <color=#00FF00>{value}</color>";
         return result;
     }
     private void CreateItemDescriptionDetail(string description)
