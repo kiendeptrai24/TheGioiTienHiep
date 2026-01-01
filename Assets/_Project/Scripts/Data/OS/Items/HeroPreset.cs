@@ -19,6 +19,7 @@ public class HeroPreset : ItemStatsPreset
     public float physicalDefensePoint; // value
     public float magicalDefensePoint; // value
     public float spiritDefensePoint; // value
+    public List<ItemEquipmentPreset> equitmentDatas;
     public List<SkillPreset> skillDatas;
     public List<TechniquePreset> techniqueDatas;
     public override ItemData GetItemData()
@@ -48,6 +49,7 @@ public class HeroPreset : ItemStatsPreset
             qualityType = qualityType,
         };
         heroPreset.statsRealmData = statsRealmPreset.GetStats();
+        heroPreset.equitmentDatas = GetEquitmentDatas();
         heroPreset.skillDatas = GetSkillDatas();
         heroPreset.techniqueDatas = GetTechniqueDatas();
         return heroPreset;
@@ -71,5 +73,15 @@ public class HeroPreset : ItemStatsPreset
             techniques.Add((TechniqueData)technique);
         }
         return techniques;
+    }
+    public List<EquitmentData> GetEquitmentDatas()
+    {
+        List<EquitmentData> equitments = new List<EquitmentData>();
+        foreach (var item in equitmentDatas)
+        {
+            var equitment = item.GetItemData();
+            equitments.Add((EquitmentData)equitment);
+        }
+        return equitments;
     }
 }

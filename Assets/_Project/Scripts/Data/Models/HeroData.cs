@@ -19,6 +19,7 @@ public class HeroData : ItemData
     public float physicalDefensePoint; // value
     public float magicalDefensePoint; // value
     public float spiritDefensePoint; // value
+    public List<EquitmentData> equitmentDatas;
     public List<TechniqueType> techniques;
     public List<SkillData> skillDatas;
     public List<SkillType> skills;
