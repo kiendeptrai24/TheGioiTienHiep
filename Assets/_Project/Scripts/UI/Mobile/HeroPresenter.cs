@@ -29,7 +29,7 @@ namespace TGTH.Mobile
         {
             view.CreateInventorySlots(amount);
 
-            foreach (var uiItem in view.listOfUIItems)
+            foreach (var uiItem in view.listOfUIItemsAlreadyOwned)
             {
                 uiItem.OnItemClicked += HandleItemClicked;
                 uiItem.OnItemBeginDrag += HandleBeginDrag;
@@ -95,7 +95,7 @@ namespace TGTH.Mobile
 
         private void ItemClicked(UIItemSlotBase uiItem)
         {
-            int index = view.listOfUIItems.IndexOf(uiItem);
+            int index = view.listOfUIItemsAlreadyOwned.IndexOf(uiItem);
             if (index < 0) return;
 
             view.DeselectItem(currentItemSelect);
@@ -107,7 +107,7 @@ namespace TGTH.Mobile
         }
         private void HandleItemRightClick(UIItemSlotBase uiItem)
         {
-            int index = view.listOfUIItems.IndexOf(uiItem);
+            int index = view.listOfUIItemsAlreadyOwned.IndexOf(uiItem);
             if (index < 0) return;
 
             OnItemActionRequested?.Invoke(index);
@@ -116,7 +116,7 @@ namespace TGTH.Mobile
         private void HandleBeginDrag(UIItemSlotBase uiItem)
         {
             isDraging = true;
-            int index = view.listOfUIItems.IndexOf(uiItem);
+            int index = view.listOfUIItemsAlreadyOwned.IndexOf(uiItem);
             if (index < 0) return;
 
             currentlyDraggedItemIndex = index;
@@ -139,7 +139,7 @@ namespace TGTH.Mobile
         private void HandleItemDropped(UIItemSlotBase uiItem)
         {
             if (currentlyDraggedItemIndex == -1) return;
-            int dropIndex = view.listOfUIItems.IndexOf(uiItem);
+            int dropIndex = view.listOfUIItemsAlreadyOwned.IndexOf(uiItem);
 
             if (dropIndex == -1) return;
 
@@ -149,8 +149,8 @@ namespace TGTH.Mobile
 
         private void SwapItemsUI(int from, int to)
         {
-            var fromSlot = view.listOfUIItems[from];
-            var toSlot = view.listOfUIItems[to];
+            var fromSlot = view.listOfUIItemsAlreadyOwned[from];
+            var toSlot = view.listOfUIItemsAlreadyOwned[to];
             if (fromSlot == toSlot)
             {
                 ResetDrag();

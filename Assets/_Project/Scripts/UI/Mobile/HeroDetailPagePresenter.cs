@@ -71,7 +71,7 @@ namespace TGTH.Mobile
         }
         private void ShowHeroDetail()
         {
-
+            
         }
         public void SetStatManager(InventoryItem item)
         {
@@ -82,7 +82,7 @@ namespace TGTH.Mobile
             {
                 Debug.Log("heroData == null");
             }
-            statsManager.Setup(heroData.statsCultivationPathData, heroData.statsRealmData, heroData.statsRaceData);
+            statsManager.Setup(heroData, heroData.statsCultivationPathData, heroData.statsRealmData, heroData.statsRaceData);
             characterIdentity.Setup(heroData.statsCultivationPathData, heroData.statsRealmData, heroData.statsRaceData);
             foreach (var eq in heroData.equitmentDatas)
             {

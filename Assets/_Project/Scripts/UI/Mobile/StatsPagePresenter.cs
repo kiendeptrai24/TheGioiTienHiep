@@ -11,8 +11,7 @@ namespace TGTH.Mobile
         protected override void Awake()
         {
             base.Awake();
-            view.SetStatsData(statsManager.stats);
-            view.ShowCharactorIdentifyData(characterIdentity);
+            UpdateDataItem();
             statsManager.OnValueChanged += UpdateDataItem;
         }
         private void OnEnable()

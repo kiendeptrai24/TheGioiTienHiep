@@ -55,6 +55,6 @@ public class UIEquipmentSlot : UIItemSlotBase
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        navigation = GetComponent<NavigationItemDetail>();
+        navigation = GetComponent<ActionNavigation>();
     }
 }

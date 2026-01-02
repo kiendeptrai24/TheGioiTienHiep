@@ -8,7 +8,7 @@ public class StatsManager : TGTHMonoBehaviour, ISaveable
 {
     [SerializeField] private bool canLoadData = true;
     public event Action OnValueChanged;
-
+    public ItemData data;
     [Header("Preset base stats")]
     public StatsRaceData statsRaceData;
     public StatsCultivationPathData statsCultivationPathData;
@@ -133,8 +133,9 @@ public class StatsManager : TGTHMonoBehaviour, ISaveable
         }
         Debug.Log(debugMsg);
     }
-    public void Setup(StatsCultivationPathData statsCultivationPathData, StatsRealmData statsRealmData, StatsRaceData statsRaceData)
+    public void Setup(ItemData item, StatsCultivationPathData statsCultivationPathData, StatsRealmData statsRealmData, StatsRaceData statsRaceData)
     { 
+        this.data = item;
         this.statsCultivationPathData = statsCultivationPathData;
         this.statsRealmData = statsRealmData;
         this.statsRaceData = statsRaceData;
@@ -146,7 +147,7 @@ public class StatsManager : TGTHMonoBehaviour, ISaveable
     {
         if(!canLoadData) return;
         ResetStatsModifiers();
-        Setup(_data.statsCultivationPathData, _data.statsRealmData, _data.statsRaceData);
+        Setup(new ItemData(), _data.statsCultivationPathData, _data.statsRealmData, _data.statsRaceData);
         ShowStas();
     }
     public void StatChange()

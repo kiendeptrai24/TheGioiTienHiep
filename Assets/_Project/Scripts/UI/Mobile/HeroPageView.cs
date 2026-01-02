@@ -14,10 +14,12 @@ namespace TGTH.Mobile
         public TMP_Dropdown itemtypeDrop;
         public TMP_Dropdown qualityTypeDrop;
 
-        public RectTransform contentPanel;
+        public RectTransform contentHeroExists;
+        public RectTransform contentHeroNotYetOwned;
         public UIInventoryItem itemPrefab;
         public MouseFollower mouseFollower;
-        public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
+        public List<UIItemSlotBase> listOfUIItemsAlreadyOwned = new List<UIItemSlotBase>();
+        public List<UIItemSlotBase> listOfUIItemsNotYetOwned = new List<UIItemSlotBase>();
         public event Action OnSortClicked;
         public event Action OnRefreshClicked;
 
@@ -38,7 +40,7 @@ namespace TGTH.Mobile
 
         public void ClearAllSlots()
         {
-            foreach (var item in listOfUIItems)
+            foreach (var item in listOfUIItemsAlreadyOwned)
             {
                 item.ResetData();
                 item.Deselect();
@@ -47,7 +49,7 @@ namespace TGTH.Mobile
 
         public void DeselectAll()
         {
-            foreach (var item in listOfUIItems)
+            foreach (var item in listOfUIItemsAlreadyOwned)
                 item.Deselect();
         }
 
@@ -55,8 +57,13 @@ namespace TGTH.Mobile
         {
             for (int i = 0; i < amount; i++)
             {
-                UIInventoryItem uiItem = Instantiate(itemPrefab, contentPanel);
-                listOfUIItems.Add(uiItem);
+                UIInventoryItem uiItem = Instantiate(itemPrefab, contentHeroExists);
+                listOfUIItemsAlreadyOwned.Add(uiItem);
+            }
+            for (int i = 0; i < amount; i++)
+            {
+                UIInventoryItem uiItem = Instantiate(itemPrefab, contentHeroNotYetOwned);
+                listOfUIItemsNotYetOwned.Add(uiItem);
             }
 
         }
@@ -78,22 +85,22 @@ namespace TGTH.Mobile
         public void ShowAllItems(List<InventoryItem> listItemDatas)
         {
             if (listItemDatas == null) return;
-            if (listOfUIItems.Count < listItemDatas.Count) return;
+            if (listOfUIItemsAlreadyOwned.Count < listItemDatas.Count) return;
             ClearAllSlots();
             for (int i = 0; i < listItemDatas.Count; i++)
             {
-                listOfUIItems[i].SetItem(listItemDatas[i]);
+                listOfUIItemsAlreadyOwned[i].SetItem(listItemDatas[i]);
             }
         }
 
         public void SetItem(int index, InventoryItem item)
         {
-            listOfUIItems[index].SetItem(item);
+            listOfUIItemsAlreadyOwned[index].SetItem(item);
         }
 
         public void SetItemData(int index, Sprite sprite, int qty, string name)
         {
-            listOfUIItems[index].SetData(sprite, qty);
+            listOfUIItemsAlreadyOwned[index].SetData(sprite, qty);
         }
 
         public void Show()
