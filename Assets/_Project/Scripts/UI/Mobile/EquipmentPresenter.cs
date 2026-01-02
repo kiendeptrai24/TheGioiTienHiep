@@ -51,12 +51,10 @@ namespace TGTH.Mobile
         }
         public void SetEquipmentSystem(EquipmentSystem system)
         {
-            Debug.Log("SetEquipmentSystem");
             equipmentSystem = system;
         }
         private void HandleEquippedChanged(InventoryItem item1, InventoryItem item2)
         {
-            Debug.Log("HandleEquippedChanged");
             if (equipmentSystem == null) return;
             equipmentSystem.Unequip(item1);
             equipmentSystem.Equip(item2);

@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace TGTH.Mobile
 {
-    public class HeroDetailPagePresenter : TGTHMonoBehaviour
+    public class HeroDetailPagePresenter : IItemDetailPageView
     {
         [SerializeField] private HeroDetailPageView view;
         [SerializeField] private IItemDetailPageView itemDetailPageView;
@@ -13,7 +14,7 @@ namespace TGTH.Mobile
         [SerializeField] private SkillSystem skillSystem;
         [SerializeField] private TechniqueSystem techniqueSystem;
 
-
+        private bool setup = false;
         protected override void Awake()
         {
             foreach (var uiItem in view.uIEquipmentSlots)
@@ -31,9 +32,33 @@ namespace TGTH.Mobile
             view.OnBiographyClicked += ShowBiography;
             view.OnHeroStatsClicked += ShowHeroInfo;
             view.OnHeroDetailClicked += ShowHeroDetail;
-            view.OnItemClicked += SetStatManager;
         }
 
+        private void Init()
+        {
+            view.equipmentSlotsDictionary = new Dictionary<EquipmentType, UIItemSlotBase>();
+            foreach (var slot in view.uIEquipmentSlots)
+            {
+                view.equipmentSlotsDictionary.Add(slot.equipmentType, slot);
+            }
+        }
+
+        public override void HandleItemClicked(InventoryItem inventoryItem)
+        {
+            if (!setup)
+            {
+                Init();
+                setup = true;
+            }
+
+            if (inventoryItem == null) return;
+            if (inventoryItem.data is HeroData heroData)
+            {
+                view.ShowData(heroData);
+                SetStatManager(inventoryItem);
+            }
+
+        }
 
         private void ShowBiography()
         {

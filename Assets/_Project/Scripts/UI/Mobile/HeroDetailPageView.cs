@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace TGTH.Mobile
 {
-    public class HeroDetailPageView : IItemDetailPageView
+    public class HeroDetailPageView : TGTHMonoBehaviour
     {
         [Header("Content")]
         [SerializeField] private TextMeshProUGUI itemNameTxt;
@@ -17,7 +17,7 @@ namespace TGTH.Mobile
         [SerializeField] private Button heroDetailBtn;
 
         public List<UIEquipmentSlot> uIEquipmentSlots;
-        private Dictionary<EquipmentType, UIItemSlotBase> equipmentSlotsDictionary;
+        public Dictionary<EquipmentType, UIItemSlotBase> equipmentSlotsDictionary;
         public List<UIItemSlotBase> uISkillItems;
         public List<UIItemSlotBase> uITechniqueItems;
 
@@ -25,9 +25,6 @@ namespace TGTH.Mobile
         public event Action OnHeroStatsClicked;
         public event Action OnHeroDetailClicked;
 
-        public event Action<InventoryItem> OnItemClicked;
-
-        private bool setup = false;
         protected override void Awake()
         {
             base.Awake();
@@ -36,33 +33,7 @@ namespace TGTH.Mobile
             heroDetailBtn.onClick.AddListener(() => { OnHeroDetailClicked?.Invoke(); });
         }
 
-        private void Init()
-        {
-            equipmentSlotsDictionary = new Dictionary<EquipmentType, UIItemSlotBase>();
-            foreach (var slot in uIEquipmentSlots)
-            {
-                equipmentSlotsDictionary.Add(slot.equipmentType, slot);
-            }
-        }
-
-        public override void HandleItemClicked(InventoryItem inventoryItem)
-        {
-            if (!setup)
-            {
-                Init();
-                setup = true;
-            }
-
-            if (inventoryItem == null) return;
-            if (inventoryItem.data is HeroData heroData)
-            {
-                SetupHeroData(heroData);
-                OnItemClicked?.Invoke(inventoryItem);
-            }
-
-        }
-
-        private void SetupHeroData(HeroData heroData)
+        public void ShowData(HeroData heroData)
         {
             itemNameTxt.text = heroData.itemName;
             realmTxt.text = EnumTranslator.ToVietnamese(heroData.cultivationStage);
