@@ -86,7 +86,6 @@ public class EquipmentSystem : StatsSystem
             return;
 
         if (item.data is not EquitmentData data) return;
-        Debug.Log("UnEquip");
 
         // ===== DAMAGE =====
         RemovePercent(StatType.PhysicalDamage, data.physicalDamage);

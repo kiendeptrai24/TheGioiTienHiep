@@ -10,6 +10,7 @@ namespace TGTH.Mobile
         [SerializeField] private InventoryPageView view;
         [SerializeField] private IItemDetailPageView itemDetailPageView;
         [SerializeField] private InventoryUseSystem inventoryUseSystem;
+        [SerializeField] private InventoryCenterManager inventoryCenterManager;
         private List<InventoryItem> listItemDatas;
         private UIItemSlotBase currentItemSelect;
         private int currentlyDraggedItemIndex = -1;
@@ -21,10 +22,12 @@ namespace TGTH.Mobile
         {
             view.OnRefreshClicked += ShowItem;
             view.OnSortClicked += SortInventory;
+            inventoryCenterManager.OnItemDataChanged += SetItemData;
 
             view.ToggleMouseFollower(false);
             InitializeInventoryUI(50);
             ShowAllItems();
+            SetItemData(inventoryCenterManager.GetItemData());
         }
         private void InitializeInventoryUI(int amount)
         {
@@ -38,6 +41,17 @@ namespace TGTH.Mobile
                 uiItem.OnItemEndDrag += HandleEndDrag;
                 uiItem.OnRightMouseBtnClick += HandleItemRightClick;
             }
+        }
+        private void SetItemData(List<ItemData> items)
+        {
+            if (listItemDatas == null)
+                listItemDatas = new List<InventoryItem>();
+            listItemDatas.Clear();
+            foreach (var item in items)
+            {
+                listItemDatas.Add(new InventoryItem(item));
+            }
+            ShowAllItems();
         }
 
         public void SetInventoryData(List<InventoryItem> items)
@@ -64,8 +78,6 @@ namespace TGTH.Mobile
             // Lấy enum từ dropdown value
             ItemType selectedType = (ItemType)type;
             QualityType selectedQuality = (QualityType)quality;
-            Debug.Log(selectedType.ToString());
-            Debug.Log(selectedQuality.ToString());
             // Lọc và sắp xếp danh sách
             var sortedList = listItemDatas
                 .Where(item => (item.data.itemType == selectedType) && (item.data.qualityType == selectedQuality))
@@ -143,7 +155,7 @@ namespace TGTH.Mobile
 
             currentItemSelect = uiItem;
             ResetDrag();
-            itemDetailPageView.HandleItemClicked(uiItem.inventoryItem);
+            itemDetailPageView?.HandleItemClicked(uiItem.inventoryItem);
         }
         private void HandleItemRightClick(UIItemSlotBase uiItem)
         {

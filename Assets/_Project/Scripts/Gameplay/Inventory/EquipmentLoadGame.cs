@@ -10,16 +10,16 @@ public class EquipmentLoadGame : TGTHMonoBehaviour, ISaveable
     [SerializeField] private List<InventoryItem> listItemDatas;
     protected override void Awake()
     {
-        equipmentPage?.SetInventoryData(listItemDatas);
+        // equipmentPage?.SetInventoryData(listItemDatas);
     }
     public void LoadData(GameData _data)
     {
-        foreach (var item in _data.itemDatas)
-        {
-            if (item is EquitmentData)
-                listItemDatas.Add(new InventoryItem(item));
-        }
-        equipmentPage?.SetInventoryData(listItemDatas);
+        // foreach (var item in _data.itemDatas)
+        // {
+        //     if (item is EquitmentData)
+        //         listItemDatas.Add(new InventoryItem(item));
+        // }
+        // equipmentPage?.SetInventoryData(listItemDatas);
     }
 
     public void SaveGame(ref GameData _data)

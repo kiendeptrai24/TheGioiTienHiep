@@ -5,14 +5,23 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 namespace TGTH.Mobile
 {
+    /// <summary>
+    /// this class must disable when start
+    /// </summary>
     public class HeroEquipmentPresenter : EquipmentBasePagePresenter , IEndDragHandler
     {
         [SerializeField] private StatsManager statsManager;
         private bool setup = false;
-        private void OnEnable()
+        protected override void Awake()
         {
-            ShowAllItems();
-            UpdateDataItem();
+            base.Awake();
+            Init();
+            view.ShowEquipmentItems(statsManager.data);
+        }
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            // UpdateDataItem();
         }
         public void UpdateDataItem()
         {
@@ -21,7 +30,6 @@ namespace TGTH.Mobile
                 Init();
                 setup = true;
             }
-            view.ShowEquipmentItems(statsManager.data);
         }
         private void Init()
         {
@@ -35,19 +43,13 @@ namespace TGTH.Mobile
         {
             if(base.HandleEquippedChanged(item1, item2))
             {
+                if(item1 == null || item1.data == null || item2 == null || item2.data == null) return false;
                 var heroData = statsManager.data as HeroData;
                 heroData.equitmentDatas.Add(item2.data as EquitmentData);
-                Debug.Log(heroData.equitmentDatas.Count);
-                if(item1 == null ||  item1.data == null) return true;
                 heroData.equitmentDatas.Remove(item1.data as EquitmentData);
                 return true;
             }
             return false;
-        }
-
-        private void ShowAllItems()
-        {
-            view.ShowAllItems(listItemDatas);
         }
 
         private void ShowAllItemsInInventory()

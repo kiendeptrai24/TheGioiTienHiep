@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,7 +11,8 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
     [SerializeField] protected EquipmentBasePageView view;
     [SerializeField] protected IItemDetailPageView itemDetailPageView;
     [SerializeField] protected EquipmentSystem equipmentSystem;
-    protected List<InventoryItem> listItemDatas;
+    [SerializeField] protected InventoryCenterManager inventoryCenterManager;
+    [SerializeField] protected List<InventoryItem> listItemDatas;
     protected UIItemSlotBase currentItemSelect;
     protected int currentlyDraggedItemIndex = -1;
     protected bool isDraging = false;
@@ -20,9 +23,27 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
     {
         view.ToggleMouseFollower(false);
         InitializeInventoryUI(50);
-        ShowAllItems();
-
+        inventoryCenterManager.OnItemEquitmentDataChanged += SetItemData;
+        SetItemData(inventoryCenterManager.GetDataType(ItemType.Equipment)); 
+        view.OnRefreshClicked += ShowAllItemsInInventory;
+        view.OnSortClicked += SortInventory;
     }
+    protected virtual void OnEnable() {
+        SetItemData(inventoryCenterManager.GetDataType(ItemType.Equipment));
+    }
+    private void SetItemData(List<ItemData> items)
+    {
+        if (listItemDatas == null)
+            listItemDatas = new List<InventoryItem>();
+        else
+            listItemDatas.Clear();
+        foreach (var item in items)
+        {
+            listItemDatas.Add(new InventoryItem(item));
+        }
+        ShowAllItems();
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -57,13 +78,17 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         if (equipmentSystem == null) return false;
         equipmentSystem.Unequip(item1);
         equipmentSystem.Equip(item2);
+        if(item1 != null && item1.data != null)
+        {
+            inventoryCenterManager.AddData(item1.data);
+            inventoryCenterManager.ItemChange(item1.data);
+        }
+        if(item2 != null && item2.data != null)
+        {
+            inventoryCenterManager.RemoveData(item2.data);
+            inventoryCenterManager.ItemChange(item2.data);
+        }
         return true;
-    }
-
-    public void SetInventoryData(List<InventoryItem> items)
-    {
-        listItemDatas = items;
-        ShowAllItems();
     }
 
     private void ShowAllItems()

@@ -11,16 +11,16 @@ public class InventoryLoadGame : TGTHMonoBehaviour, ISaveable
     [SerializeField] private List<InventoryItem> listItemDatas;
     protected override void Start()
     {
-        presenter?.SetInventoryData(listItemDatas);
+        //presenter?.SetInventoryData(listItemDatas);
     }
     public void LoadData(GameData _data)
     {
-        foreach (var item in _data.itemDatas)
-        {
-            listItemDatas.Add(new InventoryItem(item));
-        }
-        presenter?.SetInventoryData(listItemDatas);
-        inventoryUseSystem.SetInventoryData(listItemDatas);
+        // foreach (var item in _data.itemDatas)
+        // {
+        //     listItemDatas.Add(new InventoryItem(item));
+        // }
+        // presenter?.SetInventoryData(listItemDatas);
+        // inventoryUseSystem.SetInventoryData(listItemDatas);
     }
     public void SaveGame(ref GameData _data)
     {
