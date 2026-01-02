@@ -7,7 +7,7 @@ public class UIEquipmentSlot : UIItemSlotBase
 {
     public EquipmentType equipmentType;
     [SerializeField] private Image emptySlot;
-    public Action<InventoryItem, InventoryItem> OnEquippedChanged;
+    public Func<InventoryItem, InventoryItem, bool> OnEquippedChanged;
     protected override void Awake()
     {
         base.Awake();

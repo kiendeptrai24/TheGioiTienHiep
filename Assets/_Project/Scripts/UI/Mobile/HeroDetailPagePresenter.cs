@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace TGTH.Mobile
@@ -33,7 +34,9 @@ namespace TGTH.Mobile
             view.OnHeroStatsClicked += ShowHeroInfo;
             view.OnHeroDetailClicked += ShowHeroDetail;
         }
-
+        private void OnEnable() {
+            ShowData(new InventoryItem(statsManager.data));
+        }
         private void Init()
         {
             view.equipmentSlotsDictionary = new Dictionary<EquipmentType, UIItemSlotBase>();
@@ -42,7 +45,11 @@ namespace TGTH.Mobile
                 view.equipmentSlotsDictionary.Add(slot.equipmentType, slot);
             }
         }
-
+        public void ShowData(InventoryItem inventoryItem)
+        {
+            view.ShowData(inventoryItem.data as HeroData);
+            SetStatManager(inventoryItem);
+        }
         public override void HandleItemClicked(InventoryItem inventoryItem)
         {
             if (!setup)
@@ -75,13 +82,10 @@ namespace TGTH.Mobile
         }
         public void SetStatManager(InventoryItem item)
         {
-            Debug.Log("SetStatManager");
+            if(item == null || item.data == null) return;
             statsManager.ResetStats();
             var heroData = item.data as HeroData;
-            if (heroData.statsCultivationPathData == null)
-            {
-                Debug.Log("heroData == null");
-            }
+            if (heroData == null) return;
             statsManager.Setup(heroData, heroData.statsCultivationPathData, heroData.statsRealmData, heroData.statsRaceData);
             characterIdentity.Setup(heroData.statsCultivationPathData, heroData.statsRealmData, heroData.statsRaceData);
             foreach (var eq in heroData.equitmentDatas)

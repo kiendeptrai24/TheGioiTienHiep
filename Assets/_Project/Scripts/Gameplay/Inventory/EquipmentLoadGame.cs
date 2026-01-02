@@ -6,7 +6,7 @@ using TGTH.Mobile;
 
 public class EquipmentLoadGame : TGTHMonoBehaviour, ISaveable
 {
-    [SerializeField] private EquipmentPresenter equipmentPage;
+    [SerializeField] private EquipmentBasePagePresenter equipmentPage;
     [SerializeField] private List<InventoryItem> listItemDatas;
     protected override void Awake()
     {

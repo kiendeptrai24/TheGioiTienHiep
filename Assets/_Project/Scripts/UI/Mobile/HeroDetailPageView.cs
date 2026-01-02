@@ -35,6 +35,10 @@ namespace TGTH.Mobile
 
         public void ShowData(HeroData heroData)
         {
+            if (heroData == null)
+            {
+                return;
+            }
             itemNameTxt.text = heroData.itemName;
             realmTxt.text = EnumTranslator.ToVietnamese(heroData.cultivationStage);
             qualityTypeTxt.text = EnumTranslator.ToVietnamese(heroData.qualityType);
