@@ -80,6 +80,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         equipmentSystem.Equip(item2);
         if(item1 != null && item1.data != null)
         {
+            Debug.Log("Add back to inventory: " + item1.data.itemName);
             inventoryCenterManager.AddData(item1.data);
             inventoryCenterManager.ItemChange(item1.data);
         }
@@ -109,14 +110,14 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         view.ShowAllItemInInventory(filteredList);
     }
 
-    protected void SortInventory()
+    protected virtual void SortInventory()
     {
         // get equipqment type and quality in UI
         int type = view.eqipmenttypeDrop.value + 1;
         int quality = view.qualityTypeDrop.value;
 
         //convert to EquipmentType and QualityType
-        EquipmentType selectedType = (EquipmentType)type;
+        EquipmentType selectType = (EquipmentType)type;
         QualityType selectedQuality = (QualityType)quality;
 
         // get equipment item 
@@ -135,8 +136,8 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
             .Where(inv =>
             {
                 var eq = (EquitmentData)inv.data;
-                return (type == 0 || eq.equipmentType == selectedType)
-                    && (quality == 0 || eq.qualityType == selectedQuality);
+                return (eq.equipmentType == selectType)
+                    && (eq.qualityType == selectedQuality);
             })
             .OrderBy(inv => ((EquitmentData)inv.data).equipmentType)
             .ThenByDescending(inv => ((EquitmentData)inv.data).qualityType)

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -43,10 +42,15 @@ namespace TGTH.Mobile
         {
             if(base.HandleEquippedChanged(item1, item2))
             {
-                if(item1 == null || item1.data == null || item2 == null || item2.data == null) return false;
                 var heroData = statsManager.data as HeroData;
-                heroData.equitmentDatas.Add(item2.data as EquitmentData);
-                heroData.equitmentDatas.Remove(item1.data as EquitmentData);
+                if(item1 != null && item1.data != null)
+                {
+                    heroData.equitmentDatas.Remove(item1.data as EquitmentData);
+                }
+                if(item2 != null && item2.data != null)
+                {
+                    heroData.equitmentDatas.Add(item2.data as EquitmentData);
+                }
                 return true;
             }
             return false;
@@ -65,7 +69,6 @@ namespace TGTH.Mobile
 
             view.ShowAllItemInInventory(filteredList);
         }
-
         // private void SortInventory()
         // {
         //     // get equipqment type and quality in UI

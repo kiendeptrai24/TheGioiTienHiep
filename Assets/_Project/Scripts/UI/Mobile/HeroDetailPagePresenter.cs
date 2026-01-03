@@ -34,7 +34,8 @@ namespace TGTH.Mobile
             view.OnHeroStatsClicked += ShowHeroInfo;
             view.OnHeroDetailClicked += ShowHeroDetail;
         }
-        private void OnEnable() {
+        private void OnEnable()
+        {
             ShowData(new InventoryItem(statsManager.data));
         }
         private void Init()
@@ -47,8 +48,10 @@ namespace TGTH.Mobile
         }
         public void ShowData(InventoryItem inventoryItem)
         {
-            view.ShowData(inventoryItem.data as HeroData);
+            Debug.Log("Show Data Hero Detail Page Presenter");
             SetStatManager(inventoryItem);
+            Debug.Log((inventoryItem.data as HeroData).equitmentDatas.Count);
+            view.ShowData(inventoryItem.data as HeroData);
         }
         public override void HandleItemClicked(InventoryItem inventoryItem)
         {
@@ -69,20 +72,20 @@ namespace TGTH.Mobile
 
         private void ShowBiography()
         {
-            
+
         }
 
         private void ShowHeroInfo()
         {
-            
+
         }
         private void ShowHeroDetail()
         {
-            
+
         }
         public void SetStatManager(InventoryItem item)
         {
-            if(item == null || item.data == null) return;
+            if (item == null || item.data == null) return;
             statsManager.ResetStats();
             var heroData = item.data as HeroData;
             if (heroData == null) return;

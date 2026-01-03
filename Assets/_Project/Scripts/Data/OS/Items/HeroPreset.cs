@@ -34,7 +34,7 @@ public class HeroPreset : ItemStatsPreset
             itemIcon = itemIcon,
             itemDescription = itemDescription,
             currentstack = currentstack,
-            
+            raceType = raceType,
             level = level,
             attackRange = attackRange,
             health = health,

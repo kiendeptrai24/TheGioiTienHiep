@@ -59,23 +59,20 @@ namespace TGTH.Mobile
         {
             int type = view.itemtypeDrop.value + 1;
             int quality = view.qualityTypeDrop.value;
-            Debug.Log(type);
             // Lấy enum từ dropdown value
-            RaceType selectedType = (RaceType)type;
+            RaceType selectedRace = (RaceType)type;
             QualityType selectedQuality = (QualityType)quality;
             // Lọc và sắp xếp danh sách
             if (listItemDatas == null || listItemDatas.Count == 0) return;
             var sortedList = listItemDatas
-                .Where(item => (((HeroData)item.data).raceType == selectedType) && (item.data.qualityType == selectedQuality))
+                .Where(item => (((HeroData)item.data).raceType == selectedRace) && (item.data.qualityType == selectedQuality))
                 .OrderBy(item => item.data.itemType)
                 .ThenByDescending(item => item.data.qualityType)
                 .ToList();
 
             if (sortedList.Count == 0)
                 sortedList = new();
-
             view.ShowAllItems(sortedList);
-
         }
         private void HandleItemClicked(UIItemSlotBase uiItem)
         {

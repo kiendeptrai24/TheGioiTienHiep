@@ -74,7 +74,6 @@ namespace TGTH.Mobile
         {
             int type = view.itemtypeDrop.value;
             int quality = view.qualityTypeDrop.value;
-            Debug.Log(type);
             // Lấy enum từ dropdown value
             ItemType selectedType = (ItemType)type;
             QualityType selectedQuality = (QualityType)quality;

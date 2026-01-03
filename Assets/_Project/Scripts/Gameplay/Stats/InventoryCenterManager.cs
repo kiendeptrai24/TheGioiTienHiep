@@ -2,10 +2,12 @@
 
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
 
 public class InventoryCenterManager : TGTHMonoBehaviour, ISaveable
 {
-    private List<ItemData> listItemDatas = new List<ItemData>();
+    [SerializeField] private List<ItemData> listItemDatas = new List<ItemData>();
     public event Action<List<ItemData>> OnItemDataChanged;
     public event Action<List<ItemData>> OnItemEquitmentDataChanged;
     public event Action<List<ItemData>> OnItemSkillDataChanged;
@@ -14,7 +16,7 @@ public class InventoryCenterManager : TGTHMonoBehaviour, ISaveable
     private bool isEquitmentChange = false;
     private bool isSkillChange = false;
     private bool isTechniqueChange = false;
-    public event Action OnDataChanged;
+    //public event Action OnDataChanged;
 
     public void CheckDataChange()
     {

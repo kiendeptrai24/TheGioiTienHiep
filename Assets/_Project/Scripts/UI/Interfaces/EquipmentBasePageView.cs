@@ -98,8 +98,6 @@ public abstract class EquipmentBasePageView : TGTHMonoBehaviour
         {
             item.ResetData();
         }
-        Debug.Log(heroData.equitmentDatas.Count);
-        Debug.Log(equipmentSlotsDictionary.Count);
         for (int i = 0; i < heroData.equitmentDatas.Count; i++)
         {
             equipmentSlotsDictionary[heroData.equitmentDatas[i].equipmentType].SetItem(new InventoryItem(heroData.equitmentDatas[i]));
