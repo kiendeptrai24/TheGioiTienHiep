@@ -2005,6 +2005,7 @@ GameObject:
   - component: {fileID: 432532413510505737}
   - component: {fileID: 3748072802165767517}
   - component: {fileID: 3940633236033083010}
+  - component: {fileID: 2997244800495556665}
   m_Layer: 0
   m_Name: Charactor
   m_TagString: Untagged
@@ -2040,7 +2041,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1800668557
+  GlobalObjectIdHash: 780697054
   InScenePlacedSourceGlobalObjectIdHash: 3254898076
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2164,16 +2165,18 @@ MonoBehaviour:
     itemIcon: {fileID: 0}
     itemDescription: 
     currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
     physicalDamage: 0.1
     magicalDamage: 0.1
     spiritDamage: 0.1
     physicalDefense: 0.1
     magicalDefense: 0.1
     spiritDefense: 0.1
-    raceType: 0
-    health: 0.1
-    mana: 0.5
-    spirit: 0.2
+    raceType: 1
+    maxHealth: 0.1
+    maxMana: 0.5
+    maxSpirit: 0.2
     spiritRange: 0
     movementSpeed: 0
   statsCultivationPathData:
@@ -2183,18 +2186,20 @@ MonoBehaviour:
     itemIcon: {fileID: 0}
     itemDescription: 
     currentstack: 0
-    physicalDamage: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 1
     magicalDamage: 0
-    spiritDamage: 1
-    physicalDefense: 0
+    spiritDamage: 0
+    physicalDefense: 1
     magicalDefense: 0
-    spiritDefense: 1
-    essenceType: 3
-    counterEssenceType: 2
+    spiritDefense: 0
+    essenceType: 1
+    counterEssenceType: 3
     counterPercentage: 0.2
-    health: 5
-    mana: 5
-    spirit: 10
+    maxHealth: 10
+    maxMana: 5
+    maxSpirit: 5
     movementSpeed: 1
     spiritRange: 1
   statsRealmData:
@@ -2204,26 +2209,27 @@ MonoBehaviour:
     itemIcon: {fileID: 0}
     itemDescription: 
     currentstack: 0
-    physicalDamage: 10
-    magicalDamage: 10
-    spiritDamage: 10
-    physicalDefense: 5
-    magicalDefense: 5
-    spiritDefense: 5
-    cultivationStage: 0
-    health: 100
-    mana: 100
-    spirit: 100
-    critChance: 5
-    critPower: 150
+    cultivationStage: 24
+    qualityType: 0
+    physicalDamage: 600
+    magicalDamage: 600
+    spiritDamage: 600
+    physicalDefense: 300
+    magicalDefense: 300
+    spiritDefense: 300
+    maxHealth: 6000
+    maxMana: 6000
+    maxSpirit: 6000
+    critRate: 150
+    critDamage: 5
     evasion: 2
-    spiritPenetration: 10
-    movementSpeed: 4
+    armorPenetration: 40
+    movementSpeed: 5
     attackSpeed: 1
     castSpeed: 1
-    potential: 5
+    potential: 150
     skillPoints: 3
-    combatPower: 10
+    combatPower: 20000
     spiritRange: 0
 --- !u!114 &3940633236033083010
 MonoBehaviour:
@@ -2237,6 +2243,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe8bd853a33a877408df300b19f6ebc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentSystem
+  statsManager: {fileID: 0}
+  equipmentPresenter: {fileID: 0}
+--- !u!114 &2997244800495556665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70977884ca81e4043aaa37bdd4b3b2cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCameraControl
+  cameraManager: {fileID: 0}
 --- !u!1 &7825434533555785058
 GameObject:
   m_ObjectHideFlags: 0

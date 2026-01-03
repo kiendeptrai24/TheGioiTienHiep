@@ -10,6 +10,9 @@ public class TGTHNetworkBehaviour : NetworkBehaviour
     {
         
     }
+    private void Reset() {
+        LoadComponent();
+    }
     protected virtual void LoadComponent()
     {
 

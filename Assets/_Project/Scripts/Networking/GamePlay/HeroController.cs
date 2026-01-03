@@ -1,10 +1,10 @@
 using UnityEngine;
 
 
-public class PlayerController : TGTHNetworkBehaviour
+public class HeroController : TGTHNetworkBehaviour
 {
     private IStateMachine m_playerSM;
-    private ActorController m_actorController;
+    public AIMovement m_aiMovement;
     [HideInInspector] public IMoveable moveable;
     [HideInInspector] public Animator anim;
 
@@ -12,14 +12,14 @@ public class PlayerController : TGTHNetworkBehaviour
     {
         base.Awake();
         LoadComponent();
-        m_playerSM = new PlayerStateMachine(this);
-        m_playerSM.Init<IdleState_Player>();
+        m_playerSM = new HeroStateMachine(this);
+        m_playerSM.Init<IdleState_Hero>();
+
     }
 
     override protected void Start()
     {
         base.Start();
-        moveable = m_actorController.moveable;
     }
 
     private void Update()
@@ -32,6 +32,7 @@ public class PlayerController : TGTHNetworkBehaviour
     {
         base.LoadComponent();
         anim = GetComponentInChildren<Animator>();
-        m_actorController = GetComponent<ActorController>();
+        moveable = GetComponent<IMoveable>();
+        m_aiMovement = GetComponent<AIMovement>();
     }
 }
