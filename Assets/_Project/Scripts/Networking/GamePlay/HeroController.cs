@@ -1,12 +1,21 @@
 using UnityEngine;
 
 
-public class HeroController : TGTHNetworkBehaviour
+public class HeroController : TGTHNetworkBehaviour , ISkillCaster
 {
     private IStateMachine m_playerSM;
     public AIMovement m_aiMovement;
     [HideInInspector] public IMoveable moveable;
     [HideInInspector] public Animator anim;
+    [SerializeField] private float _mana = 100f;
+    [SerializeField] private float _stamina = 100f;
+    [SerializeField] private int _teamId = 0;
+    public float Mana => _mana;
+    public float Stamina => _stamina;
+    public int TeamId => _teamId;
+    public Vector3 Position => transform.position;
+
+    public bool IsAlive => true;
 
     override protected void Awake()
     {
@@ -34,5 +43,20 @@ public class HeroController : TGTHNetworkBehaviour
         anim = GetComponentInChildren<Animator>();
         moveable = GetComponent<IMoveable>();
         m_aiMovement = GetComponent<AIMovement>();
+    }
+
+    public void ConsumeMana(float amount)
+    {
+        
+    }
+
+    public void ConsumeStamina(float amount)
+    {
+        
+    }
+
+    public bool HasState(string stateId)
+    {
+        return false;
     }
 }

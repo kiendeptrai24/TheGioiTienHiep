@@ -130089,6 +130089,7 @@ GameObject:
   - component: {fileID: 879026353}
   - component: {fileID: 879026352}
   - component: {fileID: 879026351}
+  - component: {fileID: 879026358}
   m_Layer: 0
   m_Name: Charactor (4)
   m_TagString: Untagged
@@ -130150,6 +130151,9 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   m_aiMovement: {fileID: 879026351}
   anim: {fileID: 560179988}
+  _mana: 100
+  _stamina: 100
+  _teamId: 0
 --- !u!114 &879026354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130252,6 +130256,24 @@ Transform:
   - {fileID: 560179989}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &879026358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 879026350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85c9f8dc3704b1e4ca7d603923442792, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroBaseSkill
+  _skillsData: []
+  _skillsDataRuntimes: []
+  skillEffectPrefab: {fileID: 5101765743418968754, guid: 5879791225886c44f8bfc3d3f0a28052,
+    type: 3}
+  target: {fileID: 1795456858}
+  skillname: 
 --- !u!1 &879144251
 GameObject:
   m_ObjectHideFlags: 0
@@ -239294,6 +239316,9 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   m_aiMovement: {fileID: 1572486861}
   anim: {fileID: 2017536757}
+  _mana: 100
+  _stamina: 100
+  _teamId: 0
 --- !u!114 &1572486864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254304,7 +254329,7 @@ Transform:
   m_GameObject: {fileID: 1684195655}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.29, y: 0, z: 8.50661}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -272431,6 +272456,9 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   m_aiMovement: {fileID: 1795456852}
   anim: {fileID: 771970160}
+  _mana: 100
+  _stamina: 100
+  _teamId: 1
 --- !u!114 &1795456855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285660,6 +285688,9 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   m_aiMovement: {fileID: 1892632797}
   anim: {fileID: 1567586741}
+  _mana: 100
+  _stamina: 100
+  _teamId: 0
 --- !u!114 &1892632800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330514,6 +330545,74 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1001 &5845373280131009965
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5101765743418968754, guid: 5879791225886c44f8bfc3d3f0a28052,
+        type: 3}
+      propertyPath: m_Name
+      value: Cube
+      objectReference: {fileID: 0}
+    - target: {fileID: 7567953424545535138, guid: 5879791225886c44f8bfc3d3f0a28052,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.17527
+      objectReference: {fileID: 0}
+    - target: {fileID: 7567953424545535138, guid: 5879791225886c44f8bfc3d3f0a28052,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 7567953424545535138, guid: 5879791225886c44f8bfc3d3f0a28052,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7567953424545535138, guid: 5879791225886c44f8bfc3d3f0a28052,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7567953424545535138, guid: 5879791225886c44f8bfc3d3f0a28052,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7567953424545535138, guid: 5879791225886c44f8bfc3d3f0a28052,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7567953424545535138, guid: 5879791225886c44f8bfc3d3f0a28052,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7567953424545535138, guid: 5879791225886c44f8bfc3d3f0a28052,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7567953424545535138, guid: 5879791225886c44f8bfc3d3f0a28052,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7567953424545535138, guid: 5879791225886c44f8bfc3d3f0a28052,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5879791225886c44f8bfc3d3f0a28052, type: 3}
 --- !u!1 &5954691535944192269
 GameObject:
   m_ObjectHideFlags: 0
@@ -332720,6 +332819,9 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   m_aiMovement: {fileID: 8092559903589997533}
   anim: {fileID: 2180273282170868049}
+  _mana: 100
+  _stamina: 100
+  _teamId: 0
 --- !u!224 &8093813467867622042
 RectTransform:
   m_ObjectHideFlags: 0
@@ -333662,3 +333764,4 @@ SceneRoots:
   - {fileID: 1795456858}
   - {fileID: 879026357}
   - {fileID: 1684195657}
+  - {fileID: 5845373280131009965}
