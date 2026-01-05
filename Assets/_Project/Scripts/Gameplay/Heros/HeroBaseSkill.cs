@@ -70,6 +70,28 @@ public class HeroBaseSkill : TGTHMonoBehaviour, ISaveable
                 });
                 _skillController.AddSkill(skillruntime3);
                 break;
+            case SkillType.ToanLucNhatKich:
+                var skillruntime4 = new FireballSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
+
+                _skillsDataRuntimes.Add(new SkillDataRuntime()
+                {
+                    skillId = skillData.itemId,
+                    skill = skillruntime4,
+                    skillAnimationClass = typeof(ToanLucNhatKichState_Hero),
+                });
+                _skillController.AddSkill(skillruntime4);
+                break;
+            case SkillType.NhamChuan:
+                var skillruntime5 = new FireballSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
+
+                _skillsDataRuntimes.Add(new SkillDataRuntime()
+                {
+                    skillId = skillData.itemId,
+                    skill = skillruntime5,
+                    skillAnimationClass = typeof(NhamChuanState_Hero),
+                });
+                _skillController.AddSkill(skillruntime5);
+                break;
             default:
                 break;
         }

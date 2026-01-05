@@ -26,6 +26,8 @@ public class HeroStateFactory : IStateFactory
             {typeof(DonTramState_Hero), new DonTramState_Hero(_hero, _machine, "Attack")},
             {typeof(LinhTienState_Hero), new LinhTienState_Hero(_hero, _machine, "Attack2")},
             {typeof(LienKichChiThuatState_Hero), new LienKichChiThuatState_Hero(_hero, _machine, "Heal")},
+            {typeof(ToanLucNhatKichState_Hero), new ToanLucNhatKichState_Hero(_hero, _machine, "WideArm")},
+            {typeof(NhamChuanState_Hero), new NhamChuanState_Hero(_hero, _machine, "MagicArm")},
         };
         return _statesDictionary;
     }
