@@ -4,4 +4,5 @@ using System.Collections.Generic;
 public interface IStateFactory
 {
     Dictionary<Type,IState> CreateState();
+    void AddState(Type stateType, IState state);
 }

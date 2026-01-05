@@ -22,6 +22,9 @@ public class SkillPreset : ItemPreset
     public EssenceType mainEssence;
     public ElementType elementType;
     public CultivationStage realm;
+    [Header("Animation")]
+    public GameObject skillEffectPrefab;
+
 
     [Header("Combat")]
     public float attackRange;
@@ -426,7 +429,7 @@ public class SkillPreset : ItemPreset
             mainEssence = mainEssence,
             elementType = elementType,
             realm = realm,
-
+            skillEffectPrefab = skillEffectPrefab,
             // combat
             attackRange = attackRange,
             cooldown = cooldown,

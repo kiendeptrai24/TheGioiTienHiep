@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 [Serializable]
 public sealed class SkillController
 {
 
     private readonly ISkillCaster _owner;
     private readonly ITimeProvider _time;
-
+    public ITimeProvider Time => _time;
+    public ISkillCaster Caster => _owner;
     private readonly Dictionary<string, SkillRuntime> _skills = new();
     public SkillController(ISkillCaster owner, ITimeProvider timeProvider)
     {
@@ -30,12 +32,11 @@ public sealed class SkillController
 
     public bool RemoveSkill(string skillId) => _skills.Remove(skillId);
 
-    public SkillCastResult TryCast(string skillId, ISkillTarget target)
+    public SkillCastResult TryCast(string skillId, ISkillTarget target, SpawnPoint targetDirection)
     {
         if (!_skills.TryGetValue(skillId, out var rt))
             return SkillCastResult.Fail(SkillCastFailReason.Custom, "Skill not found");
-
-        var ctx = new SkillContext(_time, _owner, target, rt);
+        var ctx = new SkillContext(_time, _owner, target, rt, targetDirection);
         var can = rt.Skill.CanCast(ctx);
         if (!can.Ok) return SkillCastResult.Fail(can.Reason, can.DebugNote);
 

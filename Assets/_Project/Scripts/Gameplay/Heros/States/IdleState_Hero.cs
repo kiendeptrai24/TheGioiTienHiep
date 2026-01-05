@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class IdleState_Hero : GroundState_Hero
 {
 

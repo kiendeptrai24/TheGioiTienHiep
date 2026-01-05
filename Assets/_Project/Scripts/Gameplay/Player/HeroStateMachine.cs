@@ -48,4 +48,14 @@ public class HeroStateMachine : IStateMachine
     {
         return _curState as T;
     }
+
+    public void ChangeState(Type stateType)
+    {
+        if (!_statesDirtionary.TryGetValue(stateType, out var nextState))
+        return;
+
+        _curState?.Exit();
+        _curState = nextState;
+        _curState.Enter();
+    }
 }

@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class HeroController : TGTHNetworkBehaviour , ISkillCaster
 {
-    private IStateMachine m_playerSM;
+    private IStateMachine m_heroSM;
     public AIMovement m_aiMovement;
+    public HeroBaseSkill skillController;
+    public SkillDataRuntime currentSkillData;
     [HideInInspector] public IMoveable moveable;
     [HideInInspector] public Animator anim;
     [SerializeField] private float _mana = 100f;
@@ -17,12 +19,16 @@ public class HeroController : TGTHNetworkBehaviour , ISkillCaster
 
     public bool IsAlive => true;
 
+    public Vector3 Forward => transform.forward;
+
+    public Quaternion Rotation => transform.rotation;
+
     override protected void Awake()
     {
         base.Awake();
         LoadComponent();
-        m_playerSM = new HeroStateMachine(this);
-        m_playerSM.Init<IdleState_Hero>();
+        m_heroSM = new HeroStateMachine(this);
+        m_heroSM.Init<IdleState_Hero>();
 
     }
 
@@ -30,11 +36,15 @@ public class HeroController : TGTHNetworkBehaviour , ISkillCaster
     {
         base.Start();
     }
+    public IStateMachine GetStateMachine()
+    {
+        return m_heroSM;
+    }
 
     private void Update()
     {
         if (!IsOwner) return;
-        m_playerSM.Update();
+        m_heroSM.Update();
     }
 
     override protected void LoadComponent()
@@ -43,6 +53,7 @@ public class HeroController : TGTHNetworkBehaviour , ISkillCaster
         anim = GetComponentInChildren<Animator>();
         moveable = GetComponent<IMoveable>();
         m_aiMovement = GetComponent<AIMovement>();
+        skillController = GetComponent<HeroBaseSkill>();
     }
 
     public void ConsumeMana(float amount)

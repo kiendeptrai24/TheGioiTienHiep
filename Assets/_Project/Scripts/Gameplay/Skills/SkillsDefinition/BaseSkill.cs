@@ -8,7 +8,7 @@ public abstract class BaseSkill
     private float _cooldownSeconds = 1;
     public SkillData data;
     public GameObject skillEffectPrefab;
-
+    public Type skillAnimationClass;
     public string SkillId => _skillId;
     public string DisplayName => _displayName;
     public float CooldownSeconds => _cooldownSeconds;

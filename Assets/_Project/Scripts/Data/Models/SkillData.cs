@@ -17,6 +17,7 @@ public class SkillData : ItemData
     public EssenceType mainEssence;      // Chủ tu
     public ElementType elementType;      // Hệ
     public CultivationStage realm;       // Cảnh giới
+    public GameObject skillEffectPrefab; // Prefab hiệu ứng kỹ năng
 
     // ============================
     // COMBAT BEHAVIOR

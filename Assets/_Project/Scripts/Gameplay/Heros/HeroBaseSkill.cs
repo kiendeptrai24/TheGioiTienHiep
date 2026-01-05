@@ -3,23 +3,23 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+[Serializable]
+public class SkillDataRuntime
+{
+    public string skillId;
+    public Type skillAnimationClass;
+    public BaseSkill skill;
+}
 
 public class HeroBaseSkill : TGTHMonoBehaviour, ISaveable
 {
-    [Serializable]
-    public class SkillDataRuntime
-    {
-        public string SkillId;
-        public string SkillName;
-        public BaseSkill skill;
-    }
+    [SerializeField] private string heroName;
+    [SerializeField] private HeroData _heroData;
     [SerializeField] private SkillController _skillController;
     public SkillController SkillController => _skillController;
     [SerializeField] private List<SkillData> _skillsData = new();
     [SerializeField] private List<SkillDataRuntime> _skillsDataRuntimes;
-    [SerializeField] private GameObject skillEffectPrefab;
     public Transform target;
-    [SerializeField] private string skillname;
     override protected void Awake()
     {
         base.Awake();
@@ -30,51 +30,105 @@ public class HeroBaseSkill : TGTHMonoBehaviour, ISaveable
         foreach (var skillData in _skillsData)
         {
             if (skillData == null) continue;
-            var skill = new FireballSkill(skillData, skillEffectPrefab, skillData.itemId, skillData.itemName, skillData.cooldown);
-            _skillsDataRuntimes.Add(new SkillDataRuntime() { SkillId = skill.SkillId, SkillName = skill.DisplayName, skill = skill });
-            _skillController.AddSkill(skill);
+            SetupSkillClass(skillData.skillType, skillData);
         }
-        // //Add skill
-        // _skillController.AddSkill(new FireballSkill("skill_fireball", "Fireball"));
-        // ISkillTarget target = new EnemyTarget(this.target);
-        // // Cast
-        // var result = _skillController.TryCast("skill_fireball", target);
-        // if (!result.Ok)
-        // {
-        //     Debug.Log($"Cast fail: {result.Reason} ({result.Note})");
-        // }
-
-        // Remove skill
-        //_skillController.RemoveSkill("skill_fireball");
     }
-    [ContextMenu("ActiveSkill")]
-    public void ActiveSkill()
+    public void SetupSkillClass(SkillType skillType, SkillData skillData)
+    {
+        switch (skillType)
+        {
+            case SkillType.DonTram:
+                var skillruntime = new FireballSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
+
+                _skillsDataRuntimes.Add(new SkillDataRuntime()
+                {
+                    skillId = skillData.itemId,
+                    skill = skillruntime,
+                    skillAnimationClass = typeof(DonTramState_Hero),
+                });
+                _skillController.AddSkill(skillruntime);
+                break;
+            case SkillType.LinhTien:
+                var skillruntime2 = new FireballSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
+
+                _skillsDataRuntimes.Add(new SkillDataRuntime()
+                {
+                    skillId = skillData.itemId,
+                    skill = skillruntime2,
+                    skillAnimationClass = typeof(LinhTienState_Hero),
+                });
+                _skillController.AddSkill(skillruntime2);
+                break;
+            case SkillType.LienKichChiThuat:
+                var skillruntime3 = new FireballSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
+
+                _skillsDataRuntimes.Add(new SkillDataRuntime()
+                {
+                    skillId = skillData.itemId,
+                    skill = skillruntime3,
+                    skillAnimationClass = typeof(LienKichChiThuatState_Hero),
+                });
+                _skillController.AddSkill(skillruntime3);
+                break;
+            default:
+                break;
+        }
+    }
+    public Type GetSkillAnimationClass(string skillId)
+    {
+        foreach (var skillRuntime in _skillsDataRuntimes)
+        {
+            if (skillRuntime.skillId == skillId)
+            {
+                return skillRuntime.skillAnimationClass;
+            }
+        }
+        return null;
+    }
+    public void ActiveSkill(string skillname, SpawnPoint targetDirection)
     {
         ISkillTarget target = new EnemyTarget(this.target);
-        var result = _skillController.TryCast(skillname, target);
-        if (!result.Ok)
+        var skill = _skillController.GetRuntime(skillname);
+        if (skill != null)
         {
-            Debug.Log($"Cast fail: {result.Reason} ({result.Note})");
+            if (skill.IsReady(_skillController.Time.Now))
+            {
+                _skillController.TryCast(skillname, target, targetDirection);
+            }
+            else
+            {
+                Debug.Log($"Skill {skill.Skill.DisplayName} is on cooldown.");
+            }
         }
-        else
-        {
-            Debug.Log($"Cast success: {skillname}");
-        }
+    }
+    public List<SkillDataRuntime> GetAllSkillRuntimes()
+    {
+        return _skillsDataRuntimes;
+    }
+    public SkillRuntime GetSkill(string skillId)
+    {
+        return _skillController.GetRuntime(skillId);
     }
     public void LoadData(GameData _data)
     {
         foreach (var data in _data.itemDatas)
         {
-            if(data is SkillData skillData)
+            if (data is HeroData heroData)
             {
-                _skillsData.Add(skillData);
+                if(heroData.itemName == heroName)
+                {
+                    _heroData = heroData;
+                    break;
+                }
             }
         }
+        _skillsData.AddRange(_heroData.skillDatas);
+        Debug.Log(_skillsData.Count);
         SetupSkills();
     }
 
     public void SaveGame(ref GameData _data)
     {
-        
+
     }
 }

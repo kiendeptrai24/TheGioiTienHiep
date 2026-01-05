@@ -5,21 +5,28 @@ public class HeroStateFactory : IStateFactory
 {
     private readonly HeroController _hero;
     private readonly IStateMachine _machine;
-    
+    private Dictionary<Type, IState> _statesDictionary;
     public HeroStateFactory(HeroController hero, IStateMachine machine)
     {
         _hero = hero;
         _machine = machine;
     }
 
-    public Dictionary<Type, IState> CreateState()
+    public void AddState(Type stateType, IState state)
     {
-        var HeroDictionary = new Dictionary<Type, IState>
-        {
-            {typeof(IdleState_Hero), new IdleState_Hero(_hero, _machine, "Idle")},
-            {typeof(MoveState_Hero), new MoveState_Hero(_hero, _machine, "Move")}
-        };
-        return HeroDictionary;
+        _statesDictionary[stateType] = state;
     }
 
+    public Dictionary<Type, IState> CreateState()
+    {
+        _statesDictionary = new Dictionary<Type, IState>
+        {
+            {typeof(IdleState_Hero), new IdleState_Hero(_hero, _machine, "Idle")},
+            {typeof(MoveState_Hero), new MoveState_Hero(_hero, _machine, "Move")},
+            {typeof(DonTramState_Hero), new DonTramState_Hero(_hero, _machine, "Attack")},
+            {typeof(LinhTienState_Hero), new LinhTienState_Hero(_hero, _machine, "Attack2")},
+            {typeof(LienKichChiThuatState_Hero), new LienKichChiThuatState_Hero(_hero, _machine, "Heal")},
+        };
+        return _statesDictionary;
+    }
 }
