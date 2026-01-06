@@ -1,12 +1,15 @@
+using System;
 using UnityEngine;
 
 
-public class HeroController : TGTHNetworkBehaviour , ISkillCaster
+public class HeroController : TGTHNetworkBehaviour, ISkillCaster
 {
     private IStateMachine m_heroSM;
+    private HeroLoadData m_heroLoadData;
     public AIMovement m_aiMovement;
     public HeroBaseSkill skillController;
     public SkillDataRuntime currentSkillData;
+    [SerializeField] public HeroData heroData;
     [HideInInspector] public IMoveable moveable;
     [HideInInspector] public Animator anim;
     [SerializeField] private float _mana = 100f;
@@ -16,21 +19,21 @@ public class HeroController : TGTHNetworkBehaviour , ISkillCaster
     public float Stamina => _stamina;
     public int TeamId => _teamId;
     public Vector3 Position => transform.position;
-
     public bool IsAlive => true;
-
     public Vector3 Forward => transform.forward;
-
     public Quaternion Rotation => transform.rotation;
+    public Vector3 Center => transform.position + Vector3.up * 1.5f;
 
     override protected void Awake()
     {
         base.Awake();
         LoadComponent();
+        m_heroLoadData.OnHeroDataLoaded += LoadHeroData;
         m_heroSM = new HeroStateMachine(this);
         m_heroSM.Init<IdleState_Hero>();
-
     }
+
+    private void LoadHeroData(HeroData data) => heroData = data;
 
     override protected void Start()
     {
@@ -51,6 +54,7 @@ public class HeroController : TGTHNetworkBehaviour , ISkillCaster
     {
         base.LoadComponent();
         anim = GetComponentInChildren<Animator>();
+        m_heroLoadData = GetComponent<HeroLoadData>();
         moveable = GetComponent<IMoveable>();
         m_aiMovement = GetComponent<AIMovement>();
         skillController = GetComponent<HeroBaseSkill>();
@@ -58,12 +62,12 @@ public class HeroController : TGTHNetworkBehaviour , ISkillCaster
 
     public void ConsumeMana(float amount)
     {
-        
+
     }
 
     public void ConsumeStamina(float amount)
     {
-        
+
     }
 
     public bool HasState(string stateId)

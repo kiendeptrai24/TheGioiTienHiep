@@ -22,6 +22,8 @@ public class HeroStateFactory : IStateFactory
         _statesDictionary = new Dictionary<Type, IState>
         {
             {typeof(IdleState_Hero), new IdleState_Hero(_hero, _machine, "Idle")},
+            {typeof(BattleState_Hero), new BattleState_Hero(_hero, _machine, "Idle")},
+            {typeof(ChaseState_Hero), new ChaseState_Hero(_hero, _machine, "Move")},
             {typeof(MoveState_Hero), new MoveState_Hero(_hero, _machine, "Move")},
             {typeof(DonTramState_Hero), new DonTramState_Hero(_hero, _machine, "Attack")},
             {typeof(LinhTienState_Hero), new LinhTienState_Hero(_hero, _machine, "Attack2")},

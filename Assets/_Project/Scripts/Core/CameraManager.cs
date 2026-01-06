@@ -7,8 +7,13 @@ public class CameraManager : TGTHMonoBehaviour
 
     public Camera MainCamera { get { return mainCamera; } }
     public CinemachineCamera cinemachine;
-    [SerializeField] private float defaultCameraSize = 5f;
+    [SerializeField] private float defaultCameraSize = 70f;
     [SerializeField] private Transform defaultTarget;
+    protected override void Awake()
+    {
+        base.Awake();
+        cinemachine.Lens.FieldOfView = defaultCameraSize;
+    }
     [ContextMenu("Set Target")]
     public void SetDefaultTarget()
     {

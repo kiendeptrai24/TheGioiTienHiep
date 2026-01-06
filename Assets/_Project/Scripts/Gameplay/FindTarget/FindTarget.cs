@@ -1,0 +1,64 @@
+
+
+using UnityEngine;
+
+public class FindTarget : TGTHMonoBehaviour, ISkillTarget 
+{
+    public Transform target;
+    [SerializeField] private LayerMask whatIsTarget;
+    [SerializeField] private float range = 10f;
+    [SerializeField] private float checkInterval = 1f;
+    [SerializeField] private float checkTimer = 0f;
+    public Vector3 Position => target.position;
+    public Vector3 Forward => target.forward;
+    public Quaternion Rotation => target.rotation;
+    public bool IsAlive => true;
+
+    public Vector3 Center => target.position + Vector3.up * 1.5f;
+
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+    }
+    protected override void Start()
+    {
+        base.Start();
+        FindTargetNearest(transform.position, range);
+    }
+    private void Update() {
+        if(target == null && Time.time >= checkInterval + checkTimer)
+        {
+            checkTimer = Time.time;
+            Debug.Log("Finding Target...");
+            FindTargetNearest(transform.position, range);
+        }
+    }
+    public void FindTargetNearest(Vector3 fromPosition, float range)
+    {
+        Collider[] colliders = Physics.OverlapSphere(fromPosition, range, whatIsTarget);
+        float nearestDistance = Mathf.Infinity;
+        Transform nearestTarget = null;
+
+        foreach (var collider in colliders)
+        {
+            if(collider.transform == transform)
+                continue;
+            float distance = Vector3.Distance(fromPosition, collider.transform.position);
+            if (distance < nearestDistance)
+            {
+                nearestDistance = distance;
+                nearestTarget = collider.transform;
+            }
+        }
+
+        if (nearestTarget != null)
+        {
+            SetTarget(nearestTarget);
+        }
+    }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, range);
+    }
+}

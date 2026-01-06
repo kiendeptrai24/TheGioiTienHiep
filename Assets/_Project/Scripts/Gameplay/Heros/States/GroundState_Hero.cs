@@ -15,15 +15,18 @@ public class GroundState_Hero : HeroState
     public override void Excute()
     {
         base.Excute();
-        foreach (var skillRuntime in m_hero.skillController.GetAllSkillRuntimes())
+
+        if (m_hero.m_aiMovement.Target != null && m_hero.heroData != null)
         {
-            if(m_hero.skillController.GetSkill(skillRuntime.skillId).IsReady(Time.time))
+            if (Vector3.Distance(m_hero.transform.position, m_hero.m_aiMovement.Target.position) < m_hero.heroData.attackRange)
             {
-                m_hero.currentSkillData = skillRuntime;
-                m_machine.ChangeState(skillRuntime.skillAnimationClass);
-                break;
+                m_machine.ChangeState<BattleState_Hero>();
+                return;
             }
+            m_machine.ChangeState<ChaseState_Hero>();
         }
+
+
     }
 
     public override void Exit()

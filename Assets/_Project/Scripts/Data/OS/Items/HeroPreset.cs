@@ -12,6 +12,7 @@ public class HeroPreset : ItemStatsPreset
     public ElementType elementType;
     public int level;
     public float attackRange;
+    public float moveSpeed;
     public float health; // persent
     public float mana; // persent
     public float spirit; // persent
@@ -24,6 +25,7 @@ public class HeroPreset : ItemStatsPreset
     public List<ItemEquipmentPreset> equitmentDatas;
     public List<SkillPreset> skillDatas;
     public List<TechniquePreset> techniqueDatas;
+
     public override ItemData GetItemData()
     {
         HeroData heroPreset = new HeroData
@@ -37,6 +39,7 @@ public class HeroPreset : ItemStatsPreset
             raceType = raceType,
             level = level,
             attackRange = attackRange,
+            moveSpeed = moveSpeed,
             health = health,
             mana = mana,
             spirit = spirit,

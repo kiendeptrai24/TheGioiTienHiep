@@ -15,7 +15,9 @@ public class EnemyTarget : ISkillTarget
 
     public bool IsAlive => true;
 
-    public Vector3 Forward => throw new System.NotImplementedException();
+    public Vector3 Forward => _transform.forward;
 
-    public Quaternion Rotation => throw new System.NotImplementedException();
+    public Quaternion Rotation => _transform.rotation;
+
+    public Vector3 Center => _transform.position + Vector3.up * 1.5f;
 }

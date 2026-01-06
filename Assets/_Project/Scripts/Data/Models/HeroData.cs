@@ -12,6 +12,7 @@ public class HeroData : ItemData
     public ElementType elementType;
     public int level;
     public float attackRange;
+    public float moveSpeed;
     public float health; // persent
     public float mana; // persent
     public float spirit; // persent

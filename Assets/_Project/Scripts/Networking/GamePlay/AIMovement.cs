@@ -5,87 +5,103 @@ using UnityEngine.AI;
 
 public class AIMovement : TGTHMonoBehaviour
 {
-    [SerializeField] private PlayerController playerController;
-    public Transform target;
-    [SerializeField] private float stoppingDistance = 0.5f;
+    // Components
+    private HeroLoadData heroLoadData;
+    private FindTarget findTarget;
+    private NavMeshAgent agent;
+    // Properties
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float turnSpeed = 5f;
-    private NavMeshAgent agent;
+    // Target
+    private Transform m_Target;
+    public Transform Target { get { return m_Target; } }
+    protected override void Awake()
+    {
+        base.Awake();
+        LoadComponent();
+        if (heroLoadData != null)
+        {
+            heroLoadData.OnHeroDataLoaded += LoadHeroData;
+        }
+    }
+    protected override void Start()
+    {
+        base.Start();
+        agent.autoBraking = false;
+        agent.angularSpeed = turnSpeed;
+    }
+    private void LoadHeroData(HeroData data)
+    {
+        agent.stoppingDistance = data.attackRange;
+        agent.speed = data.moveSpeed;
+    }
+    private void Update()
+    {
+        FindTargetNearest();
+        CheckArrived();
+        RotateToMoveDirection();
+    }
     [ContextMenu("Set Target to Player")]
     public void SetDefaultTarget()
     {
-        if (agent != null && target != null)
+        if (agent != null && m_Target != null)
         {
-            agent.SetDestination(target.position);
+            agent.SetDestination(m_Target.position);
         }
     }
     public void SetTarget(Transform newTarget)
     {
-        target = newTarget;
-        if (agent != null && target != null)
-        {
-            agent.SetDestination(target.position);
-        }
-    }
-    protected override void Start() {
-        base.Start();
-        agent = GetComponent<NavMeshAgent>();
-        agent.autoBraking = false;
-        agent.stoppingDistance = stoppingDistance;
-        agent.speed = moveSpeed;
-        agent.angularSpeed = turnSpeed;
-        SetTarget(target);
-    }
-    public void UpdateDetination() {
-        if(target != null && agent != null && agent.isOnNavMesh == true)
+        m_Target = newTarget;
+        if (agent != null && m_Target != null)
         {
             agent.isStopped = false;
-            agent.SetDestination(target.position);
+            agent.SetDestination(m_Target.position);
         }
     }
-    private void Update() {
-        if(playerController != null && playerController.IsOwner && playerController.moveable.IsMoving())
+    public void FindTargetNearest()
+    {
+        if (findTarget != null && m_Target == null)
         {
-            UpdateDetination();
+            m_Target = findTarget.target;
+            return;
         }
-        if(agent != null && agent.isOnNavMesh == true)
+    }
+    public void CheckArrived()
+    {
+        if (agent != null && agent.isOnNavMesh == true)
         {
-            if(!agent.pathPending)
+            if (!agent.pathPending)
             {
-                if(agent.remainingDistance <= agent.stoppingDistance)
+                if (agent.remainingDistance <= agent.stoppingDistance)
                 {
-                    if(!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+                    if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                     {
                         OnArrived();
                     }
                 }
             }
         }
-        if(playerController != null && playerController.IsOwner && IsMoving())
-        {
-            RotateToMoveDirection();
-        }
     }
     void RotateToMoveDirection()
     {
         if (agent.velocity.sqrMagnitude > 0.01f)
         {
-            Vector3 dir = agent.velocity.normalized;
-            Quaternion targetRot = Quaternion.LookRotation(dir);
+            Quaternion targetRot = Quaternion.LookRotation(m_Target.position - transform.position);
             transform.rotation = Quaternion.Slerp(
                 transform.rotation,
                 targetRot,
-                Time.deltaTime * 10f
+                Time.deltaTime * 15f
             );
         }
     }
     void OnArrived()
     {
+        agent.velocity = Vector3.zero;
         agent.isStopped = true;
     }
     public bool IsMoving()
     {
-        if(agent != null)
+        if (agent != null)
             return !agent.isStopped;
         else
             return false;
@@ -94,8 +110,8 @@ public class AIMovement : TGTHMonoBehaviour
     {
         base.LoadComponent();
         agent = GetComponent<NavMeshAgent>();
-        playerController = FindAnyObjectByType<PlayerController>();
-        target = playerController.transform;
+        heroLoadData = GetComponent<HeroLoadData>();
+        findTarget = GetComponent<FindTarget>();
     }
 
 }

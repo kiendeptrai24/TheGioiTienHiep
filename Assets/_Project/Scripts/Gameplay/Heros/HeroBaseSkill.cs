@@ -11,23 +11,41 @@ public class SkillDataRuntime
     public BaseSkill skill;
 }
 
-public class HeroBaseSkill : TGTHMonoBehaviour, ISaveable
+public class HeroBaseSkill : TGTHMonoBehaviour
 {
-    [SerializeField] private string heroName;
-    [SerializeField] private HeroData _heroData;
-    [SerializeField] private SkillController _skillController;
-    public SkillController SkillController => _skillController;
-    [SerializeField] private List<SkillData> _skillsData = new();
-    [SerializeField] private List<SkillDataRuntime> _skillsDataRuntimes;
-    public Transform target;
+    // SkillController to manage the hero's skills
+    private SkillController m_SkillController;
+    private HeroLoadData m_HeroLoadData;
+    private FindTarget m_FindTargetEnemy;
+    public SkillController SkillController => m_SkillController;
+    // List of SkillData to be assigned in the Inspector
+    private List<SkillData> m_SkillsData;
+    private List<SkillDataRuntime> m_SkillsDataRuntimes;
+    // target enemy for skills
+    private GameObject m_EnemyTarget;
     override protected void Awake()
     {
         base.Awake();
-        _skillController = new SkillController(GetComponent<ISkillCaster>(), new UnityTimeProvider());
+        LoadComponent();
+        m_SkillController = new SkillController(GetComponent<ISkillCaster>(), new UnityTimeProvider());
+        m_SkillsDataRuntimes = new();
+        m_SkillsData = new();
+
+        if (m_HeroLoadData != null)
+        {
+            m_HeroLoadData.OnHeroDataLoaded += LoadHeroData;
+        }
     }
+
+    private void LoadHeroData(HeroData data)
+    {
+        m_SkillsData.AddRange(data.skillDatas);
+        SetupSkills();
+    }
+
     public void SetupSkills()
     {
-        foreach (var skillData in _skillsData)
+        foreach (var skillData in m_SkillsData)
         {
             if (skillData == null) continue;
             SetupSkillClass(skillData.skillType, skillData);
@@ -40,82 +58,72 @@ public class HeroBaseSkill : TGTHMonoBehaviour, ISaveable
             case SkillType.DonTram:
                 var skillruntime = new FireballSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
 
-                _skillsDataRuntimes.Add(new SkillDataRuntime()
+                m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
                     skillId = skillData.itemId,
                     skill = skillruntime,
                     skillAnimationClass = typeof(DonTramState_Hero),
                 });
-                _skillController.AddSkill(skillruntime);
+                m_SkillController.AddSkill(skillruntime);
                 break;
             case SkillType.LinhTien:
                 var skillruntime2 = new FireballSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
 
-                _skillsDataRuntimes.Add(new SkillDataRuntime()
+                m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
                     skillId = skillData.itemId,
                     skill = skillruntime2,
                     skillAnimationClass = typeof(LinhTienState_Hero),
                 });
-                _skillController.AddSkill(skillruntime2);
+                m_SkillController.AddSkill(skillruntime2);
                 break;
             case SkillType.LienKichChiThuat:
-                var skillruntime3 = new FireballSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
+                var skillruntime3 = new FocusSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
 
-                _skillsDataRuntimes.Add(new SkillDataRuntime()
+                m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
                     skillId = skillData.itemId,
                     skill = skillruntime3,
                     skillAnimationClass = typeof(LienKichChiThuatState_Hero),
                 });
-                _skillController.AddSkill(skillruntime3);
+                m_SkillController.AddSkill(skillruntime3);
                 break;
             case SkillType.ToanLucNhatKich:
                 var skillruntime4 = new FireballSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
 
-                _skillsDataRuntimes.Add(new SkillDataRuntime()
+                m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
                     skillId = skillData.itemId,
                     skill = skillruntime4,
                     skillAnimationClass = typeof(ToanLucNhatKichState_Hero),
                 });
-                _skillController.AddSkill(skillruntime4);
+                m_SkillController.AddSkill(skillruntime4);
                 break;
             case SkillType.NhamChuan:
-                var skillruntime5 = new FireballSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
+                var skillruntime5 = new FocusSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
 
-                _skillsDataRuntimes.Add(new SkillDataRuntime()
+                m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
                     skillId = skillData.itemId,
                     skill = skillruntime5,
                     skillAnimationClass = typeof(NhamChuanState_Hero),
                 });
-                _skillController.AddSkill(skillruntime5);
+                m_SkillController.AddSkill(skillruntime5);
                 break;
             default:
                 break;
         }
     }
-    public Type GetSkillAnimationClass(string skillId)
-    {
-        foreach (var skillRuntime in _skillsDataRuntimes)
-        {
-            if (skillRuntime.skillId == skillId)
-            {
-                return skillRuntime.skillAnimationClass;
-            }
-        }
-        return null;
-    }
     public void ActiveSkill(string skillname, SpawnPoint targetDirection)
     {
-        ISkillTarget target = new EnemyTarget(this.target);
-        var skill = _skillController.GetRuntime(skillname);
+        if (m_FindTargetEnemy == null) return;
+        ISkillTarget target = m_FindTargetEnemy;
+        var skill = m_SkillController.GetRuntime(skillname);
         if (skill != null)
         {
-            if (skill.IsReady(_skillController.Time.Now))
+            if (skill.IsReady(Time.time))
             {
-                _skillController.TryCast(skillname, target, targetDirection);
+                m_SkillController.TryCast(skillname, target, targetDirection);
             }
             else
             {
@@ -123,34 +131,18 @@ public class HeroBaseSkill : TGTHMonoBehaviour, ISaveable
             }
         }
     }
-    public List<SkillDataRuntime> GetAllSkillRuntimes()
+    public List<SkillDataRuntime> GetAllSkills()
     {
-        return _skillsDataRuntimes;
+        return m_SkillsDataRuntimes;
     }
     public SkillRuntime GetSkill(string skillId)
     {
-        return _skillController.GetRuntime(skillId);
+        return m_SkillController.GetRuntime(skillId);
     }
-    public void LoadData(GameData _data)
+    protected override void LoadComponent()
     {
-        foreach (var data in _data.itemDatas)
-        {
-            if (data is HeroData heroData)
-            {
-                if(heroData.itemName == heroName)
-                {
-                    _heroData = heroData;
-                    break;
-                }
-            }
-        }
-        _skillsData.AddRange(_heroData.skillDatas);
-        Debug.Log(_skillsData.Count);
-        SetupSkills();
-    }
-
-    public void SaveGame(ref GameData _data)
-    {
-
+        base.LoadComponent();
+        m_FindTargetEnemy = GetComponent<FindTarget>();
+        m_HeroLoadData = GetComponent<HeroLoadData>();
     }
 }
