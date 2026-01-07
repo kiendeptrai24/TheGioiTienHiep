@@ -21,6 +21,6 @@ public class HeroLoadData : TGTHMonoBehaviour, ISaveable
     }
     public void SaveGame(ref GameData _data)
     {
-
+        
     }
 }

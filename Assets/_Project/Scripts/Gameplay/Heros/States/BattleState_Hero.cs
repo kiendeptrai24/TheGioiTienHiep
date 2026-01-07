@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleState_Hero : HeroState
 {
+    private int _nextSkillIndex = 0;
     public BattleState_Hero(HeroController hero, IStateMachine stateMachine, string anim) : base(hero, stateMachine, anim)
     {
     }
@@ -14,13 +16,22 @@ public class BattleState_Hero : HeroState
     public override void Excute()
     {
         base.Excute();
-        foreach (var skillRuntime in m_hero.skillController.GetAllSkills())
+        var list = m_hero.skillController.GetAllSkills();
+        int count = list.Count;
+        if (count == 0) return;
+
+        for (int i = 0; i < count; i++)
         {
-            if (m_hero.skillController.GetSkill(skillRuntime.skillId).IsReady(Time.time))
+            int idx = (_nextSkillIndex + i) % count;
+            var skillDataRt = list[idx];
+
+            if (m_hero.skillController.GetSkill(skillDataRt.skillId).IsReady(m_hero.skillController.SkillController.Time.Now))
             {
-                m_hero.currentSkillData = skillRuntime;
-                m_machine.ChangeState(skillRuntime.skillAnimationClass);
-                break;
+                _nextSkillIndex = (idx + 1) % count;
+
+                m_hero.currentSkillData = skillDataRt;
+                m_machine.ChangeState(skillDataRt.skillAnimationClass);
+                return;
             }
         }
     }

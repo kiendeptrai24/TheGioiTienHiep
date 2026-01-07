@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FindTarget : TGTHMonoBehaviour, ISkillTarget 
 {
+    private ISkillCaster skillCaster;
     public Transform target;
     [SerializeField] private LayerMask whatIsTarget;
     [SerializeField] private float range = 10f;
@@ -15,7 +16,11 @@ public class FindTarget : TGTHMonoBehaviour, ISkillTarget
     public bool IsAlive => true;
 
     public Vector3 Center => target.position + Vector3.up * 1.5f;
-
+    protected override void Awake()
+    {
+        base.Awake();
+        LoadComponent();
+    }
     public void SetTarget(Transform newTarget)
     {
         target = newTarget;
@@ -43,6 +48,8 @@ public class FindTarget : TGTHMonoBehaviour, ISkillTarget
         {
             if(collider.transform == transform)
                 continue;
+            if(collider.gameObject.GetComponent<ISkillCaster>().TeamId == skillCaster.TeamId)
+                continue;
             float distance = Vector3.Distance(fromPosition, collider.transform.position);
             if (distance < nearestDistance)
             {
@@ -55,6 +62,11 @@ public class FindTarget : TGTHMonoBehaviour, ISkillTarget
         {
             SetTarget(nearestTarget);
         }
+    }
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        skillCaster = GetComponent<ISkillCaster>();
     }
     private void OnDrawGizmosSelected()
     {

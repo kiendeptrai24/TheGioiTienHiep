@@ -19,10 +19,7 @@ public class FocusSkill : BaseSkill
         var fireball = GameObject.Instantiate(skillEffectPrefab, targetPosition, targetRotation);
         var projectile = fireball.GetComponent<ParticleSystem>();
         if (projectile != null)
-        {
-            Debug.Log("Focus launched towards target at position: " + targetPosition);
             projectile.Play();
-        }
         GameObject.Destroy(fireball, 1f);
     }
     override public void BuildDefaultConditions()

@@ -3,9 +3,9 @@
 using System;
 using UnityEngine;
 
-public class FireballSkill : BaseSkill
+public class IdentifySkill : BaseSkill
 {
-    public FireballSkill(SkillData data, GameObject skillEffectPrefab, string skillId, string displayName, float cooldownSeconds = 1f)
+    public IdentifySkill(SkillData data, GameObject skillEffectPrefab, string skillId, string displayName, float cooldownSeconds = 1f)
         : base(data, skillEffectPrefab, skillId, displayName, cooldownSeconds)
     {
     }
@@ -22,10 +22,7 @@ public class FireballSkill : BaseSkill
         var fireball = GameObject.Instantiate(skillEffectPrefab, targetPosition, targetRotation);
         var projectile = fireball.GetComponent<ParticleSystem>();
         if (projectile != null)
-        {
-            Debug.Log("Fireball launched towards target at position: " + targetPosition);
             projectile.Play();
-        }
         GameObject.Destroy(fireball, 1f);
     }
     override public void BuildDefaultConditions()

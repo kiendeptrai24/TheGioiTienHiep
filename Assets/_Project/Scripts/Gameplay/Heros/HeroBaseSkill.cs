@@ -21,8 +21,6 @@ public class HeroBaseSkill : TGTHMonoBehaviour
     // List of SkillData to be assigned in the Inspector
     private List<SkillData> m_SkillsData;
     private List<SkillDataRuntime> m_SkillsDataRuntimes;
-    // target enemy for skills
-    private GameObject m_EnemyTarget;
     override protected void Awake()
     {
         base.Awake();
@@ -56,7 +54,8 @@ public class HeroBaseSkill : TGTHMonoBehaviour
         switch (skillType)
         {
             case SkillType.DonTram:
-                var skillruntime = new FireballSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
+                var skillruntime = new IdentifySkill(skillData, skillData.skillEffectPrefab,
+                 skillData.itemId, skillData.skillName, skillData.cooldown);
 
                 m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
@@ -67,7 +66,8 @@ public class HeroBaseSkill : TGTHMonoBehaviour
                 m_SkillController.AddSkill(skillruntime);
                 break;
             case SkillType.LinhTien:
-                var skillruntime2 = new FireballSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
+                var skillruntime2 = new IdentifySkill(skillData, skillData.skillEffectPrefab,
+                 skillData.itemId, skillData.skillName, skillData.cooldown);
 
                 m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
@@ -78,7 +78,8 @@ public class HeroBaseSkill : TGTHMonoBehaviour
                 m_SkillController.AddSkill(skillruntime2);
                 break;
             case SkillType.LienKichChiThuat:
-                var skillruntime3 = new FocusSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
+                var skillruntime3 = new FocusSkill(skillData, skillData.skillEffectPrefab,
+                 skillData.itemId, skillData.skillName, skillData.cooldown);
 
                 m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
@@ -89,7 +90,8 @@ public class HeroBaseSkill : TGTHMonoBehaviour
                 m_SkillController.AddSkill(skillruntime3);
                 break;
             case SkillType.ToanLucNhatKich:
-                var skillruntime4 = new FireballSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
+                var skillruntime4 = new IdentifySkill(skillData, skillData.skillEffectPrefab,
+                 skillData.itemId, skillData.skillName, skillData.cooldown);
 
                 m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
@@ -100,7 +102,8 @@ public class HeroBaseSkill : TGTHMonoBehaviour
                 m_SkillController.AddSkill(skillruntime4);
                 break;
             case SkillType.NhamChuan:
-                var skillruntime5 = new FocusSkill(skillData, skillData.skillEffectPrefab, skillData.itemId, skillData.skillName, skillData.cooldown);
+                var skillruntime5 = new FocusSkill(skillData, skillData.skillEffectPrefab,
+                 skillData.itemId, skillData.skillName, skillData.cooldown);
 
                 m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
