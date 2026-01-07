@@ -1,21 +1,24 @@
+
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterStats : TGTHNetworkBehaviour, ISaveable
-{   
+public class StatsData : TGTHMonoBehaviour, ISaveable
+{
+    [SerializeField] private bool canLoadData = true;
+    public event Action OnValueChanged;
+    public ItemData data;
     [Header("Preset base stats")]
     public StatsRaceData statsRaceData;
     public StatsCultivationPathData statsCultivationPathData;
     public StatsRealmData statsRealmData;
     private StatsModifier statsModifier = new StatsModifier();
     public Dictionary<StatType, Stat> stats = new Dictionary<StatType, Stat>();
-
-    #region Health
     public int Health => GetStatValue(StatType.Health);
     public int Mana => GetStatValue(StatType.Mana);
     public int Spirit => GetStatValue(StatType.Spirit);
-    #endregion
+
     #region Damage
     public int PhysicalDamage => GetStatValue(StatType.PhysicalDamage);
     public int MagicalDamage => GetStatValue(StatType.MagicalDamage);
@@ -77,21 +80,11 @@ public class CharacterStats : TGTHNetworkBehaviour, ISaveable
     public int AttackSpeed => GetStatValue(StatType.AttackSpeed);
     public int CastSpeed => GetStatValue(StatType.CastSpeed);
     #endregion
+
     public int CombatPower => GetStatValue(StatType.CombatPower);
-
-    protected override void Awake()
-    {
-        InitStatsPreset();
-        SaveLoadManager.Instance.saveManager.Register(this);
-    }
-
     protected override void Start()
     {
         base.Start();
-    }
-    new private void OnDestroy()
-    {
-        SaveLoadManager.Instance.saveManager.Unregister(this);
     }
     private void InitStatsPreset()
     {
@@ -107,7 +100,11 @@ public class CharacterStats : TGTHNetworkBehaviour, ISaveable
             stats.Add(type, new Stat(type, 0f));
         }
     }
-
+    public void ResetStats()
+    {
+        ResetStatsModifiers();
+        StatChange();
+    }
     public int GetStatValue(StatType type)
     {
         if (stats.TryGetValue(type, out Stat stat))
@@ -118,6 +115,14 @@ public class CharacterStats : TGTHNetworkBehaviour, ISaveable
         Debug.LogWarning($"Stat {type} không tồn tại trên {name}!");
         return 0;
     }
+    public Stat GetStat(StatType type)
+    {
+        if (stats.TryGetValue(type, out Stat stat))
+        {
+            return stat;
+        }
+        return null;
+    }
     [ContextMenu("Show Stats")]
     private void ShowStas()
     {
@@ -126,22 +131,30 @@ public class CharacterStats : TGTHNetworkBehaviour, ISaveable
         {
             debugMsg += $"{stat.Key}: {stat.Value.GetValue()}\n";
         }
+        Debug.Log(debugMsg);
     }
-
-    public void LoadData(GameData _data)
+    public void Setup(ItemData item, StatsCultivationPathData statsCultivationPathData, StatsRealmData statsRealmData, StatsRaceData statsRaceData)
     {
-        ResetStatsModifiers();
-        statsRaceData = _data.statsRaceData;
-        statsCultivationPathData = _data.statsCultivationPathData;
-        statsRealmData = _data.statsRealmData;
+        this.data = item;
+        this.statsCultivationPathData = statsCultivationPathData;
+        this.statsRealmData = statsRealmData;
+        this.statsRaceData = statsRaceData;
         statsModifier.AddStatsRaceData(stats, statsRaceData);
         statsModifier.AddStatsRealmData(stats, statsRealmData);
         statsModifier.AddStatsCultivationPathData(stats, statsCultivationPathData);
+    }
+    public void LoadData(GameData _data)
+    {
+        if (!canLoadData) return;
+        ResetStatsModifiers();
+        Setup(new ItemData(), _data.statsCultivationPathData, _data.statsRealmData, _data.statsRaceData);
         ShowStas();
     }
-
+    public void StatChange()
+    {
+        OnValueChanged?.Invoke();
+    }
     public void SaveGame(ref GameData _data)
     {
-        if (!IsServer) return;
     }
 }

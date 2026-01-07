@@ -7,7 +7,6 @@ public enum ActorState
 }
 public class ActorController : TGTHNetworkBehaviour
 {
-    private CharacterStats stats;
     public ActorState currentState = ActorState.TopDown;
     [Header("Components")]
     [SerializeField] private float turnSpeed = 10f;
@@ -27,7 +26,6 @@ public class ActorController : TGTHNetworkBehaviour
     protected override void Start()
     {
         base.Start();
-        //moveSpeed = stats.GetStatValue(StatType.MovementSpeed);
     }
     private void FixedUpdate()
     {
@@ -46,7 +44,6 @@ public class ActorController : TGTHNetworkBehaviour
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        stats = GetComponent<CharacterStats>();
         inputManager = FindAnyObjectByType<InputManager>();
     }
 }

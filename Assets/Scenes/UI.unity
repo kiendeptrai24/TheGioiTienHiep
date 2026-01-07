@@ -5040,10 +5040,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 32922808}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d440443aa1ebbc44b9945b551a1ca69b, type: 3}
+  m_Script: {fileID: 11500000, guid: f37fcc50bcd34fd42a17a7f9d9e5482d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatsManager
-  canLoadData: 0
+  canLoadData: 1
   data:
     itemId: 
     itemType: 0
@@ -61950,6 +61950,9 @@ GameObject:
   - component: {fileID: 402307717}
   - component: {fileID: 402307716}
   - component: {fileID: 402307715}
+  - component: {fileID: 402307726}
+  - component: {fileID: 402307728}
+  - component: {fileID: 402307727}
   m_Layer: 7
   m_Name: "K\xEC Phong"
   m_TagString: Untagged
@@ -62198,6 +62201,141 @@ Transform:
   - {fileID: 1379156420}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 34.87, z: 0}
+--- !u!114 &402307726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402307714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5474af88c77dd3d4887424cdeada974b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hero_Heal
+  ShowTopMostFoldoutHeaderGroup: 1
+  damageMultiplier:
+    m_InternalValue: 1
+  maxHealth:
+    m_InternalValue: 100
+  currentHealth:
+    m_InternalValue: 100
+  isDead:
+    m_InternalValue: 0
+--- !u!114 &402307727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402307714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ab2aa0ed029a0149851d2bef4737c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroStat
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &402307728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402307714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37fcc50bcd34fd42a17a7f9d9e5482d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatsData
+  canLoadData: 1
+  data:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+  statsRaceData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    raceType: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    spiritRange: 0
+    movementSpeed: 0
+  statsCultivationPathData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    essenceType: 0
+    counterEssenceType: 0
+    counterPercentage: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    movementSpeed: 0
+    spiritRange: 0
+  statsRealmData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    critRate: 0
+    critDamage: 0
+    evasion: 0
+    armorPenetration: 0
+    movementSpeed: 0
+    attackSpeed: 0
+    castSpeed: 0
+    potential: 0
+    skillPoints: 0
+    combatPower: 0
+    spiritRange: 0
 --- !u!1 &402329235
 GameObject:
   m_ObjectHideFlags: 0
@@ -78492,6 +78630,9 @@ GameObject:
   - component: {fileID: 503636847}
   - component: {fileID: 503636848}
   - component: {fileID: 503636849}
+  - component: {fileID: 503636850}
+  - component: {fileID: 503636852}
+  - component: {fileID: 503636851}
   m_Layer: 7
   m_Name: ChuongTam c2
   m_TagString: Untagged
@@ -78740,6 +78881,141 @@ MonoBehaviour:
     physicalDefense: 0
     magicalDefense: 0
     spiritDefense: 0
+--- !u!114 &503636850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503636838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5474af88c77dd3d4887424cdeada974b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hero_Heal
+  ShowTopMostFoldoutHeaderGroup: 1
+  damageMultiplier:
+    m_InternalValue: 1
+  maxHealth:
+    m_InternalValue: 100
+  currentHealth:
+    m_InternalValue: 100
+  isDead:
+    m_InternalValue: 0
+--- !u!114 &503636851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503636838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ab2aa0ed029a0149851d2bef4737c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroStat
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &503636852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503636838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37fcc50bcd34fd42a17a7f9d9e5482d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatsData
+  canLoadData: 1
+  data:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+  statsRaceData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    raceType: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    spiritRange: 0
+    movementSpeed: 0
+  statsCultivationPathData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    essenceType: 0
+    counterEssenceType: 0
+    counterPercentage: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    movementSpeed: 0
+    spiritRange: 0
+  statsRealmData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    critRate: 0
+    critDamage: 0
+    evasion: 0
+    armorPenetration: 0
+    movementSpeed: 0
+    attackSpeed: 0
+    castSpeed: 0
+    potential: 0
+    skillPoints: 0
+    combatPower: 0
+    spiritRange: 0
 --- !u!1 &503803596
 GameObject:
   m_ObjectHideFlags: 0
@@ -84285,6 +84561,9 @@ GameObject:
   - component: {fileID: 546605026}
   - component: {fileID: 546605025}
   - component: {fileID: 546605024}
+  - component: {fileID: 546605035}
+  - component: {fileID: 546605037}
+  - component: {fileID: 546605036}
   m_Layer: 7
   m_Name: "A \u0110\u1EA1i"
   m_TagString: Untagged
@@ -84533,6 +84812,141 @@ Transform:
   - {fileID: 88063484}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 34.87, z: 0}
+--- !u!114 &546605035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 546605023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5474af88c77dd3d4887424cdeada974b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hero_Heal
+  ShowTopMostFoldoutHeaderGroup: 1
+  damageMultiplier:
+    m_InternalValue: 1
+  maxHealth:
+    m_InternalValue: 100
+  currentHealth:
+    m_InternalValue: 100
+  isDead:
+    m_InternalValue: 0
+--- !u!114 &546605036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 546605023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ab2aa0ed029a0149851d2bef4737c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroStat
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &546605037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 546605023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37fcc50bcd34fd42a17a7f9d9e5482d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatsData
+  canLoadData: 1
+  data:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+  statsRaceData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    raceType: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    spiritRange: 0
+    movementSpeed: 0
+  statsCultivationPathData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    essenceType: 0
+    counterEssenceType: 0
+    counterPercentage: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    movementSpeed: 0
+    spiritRange: 0
+  statsRealmData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    critRate: 0
+    critDamage: 0
+    evasion: 0
+    armorPenetration: 0
+    movementSpeed: 0
+    attackSpeed: 0
+    castSpeed: 0
+    potential: 0
+    skillPoints: 0
+    combatPower: 0
+    spiritRange: 0
 --- !u!1 &549239148
 GameObject:
   m_ObjectHideFlags: 0
@@ -133264,6 +133678,9 @@ GameObject:
   - component: {fileID: 879026359}
   - component: {fileID: 879026360}
   - component: {fileID: 879026361}
+  - component: {fileID: 879026362}
+  - component: {fileID: 879026364}
+  - component: {fileID: 879026363}
   m_Layer: 7
   m_Name: ChuongTam
   m_TagString: Untagged
@@ -133512,6 +133929,141 @@ MonoBehaviour:
     physicalDefense: 0
     magicalDefense: 0
     spiritDefense: 0
+--- !u!114 &879026362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 879026350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5474af88c77dd3d4887424cdeada974b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hero_Heal
+  ShowTopMostFoldoutHeaderGroup: 1
+  damageMultiplier:
+    m_InternalValue: 1
+  maxHealth:
+    m_InternalValue: 100
+  currentHealth:
+    m_InternalValue: 100
+  isDead:
+    m_InternalValue: 0
+--- !u!114 &879026363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 879026350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ab2aa0ed029a0149851d2bef4737c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroStat
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &879026364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 879026350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37fcc50bcd34fd42a17a7f9d9e5482d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatsData
+  canLoadData: 1
+  data:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+  statsRaceData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    raceType: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    spiritRange: 0
+    movementSpeed: 0
+  statsCultivationPathData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    essenceType: 0
+    counterEssenceType: 0
+    counterPercentage: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    movementSpeed: 0
+    spiritRange: 0
+  statsRealmData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    critRate: 0
+    critDamage: 0
+    evasion: 0
+    armorPenetration: 0
+    movementSpeed: 0
+    attackSpeed: 0
+    castSpeed: 0
+    potential: 0
+    skillPoints: 0
+    combatPower: 0
+    spiritRange: 0
 --- !u!1 &879144251
 GameObject:
   m_ObjectHideFlags: 0
@@ -212316,6 +212868,9 @@ GameObject:
   - component: {fileID: 1367391881}
   - component: {fileID: 1367391880}
   - component: {fileID: 1367391879}
+  - component: {fileID: 1367391890}
+  - component: {fileID: 1367391892}
+  - component: {fileID: 1367391891}
   m_Layer: 7
   m_Name: "Nh\xE2n V\u1EADt"
   m_TagString: Untagged
@@ -212564,6 +213119,141 @@ Transform:
   - {fileID: 1880989905}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 47.83, z: 0}
+--- !u!114 &1367391890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367391878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5474af88c77dd3d4887424cdeada974b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hero_Heal
+  ShowTopMostFoldoutHeaderGroup: 1
+  damageMultiplier:
+    m_InternalValue: 1
+  maxHealth:
+    m_InternalValue: 100
+  currentHealth:
+    m_InternalValue: 100
+  isDead:
+    m_InternalValue: 0
+--- !u!114 &1367391891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367391878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ab2aa0ed029a0149851d2bef4737c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroStat
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &1367391892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367391878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37fcc50bcd34fd42a17a7f9d9e5482d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatsData
+  canLoadData: 1
+  data:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+  statsRaceData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    raceType: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    spiritRange: 0
+    movementSpeed: 0
+  statsCultivationPathData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    essenceType: 0
+    counterEssenceType: 0
+    counterPercentage: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    movementSpeed: 0
+    spiritRange: 0
+  statsRealmData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    critRate: 0
+    critDamage: 0
+    evasion: 0
+    armorPenetration: 0
+    movementSpeed: 0
+    attackSpeed: 0
+    castSpeed: 0
+    potential: 0
+    skillPoints: 0
+    combatPower: 0
+    spiritRange: 0
 --- !u!1 &1367434973
 GameObject:
   m_ObjectHideFlags: 0
@@ -282765,6 +283455,10 @@ GameObject:
   - component: {fileID: 1831346534}
   - component: {fileID: 1831346533}
   - component: {fileID: 1831346532}
+  - component: {fileID: 1831346543}
+  - component: {fileID: 1831346546}
+  - component: {fileID: 1831346545}
+  - component: {fileID: 1831346544}
   m_Layer: 7
   m_Name: "L\xFD T\u1EE9"
   m_TagString: Untagged
@@ -283013,6 +283707,242 @@ Transform:
   - {fileID: 709341178}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 47.83, z: 0}
+--- !u!114 &1831346543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831346531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5474af88c77dd3d4887424cdeada974b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hero_Heal
+  ShowTopMostFoldoutHeaderGroup: 1
+  damageMultiplier:
+    m_InternalValue: 1
+  maxHealth:
+    m_InternalValue: 100
+  currentHealth:
+    m_InternalValue: 100
+  isDead:
+    m_InternalValue: 0
+--- !u!114 &1831346544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831346531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ab2aa0ed029a0149851d2bef4737c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroStat
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &1831346545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831346531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37fcc50bcd34fd42a17a7f9d9e5482d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatsData
+  canLoadData: 1
+  data:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+  statsRaceData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    raceType: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    spiritRange: 0
+    movementSpeed: 0
+  statsCultivationPathData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    essenceType: 0
+    counterEssenceType: 0
+    counterPercentage: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    movementSpeed: 0
+    spiritRange: 0
+  statsRealmData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    critRate: 0
+    critDamage: 0
+    evasion: 0
+    armorPenetration: 0
+    movementSpeed: 0
+    attackSpeed: 0
+    castSpeed: 0
+    potential: 0
+    skillPoints: 0
+    combatPower: 0
+    spiritRange: 0
+--- !u!114 &1831346546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831346531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37fcc50bcd34fd42a17a7f9d9e5482d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatsManager
+  canLoadData: 1
+  data:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+  statsRaceData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    raceType: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    spiritRange: 0
+    movementSpeed: 0
+  statsCultivationPathData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    essenceType: 0
+    counterEssenceType: 0
+    counterPercentage: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    movementSpeed: 0
+    spiritRange: 0
+  statsRealmData:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    critRate: 0
+    critDamage: 0
+    evasion: 0
+    armorPenetration: 0
+    movementSpeed: 0
+    attackSpeed: 0
+    castSpeed: 0
+    potential: 0
+    skillPoints: 0
+    combatPower: 0
+    spiritRange: 0
 --- !u!1 &1831528801
 GameObject:
   m_ObjectHideFlags: 0
@@ -325919,7 +326849,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2105827619}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d440443aa1ebbc44b9945b551a1ca69b, type: 3}
+  m_Script: {fileID: 11500000, guid: f37fcc50bcd34fd42a17a7f9d9e5482d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatsManager
   canLoadData: 1

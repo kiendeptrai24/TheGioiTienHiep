@@ -7,9 +7,9 @@ namespace TGTH.Mobile
     /// <summary>
     /// this class must disable when start
     /// </summary>
-    public class HeroEquipmentPresenter : EquipmentBasePagePresenter , IEndDragHandler
+    public class HeroEquipmentPresenter : EquipmentBasePagePresenter, IEndDragHandler
     {
-        [SerializeField] private StatsManager statsManager;
+        [SerializeField] private StatsData statsManager;
         private bool setup = false;
         protected override void Awake()
         {
@@ -40,14 +40,14 @@ namespace TGTH.Mobile
         }
         protected override bool HandleEquippedChanged(InventoryItem item1, InventoryItem item2)
         {
-            if(base.HandleEquippedChanged(item1, item2))
+            if (base.HandleEquippedChanged(item1, item2))
             {
                 var heroData = statsManager.data as HeroData;
-                if(item1 != null && item1.data != null)
+                if (item1 != null && item1.data != null)
                 {
                     heroData.equitmentDatas.Remove(item1.data as EquitmentData);
                 }
-                if(item2 != null && item2.data != null)
+                if (item2 != null && item2.data != null)
                 {
                     heroData.equitmentDatas.Add(item2.data as EquitmentData);
                 }

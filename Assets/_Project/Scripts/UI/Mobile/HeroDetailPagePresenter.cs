@@ -9,7 +9,7 @@ namespace TGTH.Mobile
     {
         [SerializeField] private HeroDetailPageView view;
         [SerializeField] private IItemDetailPageView itemDetailPageView;
-        [SerializeField] private StatsManager statsManager;
+        [SerializeField] private StatsData statsManager;
         [SerializeField] private CharacterIdentity characterIdentity;
         [SerializeField] private EquipmentSystem equipmentSystem;
         [SerializeField] private SkillSystem skillSystem;

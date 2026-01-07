@@ -8,7 +8,7 @@ public interface ISkillCaster : ISkillTarget
 
     // Trạng thái / tag / buff / debuff… tuỳ bạn
     bool HasState(string stateId);
-    
+    ulong Id { get; }
     // Team/faction nếu cần
     int TeamId { get; }
 }

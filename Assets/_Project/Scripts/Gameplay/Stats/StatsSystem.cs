@@ -4,14 +4,14 @@ using UnityEngine;
 public abstract class StatsSystem : TGTHMonoBehaviour
 {
     // private CharacterStats charStats;
-    [SerializeField] private StatsManager statsManager;
+    [SerializeField] private StatsData statsManager;
     protected override void Awake()
     {
         LoadComponent();
     }
     public abstract void Equip(InventoryItem item);
     public abstract void Unequip(InventoryItem item);
-    
+
     protected void AddPercent(StatType type, float percent)
     {
         if (percent == 0) return;
@@ -41,6 +41,6 @@ public abstract class StatsSystem : TGTHMonoBehaviour
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        statsManager = GetComponent<StatsManager>();
+        statsManager = GetComponent<StatsData>();
     }
 }

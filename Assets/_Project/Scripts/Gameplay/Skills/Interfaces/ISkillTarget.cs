@@ -7,4 +7,6 @@ public interface ISkillTarget
     Vector3 Forward { get; }
     Quaternion Rotation { get; }
     bool IsAlive { get; }
+    GameObject Target { get; }
+
 }

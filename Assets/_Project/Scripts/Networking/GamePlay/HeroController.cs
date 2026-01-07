@@ -24,6 +24,10 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
     public Quaternion Rotation => transform.rotation;
     public Vector3 Center => transform.position + Vector3.up * 1.5f;
 
+    public ulong Id => OwnerClientId;
+
+    public GameObject Target => gameObject;
+
     override protected void Awake()
     {
         base.Awake();

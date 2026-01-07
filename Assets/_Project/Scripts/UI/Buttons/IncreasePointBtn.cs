@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class IncreasePointBtn : TGTHMonoBehaviour
 {
     private Button increasePointBtn;
-    private StatsManager statsManager;
+    private StatsData statsManager;
     [SerializeField] private StatType statType;
     protected override void Awake()
     {
@@ -22,7 +22,7 @@ public class IncreasePointBtn : TGTHMonoBehaviour
         {
             if (result == null) return;
             var stat = statsManager.GetStat(statType);
-            
+
             if (stat == null) return;
             stat.AddModifier(result.value);
             statsManager.StatChange();
@@ -36,7 +36,7 @@ public class IncreasePointBtn : TGTHMonoBehaviour
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        statsManager = FindAnyObjectByType<StatsManager>();
+        statsManager = FindAnyObjectByType<StatsData>();
         increasePointBtn = GetComponent<Button>();
     }
 }

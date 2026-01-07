@@ -5,7 +5,7 @@ namespace TGTH.Mobile
 {
     public class StatsPagePresenter : TGTHMonoBehaviour
     {
-        [SerializeField] private StatsManager statsManager;
+        [SerializeField] private StatsData statsManager;
         [SerializeField] private CharacterIdentity characterIdentity;
         [SerializeField] private StatsPageView view;
         protected override void Awake()
