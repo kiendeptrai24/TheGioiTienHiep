@@ -9,6 +9,7 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
     public AIMovement m_aiMovement;
     public HeroBaseSkill skillController;
     public SkillDataRuntime currentSkillData;
+    private StatsData stats;
     [SerializeField] public HeroData heroData;
     [HideInInspector] public IMoveable moveable;
     [HideInInspector] public Animator anim;
@@ -62,6 +63,7 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
         moveable = GetComponent<IMoveable>();
         m_aiMovement = GetComponent<AIMovement>();
         skillController = GetComponent<HeroBaseSkill>();
+        stats = GetComponent<StatsData>();
     }
 
     public void ConsumeMana(float amount)
@@ -78,4 +80,6 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
     {
         return false;
     }
+
+    public StatsData GetStats() => stats;
 }

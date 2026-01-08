@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class HealthController : TGTHNetworkBehaviour
 {
     private HeroLoadData heroLoadData;
+    private HeroData heroData;
     #region Health Properties
     public NetworkVariable<int> damageMultiplier = new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public NetworkVariable<int> maxHealth = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -29,6 +30,7 @@ public abstract class HealthController : TGTHNetworkBehaviour
     public override void OnNetworkSpawn()
     {
         if (!IsServer) return;
+        maxHealth.Value = Mathf.RoundToInt(heroData.health);
         currentHealth.Value = maxHealth.Value;
         isDead.Value = false;
         OnCurrentHealthChange(0, currentHealth.Value);
@@ -42,7 +44,7 @@ public abstract class HealthController : TGTHNetworkBehaviour
 
     private void OnHeroDataLoaded(HeroData data)
     {
-        maxHealth.Value = Mathf.RoundToInt(data.health);
+        heroData = data;
     }
     #region Logic Health
     public virtual void DecreaseHealth(float damage, ulong attackerId)

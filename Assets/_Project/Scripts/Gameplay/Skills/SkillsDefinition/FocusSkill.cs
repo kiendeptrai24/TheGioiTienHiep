@@ -14,11 +14,14 @@ public class FocusSkill : BaseSkill
         Quaternion targetRotation = ctx.Target.Rotation;
         var fireball = GameObject.Instantiate(skillEffectPrefab, targetPosition, targetRotation);
         var projectile = fireball.GetComponent<ParticleSystem>();
+        StatsData statsData = ctx.Caster.GetStats();
+
         if (projectile != null)
+        {
             projectile.Play();
             Collider[] colliders = Physics.OverlapSphere(
                 targetPosition,
-                5
+                data.attackRange
             );
             
             foreach (Collider col in colliders)
@@ -32,9 +35,10 @@ public class FocusSkill : BaseSkill
                 }
                 if (col.TryGetComponent<IDamageable>(out var damageable))
                 {
-                    damageable.TakeDamage(ctx, new StatsData());
+                    damageable.TakeDamage(ctx, statsData);
                 }
             }
+        }
         GameObject.Destroy(fireball, 1f);
     }
     override public void BuildDefaultConditions()

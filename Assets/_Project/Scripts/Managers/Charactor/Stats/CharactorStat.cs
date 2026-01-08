@@ -27,7 +27,7 @@ public abstract class CharacterStats : TGTHNetworkBehaviour, IDamageable
         {
             heal.DecreaseHealth(stats.MagicalDamage, ctx.Caster.Id);
         }
-        Debug.Log(gameObject.name + " Take Damage" + heal.name);
+        Debug.Log(gameObject.name + " Take Damage" + heal.name +" : " + stats.MagicalDamage);
     }
 }
 

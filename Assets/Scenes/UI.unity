@@ -61959,7 +61959,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &402307715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61972,6 +61972,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3449ec2b272826347a8bad0e3a22fa09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeroLoadData
+  ShowTopMostFoldoutHeaderGroup: 1
   m_heroName: "K\xEC Phong"
   m_heroData:
     itemId: 
@@ -62054,7 +62055,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c489c0cf369bb042909d625be7b29f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIMovement
-  moveSpeed: 3.5
   turnSpeed: 5
 --- !u!195 &402307720
 NavMeshAgent:
@@ -78639,7 +78639,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &503636839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78664,7 +78664,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c489c0cf369bb042909d625be7b29f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIMovement
-  moveSpeed: 3.5
   turnSpeed: 5
 --- !u!195 &503636841
 NavMeshAgent:
@@ -78865,6 +78864,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3449ec2b272826347a8bad0e3a22fa09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeroLoadData
+  ShowTopMostFoldoutHeaderGroup: 1
   m_heroName: "Tr\u01B0\u01A1ng Tam C2"
   m_heroData:
     itemId: 
@@ -84570,7 +84570,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &546605024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84583,6 +84583,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3449ec2b272826347a8bad0e3a22fa09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeroLoadData
+  ShowTopMostFoldoutHeaderGroup: 1
   m_heroName: "A \u0110\u1EA1i"
   m_heroData:
     itemId: 
@@ -84665,7 +84666,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c489c0cf369bb042909d625be7b29f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIMovement
-  moveSpeed: 3.5
   turnSpeed: 5
 --- !u!195 &546605029
 NavMeshAgent:
@@ -108347,7 +108347,6 @@ GameObject:
   m_Component:
   - component: {fileID: 703514337}
   - component: {fileID: 703514339}
-  - component: {fileID: 703514338}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -108392,18 +108391,6 @@ RectTransform:
   m_AnchoredPosition: {x: 825.5, y: 0}
   m_SizeDelta: {x: 0, y: 1093.3223}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &703514338
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 703514336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23623585dc5f14443a39687c7a6d286a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SET
 --- !u!114 &703514339
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133700,7 +133687,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c489c0cf369bb042909d625be7b29f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIMovement
-  moveSpeed: 3.5
   turnSpeed: 5
 --- !u!195 &879026352
 NavMeshAgent:
@@ -133913,6 +133899,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3449ec2b272826347a8bad0e3a22fa09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeroLoadData
+  ShowTopMostFoldoutHeaderGroup: 1
   m_heroName: "Tr\u01B0\u01A1ng Tam"
   m_heroData:
     itemId: 
@@ -158569,7 +158556,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1035112025
 RectTransform:
   m_ObjectHideFlags: 0
@@ -171195,7 +171182,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1105183337}
   - component: {fileID: 1105183338}
-  - component: {fileID: 1105183339}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -171264,18 +171250,6 @@ MonoBehaviour:
   m_Spacing: {x: 50, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 2
---- !u!114 &1105183339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1105183336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23623585dc5f14443a39687c7a6d286a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SET
 --- !u!1 &1106260679
 GameObject:
   m_ObjectHideFlags: 0
@@ -202237,7 +202211,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1302260248
 RectTransform:
   m_ObjectHideFlags: 0
@@ -212890,6 +212864,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3449ec2b272826347a8bad0e3a22fa09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeroLoadData
+  ShowTopMostFoldoutHeaderGroup: 1
   m_heroName: "Nh\xE2n V\u1EADt"
   m_heroData:
     itemId: 
@@ -212972,7 +212947,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c489c0cf369bb042909d625be7b29f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIMovement
-  moveSpeed: 3.5
   turnSpeed: 5
 --- !u!195 &1367391884
 NavMeshAgent:
@@ -283465,7 +283439,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1831346532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283478,6 +283452,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3449ec2b272826347a8bad0e3a22fa09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeroLoadData
+  ShowTopMostFoldoutHeaderGroup: 1
   m_heroName: "L\xFD T\u1EE9"
   m_heroData:
     itemId: 
@@ -283560,7 +283535,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c489c0cf369bb042909d625be7b29f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIMovement
-  moveSpeed: 3.5
   turnSpeed: 5
 --- !u!195 &1831346537
 NavMeshAgent:
@@ -321075,7 +321049,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2073420381
 RectTransform:
   m_ObjectHideFlags: 0

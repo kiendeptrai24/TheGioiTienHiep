@@ -131,7 +131,6 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
         {
             debugMsg += $"{stat.Key}: {stat.Value.GetValue()}\n";
         }
-        Debug.Log(debugMsg);
     }
     public void Setup(ItemData item, StatsCultivationPathData statsCultivationPathData, StatsRealmData statsRealmData, StatsRaceData statsRaceData)
     {

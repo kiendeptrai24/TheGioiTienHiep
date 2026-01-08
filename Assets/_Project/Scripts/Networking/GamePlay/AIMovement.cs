@@ -10,7 +10,6 @@ public class AIMovement : TGTHMonoBehaviour
     private FindTarget findTarget;
     private NavMeshAgent agent;
     // Properties
-    [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float turnSpeed = 5f;
     // Target
     private Transform m_Target;
