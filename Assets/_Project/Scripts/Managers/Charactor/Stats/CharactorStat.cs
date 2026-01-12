@@ -22,12 +22,11 @@ public abstract class CharacterStats : TGTHNetworkBehaviour, IDamageable
 
     public virtual void TakeDamage(SkillContext ctx, StatsData _targetStats)
     {
-        var heal = ctx.Target.Target.GetComponent<HealthController>();
+        var heal = GetComponent<HealthController>();
         if (heal != null)
         {
             heal.DecreaseHealth(stats.MagicalDamage, ctx.Caster.Id);
         }
-        Debug.Log(gameObject.name + " Take Damage" + heal.name +" : " + stats.MagicalDamage);
     }
 }
 

@@ -1,15 +1,18 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 
 public class HeroController : TGTHNetworkBehaviour, ISkillCaster
 {
+    public Transform attackPrefab;
     private IStateMachine m_heroSM;
     private HeroLoadData m_heroLoadData;
     public AIMovement m_aiMovement;
     public HeroBaseSkill skillController;
     public SkillDataRuntime currentSkillData;
     private StatsData stats;
+    private HealthController healthController;
     [SerializeField] public HeroData heroData;
     [HideInInspector] public IMoveable moveable;
     [HideInInspector] public Animator anim;
@@ -33,6 +36,7 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
     {
         base.Awake();
         LoadComponent();
+        healthController.OnDead += OnDeadServerRpc;
         m_heroLoadData.OnHeroDataLoaded += LoadHeroData;
         m_heroSM = new HeroStateMachine(this);
         m_heroSM.Init<IdleState_Hero>();
@@ -54,6 +58,12 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
         if (!IsOwner) return;
         m_heroSM.Update();
     }
+    [ServerRpc]
+    private void OnDeadServerRpc()
+    {
+        NetworkObject.Despawn();
+    }
+
 
     override protected void LoadComponent()
     {
@@ -64,6 +74,7 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
         m_aiMovement = GetComponent<AIMovement>();
         skillController = GetComponent<HeroBaseSkill>();
         stats = GetComponent<StatsData>();
+        healthController = GetComponent<HealthController>();
     }
 
     public void ConsumeMana(float amount)

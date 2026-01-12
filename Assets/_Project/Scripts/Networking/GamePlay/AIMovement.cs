@@ -3,7 +3,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AIMovement : TGTHMonoBehaviour
+public class AIMovement : TGTHNetworkBehaviour
 {
     // Components
     private HeroLoadData heroLoadData;
@@ -36,6 +36,7 @@ public class AIMovement : TGTHMonoBehaviour
     }
     private void Update()
     {
+        if(!IsServer) return;
         FindTargetNearest();
         CheckArrived();
         RotateToMoveDirection();
@@ -73,25 +74,23 @@ public class AIMovement : TGTHMonoBehaviour
             {
                 if (agent.remainingDistance <= agent.stoppingDistance)
                 {
-                    if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
-                    {
-                        OnArrived();
-                    }
+                    OnArrived();
                 }
             }
         }
     }
     void RotateToMoveDirection()
     {
-        if (agent.velocity.sqrMagnitude > 0.01f)
-        {
+        if (m_Target == null) return;
+        // if (agent.velocity.sqrMagnitude > 0.01f)
+        // {
             Quaternion targetRot = Quaternion.LookRotation(m_Target.position - transform.position);
             transform.rotation = Quaternion.Slerp(
                 transform.rotation,
                 targetRot,
                 Time.deltaTime * 15f
             );
-        }
+        // }
     }
     void OnArrived()
     {

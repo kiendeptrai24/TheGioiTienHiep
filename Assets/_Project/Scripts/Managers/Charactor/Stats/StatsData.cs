@@ -8,7 +8,8 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
 {
     [SerializeField] private bool canLoadData = true;
     public event Action OnValueChanged;
-    public ItemData data;
+    public ItemData heroData;
+    public List<TechniqueData> techniqueData;
     [Header("Preset base stats")]
     public StatsRaceData statsRaceData;
     public StatsCultivationPathData statsCultivationPathData;
@@ -80,6 +81,10 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     public int AttackSpeed => GetStatValue(StatType.AttackSpeed);
     public int CastSpeed => GetStatValue(StatType.CastSpeed);
     #endregion
+    #region Range
+    public int AttackRange => GetStatValue(StatType.AttackRange);
+    public int SpiritRange => GetStatValue(StatType.SpiritRange);
+    #endregion
 
     public int CombatPower => GetStatValue(StatType.CombatPower);
     protected override void Start()
@@ -132,22 +137,42 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
             debugMsg += $"{stat.Key}: {stat.Value.GetValue()}\n";
         }
     }
-    public void Setup(ItemData item, StatsCultivationPathData statsCultivationPathData, StatsRealmData statsRealmData, StatsRaceData statsRaceData)
+    public void Setup()
     {
-        this.data = item;
-        this.statsCultivationPathData = statsCultivationPathData;
-        this.statsRealmData = statsRealmData;
-        this.statsRaceData = statsRaceData;
+        ResetStats();
         statsModifier.AddStatsRaceData(stats, statsRaceData);
         statsModifier.AddStatsRealmData(stats, statsRealmData);
         statsModifier.AddStatsCultivationPathData(stats, statsCultivationPathData);
+        statsModifier.AddStatsHeroData(stats, heroData);
+        statsModifier.AddStatsTechniqueData(stats, techniqueData);
+        StatChange();
+
     }
     public void LoadData(GameData _data)
     {
         if (!canLoadData) return;
         ResetStatsModifiers();
-        Setup(new ItemData(), _data.statsCultivationPathData, _data.statsRealmData, _data.statsRaceData);
-        ShowStas();
+        this.statsCultivationPathData = _data.statsCultivationPathData;
+        this.statsRealmData = _data.statsRealmData;
+        this.statsRaceData = _data.statsRaceData;
+        Setup();
+    }
+    public void SetupData(StatsCultivationPathData statsCultivationPathData, StatsRealmData statsRealmData, StatsRaceData statsRaceData)
+    {
+        this.statsCultivationPathData = statsCultivationPathData;
+        this.statsRealmData = statsRealmData;
+        this.statsRaceData = statsRaceData;
+        Setup();
+    }
+    public void SetUpTechnique(List<TechniqueData> items)
+    {
+        this.techniqueData = items;
+    }
+    public void SetUpItem(ItemData item)
+    {
+        this.heroData = item;
+        SetUpTechnique((heroData as HeroData).techniqueDatas);
+        Setup();
     }
     public void StatChange()
     {

@@ -4,8 +4,7 @@ using UnityEngine;
 
 public abstract class HealthController : TGTHNetworkBehaviour
 {
-    private HeroLoadData heroLoadData;
-    private HeroData heroData;
+    private StatsData stats;
     #region Health Properties
     public NetworkVariable<int> damageMultiplier = new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public NetworkVariable<int> maxHealth = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -20,7 +19,6 @@ public abstract class HealthController : TGTHNetworkBehaviour
     {
         base.Awake();
         LoadComponent();
-        heroLoadData.OnHeroDataLoaded += OnHeroDataLoaded;
     }
     protected override void Start()
     {
@@ -30,29 +28,23 @@ public abstract class HealthController : TGTHNetworkBehaviour
     public override void OnNetworkSpawn()
     {
         if (!IsServer) return;
-        maxHealth.Value = Mathf.RoundToInt(heroData.health);
+        maxHealth.Value = Mathf.RoundToInt(stats.Health);
         currentHealth.Value = maxHealth.Value;
         isDead.Value = false;
-        OnCurrentHealthChange(0, currentHealth.Value);
-
+        OnCurrentHealthChange(0, maxHealth.Value);
     }
     public override void OnNetworkDespawn()
     {
         if(IsServer) return;
     }
     #endregion
-
-    private void OnHeroDataLoaded(HeroData data)
-    {
-        heroData = data;
-    }
+    
     #region Logic Health
     public virtual void DecreaseHealth(float damage, ulong attackerId)
     {
         if (!IsServer || ShouldDie())
             return;
         currentHealth.Value = Mathf.RoundToInt(Mathf.Max(0, currentHealth.Value - (damage * damageMultiplier.Value)));
-        Debug.Log("Decrease Health");
         ShouldDie();
 
     }
@@ -93,6 +85,6 @@ public abstract class HealthController : TGTHNetworkBehaviour
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        heroLoadData = GetComponent<HeroLoadData>();
+        stats = GetComponent<StatsData>();
     }
 }

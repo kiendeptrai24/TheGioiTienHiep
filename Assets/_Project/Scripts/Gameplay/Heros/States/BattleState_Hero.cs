@@ -18,8 +18,6 @@ public class BattleState_Hero : HeroState
         base.Excute();
         var list = m_hero.skillController.GetAllSkills();
         int count = list.Count;
-        if (count == 0) return;
-
         for (int i = 0; i < count; i++)
         {
             int idx = (_nextSkillIndex + i) % count;
@@ -34,6 +32,7 @@ public class BattleState_Hero : HeroState
                 return;
             }
         }
+        m_machine.ChangeState<AttackState_Hero>();
     }
 
     public override void Exit()

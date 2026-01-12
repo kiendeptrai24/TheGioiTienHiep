@@ -7,6 +7,9 @@ public sealed class SkillRuntime
 
     public BaseSkill Skill => _skill;
     public float NextReadyTime { get; private set; } = 0f;
+    public SkillRuntime()
+    {
+    }
 
     public SkillRuntime(BaseSkill skill)
     {

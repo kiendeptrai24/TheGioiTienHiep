@@ -17,8 +17,6 @@ public class FindTarget : TGTHMonoBehaviour, ISkillTarget
 
     public Vector3 Center => target.position + Vector3.up * 1.5f;
 
-    public GameObject Target => gameObject;
-
     protected override void Awake()
     {
         base.Awake();

@@ -13,7 +13,7 @@ public class CharacterIdentity : MonoBehaviour, ISaveable
     public StatsRaceData statsRaceData;
     public StatsCultivationPathData statsCultivationPathData;
     public StatsRealmData statsRealmData;
-    public void Setup(StatsCultivationPathData statsCultivationPathData, StatsRealmData statsRealmData, StatsRaceData statsRaceData)
+    public void SetupData(StatsCultivationPathData statsCultivationPathData, StatsRealmData statsRealmData, StatsRaceData statsRaceData)
     {
         this.statsCultivationPathData = statsCultivationPathData;
         this.statsRealmData = statsRealmData;

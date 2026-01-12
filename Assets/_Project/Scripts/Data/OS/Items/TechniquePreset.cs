@@ -162,56 +162,56 @@ public class TechniquePreset : ItemPreset
         switch (realm)
         {
             case CultivationStage.LuyenKhi_9:
-                bonusHealth = 20;
-                bonusMana = 20;
+                bonusHealth = .20f;
+                bonusMana = .20f;
                 enhanceLevel = 1;
                 break;
 
             case CultivationStage.TrucCo_SK:
-                bonusHealth = 30;
-                bonusMana = 30;
+                bonusHealth = .30f;
+                bonusMana = .30f;
                 enhanceLevel = 2;
                 break;
 
             case CultivationStage.KetDan_SK:
-                bonusHealth = 50;
-                bonusMana = 50;
+                bonusHealth = .50f;
+                bonusMana = .50f;
                 enhanceLevel = 3;
                 break;
 
             case CultivationStage.NguyenAnh_SK:
-                bonusHealth = 70;
-                bonusMana = 70;
+                bonusHealth = .70f;
+                bonusMana = .70f;
                 enhanceLevel = 4;
                 break;
 
             case CultivationStage.HoaThan_SK:
-                bonusHealth = 90;
-                bonusMana = 90;
+                bonusHealth = .90f;
+                bonusMana = .90f;
                 enhanceLevel = 5;
                 break;
 
             case CultivationStage.HopThe_SK:
-                bonusHealth = 110;
-                bonusMana = 110;
+                bonusHealth = 1.10f;
+                bonusMana = 1.10f;
                 enhanceLevel = 6;
                 break;
 
             case CultivationStage.DoKiep_SK:
-                bonusHealth = 130;
-                bonusMana = 130;
+                bonusHealth = 1.30f;
+                bonusMana = 1.30f;
                 enhanceLevel = 7;
                 break;
 
             case CultivationStage.DaiThua_SK:
-                bonusHealth = 160;
-                bonusMana = 160;
+                bonusHealth = 1.60f;
+                bonusMana = 1.60f;
                 enhanceLevel = 8;
                 break;
 
             case CultivationStage.PhiThang:
-                bonusHealth = 210;
-                bonusMana = 210;
+                bonusHealth = 2.10f;
+                bonusMana = 2.10f;
                 enhanceLevel = 9;
                 break;
         }
@@ -224,23 +224,23 @@ public class TechniquePreset : ItemPreset
         switch (realm)
         {
             case CultivationStage.LuyenKhi_9:
-                physicalDefense = 5;
-                magicalDefense = 5;
-                bonusHealth = 20;
+                physicalDefense = .05f;
+                magicalDefense = .05f;
+                bonusHealth = .20f;
                 enhanceLevel = 1;
                 break;
 
             case CultivationStage.TrucCo_SK:
-                physicalDefense = 7.5f;
-                magicalDefense = 7.5f;
-                bonusHealth = 30;
+                physicalDefense = .075f;
+                magicalDefense = .075f;
+                bonusHealth = .30f;
                 enhanceLevel = 2;
                 break;
 
             case CultivationStage.KetDan_SK:
-                physicalDefense = 12.5f;
-                magicalDefense = 12.5f;
-                bonusHealth = 50;
+                physicalDefense = .125f;
+                magicalDefense = .125f;
+                bonusHealth = .50f;
                 enhanceLevel = 3;
                 break;
         }
@@ -253,20 +253,20 @@ public class TechniquePreset : ItemPreset
         switch (realm)
         {
             case CultivationStage.LuyenKhi_9:
-                magicalDamage = 10;
-                bonusHealth = 20;
+                magicalDamage = .10f;
+                bonusHealth = .20f;
                 enhanceLevel = 1;
                 break;
 
             case CultivationStage.TrucCo_SK:
-                magicalDamage = 15;
-                bonusHealth = 30;
+                magicalDamage = .15f;
+                bonusHealth = .30f;
                 enhanceLevel = 2;
                 break;
 
             case CultivationStage.KetDan_SK:
-                magicalDamage = 25;
-                bonusHealth = 50;
+                magicalDamage = .25f;
+                bonusHealth = .50f;
                 enhanceLevel = 3;
                 break;
         }
@@ -280,23 +280,23 @@ public class TechniquePreset : ItemPreset
         switch (realm)
         {
             case CultivationStage.LuyenKhi_9:
-                physicalDamage = 5;
-                physicalDefense = 5;
-                bonusHealth = 20;
+                physicalDamage = .05f;
+                physicalDefense = .05f;
+                bonusHealth = .20f;
                 enhanceLevel = 1;
                 break;
 
             case CultivationStage.TrucCo_SK:
-                physicalDamage = 10;
-                physicalDefense = 5;
-                bonusHealth = 30;
+                physicalDamage = .10f;
+                physicalDefense = .05f;
+                bonusHealth = .30f;
                 enhanceLevel = 2;
                 break;
 
             case CultivationStage.KetDan_SK:
-                physicalDamage = 20;
-                physicalDefense = 5;
-                bonusHealth = 50;
+                physicalDamage = .20f;
+                physicalDefense = .05f;
+                bonusHealth = .50f;
                 enhanceLevel = 3;
                 break;
         }

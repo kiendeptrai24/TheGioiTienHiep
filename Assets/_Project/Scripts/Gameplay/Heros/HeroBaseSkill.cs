@@ -21,11 +21,13 @@ public class HeroBaseSkill : TGTHMonoBehaviour
     // List of SkillData to be assigned in the Inspector
     private List<SkillData> m_SkillsData;
     private List<SkillDataRuntime> m_SkillsDataRuntimes;
+    public UnityTimeProvider timeProvider;
     override protected void Awake()
     {
         base.Awake();
         LoadComponent();
-        m_SkillController = new SkillController(GetComponent<ISkillCaster>(), new UnityTimeProvider());
+        timeProvider = new UnityTimeProvider();
+        m_SkillController = new SkillController(GetComponent<ISkillCaster>(), timeProvider);
         m_SkillsDataRuntimes = new();
         m_SkillsData = new();
 
@@ -38,7 +40,7 @@ public class HeroBaseSkill : TGTHMonoBehaviour
     private void LoadHeroData(HeroData data)
     {
         m_SkillsData.AddRange(data.skillDatas);
-        SetupSkills();
+        //SetupSkills();    
     }
 
     public void SetupSkills()
@@ -55,7 +57,7 @@ public class HeroBaseSkill : TGTHMonoBehaviour
         {
             case SkillType.DonTram:
                 var skillruntime = new IdentifySkill(skillData, skillData.skillEffectPrefab,
-                 skillData.itemId, skillData.skillName, skillData.cooldown);
+                skillData.itemId, skillData.skillName, skillData.cooldown);
 
                 m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
@@ -66,7 +68,7 @@ public class HeroBaseSkill : TGTHMonoBehaviour
                 m_SkillController.AddSkill(skillruntime);
                 break;
             case SkillType.LinhTien:
-                var skillruntime2 = new IdentifySkill(skillData, skillData.skillEffectPrefab,
+                var skillruntime2 = new FocusSkill(skillData, skillData.skillEffectPrefab,
                  skillData.itemId, skillData.skillName, skillData.cooldown);
 
                 m_SkillsDataRuntimes.Add(new SkillDataRuntime()
@@ -78,7 +80,7 @@ public class HeroBaseSkill : TGTHMonoBehaviour
                 m_SkillController.AddSkill(skillruntime2);
                 break;
             case SkillType.LienKichChiThuat:
-                var skillruntime3 = new FocusSkill(skillData, skillData.skillEffectPrefab,
+                var skillruntime3 = new IdentifySkill(skillData, skillData.skillEffectPrefab,
                  skillData.itemId, skillData.skillName, skillData.cooldown);
 
                 m_SkillsDataRuntimes.Add(new SkillDataRuntime()
@@ -112,6 +114,42 @@ public class HeroBaseSkill : TGTHMonoBehaviour
                     skillAnimationClass = typeof(NhamChuanState_Hero),
                 });
                 m_SkillController.AddSkill(skillruntime5);
+                break;
+            case SkillType.VanLinhTien:
+                var skillruntime6 = new FocusSkill(skillData, skillData.skillEffectPrefab,
+                 skillData.itemId, skillData.skillName, skillData.cooldown);
+
+                m_SkillsDataRuntimes.Add(new SkillDataRuntime()
+                {
+                    skillId = skillData.itemId,
+                    skill = skillruntime6,
+                    skillAnimationClass = typeof(VanLinhTienState_Hero)
+                });
+                m_SkillController.AddSkill(skillruntime6);
+                break;
+            case SkillType.LinhTram:
+                var skillruntime7 = new IdentifySkill(skillData, skillData.skillEffectPrefab,
+                 skillData.itemId, skillData.skillName, skillData.cooldown);
+
+                m_SkillsDataRuntimes.Add(new SkillDataRuntime()
+                {
+                    skillId = skillData.itemId,
+                    skill = skillruntime7,
+                    skillAnimationClass = typeof(LinhTramState_Hero)
+                });
+                m_SkillController.AddSkill(skillruntime7);
+                break;
+            case SkillType.VuTien:
+                var skillruntime8 = new FocusSkill(skillData, skillData.skillEffectPrefab,
+                 skillData.itemId, skillData.skillName, skillData.cooldown);
+
+                m_SkillsDataRuntimes.Add(new SkillDataRuntime()
+                {
+                    skillId = skillData.itemId,
+                    skill = skillruntime8,
+                    skillAnimationClass = typeof(VuTienState_Hero)
+                });
+                m_SkillController.AddSkill(skillruntime8);
                 break;
             default:
                 break;

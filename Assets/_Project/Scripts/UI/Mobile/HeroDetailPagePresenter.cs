@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 namespace TGTH.Mobile
@@ -36,7 +37,7 @@ namespace TGTH.Mobile
         }
         private void OnEnable()
         {
-            ShowData(new InventoryItem(statsManager.data));
+            ShowData(new InventoryItem(statsManager.heroData));
         }
         private void Init()
         {
@@ -89,8 +90,9 @@ namespace TGTH.Mobile
             statsManager.ResetStats();
             var heroData = item.data as HeroData;
             if (heroData == null) return;
-            statsManager.Setup(heroData, heroData.statsCultivationPathData, heroData.statsRealmData, heroData.statsRaceData);
-            characterIdentity.Setup(heroData.statsCultivationPathData, heroData.statsRealmData, heroData.statsRaceData);
+            statsManager.SetUpItem(heroData);
+            statsManager.SetupData(heroData.statsCultivationPathData, heroData.statsRealmData, heroData.statsRaceData);
+            characterIdentity.SetupData(heroData.statsCultivationPathData, heroData.statsRealmData, heroData.statsRaceData);
             foreach (var eq in heroData.equitmentDatas)
             {
                 equipmentSystem.Equip(new InventoryItem(eq));

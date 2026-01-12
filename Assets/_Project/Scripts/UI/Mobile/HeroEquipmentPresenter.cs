@@ -15,7 +15,7 @@ namespace TGTH.Mobile
         {
             base.Awake();
             Init();
-            view.ShowEquipmentItems(statsManager.data);
+            view.ShowEquipmentItems(statsManager.heroData);
         }
         protected override void OnEnable()
         {
@@ -42,7 +42,7 @@ namespace TGTH.Mobile
         {
             if (base.HandleEquippedChanged(item1, item2))
             {
-                var heroData = statsManager.data as HeroData;
+                var heroData = statsManager.heroData as HeroData;
                 if (item1 != null && item1.data != null)
                 {
                     heroData.equitmentDatas.Remove(item1.data as EquitmentData);
