@@ -10,6 +10,7 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     public event Action OnValueChanged;
     public ItemData heroData;
     public List<TechniqueData> techniqueData;
+    public List<SkillData> skillDatas;
     [Header("Preset base stats")]
     public StatsRaceData statsRaceData;
     public StatsCultivationPathData statsCultivationPathData;
@@ -168,6 +169,10 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     {
         this.techniqueData = items;
     }
+    public void SetUpSkill(List<SkillData> items)
+    {
+        this.skillDatas = items;
+    }
     public void SetUpItem(ItemData item)
     {
         this.heroData = item;
@@ -180,5 +185,6 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     }
     public void SaveGame(ref GameData _data)
     {
+        
     }
 }

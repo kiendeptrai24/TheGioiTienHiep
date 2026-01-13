@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 public class HeroStateFactory : IStateFactory
 {
-    private readonly HeroController _hero;
-    private readonly IStateMachine _machine;
-    private Dictionary<Type, IState> _statesDictionary;
+    protected HeroController _hero;
+    protected IStateMachine _machine;
+    protected Dictionary<Type, IState> _statesDictionary;
     public HeroStateFactory(HeroController hero, IStateMachine machine)
     {
         _hero = hero;
@@ -17,7 +17,7 @@ public class HeroStateFactory : IStateFactory
         _statesDictionary[stateType] = state;
     }
 
-    public Dictionary<Type, IState> CreateState()
+    public virtual Dictionary<Type, IState> CreateState()
     {
         _statesDictionary = new Dictionary<Type, IState>
         {
@@ -26,8 +26,7 @@ public class HeroStateFactory : IStateFactory
             {typeof(ChaseState_Hero), new ChaseState_Hero(_hero, _machine, "Move")},
             {typeof(MoveState_Hero), new MoveState_Hero(_hero, _machine, "Move")},
 
-            {typeof(AttackState_Hero), new AttackState_Hero(_hero, _machine, "StandingAttack1")},
-            {typeof(AttackRangeState_Hero), new AttackRangeState_Hero(_hero, _machine, "StandingMagicAttack")},
+
 
             {typeof(DonTramState_Hero), new DonTramState_Hero(_hero, _machine, "Slash")},
             {typeof(LienKichChiThuatState_Hero), new LienKichChiThuatState_Hero(_hero, _machine, "Attack2")},

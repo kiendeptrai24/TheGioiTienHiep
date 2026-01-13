@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class AttackRangeState_Hero : HeroState, ISkillTrigger, IAnimationTrigger
@@ -9,30 +10,11 @@ public class AttackRangeState_Hero : HeroState, ISkillTrigger, IAnimationTrigger
 
     public void ActiveSkill()
     {
-        var spawnPoint  = new SpawnPoint();
-        spawnPoint.position = m_hero.transform.position;
-        spawnPoint.rotation = m_hero.transform.rotation;
-        skillContext = new SkillContext(m_hero.skillController.timeProvider, m_hero, m_hero, new SkillRuntime(),spawnPoint);
-        Collider[] colliders = Physics.OverlapSphere(
-                m_hero.transform.position,
-            10
-        );
-        var slash = GameObject.Instantiate(m_hero.attackPrefab, spawnPoint.position, spawnPoint.rotation);
-        GameObject.Destroy(slash.gameObject, 1);
-        foreach (Collider col in colliders)
-        {
-            if(col.TryGetComponent<ISkillCaster>(out var caster))
-            {
-                if(caster.TeamId == m_hero.TeamId)
-                {
-                    continue;
-                }
-            }
-            if (col.TryGetComponent<IDamageable>(out var damageable))
-            {
-                damageable.TakeDamage(skillContext, m_hero.GetStats());
-            }
-        }
+        var networkSlash = GameObject.Instantiate(m_hero.attackPrefab, m_hero.transform.position, m_hero.transform.rotation);
+        networkSlash.Spawn();
+        var bullet = networkSlash.GetComponent<BulletBase>();
+        var target = m_hero.target.target;
+        bullet.SetUpTarGet(m_hero, target, m_hero.GetStats());
     }
 
     public void ActiveTrigger()

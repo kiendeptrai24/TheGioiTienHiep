@@ -1,8 +1,8 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class AttackState_Hero : HeroState, ISkillTrigger, IAnimationTrigger
 {
-    private SkillContext skillContext;
     public AttackState_Hero(HeroController hero, IStateMachine stateMachine, string anim) : base(hero, stateMachine, anim)
     {
 
@@ -10,32 +10,13 @@ public class AttackState_Hero : HeroState, ISkillTrigger, IAnimationTrigger
 
     public void ActiveSkill()
     {
-
-        var spawnPoint = new SpawnPoint();
-        spawnPoint.position = m_hero.transform.position + Vector3.up * 1f;
-        spawnPoint.rotation = m_hero.transform.rotation;
-        skillContext = new SkillContext(m_hero.skillController.timeProvider, m_hero, m_hero, new SkillRuntime(), spawnPoint);
-        Collider[] colliders = Physics.OverlapSphere(
-                m_hero.transform.position,
-            3
-        );
-        Debug.Log(m_hero.GetStats().AttackRange);
-        var slash = GameObject.Instantiate(m_hero.attackPrefab, spawnPoint.position, spawnPoint.rotation);
-        GameObject.Destroy(slash.gameObject, 1);
-        foreach (Collider col in colliders)
-        {
-            if (col.TryGetComponent<ISkillCaster>(out var caster))
-            {
-                if (caster.TeamId == m_hero.TeamId)
-                {
-                    continue;
-                }
-            }
-            if (col.TryGetComponent<IDamageable>(out var damageable))
-            {
-                damageable.TakeDamage(skillContext, m_hero.GetStats());
-            }
-        }
+        Vector3 pos = m_hero.transform.position + Vector3.up * 1f;
+        Quaternion rot = m_hero.transform.rotation;
+        var networkSlash = GameObject.Instantiate(m_hero.attackPrefab, pos, rot);
+        networkSlash.Spawn();
+        var bullet = networkSlash.GetComponent<BulletBase>();
+        var target = m_hero.target.target;
+        bullet.SetUpTarGet(m_hero, target, m_hero.GetStats());
     }
 
     public void ActiveTrigger()

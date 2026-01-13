@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 public class HeroStateMachine : IStateMachine
 {
-    private Dictionary<Type, IState> _statesDirtionary = new Dictionary<Type, IState>();
-    private IState _curState;
-    private readonly IStateFactory _factory;
+    protected Dictionary<Type, IState> _statesDirtionary = new Dictionary<Type, IState>();
+    protected IState _curState;
+    protected IStateFactory _factory;
 
     public HeroStateMachine(HeroController hero)
     {
@@ -13,7 +13,7 @@ public class HeroStateMachine : IStateMachine
         CreateState();
     }
 
-    public void CreateState() => _statesDirtionary = _factory.CreateState();
+    public virtual void CreateState() => _statesDirtionary = _factory.CreateState();
 
     public void Init<T>() where T : IState
     {
@@ -52,7 +52,7 @@ public class HeroStateMachine : IStateMachine
     public void ChangeState(Type stateType)
     {
         if (!_statesDirtionary.TryGetValue(stateType, out var nextState))
-        return;
+            return;
 
         _curState?.Exit();
         _curState = nextState;

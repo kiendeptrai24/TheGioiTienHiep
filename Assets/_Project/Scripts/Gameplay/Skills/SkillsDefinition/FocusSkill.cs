@@ -35,7 +35,7 @@ public class FocusSkill : BaseSkill
                 }
                 if (col.TryGetComponent<IDamageable>(out var damageable))
                 {
-                    damageable.TakeDamage(ctx, statsData);
+                    damageable.TakeDamage(statsData);
                 }
             }
         }

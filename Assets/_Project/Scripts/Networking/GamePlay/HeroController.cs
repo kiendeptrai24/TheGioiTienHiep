@@ -5,20 +5,21 @@ using UnityEngine;
 
 public class HeroController : TGTHNetworkBehaviour, ISkillCaster
 {
-    public Transform attackPrefab;
-    private IStateMachine m_heroSM;
-    private HeroLoadData m_heroLoadData;
+    protected StatsData stats;
+    public NetworkObject attackPrefab;
+    protected IStateMachine m_heroSM;
+    protected HeroLoadData m_heroLoadData;
     public AIMovement m_aiMovement;
     public HeroBaseSkill skillController;
     public SkillDataRuntime currentSkillData;
-    private StatsData stats;
-    private HealthController healthController;
+    protected HealthController healthController;
+    public FindTarget target;
     [SerializeField] public HeroData heroData;
     [HideInInspector] public IMoveable moveable;
     [HideInInspector] public Animator anim;
-    [SerializeField] private float _mana = 100f;
-    [SerializeField] private float _stamina = 100f;
-    [SerializeField] private int _teamId = 0;
+    [SerializeField] protected float _mana = 100f;
+    [SerializeField] protected float _stamina = 100f;
+    [SerializeField] protected int _teamId = 0;
     public float Mana => _mana;
     public float Stamina => _stamina;
     public int TeamId => _teamId;
@@ -30,8 +31,6 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
 
     public ulong Id => OwnerClientId;
 
-    public GameObject Target => gameObject;
-
     override protected void Awake()
     {
         base.Awake();
@@ -42,7 +41,7 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
         m_heroSM.Init<IdleState_Hero>();
     }
 
-    private void LoadHeroData(HeroData data) => heroData = data;
+    protected void LoadHeroData(HeroData data) => heroData = data;
 
     override protected void Start()
     {
@@ -59,7 +58,7 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
         m_heroSM.Update();
     }
     [ServerRpc]
-    private void OnDeadServerRpc()
+    protected void OnDeadServerRpc()
     {
         NetworkObject.Despawn();
     }
@@ -75,6 +74,7 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
         skillController = GetComponent<HeroBaseSkill>();
         stats = GetComponent<StatsData>();
         healthController = GetComponent<HealthController>();
+        target = GetComponent<FindTarget>();
     }
 
     public void ConsumeMana(float amount)

@@ -5060,6 +5060,7 @@ MonoBehaviour:
     magicalDefense: 0
     spiritDefense: 0
   techniqueData: []
+  skillDatas: []
   statsRaceData:
     itemId: 
     itemType: 0
@@ -62058,7 +62059,7 @@ GameObject:
   - component: {fileID: 402307724}
   - component: {fileID: 402307723}
   - component: {fileID: 402307722}
-  - component: {fileID: 402307721}
+  - component: {fileID: 402307730}
   - component: {fileID: 402307720}
   - component: {fileID: 402307719}
   - component: {fileID: 402307718}
@@ -62069,6 +62070,7 @@ GameObject:
   - component: {fileID: 402307728}
   - component: {fileID: 402307727}
   - component: {fileID: 402307729}
+  - component: {fileID: 402307731}
   m_Layer: 7
   m_Name: "K\xEC Phong"
   m_TagString: Untagged
@@ -62195,29 +62197,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
---- !u!114 &402307721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 402307714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9eedc67a47f72a84398cf7589610dbf0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HeroController
-  ShowTopMostFoldoutHeaderGroup: 1
-  attackPrefab: {fileID: 7023287381916535993, guid: 87167b19fb4a32a4e8e4f2c5f40a40b3,
-    type: 3}
-  m_aiMovement: {fileID: 402307719}
-  skillController: {fileID: 402307718}
-  currentSkillData:
-    skillId: 
-  anim: {fileID: 1379156418}
-  _mana: 100
-  _stamina: 100
-  _teamId: 1
 --- !u!114 &402307722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62384,6 +62363,7 @@ MonoBehaviour:
     magicalDefense: 0
     spiritDefense: 0
   techniqueData: []
+  skillDatas: []
   statsRaceData:
     itemId: 
     itemType: 0
@@ -62473,6 +62453,57 @@ MonoBehaviour:
   healUIPrefab: {fileID: 3541915094644920467, guid: d889833a2d3b38a41a0bca843938c506,
     type: 3}
   parent: {fileID: 1067287895}
+--- !u!114 &402307730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402307714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c6a33c2d5b44e14e9c3b73a82fba621, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroRangeController
+  ShowTopMostFoldoutHeaderGroup: 1
+  attackPrefab: {fileID: 8350419644223561447, guid: 08fd1b80cc24cc8439f45fda3c558255,
+    type: 3}
+  m_aiMovement: {fileID: 402307719}
+  skillController: {fileID: 402307718}
+  currentSkillData:
+    skillId: 
+  target: {fileID: 0}
+  anim: {fileID: 1379156418}
+  _mana: 100
+  _stamina: 100
+  _teamId: 1
+--- !u!54 &402307731
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402307714}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 64
+  m_CollisionDetection: 0
 --- !u!1 &402329235
 GameObject:
   m_ObjectHideFlags: 0
@@ -78760,7 +78791,7 @@ GameObject:
   - component: {fileID: 503636845}
   - component: {fileID: 503636844}
   - component: {fileID: 503636843}
-  - component: {fileID: 503636842}
+  - component: {fileID: 503636854}
   - component: {fileID: 503636841}
   - component: {fileID: 503636840}
   - component: {fileID: 503636839}
@@ -78771,6 +78802,7 @@ GameObject:
   - component: {fileID: 503636852}
   - component: {fileID: 503636851}
   - component: {fileID: 503636853}
+  - component: {fileID: 503636855}
   m_Layer: 7
   m_Name: "A Nh\u1ECB"
   m_TagString: Untagged
@@ -78826,29 +78858,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
---- !u!114 &503636842
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 503636838}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9eedc67a47f72a84398cf7589610dbf0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HeroController
-  ShowTopMostFoldoutHeaderGroup: 1
-  attackPrefab: {fileID: 7023287381916535993, guid: 87167b19fb4a32a4e8e4f2c5f40a40b3,
-    type: 3}
-  m_aiMovement: {fileID: 503636840}
-  skillController: {fileID: 503636839}
-  currentSkillData:
-    skillId: 
-  anim: {fileID: 1233361843}
-  _mana: 100
-  _stamina: 100
-  _teamId: 2
 --- !u!114 &503636843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78944,7 +78953,7 @@ Transform:
   m_GameObject: {fileID: 503636838}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.4053809, z: 0, w: 0.91414785}
-  m_LocalPosition: {x: -6.54, y: 0, z: -8.71}
+  m_LocalPosition: {x: -3.33, y: 0, z: -6.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -79086,6 +79095,7 @@ MonoBehaviour:
     magicalDefense: 0
     spiritDefense: 0
   techniqueData: []
+  skillDatas: []
   statsRaceData:
     itemId: 
     itemType: 0
@@ -79175,6 +79185,57 @@ MonoBehaviour:
   healUIPrefab: {fileID: 3541915094644920467, guid: d889833a2d3b38a41a0bca843938c506,
     type: 3}
   parent: {fileID: 294352112}
+--- !u!114 &503636854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503636838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3255eb0016500d42859b408f7f5b10b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroMeleeController
+  ShowTopMostFoldoutHeaderGroup: 1
+  attackPrefab: {fileID: 810929873041272388, guid: 74c549d1b06b6b140a1fd9536eea637f,
+    type: 3}
+  m_aiMovement: {fileID: 503636840}
+  skillController: {fileID: 503636839}
+  currentSkillData:
+    skillId: 
+  target: {fileID: 0}
+  anim: {fileID: 1233361843}
+  _mana: 100
+  _stamina: 100
+  _teamId: 0
+--- !u!54 &503636855
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503636838}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 64
+  m_CollisionDetection: 0
 --- !u!1 &503803596
 GameObject:
   m_ObjectHideFlags: 0
@@ -84713,7 +84774,7 @@ GameObject:
   - component: {fileID: 546605033}
   - component: {fileID: 546605032}
   - component: {fileID: 546605031}
-  - component: {fileID: 546605030}
+  - component: {fileID: 546605039}
   - component: {fileID: 546605029}
   - component: {fileID: 546605028}
   - component: {fileID: 546605027}
@@ -84724,6 +84785,7 @@ GameObject:
   - component: {fileID: 546605037}
   - component: {fileID: 546605036}
   - component: {fileID: 546605038}
+  - component: {fileID: 546605040}
   m_Layer: 7
   m_Name: "A \u0110\u1EA1i"
   m_TagString: Untagged
@@ -84850,29 +84912,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
---- !u!114 &546605030
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 546605023}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9eedc67a47f72a84398cf7589610dbf0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HeroController
-  ShowTopMostFoldoutHeaderGroup: 1
-  attackPrefab: {fileID: 7023287381916535993, guid: 87167b19fb4a32a4e8e4f2c5f40a40b3,
-    type: 3}
-  m_aiMovement: {fileID: 546605028}
-  skillController: {fileID: 546605027}
-  currentSkillData:
-    skillId: 
-  anim: {fileID: 88063482}
-  _mana: 100
-  _stamina: 100
-  _teamId: 1
 --- !u!114 &546605031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85039,6 +85078,7 @@ MonoBehaviour:
     magicalDefense: 0
     spiritDefense: 0
   techniqueData: []
+  skillDatas: []
   statsRaceData:
     itemId: 
     itemType: 0
@@ -85128,6 +85168,57 @@ MonoBehaviour:
   healUIPrefab: {fileID: 3541915094644920467, guid: d889833a2d3b38a41a0bca843938c506,
     type: 3}
   parent: {fileID: 2055541001}
+--- !u!114 &546605039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 546605023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3255eb0016500d42859b408f7f5b10b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroMeleeController
+  ShowTopMostFoldoutHeaderGroup: 1
+  attackPrefab: {fileID: 810929873041272388, guid: 74c549d1b06b6b140a1fd9536eea637f,
+    type: 3}
+  m_aiMovement: {fileID: 546605028}
+  skillController: {fileID: 546605027}
+  currentSkillData:
+    skillId: 
+  target: {fileID: 0}
+  anim: {fileID: 88063482}
+  _mana: 100
+  _stamina: 100
+  _teamId: 1
+--- !u!54 &546605040
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 546605023}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 64
+  m_CollisionDetection: 0
 --- !u!1 &549239148
 GameObject:
   m_ObjectHideFlags: 0
@@ -133959,7 +134050,7 @@ GameObject:
   - component: {fileID: 879026356}
   - component: {fileID: 879026355}
   - component: {fileID: 879026354}
-  - component: {fileID: 879026353}
+  - component: {fileID: 879026366}
   - component: {fileID: 879026352}
   - component: {fileID: 879026351}
   - component: {fileID: 879026358}
@@ -133970,6 +134061,7 @@ GameObject:
   - component: {fileID: 879026364}
   - component: {fileID: 879026363}
   - component: {fileID: 879026365}
+  - component: {fileID: 879026367}
   m_Layer: 7
   m_Name: "Tr\u01B0\u01A1ng Tam"
   m_TagString: Untagged
@@ -134013,29 +134105,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
---- !u!114 &879026353
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 879026350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9eedc67a47f72a84398cf7589610dbf0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HeroController
-  ShowTopMostFoldoutHeaderGroup: 1
-  attackPrefab: {fileID: 7023287381916535993, guid: 87167b19fb4a32a4e8e4f2c5f40a40b3,
-    type: 3}
-  m_aiMovement: {fileID: 879026351}
-  skillController: {fileID: 879026358}
-  currentSkillData:
-    skillId: 
-  anim: {fileID: 560179988}
-  _mana: 100
-  _stamina: 100
-  _teamId: 1
 --- !u!114 &879026354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134285,6 +134354,7 @@ MonoBehaviour:
     magicalDefense: 0
     spiritDefense: 0
   techniqueData: []
+  skillDatas: []
   statsRaceData:
     itemId: 
     itemType: 0
@@ -134374,6 +134444,57 @@ MonoBehaviour:
   healUIPrefab: {fileID: 3541915094644920467, guid: d889833a2d3b38a41a0bca843938c506,
     type: 3}
   parent: {fileID: 1189756926}
+--- !u!114 &879026366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 879026350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3255eb0016500d42859b408f7f5b10b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroMeleeController
+  ShowTopMostFoldoutHeaderGroup: 1
+  attackPrefab: {fileID: 810929873041272388, guid: 74c549d1b06b6b140a1fd9536eea637f,
+    type: 3}
+  m_aiMovement: {fileID: 879026351}
+  skillController: {fileID: 879026358}
+  currentSkillData:
+    skillId: 
+  target: {fileID: 0}
+  anim: {fileID: 560179988}
+  _mana: 100
+  _stamina: 100
+  _teamId: 1
+--- !u!54 &879026367
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 879026350}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 64
+  m_CollisionDetection: 0
 --- !u!1 &879144251
 GameObject:
   m_ObjectHideFlags: 0
@@ -213655,6 +213776,7 @@ MonoBehaviour:
   skillController: {fileID: 1367391882}
   currentSkillData:
     skillId: 
+  target: {fileID: 0}
   anim: {fileID: 1880989903}
   _mana: 100
   _stamina: 100
@@ -213825,6 +213947,7 @@ MonoBehaviour:
     magicalDefense: 0
     spiritDefense: 0
   techniqueData: []
+  skillDatas: []
   statsRaceData:
     itemId: 
     itemType: 0
@@ -284108,7 +284231,7 @@ GameObject:
   - component: {fileID: 1831346541}
   - component: {fileID: 1831346540}
   - component: {fileID: 1831346539}
-  - component: {fileID: 1831346538}
+  - component: {fileID: 1831346548}
   - component: {fileID: 1831346537}
   - component: {fileID: 1831346536}
   - component: {fileID: 1831346535}
@@ -284119,6 +284242,7 @@ GameObject:
   - component: {fileID: 1831346545}
   - component: {fileID: 1831346544}
   - component: {fileID: 1831346547}
+  - component: {fileID: 1831346549}
   m_Layer: 7
   m_Name: "L\xFD T\u1EE9"
   m_TagString: Untagged
@@ -284245,29 +284369,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
---- !u!114 &1831346538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1831346531}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9eedc67a47f72a84398cf7589610dbf0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HeroController
-  ShowTopMostFoldoutHeaderGroup: 1
-  attackPrefab: {fileID: 7023287381916535993, guid: 87167b19fb4a32a4e8e4f2c5f40a40b3,
-    type: 3}
-  m_aiMovement: {fileID: 1831346536}
-  skillController: {fileID: 1831346535}
-  currentSkillData:
-    skillId: 
-  anim: {fileID: 709341176}
-  _mana: 100
-  _stamina: 100
-  _teamId: 2
 --- !u!114 &1831346539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284363,7 +284464,7 @@ Transform:
   m_GameObject: {fileID: 1831346531}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.54, y: 0, z: -6.89}
+  m_LocalPosition: {x: -7.28, y: 0, z: -8.74}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -284434,6 +284535,7 @@ MonoBehaviour:
     magicalDefense: 0
     spiritDefense: 0
   techniqueData: []
+  skillDatas: []
   statsRaceData:
     itemId: 
     itemType: 0
@@ -284523,6 +284625,57 @@ MonoBehaviour:
   healUIPrefab: {fileID: 3541915094644920467, guid: d889833a2d3b38a41a0bca843938c506,
     type: 3}
   parent: {fileID: 1142072429}
+--- !u!114 &1831346548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831346531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c6a33c2d5b44e14e9c3b73a82fba621, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroRangeController
+  ShowTopMostFoldoutHeaderGroup: 1
+  attackPrefab: {fileID: 8350419644223561447, guid: 08fd1b80cc24cc8439f45fda3c558255,
+    type: 3}
+  m_aiMovement: {fileID: 1831346536}
+  skillController: {fileID: 1831346535}
+  currentSkillData:
+    skillId: 
+  target: {fileID: 0}
+  anim: {fileID: 709341176}
+  _mana: 100
+  _stamina: 100
+  _teamId: 0
+--- !u!54 &1831346549
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831346531}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 64
+  m_CollisionDetection: 0
 --- !u!1 &1831528801
 GameObject:
   m_ObjectHideFlags: 0
@@ -327563,6 +327716,7 @@ MonoBehaviour:
     magicalDefense: 0
     spiritDefense: 0
   techniqueData: []
+  skillDatas: []
   statsRaceData:
     itemId: 
     itemType: 0
