@@ -1,4 +1,5 @@
 
+using Unity.Netcode;
 using UnityEngine;
 
 public class FocusSkill : BaseSkill
@@ -12,13 +13,20 @@ public class FocusSkill : BaseSkill
     {
         Vector3 targetPosition = ctx.Target.Center;
         Quaternion targetRotation = ctx.Target.Rotation;
-        var fireball = GameObject.Instantiate(skillEffectPrefab, targetPosition, targetRotation);
-        var projectile = fireball.GetComponent<ParticleSystem>();
-        StatsData statsData = ctx.Caster.GetStats();
-
-        if (projectile != null)
+        
+        var skillEffect = NetworkObjectPool.Singleton.GetNetworkObject(skillEffectPrefab, targetPosition, targetRotation, true);
+        var networkObject = skillEffect.GetComponent<NetworkObject>();
+        if (networkObject != null)
         {
-            projectile.Play();
+            NetworkObjectPool.Singleton.ReturnNetworkObject(networkObject, 1f);
+        }
+
+
+        StatsData statsData = ctx.Caster.GetStats();
+        var partical = skillEffect.GetComponent<ParticleSystem>();
+        if (partical != null)
+        {
+            partical.Play();
             Collider[] colliders = Physics.OverlapSphere(
                 targetPosition,
                 data.attackRange
@@ -39,7 +47,6 @@ public class FocusSkill : BaseSkill
                 }
             }
         }
-        GameObject.Destroy(fireball, 1f);
     }
     override public void BuildDefaultConditions()
     {

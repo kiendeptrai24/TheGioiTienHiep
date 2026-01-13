@@ -62056,6 +62056,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 402307725}
+  - component: {fileID: 402307731}
   - component: {fileID: 402307724}
   - component: {fileID: 402307723}
   - component: {fileID: 402307722}
@@ -62070,7 +62071,6 @@ GameObject:
   - component: {fileID: 402307728}
   - component: {fileID: 402307727}
   - component: {fileID: 402307729}
-  - component: {fileID: 402307731}
   m_Layer: 7
   m_Name: "K\xEC Phong"
   m_TagString: Untagged
@@ -78788,6 +78788,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 503636846}
+  - component: {fileID: 503636855}
   - component: {fileID: 503636845}
   - component: {fileID: 503636844}
   - component: {fileID: 503636843}
@@ -78802,7 +78803,6 @@ GameObject:
   - component: {fileID: 503636852}
   - component: {fileID: 503636851}
   - component: {fileID: 503636853}
-  - component: {fileID: 503636855}
   m_Layer: 7
   m_Name: "A Nh\u1ECB"
   m_TagString: Untagged
@@ -84771,6 +84771,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 546605034}
+  - component: {fileID: 546605040}
   - component: {fileID: 546605033}
   - component: {fileID: 546605032}
   - component: {fileID: 546605031}
@@ -84785,7 +84786,6 @@ GameObject:
   - component: {fileID: 546605037}
   - component: {fileID: 546605036}
   - component: {fileID: 546605038}
-  - component: {fileID: 546605040}
   m_Layer: 7
   m_Name: "A \u0110\u1EA1i"
   m_TagString: Untagged
@@ -134047,6 +134047,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 879026357}
+  - component: {fileID: 879026367}
+  - component: {fileID: 879026360}
   - component: {fileID: 879026356}
   - component: {fileID: 879026355}
   - component: {fileID: 879026354}
@@ -134055,13 +134057,11 @@ GameObject:
   - component: {fileID: 879026351}
   - component: {fileID: 879026358}
   - component: {fileID: 879026359}
-  - component: {fileID: 879026360}
   - component: {fileID: 879026361}
   - component: {fileID: 879026362}
   - component: {fileID: 879026364}
   - component: {fileID: 879026363}
   - component: {fileID: 879026365}
-  - component: {fileID: 879026367}
   m_Layer: 7
   m_Name: "Tr\u01B0\u01A1ng Tam"
   m_TagString: Untagged
@@ -199388,6 +199388,101 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1280091297}
   m_CullTransparentMesh: 1
+--- !u!1 &1282061039
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1282061042}
+  - component: {fileID: 1282061040}
+  - component: {fileID: 1282061041}
+  m_Layer: 0
+  m_Name: ObjectPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1282061040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1282061039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 3262069933
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &1282061041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1282061039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcc78ab219ae64e42aedb00fedc97ddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NetworkObjectPool
+  ShowTopMostFoldoutHeaderGroup: 1
+  PooledPrefabsList:
+  - Prefab: {fileID: 1688188028532303225, guid: 6d5a1bb79c32aec46b42caece79c8820,
+      type: 3}
+    PrewarmCount: 1
+  - Prefab: {fileID: 3069383252331986897, guid: f08f959940e7fc2498653ad4c3783dd5,
+      type: 3}
+    PrewarmCount: 1
+  - Prefab: {fileID: 518036646348351794, guid: 9ef7b92713cb9fd4cb9c207d96429bad, type: 3}
+    PrewarmCount: 1
+  - Prefab: {fileID: 5476521010759965892, guid: 903488bd42e8ae6418c4a0cffd5cc045,
+      type: 3}
+    PrewarmCount: 1
+  - Prefab: {fileID: 5139990320137119601, guid: 535fc95e9046880489d4dc905720fdbf,
+      type: 3}
+    PrewarmCount: 1
+  - Prefab: {fileID: 5365407012421437998, guid: 870b5620b9b56d3478470251dcd7f567,
+      type: 3}
+    PrewarmCount: 1
+  - Prefab: {fileID: 3910927225997188742, guid: bd565e4b95dd3ee45b3f2c10a0c17de3,
+      type: 3}
+    PrewarmCount: 1
+  - Prefab: {fileID: 2930353688304561002, guid: cb4b0fcd9e69b8c448a33ced807c3b08,
+      type: 3}
+    PrewarmCount: 1
+--- !u!4 &1282061042
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1282061039}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.96694, y: -1.34079, z: 2.52935}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1282275149
 GameObject:
   m_ObjectHideFlags: 0
@@ -284228,6 +284323,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1831346542}
+  - component: {fileID: 1831346549}
   - component: {fileID: 1831346541}
   - component: {fileID: 1831346540}
   - component: {fileID: 1831346539}
@@ -284242,7 +284338,6 @@ GameObject:
   - component: {fileID: 1831346545}
   - component: {fileID: 1831346544}
   - component: {fileID: 1831346547}
-  - component: {fileID: 1831346549}
   m_Layer: 7
   m_Name: "L\xFD T\u1EE9"
   m_TagString: Untagged
@@ -353592,3 +353687,4 @@ SceneRoots:
   - {fileID: 1367391889}
   - {fileID: 1684195657}
   - {fileID: 1815184569}
+  - {fileID: 1282061042}

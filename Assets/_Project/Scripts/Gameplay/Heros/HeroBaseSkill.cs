@@ -40,7 +40,7 @@ public class HeroBaseSkill : TGTHMonoBehaviour
     private void LoadHeroData(HeroData data)
     {
         m_SkillsData.AddRange(data.skillDatas);
-        //SetupSkills();    
+        SetupSkills();    
     }
 
     public void SetupSkills()

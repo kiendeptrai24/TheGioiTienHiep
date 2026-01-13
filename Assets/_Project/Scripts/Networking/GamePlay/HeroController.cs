@@ -35,12 +35,14 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
     {
         base.Awake();
         LoadComponent();
-        healthController.OnDead += OnDeadServerRpc;
         m_heroLoadData.OnHeroDataLoaded += LoadHeroData;
-        m_heroSM = new HeroStateMachine(this);
-        m_heroSM.Init<IdleState_Hero>();
     }
-
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        if (!IsServer) return;
+        healthController.OnDead += OnDeadServerRpc;
+    }
     protected void LoadHeroData(HeroData data) => heroData = data;
 
     override protected void Start()

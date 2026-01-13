@@ -10,13 +10,17 @@ public class FindTarget : TGTHMonoBehaviour, ISkillTarget
     [SerializeField] private float range = 10f;
     [SerializeField] private float checkInterval = 1f;
     [SerializeField] private float checkTimer = 0f;
-    public Vector3 Position => target.position;
-    public Vector3 Forward => target.forward;
-    public Quaternion Rotation => target.rotation;
+    public Vector3 Position => target == null ? Vector3.zero : target.position;
+    public Vector3 Forward => target == null ? Vector3.zero : target.forward;
+    public Quaternion Rotation => target == null ? Quaternion.identity : target.rotation;
     public bool IsAlive => true;
 
-    public Vector3 Center => target.position + Vector3.up * 1.5f;
-
+    public Vector3 Center => GetCenter();
+    private Vector3 GetCenter()
+    {
+        if(target == null) return Vector3.zero;
+        return target.position + Vector3.up * 1.5f;
+    }
     protected override void Awake()
     {
         base.Awake();

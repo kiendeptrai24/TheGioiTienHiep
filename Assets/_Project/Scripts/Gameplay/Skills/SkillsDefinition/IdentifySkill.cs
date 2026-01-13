@@ -1,6 +1,7 @@
 
 
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 public class IdentifySkill : BaseSkill
@@ -12,20 +13,22 @@ public class IdentifySkill : BaseSkill
 
     protected override void OnApplyEffect(in SkillContext ctx)
     {
-        // Vector3 spawnPos =
-        // ctx.Caster.Position.position +
-        // ctx.Caster.transform.forward * 1.5f;
 
         Vector3 targetPosition = ctx.TargetDirection.position;
         Quaternion targetRotation = ctx.TargetDirection.rotation;
 
-        var fireball = GameObject.Instantiate(skillEffectPrefab, targetPosition, targetRotation);
-        var projectile = fireball.GetComponent<ParticleSystem>();
+        var skillEffect = NetworkObjectPool.Singleton.GetNetworkObject(skillEffectPrefab, targetPosition, targetRotation, true);
+        var networkObject = skillEffect.GetComponent<NetworkObject>();
+        if (networkObject != null)
+        {
+            NetworkObjectPool.Singleton.ReturnNetworkObject(networkObject);
+        }
         StatsData statsData = ctx.Caster.GetStats();
 
-        if (projectile != null)
+        var partical = skillEffect.GetComponent<ParticleSystem>();
+        if (partical != null)
         {
-            projectile.Play();
+            partical.Play();
             Collider[] colliders = Physics.OverlapSphere(
                 targetPosition,
                 data.attackRange
@@ -46,7 +49,6 @@ public class IdentifySkill : BaseSkill
                 }
             }
         }
-        GameObject.Destroy(fireball, 1f);
     }
     override public void BuildDefaultConditions()
     {
