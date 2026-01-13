@@ -39,7 +39,6 @@ public class FindTarget : TGTHMonoBehaviour, ISkillTarget
         if(target == null && Time.time >= checkInterval + checkTimer)
         {
             checkTimer = Time.time;
-            Debug.Log("Finding Target...");
             FindTargetNearest(transform.position, range);
         }
     }

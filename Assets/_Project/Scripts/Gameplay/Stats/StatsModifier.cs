@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public class StatsModifier
 {
@@ -144,7 +145,8 @@ public class StatsModifier
         stats.TryGetValue(StatType.SpiritDefense, out Stat spiritDefenseStat);
 
         stats.TryGetValue(StatType.MovementSpeed, out Stat movementSpeedStat);
-        stats.TryGetValue(StatType.AttackSpeed, out Stat attackSpeedStat);
+        stats.TryGetValue(StatType.AttackRange, out Stat attackRangeStat);
+
 
         healthStat.AddModifierPercent(heroData.health);
         manaStat.AddModifierPercent(heroData.mana);
@@ -159,7 +161,7 @@ public class StatsModifier
         spiritDefenseStat.AddModifierPercent(heroData.spiritDefense);
 
         movementSpeedStat.AddModifier(heroData.moveSpeed);
-        attackSpeedStat.AddModifier(heroData.attackRange);
+        attackRangeStat.AddModifier(heroData.attackRange);
     }
     public void AddStatsTechniqueData(Dictionary<StatType, Stat> stats, List<TechniqueData> datas)
     {
@@ -207,7 +209,5 @@ public class StatsModifier
 
             attackSpeedStat.AddModifier(item.attackSpeed);
        }
-
-
     }    
 }

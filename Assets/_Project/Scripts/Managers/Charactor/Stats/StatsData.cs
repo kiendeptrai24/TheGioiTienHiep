@@ -8,6 +8,7 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
 {
     [SerializeField] private bool canLoadData = true;
     public event Action OnValueChanged;
+    private HeroLoadData heroLoadData;
     public ItemData heroData;
     public List<TechniqueData> techniqueData;
     public List<SkillData> skillDatas;
@@ -88,6 +89,18 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     #endregion
 
     public int CombatPower => GetStatValue(StatType.CombatPower);
+    protected override void Awake()
+    {
+        base.Awake();
+        heroLoadData = GetComponent<HeroLoadData>();
+        heroLoadData.OnHeroDataLoaded += OnHeroDataLoaded;
+    }
+
+    private void OnHeroDataLoaded(HeroData data)
+    {
+        SetUpItem(data);
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -137,6 +150,7 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
         {
             debugMsg += $"{stat.Key}: {stat.Value.GetValue()}\n";
         }
+        Debug.Log(debugMsg);
     }
     public void Setup()
     {
@@ -176,7 +190,9 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     public void SetUpItem(ItemData item)
     {
         this.heroData = item;
-        SetUpTechnique((heroData as HeroData).techniqueDatas);
+        var data = item as HeroData;
+        SetUpTechnique(data.techniqueDatas);
+        SetupData(data.statsCultivationPathData, data.statsRealmData, data.statsRaceData);
         Setup();
     }
     public void StatChange()
@@ -185,6 +201,6 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     }
     public void SaveGame(ref GameData _data)
     {
-        
+
     }
 }

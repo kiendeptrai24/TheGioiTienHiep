@@ -23,10 +23,12 @@ public abstract class CharacterStats : TGTHNetworkBehaviour, IDamageable
     public virtual void TakeDamage(StatsData _casterStats)
     {
         var heal = GetComponent<HealthController>();
+        if (_casterStats == null)
+            return;
         var Caster = _casterStats.GetComponent<HeroController>();
-        if (heal != null)
+        if (heal != null && Caster != null)
         {
-            heal.DecreaseHealth(stats.MagicalDamage, Caster.Id);
+            heal.DecreaseHealth(_casterStats.PhysicalDamage, Caster.Id);
         }
     }
 }

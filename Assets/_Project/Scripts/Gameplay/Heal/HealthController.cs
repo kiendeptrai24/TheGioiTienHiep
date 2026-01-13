@@ -35,7 +35,7 @@ public abstract class HealthController : TGTHNetworkBehaviour
     }
     public override void OnNetworkDespawn()
     {
-        if(IsServer) return;
+        if(!IsServer) return;
     }
     #endregion
     

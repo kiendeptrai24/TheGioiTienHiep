@@ -2,11 +2,10 @@
 using System;
 using UnityEngine;
 
-public class HeroLoadData : TGTHNetworkBehaviour, ISaveable
+public class HeroLoadData : TGTHMonoBehaviour, ISaveable
 {
     [SerializeField] private string m_heroName;
     [SerializeField] private ItemData m_heroData;
-    private StatsData stats;
     public event Action<HeroData> OnHeroDataLoaded;
     protected override void Awake()
     {
@@ -19,8 +18,6 @@ public class HeroLoadData : TGTHNetworkBehaviour, ISaveable
     }
     public void LoadData(GameData _data)
     {
-        if (IsServer)
-            return;
         foreach (var data in _data.itemDatas)
         {
             if (data.itemName == m_heroName && data is HeroData heroData)
@@ -30,7 +27,6 @@ public class HeroLoadData : TGTHNetworkBehaviour, ISaveable
                 break;
             }
         }
-        stats?.SetUpItem(m_heroData);
     }
     public void SaveGame(ref GameData _data)
     {
@@ -39,6 +35,5 @@ public class HeroLoadData : TGTHNetworkBehaviour, ISaveable
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        stats = GetComponent<StatsData>();
     }
 }
