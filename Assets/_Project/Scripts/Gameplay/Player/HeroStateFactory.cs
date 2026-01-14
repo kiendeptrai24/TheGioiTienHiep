@@ -26,13 +26,10 @@ public class HeroStateFactory : IStateFactory
             {typeof(ChaseState_Hero), new ChaseState_Hero(_hero, _machine, "Move")},
             {typeof(MoveState_Hero), new MoveState_Hero(_hero, _machine, "Move")},
 
-
-
             {typeof(DonTramState_Hero), new DonTramState_Hero(_hero, _machine, "Slash")},
-            {typeof(LienKichChiThuatState_Hero), new LienKichChiThuatState_Hero(_hero, _machine, "Attack2")},
+            {typeof(LienKichChiThuatState_Hero), new LienKichChiThuatState_Hero(_hero, _machine, "GroundSlam")},
             {typeof(ToanLucNhatKichState_Hero), new ToanLucNhatKichState_Hero(_hero, _machine, "WideArm")},
             {typeof(LinhTramState_Hero), new LinhTramState_Hero(_hero, _machine, "WideArm")},
-
             {typeof(NhamChuanState_Hero), new NhamChuanState_Hero(_hero, _machine, "Heal")},
             {typeof(LinhTienState_Hero), new LinhTienState_Hero(_hero, _machine, "Heal")},
             {typeof(VanLinhTienState_Hero), new VanLinhTienState_Hero(_hero, _machine, "MagicArm")},

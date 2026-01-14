@@ -7,6 +7,7 @@ using UnityEngine;
 public class StatsData : TGTHMonoBehaviour, ISaveable
 {
     [SerializeField] private bool canLoadData = true;
+    [SerializeField] private bool isHero = true;
     public event Action OnValueChanged;
     private HeroLoadData heroLoadData;
     public ItemData heroData;
@@ -92,6 +93,7 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     protected override void Awake()
     {
         base.Awake();
+        if(!isHero) return;
         heroLoadData = GetComponent<HeroLoadData>();
         heroLoadData.OnHeroDataLoaded += OnHeroDataLoaded;
     }
