@@ -9,9 +9,10 @@ public class BuyItemPopup : BasePopup<ShopSetupData, QuantityPopupData>
     [SerializeField] private Button showInfoBtn;
     [SerializeField] private Button minusBtn;
     [SerializeField] private Button addBtn;
-    
-    [SerializeField] private TextMeshProUGUI quantityTxt;
+    [SerializeField] private Image itemIconImge;
+    [SerializeField] private TextMeshProUGUI titleTxt;
     [SerializeField] private TextMeshProUGUI descriptionTxt;
+    [SerializeField] private TextMeshProUGUI quantityTxt;
     [SerializeField] private TextMeshProUGUI priceTxt;
     protected Action onShowInfoBtn;
     private int quantity = 1;
@@ -31,6 +32,7 @@ public class BuyItemPopup : BasePopup<ShopSetupData, QuantityPopupData>
         showInfoBtn.onClick.AddListener(OnShowInfoClicked);
         minusBtn.onClick.AddListener(() =>
         {
+            if (quantity <= 1) return;
             quantity--;
             UpdateQuantity();
         });
@@ -45,7 +47,7 @@ public class BuyItemPopup : BasePopup<ShopSetupData, QuantityPopupData>
     {
         int totelPrice = quantity * price;
         quantityTxt.text = quantity.ToString();
-        priceTxt.text = totelPrice + "";
+        priceTxt.text = "Tổng: " + totelPrice + "K";
     }
     private void OnShowInfoClicked()
     {
@@ -82,14 +84,18 @@ public class BuyItemPopup : BasePopup<ShopSetupData, QuantityPopupData>
     {
         base.LoadComponent();
     }
-    
+
     protected override void SetupPopupData(ShopSetupData data)
     {
         string description = "";
-        description += data.data.title +"\n";
-        description += "loại: " + data.data.type +"\n";
-        description += "Cảnh giới: " + data.data.realm +"\n";
+        titleTxt.text = data.data.title + "\n";
+        itemIconImge.sprite = data.data.itemIcon;
+        description += "Loại: " + data.data.type + "\n";
+        description += "Cảnh giới: " + EnumTranslator.ToVietnamese(data.data.realm) + "\n";
+        description += "Phẩm: " + EnumTranslator.ToVietnamese(data.data.quanlity) + "\n";
         priceTxt.text = "Tổng: " + data.data.price + "K";
         descriptionTxt.text = description;
+        price = data.data.price;
+        UpdateQuantity();
     }
 }

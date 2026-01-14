@@ -66,20 +66,25 @@ public class ItemEquipmentPreset : ItemStatsPreset
 
     public override ItemData GetItemData()
     {
+        ItemData data = base.GetItemData();
+
         return new EquitmentData
         {
             // base
-            itemId = itemId,
-            itemName = itemName,
-            itemType = itemType,
-            itemIcon = itemIcon,
-            itemDescription = itemDescription,
-            currentstack = currentstack,
+            itemId = data.itemId,
+            itemName = data.itemName,
+            itemType = data.itemType,
+            itemIcon = data.itemIcon,
+            itemDescription = data.itemDescription,
+            currentstack = data.currentstack,
+            canStack = data.canStack,
+            itemPrice = data.itemPrice,
+            cultivationStage = data.cultivationStage,
+            qualityType = data.qualityType,
 
             // equipment meta
             equipmentType = equipmentType,
             level = level,
-            qualityType = qualityType,
             raceType = raceType,
             elementType = elementType,
 

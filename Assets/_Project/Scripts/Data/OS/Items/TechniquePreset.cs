@@ -307,15 +307,20 @@ public class TechniquePreset : ItemPreset
 
     public override ItemData GetItemData()
     {
+        ItemData data = base.GetItemData();
         return new TechniqueData
         {
             // base
-            itemId = itemId,
-            itemName = itemName,
-            itemType = itemType,
-            itemIcon = itemIcon,
-            itemDescription = itemDescription,
-            currentstack = currentstack,
+            itemId = data.itemId,
+            itemName = data.itemName,
+            itemType = data.itemType,
+            itemIcon = data.itemIcon,
+            itemDescription = data.itemDescription,
+            currentstack = data.currentstack,
+            canStack = data.canStack,
+            itemPrice = data.itemPrice,
+            cultivationStage = data.cultivationStage,
+            qualityType = data.qualityType,
 
             // base stats trong ItemData
             physicalDamage = physicalDamage,
@@ -326,9 +331,6 @@ public class TechniquePreset : ItemPreset
             spiritDefense = spiritDefense,
 
             // meta
-            techniqueId = itemId,
-            techniqueName = itemName,
-            qualityType = qualityType,
             enhanceLevel = enhanceLevel,
             raceType = raceType,
             mainEssence = mainEssence,

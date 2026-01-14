@@ -34,9 +34,23 @@ public class InventoryPageManager : TGTHMonoBehaviour
         else
         {
             List<InventoryItem> list = isAwake ? listItemDatas : listItemsPurchased;
-            list.Add(new InventoryItem(data));
+            var item = list.Find(i => i.data.itemId == data.itemId);
+            if (item != null)
+            {
+                if (item.CanStack())
+                {
+                    item.AddStack(quantity);
+                    Debug.Log("stack");
+                }
+                else
+                {
+                    for (int i = 0; i < quantity; i++)
+                    {
+                        list.Add(new InventoryItem(data));
+                    }
+                }
+            }
             presenter?.Refesh();
-            Debug.Log("Add Inventory Item Success");
             return true;
         }
     }
@@ -51,7 +65,7 @@ public class InventoryPageManager : TGTHMonoBehaviour
             List<InventoryItem> list = isAwake ? listItemDatas : listItemsPurchased;
             list.Add(item);
             presenter?.Refesh();
-            
+
             return true;
         }
     }
@@ -70,13 +84,16 @@ public class InventoryPageManager : TGTHMonoBehaviour
         presenter?.Refesh();
         return true;
     }
-    public bool RemoveInventoryItem(InventoryItem item)
+    public bool RemoveInventoryItem(InventoryItem item, int quantity = 1)
     {
         List<InventoryItem> list = isAwake ? listItemDatas : listItemsPurchased;
 
         if (list.Contains(item))
         {
-            list.Remove(item);
+            item.RemoveStack(quantity);
+            if (item.stackSize == 0)
+                list.Remove(item);
+
             presenter?.Refesh();
             return true;
         }

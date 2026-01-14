@@ -9,6 +9,7 @@ public class ItemData
     public string itemName;
     public Sprite itemIcon;
     public int itemPrice;
+    public bool canStack;
     public string itemDescription;
     public int currentstack;
     public CultivationStage cultivationStage;

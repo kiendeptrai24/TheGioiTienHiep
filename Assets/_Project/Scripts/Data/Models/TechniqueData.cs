@@ -9,8 +9,6 @@ public class TechniqueData : ItemData
     // META INFO
     // ============================
     [Header("Meta")]
-    public string techniqueId;
-    public string techniqueName;
     public bool hasLearned;
     public TechniqueType techniqueType;
     public int enhanceLevel;             // Cường hóa

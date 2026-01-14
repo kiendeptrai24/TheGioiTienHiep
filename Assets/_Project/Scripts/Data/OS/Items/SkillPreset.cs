@@ -403,15 +403,20 @@ public class SkillPreset : ItemPreset
     // (Nếu bạn muốn) export ra ItemData runtime:
     public override ItemData GetItemData()
     {
+        ItemData data = base.GetItemData();
         return new SkillData
         {
             // base
-            itemId = itemId,
-            itemName = itemName,
-            itemType = itemType,
-            itemIcon = itemIcon,
-            itemDescription = itemDescription,
-            currentstack = currentstack,
+            itemId = data.itemId,
+            itemName = data.itemName,
+            itemType = data.itemType,
+            itemIcon = data.itemIcon,
+            itemDescription = data.itemDescription,
+            currentstack = data.currentstack,
+            canStack = data.canStack,
+            itemPrice = data.itemPrice,
+            cultivationStage = data.cultivationStage,
+            qualityType = data.qualityType,
 
             // base stats trong ItemData
             physicalDamage = physicalDamage,
@@ -423,7 +428,6 @@ public class SkillPreset : ItemPreset
 
             // meta
             skillType = skillType,
-            qualityType = qualityType,
             enhanceLevel = enhanceLevel,
             raceType = raceType,
             mainEssence = mainEssence,

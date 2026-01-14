@@ -8,9 +8,7 @@ public class SkillData : ItemData
     // META INFO
     // ============================
     [Header("Meta")]
-    public string skillId;
-    public string skillName;
-    bool hasLearned;
+    public bool hasLearned;
     public SkillType skillType;          // tên kỹ năng (enum)
     public int enhanceLevel;             // Cường hóa
     public RaceType raceType;            // Tộc

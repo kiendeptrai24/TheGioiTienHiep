@@ -1,17 +1,20 @@
+using UnityEngine;
 
 public class ShopDataPopup
 {
     public string title;
+    public Sprite itemIcon;
     public string type;
-    public string realm;
-    public string quality;
-    public string price;
-    public ShopDataPopup(string title, string type, string realm, string quality, string price)
+    public CultivationStage realm;
+    public QualityType quanlity;
+    public int price;
+    public ShopDataPopup(string title, Sprite itemIcon, string type, CultivationStage realm, QualityType quanlity, int price)
     {
         this.title = title;
+        this.itemIcon = itemIcon;
         this.type = type;
         this.realm = realm;
-        this.quality = quality;
+        this.quanlity = quanlity;
         this.price = price;
     }
     public ShopDataPopup() { }

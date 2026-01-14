@@ -178,6 +178,12 @@ namespace TGTH.Mobile
         {
             var popup = PopupManager.Instance.GetPopup<BuyItemPopup>();
             ShopDataPopup shopData = new ShopDataPopup();
+            shopData.title = uiItem.inventoryItem.data.itemName;
+            shopData.itemIcon = uiItem.inventoryItem.data.itemIcon;
+            shopData.type = uiItem.inventoryItem.data.itemType.ToString();
+            shopData.realm = uiItem.inventoryItem.data.cultivationStage;
+            shopData.quanlity = uiItem.inventoryItem.data.qualityType;
+            shopData.price = uiItem.inventoryItem.data.itemPrice;
 
             ShopSetupData data = new ShopSetupData(shopData);
 

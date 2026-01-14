@@ -107,11 +107,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2843538724595089675}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: 0}
-  m_SizeDelta: {x: 33.958, y: 31.19}
-  m_Pivot: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -0.0000076293945, y: 0}
+  m_SizeDelta: {x: 0, y: 93.5313}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &8886858671078235759
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -167,15 +167,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 55
+  m_fontSizeBase: 55
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 1024
+  m_HorizontalAlignment: 4
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -424,6 +424,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIInventoryItem
   navigation: {fileID: 8399350311711493931}
+  resetDataOnAwake: 1
   uiInventoryType: 0
   itemImage: {fileID: 2770298862685003647}
   borderImage: {fileID: 6643775912954256070}
@@ -433,6 +434,7 @@ MonoBehaviour:
       itemType: 0
       itemName: 
       itemIcon: {fileID: 0}
+      itemPrice: 0
       itemDescription: 
       currentstack: 0
       cultivationStage: 0

@@ -28,14 +28,20 @@ public class HeroPreset : ItemStatsPreset
 
     public override ItemData GetItemData()
     {
+        ItemData data = base.GetItemData();
         HeroData heroPreset = new HeroData
         {
-            itemId = itemId,
-            itemName = itemName,
-            itemType = itemType,
-            itemIcon = itemIcon,
-            itemDescription = itemDescription,
-            currentstack = currentstack,
+            itemId = data.itemId,
+            itemName = data.itemName,
+            itemType = data.itemType,
+            itemIcon = data.itemIcon,
+            itemDescription = data.itemDescription,
+            currentstack = data.currentstack,
+            canStack = data.canStack,
+            itemPrice = data.itemPrice,
+            cultivationStage = data.cultivationStage,
+            qualityType = data.qualityType,
+            
             raceType = raceType,
             level = level,
             attackRange = attackRange,
@@ -49,7 +55,6 @@ public class HeroPreset : ItemStatsPreset
             physicalDefensePoint = physicalDefensePoint,
             magicalDefensePoint = magicalDefensePoint,
             spiritDefensePoint = spiritDefensePoint,
-            qualityType = qualityType,
         };
         heroPreset.statsRealmData = statsRealmPreset.GetStats();
         heroPreset.statsRaceData = statsRacePreset.GetStats();
