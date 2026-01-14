@@ -40,7 +40,6 @@ public class InventoryPageManager : TGTHMonoBehaviour
                 if (item.CanStack())
                 {
                     item.AddStack(quantity);
-                    Debug.Log("stack");
                 }
                 else
                 {

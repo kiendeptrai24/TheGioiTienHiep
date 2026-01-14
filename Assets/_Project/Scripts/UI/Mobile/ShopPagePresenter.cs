@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Globalization;
+using System.Text;
+
 namespace TGTH.Mobile
 {
     public class ShopPagePresenter : TGTHMonoBehaviour, IPointerClickHandler, IEndDragHandler
@@ -16,18 +19,61 @@ namespace TGTH.Mobile
         public event Action<int> OnItemActionRequested;
         public event Action<int> OnStartDragging;
         private bool isDraging = false;
+        private static string RemoveDiacritics(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return text;
 
+            var normalized = text.Normalize(NormalizationForm.FormD);
+            var sb = new StringBuilder();
+
+            foreach (var c in normalized)
+            {
+                if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                    sb.Append(c);
+            }
+
+            return sb.ToString().Normalize(NormalizationForm.FormC);
+        }
         protected override void Awake()
         {
             view.OnRefreshClicked += ShowItem;
             view.OnEquipmentTypeChanged += SortInventoryEquipmentType;
             view.OnTechniqueAndSkillTypeChanged += SortInventoryTechniqueAndSkillType;
             view.OnOtherTypeChanged += SortInventoryOtherType;
+            view.OnSearchItemSubmit += SearchItemInventory;
 
             view.ToggleMouseFollower(false);
             InitializeInventoryUI(50);
             ShowAllItems();
         }
+
+        private void SearchItemInventory(string value)
+        {
+            if (listItemDatas == null || listItemDatas.Count == 0)
+                return;
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                view.ShowAllItems(listItemDatas);
+                return;
+            }
+
+            string keyword = RemoveDiacritics(value)
+                .ToLowerInvariant()
+                .Trim();
+
+            var result = listItemDatas
+                .Where(item =>
+                    item.data.itemName != null &&
+                    RemoveDiacritics(item.data.itemName)
+                        .ToLowerInvariant()
+                        .Contains(keyword))
+                .ToList();
+
+            view.ShowAllItems(result);
+        }
+
         private void InitializeInventoryUI(int amount)
         {
             view.CreateInventorySlots(amount);
@@ -87,10 +133,6 @@ namespace TGTH.Mobile
                 .ThenByDescending(item => item.data.qualityType)
                 .ToList();
 
-
-            if (sortedList.Count == 0)
-                sortedList = new();
-
             view.ShowAllItems(sortedList);
         }
         public void SortInventoryTechniqueAndSkillType(int value)
@@ -116,8 +158,6 @@ namespace TGTH.Mobile
                     .ThenByDescending(item => item.data.qualityType)
                     .ToList();
             }
-            if (sortedList.Count == 0)
-                sortedList = new();
 
             view.ShowAllItems(sortedList);
 

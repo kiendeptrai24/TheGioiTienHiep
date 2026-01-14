@@ -20,6 +20,7 @@ namespace TGTH.Mobile
         public TMP_Dropdown equipmentTypeDrop;
         public TMP_Dropdown techniqueAndSkillTypeDrop;
         public TMP_Dropdown otherDrop;
+        public TMP_InputField searchItemField;
 
         public RectTransform contentPanel;
         public UIItemSlotBase itemPrefab;
@@ -32,7 +33,7 @@ namespace TGTH.Mobile
         public event Action<int> OnEquipmentTypeChanged;
         public event Action<int> OnTechniqueAndSkillTypeChanged;
         public Action<int> OnOtherTypeChanged;
-
+        public Action<string> OnSearchItemSubmit;
 
         private void Awake()
         {
@@ -43,6 +44,8 @@ namespace TGTH.Mobile
             techniqueAndSkillTypeDrop.onValueChanged.AddListener((value) => OnTechniqueAndSkillTypeChanged?.Invoke(value));
             otherDrop.onValueChanged.AddListener((value) => OnOtherTypeChanged?.Invoke(value));
 
+            searchItemField.onValueChanged.AddListener((string text) => OnSearchItemSubmit?.Invoke(text));
+            searchItemField.onSubmit.AddListener((string text) => OnSearchItemSubmit?.Invoke(text));
         }
         public void ToggleMouseFollower(bool enable)
         {
