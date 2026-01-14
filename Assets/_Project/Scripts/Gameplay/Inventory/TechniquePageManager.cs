@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TGTH.Mobile;
 
-public class TechniqueManager : TGTHMonoBehaviour
+public class TechniquePageManager : TGTHMonoBehaviour
 {
     [SerializeField] private TechniquePresenter presenter;
     [SerializeField] private List<InventoryItem> listItemDatas;
@@ -48,5 +48,10 @@ public class TechniqueManager : TGTHMonoBehaviour
     private void UnLockTechnique()
     {
         presenter.UnlockItem(2);
+    }
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        presenter = GetComponent<TechniquePresenter>();
     }
 }

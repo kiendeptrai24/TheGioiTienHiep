@@ -1,30 +1,57 @@
-
-
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 namespace TGTH.Mobile
 {
-    public class SkillPageView : TGTHMonoBehaviour
+    public class ShopPageView : MonoBehaviour
     {
+        public enum InventoryItemType
+        {
+            item,
+            Equipment,
+            Orther
+        }
         [Header("UI References")]
-        //public Button refreshBtn;
+        public Button sortBtn;
+        public Button showAllItemsBtn;
+        public TMP_Dropdown equipmentTypeDrop;
+        public TMP_Dropdown techniqueAndSkillTypeDrop;
+        public TMP_Dropdown otherDrop;
+
         public RectTransform contentPanel;
         public UIItemSlotBase itemPrefab;
         public MouseFollower mouseFollower;
-        public List<UISkillItem> listOfEquitmentItems = new List<UISkillItem>();
-        public List<UIItemSlotBase> listOfUIItemsInInventory = new List<UIItemSlotBase>();
         public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
 
+
+        public event Action OnSortClicked;
+        public event Action OnRefreshClicked;
+        public event Action<int> OnEquipmentTypeChanged;
+        public event Action<int> OnTechniqueAndSkillTypeChanged;
+        public Action<int> OnOtherTypeChanged;
+
+
+        private void Awake()
+        {
+            showAllItemsBtn.onClick.AddListener(() => OnRefreshClicked?.Invoke());
+            sortBtn.onClick.AddListener(() => OnRefreshClicked?.Invoke());
+            sortBtn.onClick.AddListener(() => OnSortClicked?.Invoke());
+            equipmentTypeDrop.onValueChanged.AddListener((value) => OnEquipmentTypeChanged?.Invoke(value));
+            techniqueAndSkillTypeDrop.onValueChanged.AddListener((value) => OnTechniqueAndSkillTypeChanged?.Invoke(value));
+            otherDrop.onValueChanged.AddListener((value) => OnOtherTypeChanged?.Invoke(value));
+
+        }
         public void ToggleMouseFollower(bool enable)
         {
-            mouseFollower.Toggle(enable);
+            mouseFollower?.Toggle(enable);
         }
 
         public void SetFollowerData(Sprite sprite, int quantity)
         {
-            mouseFollower.SetData(sprite, quantity);
+            mouseFollower?.SetData(sprite, quantity);
         }
 
         public void ClearAllSlots()
@@ -48,9 +75,8 @@ namespace TGTH.Mobile
             {
                 UIItemSlotBase uiItem = Instantiate(itemPrefab, contentPanel);
                 listOfUIItems.Add(uiItem);
-                listOfUIItemsInInventory.Add(uiItem);
             }
-            listOfUIItems.AddRange(listOfEquitmentItems);
+
         }
         public void DeselectItem(UIItemSlotBase uiItem)
         {
@@ -71,46 +97,17 @@ namespace TGTH.Mobile
         {
             if (listItemDatas == null) return;
             if (listOfUIItems.Count < listItemDatas.Count) return;
+            ClearAllSlots();
             for (int i = 0; i < listItemDatas.Count; i++)
             {
-                if (i >= 50) return;
                 listOfUIItems[i].SetItem(listItemDatas[i]);
             }
         }
         public void RefreshInventory(List<InventoryItem> listItemDatas)
         {
-            // 1️⃣ Tập item đang equip
-            HashSet<InventoryItem> equippedItems = new HashSet<InventoryItem>();
-
-            foreach (var slot in listOfEquitmentItems)
-            {
-                if (slot.inventoryItem != null)
-                    equippedItems.Add(slot.inventoryItem);
-            }
-
-            // 2️⃣ Duyệt theo index – GIỮ NGUYÊN VỊ TRÍ
-            for (int i = 0; i < listOfUIItemsInInventory.Count; i++)
-            {
-                // Không có item ở index này
-                if (i >= listItemDatas.Count)
-                {
-                    listOfUIItemsInInventory[i].ResetData();
-                    continue;
-                }
-
-                InventoryItem item = listItemDatas[i];
-
-                // Item đang equip → slot trống
-                if (equippedItems.Contains(item))
-                {
-                    listOfUIItemsInInventory[i].ResetData();
-                }
-                else
-                {
-                    listOfUIItemsInInventory[i].SetItem(item);
-                }
-            }
+            ShowAllItems(listItemDatas);
         }
+
         public void SetItem(int index, InventoryItem item)
         {
             listOfUIItems[index].SetItem(item);

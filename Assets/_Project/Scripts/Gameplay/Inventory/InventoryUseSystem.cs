@@ -3,22 +3,21 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-public class InventoryUseSystem : TGTHMonoBehaviour
+public class InventoryUseSystem : TGTHMonoBehaviour, IUsable
 {
-    [SerializeField] private TechniqueManager techniqueManager;
+    [SerializeField] private InventoryPageManager inventoryPageManager;
+    [SerializeField] private TechniquePageManager techniqueManager;
     [SerializeField] private SkillPageManager skillPageManager;
-    private List<InventoryItem> inventoryItems = new List<InventoryItem>();
     public List<ItemData> itemUsed = new List<ItemData>();
-    public void UseItem(UIItemSlotBase uiItem)
+
+    public void UseItem(UIItemSlotBase uiItem, int quantity = 1)
     {
-        var inventoryItem = uiItem.inventoryItem;
-        if (inventoryItem == null) return;
-        bool successAddItem = techniqueManager.AddItemData(inventoryItem.data) || skillPageManager.AddItemData(inventoryItem.data);
-        if (successAddItem)
+        if (TryAddItemToPages(uiItem.inventoryItem))
         {
-            Debug.Log("using item complete");
+            var inventoryItem = uiItem.inventoryItem;
+
             itemUsed.Add(inventoryItem.data);
-            inventoryItems.Remove(inventoryItem);
+            inventoryPageManager.RemoveInventoryItem(inventoryItem);
             uiItem.ResetData();
         }
         else
@@ -26,10 +25,23 @@ public class InventoryUseSystem : TGTHMonoBehaviour
             Debug.Log("dont have use item");
         }
     }
-    public void SetInventoryData(List<InventoryItem> items)
+    private bool TryAddItemToPages(InventoryItem inventoryItem)
     {
-        inventoryItems = items;
+        if (inventoryItem == null)
+            return false;
+
+        if (techniqueManager.AddItemData(inventoryItem.data))
+            return true;
+
+        if (skillPageManager.AddItemData(inventoryItem.data))
+            return true;
+
+        return false;
     }
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        inventoryPageManager = GetComponent<InventoryPageManager>();
 
-
+    }
 }

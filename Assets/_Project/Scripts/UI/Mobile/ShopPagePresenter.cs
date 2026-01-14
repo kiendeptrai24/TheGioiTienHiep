@@ -5,12 +5,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 namespace TGTH.Mobile
 {
-    public class InventoryPagePresenter : TGTHMonoBehaviour, IPointerClickHandler, IEndDragHandler
+    public class ShopPagePresenter : TGTHMonoBehaviour, IPointerClickHandler, IEndDragHandler
     {
-        [SerializeField] private InventoryPageView view;
+        [SerializeField] private ShopPageView view;
         [SerializeField] private IItemDetailPageView itemDetailPageView;
-        [SerializeField] private InventoryUseSystem inventoryUseSystem;
-        [SerializeField] private InventoryCenterManager inventoryCenterManager;
+        [SerializeField] private ShopUseSystem shopUseSystem;
         private List<InventoryItem> listItemDatas;
         private UIItemSlotBase currentItemSelect;
         private int currentlyDraggedItemIndex = -1;
@@ -21,13 +20,13 @@ namespace TGTH.Mobile
         protected override void Awake()
         {
             view.OnRefreshClicked += ShowItem;
-            view.OnSortClicked += SortInventory;
-            inventoryCenterManager.OnItemDataChanged += SetItemData;
+            view.OnEquipmentTypeChanged += SortInventoryEquipmentType;
+            view.OnTechniqueAndSkillTypeChanged += SortInventoryTechniqueAndSkillType;
+            view.OnOtherTypeChanged += SortInventoryOtherType;
 
             view.ToggleMouseFollower(false);
             InitializeInventoryUI(50);
             ShowAllItems();
-            SetItemData(inventoryCenterManager.GetItemData());
         }
         private void InitializeInventoryUI(int amount)
         {
@@ -71,28 +70,99 @@ namespace TGTH.Mobile
 
         public void RefreshInventory()
         {
-            
+            for (int i = 0; i < listItemDatas.Count; i++)
+                view.SetItem(i, listItemDatas[i]);
         }
-        public void SortInventory()
+        public void SortInventoryEquipmentType(int value)
         {
-            int type = view.itemtypeDrop.value;
-            int quality = view.qualityTypeDrop.value;
-            // Lấy enum từ dropdown value
-            ItemType selectedType = (ItemType)type;
-            QualityType selectedQuality = (QualityType)quality;
-            // Lọc và sắp xếp danh sách
+            if (listItemDatas == null || listItemDatas.Count == 0) return;
+            int type = value;
+            EquipmentType selectedType = (EquipmentType)type + 1;
+
             var sortedList = listItemDatas
-                .Where(item => (item.data.itemType == selectedType) && (item.data.qualityType == selectedQuality))
+                .Where(item =>
+                    item.data is EquitmentData equipment &&
+                    equipment.equipmentType == selectedType)
                 .OrderBy(item => item.data.itemType)
                 .ThenByDescending(item => item.data.qualityType)
                 .ToList();
+
 
             if (sortedList.Count == 0)
                 sortedList = new();
 
             view.ShowAllItems(sortedList);
+        }
+        public void SortInventoryTechniqueAndSkillType(int value)
+        {
+            if (listItemDatas == null || listItemDatas.Count == 0) return;
+            int typeIndex = value;
+            List<InventoryItem> sortedList;
+            if (typeIndex == 0)
+            {
+                sortedList = listItemDatas
+                   .Where(item =>
+                       item.data is TechniqueData technique)
+                   .OrderBy(item => item.data.itemType)
+                   .ThenByDescending(item => item.data.qualityType)
+                   .ToList();
+            }
+            else
+            {
+                sortedList = listItemDatas
+                    .Where(item =>
+                        item.data is SkillData skill)
+                    .OrderBy(item => item.data.itemType)
+                    .ThenByDescending(item => item.data.qualityType)
+                    .ToList();
+            }
+            if (sortedList.Count == 0)
+                sortedList = new();
+
+            view.ShowAllItems(sortedList);
+
+            // if (listItemDatas == null || listItemDatas.Count == 0) return;
+
+            // int typeIndex = value;
+
+            // int techniqueCount = Enum.GetValues(typeof(TechniqueType)).Length;
+            // List<InventoryItem> sortedList;
+
+            // // TECHNIQUE
+            // if (typeIndex < techniqueCount)
+            // {
+            //     TechniqueType selectedType = (TechniqueType)typeIndex;
+
+            //     sortedList = listItemDatas
+            //         .Where(item =>
+            //             item.data is TechniqueData technique &&
+            //             technique.techniqueType == selectedType)
+            //         .OrderBy(item => item.data.itemType)
+            //         .ThenByDescending(item => item.data.qualityType)
+            //         .ToList();
+            // }
+            // // SKILL
+            // else
+            // {
+            //     SkillType selectedType =
+            //         (SkillType)(typeIndex - techniqueCount);
+
+            //     sortedList = listItemDatas
+            //         .Where(item =>
+            //             item.data is SkillData skill &&
+            //             skill.skillType == selectedType)
+            //         .OrderBy(item => item.data.itemType)
+            //         .ThenByDescending(item => item.data.qualityType)
+            //         .ToList();
+            // }
+
+            // view.ShowAllItems(sortedList);
+        }
+        public void SortInventoryOtherType(int value)
+        {
 
         }
+
         private void HandleItemClicked(UIItemSlotBase uiItem)
         {
             if (isDraging)
@@ -106,45 +176,33 @@ namespace TGTH.Mobile
 
         private void Navigation(UIItemSlotBase uiItem)
         {
-            if (uiItem.inventoryItem.data is TechniqueData)
-            {
-                var popup = PopupManager.Instance.GetPopup<UseItemPopup>();
-                BaseSetupData data = new BaseSetupData("Bạn có muốn sử dụng công pháp này không?");
+            var popup = PopupManager.Instance.GetPopup<BuyItemPopup>();
+            ShopDataPopup shopData = new ShopDataPopup();
 
-                if (popup != null)
-                {
-                    popup.ShowPopup(data,
-                    onConfirm: (BasePopupData result) =>
-                    {
-                        inventoryUseSystem.UseItem(uiItem);
-                    },
-                    onCancel: () =>
-                    {
-                        // inventoryUseSystem.UseItem()
-                    });
-                }
-                return;
-            }
-            else if (uiItem.inventoryItem.data is SkillData)
-            {
-                var popup = PopupManager.Instance.GetPopup<UseItemPopup>();
-                BaseSetupData data = new BaseSetupData("Bạn có muốn sử dụng kỹ năng này không?");
+            ShopSetupData data = new ShopSetupData(shopData);
 
-                if (popup != null)
+            if (popup != null)
+            {
+                popup.ShowPopup(data,
+                onConfirm: (QuantityPopupData result) =>
                 {
-                    popup.ShowPopup(data,
-                    onConfirm: (BasePopupData result) =>
+                    shopUseSystem.UseItem(uiItem, result.quantity);
+                },
+                onCancel: () =>
+                {
+
+                },
+                onShowInfo: () =>
+                {
+                    Debug.Log("Show Info");
+                    if (uiItem == null)
                     {
-                        inventoryUseSystem.UseItem(uiItem);
-                    },
-                    onCancel: () =>
-                    {
-                        // inventoryUseSystem.UseItem()
-                    });
-                }
-                return;
+                        Debug.Log("uiItem is null");
+                    }
+                    uiItem?.navigation.OnClick();
+                });
+
             }
-            uiItem?.navigation.OnClick();
         }
 
         private void ItemClicked(UIItemSlotBase uiItem)
@@ -224,20 +282,6 @@ namespace TGTH.Mobile
         {
             view.ShowAllItems(listItemDatas);
         }
-        [ContextMenu("Add")]
-        public void AddItem()
-        {
-            if (currentItemSelect == null) return;
-            currentItemSelect.inventoryItem.AddStack();
-            currentItemSelect.SetItem(currentItemSelect.inventoryItem);
-        }
-        [ContextMenu("Remove")]
-        public void RemoveItem()
-        {
-            if (currentItemSelect == null) return;
-            currentItemSelect.inventoryItem.RemoveStack();
-            currentItemSelect.SetItem(currentItemSelect.inventoryItem);
-        }
         public void OnPointerClick(PointerEventData eventData)
         {
             view.DeselectItem(currentItemSelect);
@@ -262,8 +306,8 @@ namespace TGTH.Mobile
         protected override void LoadComponent()
         {
             base.LoadComponent();
-            view = GetComponent<InventoryPageView>();
-            inventoryUseSystem = GetComponent<InventoryUseSystem>();
+            view = GetComponent<ShopPageView>();
+            shopUseSystem = GetComponent<ShopUseSystem>();
         }
     }
 }

@@ -7,7 +7,7 @@ using TGTH.Mobile;
 public class TechniqueLoadGame : TGTHMonoBehaviour, ISaveable
 {
     [SerializeField] private TechniquePresenter presenter;
-    [SerializeField] private TechniqueManager techniqueManager;
+    [SerializeField] private TechniquePageManager techniqueManager;
     [SerializeField] private List<InventoryItem> listItemDatas;
     protected override void Awake()
     {
@@ -28,5 +28,11 @@ public class TechniqueLoadGame : TGTHMonoBehaviour, ISaveable
     public void SaveGame(ref GameData _data)
     {
 
+    }
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        presenter = GetComponent<TechniquePresenter>();
+        techniqueManager = GetComponent<TechniquePageManager>();
     }
 }

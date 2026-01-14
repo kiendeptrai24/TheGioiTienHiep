@@ -8,6 +8,7 @@ public class ItemData
     public ItemType itemType;
     public string itemName;
     public Sprite itemIcon;
+    public int itemPrice;
     public string itemDescription;
     public int currentstack;
     public CultivationStage cultivationStage;

@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using System;
 using UnityEngine.EventSystems;
 public enum UIInventoryType

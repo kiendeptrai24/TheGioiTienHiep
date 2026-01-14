@@ -1,25 +1,19 @@
-
-
 using System.Collections.Generic;
 using UnityEngine;
-using TGTH.Mobile;
 
-public class InventoryLoadGame : TGTHMonoBehaviour, ISaveable
+public class ShopLoadGame : TGTHMonoBehaviour, ISaveable
 {
-    [SerializeField] private InventoryPageManager inventoryPageManager;
+    [SerializeField] private ShopPageManager shopPageManager;
     [SerializeField] private List<InventoryItem> listItemDatas;
-    protected override void Start()
-    {
-        inventoryPageManager?.SetInventoryData(listItemDatas);
-    }
     public void LoadData(GameData _data)
     {
         foreach (var item in _data.itemDatas)
         {
             listItemDatas.Add(new InventoryItem(item));
         }
-        inventoryPageManager?.SetInventoryData(listItemDatas);
+        shopPageManager?.SetInventoryData(listItemDatas);
     }
+
     public void SaveGame(ref GameData _data)
     {
 
@@ -27,6 +21,6 @@ public class InventoryLoadGame : TGTHMonoBehaviour, ISaveable
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        inventoryPageManager = GetComponent<InventoryPageManager>();
+        shopPageManager = GetComponent<ShopPageManager>();
     }
 }

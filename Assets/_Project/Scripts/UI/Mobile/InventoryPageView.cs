@@ -91,7 +91,10 @@ namespace TGTH.Mobile
                 listOfUIItems[i].SetItem(listItemDatas[i]);
             }
         }
-
+        public void RefreshInventory(List<InventoryItem> listItemDatas)
+        {
+            ShowAllItems(listItemDatas);
+        }
         public void SetItem(int index, InventoryItem item)
         {
             listOfUIItems[index].SetItem(item);

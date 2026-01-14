@@ -1,5 +1,3 @@
-using System;
-using TGTH.Mobile;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

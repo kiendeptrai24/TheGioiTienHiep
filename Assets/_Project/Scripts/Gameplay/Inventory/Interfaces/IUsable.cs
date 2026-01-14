@@ -1,4 +1,6 @@
+using System.Collections.Generic;
+
 public interface IUsable
 {
-    void Use();
+    void UseItem(UIItemSlotBase uiItem, int quantity = 1);
 }
