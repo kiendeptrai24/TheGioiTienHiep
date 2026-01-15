@@ -1,6 +1,8 @@
 
 
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 public enum InputType
 {
     Player,
@@ -8,9 +10,11 @@ public enum InputType
     UI,
 
 }
-public class InputManager : MonoBehaviour {
+public class InputManager : MonoBehaviour
+{
     public InputHandler inputHandler;
     public InputType inputType;
+    public Action OnEnterClick;
     public Vector2 GetInputDirection()
     {
         return inputHandler.Player.Move.ReadValue<Vector2>();
@@ -22,11 +26,14 @@ public class InputManager : MonoBehaviour {
     public void Awake()
     {
         inputHandler = new InputHandler();
+        inputHandler.UI.Enter.performed += (InputAction.CallbackContext context) => { OnEnterClick?.Invoke(); };
     }
-    private void OnEnable() {
+    private void OnEnable()
+    {
         inputHandler.Enable();
     }
-    private void OnDisable() {
+    private void OnDisable()
+    {
         inputHandler.Disable();
     }
 }

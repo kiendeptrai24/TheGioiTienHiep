@@ -49,10 +49,10 @@ namespace Photon.Chat.TGTHChat
             var auth = new AuthenticationValues("kien");
 
             // Nếu nghi ngờ region, comment dòng dưới để auto
-            // chatClient.ChatRegion = "EU";
-
             clientState = ClientChatState.Connecting;
 
+            chatClient.ChatRegion = "Asia";
+            chatClient.MessageLimit = 100;
             bool ok = chatClient.Connect(ChatSettings.Instance.AppId, "1.0", auth);
             Debug.Log($"[PhotonChat] Connect() returned: {ok}, userId={userId}");
         }
@@ -63,7 +63,11 @@ namespace Photon.Chat.TGTHChat
         }
         public void ClientDisconnect()
         {
-
+            if (this.chatClient != null)
+            {
+                this.chatClient.Disconnect();
+            }
+            clientState = ClientChatState.Disconnected;
         }
 
         public void OnDestroy()
@@ -90,7 +94,7 @@ namespace Photon.Chat.TGTHChat
         {
             Debug.Log("[PhotonChat] Connected");
             clientState = ClientChatState.Connected;
-            chatClient.Subscribe(new[] { "channelA", "channelB" });
+            chatClient.Subscribe(new[] { "Global", "channelB" });
             OnClientChatConnected?.Invoke();
         }
 

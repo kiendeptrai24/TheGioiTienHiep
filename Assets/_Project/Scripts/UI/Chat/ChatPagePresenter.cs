@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using Photon.Chat;
 using Photon.Chat.TGTHChat;
 using UnityEngine;
 
 public class ChatPagePresenter : TGTHMonoBehaviour
 {
-    private ChatPageView view;
+    [SerializeField] private ChatPageView view;
     [SerializeField] private ChatManager chatManager;
     private ChatClient chatClient;
 
@@ -46,13 +44,16 @@ public class ChatPagePresenter : TGTHMonoBehaviour
         {
             Debug.Log("Message: " + message + "\n");
         }
-        view.ShowText(channel.ToStringMessages());
+
+        string messageString = $"<b><color=#ce4627ff>{senders[0]}: </color></b>" + messages[0];
+
+        view.ShowText(messageString);
     }
 
     private void OnSubmitChat(string text)
     {
         Debug.Log("Submit chat: " + text);
-        this.chatClient.PublishMessage("channelA", text);
+        this.chatClient.PublishMessage("Global", text);
     }
     protected override void LoadComponent()
     {

@@ -9,34 +9,74 @@ public class ChatPageView : TGTHMonoBehaviour
 {
     [SerializeField] private TMP_InputField chatInputField;
     [SerializeField] private TextMeshProUGUI chatText;
-    [SerializeField] private Button submitButton;
+    [SerializeField] private TMP_InputField chatInputZoomOutField;
+    [SerializeField] private TextMeshProUGUI chatZoomOutText;
+    [SerializeField] private NavigationButton zoomInButton;
+    [SerializeField] private NavigationButton zoomOutButton;
+    [SerializeField] private bool showZoomOut;
+    [SerializeField] private Button submitSmallChatButton;
+    [SerializeField] private Button submitLargeChatButton;
+    private InputManager inputs;
     public Action<string> OnSubmitChat;
     public int TestLength = 2048;
     private byte[] testBytes = new byte[2048];
     protected override void Awake()
     {
         base.Awake();
-        // Ensure TMP renders <color> tags and \n, \t correctly
+        LoadComponent();
         if (chatText != null)
         {
             chatText.richText = true;
             chatText.parseCtrlCharacters = true;
         }
         OnSubmitChat?.Invoke(chatInputField.text);
-        submitButton.onClick.AddListener(() =>
+        zoomInButton.m_OnClick += () =>
+        {
+            showZoomOut = false;
+        };
+        zoomOutButton.m_OnClick += () =>
+        {
+            showZoomOut = true;
+        };
+        submitSmallChatButton.onClick.AddListener(() =>
         {
             OnSubmitChat?.Invoke(chatInputField.text);
             chatInputField.text = "";
+            chatInputField.ActivateInputField();
         });
+
+        submitLargeChatButton.onClick.AddListener(() =>
+        {
+            OnSubmitChat?.Invoke(chatInputZoomOutField.text);
+            chatInputZoomOutField.text = "";
+            chatInputZoomOutField.ActivateInputField();
+        });
+
+        inputs.OnEnterClick += () =>
+        {
+            if (showZoomOut == false)
+            {
+                OnSubmitChat?.Invoke(chatInputField.text);
+                chatInputField.text = "";
+                chatInputField.ActivateInputField();
+            }
+            else
+            {
+                OnSubmitChat?.Invoke(chatInputZoomOutField.text);
+                chatInputZoomOutField.text = "";
+                chatInputZoomOutField.ActivateInputField();
+            }
+        };
     }
-    private string PostHelpToCurrentChannel(string inputLine)
+    protected override void LoadComponent()
     {
-        return inputLine += HelpText;
+        base.LoadComponent();
+        inputs = FindAnyObjectByType<InputManager>();
     }
     public void ShowText(string message)
     {
-        chatText.text = message;
-        
+        chatZoomOutText.text += message + "\n";
+        chatText.text += message + "\n";
     }
     private static string HelpText = "\n    -- HELP --\n" +
                                     "To subscribe to channel(s):\n" +

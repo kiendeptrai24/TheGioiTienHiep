@@ -1,4 +1,5 @@
 
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +7,7 @@ public abstract class ActionButton : TGTHMonoBehaviour
 {
     [SerializeField] public ScreenManager screenManager;
     private Button m_Button;
-
+    public Action m_OnClick;
     protected override void Awake()
     {
         base.Awake();
@@ -17,7 +18,11 @@ public abstract class ActionButton : TGTHMonoBehaviour
     {
         base.LoadComponent();
         m_Button = GetComponent<Button>();
-        m_Button.onClick.AddListener(OnClick);
+        m_Button.onClick.AddListener(() => 
+        {
+            m_OnClick?.Invoke(); 
+            OnClick();
+        });
         if (screenManager == null)
             screenManager = GetComponentInParent<ScreenManager>();
 
