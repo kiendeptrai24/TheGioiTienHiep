@@ -14,6 +14,11 @@ public class ChaseState_Hero : HeroState
     public override void Excute()
     {
         base.Excute();
+        if (m_hero.m_aiMovement.Target == null)
+        {
+            m_machine.ChangeState<IdleState_Hero>();
+            return;
+        }
         if (Vector3.Distance(m_hero.transform.position, m_hero.m_aiMovement.Target.position) >= m_hero.heroData.attackRange)
         {
             m_hero.m_aiMovement.SetTarget(m_hero.m_aiMovement.Target);
