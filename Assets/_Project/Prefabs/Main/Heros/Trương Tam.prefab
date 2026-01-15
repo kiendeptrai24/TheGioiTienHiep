@@ -700,7 +700,7 @@ Animator:
   m_GameObject: {fileID: 2224147457494974781}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: a56c65a13a78a88499b903b18001bdcb, type: 3}
-  m_Controller: {fileID: 9100000, guid: 361eb5eaec3d3eb4fa0322dfa4eebe10, type: 2}
+  m_Controller: {fileID: 9100000, guid: 05e331f967d623a489456df27357c0db, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2279,7 +2279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1338340452
+  GlobalObjectIdHash: 2751966257
   InScenePlacedSourceGlobalObjectIdHash: 3254898076
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2462,6 +2462,8 @@ MonoBehaviour:
     itemType: 0
     itemName: 
     itemIcon: {fileID: 0}
+    itemPrice: 0
+    canStack: 0
     itemDescription: 
     currentstack: 0
     cultivationStage: 0
@@ -2506,11 +2508,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatsData
   canLoadData: 0
+  isHero: 1
   heroData:
     itemId: 
     itemType: 0
     itemName: 
     itemIcon: {fileID: 0}
+    itemPrice: 0
+    canStack: 0
     itemDescription: 
     currentstack: 0
     cultivationStage: 0
@@ -2528,6 +2533,8 @@ MonoBehaviour:
     itemType: 0
     itemName: 
     itemIcon: {fileID: 0}
+    itemPrice: 0
+    canStack: 0
     itemDescription: 
     currentstack: 0
     cultivationStage: 0
@@ -2549,6 +2556,8 @@ MonoBehaviour:
     itemType: 0
     itemName: 
     itemIcon: {fileID: 0}
+    itemPrice: 0
+    canStack: 0
     itemDescription: 
     currentstack: 0
     cultivationStage: 0
@@ -2572,6 +2581,8 @@ MonoBehaviour:
     itemType: 0
     itemName: 
     itemIcon: {fileID: 0}
+    itemPrice: 0
+    canStack: 0
     itemDescription: 
     currentstack: 0
     cultivationStage: 0
