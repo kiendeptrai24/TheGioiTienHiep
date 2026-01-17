@@ -1,57 +1,78 @@
 
 using System;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ChatPageView : TGTHMonoBehaviour
 {
+    [SerializeField] private TMP_InputField addFriendField;
+    [SerializeField] Button addFriendBtn;
+    public Action<string> OnAddFriend;
+
+    [Header("Field")]
     [SerializeField] private TMP_InputField chatInputField;
-    [SerializeField] private TextMeshProUGUI chatText;
     [SerializeField] private TMP_InputField chatInputZoomOutField;
+
+    [Header("Text")]
+    [SerializeField] private TextMeshProUGUI chatText;
     [SerializeField] private TextMeshProUGUI chatZoomOutText;
+    [Header("Text Friend")]
+    [SerializeField] private TextMeshProUGUI nameFriendText;
+    [SerializeField] private TextMeshProUGUI nameFriendLargeText;
+
+    [Header("Text Private")]
+    [SerializeField] private TextMeshProUGUI chatPrivateText;
+    [SerializeField] private TextMeshProUGUI chatPrivateZoomOutText;
+
+    [Header("Button Navigation")]
+    [Space]
     [SerializeField] private NavigationButton zoomInButton;
     [SerializeField] private NavigationButton zoomOutButton;
-    [SerializeField] private bool showZoomOut;
+    [Space]
+    [SerializeField] private NavigationButton chatGeneralSmallPanelBtn;
+    [SerializeField] private NavigationButton chatPrivateSmallPanelBtn;
+    [Space]
+    [SerializeField] private NavigationButton chatGeneralLargePanelBtn;
+    [SerializeField] private NavigationButton chatPrivateLargePanelBtn;
+
+
+    [Header("Button Submit")]
     [SerializeField] private Button submitSmallChatButton;
     [SerializeField] private Button submitLargeChatButton;
+
+    [Header("Zoom Out")]
+    [SerializeField] private bool showZoomOut;
+    public bool chatPrivate = false;
+
     private InputManager inputs;
     public Action<string> OnSubmitChat;
-    public int TestLength = 2048;
-    private byte[] testBytes = new byte[2048];
+
     protected override void Awake()
     {
         base.Awake();
         LoadComponent();
+        addFriendBtn.onClick.AddListener(() =>
+        {
+            OnAddFriend?.Invoke(addFriendField.text);
+            addFriendField.text = "";
+            addFriendField.ActivateInputField();
+        });
+
         if (chatText != null)
         {
             chatText.richText = true;
             chatText.parseCtrlCharacters = true;
         }
         OnSubmitChat?.Invoke(chatInputField.text);
-        zoomInButton.m_OnClick += () =>
-        {
-            showZoomOut = false;
-        };
-        zoomOutButton.m_OnClick += () =>
-        {
-            showZoomOut = true;
-        };
-        submitSmallChatButton.onClick.AddListener(() =>
-        {
-            OnSubmitChat?.Invoke(chatInputField.text);
-            chatInputField.text = "";
-            chatInputField.ActivateInputField();
-        });
 
-        submitLargeChatButton.onClick.AddListener(() =>
-        {
-            OnSubmitChat?.Invoke(chatInputZoomOutField.text);
-            chatInputZoomOutField.text = "";
-            chatInputZoomOutField.ActivateInputField();
-        });
+        CallbackButtonNavigation();
+        CallBackButtonSubmit();
+        CallbackPressEnter();
+    }
 
+    private void CallbackPressEnter()
+    {
         inputs.OnEnterClick += () =>
         {
             if (showZoomOut == false)
@@ -68,6 +89,52 @@ public class ChatPageView : TGTHMonoBehaviour
             }
         };
     }
+
+    private void CallBackButtonSubmit()
+    {
+        submitSmallChatButton.onClick.AddListener(() =>
+        {
+            OnSubmitChat?.Invoke(chatInputField.text);
+            chatInputField.text = "";
+            chatInputField.ActivateInputField();
+        });
+
+        submitLargeChatButton.onClick.AddListener(() =>
+        {
+            OnSubmitChat?.Invoke(chatInputZoomOutField.text);
+            chatInputZoomOutField.text = "";
+            chatInputZoomOutField.ActivateInputField();
+        });
+    }
+
+    private void CallbackButtonNavigation()
+    {
+        zoomInButton.m_OnClick += () =>
+        {
+            showZoomOut = false;
+        };
+        zoomOutButton.m_OnClick += () =>
+        {
+            showZoomOut = true;
+        };
+        chatGeneralSmallPanelBtn.m_OnClick += () =>
+        {
+            chatPrivate = false;
+        };
+        chatPrivateSmallPanelBtn.m_OnClick += () =>
+        {
+            chatPrivate = true;
+        };
+        chatGeneralLargePanelBtn.m_OnClick += () =>
+        {
+            chatPrivate = false;
+        };
+        chatPrivateLargePanelBtn.m_OnClick += () =>
+        {
+            chatPrivate = true;
+        };
+    }
+
     protected override void LoadComponent()
     {
         base.LoadComponent();
@@ -77,6 +144,16 @@ public class ChatPageView : TGTHMonoBehaviour
     {
         chatZoomOutText.text += message + "\n";
         chatText.text += message + "\n";
+    }
+    public void ShowTextWithFriend(string message)
+    {
+        chatPrivateText.text += message + "\n";
+        chatPrivateZoomOutText.text += message + "\n";
+    }
+    public void ShowNameFriend(string name)
+    {
+        var messageString = $"<b><color=#ce4627ff>Chò truyện: </color></b>{name}";
+        nameFriendText.text = messageString;
     }
     private static string HelpText = "\n    -- HELP --\n" +
                                     "To subscribe to channel(s):\n" +

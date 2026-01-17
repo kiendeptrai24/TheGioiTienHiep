@@ -11,6 +11,7 @@ public abstract class ScreenManager : TGTHMonoBehaviour
 {
     protected Stack<NavigationData> m_NavigationStack = new();
     protected Dictionary<string, GameObject> m_Screens = new();
+    protected Dictionary<string, List<GameObject>> m_ScreensList = new();
     protected GameObject m_CurrentScreen;
     [SerializeField] protected string defaultScreen;
     protected override void Awake()
@@ -30,7 +31,7 @@ public abstract class ScreenManager : TGTHMonoBehaviour
     }
 
 
-    public void NavigateTo(string screenName, object data = null)
+    public virtual void NavigateTo(string screenName, object data = null)
     {
         m_NavigationStack.Push(new NavigationData { ScreenName = screenName, Data = data });
         OnStackChanged();
@@ -65,6 +66,8 @@ public abstract class ScreenManager : TGTHMonoBehaviour
             var screenName = m_NavigationStack.Peek().ScreenName;
             if (m_Screens.ContainsKey(screenName))
             {
+                UpdateChildrenScreen(screenName);
+
                 m_CurrentScreen = m_Screens[screenName];
                 m_CurrentScreen.SetActive(false);
                 m_CurrentScreen = null;
@@ -73,6 +76,32 @@ public abstract class ScreenManager : TGTHMonoBehaviour
         }
 
     }
+
+    private void UpdateChildrenScreen(string screenName)
+    {
+        if (m_ScreensList.Count > 0 && m_ScreensList.ContainsKey(screenName))
+        {
+            foreach (var screenChildren in m_ScreensList)
+            {
+                if (screenChildren.Key != screenName)
+                {
+                    foreach (var screenChild in screenChildren.Value)
+                    {
+                        screenChild.SetActive(false);
+                    }
+                }
+                else
+                {
+
+                    foreach (var screen in m_ScreensList[screenName])
+                    {
+                        screen.SetActive(true);
+                    }
+                }
+            }
+        }
+    }
+
     public void OnStackChanged()
     {
         if (m_NavigationStack.Count > 0)
@@ -85,6 +114,8 @@ public abstract class ScreenManager : TGTHMonoBehaviour
                 {
                     m_CurrentScreen.SetActive(false);
                 }
+
+                UpdateChildrenScreen(screenName);
 
                 m_CurrentScreen = m_Screens[screenName];
                 m_CurrentScreen.SetActive(true);

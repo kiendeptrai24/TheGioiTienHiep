@@ -2,6 +2,7 @@
 using System;
 using ExitGames.Client.Photon;
 using Photon.Chat.DemoChat;
+using TMPro;
 using UnityEngine;
 namespace Photon.Chat.TGTHChat
 {
@@ -14,25 +15,23 @@ namespace Photon.Chat.TGTHChat
             Connected,
             Disconnected
         }
+        [SerializeField] private ProfileManager profileManager;
         public ChatClient chatClient;
         public ClientChatState clientState;
-        [SerializeField] private string userId;
-        [SerializeField] private string userName;
-
         public Action OnClientChatConnected;
         public Action OnClientChatDisconnected;
 
-        public Action<string, string[], object[]> OnGetMessages;
-        public Action<string, object, string> OnPrivateMessage;
+        public event Action<string, string[], object[]> OnGetMessages;
+        public event Action<string, object, string> OnPrivateMessage;
         protected override void Awake()
         {
             base.Awake();
-            clientState = ClientChatState.None;
-            ClientConnect();
         }
         protected override void Start()
         {
             base.Start();
+            clientState = ClientChatState.None;
+            ClientConnect();
         }
 
         public void ClientConnect()
@@ -45,16 +44,12 @@ namespace Photon.Chat.TGTHChat
             chatClient.UseBackgroundWorkerForSending = true;
 #endif
 
-            // userId = Guid.NewGuid().ToString();
-            var auth = new AuthenticationValues("kien");
-
-            // Nếu nghi ngờ region, comment dòng dưới để auto
+            var auth = new AuthenticationValues(profileManager.GetProfileUser().userId);
+            
             clientState = ClientChatState.Connecting;
-
             chatClient.ChatRegion = "Asia";
             chatClient.MessageLimit = 100;
             bool ok = chatClient.Connect(ChatSettings.Instance.AppId, "1.0", auth);
-            Debug.Log($"[PhotonChat] Connect() returned: {ok}, userId={userId}");
         }
 
         private void Update()
