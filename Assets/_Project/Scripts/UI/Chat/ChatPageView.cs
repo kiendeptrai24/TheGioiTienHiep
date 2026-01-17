@@ -6,10 +6,6 @@ using UnityEngine.UI;
 
 public class ChatPageView : TGTHMonoBehaviour
 {
-    [SerializeField] private TMP_InputField addFriendField;
-    [SerializeField] Button addFriendBtn;
-    public Action<string> OnAddFriend;
-
     [Header("Field")]
     [SerializeField] private TMP_InputField chatInputField;
     [SerializeField] private TMP_InputField chatInputZoomOutField;
@@ -44,6 +40,8 @@ public class ChatPageView : TGTHMonoBehaviour
     [Header("Zoom Out")]
     [SerializeField] private bool showZoomOut;
     public bool chatPrivate = false;
+    public bool chatPrivateSmallSave = false;
+    public bool chatPrivateLargeSave = false;
 
     private InputManager inputs;
     public Action<string> OnSubmitChat;
@@ -52,19 +50,12 @@ public class ChatPageView : TGTHMonoBehaviour
     {
         base.Awake();
         LoadComponent();
-        addFriendBtn.onClick.AddListener(() =>
-        {
-            OnAddFriend?.Invoke(addFriendField.text);
-            addFriendField.text = "";
-            addFriendField.ActivateInputField();
-        });
 
         if (chatText != null)
         {
             chatText.richText = true;
             chatText.parseCtrlCharacters = true;
         }
-        OnSubmitChat?.Invoke(chatInputField.text);
 
         CallbackButtonNavigation();
         CallBackButtonSubmit();
@@ -112,25 +103,31 @@ public class ChatPageView : TGTHMonoBehaviour
         zoomInButton.m_OnClick += () =>
         {
             showZoomOut = false;
+            chatPrivate = chatPrivateSmallSave;
         };
         zoomOutButton.m_OnClick += () =>
         {
             showZoomOut = true;
+            chatPrivate = chatPrivateLargeSave;
         };
         chatGeneralSmallPanelBtn.m_OnClick += () =>
         {
+            chatPrivateSmallSave = false;
             chatPrivate = false;
         };
         chatPrivateSmallPanelBtn.m_OnClick += () =>
         {
+            chatPrivateSmallSave = true;
             chatPrivate = true;
         };
         chatGeneralLargePanelBtn.m_OnClick += () =>
         {
+            chatPrivateLargeSave = false;
             chatPrivate = false;
         };
         chatPrivateLargePanelBtn.m_OnClick += () =>
         {
+            chatPrivateLargeSave = true;
             chatPrivate = true;
         };
     }
@@ -149,6 +146,11 @@ public class ChatPageView : TGTHMonoBehaviour
     {
         chatPrivateText.text += message + "\n";
         chatPrivateZoomOutText.text += message + "\n";
+    }
+    public void ResetChatWithFriend()
+    {
+        chatPrivateText.text = "";
+        chatPrivateZoomOutText.text = "";
     }
     public void ShowNameFriend(string name)
     {

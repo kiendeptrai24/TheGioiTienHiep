@@ -15,14 +15,26 @@ namespace Photon.Chat.TGTHChat
             Connected,
             Disconnected
         }
+        public enum UserStatus
+        {
+            Offline = 0,
+            Invisible = 1,
+            Online = 2,
+            Away = 3,
+            DoNotDisturb = 4,
+            LookingForGroup = 5,
+            Playing = 6
+        }
         [SerializeField] private ProfileManager profileManager;
         public ChatClient chatClient;
         public ClientChatState clientState;
-        public Action OnClientChatConnected;
-        public Action OnClientChatDisconnected;
+        public event Action OnClientChatConnected;
+        public event Action OnClientChatDisconnected;
 
         public event Action<string, string[], object[]> OnGetMessages;
         public event Action<string, object, string> OnPrivateMessage;
+        public event Action<string, int, bool, object> OnFriendStatusUpdate;
+
         protected override void Awake()
         {
             base.Awake();
@@ -45,7 +57,7 @@ namespace Photon.Chat.TGTHChat
 #endif
 
             var auth = new AuthenticationValues(profileManager.GetProfileUser().userId);
-            
+
             clientState = ClientChatState.Connecting;
             chatClient.ChatRegion = "Asia";
             chatClient.MessageLimit = 100;
@@ -64,7 +76,6 @@ namespace Photon.Chat.TGTHChat
             }
             clientState = ClientChatState.Disconnected;
         }
-
         public void OnDestroy()
         {
             if (this.chatClient != null)
@@ -82,14 +93,18 @@ namespace Photon.Chat.TGTHChat
         public void OnDisconnected()
         {
             clientState = ClientChatState.Disconnected;
+            chatClient.SetOnlineStatus((int)UserStatus.Online, profileManager.GetProfileUser().userName);
             OnClientChatDisconnected?.Invoke();
         }
 
         public void OnConnected()
         {
             Debug.Log("[PhotonChat] Connected");
+
             clientState = ClientChatState.Connected;
-            chatClient.Subscribe(new[] { "Global", "channelB" });
+            chatClient.SetOnlineStatus((int)UserStatus.Online, profileManager.GetProfileUser().userName);
+
+            chatClient.Subscribe(new[] { "Global" });
             OnClientChatConnected?.Invoke();
         }
 
@@ -109,7 +124,8 @@ namespace Photon.Chat.TGTHChat
 
         public void OnStatusUpdate(string user, int status, bool gotMessage, object message)
         {
-
+            Console.WriteLine("Status change for: {0} to: {1}", user, status);
+            OnFriendStatusUpdate?.Invoke(user, status, gotMessage, message);
         }
 
         public void OnUserSubscribed(string channel, string user)

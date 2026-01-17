@@ -27,6 +27,14 @@ public class ProfileManager : TGTHMonoBehaviour
         profileUser.userName = userName;
         OnProfileChanged?.Invoke(profileUser);
     }
+    public void AddFriend(string friend)
+    {
+        profileUser.AddFriend(friend);
+    }
+    public void RemoveFriend(string friend)
+    {
+        profileUser.RemoveFriend(friend);
+    }
     protected override void LoadComponent()
     {
         base.LoadComponent();

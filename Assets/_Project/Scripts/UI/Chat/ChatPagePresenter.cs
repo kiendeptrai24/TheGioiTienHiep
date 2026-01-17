@@ -1,8 +1,7 @@
-using System;
 using ExitGames.Client.Photon;
-using ExitGames.Client.Photon.StructWrapping;
 using Photon.Chat;
 using Photon.Chat.TGTHChat;
+using TGTH.Mobile;
 using UnityEngine;
 
 public class ChatPagePresenter : TGTHMonoBehaviour
@@ -23,6 +22,7 @@ public class ChatPagePresenter : TGTHMonoBehaviour
     [SerializeField] private ChatPageView view;
     [SerializeField] private ChatManager chatManager;
     [SerializeField] private ProfileManager profileManager;
+    [SerializeField] private FriendPagePresenter friendPagePresenter;
     private ChatClient chatClient;
     private string nameFriend;
     protected override void Awake()
@@ -40,16 +40,19 @@ public class ChatPagePresenter : TGTHMonoBehaviour
                 OnSendGlobalChat(text);
             }
         };
-        view.OnAddFriend += OnAddFriend;
+        friendPagePresenter.OnSwitchFriend += (name) =>
+        {
+            if (nameFriend == name) return;
+            nameFriend = name;
+            view.ShowNameFriend(nameFriend);
+            // reset messege when you switch to new friend
+            // dont save messege history
+            view.ResetChatWithFriend();
+
+        };
         chatManager.OnGetMessages += OnGetMessages;
         chatManager.OnPrivateMessage += OnPrivateMessage;
 
-    }
-
-    private void OnAddFriend(string name)
-    {
-        nameFriend = name;
-        view.ShowNameFriend(nameFriend);
     }
 
     protected override void Start()
