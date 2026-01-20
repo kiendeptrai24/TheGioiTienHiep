@@ -2003,9 +2003,11 @@ GameObject:
   - component: {fileID: 4697967168902593822}
   - component: {fileID: 5245176849251198561}
   - component: {fileID: 432532413510505737}
-  - component: {fileID: 3748072802165767517}
   - component: {fileID: 3940633236033083010}
   - component: {fileID: 2997244800495556665}
+  - component: {fileID: 2417333655836378672}
+  - component: {fileID: 5961338288685753757}
+  - component: {fileID: 3100323945643275413}
   m_Layer: 0
   m_Name: Charactor
   m_TagString: Untagged
@@ -2041,7 +2043,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 780697054
+  GlobalObjectIdHash: 1251779217
   InScenePlacedSourceGlobalObjectIdHash: 3254898076
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2093,7 +2095,7 @@ MonoBehaviour:
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
-  UseQuaternionSynchronization: 0
+  UseQuaternionSynchronization: 1
   UseQuaternionCompression: 0
   UseHalfFloatPrecision: 0
   InLocalSpace: 0
@@ -2143,94 +2145,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ActorController
   ShowTopMostFoldoutHeaderGroup: 1
   currentState: 0
+  mapSpawn: {fileID: 0}
   turnSpeed: 12
   moveSpeed: 5
---- !u!114 &3748072802165767517
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7804178499550283321}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e33819dbf526ca498accd1351fd3bbd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterStats
-  ShowTopMostFoldoutHeaderGroup: 1
-  statsRaceData:
-    itemId: 
-    itemType: 0
-    itemName: 
-    itemIcon: {fileID: 0}
-    itemDescription: 
-    currentstack: 0
-    cultivationStage: 0
-    qualityType: 0
-    physicalDamage: 0.1
-    magicalDamage: 0.1
-    spiritDamage: 0.1
-    physicalDefense: 0.1
-    magicalDefense: 0.1
-    spiritDefense: 0.1
-    raceType: 1
-    maxHealth: 0.1
-    maxMana: 0.5
-    maxSpirit: 0.2
-    spiritRange: 0
-    movementSpeed: 0
-  statsCultivationPathData:
-    itemId: 
-    itemType: 0
-    itemName: 
-    itemIcon: {fileID: 0}
-    itemDescription: 
-    currentstack: 0
-    cultivationStage: 0
-    qualityType: 0
-    physicalDamage: 1
-    magicalDamage: 0
-    spiritDamage: 0
-    physicalDefense: 1
-    magicalDefense: 0
-    spiritDefense: 0
-    essenceType: 1
-    counterEssenceType: 3
-    counterPercentage: 0.2
-    maxHealth: 10
-    maxMana: 5
-    maxSpirit: 5
-    movementSpeed: 1
-    spiritRange: 1
-  statsRealmData:
-    itemId: 
-    itemType: 0
-    itemName: 
-    itemIcon: {fileID: 0}
-    itemDescription: 
-    currentstack: 0
-    cultivationStage: 24
-    qualityType: 0
-    physicalDamage: 600
-    magicalDamage: 600
-    spiritDamage: 600
-    physicalDefense: 300
-    magicalDefense: 300
-    spiritDefense: 300
-    maxHealth: 6000
-    maxMana: 6000
-    maxSpirit: 6000
-    critRate: 150
-    critDamage: 5
-    evasion: 2
-    armorPenetration: 40
-    movementSpeed: 5
-    attackSpeed: 1
-    castSpeed: 1
-    potential: 150
-    skillPoints: 3
-    combatPower: 20000
-    spiritRange: 0
 --- !u!114 &3940633236033083010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2258,6 +2175,73 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCameraControl
   cameraManager: {fileID: 0}
+--- !u!54 &2417333655836378672
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  serializedVersion: 5
+  m_Mass: 5
+  m_LinearDamping: 0
+  m_AngularDamping: 0
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 1
+  m_Constraints: 80
+  m_CollisionDetection: 0
+--- !u!136 &5961338288685753757
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &3100323945643275413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkRigidbody
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkRigidbodyBaseExpanded: 0
+  UseRigidBodyForMotion: 0
+  AutoUpdateKinematicState: 1
+  AutoSetKinematicOnDespawn: 1
 --- !u!1 &7825434533555785058
 GameObject:
   m_ObjectHideFlags: 0

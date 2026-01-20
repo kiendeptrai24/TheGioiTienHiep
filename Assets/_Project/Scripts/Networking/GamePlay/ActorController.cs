@@ -7,8 +7,10 @@ public enum ActorState
 }
 public class ActorController : TGTHNetworkBehaviour
 {
+    private Rigidbody rig;
     public ActorState currentState = ActorState.TopDown;
     [Header("Components")]
+    [SerializeField] private MapSpawn mapSpawn;
     [SerializeField] private float turnSpeed = 10f;
     [SerializeField] private float moveSpeed = 5f;
     private IRotable characterRotation;
@@ -19,13 +21,15 @@ public class ActorController : TGTHNetworkBehaviour
         LoadComponent();
         if (currentState == ActorState.TopDown)
         {
-            characterRotation = new TopDownRotation();
-            moveable = new TopDownMovement();
+            characterRotation = new TopDownRotation(rig);
+            moveable = new TopDownMovement(rig);
         }
     }
     protected override void Start()
     {
         base.Start();
+        mapSpawn = FindAnyObjectByType<MapSpawn>();
+        mapSpawn.Owner = transform;
     }
     private void FixedUpdate()
     {
@@ -45,5 +49,6 @@ public class ActorController : TGTHNetworkBehaviour
     {
         base.LoadComponent();
         inputManager = FindAnyObjectByType<InputManager>();
+        rig = GetComponent<Rigidbody>();
     }
 }
