@@ -18,10 +18,11 @@ namespace WorldMap.Domain
             return new Vector3(wx, y, wz);
         }
 
-        public static GridCoord WorldToGrid(GridConfig cfg, Vector3 world)
+        public static GridCoord WorldToGrid(GridConfig grid, Vector3 world)
         {
-            int x = Mathf.FloorToInt((world.x - cfg.origin.x) / cfg.cellSize);
-            int z = Mathf.FloorToInt((world.z - cfg.origin.z) / cfg.cellSize);
+            float size = grid.cellSize;
+            int x = Mathf.FloorToInt(world.x / size);
+            int z = Mathf.FloorToInt(world.z / size);
             return new GridCoord(x, z);
         }
     }

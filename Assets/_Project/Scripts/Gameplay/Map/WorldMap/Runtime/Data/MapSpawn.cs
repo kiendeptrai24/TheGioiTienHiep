@@ -1,6 +1,7 @@
 using UnityEngine;
 using WorldMap.Baking;
 using WorldMap.Data;
+using WorldMap.Domain;
 public class MapSpawn : TGTHMonoBehaviour
 {
     public MapDataPreset mapDataPreset;
@@ -63,4 +64,6 @@ public class MapSpawn : TGTHMonoBehaviour
             }
         }
     }
+    public GridCoord WorldToGrid(Vector3 world) => GridMath.WorldToGrid(mapDataPreset.grid, world);
+    public Vector3 GridToWorld(GridCoord c) => GridMath.GridToWorld(mapDataPreset.grid, c);
 }
