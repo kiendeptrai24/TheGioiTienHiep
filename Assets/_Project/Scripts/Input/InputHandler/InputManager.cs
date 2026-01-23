@@ -23,6 +23,24 @@ public class InputManager : MonoBehaviour
     {
         return inputHandler.UI.Mouse.ReadValue<Vector2>();
     }
+    public Vector2 GetInputScrollWheel()
+    {
+        return inputHandler.UI.Scroll.ReadValue<Vector2>();
+    }
+    public bool IsPointerPressed()
+    {
+        return inputHandler.UI.PointerPress.IsPressed();
+    }
+
+    public Vector2 GetPointerPosition()
+    {
+        return inputHandler.UI.PointerPosition.ReadValue<Vector2>();
+    }
+
+    public Vector2 GetPointerDelta()
+    {
+        return inputHandler.UI.PointerDelta.ReadValue<Vector2>();
+    }
     public void Awake()
     {
         inputHandler = new InputHandler();

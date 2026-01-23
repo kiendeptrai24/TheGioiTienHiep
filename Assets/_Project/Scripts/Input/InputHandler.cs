@@ -236,6 +236,42 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Scroll"",
+                    ""type"": ""Value"",
+                    ""id"": ""00295f87-dfaf-4ec6-bd11-1dd380b2af75"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PointerPress"",
+                    ""type"": ""Button"",
+                    ""id"": ""16658d8b-007b-4e30-8483-05319ed8775c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PointerPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""d2eb5ae6-945c-478f-81d5-1b9bb64a0e88"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PointerDelta"",
+                    ""type"": ""Value"",
+                    ""id"": ""780cf049-729a-484a-945f-dd22a4d8c62f"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -260,6 +296,50 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
                     ""action"": ""Enter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ac5b4bd1-237e-4351-bd53-0cd9fbd29a50"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""553fe169-f4fe-4db4-b199-c359042280d3"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Press,Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerPress"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""189f4087-0107-4af5-a420-a9aed835e659"",
+                    ""path"": ""<Pointer>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1765f24d-93c8-48d7-80ab-780d677c3c67"",
+                    ""path"": ""<Pointer>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerDelta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -273,6 +353,10 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Mouse = m_UI.FindAction("Mouse", throwIfNotFound: true);
         m_UI_Enter = m_UI.FindAction("Enter", throwIfNotFound: true);
+        m_UI_Scroll = m_UI.FindAction("Scroll", throwIfNotFound: true);
+        m_UI_PointerPress = m_UI.FindAction("PointerPress", throwIfNotFound: true);
+        m_UI_PointerPosition = m_UI.FindAction("PointerPosition", throwIfNotFound: true);
+        m_UI_PointerDelta = m_UI.FindAction("PointerDelta", throwIfNotFound: true);
     }
 
     ~@InputHandler()
@@ -452,6 +536,10 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
     private readonly InputAction m_UI_Mouse;
     private readonly InputAction m_UI_Enter;
+    private readonly InputAction m_UI_Scroll;
+    private readonly InputAction m_UI_PointerPress;
+    private readonly InputAction m_UI_PointerPosition;
+    private readonly InputAction m_UI_PointerDelta;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -471,6 +559,22 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/Enter".
         /// </summary>
         public InputAction @Enter => m_Wrapper.m_UI_Enter;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/Scroll".
+        /// </summary>
+        public InputAction @Scroll => m_Wrapper.m_UI_Scroll;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/PointerPress".
+        /// </summary>
+        public InputAction @PointerPress => m_Wrapper.m_UI_PointerPress;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/PointerPosition".
+        /// </summary>
+        public InputAction @PointerPosition => m_Wrapper.m_UI_PointerPosition;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/PointerDelta".
+        /// </summary>
+        public InputAction @PointerDelta => m_Wrapper.m_UI_PointerDelta;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -503,6 +607,18 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
             @Enter.started += instance.OnEnter;
             @Enter.performed += instance.OnEnter;
             @Enter.canceled += instance.OnEnter;
+            @Scroll.started += instance.OnScroll;
+            @Scroll.performed += instance.OnScroll;
+            @Scroll.canceled += instance.OnScroll;
+            @PointerPress.started += instance.OnPointerPress;
+            @PointerPress.performed += instance.OnPointerPress;
+            @PointerPress.canceled += instance.OnPointerPress;
+            @PointerPosition.started += instance.OnPointerPosition;
+            @PointerPosition.performed += instance.OnPointerPosition;
+            @PointerPosition.canceled += instance.OnPointerPosition;
+            @PointerDelta.started += instance.OnPointerDelta;
+            @PointerDelta.performed += instance.OnPointerDelta;
+            @PointerDelta.canceled += instance.OnPointerDelta;
         }
 
         /// <summary>
@@ -520,6 +636,18 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
             @Enter.started -= instance.OnEnter;
             @Enter.performed -= instance.OnEnter;
             @Enter.canceled -= instance.OnEnter;
+            @Scroll.started -= instance.OnScroll;
+            @Scroll.performed -= instance.OnScroll;
+            @Scroll.canceled -= instance.OnScroll;
+            @PointerPress.started -= instance.OnPointerPress;
+            @PointerPress.performed -= instance.OnPointerPress;
+            @PointerPress.canceled -= instance.OnPointerPress;
+            @PointerPosition.started -= instance.OnPointerPosition;
+            @PointerPosition.performed -= instance.OnPointerPosition;
+            @PointerPosition.canceled -= instance.OnPointerPosition;
+            @PointerDelta.started -= instance.OnPointerDelta;
+            @PointerDelta.performed -= instance.OnPointerDelta;
+            @PointerDelta.canceled -= instance.OnPointerDelta;
         }
 
         /// <summary>
@@ -589,5 +717,33 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnEnter(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Scroll" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnScroll(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PointerPress" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPointerPress(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PointerPosition" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPointerPosition(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PointerDelta" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPointerDelta(InputAction.CallbackContext context);
     }
 }
