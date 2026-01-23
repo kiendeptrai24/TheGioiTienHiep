@@ -28,7 +28,6 @@ public class ChatPagePresenter : TGTHMonoBehaviour
     protected override void Awake()
     {
         base.Awake();
-        LoadComponent();
         view.OnSubmitChat += (text) =>
         {
             if (view.chatPrivate)
@@ -137,5 +136,8 @@ public class ChatPagePresenter : TGTHMonoBehaviour
     {
         base.LoadComponent();
         view = GetComponent<ChatPageView>();
+        chatManager = FindAnyObjectByType<ChatManager>();
+        profileManager = FindAnyObjectByType<ProfileManager>();
+        friendPagePresenter = FindAnyObjectByType<FriendPagePresenter>();
     }
 }

@@ -12,6 +12,7 @@ namespace TGTH.Mobile
         protected override void Awake()
         {
             base.Awake();
+            LoadComponent();
             view.OnAddFriend += OnAddFriend;
         }
         protected override void Start()
@@ -47,6 +48,12 @@ namespace TGTH.Mobile
         {
             var nameFriend = name;
             profileManager.RemoveFriend(nameFriend);
+        }
+        protected override void LoadComponent()
+        {
+            base.LoadComponent();
+            view = GetComponent<FriendPageView>();
+            profileManager = FindAnyObjectByType<ProfileManager>();
         }
     }
 }
