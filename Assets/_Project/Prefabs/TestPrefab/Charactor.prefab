@@ -2008,6 +2008,7 @@ GameObject:
   - component: {fileID: 2417333655836378672}
   - component: {fileID: 5961338288685753757}
   - component: {fileID: 3100323945643275413}
+  - component: {fileID: 7901223169405952457}
   m_Layer: 0
   m_Name: Charactor
   m_TagString: Untagged
@@ -2242,6 +2243,27 @@ MonoBehaviour:
   UseRigidBodyForMotion: 0
   AutoUpdateKinematicState: 1
   AutoSetKinematicOnDespawn: 1
+--- !u!114 &7901223169405952457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc16bdcf857dc81478c1a8e12ac5a9f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PathFollowerRB
+  ShowTopMostFoldoutHeaderGroup: 1
+  mapSpawn: {fileID: 0}
+  pathTest: {fileID: 0}
+  actorController: {fileID: 432532413510505737}
+  rb: {fileID: 2417333655836378672}
+  inputManager: {fileID: 0}
+  arriveDistance: 0.15
+  lookAheadSteps: 4
+  cornerSlowDown: 0.8
 --- !u!1 &7825434533555785058
 GameObject:
   m_ObjectHideFlags: 0

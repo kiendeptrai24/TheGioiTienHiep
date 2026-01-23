@@ -8,9 +8,14 @@ using WorldMap.Domain;
 public static class GridAStarPathfinder
 {
     // 4 hướng (ổn định, dễ). Bạn có thể nâng lên 8 hướng sau.
-    private static readonly (int dx, int dz)[] Neigh4 =
+    // private static readonly (int dx, int dz)[] Neigh8 =
+    // {
+    //     (1,0), (-1,0), (0,1), (0,-1)
+    // };
+    private static readonly (int dx, int dz, float cost)[] Neigh8 =
     {
-        (1,0), (-1,0), (0,1), (0,-1)
+        ( 1, 0, 1f), (-1, 0, 1f), (0, 1, 1f), (0,-1, 1f),
+        ( 1, 1, 1.4142f), ( 1,-1, 1.4142f), (-1, 1, 1.4142f), (-1,-1, 1.4142f),
     };
 
     public static bool TryFindPath(
@@ -74,12 +79,27 @@ public static class GridAStarPathfinder
             FromIndex(current, w, out int cx, out int cz);
 
             // Duyệt neighbor
-            for (int i = 0; i < Neigh4.Length; i++)
+            for (int i = 0; i < Neigh8.Length; i++)
             {
-                int nx = cx + Neigh4[i].dx;
-                int nz = cz + Neigh4[i].dz;
+                int nx = cx + Neigh8[i].dx;
+                int nz = cz + Neigh8[i].dz;
 
                 if (!InBounds(nx, nz, w, h)) continue;
+
+                int dx = Neigh8[i].dx;
+                int dz = Neigh8[i].dz;
+
+                // nếu đi chéo thì bắt buộc 2 ô cạnh phải walkable để không "cắt góc xuyên tường"
+                if (dx != 0 && dz != 0)
+                {
+                    // 2 ô cạnh cũng phải nằm trong bounds (thường sẽ đúng nếu nx/nz đã inbounds,
+                    // nhưng vẫn an toàn)
+                    if (!InBounds(cx + dx, cz, w, h)) continue;
+                    if (!InBounds(cx, cz + dz, w, h)) continue;
+
+                    if (map.Get(cx + dx, cz).walkable == 0) continue;
+                    if (map.Get(cx, cz + dz).walkable == 0) continue;
+                }
 
                 var cell = map.Get(nx, nz);
                 if (cell.walkable == 0) continue;
@@ -87,9 +107,8 @@ public static class GridAStarPathfinder
                 int nIdx = ToIndex(nx, nz, w);
                 if (closed[nIdx]) continue;
 
-                // cost cơ bản = 1 * cell.cost (cost nên >= 1)
                 float stepCost = Mathf.Max(1, cell.cost);
-                float tentativeG = gScore[current] + stepCost;
+                float tentativeG = gScore[current] + stepCost * Neigh8[i].cost;
 
                 if (tentativeG < gScore[nIdx])
                 {
@@ -119,8 +138,14 @@ public static class GridAStarPathfinder
         outPath.Reverse();
     }
 
-    private static float Heuristic(int ax, int az, int bx, int bz)
-        => Mathf.Abs(ax - bx) + Mathf.Abs(az - bz); // Manhattan
+    private static float Heuristic(int ax, int az, int bx, int bz)// => Mathf.Abs(ax - bx) + Mathf.Abs(az - bz);
+    {
+        int dx = Mathf.Abs(ax - bx);
+        int dz = Mathf.Abs(az - bz);
+        int min = Mathf.Min(dx, dz);
+        int max = Mathf.Max(dx, dz);
+        return 1.4142f * min + (max - min); // Octile for 8-direction
+    }
 
     private static bool InBounds(int x, int z, int w, int h)
         => x >= 0 && z >= 0 && x < w && z < h;
@@ -136,15 +161,15 @@ public static class GridAStarPathfinder
     // ===== Min-Heap đơn giản =====
     private sealed class MinHeap
     {
-        private struct Node 
-        { 
+        private struct Node
+        {
             public int idx;
             public float pri;
             public Node(int i, float p)
-            { 
-                idx=i;
-                pri=p;
-            } 
+            {
+                idx = i;
+                pri = p;
+            }
         }
         private readonly List<Node> a = new List<Node>(256);
         public int Count => a.Count;

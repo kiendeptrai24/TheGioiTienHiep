@@ -6,14 +6,10 @@ namespace WorldMap.Travel
     public sealed class TeleportService
     {
         // One responsibility: move player to a destination spawn point
-        public bool TryTeleport(Transform player, Destination destination)
+        public bool TryTeleport(Transform player, Vector3 destination, Quaternion rotation)
         {
-            if (player == null || destination == null) return false;
-            if (!destination.unlocked) return false;
-            if (destination.spawnPoint == null) return false;
-
-            player.position = destination.spawnPoint.position;
-            player.rotation = destination.spawnPoint.rotation;
+            player.position = destination;
+            player.rotation = rotation;
             return true;
         }
     }

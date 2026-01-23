@@ -1,30 +1,44 @@
-// Assets/_Game/WorldMap/Runtime/UI/MapSearchController.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using WorldMap.Travel;
 
 namespace WorldMap.UI
 {
-    public class MapSearchController : MonoBehaviour
+    public class MapSearchController : TGTHNetworkBehaviour
     {
-        [SerializeField] private DestinationDatabase database;
-        [SerializeField] private Transform player;
+        public ActorController actorController;
+        [SerializeField] private string searchText;
+        [SerializeField] private List<Destination> destititions;
+        private TeleportService teleport = new TeleportService();
+        protected override void Awake()
+        {
 
-        private readonly TeleportService teleport = new TeleportService();
-
-        // One responsibility: glue UI calls to services (no path logic here)
+        }
         public void TeleportById(string destinationId)
         {
-            var d = database.FindById(destinationId);
-            teleport.TryTeleport(player, d);
+
+        }
+        [ContextMenu("Teleport")]
+        public void Teleport()
+        {
+            Debug.Log("teleport IsOwner");
+            if (actorController == null) return;
+
+            var des = destititions.FirstOrDefault(d => d.id == searchText);
+            if (des == null) return;
+
+            actorController.RequestTeleportServerRpc(
+                des.spawnPoint.position,
+                des.spawnPoint.rotation
+            );
         }
 
-        // UI can call this to get results and render list (you implement UI list)
-        public System.Collections.Generic.List<Destination> Search(string text)
+
+        public List<Destination> Search(string text)
         {
-            var list = new System.Collections.Generic.List<Destination>();
-            foreach (var d in database.Search(text))
-                list.Add(d);
-            return list;
+            return null;
         }
     }
 }
