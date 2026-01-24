@@ -21,6 +21,8 @@ public class ItemMapWorld : TGTHMonoBehaviour
     public ItemData GetItemData()
     {
         destination.itemData = itemDataPreset.GetItemData();
+        var itemResources = destination.itemData as ItemResourseData;
+        itemResources.position = transform.position;
         return destination.itemData;
     }
     protected override void LoadComponent()

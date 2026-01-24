@@ -22,6 +22,7 @@ namespace TGTH.Mobile
         public List<UIItemResourse> uIItemNearBy;
         [SerializeField] private UIItemResourse uIItemPrefab;
         public event Action<int> OnRealmSliderChanged;
+        public event Action OnOkClicked;
         public event Action OnAddClicked;
         public event Action OnMinusClicked;
         public event Action<UIItemResourse> OnCreateNewItem;
@@ -37,7 +38,7 @@ namespace TGTH.Mobile
                 realmTxt.text = EnumTranslator.ToVietnamese(realm);
 
             });
-
+            okBtn.onClick.AddListener(() => OnOkClicked?.Invoke());
             minusValueBtn.onClick.AddListener(() => OnMinusClicked?.Invoke());
             addValueBtn.onClick.AddListener(() => OnAddClicked?.Invoke());
         }

@@ -8,19 +8,33 @@ namespace TGTH.Mobile
     public class MapSearchDetailPagePresenter : TGTHMonoBehaviour
     {
         [SerializeField] private MapSearchDetailPageView view;
+        [SerializeField] private MapSearchResultPagePresenter presenter;
         [SerializeField] private ResourceManager resource;
         public UIItemResourse curItem;
         private ResourceType resourceType = ResourceType.SpiritStone;
         private CultivationStage cultivationStage;
-
+        [SerializeField] private PathTest pathTest;
+        public NavigationFindMapResult navigationFindMapResult;
         protected override void Awake()
         {
             base.Awake();
+            view.OnOkClicked += OnOkClicked;
             view.OnRealmSliderChanged += OnRealmSliderChanged;
             view.OnAddClicked += OnAddClicked;
             view.OnMinusClicked += OnMinusClicked;
             view.OnCreateNewItem += OnAddEventItem;
             Init();
+        }
+
+        private void OnOkClicked()
+        {
+            var itemResources = curItem.itemData as ItemResourseData;
+            var result = pathTest.FindPathWithPossition(itemResources.position);
+            if (result.ok)
+            {
+                navigationFindMapResult.OnClick();
+                presenter.ShowData(result);
+            }
         }
 
         private void OnAddEventItem(UIItemResourse item)

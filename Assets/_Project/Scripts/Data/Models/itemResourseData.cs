@@ -5,4 +5,5 @@ using UnityEngine;
 public class ItemResourseData : ItemData
 {
     public ResourceType resourceType;
+    public Vector3 position;
 }

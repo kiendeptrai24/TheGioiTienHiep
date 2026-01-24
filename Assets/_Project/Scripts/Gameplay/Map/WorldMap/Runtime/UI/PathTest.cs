@@ -7,7 +7,14 @@ public class PathTest : TGTHMonoBehaviour
     public PathFollowerRB follower;
     public MapSpawn mapSpawn;
     public Transform B;
-
+    public class FindPathResult
+    {
+        public List<GridCoord> path;
+        public GridCoord start;
+        public GridCoord goal;
+        public bool ok;
+        public int distance;
+    }
     private readonly List<GridCoord> path = new List<GridCoord>(512);
 
     [ContextMenu("Find Path A->B")]
@@ -46,6 +53,46 @@ public class PathTest : TGTHMonoBehaviour
                 Vector3 p2 = mapSpawn.GridToWorld(path[i + 1]);
                 Debug.DrawLine(p1 + Vector3.up * 0.2f, p2 + Vector3.up * 0.2f, Color.green, 100f);
             }
+        }
+    }
+    public FindPathResult FindPathWithPossition(Vector3 pos)
+    {
+        var start = mapSpawn.WorldToGrid(follower.transform.position);
+        var goal = mapSpawn.WorldToGrid(pos);
+
+        if (start.x < 0 || start.z < 0 || start.x > 1000 || start.z > 1000)
+        {
+            Debug.Log("Invalid start");
+            return null;
+        }
+        if (goal.x < 0 || goal.z < 0 || goal.x > 1000 || goal.z > 1000)
+        {
+            Debug.Log("Invalid goal");
+            return null;
+        }
+        bool ok = GridAStarPathfinder.TryFindPath(mapSpawn.mapDataPreset, start, goal, path);
+        FindPathResult result = new FindPathResult();
+        result.ok = ok;
+        result.path = path;
+        result.start = start;
+        result.goal = goal;
+        result.distance = path.Count;
+        return result;
+
+    }
+    public void StartFollowPath()
+    {
+        if (follower != null)
+        {
+            follower.mapSpawn = mapSpawn;
+            SimplifyInPlace(path);
+            follower.SetPath(path);
+        }
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+            Vector3 p1 = mapSpawn.GridToWorld(path[i]);
+            Vector3 p2 = mapSpawn.GridToWorld(path[i + 1]);
+            Debug.DrawLine(p1 + Vector3.up * 0.2f, p2 + Vector3.up * 0.2f, Color.green, 100f);
         }
     }
     public static void SimplifyInPlace(List<GridCoord> path)
