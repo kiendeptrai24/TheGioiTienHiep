@@ -4,7 +4,8 @@ using WorldMap.Travel;
 
 public class ItemMapWorld : TGTHMonoBehaviour
 {
-    [SerializeField] private Destination destination;
+    [SerializeField] private ItemResourcePreset itemDataPreset;
+    public Destination destination;
     public event Action<Destination> OnItemInteract;
     protected override void Awake()
     {
@@ -17,10 +18,13 @@ public class ItemMapWorld : TGTHMonoBehaviour
     }
     public void ItemInteract() => OnItemInteract?.Invoke(destination);
 
+    public ItemData GetItemData()
+    {
+        destination.itemData = itemDataPreset.GetItemData();
+        return destination.itemData;
+    }
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        destination.spawnPoint = transform;
-
     }
 }

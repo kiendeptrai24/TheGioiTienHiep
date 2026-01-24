@@ -14,7 +14,6 @@ public class ItemData
     public int currentstack;
     public CultivationStage cultivationStage;
     public QualityType qualityType;
-
     
     //Offensive Stats
     public float physicalDamage;

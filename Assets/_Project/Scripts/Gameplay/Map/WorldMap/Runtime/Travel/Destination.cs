@@ -3,19 +3,10 @@ using UnityEngine;
 
 namespace WorldMap.Travel
 {
-    public enum ResourceType
-    {
-        SpiritStone,
-        Ore,
-        Wood,
-        Herb
-    }
-
 
     [System.Serializable]
     public class Destination
     {
-        
         public string id;
         public string displayName;
         public ResourceType type;
