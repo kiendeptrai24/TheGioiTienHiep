@@ -1,7 +1,17 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class MinimapWorldIcon : MonoBehaviour
+public class MinimapWorldIcon : TGTHMonoBehaviour
 {
-    public void ShowInfo() => Debug.Log(gameObject.name);
+    private ItemMapWorld item;
+    protected override void Awake()
+    {
+        base.Awake();
+        LoadComponent();
+    }
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        item = GetComponentInParent<ItemMapWorld>();
+    }
+    public void OnItemInteract() => item.ItemInteract();
 }
