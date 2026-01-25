@@ -12,6 +12,8 @@ namespace TGTH.Mobile
         [SerializeField] private Slider realmSlider;
         [SerializeField] private TextMeshProUGUI realmTxt;
         [SerializeField] private Transform resourceContent;
+        [SerializeField] private TMP_InputField xPosTxt;
+        [SerializeField] private TMP_InputField yPosTxt;
         [SerializeField] private Button okBtn;
         [SerializeField] private Button cancelBtn;
         [SerializeField] private Button addValueBtn;
@@ -26,6 +28,8 @@ namespace TGTH.Mobile
         public event Action OnAddClicked;
         public event Action OnMinusClicked;
         public event Action<UIItemResourse> OnCreateNewItem;
+        public event Action<int> OnYPosChanged;
+        public event Action<int> OnXPosChanged;
 
         protected override void Awake()
         {
@@ -41,6 +45,32 @@ namespace TGTH.Mobile
             okBtn.onClick.AddListener(() => OnOkClicked?.Invoke());
             minusValueBtn.onClick.AddListener(() => OnMinusClicked?.Invoke());
             addValueBtn.onClick.AddListener(() => OnAddClicked?.Invoke());
+            xPosTxt.onValueChanged.AddListener((value) =>
+            {
+                try
+                {
+                    int result = int.Parse(xPosTxt.text);
+                    OnXPosChanged?.Invoke(result);
+                }
+                catch (System.Exception)
+                {
+
+                }
+
+            });
+            yPosTxt.onValueChanged.AddListener((value) =>
+            {
+                try
+                {
+                    int result = int.Parse(xPosTxt.text);
+                    OnYPosChanged?.Invoke(result);
+                }
+                catch (System.Exception)
+                {
+
+                }
+
+            });
         }
 
         public void Init()

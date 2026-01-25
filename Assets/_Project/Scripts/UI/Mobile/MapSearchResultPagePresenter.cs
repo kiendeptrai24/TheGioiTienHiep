@@ -28,9 +28,9 @@ namespace TGTH.Mobile
         {
 
         }
-        public void ShowData(FindPathResult result)
+        public void ShowData(FindPathResult result, ItemData itemData)
         {
-            view.ShowData(result, null);
+            view.ShowData(result, itemData);
         }
         protected override void Start()
         {

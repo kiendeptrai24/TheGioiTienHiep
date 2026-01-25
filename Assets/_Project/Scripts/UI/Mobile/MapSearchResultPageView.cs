@@ -32,10 +32,10 @@ namespace TGTH.Mobile
         {
             base.LoadComponent();
         }
-        public void ShowData(FindPathResult result, Sprite icon)
+        public void ShowData(FindPathResult result, ItemData itemData)
         {
             if (result == null) return;
-            modelIcon.sprite = icon;
+            modelIcon.sprite = itemData.itemIcon;
             posResultTxt.text = result.goal.x.ToString() + ":" + result.goal.z.ToString();
             distanceResultTxt.text = result.distance.ToString() + " ô";
 

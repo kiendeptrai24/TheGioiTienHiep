@@ -10,11 +10,13 @@ namespace TGTH.Mobile
         [SerializeField] private MapSearchDetailPageView view;
         [SerializeField] private MapSearchResultPagePresenter presenter;
         [SerializeField] private ResourceManager resource;
-        public UIItemResourse curItem;
         private ResourceType resourceType = ResourceType.SpiritStone;
         private CultivationStage cultivationStage;
         [SerializeField] private PathTest pathTest;
         public NavigationFindMapResult navigationFindMapResult;
+        public UIItemResourse curItem;
+        private int xPos = 0;
+        private int yPos = 0;
         protected override void Awake()
         {
             base.Awake();
@@ -23,18 +25,59 @@ namespace TGTH.Mobile
             view.OnAddClicked += OnAddClicked;
             view.OnMinusClicked += OnMinusClicked;
             view.OnCreateNewItem += OnAddEventItem;
+            view.OnXPosChanged += OnXPosChanged;
+            view.OnYPosChanged += OnYPosChanged;
+
             Init();
+        }
+        private void OnDisable()
+        {
+            curItem = null;
+        }
+        private void OnYPosChanged(int value)
+        {
+            yPos = value;
+        }
+
+        private void OnXPosChanged(int value)
+        {
+            xPos = value;
         }
 
         private void OnOkClicked()
         {
-            var itemResources = curItem.itemData as ItemResourseData;
-            var result = pathTest.FindPathWithPossition(itemResources.position);
-            if (result.ok)
+
+            if (curItem != null && curItem.itemData != null)
             {
-                navigationFindMapResult.OnClick();
-                presenter.ShowData(result);
+                var itemResources = curItem.itemData as ItemResourseData;
+                var result = pathTest.FindPathWithPossition(itemResources.position);
+
+                if (result.ok)
+                {
+                    navigationFindMapResult.SetScreenName("SearchMapResult");
+                    presenter.ShowData(result, curItem.itemData);
+                    navigationFindMapResult.OnClick();
+                }
+                return;
             }
+            else
+            {
+                Vector3 pos = new Vector3(xPos, 0, yPos);
+
+                var result = pathTest.FindPathWithPossition(pos);
+                if (result.ok)
+                {
+                    navigationFindMapResult.SetScreenName("MapDetail");
+                    pathTest.StartFollowPath();
+                    navigationFindMapResult.OnClick();
+                }
+                else
+                {
+                    Debug.Log("Không tìm thấy đường");
+                }
+
+            }
+
         }
 
         private void OnAddEventItem(UIItemResourse item)

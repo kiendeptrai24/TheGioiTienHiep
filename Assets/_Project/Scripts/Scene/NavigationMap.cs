@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NavigationFindMapResult : ActionNavigation
+public class NavigationMap : ActionNavigation
 {
     protected override void Awake()
     {
@@ -10,9 +10,5 @@ public class NavigationFindMapResult : ActionNavigation
     public override void OnClick()
     {
         m_ScreenManager.NavigateTo(m_ScreenName);
-    }
-    public void SetScreenName(string name)
-    {
-        m_ScreenName = name;
     }
 }
