@@ -4,12 +4,23 @@ public class MinimapIconClickRaycaster : TGTHMonoBehaviour
 {
     [Header("Refs")]
     [SerializeField] private Camera minimapCamera;
+    [SerializeField] private Transform target;
     [SerializeField] private RectTransform minimapRect;
     [SerializeField] private Canvas rootCanvas;
     [SerializeField] private LayerMask iconLayer; // icon phải có Collider + layer này
     [SerializeField] private InputManager input;
 
+    [Header("Move")]
+    [Tooltip("Tốc độ di chuyển (world units / giây).")]
+    [SerializeField] private float moveSpeed = 10f;
+
+    [Tooltip("Khoảng cách tới đích thì dừng.")]
+    [SerializeField] private float stopDistance = 0.05f;
+
     private bool _enabled;
+
+    private bool _moving;
+    private Vector3 _destination;
 
     protected override void Awake()
     {
@@ -17,19 +28,54 @@ public class MinimapIconClickRaycaster : TGTHMonoBehaviour
         LoadComponent();
 
         // Subscribe input once
-        input.inputHandler.UI.PointerPress.performed += _ =>
+        if (input != null && input.inputHandler != null)
         {
-            if (!_enabled) return;
-            TryClickIcon();
-        };
+            input.inputHandler.UI.PointerPress.performed += _ =>
+            {
+                if (!_enabled) return;
+                TryClickIcon();
+            };
+        }
     }
 
-    private void OnEnable()  => _enabled = true;
-    private void OnDisable() => _enabled = false;
+    private void OnEnable() => _enabled = true;
+
+    private void OnDisable()
+    {
+        _enabled = false;
+        _moving = false; // ✅ không giữ lại trạng thái
+    }
+
+    private void Update()
+    {
+        if (!_enabled || !_moving || target == null) return;
+
+        Vector3 current = target.position;
+        Vector3 dest = _destination;
+
+        // chỉ di chuyển theo XZ, giữ nguyên Y
+        dest.y = current.y;
+
+        Vector3 delta = dest - current;
+        delta.y = 0f;
+
+        if (delta.sqrMagnitude <= stopDistance * stopDistance)
+        {
+            target.position = new Vector3(dest.x, current.y, dest.z);
+            _moving = false; // ✅ tới nơi là dừng, không giữ lại
+            return;
+        }
+
+        target.position = Vector3.MoveTowards(
+            current,
+            new Vector3(dest.x, current.y, dest.z),
+            moveSpeed * Time.deltaTime
+        );
+    }
 
     public void TryClickIcon()
     {
-        if (minimapCamera == null || minimapRect == null || input == null) return;
+        if (minimapCamera == null || minimapRect == null || input == null || target == null) return;
 
         Vector2 screenPos = input.GetPointerPosition();
 
@@ -49,7 +95,6 @@ public class MinimapIconClickRaycaster : TGTHMonoBehaviour
         Rect r = minimapRect.rect;
         float u = (local.x - r.xMin) / r.width;
         float v = (local.y - r.yMin) / r.height;
-
         if (u < 0f || u > 1f || v < 0f || v > 1f) return;
 
         // viewport -> raycast world
@@ -58,7 +103,13 @@ public class MinimapIconClickRaycaster : TGTHMonoBehaviour
         {
             var icon = hit.collider.GetComponentInParent<MinimapWorldIcon>();
             if (icon != null)
+            {
                 icon.OnItemInteract();
+
+                // ✅ set điểm đến 1 lần, không theo dõi nữa
+                _destination = icon.transform.position;
+                _moving = true;
+            }
         }
     }
 

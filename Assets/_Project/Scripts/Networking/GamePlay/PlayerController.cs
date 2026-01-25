@@ -15,7 +15,12 @@ public class PlayerController : TGTHNetworkBehaviour
         m_playerSM = new PlayerStateMachine(this);
         m_playerSM.Init<IdleState_Player>();
     }
-
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        if (!IsOwner) return;
+        SetMinimapCamrea();
+    }
     override protected void Start()
     {
         base.Start();
@@ -27,7 +32,10 @@ public class PlayerController : TGTHNetworkBehaviour
         if (!IsOwner) return;
         m_playerSM.Update();
     }
-
+    public void SetMinimapCamrea()
+    {
+        FindAnyObjectByType<MinimapController>().SetFollowPlayer(transform);
+    }
     override protected void LoadComponent()
     {
         base.LoadComponent();

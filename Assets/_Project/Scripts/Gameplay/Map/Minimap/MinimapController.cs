@@ -2,8 +2,12 @@ using UnityEngine;
 
 public class MinimapController : TGTHMonoBehaviour
 {
+    [SerializeField] private bool canInteract = true;
     [Header("Refs")]
     [SerializeField] private Camera minimapCamera;
+    [SerializeField] private BoxCollider targetCollider; // ✅ vùng giới hạn (World bounds)
+    [SerializeField] private Transform target;
+    [SerializeField] private Transform followPlayer;
     [SerializeField] private InputManager input;
     [SerializeField] private RectTransform minimapRect;
     [SerializeField] private Canvas rootCanvas;
@@ -16,8 +20,13 @@ public class MinimapController : TGTHMonoBehaviour
     [Header("Pan")]
     [SerializeField] private float panSpeed = 1f;
 
+    [Header("Clamp")]
+    [Tooltip("Nếu true: clamp theo collider bounds nhưng trừ half-size của target để không lọt ra ngoài.")]
+    [SerializeField] private bool considerTargetSize = true;
+
     private bool _prevPressed;
-    private bool _panCaptured; // ✅ chỉ pan khi captured
+    private bool _panCaptured;
+    [SerializeField] private bool isFollowPlayer = false;
 
     protected override void Awake()
     {
@@ -25,37 +34,41 @@ public class MinimapController : TGTHMonoBehaviour
         LoadComponent();
     }
 
+    protected override void Start()
+    {
+        base.Start();
+    }
+    public void SetFollowPlayer(Transform player)
+    {
+        this.followPlayer = player;
+    }
     private void Update()
     {
-        if (minimapCamera == null || input == null || minimapRect == null) return;
+
+        if (isFollowPlayer && followPlayer != null)
+        {
+            target.position = ClampToBoxCollider(followPlayer.position);
+        }
+        if (!canInteract) return;
+
+        if (minimapCamera == null || input == null || minimapRect == null || target == null) return;
 
         bool pressed = input.IsPointerPressed();
         bool over = IsPointerOverMinimap();
 
-        // Detect press down (edge)
         if (pressed && !_prevPressed)
         {
-            // ✅ chỉ capture nếu bắt đầu click trong minimap
-            _panCaptured = over;
+            _panCaptured = over; // chỉ capture nếu click bắt đầu trong minimap
         }
 
-        // Nếu đang giữ mà ra ngoài -> huỷ capture ngay
-        // if (pressed && _panCaptured && !over)
-        // {
-        //     _panCaptured = false;
-        // }
-
-        // Khi nhả -> reset
         if (!pressed && _prevPressed)
         {
             _panCaptured = false;
         }
 
-        // Zoom: chỉ khi con trỏ đang ở trong minimap
         if (over)
             HandleZoom();
 
-        // Pan: chỉ khi đang pressed + đã captured
         if (pressed && _panCaptured)
             HandlePan();
 
@@ -97,7 +110,45 @@ public class MinimapController : TGTHMonoBehaviour
             -delta.y * worldPerPixelY
         ) * panSpeed;
 
-        minimapCamera.transform.position += move;
+        Vector3 desired = target.position + move;
+
+        // ✅ Clamp target trong BoxCollider
+
+        desired = ClampToBoxCollider(desired);
+
+        target.position = desired;
+    }
+
+    private Vector3 ClampToBoxCollider(Vector3 pos)
+    {
+        if (targetCollider == null) return pos;
+
+        Bounds b = targetCollider.bounds; // world bounds
+        Vector3 min = b.min;
+        Vector3 max = b.max;
+
+        // Nếu muốn đảm bảo "target không bị lọt ra ngoài" (tính theo kích thước target)
+        if (considerTargetSize)
+        {
+            // Lấy bounds của target nếu có collider/renderer (ưu tiên collider)
+            if (target.TryGetComponent<Collider>(out var col))
+            {
+                Vector3 ext = col.bounds.extents;
+                min.x += ext.x; max.x -= ext.x;
+                min.z += ext.z; max.z -= ext.z;
+            }
+            else if (target.TryGetComponent<Renderer>(out var rd))
+            {
+                Vector3 ext = rd.bounds.extents;
+                min.x += ext.x; max.x -= ext.x;
+                min.z += ext.z; max.z -= ext.z;
+            }
+        }
+
+        pos.x = Mathf.Clamp(pos.x, min.x, max.x);
+        pos.z = Mathf.Clamp(pos.z, min.z, max.z);
+        // giữ Y như cũ (hoặc bạn muốn cố định thì chỉnh ở đây)
+        return pos;
     }
 
     protected override void LoadComponent()
@@ -106,5 +157,8 @@ public class MinimapController : TGTHMonoBehaviour
         if (input == null) input = FindAnyObjectByType<InputManager>();
         if (minimapRect == null) minimapRect = GetComponent<RectTransform>();
         if (rootCanvas == null && minimapRect != null) rootCanvas = minimapRect.GetComponentInParent<Canvas>();
+
+        // nếu bạn quên gán targetCollider, có thể tự tìm theo tag/name tuỳ bạn
+        // if (targetCollider == null) targetCollider = FindAnyObjectByType<BoxCollider>();
     }
 }
