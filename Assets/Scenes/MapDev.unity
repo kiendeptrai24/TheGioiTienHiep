@@ -932,7 +932,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinimapController
   canInteract: 1
-  minimapCamera: {fileID: 163700422}
+  minimapManager: {fileID: 0}
   targetCollider: {fileID: 0}
   target: {fileID: 0}
   followPlayer: {fileID: 0}
@@ -2193,9 +2193,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b76699b5bd60b474d96c004efe7f44b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinimapManger
+  minimapCamera: {fileID: 163700422}
+  cinemachineCamera: {fileID: 1054448435}
   player: {fileID: 0}
-  controllers:
-  - {fileID: 616122544}
+  controllers: []
 --- !u!1 &556497055
 GameObject:
   m_ObjectHideFlags: 0
@@ -2689,7 +2690,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinimapController
   canInteract: 0
-  minimapCamera: {fileID: 163700422}
+  minimapManager: {fileID: 0}
   targetCollider: {fileID: 1740338828}
   target: {fileID: 473682565}
   followPlayer: {fileID: 0}
@@ -4713,7 +4714,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinimapController
   canInteract: 1
-  minimapCamera: {fileID: 163700422}
+  minimapManager: {fileID: 0}
   targetCollider: {fileID: 1740338828}
   target: {fileID: 473682565}
   followPlayer: {fileID: 0}
@@ -4722,7 +4723,7 @@ MonoBehaviour:
   rootCanvas: {fileID: 7445379370004631891}
   zoomSpeed: 10
   minZoom: 5
-  maxZoom: 50
+  maxZoom: 60
   panSpeed: 5
   considerTargetSize: 1
   isFollowPlayer: 0
@@ -114645,10 +114646,10 @@ RectTransform:
   - {fileID: 953256689}
   m_Father: {fileID: 4446163820578460382}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -1806.6666}
-  m_SizeDelta: {x: 1860, y: 3153.3333}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &2751698127139676733
 RectTransform:
@@ -151697,10 +151698,10 @@ RectTransform:
   - {fileID: 7257607346554377473}
   m_Father: {fileID: 8311993050231719802}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 830, y: -100}
-  m_SizeDelta: {x: 1660, y: 200}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3700590215436750427
 MonoBehaviour:
@@ -172944,7 +172945,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!222 &4230722614646559676
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -242670,10 +242671,10 @@ RectTransform:
   - {fileID: 8483017801059822322}
   m_Father: {fileID: 8311993050231719802}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1760, y: -100}
-  m_SizeDelta: {x: 200, y: 200}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6111584989527857429
 MonoBehaviour:
@@ -327425,10 +327426,10 @@ RectTransform:
   - {fileID: 6111560297151791232}
   m_Father: {fileID: 4446163820578460382}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -30}
-  m_SizeDelta: {x: 1860, y: 200}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &8312276419498385902
 MonoBehaviour:

@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class MinimapManger : TGTHMonoBehaviour
 {
+    public Camera minimapCamera;
+    public CinemachineCamera cinemachineCamera;
     [SerializeField] private Transform player;
     [SerializeField] private List<MinimapController> controllers;
     protected override void Awake()
@@ -27,6 +30,7 @@ public class MinimapManger : TGTHMonoBehaviour
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        if (player == null) player = FindAnyObjectByType<Transform>();
+        if (minimapCamera == null) minimapCamera = GetComponentInChildren<Camera>();
+        if (cinemachineCamera == null) cinemachineCamera = GetComponentInChildren<CinemachineCamera>();
     }
 }

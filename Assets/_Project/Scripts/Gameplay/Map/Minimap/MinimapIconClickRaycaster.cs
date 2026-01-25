@@ -26,8 +26,10 @@ public class MinimapIconClickRaycaster : TGTHMonoBehaviour
     {
         base.Awake();
         LoadComponent();
-
-        // Subscribe input once
+    }
+    protected override void Start()
+    {
+        base.Start();
         if (input != null && input.inputHandler != null)
         {
             input.inputHandler.UI.PointerPress.performed += _ =>
@@ -36,8 +38,8 @@ public class MinimapIconClickRaycaster : TGTHMonoBehaviour
                 TryClickIcon();
             };
         }
-    }
 
+    }
     private void OnEnable() => _enabled = true;
 
     private void OnDisable()
@@ -105,7 +107,6 @@ public class MinimapIconClickRaycaster : TGTHMonoBehaviour
             if (icon != null)
             {
                 icon.OnItemInteract();
-
                 // ✅ set điểm đến 1 lần, không theo dõi nữa
                 _destination = icon.transform.position;
                 _moving = true;

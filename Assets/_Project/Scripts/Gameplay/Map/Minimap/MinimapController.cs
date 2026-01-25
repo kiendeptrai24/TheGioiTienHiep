@@ -4,7 +4,7 @@ public class MinimapController : TGTHMonoBehaviour
 {
     [SerializeField] private bool canInteract = true;
     [Header("Refs")]
-    [SerializeField] private Camera minimapCamera;
+    [SerializeField] private MinimapManger minimapManager;
     [SerializeField] private BoxCollider targetCollider; // ✅ vùng giới hạn (World bounds)
     [SerializeField] private Transform target;
     [SerializeField] private Transform followPlayer;
@@ -51,7 +51,8 @@ public class MinimapController : TGTHMonoBehaviour
         }
         if (!canInteract) return;
 
-        if (minimapCamera == null || input == null || minimapRect == null || target == null) return;
+        if (minimapManager == null || minimapManager.minimapCamera == null || minimapManager.cinemachineCamera == null
+        || input == null || minimapRect == null || target == null) return;
 
         bool pressed = input.IsPointerPressed();
         bool over = IsPointerOverMinimap();
@@ -91,8 +92,11 @@ public class MinimapController : TGTHMonoBehaviour
         float scrollY = input.GetInputScrollWheel().y;
         if (Mathf.Abs(scrollY) > 0.001f)
         {
-            float newSize = minimapCamera.orthographicSize - scrollY * zoomSpeed;
-            minimapCamera.orthographicSize = Mathf.Clamp(newSize, minZoom, maxZoom);
+            var vcam = minimapManager.cinemachineCamera; // CinemachineVirtualCamera
+            float curSize = vcam.Lens.OrthographicSize;
+
+            float newSize = curSize - scrollY * zoomSpeed;
+            vcam.Lens.OrthographicSize = Mathf.Clamp(newSize, minZoom, maxZoom);
         }
     }
 
@@ -101,8 +105,8 @@ public class MinimapController : TGTHMonoBehaviour
         Vector2 delta = input.GetPointerDelta();
         if (delta.sqrMagnitude < 0.01f) return;
 
-        float worldPerPixelY = (2f * minimapCamera.orthographicSize) / Screen.height;
-        float worldPerPixelX = (2f * minimapCamera.orthographicSize * minimapCamera.aspect) / Screen.width;
+        float worldPerPixelY = (2f * minimapManager.minimapCamera.orthographicSize) / Screen.height;
+        float worldPerPixelX = (2f * minimapManager.minimapCamera.orthographicSize * minimapManager.minimapCamera.aspect) / Screen.width;
 
         Vector3 move = new Vector3(
             -delta.x * worldPerPixelX,
@@ -157,6 +161,7 @@ public class MinimapController : TGTHMonoBehaviour
         if (input == null) input = FindAnyObjectByType<InputManager>();
         if (minimapRect == null) minimapRect = GetComponent<RectTransform>();
         if (rootCanvas == null && minimapRect != null) rootCanvas = minimapRect.GetComponentInParent<Canvas>();
+        if (minimapManager == null) minimapManager = FindAnyObjectByType<MinimapManger>();
 
         // nếu bạn quên gán targetCollider, có thể tự tìm theo tag/name tuỳ bạn
         // if (targetCollider == null) targetCollider = FindAnyObjectByType<BoxCollider>();
