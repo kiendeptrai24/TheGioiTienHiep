@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static PathTest;
 
 namespace TGTH.Mobile
 {
@@ -15,6 +16,7 @@ namespace TGTH.Mobile
         [SerializeField] private PathTest pathTest;
         public NavigationFindMapResult navigationFindMapResult;
         public UIItemResourse curItem;
+        private List<FindPathResult> findPathResults = new List<FindPathResult>();
         private int xPos = 0;
         private int yPos = 0;
         protected override void Awake()
@@ -50,12 +52,29 @@ namespace TGTH.Mobile
             if (curItem != null && curItem.itemData != null)
             {
                 var itemResources = curItem.itemData as ItemResourseData;
+                var resource = pathTest.mapSpawn.WorldToGrid(itemResources.position);
+                foreach (var item in findPathResults)
+                {
+                    if (item.goal.x == resource.x && item.goal.z == resource.z)
+                    {
+                        int index = findPathResults.IndexOf(item);
+                        presenter.ShowData(findPathResults, index);
+
+                        navigationFindMapResult.SetScreenName("SearchMapResult");
+                        navigationFindMapResult.OnClick();
+                        return;
+                    }
+                }
                 var result = pathTest.FindPathWithPossition(itemResources.position);
 
                 if (result.ok)
                 {
+                    result.itemData = itemResources;
+                    findPathResults.Add(result);
+                    int index = findPathResults.IndexOf(result);
+                    presenter.ShowData(findPathResults, index);
+
                     navigationFindMapResult.SetScreenName("SearchMapResult");
-                    presenter.ShowData(result, curItem.itemData);
                     navigationFindMapResult.OnClick();
                 }
                 return;

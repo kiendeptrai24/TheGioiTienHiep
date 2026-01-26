@@ -9,6 +9,7 @@ public class PathTest : TGTHMonoBehaviour
     public Transform B;
     public class FindPathResult
     {
+        public ItemData itemData;
         public List<GridCoord> path;
         public GridCoord start;
         public GridCoord goal;

@@ -35,6 +35,7 @@ public class PlayerController : TGTHNetworkBehaviour
     public void SetMinimapCamrea()
     {
         FindAnyObjectByType<MinimapController>().SetFollowPlayer(transform);
+        FindAnyObjectByType<MapSpawn>().SetFollowPlayer(transform);
     }
     override protected void LoadComponent()
     {

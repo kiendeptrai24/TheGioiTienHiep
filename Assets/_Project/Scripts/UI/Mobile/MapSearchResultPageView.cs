@@ -9,19 +9,25 @@ namespace TGTH.Mobile
     public class MapSearchResultPageView : TGTHMonoBehaviour
     {
         [SerializeField] private Image modelIcon;
+        [SerializeField] private TextMeshProUGUI modelNameTxt;
         [SerializeField] private TextMeshProUGUI posResultTxt;
         [SerializeField] private TextMeshProUGUI distanceResultTxt;
         [SerializeField] private Button okBtn;
         [SerializeField] private Button cancelBtn;
+        [SerializeField] private Button previousBtn;
+        [SerializeField] private Button nextBtn;
         public event Action OnOkClicked;
         public event Action OnCancelClicked;
+        public event Action OnPreviousClicked;
+        public event Action OnNextClicked;
         protected override void Awake()
         {
             base.Awake();
 
             okBtn.onClick.AddListener(() => OnOkClicked?.Invoke());
             cancelBtn.onClick.AddListener(() => OnCancelClicked?.Invoke());
-
+            previousBtn.onClick.AddListener(() => OnPreviousClicked?.Invoke());
+            nextBtn.onClick.AddListener(() => OnNextClicked?.Invoke());
         }
         protected override void Start()
         {
@@ -31,10 +37,11 @@ namespace TGTH.Mobile
         {
             base.LoadComponent();
         }
-        public void ShowData(FindPathResult result, ItemData itemData)
+        public void ShowData(FindPathResult result)
         {
             if (result == null) return;
-            modelIcon.sprite = itemData.itemIcon;
+            modelIcon.sprite = result.itemData.itemIcon;
+            modelNameTxt.text = result.itemData.itemName;
             posResultTxt.text = result.goal.x.ToString() + ":" + result.goal.z.ToString();
             distanceResultTxt.text = result.distance.ToString() + " ô";
 

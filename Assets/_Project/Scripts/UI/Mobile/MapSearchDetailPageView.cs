@@ -9,6 +9,7 @@ namespace TGTH.Mobile
     public class MapSearchDetailPageView : TGTHMonoBehaviour
     {
         [SerializeField] private Image modelIcon;
+        [SerializeField] private TextMeshProUGUI modelNameTxt;
         [SerializeField] private Slider realmSlider;
         [SerializeField] private TextMeshProUGUI realmTxt;
         [SerializeField] private Transform resourceContent;
@@ -89,6 +90,7 @@ namespace TGTH.Mobile
         public void SetModeIcon(ItemData itemData)
         {
             modelIcon.sprite = itemData.itemIcon;
+            modelNameTxt.text = itemData.itemName;
         }
         public void SortItemType()
         {

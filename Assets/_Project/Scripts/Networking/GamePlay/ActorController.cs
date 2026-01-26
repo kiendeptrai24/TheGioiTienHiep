@@ -49,7 +49,7 @@ public class ActorController : TGTHNetworkBehaviour
     {
         base.Start();
         mapSpawn = FindAnyObjectByType<MapSpawn>();
-        mapSpawn.Owner = transform;
+        mapSpawn.player = transform;
     }
     private void FixedUpdate()
     {

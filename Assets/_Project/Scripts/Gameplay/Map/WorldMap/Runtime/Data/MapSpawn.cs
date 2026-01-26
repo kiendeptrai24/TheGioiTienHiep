@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using WorldMap.Baking;
 using WorldMap.Data;
@@ -6,16 +7,23 @@ public class MapSpawn : TGTHMonoBehaviour
 {
     public MapDataPreset mapDataPreset;
     public int walkable;
-    public Transform Owner;
+    public Transform player;
     public MapCell cell;
     int xPos;
     int zPos;
-
+    public event Action<int, int> posPlayer;
     protected override void Awake()
     {
         base.Awake();
     }
-
+    public void SetFollowPlayer(Transform player)
+    {
+        this.player = player;
+    }
+    protected override void Start()
+    {
+        base.Start();
+    }
     [ContextMenu("Set Data")]
     public void Setdata()
     {
@@ -50,13 +58,14 @@ public class MapSpawn : TGTHMonoBehaviour
 
     private void Update()
     {
-        if (Owner != null)
+        if (player != null)
         {
-            int x = (int)(Owner.position.x / mapDataPreset.grid.cellSize);
-            int z = (int)(Owner.position.z / mapDataPreset.grid.cellSize);
+            int x = (int)(player.position.x / mapDataPreset.grid.cellSize);
+            int z = (int)(player.position.z / mapDataPreset.grid.cellSize);
             if (xPos == x && zPos == z) return;
             xPos = x;
             zPos = z;
+            posPlayer?.Invoke(x, z);
             if (x >= 0 && x < mapDataPreset.grid.width && z >= 0 && z < mapDataPreset.grid.height)
             {
                 cell = mapDataPreset.Get(x, z);
