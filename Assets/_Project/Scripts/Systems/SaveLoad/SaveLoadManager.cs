@@ -38,15 +38,19 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
     private void LoadOSToGameData()
     {
         gameData = new GameData();
-        gameData.statsCultivationPathData = statsCultivationPathPreset.GetStats();
-        gameData.statsRaceData = statsRacePreset.GetStats();
-        gameData.statsRealmData = statsRealmPreset.GetStats();
+        if (statsCultivationPathPreset != null)
+        {
+            gameData.statsCultivationPathData = statsCultivationPathPreset.GetStats();
+            gameData.statsRaceData = statsRacePreset.GetStats();
+            gameData.statsRealmData = statsRealmPreset.GetStats();
+        }
         foreach (var itemData in listItemPreset)
         {
             gameData.itemDatas.Add(itemData.GetItemData());
         }
     }
-    new private void OnDestroy() {
+    new private void OnDestroy()
+    {
         saveManager.SaveGame();
     }
 }
