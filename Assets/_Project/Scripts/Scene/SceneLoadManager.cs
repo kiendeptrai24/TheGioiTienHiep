@@ -2,12 +2,15 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.Netcode;
+using System;
 public class SceneLoadManager : Singleton<SceneLoadManager>
 {
+    public event Action<float> process;
     protected override void Awake()
     {
         DontDestroyOnLoad(this);
     }
+    #region Network Scene
 
     public void SubscribeOnNetworkEvents()
     {
@@ -37,24 +40,61 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         NetworkManager.Singleton.SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
     }
 
+    private IEnumerator ProcessNetworkSceneLoading(AsyncOperation asyncOperation)
+    {
+        yield return asyncOperation;
+        SceneManager.UnloadSceneAsync("LoadingScene");
+    }
+    #endregion
+
+    #region Scene
+
     public void LoadRegularScene(string sceneName, bool useLoadScreen = true)
     {
         StartCoroutine(ProcessRegularSceneLoading(sceneName, useLoadScreen));
     }
-    private IEnumerator ProcessNetworkSceneLoading(AsyncOperation asyncOperation)
-    {
-        yield return asyncOperation;
 
-        SceneManager.UnloadSceneAsync("LoadingScene");
+    public void UnLoadScene(string sceneName)
+    {
+        Scene scene = SceneManager.GetSceneByName(sceneName);
+        if (scene == null) return;
+        if (scene.isLoaded)
+        {
+            SceneManager.UnloadSceneAsync(scene).completed += _ =>
+            {
+                Debug.Log("Loading scene unloaded");
+            };
+        }
     }
 
-    private IEnumerator ProcessRegularSceneLoading(string sceneToLoad, bool useLoadScene = true)
+    private IEnumerator ProcessRegularSceneLoading(string sceneToLoad, bool useLoadScene = true, bool WaitForSeconds = true)
     {
         if (useLoadScene)
         {
-            SceneManager.LoadScene("LoadingScene");
-            yield return new WaitForSeconds(1f);
+            SceneManager.LoadScene("LoadingScene", LoadSceneMode.Additive);
+            if (WaitForSeconds)
+                yield return new WaitForSeconds(1f);
         }
-        yield return SceneManager.LoadSceneAsync(sceneToLoad);
+
+        AsyncOperation loadOp = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
+        loadOp.allowSceneActivation = false;
+
+        while (loadOp.progress < 0.9f)
+            yield return null;
+
+
+        while (!loadOp.isDone)
+        {
+            process.Invoke(loadOp.progress);
+            yield return null;
+            loadOp.allowSceneActivation = true;
+        }
+
+        if (useLoadScene)
+        {
+            UnLoadScene("LoadingScene");
+        }
     }
+    #endregion
+
 }

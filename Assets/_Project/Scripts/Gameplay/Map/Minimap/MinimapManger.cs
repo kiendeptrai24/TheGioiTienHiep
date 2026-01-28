@@ -6,6 +6,7 @@ public class MinimapManger : TGTHMonoBehaviour
 {
     public Camera minimapCamera;
     public CinemachineCamera cinemachineCamera;
+    public Transform minimapTarget;
     [SerializeField] private Transform player;
     [SerializeField] private List<MinimapController> controllers;
     protected override void Awake()

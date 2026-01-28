@@ -5,6 +5,7 @@ using UnityEngine;
 public class FindTarget : TGTHMonoBehaviour, ISkillTarget 
 {
     private ISkillCaster skillCaster;
+    public bool inWorld = true;
     public Transform target;
     [SerializeField] private LayerMask whatIsTarget;
     [SerializeField] private float range = 10f;
