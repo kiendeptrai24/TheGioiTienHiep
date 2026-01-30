@@ -1321,7 +1321,7 @@ GameObject:
   - component: {fileID: 6894223928933206975}
   - component: {fileID: 7595186681768438443}
   - component: {fileID: 3110366432968102501}
-  - component: {fileID: 5879288951519494882}
+  - component: {fileID: 4653743167290161615}
   m_Layer: 7
   m_Name: Monterworld
   m_TagString: Untagged
@@ -1523,7 +1523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldMonsterBattleTrigger
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &5879288951519494882
+--- !u!114 &4653743167290161615
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1532,13 +1532,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 4546658479400525563}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87fe1e73ed7fc17429ce26bef74594f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b3128f2cc120ad479078232f32ca0fd, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MonsterBattleLoadout
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerBattleRoster
   ShowTopMostFoldoutHeaderGroup: 1
-  enemyPrefabs:
-  - {fileID: 1749358295012249173}
-  - {fileID: 1749358295012249173}
+  heroPrefabs:
+  - {fileID: 7203687201702666221, guid: defc5e32b8d27994ba7a4bdc4c8e74c8, type: 3}
+  - {fileID: 8254376877235479551, guid: 49443871d6f86594a82135f360567133, type: 3}
+  - {fileID: 38339689179112586, guid: 3d5c164b4ffe2584487554364a501f73, type: 3}
+  maxHeroesToSpawn: 5
 --- !u!1 &4589160739909598690
 GameObject:
   m_ObjectHideFlags: 0

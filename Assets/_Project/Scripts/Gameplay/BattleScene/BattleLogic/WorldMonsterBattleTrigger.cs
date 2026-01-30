@@ -13,7 +13,6 @@ public class WorldMonsterBattleTrigger : NetworkBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!IsServer) return;
-        Debug.Log("ontriggerenteđr");
 
         var playerNO = other.GetComponentInParent<NetworkObject>();
         if (playerNO == null || !playerNO.IsPlayerObject) return;
@@ -27,6 +26,7 @@ public class WorldMonsterBattleTrigger : NetworkBehaviour
         var loadout = GetComponent<MonsterBattleLoadout>();
         if (loadout == null || loadout.enemyPrefabs.Count == 0) return;
         Debug.Log("ontriggerenter");
-        BattleService.Instance.ServerStartBattle(playerNO.OwnerClientId, NetworkObjectId, loadout);
+        // BattleService.Instance.ServerStartBattle(playerNO.OwnerClientId, NetworkObjectId, loadout);
+        BattleSimulatorRequest.Instance.RequestBattleSimulatorServerRpc(playerNO.OwnerClientId, NetworkObjectId);
     }
 }

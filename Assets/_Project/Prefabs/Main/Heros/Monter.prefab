@@ -1139,7 +1139,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.4053809, z: 0, w: 0.91414785}
   m_LocalPosition: {x: 2.7038002, y: 0.995, z: 4.494}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 30, y: 1, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 290507890258814681}
@@ -1185,8 +1185,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2254947688
-  InScenePlacedSourceGlobalObjectIdHash: 979018260
+  GlobalObjectIdHash: 3766114735
+  InScenePlacedSourceGlobalObjectIdHash: 2254947688
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
@@ -1441,6 +1441,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StatsData
   canLoadData: 0
   isHero: 1
+  heroPreset: {fileID: 11400000, guid: 69fb5929cf0346f4b94a471b49bbbf5f, type: 2}
   heroData:
     itemId: 
     itemType: 0
