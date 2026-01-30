@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using Unity.Netcode;
-using UnityEngine;
 
 public enum TeamId : byte { Heroes = 0, Enemies = 1 }
 
@@ -39,7 +37,7 @@ public struct UnitSnapshot
     public int attackSpeed;    // dùng để tính interval
 }
 
-public enum BattleEventType : byte { Attack = 0, Death = 1, End = 2 }
+public enum BattleEventType : byte { Attack = 0, Skill = 1, Death = 2, End = 3 }
 
 [Serializable]
 public struct BattleEvent
@@ -51,7 +49,11 @@ public struct BattleEvent
     public int damage;
     public bool isCrit;
     public int targetHpAfter;
+
+    public int skillType; // chỉ dùng khi type == Skill (cast skill nào)
+    public int skillIndex;    // skill slot nào trong list (0..n-1)
 }
+
 public struct BattleEventDTO : INetworkSerializable
 {
     public float t;
@@ -61,9 +63,11 @@ public struct BattleEventDTO : INetworkSerializable
     public int damage;
     public bool isCrit;
     public int targetHpAfter;
+    public int skillType;
+    public int skillIndex;
 
-    public void NetworkSerialize<T>(BufferSerializer<T> serializer)
-        where T : IReaderWriter
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         serializer.SerializeValue(ref t);
         serializer.SerializeValue(ref type);
@@ -72,5 +76,7 @@ public struct BattleEventDTO : INetworkSerializable
         serializer.SerializeValue(ref damage);
         serializer.SerializeValue(ref isCrit);
         serializer.SerializeValue(ref targetHpAfter);
+        serializer.SerializeValue(ref skillType);
+        serializer.SerializeValue(ref skillIndex);
     }
 }
