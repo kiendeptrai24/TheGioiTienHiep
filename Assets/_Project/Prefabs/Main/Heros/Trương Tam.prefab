@@ -2437,6 +2437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dc040c258f9e204082a158ed396f829, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FindTarget
+  battleState: 0
   target: {fileID: 0}
   whatIsTarget:
     serializedVersion: 2
@@ -2456,6 +2457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3449ec2b272826347a8bad0e3a22fa09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeroLoadData
+  loadHeroData: 1
   m_heroName: "Tr\u01B0\u01A1ng Tam"
   m_heroData:
     itemId: 
@@ -2474,6 +2476,7 @@ MonoBehaviour:
     physicalDefense: 0
     magicalDefense: 0
     spiritDefense: 0
+  heroPreset: {fileID: 11400000, guid: 3c4b9e329b4843b449b07f54825f766a, type: 2}
 --- !u!114 &5713777088063279524
 MonoBehaviour:
   m_ObjectHideFlags: 0

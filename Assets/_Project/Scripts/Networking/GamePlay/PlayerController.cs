@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -7,7 +8,7 @@ public class PlayerController : TGTHNetworkBehaviour
     private ActorController m_actorController;
     [HideInInspector] public IMoveable moveable;
     [HideInInspector] public Animator anim;
-
+    public List<GameObject> heroes;
     override protected void Awake()
     {
         base.Awake();

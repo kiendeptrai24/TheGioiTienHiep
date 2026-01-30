@@ -35,6 +35,7 @@ public class NetworkObjectPool : NetworkBehaviour
         else
         {
             Singleton = this;
+            DontDestroyOnLoad(gameObject);
         }
     }
 
@@ -88,7 +89,7 @@ public class NetworkObjectPool : NetworkBehaviour
     /// <param name="position">The position to spawn the object at.</param>
     /// <param name="rotation">The rotation to spawn the object with.</param>
     /// <returns></returns>
-    public NetworkObject GetNetworkObject(GameObject prefab, Vector3 position, Quaternion rotation,bool ChangeOwnership = false,bool autoSpawn = true)
+    public NetworkObject GetNetworkObject(GameObject prefab, Vector3 position, Quaternion rotation, bool ChangeOwnership = false, bool autoSpawn = true)
     {
         NetworkObject networkObject = null;
         try
@@ -118,11 +119,11 @@ public class NetworkObjectPool : NetworkBehaviour
     /// <summary>
     /// Return an object to the pool (reset objects before returning).
     /// </summary>
-    public void ReturnNetworkObject(NetworkObject networkObject,float duration = 0.001f)
+    public void ReturnNetworkObject(NetworkObject networkObject, float duration = 0.001f)
     {
         StartCoroutine(ReturnToPool(networkObject, duration));
     }
-    private IEnumerator ReturnToPool(NetworkObject networkObject, float duration) 
+    private IEnumerator ReturnToPool(NetworkObject networkObject, float duration)
     {
         yield return new WaitForSeconds(duration);
         try

@@ -90,10 +90,12 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     #endregion
 
     public int CombatPower => GetStatValue(StatType.CombatPower);
+
+    public event Action<StatsData> OnStatReady;
     protected override void Awake()
     {
         base.Awake();
-        if(!isHero) return;
+        if (!isHero) return;
         heroLoadData = GetComponent<HeroLoadData>();
         heroLoadData.OnHeroDataLoaded += OnHeroDataLoaded;
     }
@@ -163,7 +165,7 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
         statsModifier.AddStatsHeroData(stats, heroData);
         statsModifier.AddStatsTechniqueData(stats, techniqueData);
         StatChange();
-
+        OnStatReady?.Invoke(this);
     }
     public void LoadData(GameData _data)
     {

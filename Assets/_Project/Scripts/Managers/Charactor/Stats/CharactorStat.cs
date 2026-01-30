@@ -1,5 +1,4 @@
 
-using System.Collections;
 using UnityEngine;
 
 public abstract class CharacterStats : TGTHNetworkBehaviour, IDamageable
@@ -23,7 +22,7 @@ public abstract class CharacterStats : TGTHNetworkBehaviour, IDamageable
     /// <summary>
     /// Tính toán damage cuối cùng dựa trên stats của người đánh và người bị đánh
     /// </summary>
-    protected virtual (int damage, bool isCrit, float lifeSteal, float reflect) 
+    protected virtual (int damage, bool isCrit, float lifeSteal, float reflect)
     CalculateDamage(StatsData attacker, StatsData defender)
     {
         if (attacker == null || defender == null) return (0, false, 0, 0);
@@ -98,6 +97,7 @@ public abstract class CharacterStats : TGTHNetworkBehaviour, IDamageable
 
     public virtual void TakeDamage(StatsData _casterStats)
     {
+        if (!IsServer) return;
         var heal = GetComponent<HealthController>();
         if (_casterStats == null || stats == null)
             return;
@@ -105,6 +105,7 @@ public abstract class CharacterStats : TGTHNetworkBehaviour, IDamageable
         if (heal != null && Caster != null)
         {
             var (finalDamage, isCrit, lifeSteal, reflect) = CalculateDamage(_casterStats, stats);
+            Debug.Log("Damage: " + finalDamage);
             heal.DecreaseHealth(finalDamage, Caster.Id);
 
             // Hút máu cho attacker

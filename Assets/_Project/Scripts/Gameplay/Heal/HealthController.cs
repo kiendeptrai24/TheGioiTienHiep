@@ -19,13 +19,9 @@ public abstract class HealthController : TGTHNetworkBehaviour
     {
         base.Awake();
         LoadComponent();
+        stats.OnStatReady += OnStatReady;
     }
-    protected override void Start()
-    {
-        currentHealth.OnValueChanged += OnCurrentHealthChange;
-        isDead.OnValueChanged += OnStateChanged;
-    }
-    public override void OnNetworkSpawn()
+    public void OnStatReady(StatsData _stats)
     {
         if (!IsServer) return;
         maxHealth.Value = Mathf.RoundToInt(stats.Health);
@@ -33,12 +29,18 @@ public abstract class HealthController : TGTHNetworkBehaviour
         isDead.Value = false;
         OnCurrentHealthChange(0, maxHealth.Value);
     }
+    protected override void Start()
+    {
+        currentHealth.OnValueChanged += OnCurrentHealthChange;
+        isDead.OnValueChanged += OnStateChanged;
+
+    }
     public override void OnNetworkDespawn()
     {
-        if(!IsServer) return;
+        if (!IsServer) return;
     }
     #endregion
-    
+
     #region Logic Health
     public virtual void DecreaseHealth(float damage, ulong attackerId)
     {
@@ -46,7 +48,6 @@ public abstract class HealthController : TGTHNetworkBehaviour
             return;
         currentHealth.Value = Mathf.RoundToInt(Mathf.Max(0, currentHealth.Value - (damage * damageMultiplier.Value)));
         ShouldDie();
-
     }
     public virtual void IncreaseHealth()
     {
@@ -55,26 +56,26 @@ public abstract class HealthController : TGTHNetworkBehaviour
         if (currentHealth.Value > maxHealth.Value)
             return;
         currentHealth.Value++;
-        
+
     }
     public bool ShouldDie()
     {
         if (currentHealth.Value <= 0)
         {
-            isDead.Value = true; 
+            isDead.Value = true;
             return true;
         }
         return false;
     }
     #endregion
-    
+
     #region Callback
     public void OnStateChanged(bool previous, bool current)
     {
         if (previous == false && current == true)
         {
             OnDead?.Invoke();
-        }    
+        }
     }
     public void OnCurrentHealthChange(int previous, int current)
     {

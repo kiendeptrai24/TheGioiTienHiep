@@ -1,6 +1,7 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Pool;
 
 
 public class HeroController : TGTHNetworkBehaviour, ISkillCaster
@@ -28,7 +29,10 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
     public Vector3 Forward => transform.forward;
     public Quaternion Rotation => transform.rotation;
     public Vector3 Center => transform.position + Vector3.up * 1.5f;
-
+    public void SetTeamId(int teamId)
+    {
+        _teamId = teamId;
+    }
     public ulong Id => OwnerClientId;
 
     override protected void Awake()
@@ -41,7 +45,7 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
     {
         base.OnNetworkSpawn();
         if (!IsServer) return;
-        healthController.OnDead += OnDeadServerRpc;
+        healthController.OnDead += OnDeads;
     }
     protected void LoadHeroData(HeroData data) => heroData = data;
 
@@ -56,15 +60,19 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
 
     private void Update()
     {
-        if (!IsOwner) return;
+        if (!IsServer) return;
         m_heroSM.Update();
     }
-    [ServerRpc]
-    protected void OnDeadServerRpc()
+    // [ServerRpc]
+    protected void OnDeads()
     {
         NetworkObject.Despawn();
+        Destroy(gameObject);
     }
-
+    protected void OnDead()
+    {
+        NetworkObjectPool.Singleton.ReturnNetworkObject(NetworkObject);
+    }
 
     override protected void LoadComponent()
     {

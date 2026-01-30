@@ -18,9 +18,9 @@ public class GroundState_Hero : HeroState
     public override void Excute()
     {
         base.Excute();
-
         if (m_hero.m_aiMovement.Target != null && m_hero.heroData != null)
         {
+
             if (Vector3.Distance(m_hero.transform.position, m_hero.m_aiMovement.Target.position) < stats.AttackRange)
             {
                 m_machine.ChangeState<BattleState_Hero>();

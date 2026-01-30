@@ -2,10 +2,10 @@
 
 using UnityEngine;
 
-public class FindTarget : TGTHMonoBehaviour, ISkillTarget 
+public class FindTarget : TGTHMonoBehaviour, ISkillTarget
 {
     private ISkillCaster skillCaster;
-    public bool inWorld = true;
+    public bool battleState = false;
     public Transform target;
     [SerializeField] private LayerMask whatIsTarget;
     [SerializeField] private float range = 10f;
@@ -19,7 +19,7 @@ public class FindTarget : TGTHMonoBehaviour, ISkillTarget
     public Vector3 Center => GetCenter();
     private Vector3 GetCenter()
     {
-        if(target == null) return Vector3.zero;
+        if (target == null) return Vector3.zero;
         return target.position + Vector3.up * 1.5f;
     }
     protected override void Awake()
@@ -34,10 +34,11 @@ public class FindTarget : TGTHMonoBehaviour, ISkillTarget
     protected override void Start()
     {
         base.Start();
-        FindTargetNearest(transform.position, range);
     }
-    private void Update() {
-        if(target == null && Time.time >= checkInterval + checkTimer)
+    private void Update()
+    {
+        if (!battleState) return;
+        if (target == null && Time.time >= checkInterval + checkTimer)
         {
             checkTimer = Time.time;
             FindTargetNearest(transform.position, range);
@@ -51,9 +52,12 @@ public class FindTarget : TGTHMonoBehaviour, ISkillTarget
 
         foreach (var collider in colliders)
         {
-            if(collider.transform == transform)
+            if (collider.transform == transform)
                 continue;
-            if(collider.gameObject.GetComponent<ISkillCaster>().TeamId == skillCaster.TeamId)
+            if (!collider.TryGetComponent<ISkillCaster>(out var otherCaster))
+                continue;
+
+            if (otherCaster.TeamId == skillCaster.TeamId)
                 continue;
             float distance = Vector3.Distance(fromPosition, collider.transform.position);
             if (distance < nearestDistance)

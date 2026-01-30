@@ -33,17 +33,15 @@ public class TestLoadScene : Singleton<TestLoadScene>
         sceneLoadManager.LoadRegularScene(sceneName);
     }
 
-    [ContextMenu("Reload Scene")]
+    [ContextMenu("Unload Scene")]
     public void UnLoadScene()
     {
+
         Scene scene = SceneManager.GetSceneByName(sceneName);
         if (scene == null) return;
         if (scene.isLoaded)
         {
-            SceneManager.UnloadSceneAsync(scene).completed += _ =>
-            {
-                Debug.Log("Scene unloaded");
-            };
+            sceneLoadManager.UnLoadScene(sceneName);
         }
     }
 }
