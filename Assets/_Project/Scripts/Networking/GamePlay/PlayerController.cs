@@ -20,7 +20,7 @@ public class PlayerController : TGTHNetworkBehaviour
     {
         base.OnNetworkSpawn();
         if (!IsOwner) return;
-        SetMinimapCamrea();
+        SetPlayerNet();
     }
     override protected void Start()
     {
@@ -33,10 +33,9 @@ public class PlayerController : TGTHNetworkBehaviour
         if (!IsOwner) return;
         m_playerSM.Update();
     }
-    public void SetMinimapCamrea()
+    public void SetPlayerNet()
     {
-        FindAnyObjectByType<MinimapController>().SetFollowPlayer(transform);
-        FindAnyObjectByType<MapSpawn>().SetFollowPlayer(transform);
+        PlayerNetManager.Instance.SetPlayerObject(NetworkObject);
     }
     override protected void LoadComponent()
     {

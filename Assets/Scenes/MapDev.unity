@@ -3944,6 +3944,51 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 10, y: 15, z: 5}
   m_Center: {x: 12, y: 6.9, z: 0}
+--- !u!1 &914524514
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 914524515}
+  - component: {fileID: 914524516}
+  m_Layer: 0
+  m_Name: PlayerNetManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &914524515
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914524514}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1864780035}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &914524516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914524514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1fc6a8202805674e8a42405bc1aaa6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerNetManager
+  playerObject: {fileID: 0}
 --- !u!1 &924889252
 GameObject:
   m_ObjectHideFlags: 0
@@ -4670,7 +4715,7 @@ GameObject:
   - component: {fileID: 1032522013}
   - component: {fileID: 1032522014}
   m_Layer: 5
-  m_Name: GameObject
+  m_Name: UIInterractMonster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6978,6 +7023,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1608227894}
+    - targetCorrespondingSourceObject: {fileID: 5403447880746515132, guid: 61157e5c822e268428b5910c523565e2,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 914524515}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61157e5c822e268428b5910c523565e2, type: 3}
 --- !u!1 &1678707696
@@ -8384,25 +8433,6 @@ MonoBehaviour:
     spawnPoint: {fileID: 0}
     unlocked: 1
     keywords: []
---- !u!1 &1901435663 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4546658479400525563, guid: 03819744be33c024db9b04fb221c6a08,
-    type: 3}
-  m_PrefabInstance: {fileID: 4605298242583024415}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1901435674
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1901435663}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc0343f2721cfec4a95dc9c8fb33fed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MonsterClickable
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1001 &1904399322
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -187299,11 +187329,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4546658479400525563, guid: 03819744be33c024db9b04fb221c6a08,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1901435674}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03819744be33c024db9b04fb221c6a08, type: 3}
 --- !u!222 &4605360466371645180
 CanvasRenderer:

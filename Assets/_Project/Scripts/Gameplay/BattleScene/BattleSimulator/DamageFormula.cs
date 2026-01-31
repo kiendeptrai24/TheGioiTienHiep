@@ -4,33 +4,67 @@ using UnityEngine;
 public static class DamageFormula
 {
     public static (int damage, bool isCrit, float lifeSteal, float reflect)
-    Calc(in UnitSnapshot atk, in UnitSnapshot def, ref XorShift32 rng)
+    Calc(in UnitSnapshot attacker, in UnitSnapshot defender, ref XorShift32 rng)
     {
-        if (def.dmgImmunity >= 1f) return (0, false, 0, 0);
+        if (defender.dmgImmunity >= 1f) return (0, false, 0, 0);
+        // Damage sources
+        int physicalDmg = attacker.physicalDmg;
+        int magicalDmg = attacker.magicalDmg;
+        int spiritDmg = attacker.spiritDmg;
+        float trueDmg = attacker.trueDmg;
 
-        float finalPhysicalDef = Mathf.Max(0, def.physicalDef - def.physicalDef * atk.armorPen);
-        float finalPhysical = Mathf.Max(0, atk.physicalDmg - finalPhysicalDef);
+        // Penetration
+        float armorPen = attacker.armorPen;
+        float spiritPen = attacker.spiritPen;
 
-        float finalMagicalDef = Mathf.Max(0, def.magicalDef - def.magicalDef * atk.armorPen);
-        float finalMagical = Mathf.Max(0, atk.magicalDmg - finalMagicalDef);
+        // Defense
+        int physicalDef = defender.physicalDef;
+        int magicalDef = defender.magicalDef;
+        int spiritDef = defender.spiritDef;
 
-        float finalSpiritDef = Mathf.Max(0, def.spiritDef - def.spiritDef * atk.spiritPen);
-        float finalSpirit = Mathf.Max(0, atk.spiritDmg - finalSpiritDef);
+        // Damage reduction
+        float penReduction = defender.penReduction;
+        float trueDmgReduction = defender.trueReduction;
 
-        float total = finalPhysical + finalMagical + finalSpirit;
+        // Immunity
+        float damageImmunity = defender.dmgImmunity;
+        if (damageImmunity >= 1f) return (0, false, 0, 0);
 
-        bool isCrit = rng.Next01() < atk.critChance;
+        // Calculate damage
+        float finalPhysicalDef = Mathf.Max(0, physicalDef - physicalDef * armorPen);
+        float finalPhysical = Mathf.Max(0, physicalDmg - finalPhysicalDef);
+
+        float finalMagicalDef = Mathf.Max(0, magicalDef - magicalDef * armorPen);
+        float finalMagical = Mathf.Max(0, magicalDmg - finalMagicalDef);
+
+        float finalSpiritDef = Mathf.Max(0, spiritDef - spiritDef * spiritPen);
+        float finalSpirit = Mathf.Max(0, spiritDmg - finalSpiritDef);
+
+        float totalDmg = finalPhysical + finalMagical + finalSpirit;
+
+        // Crit
+        bool isCrit = rng.Next01() < attacker.critChance;
         if (isCrit)
-            total *= atk.critPower * (1f - def.critReduction);
+            totalDmg *= attacker.critPower * (1f - defender.critReduction);
 
-        total *= (1f - def.penReduction);
-        total += atk.trueDmg * (1f - def.trueReduction);
-        total *= (1f - def.dmgImmunity);
+        // Penetration reduction
+        totalDmg *= (1f - penReduction);
 
-        int dmg = Mathf.Max(0, Mathf.RoundToInt(total));
-        float ls = atk.lifeSteal * total;
-        float rf = def.reflect * total;
-        return (dmg, isCrit, ls, rf);
+        // True damage
+        totalDmg += trueDmg * (1f - trueDmgReduction);
+
+        // Damage immunity
+        totalDmg *= (1f - damageImmunity);
+
+        // LifeSteal
+        float lifeSteal = attacker.lifeSteal * totalDmg;
+
+        // Reflect
+        float reflect = defender.reflect * totalDmg;
+
+        // Clamp
+        int final = Mathf.Max(0, Mathf.RoundToInt(totalDmg));
+        return (final, isCrit, lifeSteal, reflect);
     }
 
     // ====== NEW: cast skill -> apply SkillData bonuses for this hit ======

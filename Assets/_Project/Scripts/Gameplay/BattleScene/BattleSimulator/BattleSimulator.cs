@@ -29,7 +29,9 @@ public static class BattleSimulator
             units.Add(e.snap);
             skillsByUnit.Add(e.skills);
         }
-        
+
+        Debug.Log(units.Count);
+        Debug.Log(skillsByUnit.Count);
         // ===== Timers =====
         float[] nextBasic = new float[units.Count];
 
@@ -61,7 +63,7 @@ public static class BattleSimulator
         {
             if (!HasAlive(units, TeamId.Heroes)) return End(TeamId.Enemies, t, events);
             if (!HasAlive(units, TeamId.Enemies)) return End(TeamId.Heroes, t, events);
-
+            
             // ===== pick next actor by nextBasic =====
             int a = -1;
             float best = float.MaxValue;

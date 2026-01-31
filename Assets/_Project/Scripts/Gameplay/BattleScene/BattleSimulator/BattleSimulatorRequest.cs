@@ -28,7 +28,8 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
 
         List<UnitInput> enemySnaps = new();
         List<UnitInput> heroSnaps = new();
-
+        Debug.Log(heroRoster.heroPrefabs.Count);
+        Debug.Log(enemyRoster.heroPrefabs.Count);
         // HERO uid: 0..H-1
         int uid = 1;
         foreach (var heroPrefab in heroRoster.heroPrefabs)
@@ -37,7 +38,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
 
             // nếu đây là prefab (NetworkObject) -> phải instantiate để lấy StatsData runtime
             var stats = heroPrefab.GetComponent<StatsData>();
-            stats.Setup(); // hoặc SetupDataPreset/Setup tùy bạn
+            stats.SetupDataPreset(); // hoặc SetupDataPreset/Setup tùy bạn
 
             heroSnaps.Add(SnapshotMapper.FromStats(stats, uid, TeamId.Heroes));
             uid++;
@@ -51,7 +52,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             if (enemyPrefab == null) continue;
 
             var stats = enemyPrefab.GetComponent<StatsData>();
-            stats.Setup();
+            stats.SetupDataPreset();
 
             enemySnaps.Add(SnapshotMapper.FromStats(stats, heroCount, TeamId.Enemies));
             heroCount++;

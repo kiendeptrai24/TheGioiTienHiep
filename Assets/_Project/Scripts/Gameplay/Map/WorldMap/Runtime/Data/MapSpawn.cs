@@ -1,4 +1,5 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 using WorldMap.Baking;
 using WorldMap.Data;
@@ -15,10 +16,12 @@ public class MapSpawn : TGTHMonoBehaviour
     protected override void Awake()
     {
         base.Awake();
+        PlayerNetManager.Instance.OnPlayerExists += OnPlayerExists;
     }
-    public void SetFollowPlayer(Transform player)
+
+    private void OnPlayerExists(NetworkObject @object)
     {
-        this.player = player;
+        this.player = @object.transform;
     }
     protected override void Start()
     {

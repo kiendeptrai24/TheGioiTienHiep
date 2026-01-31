@@ -1,3 +1,5 @@
+using System;
+using Unity.Netcode;
 using UnityEngine;
 
 public class MinimapController : TGTHMonoBehaviour
@@ -32,6 +34,13 @@ public class MinimapController : TGTHMonoBehaviour
     {
         base.Awake();
         LoadComponent();
+        PlayerNetManager.Instance.OnPlayerExists += OnPlayerExists;
+
+    }
+
+    private void OnPlayerExists(NetworkObject @object)
+    {
+        followPlayer = @object.transform;
     }
 
     protected override void Start()

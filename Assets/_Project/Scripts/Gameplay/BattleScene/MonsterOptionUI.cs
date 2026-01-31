@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ public class MonsterOptionUI : MonoBehaviour
     [SerializeField] private Button attackButton;
     [SerializeField] private Button infoButton;
     [SerializeField] private GameObject root;
-    [SerializeField] private PlayerController player;
+    [SerializeField] private NetworkObject player;
     private MonsterClickable currentMonster;
 
     private void Awake()
@@ -23,9 +24,13 @@ public class MonsterOptionUI : MonoBehaviour
         {
             OnAttackClicked();
         });
-
+        PlayerNetManager.Instance.OnPlayerExists += OnPlayerExists;
     }
 
+    private void OnPlayerExists(NetworkObject @object)
+    {
+        player = @object;
+    }
 
     public void Show(MonsterClickable monster)
     {

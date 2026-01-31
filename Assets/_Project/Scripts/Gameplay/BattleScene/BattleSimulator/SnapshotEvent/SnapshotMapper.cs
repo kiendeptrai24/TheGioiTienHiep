@@ -10,7 +10,7 @@ public static class SnapshotMapper
         // lấy skill list của hero
         var heroData = s.heroPreset.GetItemData() as HeroData; // bạn đang có heroData rồi
         List<SkillData> skills = heroData != null ? heroData.skillDatas : new List<SkillData>();
-
+        Debug.Log(hp);
         return new UnitInput
         {
             snap = new UnitSnapshot
