@@ -383,7 +383,9 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -4565884009001823619, guid: a56c65a13a78a88499b903b18001bdcb, type: 3}
+  - {fileID: 2100000, guid: e0e89402df2fdf5429071fd86e6b5983, type: 2}
+  - {fileID: 2100000, guid: 2005d51399629804fb863d5ca0900714, type: 2}
+  - {fileID: 2100000, guid: 18eebfe2624ce2a4dbcfb1f435833b90, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1759,6 +1761,7 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: -840037777384891287, guid: a56c65a13a78a88499b903b18001bdcb, type: 3}
+  - {fileID: 2100000, guid: aa0dff62813c40c4d8a24cc347692557, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2188,6 +2191,7 @@ GameObject:
   - component: {fileID: 7901223169405952457}
   - component: {fileID: 2303058893719603686}
   - component: {fileID: 7294590751173965482}
+  - component: {fileID: 6332937592598727563}
   m_Layer: 0
   m_Name: Charactor
   m_TagString: Untagged
@@ -2224,7 +2228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3254898076
+  GlobalObjectIdHash: 1251779217
   InScenePlacedSourceGlobalObjectIdHash: 3254898076
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2486,6 +2490,24 @@ MonoBehaviour:
     m_InternalValue: 0
   EngagedMonsterNetId:
     m_InternalValue: 0
+--- !u!114 &6332937592598727563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 713edccdfd4df9a4c92f971121b37848, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerVisibilityTintURP
+  renderers:
+  - {fileID: 2417816037525526889}
+  - {fileID: 4577024574730961590}
+  occludedMaterial: {fileID: -4565884009001823619, guid: a56c65a13a78a88499b903b18001bdcb,
+    type: 3}
+  fader: {fileID: 0}
 --- !u!1 &7825434533555785058
 GameObject:
   m_ObjectHideFlags: 0
