@@ -33,6 +33,7 @@ public class OccluderFadable : TGTHMonoBehaviour
 
     // để destroy instance materials tránh leak
     readonly List<Material> _created = new();
+    private bool occluding = false;
 
     protected override void LoadComponent()
     {
@@ -59,7 +60,9 @@ public class OccluderFadable : TGTHMonoBehaviour
 
     public void SetOccluding(bool occluding)
     {
-        _target = occluding ? fadedAlpha : 1f;
+        if (this.occluding == occluding) return;
+        this.occluding = occluding;
+        _target = this.occluding ? fadedAlpha : 1f;
         enabled = true;
     }
 
