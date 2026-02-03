@@ -88,7 +88,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
                 Send = new ClientRpcSendParams { TargetClientIds = new[] { playerClientId } }
             });
     }
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void RequestBattleSimulatorServerRpc(ulong playerClientId, ulong monsterNetId)
     {
         RequestBattleSimulator(playerClientId, monsterNetId);

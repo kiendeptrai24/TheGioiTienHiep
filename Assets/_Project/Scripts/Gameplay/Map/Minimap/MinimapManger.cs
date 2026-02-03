@@ -1,19 +1,37 @@
+using System;
 using System.Collections.Generic;
 using Unity.Cinemachine;
+using Unity.Netcode;
 using UnityEngine;
 
-public class MinimapManger : TGTHMonoBehaviour
+public class MinimapManger : Singleton<MinimapManger>
 {
     public Camera minimapCamera;
     public CinemachineCamera cinemachineCamera;
     public Transform minimapTarget;
+    private PlayerNetManager playerNetManager;
     [SerializeField] private Transform player;
-    [SerializeField] private List<MinimapController> controllers;
+    [SerializeField] private List<MinimapController> controllers = new();
     protected override void Awake()
     {
         base.Awake();
         LoadComponent();
+        playerNetManager = PlayerNetManager.Instance;
+        playerNetManager.OnPlayerExists += OnPlayerExists;
     }
+    public void Register(MinimapController c)
+    {
+        controllers.Add(c);
+    }
+
+    public void Unregister(MinimapController c)
+        => controllers.Remove(c);
+
+    private void OnPlayerExists(NetworkObject @object)
+    {
+        SetPlayer(@object.transform);
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -27,7 +45,7 @@ public class MinimapManger : TGTHMonoBehaviour
                 controller.SetFollowPlayer(player);
             }
     }
-
+    public Transform GetPlayer() => player;
     protected override void LoadComponent()
     {
         base.LoadComponent();

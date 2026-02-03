@@ -21,6 +21,11 @@ public class PathTest : TGTHMonoBehaviour
     [ContextMenu("Find Path A->B")]
     public void Find()
     {
+        if (mapSpawn == null || follower == null || B == null)
+        {
+            Debug.Log("Missing references");
+            return;
+        }
         var start = mapSpawn.WorldToGrid(follower.transform.position);
         var goal = mapSpawn.WorldToGrid(B.position);
         Debug.Log("Start: " + start.ToString());

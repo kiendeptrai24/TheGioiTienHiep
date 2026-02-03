@@ -34,15 +34,19 @@ public class MinimapController : TGTHMonoBehaviour
     {
         base.Awake();
         LoadComponent();
-        PlayerNetManager.Instance.OnPlayerExists += OnPlayerExists;
-
     }
-
-    private void OnPlayerExists(NetworkObject @object)
+    private void OnEnable()
     {
-        followPlayer = @object.transform;
+        MinimapManger.Instance.Register(this);
+        if (followPlayer == null)
+        {
+            SetFollowPlayer(MinimapManger.Instance.GetPlayer());
+        }
     }
-
+    private void OnDestroy()
+    {
+        MinimapManger.Instance.Unregister(this);
+    }
     protected override void Start()
     {
         base.Start();
