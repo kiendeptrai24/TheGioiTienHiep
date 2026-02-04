@@ -17,7 +17,7 @@ public class MinimapManger : Singleton<MinimapManger>
         base.Awake();
         LoadComponent();
         playerNetManager = PlayerNetManager.Instance;
-        playerNetManager.OnPlayerExists += OnPlayerExists;
+        playerNetManager.OnPlayerExiststed += OnPlayerExists;
     }
     public void Register(MinimapController c)
     {

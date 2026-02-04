@@ -37,13 +37,17 @@ namespace TGTH.Mobile
         }
         protected override void Awake()
         {
+            ProfileManager.Instance.OnProfileChanged += (profile) =>
+            {
+                view.priceText.text = profile.price.ToString();
+            };
             view.OnRefreshClicked += ShowItem;
             view.OnEquipmentTypeChanged += SortInventoryEquipmentType;
             view.OnTechniqueAndSkillTypeChanged += SortInventoryTechniqueAndSkillType;
             view.OnOtherTypeChanged += SortInventoryOtherType;
             view.OnSearchItemSubmit += SearchItemInventory;
-
             view.ToggleMouseFollower(false);
+
             InitializeInventoryUI(50);
             ShowAllItems();
         }
@@ -160,43 +164,6 @@ namespace TGTH.Mobile
             }
 
             view.ShowAllItems(sortedList);
-
-            // if (listItemDatas == null || listItemDatas.Count == 0) return;
-
-            // int typeIndex = value;
-
-            // int techniqueCount = Enum.GetValues(typeof(TechniqueType)).Length;
-            // List<InventoryItem> sortedList;
-
-            // // TECHNIQUE
-            // if (typeIndex < techniqueCount)
-            // {
-            //     TechniqueType selectedType = (TechniqueType)typeIndex;
-
-            //     sortedList = listItemDatas
-            //         .Where(item =>
-            //             item.data is TechniqueData technique &&
-            //             technique.techniqueType == selectedType)
-            //         .OrderBy(item => item.data.itemType)
-            //         .ThenByDescending(item => item.data.qualityType)
-            //         .ToList();
-            // }
-            // // SKILL
-            // else
-            // {
-            //     SkillType selectedType =
-            //         (SkillType)(typeIndex - techniqueCount);
-
-            //     sortedList = listItemDatas
-            //         .Where(item =>
-            //             item.data is SkillData skill &&
-            //             skill.skillType == selectedType)
-            //         .OrderBy(item => item.data.itemType)
-            //         .ThenByDescending(item => item.data.qualityType)
-            //         .ToList();
-            // }
-
-            // view.ShowAllItems(sortedList);
         }
         public void SortInventoryOtherType(int value)
         {
@@ -232,7 +199,19 @@ namespace TGTH.Mobile
                 popup.ShowPopup(data,
                 onConfirm: (QuantityPopupData result) =>
                 {
-                    shopUseSystem.UseItem(uiItem, result.quantity);
+                    int price = uiItem.inventoryItem.data.itemPrice * result.quantity;
+                    ShopRequester.Instance.RequestBuy(price, (success, message) =>
+                    {
+                        if (success)
+                        {
+                            shopUseSystem.UseItem(uiItem, result.quantity);
+                            Debug.Log(message);
+                        }
+                        else
+                        {
+                            Debug.Log(message);
+                        }
+                    });
                 },
                 onCancel: () =>
                 {

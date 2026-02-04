@@ -11,7 +11,7 @@ public class MonsterOptionUI : MonoBehaviour
     [SerializeField] private Button infoButton;
     [SerializeField] private GameObject root;
     [SerializeField] private NetworkObject player;
-    private MonsterClickable currentMonster;
+    private EntityClickable currentEntity;
 
     private void Awake()
     {
@@ -24,7 +24,7 @@ public class MonsterOptionUI : MonoBehaviour
         {
             OnAttackClicked();
         });
-        PlayerNetManager.Instance.OnPlayerExists += OnPlayerExists;
+        PlayerNetManager.Instance.OnPlayerExiststed += OnPlayerExists;
     }
 
     private void OnPlayerExists(NetworkObject @object)
@@ -32,15 +32,15 @@ public class MonsterOptionUI : MonoBehaviour
         player = @object;
     }
 
-    public void Show(MonsterClickable monster)
+    public void Show(EntityClickable entity)
     {
-        currentMonster = monster;
+        currentEntity = entity;
         root.SetActive(true);
     }
 
     public void Hide()
     {
-        currentMonster = null;
+        currentEntity = null;
         root.SetActive(false);
     }
 
@@ -49,10 +49,9 @@ public class MonsterOptionUI : MonoBehaviour
         Hide();
     }
 
-    // Button: Đánh
     public void OnAttackClicked()
     {
-        BattleSimulatorRequest.Instance.RequestBattleSimulatorServerRpc(player.OwnerClientId, currentMonster.NetworkObjectId);
+        currentEntity?.OnEntityClickedAccept(player);
         Hide();
     }
 }

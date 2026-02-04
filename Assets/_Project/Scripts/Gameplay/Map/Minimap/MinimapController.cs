@@ -7,7 +7,7 @@ public class MinimapController : TGTHMonoBehaviour
     [SerializeField] private bool canInteract = true;
     [Header("Refs")]
     [SerializeField] private MinimapManger minimapManager;
-    [SerializeField] private BoxCollider targetCollider; // ✅ vùng giới hạn (World bounds)
+    [SerializeField] private BoxCollider targetCollider;
     [SerializeField] private Transform target;
     [SerializeField] private Transform followPlayer;
     [SerializeField] private InputManager input;
@@ -45,7 +45,7 @@ public class MinimapController : TGTHMonoBehaviour
     }
     private void OnDestroy()
     {
-        MinimapManger.Instance.Unregister(this);
+        //MinimapManger.Instance.Unregister(this);
     }
     protected override void Start()
     {

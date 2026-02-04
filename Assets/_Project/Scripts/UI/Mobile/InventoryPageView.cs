@@ -19,6 +19,7 @@ namespace TGTH.Mobile
         public Button showAllItemsBtn;
         public TMP_Dropdown itemtypeDrop;
         public TMP_Dropdown qualityTypeDrop;
+        public TextMeshProUGUI priceText;
 
         public RectTransform contentPanel;
         public UIInventoryItem itemPrefab;
@@ -26,7 +27,6 @@ namespace TGTH.Mobile
         public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
         public event Action OnSortClicked;
         public event Action OnRefreshClicked;
-
         private void Awake()
         {
             showAllItemsBtn.onClick.AddListener(() => OnRefreshClicked?.Invoke());

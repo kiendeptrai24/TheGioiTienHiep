@@ -2,10 +2,9 @@
 
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class InventoryCenterManager : TGTHMonoBehaviour, ISaveable
+public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveable
 {
     [SerializeField] private List<ItemData> listItemDatas = new List<ItemData>();
     public event Action<List<ItemData>> OnItemDataChanged;

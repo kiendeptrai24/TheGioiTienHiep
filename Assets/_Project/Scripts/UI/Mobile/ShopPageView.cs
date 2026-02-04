@@ -17,6 +17,7 @@ namespace TGTH.Mobile
         [Header("UI References")]
         public Button sortBtn;
         public Button showAllItemsBtn;
+        public TextMeshProUGUI priceText;
         public TMP_Dropdown equipmentTypeDrop;
         public TMP_Dropdown techniqueAndSkillTypeDrop;
         public TMP_Dropdown otherDrop;

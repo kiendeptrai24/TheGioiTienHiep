@@ -1,8 +1,9 @@
 
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
-public class ProfileManager : TGTHMonoBehaviour
+public class ProfileManager : Singleton<ProfileManager>
 {
     [SerializeField] private ProfileUser profileUser;
     public event Action<ProfileUser> OnProfileChanged;
@@ -11,6 +12,16 @@ public class ProfileManager : TGTHMonoBehaviour
         base.Awake();
         string userId = Guid.NewGuid().ToString();
         profileUser = new ProfileUser(userId, "người chơi");
+    }
+    public void BindResource(ResourceStorage storage)
+    {
+        storage.OnSpiritStoneChanged += OnSpiritStoneChanged;
+    }
+
+    private void OnSpiritStoneChanged(int newAmount)
+    {
+        profileUser.price = newAmount;
+        OnProfileChanged?.Invoke(profileUser);
     }
     protected override void Start()
     {

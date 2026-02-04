@@ -48,14 +48,14 @@ public class CameraOcclusionFader : TGTHMonoBehaviour
 
         // an toàn nếu Instance chưa có
         if (PlayerNetManager.Instance != null)
-            PlayerNetManager.Instance.OnPlayerExists += OnPlayerExists;
+            PlayerNetManager.Instance.OnPlayerExiststed += OnPlayerExists;
     }
 
     protected void OnDestroy()
     {
         // TGTHMonoBehaviour có OnDestroy override thì giữ base nếu cần
         if (PlayerNetManager.Instance != null)
-            PlayerNetManager.Instance.OnPlayerExists -= OnPlayerExists;
+            PlayerNetManager.Instance.OnPlayerExiststed -= OnPlayerExists;
 
     }
 

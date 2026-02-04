@@ -7,6 +7,9 @@ public class ProfileUser
 {
     public string userId;
     public string userName;
+    public int price;
+    public int level;
+    public int experience;
     private List<string> listFriend;
     public ProfileUser(string userId, string userName)
     {

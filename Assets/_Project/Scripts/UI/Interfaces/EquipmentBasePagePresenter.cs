@@ -23,6 +23,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
     {
         view.ToggleMouseFollower(false);
         InitializeInventoryUI(50);
+        inventoryCenterManager = InventoryCenterManager.Instance;
         inventoryCenterManager.OnItemEquitmentDataChanged += SetItemData;
         SetItemData(inventoryCenterManager.GetDataType(ItemType.Equipment)); 
         view.OnRefreshClicked += ShowAllItemsInInventory;

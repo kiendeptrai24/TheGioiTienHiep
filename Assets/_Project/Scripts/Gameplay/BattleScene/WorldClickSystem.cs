@@ -4,12 +4,22 @@ public class WorldClickSystem : TGTHMonoBehaviour
 {
     [SerializeField] private Camera mainCamera;
     [SerializeField] private InputManager input;
+    private bool _wasPressed;
 
     private void Update()
     {
-        if (!input.IsPointerPressed())
-            return;
+        bool pressed = input.IsPointerPressed();
 
+        if (pressed && !_wasPressed)
+        {
+            HandleClick();
+        }
+
+        _wasPressed = pressed;
+    }
+
+    private void HandleClick()
+    {
         Ray ray = mainCamera.ScreenPointToRay(input.GetPointerPosition());
 
         if (Physics.Raycast(ray, out RaycastHit hit, 1000f))

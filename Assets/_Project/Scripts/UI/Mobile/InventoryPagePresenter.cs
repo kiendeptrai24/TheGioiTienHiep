@@ -10,7 +10,7 @@ namespace TGTH.Mobile
         [SerializeField] private InventoryPageView view;
         [SerializeField] private IItemDetailPageView itemDetailPageView;
         [SerializeField] private InventoryUseSystem inventoryUseSystem;
-        [SerializeField] private InventoryCenterManager inventoryCenterManager;
+        private InventoryCenterManager inventoryCenterManager;
         private List<InventoryItem> listItemDatas;
         private UIItemSlotBase currentItemSelect;
         private int currentlyDraggedItemIndex = -1;
@@ -20,10 +20,14 @@ namespace TGTH.Mobile
 
         protected override void Awake()
         {
+            inventoryCenterManager = InventoryCenterManager.Instance;
             view.OnRefreshClicked += ShowItem;
             view.OnSortClicked += SortInventory;
             inventoryCenterManager.OnItemDataChanged += SetItemData;
-
+            ProfileManager.Instance.OnProfileChanged += (profile) =>
+            {
+                view.priceText.text = profile.price.ToString();
+            };
             view.ToggleMouseFollower(false);
             InitializeInventoryUI(50);
             ShowAllItems();
@@ -71,7 +75,7 @@ namespace TGTH.Mobile
 
         public void RefreshInventory()
         {
-            
+
         }
         public void SortInventory()
         {
@@ -264,6 +268,7 @@ namespace TGTH.Mobile
             base.LoadComponent();
             view = GetComponent<InventoryPageView>();
             inventoryUseSystem = GetComponent<InventoryUseSystem>();
+            inventoryCenterManager = InventoryCenterManager.Instance;
         }
     }
 }

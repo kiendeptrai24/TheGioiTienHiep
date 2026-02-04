@@ -16,7 +16,7 @@ public class MapSpawn : TGTHMonoBehaviour
     protected override void Awake()
     {
         base.Awake();
-        PlayerNetManager.Instance.OnPlayerExists += OnPlayerExists;
+        PlayerNetManager.Instance.OnPlayerExiststed += OnPlayerExists;
     }
 
     private void OnPlayerExists(NetworkObject @object)
