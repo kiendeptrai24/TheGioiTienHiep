@@ -7,11 +7,12 @@ public static class BattleEventMapper
         // default dto
         var dto = new BattleEventDTO
         {
-            t = ev.t,
+            t = ev.time,
             type = ev.type,
+            team = ev.team,
             ownerUid = ev.ownerUid,
-            attackerUid = -1,
-            targetUid = -1,
+            attackerUid = "",
+            targetUid = "",
 
             damage = 0,
             isCrit = false,
@@ -24,6 +25,10 @@ public static class BattleEventMapper
             toX = 0,
             toY = 0
         };
+        if (ev.ownerUid == null)
+        {
+            dto.ownerUid = "";
+        }
 
         switch (ev)
         {
@@ -54,10 +59,17 @@ public static class BattleEventMapper
                 dto.attackerUid = d.attackerUid;
                 dto.targetUid = d.targetUid;
                 break;
+            case BattleEventInit b:
+                dto.ownerUid = b.ownerUid;
+                dto.cell = b.cell;
+                dto.maxHp = b.maxHp;
+                dto.curHp = b.curtHp;
+                break;
             default:
                 // nothing extra
                 break;
         }
+
 
         return dto;
     }
@@ -69,7 +81,7 @@ public static class BattleEventMapper
             case BattleEventType.Move:
                 return new BattleEventMove
                 {
-                    t = dto.t,
+                    time = dto.t,
                     type = dto.type,
                     from = new Vector2Int(dto.fromX, dto.fromY),
                     to = new Vector2Int(dto.toX, dto.toY),
@@ -78,7 +90,7 @@ public static class BattleEventMapper
             case BattleEventType.Skill:
                 return new BattleEventSkill
                 {
-                    t = dto.t,
+                    time = dto.t,
                     type = dto.type,
                     attackerUid = dto.attackerUid,
                     targetUid = dto.targetUid,
@@ -91,7 +103,7 @@ public static class BattleEventMapper
             case BattleEventType.Attack:
                 return new BattleEventAttack
                 {
-                    t = dto.t,
+                    time = dto.t,
                     type = dto.type,
                     attackerUid = dto.attackerUid,
                     targetUid = dto.targetUid,
@@ -102,15 +114,26 @@ public static class BattleEventMapper
             case BattleEventType.Death:
                 return new BattleEventDealth
                 {
-                    t = dto.t,
+                    time = dto.t,
                     type = dto.type,
                     attackerUid = dto.attackerUid,
                     targetUid = dto.targetUid,
                 };
+            case BattleEventType.Init:
+                return new BattleEventInit
+                {
+                    time = dto.t,
+                    team = dto.team,
+                    ownerUid = dto.ownerUid,
+                    cell = dto.cell,
+                    type = dto.type,
+                    maxHp = dto.maxHp,
+                    curtHp = dto.curHp
+                };
             default:
                 return new BattleEvent
                 {
-                    t = dto.t,
+                    time = dto.t,
                     type = dto.type,
                 };
         }

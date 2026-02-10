@@ -1139,7 +1139,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.4053809, z: 0, w: 0.91414785}
   m_LocalPosition: {x: 2.7038002, y: 0.995, z: 4.494}
-  m_LocalScale: {x: 30, y: 1, z: 30}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 290507890258814681}
@@ -1185,7 +1185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3766114735
+  GlobalObjectIdHash: 2254947688
   InScenePlacedSourceGlobalObjectIdHash: 2254947688
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1443,11 +1443,11 @@ MonoBehaviour:
   isHero: 1
   heroPreset: {fileID: 11400000, guid: 69fb5929cf0346f4b94a471b49bbbf5f, type: 2}
   heroData:
-    itemId: 
-    itemType: 0
-    itemName: 
-    itemIcon: {fileID: 0}
-    itemPrice: 0
+    itemId: 69fb5929cf0346f4b94a471b49bbbf5f
+    itemType: 4
+    itemName: Monter
+    itemIcon: {fileID: -1351563598, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
+    itemPrice: 100
     canStack: 0
     itemDescription: 
     currentstack: 0
@@ -1472,16 +1472,16 @@ MonoBehaviour:
     currentstack: 0
     cultivationStage: 0
     qualityType: 0
-    physicalDamage: 0
-    magicalDamage: 0
-    spiritDamage: 0
-    physicalDefense: 0
-    magicalDefense: 0
-    spiritDefense: 0
-    raceType: 0
-    maxHealth: 0
-    maxMana: 0
-    maxSpirit: 0
+    physicalDamage: 0.1
+    magicalDamage: 0.1
+    spiritDamage: 0.1
+    physicalDefense: 0.1
+    magicalDefense: 0.1
+    spiritDefense: 0.1
+    raceType: 1
+    maxHealth: 0.1
+    maxMana: 0.5
+    maxSpirit: 0.2
     spiritRange: 0
     movementSpeed: 0
   statsCultivationPathData:
@@ -1495,20 +1495,20 @@ MonoBehaviour:
     currentstack: 0
     cultivationStage: 0
     qualityType: 0
-    physicalDamage: 0
+    physicalDamage: 1
     magicalDamage: 0
     spiritDamage: 0
-    physicalDefense: 0
+    physicalDefense: 1
     magicalDefense: 0
     spiritDefense: 0
-    essenceType: 0
-    counterEssenceType: 0
-    counterPercentage: 0
-    maxHealth: 0
-    maxMana: 0
-    maxSpirit: 0
-    movementSpeed: 0
-    spiritRange: 0
+    essenceType: 1
+    counterEssenceType: 3
+    counterPercentage: 0.2
+    maxHealth: 10
+    maxMana: 5
+    maxSpirit: 5
+    movementSpeed: 1
+    spiritRange: 1
   statsRealmData:
     itemId: 
     itemType: 0
@@ -1520,25 +1520,25 @@ MonoBehaviour:
     currentstack: 0
     cultivationStage: 0
     qualityType: 0
-    physicalDamage: 0
-    magicalDamage: 0
-    spiritDamage: 0
-    physicalDefense: 0
-    magicalDefense: 0
-    spiritDefense: 0
-    maxHealth: 0
-    maxMana: 0
-    maxSpirit: 0
-    critRate: 0
-    critDamage: 0
-    evasion: 0
-    armorPenetration: 0
-    movementSpeed: 0
-    attackSpeed: 0
-    castSpeed: 0
-    potential: 0
-    skillPoints: 0
-    combatPower: 0
+    physicalDamage: 10
+    magicalDamage: 10
+    spiritDamage: 10
+    physicalDefense: 5
+    magicalDefense: 5
+    spiritDefense: 5
+    maxHealth: 100
+    maxMana: 100
+    maxSpirit: 100
+    critRate: 150
+    critDamage: 5
+    evasion: 2
+    armorPenetration: 10
+    movementSpeed: 4
+    attackSpeed: 1
+    castSpeed: 1
+    potential: 5
+    skillPoints: 3
+    combatPower: 10
     spiritRange: 0
 --- !u!114 &4113219700534178725
 MonoBehaviour:

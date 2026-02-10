@@ -4,9 +4,10 @@ using UnityEngine;
 [Serializable]
 public class BattleEvent
 {
-    public float t;
+    public float time;
+    public TeamId team;
     public BattleEventType type;
-    public int ownerUid;
+    public string ownerUid;
 }
 
 [Serializable]
@@ -19,8 +20,8 @@ public class BattleEventMove : BattleEvent
 [Serializable]
 public class BattleEventAttack : BattleEvent
 {
-    public int targetUid;
-    public int attackerUid;
+    public string targetUid;
+    public string attackerUid;
     public int damage;
     public bool isCrit;
     public int targetHpAfter;
@@ -35,7 +36,14 @@ public class BattleEventSkill : BattleEventAttack
 [Serializable]
 public class BattleEventDealth : BattleEvent
 {
-    public int targetUid;
-    public int attackerUid;
+    public string targetUid;
+    public string attackerUid;
 }
 
+[Serializable]
+public class BattleEventInit : BattleEvent
+{
+    public Vector2Int cell;
+    public int maxHp;
+    public int curtHp;
+}

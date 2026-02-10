@@ -1,12 +1,12 @@
 using System;
 using Unity.Netcode;
-
+[Serializable]
 public enum TeamId : byte { Heroes = 0, Enemies = 1 }
 
 [Serializable]
 public class UnitSnapshot
 {
-    public int uid;          // index trong list
+    public string uid;          // index trong list
     public TeamId team;
     public int hpMax;
     public int hp;
@@ -46,7 +46,8 @@ public enum BattleEventType : byte
     Skill = 3,
     Death = 4,
     End = 5,
-    Stuck = 99
+    Init = 6,
+    Stuck = 99,
 
 }
 

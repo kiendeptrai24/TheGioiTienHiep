@@ -41,7 +41,7 @@ public static class BattleCombatResolver
         {
             events.Add(new BattleEventSkill
             {
-                t = t,
+                time = t,
                 type = BattleEventType.Skill,
                 attackerUid = atk.uid,
                 targetUid = def.uid,
@@ -94,7 +94,7 @@ public static class BattleCombatResolver
         {
             events.Add(new BattleEventAttack
             {
-                t = t,
+                time = t,
                 type = BattleEventType.Attack,
                 attackerUid = atk.uid,
                 targetUid = def.uid,

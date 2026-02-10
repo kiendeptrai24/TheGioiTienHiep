@@ -23,8 +23,8 @@ public sealed class BattleScheduler
         {
             float spd = Mathf.Max(1f, s.units[i].attackSpeed);
 
-            nextBasic[i] = 0;//0.2f + (1f / spd);
-            nextMove[i] = 0;
+            nextBasic[i] = .01f;//0.2f + (1f / spd);
+            nextMove[i] = .01f;
 
             var list = s.skillsByUnit[i];
             if (list == null || list.Count == 0)

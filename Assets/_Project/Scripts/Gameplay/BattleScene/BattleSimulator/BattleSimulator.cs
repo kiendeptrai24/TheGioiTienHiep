@@ -36,7 +36,21 @@ public static class BattleSimulator
         sched.Init(s);
 
         float t = 0f;
-        events.Add(new BattleEvent { t = t, type = BattleEventType.Start, });
+        for (int i = 0; i < s.units.Count; i++)
+        {
+            events.Add(new BattleEventInit
+            {
+                time = t,
+                ownerUid = s.units[i].uid,
+                team = s.units[i].team,
+                cell = s.cell[i],
+                type = BattleEventType.Init,
+                maxHp = s.units[i].hpMax,
+                curtHp = s.units[i].hp
+            });
+            Debug.Log(s.units[i].uid);
+        }
+        events.Add(new BattleEvent { time = t, type = BattleEventType.Start, });
 
         ///return new Result();
         while (t < timeLimit)
@@ -102,7 +116,7 @@ public static class BattleSimulator
                 if (recordEvents)
                     events.Add(new BattleEventMove
                     {
-                        t = t,
+                        time = t,
                         type = BattleEventType.Move,
                         ownerUid = s.units[a].uid,  // dùng attackerUid cho thống nhất
                         from = from,
@@ -122,7 +136,7 @@ public static class BattleSimulator
             board.FreeCell(s.cell[target], target);
 
             if (recordEvents)
-                events.Add(new BattleEventDealth { t = t, type = BattleEventType.Death, attackerUid = s.units[a].uid, targetUid = s.units[target].uid });
+                events.Add(new BattleEventDealth { time = t, type = BattleEventType.Death, attackerUid = s.units[a].uid, targetUid = s.units[target].uid });
         }
 
         if (s.units[a].hp <= 0)
@@ -130,7 +144,7 @@ public static class BattleSimulator
             board.FreeCell(s.cell[a], a);
 
             if (recordEvents)
-                events.Add(new BattleEventDealth { t = t, type = BattleEventType.Death, attackerUid = s.units[target].uid, targetUid = s.units[a].uid });
+                events.Add(new BattleEventDealth { time = t, type = BattleEventType.Death, attackerUid = s.units[target].uid, targetUid = s.units[a].uid });
         }
     }
 
@@ -144,7 +158,7 @@ public static class BattleSimulator
     static Result End(TeamId winner, float t, List<BattleEvent> events, bool recordEvents)
     {
         if (recordEvents)
-            events.Add(new BattleEvent { t = t, type = BattleEventType.End });
+            events.Add(new BattleEvent { time = t, type = BattleEventType.End });
 
         return new Result { winner = winner, duration = t, events = recordEvents ? events : null };
     }
