@@ -35,10 +35,6 @@ public abstract class HealthController : TGTHNetworkBehaviour
         isDead.OnValueChanged += OnStateChanged;
 
     }
-    public override void OnNetworkDespawn()
-    {
-        if (!IsServer) return;
-    }
     #endregion
 
     #region Logic Health

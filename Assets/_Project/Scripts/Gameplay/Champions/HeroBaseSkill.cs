@@ -3,19 +3,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-[Serializable]
-public class SkillDataRuntime
-{
-    public string skillId;
-    public Type skillAnimationClass;
-    public BaseSkill skill;
-}
 
-public class HeroBaseSkill : TGTHMonoBehaviour
+public class ChampionBaseSkill : TGTHMonoBehaviour
 {
     // SkillController to manage the hero's skills
     private SkillController m_SkillController;
-    private StatsData statsData;
+    private HeroLoadData m_HeroLoadData;
     private FindTarget m_FindTargetEnemy;
     public SkillController SkillController => m_SkillController;
     // List of SkillData to be assigned in the Inspector
@@ -31,13 +24,16 @@ public class HeroBaseSkill : TGTHMonoBehaviour
         m_SkillsDataRuntimes = new();
         m_SkillsData = new();
 
-        if (statsData != null)
+        if (m_HeroLoadData != null)
         {
-            var data = statsData.heroPreset.GetItemData();
-            var heroData = data as HeroData;
-            m_SkillsData.AddRange(heroData.skillDatas);
-            SetupSkills();
+            m_HeroLoadData.OnHeroDataLoaded += LoadHeroData;
         }
+    }
+
+    private void LoadHeroData(HeroData data)
+    {
+        m_SkillsData.AddRange(data.skillDatas);
+        SetupSkills();
     }
 
     public void SetupSkills()
@@ -181,6 +177,6 @@ public class HeroBaseSkill : TGTHMonoBehaviour
     {
         base.LoadComponent();
         m_FindTargetEnemy = GetComponent<FindTarget>();
-        statsData = GetComponent<StatsData>();
+        m_HeroLoadData = GetComponent<HeroLoadData>();
     }
 }

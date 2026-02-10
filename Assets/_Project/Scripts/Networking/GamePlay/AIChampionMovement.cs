@@ -3,7 +3,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AIMovement : TGTHNetworkBehaviour
+public class AIChampionMovement : TGTHMonoBehaviour
 {
     // Components
     private StatsData statsData;
@@ -33,7 +33,6 @@ public class AIMovement : TGTHNetworkBehaviour
     }
     private void Update()
     {
-        if (!IsServer) return;
         FindTargetNearest();
         CheckArrived();
         RotateToMoveDirection();
