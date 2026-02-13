@@ -96,16 +96,7 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     protected override void Awake()
     {
         base.Awake();
-        if (!isHero) return;
-        heroLoadData = GetComponent<HeroLoadData>();
-        heroLoadData.OnHeroDataLoaded += OnHeroDataLoaded;
     }
-
-    private void OnHeroDataLoaded(HeroData data)
-    {
-        SetUpItem(data);
-    }
-
     protected override void Start()
     {
         base.Start();

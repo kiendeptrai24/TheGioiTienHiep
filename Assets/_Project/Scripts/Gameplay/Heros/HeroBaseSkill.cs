@@ -173,6 +173,10 @@ public class HeroBaseSkill : TGTHMonoBehaviour
     {
         return m_SkillsDataRuntimes;
     }
+    public bool HasSkill(string skillId)
+    {
+        return m_SkillController.HasSkill(skillId);
+    }
     public SkillRuntime GetSkill(string skillId)
     {
         return m_SkillController.GetRuntime(skillId);

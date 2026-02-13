@@ -82,7 +82,10 @@ public sealed class BattleScheduler
         float spd = Mathf.Max(1f, s.units[a].attackSpeed);
         nextBasic[a] = t + (1f / spd);
     }
-
+    public void ApplyCell(BattleSimState s, int a, Vector2Int cell, float moveInterval)
+    {
+        s.cell[a] = cell;
+    }
     public void ScheduleNextMove(int a, float t, float moveInterval)
     {
         nextMove[a] = t + Mathf.Max(0.05f, moveInterval);

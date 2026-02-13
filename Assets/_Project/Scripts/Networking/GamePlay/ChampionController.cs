@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class ChampionController : TGTHMonoBehaviour, ISkillCaster
 {
+    public bool isMeleeChampion = true;
     protected StatsData stats;
     public GameObject attackPrefab;
     protected IStateMachine m_championSM;
@@ -38,12 +39,14 @@ public class ChampionController : TGTHMonoBehaviour, ISkillCaster
     {
         base.Awake();
         LoadComponent();
-        healthController.OnDead += OnDead;
+        m_championSM = new ChampionStateMachine(this);
+        //healthController.OnDead += OnDead;
     }
 
     override protected void Start()
     {
         base.Start();
+        m_championSM.Init<IdleState_Champion>();
     }
     public IStateMachine GetStateMachine()
     {

@@ -54,6 +54,15 @@ public class AIChampionMovement : TGTHMonoBehaviour
             agent.SetDestination(m_Target.position);
         }
     }
+    public void SetTarget(Vector3 destination)
+    {
+        m_Target = null;
+        if (agent != null)
+        {
+            agent.isStopped = false;
+            agent.SetDestination(destination);
+        }
+    }
     public void FindTargetNearest()
     {
         if (findTarget != null && m_Target == null)

@@ -45,6 +45,7 @@ public static class BattleEventMapper
                 dto.damage = s.damage;
                 dto.isCrit = s.isCrit;
                 dto.targetHpAfter = s.targetHpAfter;
+
                 dto.skillId = s.skillId;
                 break;
 
@@ -83,6 +84,8 @@ public static class BattleEventMapper
                 {
                     time = dto.t,
                     type = dto.type,
+                    team = dto.team,
+                    ownerUid = dto.ownerUid,
                     from = new Vector2Int(dto.fromX, dto.fromY),
                     to = new Vector2Int(dto.toX, dto.toY),
                 };
@@ -92,6 +95,8 @@ public static class BattleEventMapper
                 {
                     time = dto.t,
                     type = dto.type,
+                    ownerUid = dto.ownerUid,
+                    team = dto.team,
                     attackerUid = dto.attackerUid,
                     targetUid = dto.targetUid,
                     damage = dto.damage,
@@ -105,6 +110,8 @@ public static class BattleEventMapper
                 {
                     time = dto.t,
                     type = dto.type,
+                    team = dto.team,
+                    ownerUid = dto.ownerUid,
                     attackerUid = dto.attackerUid,
                     targetUid = dto.targetUid,
                     damage = dto.damage,
@@ -115,6 +122,8 @@ public static class BattleEventMapper
                 return new BattleEventDealth
                 {
                     time = dto.t,
+                    team = dto.team,
+                    ownerUid = dto.ownerUid,
                     type = dto.type,
                     attackerUid = dto.attackerUid,
                     targetUid = dto.targetUid,
@@ -135,6 +144,8 @@ public static class BattleEventMapper
                 {
                     time = dto.t,
                     type = dto.type,
+                    team = dto.team,
+                    ownerUid = dto.ownerUid,
                 };
         }
     }

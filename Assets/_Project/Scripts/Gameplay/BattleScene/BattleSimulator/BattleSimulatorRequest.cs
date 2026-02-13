@@ -64,7 +64,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         {
             width = 10,
             height = 10,
-            moveInterval = 0.25f,
+            moveInterval = 1.5f,
             allowDiagonal = true
         };
 
@@ -116,15 +116,15 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
                     break;
 
                 case BattleEventSkill s:
-                    text += $"{s.time:0.00}s SKILL uid: {s.attackerUid} -> {s.targetUid} " +
+                    text += $"{s.time:0.00}s SKILL uid: {s.ownerUid} -> {s.targetUid} " +
                             $"skillId={s.skillId} dmg={s.damage} crit={s.isCrit} hpAfter={s.targetHpAfter}\n\n";
                     break;
                 case BattleEventAttack a:
-                    text += $"{a.time:0.00}s ATK uid: {a.attackerUid} -> uid: {a.targetUid} " +
+                    text += $"{a.time:0.00}s ATK uid: {a.ownerUid} -> uid: {a.targetUid} " +
                             $"dmg={a.damage} crit={a.isCrit} hpAfter={a.targetHpAfter}\n\n";
                     break;
                 case BattleEventDealth d:
-                    text += $"{d.time:0.00}s DEATH uid: {d.attackerUid} killed -> uid: {d.targetUid}\n\n";
+                    text += $"{d.time:0.00}s DEATH uid: {d.ownerUid} killed -> uid: {d.targetUid}\n\n";
                     break;
                 case BattleEventInit b:
                     text += $"{b.time}:0.00s champion init with uid{b.ownerUid} team {b.team} maxHp {b.maxHp} curHp {b.curtHp}\n\n";

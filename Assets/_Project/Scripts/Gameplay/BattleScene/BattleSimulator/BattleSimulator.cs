@@ -21,6 +21,8 @@ public static class BattleSimulator
         bool recordEvents = true)
     {
         int iter = 0;
+        int index = 0;
+        int tawait = 0;
 
         var rng = new XorShift32(seed);
         var events = recordEvents ? new List<BattleEvent>(1024) : null;
@@ -48,7 +50,6 @@ public static class BattleSimulator
                 maxHp = s.units[i].hpMax,
                 curtHp = s.units[i].hp
             });
-            Debug.Log(s.units[i].uid);
         }
         events.Add(new BattleEvent { time = t, type = BattleEventType.Start, });
 
@@ -103,29 +104,31 @@ public static class BattleSimulator
         bool moved = false;
 
         Vector2Int from = s.cell[a];
-
+        Vector2Int step = from;
+        int cellTomove = 1;
         if (dist > myRange)
         {
-            Vector2Int step = board.ChooseMoveStep(from, s.cell[target], s.units);
+            step = board.ChooseMoveStep(from, s.cell[target], s.units);
 
             if (step != from && board.TryMove(a, from, step, s.units))
             {
-                s.cell[a] = step;
+                sched.ApplyCell(s, a, step, board.moveInterval);
                 moved = true;
-
+                cellTomove = board.Dist(from, step);
                 if (recordEvents)
                     events.Add(new BattleEventMove
                     {
                         time = t,
+                        team = s.units[a].team,
                         type = BattleEventType.Move,
-                        ownerUid = s.units[a].uid,  // dùng attackerUid cho thống nhất
+                        ownerUid = s.units[a].uid,
                         from = from,
                         to = step
                     });
             }
         }
 
-        sched.ScheduleNextMove(a, t, board.moveInterval);
+        sched.ScheduleNextMove(a, t, board.moveInterval * cellTomove);
         return moved;
     }
 
@@ -136,7 +139,15 @@ public static class BattleSimulator
             board.FreeCell(s.cell[target], target);
 
             if (recordEvents)
-                events.Add(new BattleEventDealth { time = t, type = BattleEventType.Death, attackerUid = s.units[a].uid, targetUid = s.units[target].uid });
+                events.Add(new BattleEventDealth
+                {
+                    time = t,
+                    team = s.units[target].team,
+                    ownerUid = s.units[target].uid,
+                    type = BattleEventType.Death,
+                    attackerUid = s.units[a].uid,
+                    targetUid = s.units[target].uid
+                });
         }
 
         if (s.units[a].hp <= 0)
@@ -144,7 +155,15 @@ public static class BattleSimulator
             board.FreeCell(s.cell[a], a);
 
             if (recordEvents)
-                events.Add(new BattleEventDealth { time = t, type = BattleEventType.Death, attackerUid = s.units[target].uid, targetUid = s.units[a].uid });
+                events.Add(new BattleEventDealth
+                {
+                    time = t,
+                    team = s.units[a].team,
+                    ownerUid = s.units[a].uid,
+                    type = BattleEventType.Death,
+                    attackerUid = s.units[target].uid,
+                    targetUid = s.units[a].uid
+                });
         }
     }
 

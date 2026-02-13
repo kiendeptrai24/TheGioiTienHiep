@@ -3,7 +3,7 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
-public class Hero_Heal : HealthController
+public class Hero_Heal : TGTHNetworkBehaviour, HealthController
 {
     private StatsData stats;
     #region Health Properties
@@ -11,6 +11,7 @@ public class Hero_Heal : HealthController
     public NetworkVariable<int> maxHealth = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public NetworkVariable<int> currentHealth = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
     public event Action<float, float> OnHealthChanged;
     public event Action OnDead;
     #endregion
@@ -22,14 +23,6 @@ public class Hero_Heal : HealthController
         LoadComponent();
         stats.OnStatReady += OnStatReady;
     }
-    public void OnStatReady(StatsData _stats)
-    {
-        if (!IsServer) return;
-        maxHealth.Value = Mathf.RoundToInt(stats.Health);
-        currentHealth.Value = maxHealth.Value;
-        isDead.Value = false;
-        OnCurrentHealthChange(0, maxHealth.Value);
-    }
     protected override void Start()
     {
         currentHealth.OnValueChanged += OnCurrentHealthChange;
@@ -39,14 +32,14 @@ public class Hero_Heal : HealthController
     #endregion
 
     #region Logic Health
-    public override void DecreaseHealth(float damage, ulong attackerId)
+    public void DecreaseHealth(float damage, ulong attackerId)
     {
         if (!IsServer || ShouldDie())
             return;
         currentHealth.Value = Mathf.RoundToInt(Mathf.Max(0, currentHealth.Value - (damage * damageMultiplier.Value)));
         ShouldDie();
     }
-    public override void IncreaseHealth()
+    public void IncreaseHealth()
     {
         if (!IsServer)
             return;
@@ -55,6 +48,33 @@ public class Hero_Heal : HealthController
         currentHealth.Value++;
 
     }
+    #endregion
+
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        stats = GetComponent<StatsData>();
+    }
+
+    public float GetMaxHealth()
+    {
+        return maxHealth.Value;
+    }
+
+    public float GetCurHealth()
+    {
+        return currentHealth.Value;
+    }
+
+    public void OnStatReady(StatsData _stats)
+    {
+        if (!IsServer) return;
+        maxHealth.Value = Mathf.RoundToInt(stats.Health);
+        currentHealth.Value = maxHealth.Value;
+        isDead.Value = false;
+        OnCurrentHealthChange(0, maxHealth.Value);
+    }
+
     public bool ShouldDie()
     {
         if (currentHealth.Value <= 0)
@@ -64,7 +84,6 @@ public class Hero_Heal : HealthController
         }
         return false;
     }
-    #endregion
 
     #region Callback
     public void OnStateChanged(bool previous, bool current)
@@ -79,10 +98,4 @@ public class Hero_Heal : HealthController
         OnHealthChanged?.Invoke(current, maxHealth.Value);
     }
     #endregion
-
-    protected override void LoadComponent()
-    {
-        base.LoadComponent();
-        stats = GetComponent<StatsData>();
-    }
 }

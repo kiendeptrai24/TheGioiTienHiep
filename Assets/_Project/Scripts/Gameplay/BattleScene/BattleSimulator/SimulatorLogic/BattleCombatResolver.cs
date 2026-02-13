@@ -43,6 +43,8 @@ public static class BattleCombatResolver
             {
                 time = t,
                 type = BattleEventType.Skill,
+                team = atk.team,
+                ownerUid = atk.uid,
                 attackerUid = atk.uid,
                 targetUid = def.uid,
                 damage = dmg,
@@ -96,6 +98,8 @@ public static class BattleCombatResolver
             {
                 time = t,
                 type = BattleEventType.Attack,
+                team = atk.team,
+                ownerUid = atk.uid,
                 attackerUid = atk.uid,
                 targetUid = def.uid,
                 damage = dmg,

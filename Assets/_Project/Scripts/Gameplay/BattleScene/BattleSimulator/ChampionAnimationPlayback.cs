@@ -1,0 +1,60 @@
+
+
+using UnityEngine;
+
+public class ChampionAnimationPlayback : TGTHMonoBehaviour, IChampionAnimation
+{
+    public ChampionController champion;
+    private IStateMachine m_machine;
+    private HeroBaseSkill heroSkills;
+    private AIChampionMovement aiMovement;
+    protected override void Awake()
+    {
+        base.Awake();
+        LoadComponent();
+    }
+    override protected void Start()
+    {
+        base.Start();
+        m_machine = champion.GetStateMachine();
+    }
+    public void PlayAnimationAttack()
+    {
+        if (champion == null)
+            m_machine = champion.GetStateMachine();
+
+        if (champion.isMeleeChampion)
+            m_machine.ChangeState<AttackState_Champion>();
+        else
+            m_machine.ChangeState<AttackRangeState_Champion>();
+    }
+
+    public void PlayMovement(Vector3 destination)
+    {
+        if (aiMovement != null)
+        {
+            aiMovement.SetTarget(destination);
+        }
+    }
+
+    public void PlayAnimationSkill(string skillid)
+    {
+        if (heroSkills.HasSkill(skillid))
+        {
+            var skillData = heroSkills.GetSkill(skillid);
+            m_machine.ChangeState(skillData.Skill.skillAnimationClass);
+        }
+    }
+
+    public void PlayAnimationDeath()
+    {
+        Destroy(gameObject);
+    }
+    override protected void LoadComponent()
+    {
+        base.LoadComponent();
+        champion = GetComponent<ChampionController>();
+        heroSkills = GetComponent<HeroBaseSkill>();
+        aiMovement = GetComponent<AIChampionMovement>();
+    }
+}
