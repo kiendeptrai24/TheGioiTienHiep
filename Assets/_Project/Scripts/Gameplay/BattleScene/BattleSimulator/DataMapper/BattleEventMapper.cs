@@ -40,6 +40,7 @@ public static class BattleEventMapper
                 break;
 
             case BattleEventSkill s:
+                dto.targetTeam = s.targetTeam;
                 dto.attackerUid = s.attackerUid;
                 dto.targetUid = s.targetUid;
                 dto.damage = s.damage;
@@ -50,6 +51,7 @@ public static class BattleEventMapper
                 break;
 
             case BattleEventAttack a:
+                dto.targetTeam = a.targetTeam;
                 dto.attackerUid = a.attackerUid;
                 dto.targetUid = a.targetUid;
                 dto.damage = a.damage;
@@ -57,6 +59,7 @@ public static class BattleEventMapper
                 dto.targetHpAfter = a.targetHpAfter;
                 break;
             case BattleEventDealth d:
+                dto.targetTeam = d.targetTeam;
                 dto.attackerUid = d.attackerUid;
                 dto.targetUid = d.targetUid;
                 break;
@@ -97,6 +100,7 @@ public static class BattleEventMapper
                     type = dto.type,
                     ownerUid = dto.ownerUid,
                     team = dto.team,
+                    targetTeam = dto.targetTeam,
                     attackerUid = dto.attackerUid,
                     targetUid = dto.targetUid,
                     damage = dto.damage,
@@ -111,6 +115,7 @@ public static class BattleEventMapper
                     time = dto.t,
                     type = dto.type,
                     team = dto.team,
+                    targetTeam = dto.targetTeam,
                     ownerUid = dto.ownerUid,
                     attackerUid = dto.attackerUid,
                     targetUid = dto.targetUid,
@@ -123,6 +128,7 @@ public static class BattleEventMapper
                 {
                     time = dto.t,
                     team = dto.team,
+                    targetTeam = dto.targetTeam,
                     ownerUid = dto.ownerUid,
                     type = dto.type,
                     attackerUid = dto.attackerUid,

@@ -112,22 +112,22 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             switch (ev)
             {
                 case BattleEventMove m:
-                    text += $"{m.time:0.00}s MOVE uid: {m.ownerUid} {m.from} -> {m.to}\n\n";
+                    text += $"{m.time:0.00}s MOVE uid: {m.ownerUid} team {m.team} {m.from} -> {m.to}\n\n";
                     break;
 
                 case BattleEventSkill s:
-                    text += $"{s.time:0.00}s SKILL uid: {s.ownerUid} -> {s.targetUid} " +
+                    text += $"{s.time:0.00}s SKILL uid: {s.ownerUid} team {s.team} enemyTeam {s.targetTeam} -> {s.targetUid} " +
                             $"skillId={s.skillId} dmg={s.damage} crit={s.isCrit} hpAfter={s.targetHpAfter}\n\n";
                     break;
                 case BattleEventAttack a:
-                    text += $"{a.time:0.00}s ATK uid: {a.ownerUid} -> uid: {a.targetUid} " +
+                    text += $"{a.time:0.00}s ATK uid: {a.ownerUid} team {a.team} enemyTeam {a.targetTeam} -> uid: {a.targetUid}" +
                             $"dmg={a.damage} crit={a.isCrit} hpAfter={a.targetHpAfter}\n\n";
                     break;
                 case BattleEventDealth d:
-                    text += $"{d.time:0.00}s DEATH uid: {d.ownerUid} killed -> uid: {d.targetUid}\n\n";
+                    text += $"{d.time:0.00}s DEATH uid: {d.ownerUid} attackerTeam: {d.team} killed -> uid: {d.targetUid} TargetTeam: {d.targetTeam}\n\n";
                     break;
                 case BattleEventInit b:
-                    text += $"{b.time}:0.00s champion init with uid{b.ownerUid} team {b.team} maxHp {b.maxHp} curHp {b.curtHp}\n\n";
+                    text += $"{b.time:0.00}s champion init with uid{b.ownerUid} team {b.team} maxHp {b.maxHp} curHp {b.curtHp}\n\n";
                     break;
                 default:
                     text += $"{ev.time:0.00}s {ev.type} uid: {ev.ownerUid}\n\n";

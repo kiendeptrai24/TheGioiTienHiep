@@ -21,7 +21,11 @@ public static class BattleCombatResolver
             // sched.PutSkillOnCooldown(attackerIndex, -1, t, 0f);
             return false;
         }
-
+        if (s.units[attackerIndex].nextActionTime > t)
+        {
+            sched.ScheduleNextBasic(s, attackerIndex, t);
+            return false;
+        }
         SkillData skill = s.skillsByUnit[attackerIndex][skillIndex];
 
         var atk = s.units[attackerIndex];
@@ -44,6 +48,7 @@ public static class BattleCombatResolver
                 time = t,
                 type = BattleEventType.Skill,
                 team = atk.team,
+                targetTeam = def.team,
                 ownerUid = atk.uid,
                 attackerUid = atk.uid,
                 targetUid = def.uid,
@@ -68,6 +73,11 @@ public static class BattleCombatResolver
         List<BattleEvent> events,
         bool recordEvents)
     {
+        if (s.units[attackerIndex].nextActionTime > t)
+        {
+            sched.ScheduleNextBasic(s, attackerIndex, t);
+            return false;
+        }
         int myRange = s.atkRange[attackerIndex];
         if (dist <= myRange)
         {
@@ -99,6 +109,7 @@ public static class BattleCombatResolver
                 time = t,
                 type = BattleEventType.Attack,
                 team = atk.team,
+                targetTeam = def.team,
                 ownerUid = atk.uid,
                 attackerUid = atk.uid,
                 targetUid = def.uid,

@@ -21,7 +21,9 @@ public class AIChampionMovement : TGTHMonoBehaviour
         if (statsData != null)
         {
             statsData.SetupDataPreset();
-            agent.stoppingDistance = statsData.AttackSpeed;
+            var herodata = statsData.heroData as HeroData;
+            agent.stoppingDistance = herodata.attackRange;
+            Debug.Log("AI Champion Movement Stopping Distance set to: " + agent.stoppingDistance);
             agent.speed = statsData.MovementSpeed;
         }
     }
@@ -33,8 +35,8 @@ public class AIChampionMovement : TGTHMonoBehaviour
     }
     private void Update()
     {
-        FindTargetNearest();
         CheckArrived();
+        FindTargetNearest();
         RotateToMoveDirection();
     }
     [ContextMenu("Set Target to Player")]
@@ -87,20 +89,18 @@ public class AIChampionMovement : TGTHMonoBehaviour
     void RotateToMoveDirection()
     {
         if (m_Target == null) return;
-        // if (agent.velocity.sqrMagnitude > 0.01f)
-        // {
         Quaternion targetRot = Quaternion.LookRotation(m_Target.position - transform.position);
         transform.rotation = Quaternion.Slerp(
             transform.rotation,
             targetRot,
             Time.deltaTime * 15f
         );
-        // }
     }
     void OnArrived()
     {
         agent.velocity = Vector3.zero;
         agent.isStopped = true;
+        Debug.Log("AI Champion Arrived at Target");
     }
     public bool IsMoving()
     {

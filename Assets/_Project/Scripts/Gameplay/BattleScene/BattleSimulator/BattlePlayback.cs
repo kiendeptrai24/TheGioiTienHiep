@@ -53,8 +53,8 @@ public class BattlePlayback : TGTHMonoBehaviour
             Vector3 rotOffset = eventInit.team == TeamId.Heroes ? Vector3.zero : Vector3.back;
             Quaternion rot = Quaternion.LookRotation(rotOffset);
 
-            float xPos = Mathf.RoundToInt(origin.position.x + eventInit.cell.y);
-            float yPos = Mathf.RoundToInt(origin.position.z + eventInit.cell.x);
+            int xPos = Mathf.RoundToInt(origin.position.x + eventInit.cell.y);
+            int yPos = Mathf.RoundToInt(origin.position.z + eventInit.cell.x);
 
             Vector3 pos = new Vector3(
                 (xPos + posOrigin.x) * offsetOrigin.x,
@@ -115,6 +115,9 @@ public class BattlePlayback : TGTHMonoBehaviour
             case BattleEventType.Death:
                 PlayDeath(e.ownerUid, e.team);
                 break;
+            default:
+                Debug.Log($"Unknown event type {e.type} for champion id {e.ownerUid}");
+                break;
         }
     }
     public void DescreaseHealth(BattleEvent chamId, TeamId team)
@@ -139,12 +142,15 @@ public class BattlePlayback : TGTHMonoBehaviour
     {
         var eventMove = chamId as BattleEventMove;
         var chamAnim = GetAnimationCham(eventMove.ownerUid, team);
-        Vector2 cell = eventMove.to;
+        int xPos = Mathf.RoundToInt(origin.position.x + eventMove.to.y);
+        int yPos = Mathf.RoundToInt(origin.position.z + eventMove.to.x);
         Vector3 destination = new Vector3(
-                (cell.x + posOrigin.x) * offsetOrigin.x,
+                (xPos + posOrigin.x) * offsetOrigin.x,
                 0,
-                (cell.y + posOrigin.y) * offsetOrigin.y
+                (yPos + posOrigin.y) * offsetOrigin.y
             );
+        Vector3 chamPos = chamAnim.transform.position;
+        Debug.Log("movement distance" + "cham pos " + chamPos + " destination " + destination);
         chamAnim.PlayMovement(destination);
     }
     public void PlayAttack(ChampionAnimationPlayback chamAnim)

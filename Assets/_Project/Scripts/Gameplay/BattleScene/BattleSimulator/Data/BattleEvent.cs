@@ -20,6 +20,7 @@ public class BattleEventMove : BattleEvent
 [Serializable]
 public class BattleEventAttack : BattleEvent
 {
+    public TeamId targetTeam;
     public string targetUid;
     public string attackerUid;
     public int damage;
@@ -36,6 +37,7 @@ public class BattleEventSkill : BattleEventAttack
 [Serializable]
 public class BattleEventDealth : BattleEvent
 {
+    public TeamId targetTeam;
     public string targetUid;
     public string attackerUid;
 }

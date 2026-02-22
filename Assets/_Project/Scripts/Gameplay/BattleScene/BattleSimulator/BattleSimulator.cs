@@ -21,8 +21,6 @@ public static class BattleSimulator
         bool recordEvents = true)
     {
         int iter = 0;
-        int index = 0;
-        int tawait = 0;
 
         var rng = new XorShift32(seed);
         var events = recordEvents ? new List<BattleEvent>(1024) : null;
@@ -66,6 +64,8 @@ public static class BattleSimulator
             int a = sched.PickNextActor(s, out float bestT);
             if (a < 0 || bestT == float.MaxValue) break;
             t = bestT;
+            // commit any moves that finished by time t
+            sched.CommitPendingMoves(s, board, t);
             if (s.units[a].hp <= 0) continue;
             TeamId enemyTeam = (s.units[a].team == TeamId.Heroes) ? TeamId.Enemies : TeamId.Heroes;
             int target = BattleTargeting.FindNearestAlive(s, enemyTeam, a);
@@ -112,9 +112,11 @@ public static class BattleSimulator
 
             if (step != from && board.TryMove(a, from, step, s.units))
             {
-                sched.ApplyCell(s, a, step, board.moveInterval);
-                moved = true;
                 cellTomove = board.Dist(from, step);
+                // schedule cell update at t + move duration
+                sched.ApplyCell(s, a, step, t, board.moveInterval * cellTomove);
+                Debug.Log($"Moved unit {a} from {from} to {step} {board.moveInterval * cellTomove}s");
+                moved = true;
                 if (recordEvents)
                     events.Add(new BattleEventMove
                     {
@@ -125,6 +127,7 @@ public static class BattleSimulator
                         from = from,
                         to = step
                     });
+                s.units[a].nextActionTime = t + board.moveInterval * cellTomove;
             }
         }
 
@@ -143,6 +146,7 @@ public static class BattleSimulator
                 {
                     time = t,
                     team = s.units[target].team,
+                    targetTeam = s.units[a].team,
                     ownerUid = s.units[target].uid,
                     type = BattleEventType.Death,
                     attackerUid = s.units[a].uid,
@@ -159,6 +163,7 @@ public static class BattleSimulator
                 {
                     time = t,
                     team = s.units[a].team,
+                    targetTeam = s.units[target].team,
                     ownerUid = s.units[a].uid,
                     type = BattleEventType.Death,
                     attackerUid = s.units[target].uid,
