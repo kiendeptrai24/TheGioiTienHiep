@@ -104,9 +104,8 @@ public class BattlePlayback : TGTHMonoBehaviour
                 PlayMovement(e, e.team);
                 break;
             case BattleEventType.Attack:
-                var attack = e as BattleEventAttack;
-                DescreaseHealth(e, e.team);
                 PlayAttack(GetAnimationCham(e.ownerUid, e.team));
+                DescreaseHealth(e);
                 break;
             case BattleEventType.Skill:
                 var skill = e as BattleEventSkill;
@@ -120,18 +119,12 @@ public class BattlePlayback : TGTHMonoBehaviour
                 break;
         }
     }
-    public void DescreaseHealth(BattleEvent chamId, TeamId team)
+    public void DescreaseHealth(BattleEvent e)
     {
-
-        var battleEventAttack = chamId as BattleEventAttack;
-        var chamAnim = GetAnimationCham(battleEventAttack.attackerUid, team);
+        var bea = e as BattleEventAttack;
+        var chamAnim = GetAnimationCham(bea.targetUid, bea.targetTeam);
         var health = chamAnim.GetComponent<HealthController>();
-        int damage = battleEventAttack.damage;
-        if (health == null)
-        {
-            Debug.Log($"Cannot find health component for champion id {battleEventAttack.attackerUid} in team {team}");
-            return;
-        }
+        int damage = bea.damage;
         health.DecreaseHealth(damage, 0);
     }
     public void PlayAnimationSkill(ChampionAnimationPlayback chamAnim, string skillId)
@@ -149,8 +142,6 @@ public class BattlePlayback : TGTHMonoBehaviour
                 0,
                 (yPos + posOrigin.y) * offsetOrigin.y
             );
-        Vector3 chamPos = chamAnim.transform.position;
-        Debug.Log("movement distance" + "cham pos " + chamPos + " destination " + destination);
         chamAnim.PlayMovement(destination);
     }
     public void PlayAttack(ChampionAnimationPlayback chamAnim)
@@ -160,7 +151,6 @@ public class BattlePlayback : TGTHMonoBehaviour
     public void PlayDeath(string chamId, TeamId team)
     {
         var chamAnim = GetAnimationCham(chamId, team);
-        Debug.Log($"Play death animation for champion id {chamId} in team {team}");
         chamAnim.PlayAnimationDeath();
         if (team == TeamId.Heroes)
         {
@@ -178,7 +168,6 @@ public class BattlePlayback : TGTHMonoBehaviour
         if (team == TeamId.Enemies && championsEnemies.TryGetValue(chamId, out var champEnemy))
             return champEnemy;
 
-        Debug.Log($"Cannot find champion animation with id {chamId} in team {team}");
         return null;
     }
 }

@@ -16,7 +16,7 @@ public class DonTramState_Champion : ChampionState, ISkillTrigger, IAnimationTri
 
     public void ActiveTrigger()
     {
-        m_machine.ChangeState<IdleState_Hero>();
+        m_machine.ChangeState<IdleState_Champion>();
     }
 
     public override void Enter()

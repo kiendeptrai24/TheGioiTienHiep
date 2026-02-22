@@ -30,14 +30,14 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         List<UnitInput> heroSnaps = new();
         // HERO uid: 0..H-1
         int heroCount = 0;
-        foreach (var heroPrefab in heroRoster.heroPrefabs)
+        foreach (var heroPrefab in heroRoster.chamPrefabs)
         {
             if (heroPrefab == null) continue;
 
             // nếu đây là prefab (NetworkObject) -> phải instantiate để lấy StatsData runtime
             var stats = heroPrefab.GetComponent<StatsData>();
             stats.SetupDataPreset(); // hoặc SetupDataPreset/Setup tùy bạn
-            var snap = SnapshotMapper.FromStats(stats, heroCount, TeamId.Heroes);
+            var snap = SnapshotMapper.FromStats(stats, TeamId.Heroes);
             snap.placement.cell = new Vector2Int(0, heroCount);
             snap.placement.attackRange = (int)snap.snap.attackRange;
             heroSnaps.Add(snap);
@@ -47,14 +47,14 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         int enemyCount = 10;
 
         // ENEMY uid: heroCount..heroCount+E-1
-        foreach (var enemyPrefab in enemyRoster.heroPrefabs)
+        foreach (var enemyPrefab in enemyRoster.chamPrefabs)
         {
             if (enemyPrefab == null) continue;
 
             var stats = enemyPrefab.GetComponent<StatsData>();
             stats.SetupDataPreset();
 
-            var snap = SnapshotMapper.FromStats(stats, enemyCount, TeamId.Enemies);
+            var snap = SnapshotMapper.FromStats(stats, TeamId.Enemies);
             snap.placement.cell = new Vector2Int(9, 19 - enemyCount);
             snap.placement.attackRange = (int)snap.snap.attackRange;
             enemySnaps.Add(snap);
@@ -64,7 +64,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         {
             width = 10,
             height = 10,
-            moveInterval = 1.5f,
+            moveInterval = .5f,
             allowDiagonal = true
         };
 

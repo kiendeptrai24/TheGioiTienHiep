@@ -605,7 +605,6 @@ GameObject:
   - component: {fileID: 4780332464445139027}
   - component: {fileID: 4276520118528860255}
   - component: {fileID: 3471520375736639621}
-  - component: {fileID: 8933791410952347468}
   - component: {fileID: 2431098335187412916}
   - component: {fileID: 2352057310296838980}
   - component: {fileID: 8095543097241544068}
@@ -613,6 +612,7 @@ GameObject:
   - component: {fileID: 1568833544950699125}
   - component: {fileID: 5845973082963824177}
   - component: {fileID: 1243335212970064389}
+  - component: {fileID: 3416718887445609666}
   m_Layer: 7
   m_Name: "A \u0110\u1EA1i"
   m_TagString: Untagged
@@ -686,19 +686,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
---- !u!114 &8933791410952347468
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1983411562222401376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85c9f8dc3704b1e4ca7d603923442792, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HeroBaseSkill
-  isHero: 0
 --- !u!136 &2431098335187412916
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -919,7 +906,7 @@ MonoBehaviour:
   attackPrefab: {fileID: 5503505460791601945, guid: 74c549d1b06b6b140a1fd9536eea637f,
     type: 3}
   m_aiMovement: {fileID: 1568833544950699125}
-  skillController: {fileID: 8933791410952347468}
+  skillController: {fileID: 0}
   currentSkillData:
     skillId: 
   anim: {fileID: 8646063541036179383}
@@ -967,7 +954,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d934d0a517597348a27bd1f24b7b008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChampionAnimationPlayback
-  champion: {fileID: 0}
+  champion: {fileID: 1128743880306047126}
+--- !u!114 &3416718887445609666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983411562222401376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d9893e9e19d22644b8dcb124753f0e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChampionBaseSkill
 --- !u!1 &2097637020393757430
 GameObject:
   m_ObjectHideFlags: 0

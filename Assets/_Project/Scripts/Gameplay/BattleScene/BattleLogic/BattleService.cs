@@ -62,10 +62,10 @@ public class BattleService : NetworkBehaviour
         var roster = playerObj.GetComponent<PlayerBattleRoster>();
         if (roster == null) return;
 
-        int n = Mathf.Min(roster.maxHeroesToSpawn, roster.heroPrefabs.Count);
+        int n = Mathf.Min(roster.maxHeroesToSpawn, roster.heroNetPrefabs.Count);
         for (int i = 0; i < n; i++)
         {
-            var prefab = roster.heroPrefabs[i];
+            var prefab = roster.heroNetPrefabs[i];
             if (prefab == null) continue;
 
             var pos = GetSpawn(s.Island.heroSpawns, i, s.Island.transform.position);

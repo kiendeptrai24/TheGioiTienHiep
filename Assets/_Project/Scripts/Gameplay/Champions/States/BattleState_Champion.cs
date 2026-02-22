@@ -4,7 +4,7 @@ using UnityEngine;
 public class BattleState_Champion : ChampionState
 {
     private int _nextSkillIndex = 0;
-    private HeroBaseSkill heroSkills;
+    private ChampionBaseSkill heroSkills;
     public BattleState_Champion(ChampionController champion, IStateMachine stateMachine, string anim) : base(champion, stateMachine, anim)
     {
         heroSkills = champion.skillController;

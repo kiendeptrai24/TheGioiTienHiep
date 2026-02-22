@@ -3,12 +3,11 @@ using UnityEngine;
 
 public static class SnapshotMapper
 {
-    public static UnitInput FromStats(StatsData s, int uid, TeamId team)
+    public static UnitInput FromStats(StatsData s, TeamId team)
     {
         int hp = s.Health;
 
-        // lấy skill list của hero
-        var heroData = s.heroPreset.GetItemData() as HeroData; // bạn đang có heroData rồi
+        var heroData = s.heroPreset.GetItemData() as HeroData;
         List<SkillData> skills = heroData != null ? heroData.skillDatas : new List<SkillData>();
         return new UnitInput
         {
@@ -43,7 +42,7 @@ public static class SnapshotMapper
                 reflect = s.ReflectDamage,
 
                 attackSpeed = Mathf.Max(1, s.AttackSpeed),
-                attackRange = Mathf.Max(1, s.AttackRange)
+                attackRange = Mathf.Max(1, heroData.attackRange)
             },
             skills = skills
         };

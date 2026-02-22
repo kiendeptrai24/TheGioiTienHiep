@@ -1486,7 +1486,6 @@ GameObject:
   - component: {fileID: 6598824575513415056}
   - component: {fileID: 8881702731080846008}
   - component: {fileID: 6357612355618796698}
-  - component: {fileID: 3913131361853228358}
   - component: {fileID: 2319664517494395950}
   - component: {fileID: 8088733750663028991}
   - component: {fileID: 3668945714780889387}
@@ -1494,6 +1493,7 @@ GameObject:
   - component: {fileID: 160952187477607932}
   - component: {fileID: 5965476177745462768}
   - component: {fileID: 7242292037420256539}
+  - component: {fileID: -2216064858168154340}
   m_Layer: 7
   m_Name: "K\xEC Phong"
   m_TagString: Untagged
@@ -1567,19 +1567,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
---- !u!114 &3913131361853228358
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6061070319486654388}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85c9f8dc3704b1e4ca7d603923442792, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HeroBaseSkill
-  isHero: 0
 --- !u!136 &2319664517494395950
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1797,10 +1784,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChampionController
   isMeleeChampion: 0
-  attackPrefab: {fileID: 5503505460791601945, guid: 74c549d1b06b6b140a1fd9536eea637f,
+  attackPrefab: {fileID: 1692517446758730, guid: 08fd1b80cc24cc8439f45fda3c558255,
     type: 3}
   m_aiMovement: {fileID: 160952187477607932}
-  skillController: {fileID: 3913131361853228358}
+  skillController: {fileID: 0}
   currentSkillData:
     skillId: 
   anim: {fileID: 5356049707091689785}
@@ -1848,7 +1835,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d934d0a517597348a27bd1f24b7b008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChampionAnimationPlayback
-  champion: {fileID: 0}
+  champion: {fileID: 4188374026256888863}
+--- !u!114 &-2216064858168154340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6061070319486654388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d9893e9e19d22644b8dcb124753f0e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChampionBaseSkill
 --- !u!1 &6062262065057353564
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,7 +18,6 @@ public class GroundState_Champion : ChampionState
     public override void Excute()
     {
         base.Excute();
-        m_machine.ChangeState<BattleState_Champion>();
     }
 
     public override void Exit()

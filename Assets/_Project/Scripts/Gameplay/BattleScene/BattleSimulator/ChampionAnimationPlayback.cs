@@ -6,7 +6,7 @@ public class ChampionAnimationPlayback : TGTHMonoBehaviour, IChampionAnimation
 {
     public ChampionController champion;
     private IStateMachine m_machine;
-    private HeroBaseSkill heroSkills;
+    private ChampionBaseSkill chamSkills;
     private AIChampionMovement aiMovement;
     protected override void Awake()
     {
@@ -41,9 +41,9 @@ public class ChampionAnimationPlayback : TGTHMonoBehaviour, IChampionAnimation
     {
 
 
-        if (heroSkills.HasSkill(skillid))
+        if (chamSkills.HasSkill(skillid))
         {
-            var skillData = heroSkills.GetSkill(skillid);
+            var skillData = chamSkills.GetSkill(skillid);
             m_machine.ChangeState(skillData.Skill.skillAnimationClass);
         }
     }
@@ -56,7 +56,7 @@ public class ChampionAnimationPlayback : TGTHMonoBehaviour, IChampionAnimation
     {
         base.LoadComponent();
         champion = GetComponent<ChampionController>();
-        heroSkills = GetComponent<HeroBaseSkill>();
+        chamSkills = GetComponent<ChampionBaseSkill>();
         aiMovement = GetComponent<AIChampionMovement>();
     }
 }

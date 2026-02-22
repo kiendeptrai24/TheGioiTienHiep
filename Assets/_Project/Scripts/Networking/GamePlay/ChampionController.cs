@@ -8,7 +8,7 @@ public class ChampionController : TGTHMonoBehaviour, ISkillCaster
     public GameObject attackPrefab;
     protected IStateMachine m_championSM;
     public AIChampionMovement m_aiMovement;
-    public HeroBaseSkill skillController;
+    public ChampionBaseSkill skillController;
     public SkillDataRuntime currentSkillData;
     protected HealthController healthController;
     [HideInInspector] public IMoveable moveable;
@@ -68,7 +68,7 @@ public class ChampionController : TGTHMonoBehaviour, ISkillCaster
         anim = GetComponentInChildren<Animator>();
         moveable = GetComponent<IMoveable>();
         m_aiMovement = GetComponent<AIChampionMovement>();
-        skillController = GetComponent<HeroBaseSkill>();
+        skillController = GetComponent<ChampionBaseSkill>();
         stats = GetComponent<StatsData>();
         healthController = GetComponent<HealthController>();
     }

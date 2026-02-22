@@ -21,9 +21,7 @@ public class AIChampionMovement : TGTHMonoBehaviour
         if (statsData != null)
         {
             statsData.SetupDataPreset();
-            var herodata = statsData.heroData as HeroData;
-            agent.stoppingDistance = herodata.attackRange;
-            Debug.Log("AI Champion Movement Stopping Distance set to: " + agent.stoppingDistance);
+            agent.stoppingDistance = 0.3f;
             agent.speed = statsData.MovementSpeed;
         }
     }

@@ -56,7 +56,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
                 {
                     skillId = skillData.itemId,
                     skill = skillruntime,
-                    skillAnimationClass = typeof(DonTramState_Hero),
+                    skillAnimationClass = typeof(DonTramState_Champion),
                 });
                 m_SkillController.AddSkill(skillruntime);
                 break;
@@ -68,7 +68,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
                 {
                     skillId = skillData.itemId,
                     skill = skillruntime2,
-                    skillAnimationClass = typeof(LinhTienState_Hero),
+                    skillAnimationClass = typeof(LinhTienState_Champion),
                 });
                 m_SkillController.AddSkill(skillruntime2);
                 break;
@@ -80,7 +80,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
                 {
                     skillId = skillData.itemId,
                     skill = skillruntime3,
-                    skillAnimationClass = typeof(LienKichChiThuatState_Hero),
+                    skillAnimationClass = typeof(LienKichChiThuatState_Champion),
                 });
                 m_SkillController.AddSkill(skillruntime3);
                 break;
@@ -92,7 +92,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
                 {
                     skillId = skillData.itemId,
                     skill = skillruntime4,
-                    skillAnimationClass = typeof(ToanLucNhatKichState_Hero),
+                    skillAnimationClass = typeof(ToanLucNhatKichState_Champion),
                 });
                 m_SkillController.AddSkill(skillruntime4);
                 break;
@@ -104,7 +104,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
                 {
                     skillId = skillData.itemId,
                     skill = skillruntime5,
-                    skillAnimationClass = typeof(NhamChuanState_Hero),
+                    skillAnimationClass = typeof(NhamChuanState_Champion),
                 });
                 m_SkillController.AddSkill(skillruntime5);
                 break;
@@ -116,7 +116,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
                 {
                     skillId = skillData.itemId,
                     skill = skillruntime6,
-                    skillAnimationClass = typeof(VanLinhTienState_Hero)
+                    skillAnimationClass = typeof(VanLinhTienState_Champion)
                 });
                 m_SkillController.AddSkill(skillruntime6);
                 break;
@@ -128,7 +128,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
                 {
                     skillId = skillData.itemId,
                     skill = skillruntime7,
-                    skillAnimationClass = typeof(LinhTramState_Hero)
+                    skillAnimationClass = typeof(LinhTramState_Champion)
                 });
                 m_SkillController.AddSkill(skillruntime7);
                 break;
@@ -140,7 +140,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
                 {
                     skillId = skillData.itemId,
                     skill = skillruntime8,
-                    skillAnimationClass = typeof(VuTienState_Hero)
+                    skillAnimationClass = typeof(VuTienState_Champion)
                 });
                 m_SkillController.AddSkill(skillruntime8);
                 break;
@@ -168,6 +168,10 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
     public List<SkillDataRuntime> GetAllSkills()
     {
         return m_SkillsDataRuntimes;
+    }
+    public bool HasSkill(string skillId)
+    {
+        return m_SkillController.HasSkill(skillId);
     }
     public SkillRuntime GetSkill(string skillId)
     {
