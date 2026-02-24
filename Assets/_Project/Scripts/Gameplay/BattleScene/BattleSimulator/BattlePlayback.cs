@@ -1,8 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BattlePlayback : TGTHMonoBehaviour
 {
+    public float timeToDeplay = 0.5f;
     public int[,] framesUnit = new int[10, 10];
     public Transform origin;
     public List<ChampionController> objects;
@@ -95,6 +97,7 @@ public class BattlePlayback : TGTHMonoBehaviour
         {
             ResetBattle();
         }
+        Debug.Log($"{Time.time - battleTimer:0.00}s / {events[events.Count - 1].time:0.00}s");
     }
     void Dispatch(BattleEvent e)
     {
@@ -105,7 +108,8 @@ public class BattlePlayback : TGTHMonoBehaviour
                 break;
             case BattleEventType.Attack:
                 PlayAttack(GetAnimationCham(e.ownerUid, e.team));
-                DescreaseHealth(e);
+                //DescreaseHealth(e);
+                StartCoroutine(DecreaseHealthBattle(e));
                 break;
             case BattleEventType.Skill:
                 var skill = e as BattleEventSkill;
@@ -124,6 +128,26 @@ public class BattlePlayback : TGTHMonoBehaviour
         var bea = e as BattleEventAttack;
         var chamAnim = GetAnimationCham(bea.targetUid, bea.targetTeam);
         var health = chamAnim.GetComponent<HealthController>();
+        int damage = bea.damage;
+        health.DecreaseHealth(damage, 0);
+    }
+
+    private IEnumerator DecreaseHealthBattle(BattleEvent e)
+    {
+        yield return new WaitForSeconds(timeToDeplay);
+
+        var bea = e as BattleEventAttack;
+        if (bea == null)
+            yield break;
+
+        var chamAnim = GetAnimationCham(bea.targetUid, bea.targetTeam);
+        if (chamAnim == null)
+            yield break;
+
+        var health = chamAnim.GetComponent<HealthController>();
+        if (health == null)
+            yield break;
+
         int damage = bea.damage;
         health.DecreaseHealth(damage, 0);
     }

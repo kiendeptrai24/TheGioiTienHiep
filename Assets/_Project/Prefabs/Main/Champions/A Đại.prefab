@@ -673,7 +673,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1983411562222401376}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.2
+  m_Radius: 0.1
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -725,9 +725,9 @@ MonoBehaviour:
   isHero: 1
   heroPreset: {fileID: 11400000, guid: b927363ac8b7260448d4eb5d9f9d4a0b, type: 2}
   heroData:
-    itemId: 856e38a0a3999b743985fad6c670c593
+    itemId: b927363ac8b7260448d4eb5d9f9d4a0b
     itemType: 4
-    itemName: "A Nh\u1ECB"
+    itemName: "A \u0110\u1EA1i"
     itemIcon: {fileID: -1351563598, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
     itemPrice: 100
     canStack: 0
@@ -742,9 +742,9 @@ MonoBehaviour:
     magicalDefense: 0
     spiritDefense: 0
   techniqueData:
-  - itemId: 967ca2419ba9971429f2d3f826cf9c0b
+  - itemId: 0883b5bf14c481a4090d4583c2e25aa7
     itemType: 2
-    itemName: "Man Ng\u01B0u B\xED Ph\xE1p C1"
+    itemName: "Y\xEAu Linh Quy\u1EBFt C1"
     itemIcon: {fileID: -235380508, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
     itemPrice: 100
     canStack: 0
@@ -752,10 +752,10 @@ MonoBehaviour:
     currentstack: 0
     cultivationStage: 0
     qualityType: 0
-    physicalDamage: 0.05
-    magicalDamage: 0
+    physicalDamage: 0
+    magicalDamage: 0.1
     spiritDamage: 0
-    physicalDefense: 0.05
+    physicalDefense: 0
     magicalDefense: 0
     spiritDefense: 0
     hasLearned: 0
@@ -793,7 +793,7 @@ MonoBehaviour:
     bonusMana: 0
     bonusSpirit: 0
     totalQualityAndLevel: 0
-    statCount: 3
+    statCount: 2
   skillDatas: []
   statsRaceData:
     itemId: 
@@ -852,17 +852,17 @@ MonoBehaviour:
     canStack: 0
     itemDescription: 
     currentstack: 0
-    cultivationStage: 2
+    cultivationStage: 0
     qualityType: 0
-    physicalDamage: 12
-    magicalDamage: 12
-    spiritDamage: 12
-    physicalDefense: 6
-    magicalDefense: 6
-    spiritDefense: 6
-    maxHealth: 120
-    maxMana: 120
-    maxSpirit: 120
+    physicalDamage: 10
+    magicalDamage: 10
+    spiritDamage: 10
+    physicalDefense: 5
+    magicalDefense: 5
+    spiritDefense: 5
+    maxHealth: 100
+    maxMana: 100
+    maxSpirit: 100
     critRate: 150
     critDamage: 5
     evasion: 2
@@ -872,7 +872,7 @@ MonoBehaviour:
     castSpeed: 1
     potential: 5
     skillPoints: 3
-    combatPower: 40
+    combatPower: 10
     spiritRange: 0
 --- !u!114 &8095543097241544068
 MonoBehaviour:

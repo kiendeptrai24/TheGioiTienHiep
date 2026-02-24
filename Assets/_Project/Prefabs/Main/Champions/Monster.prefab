@@ -1519,7 +1519,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 5549051213816601802}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.2
+  m_Radius: 0.1
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -1571,9 +1571,9 @@ MonoBehaviour:
   isHero: 1
   heroPreset: {fileID: 11400000, guid: 69fb5929cf0346f4b94a471b49bbbf5f, type: 2}
   heroData:
-    itemId: 856e38a0a3999b743985fad6c670c593
+    itemId: 69fb5929cf0346f4b94a471b49bbbf5f
     itemType: 4
-    itemName: "A Nh\u1ECB"
+    itemName: Monter
     itemIcon: {fileID: -1351563598, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
     itemPrice: 100
     canStack: 0
@@ -1646,17 +1646,17 @@ MonoBehaviour:
     canStack: 0
     itemDescription: 
     currentstack: 0
-    cultivationStage: 2
+    cultivationStage: 0
     qualityType: 0
-    physicalDamage: 12
-    magicalDamage: 12
-    spiritDamage: 12
-    physicalDefense: 6
-    magicalDefense: 6
-    spiritDefense: 6
-    maxHealth: 120
-    maxMana: 120
-    maxSpirit: 120
+    physicalDamage: 10
+    magicalDamage: 10
+    spiritDamage: 10
+    physicalDefense: 5
+    magicalDefense: 5
+    spiritDefense: 5
+    maxHealth: 100
+    maxMana: 100
+    maxSpirit: 100
     critRate: 150
     critDamage: 5
     evasion: 2
@@ -1666,7 +1666,7 @@ MonoBehaviour:
     castSpeed: 1
     potential: 5
     skillPoints: 3
-    combatPower: 40
+    combatPower: 10
     spiritRange: 0
 --- !u!114 &8274651588705485464
 MonoBehaviour:

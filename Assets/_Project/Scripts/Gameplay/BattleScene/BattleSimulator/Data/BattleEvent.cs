@@ -38,6 +38,7 @@ public class BattleEventSkill : BattleEventAttack
 public class BattleEventDealth : BattleEvent
 {
     public TeamId targetTeam;
+    public TeamId attackerTeam;
     public string targetUid;
     public string attackerUid;
 }

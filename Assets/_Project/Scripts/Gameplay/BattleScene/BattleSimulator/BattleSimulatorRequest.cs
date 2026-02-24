@@ -34,9 +34,8 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         {
             if (heroPrefab == null) continue;
 
-            // nếu đây là prefab (NetworkObject) -> phải instantiate để lấy StatsData runtime
             var stats = heroPrefab.GetComponent<StatsData>();
-            stats.SetupDataPreset(); // hoặc SetupDataPreset/Setup tùy bạn
+            stats.SetupDataPreset();
             var snap = SnapshotMapper.FromStats(stats, TeamId.Heroes);
             snap.placement.cell = new Vector2Int(0, heroCount);
             snap.placement.attackRange = (int)snap.snap.attackRange;
@@ -124,7 +123,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
                             $"dmg={a.damage} crit={a.isCrit} hpAfter={a.targetHpAfter}\n\n";
                     break;
                 case BattleEventDealth d:
-                    text += $"{d.time:0.00}s DEATH uid: {d.ownerUid} attackerTeam: {d.team} killed -> uid: {d.targetUid} TargetTeam: {d.targetTeam}\n\n";
+                    text += $"{d.time:0.00}s (DEATH uid: {d.ownerUid} team: {d.team}) attackerTeam: {d.attackerTeam} uid: {d.attackerUid} killed -> targetTeam: {d.targetTeam} uid: {d.targetUid} \n\n";
                     break;
                 case BattleEventInit b:
                     text += $"{b.time:0.00}s champion init with uid{b.ownerUid} team {b.team} maxHp {b.maxHp} curHp {b.curtHp}\n\n";

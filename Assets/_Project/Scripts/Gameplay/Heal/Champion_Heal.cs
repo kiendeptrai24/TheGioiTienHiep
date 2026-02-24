@@ -19,6 +19,11 @@ public class Champion_Heal : TGTHMonoBehaviour, HealthController
         stats = GetComponent<StatsData>();
         stats.OnStatReady += OnStatReady;
     }
+    override protected void Start()
+    {
+        base.Start();
+        stats.SetupDataPreset();
+    }
     public void DecreaseHealth(float damage, ulong attackerId)
     {
         Debug.Log("Champion Decrease Health: " + currentHealth + "/" + maxHealth);
@@ -52,7 +57,7 @@ public class Champion_Heal : TGTHMonoBehaviour, HealthController
         maxHealth = Mathf.RoundToInt(stats.Health);
         currentHealth = maxHealth;
         isDead = false;
-        OnHealthChanged?.Invoke(0, maxHealth);
+        OnHealthChanged?.Invoke(currentHealth, maxHealth);
     }
 
     public bool ShouldDie()

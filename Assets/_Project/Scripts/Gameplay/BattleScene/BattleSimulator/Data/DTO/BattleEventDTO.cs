@@ -7,6 +7,7 @@ public struct BattleEventDTO : INetworkSerializable
     public BattleEventType type;
     public TeamId team;
     public TeamId targetTeam;
+    public TeamId attackerTeam;
     public string ownerUid;
     public string attackerUid;
     public string targetUid;
@@ -27,6 +28,7 @@ public struct BattleEventDTO : INetworkSerializable
         serializer.SerializeValue(ref t);
         serializer.SerializeValue(ref team);
         serializer.SerializeValue(ref targetTeam);
+        serializer.SerializeValue(ref attackerTeam);
         serializer.SerializeValue(ref type);
         serializer.SerializeValue(ref ownerUid);
         serializer.SerializeValue(ref attackerUid);

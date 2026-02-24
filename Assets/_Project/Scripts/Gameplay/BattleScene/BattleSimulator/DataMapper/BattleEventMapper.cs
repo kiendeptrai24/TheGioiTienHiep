@@ -60,8 +60,9 @@ public static class BattleEventMapper
                 break;
             case BattleEventDealth d:
                 dto.targetTeam = d.targetTeam;
-                dto.attackerUid = d.attackerUid;
                 dto.targetUid = d.targetUid;
+                dto.attackerTeam = d.attackerTeam;
+                dto.attackerUid = d.attackerUid;
                 break;
             case BattleEventInit b:
                 dto.ownerUid = b.ownerUid;
@@ -127,12 +128,15 @@ public static class BattleEventMapper
                 return new BattleEventDealth
                 {
                     time = dto.t,
+                    type = dto.type,
+
                     team = dto.team,
                     targetTeam = dto.targetTeam,
                     ownerUid = dto.ownerUid,
-                    type = dto.type,
-                    attackerUid = dto.attackerUid,
                     targetUid = dto.targetUid,
+
+                    attackerTeam = dto.attackerTeam,
+                    attackerUid = dto.attackerUid,
                 };
             case BattleEventType.Init:
                 return new BattleEventInit

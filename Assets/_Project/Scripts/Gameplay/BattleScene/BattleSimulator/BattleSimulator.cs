@@ -145,12 +145,15 @@ public static class BattleSimulator
                 events.Add(new BattleEventDealth
                 {
                     time = t,
+
                     team = s.units[target].team,
-                    targetTeam = s.units[a].team,
+                    targetTeam = s.units[target].team,
+                    targetUid = s.units[target].uid,
                     ownerUid = s.units[target].uid,
-                    type = BattleEventType.Death,
+
+                    attackerTeam = s.units[a].team,
                     attackerUid = s.units[a].uid,
-                    targetUid = s.units[target].uid
+                    type = BattleEventType.Death,
                 });
         }
 
@@ -162,12 +165,15 @@ public static class BattleSimulator
                 events.Add(new BattleEventDealth
                 {
                     time = t,
+
                     team = s.units[a].team,
-                    targetTeam = s.units[target].team,
+                    targetTeam = s.units[a].team,
+                    targetUid = s.units[a].uid,
                     ownerUid = s.units[a].uid,
-                    type = BattleEventType.Death,
+
+                    attackerTeam = s.units[target].team,
                     attackerUid = s.units[target].uid,
-                    targetUid = s.units[a].uid
+                    type = BattleEventType.Death,
                 });
         }
     }
