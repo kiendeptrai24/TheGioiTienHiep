@@ -23,7 +23,6 @@ public class HealUI : TGTHMonoBehaviour
 
     private void OnHealthChanged(float curheal, float maxheal)
     {
-        Debug.Log("Heal UI Change Health: " + curheal + "/" + maxheal);
         float percent = maxheal > 0 ? curheal / maxheal : 0;
         m_healSlider.value = percent;
     }

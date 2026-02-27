@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using ExitGames.Client.Photon.StructWrapping;
 using UnityEngine;
 
 public class BattlePlayback : TGTHMonoBehaviour
 {
     public float timeToDeplay = 0.5f;
+    public int timeScale = 1;
     public int[,] framesUnit = new int[10, 10];
     public Transform origin;
     public List<ChampionController> objects;
@@ -27,6 +29,11 @@ public class BattlePlayback : TGTHMonoBehaviour
             string id = stats.heroPreset.itemId;
             championsObject.Add(id, champ);
         }
+    }
+    [ContextMenu("set battle time scale")]
+    public void SetBattleTimeScale()
+    {
+        Time.timeScale = timeScale;
     }
     [ContextMenu("set battle events")]
     public void SetBattleEvent()
@@ -89,7 +96,6 @@ public class BattlePlayback : TGTHMonoBehaviour
         if (currentEventIndex < events.Count &&
            Time.time - battleTimer >= events[currentEventIndex].time)
         {
-            Debug.Log($"Dispatching event at time {events[currentEventIndex].type} for champion id {events[currentEventIndex].ownerUid}");
             Dispatch(events[currentEventIndex]);
             currentEventIndex++;
         }
@@ -97,48 +103,34 @@ public class BattlePlayback : TGTHMonoBehaviour
         {
             ResetBattle();
         }
-        Debug.Log($"{Time.time - battleTimer:0.00}s / {events[events.Count - 1].time:0.00}s");
     }
     void Dispatch(BattleEvent e)
     {
         switch (e.type)
         {
             case BattleEventType.Move:
-                PlayMovement(e, e.team);
+                PlayMovement(e);
                 break;
             case BattleEventType.Attack:
-                PlayAttack(GetAnimationCham(e.ownerUid, e.team));
-                //DescreaseHealth(e);
-                StartCoroutine(DecreaseHealthBattle(e));
+                PlayAttack(e);
                 break;
             case BattleEventType.Skill:
-                var skill = e as BattleEventSkill;
-                PlayAnimationSkill(GetAnimationCham(e.ownerUid, e.team), skill.skillId);
+                PlayAnimationSkill(e);
                 break;
             case BattleEventType.Death:
-                PlayDeath(e.ownerUid, e.team);
+                PlayDeath(e);
                 break;
             default:
                 Debug.Log($"Unknown event type {e.type} for champion id {e.ownerUid}");
                 break;
         }
     }
-    public void DescreaseHealth(BattleEvent e)
-    {
-        var bea = e as BattleEventAttack;
-        var chamAnim = GetAnimationCham(bea.targetUid, bea.targetTeam);
-        var health = chamAnim.GetComponent<HealthController>();
-        int damage = bea.damage;
-        health.DecreaseHealth(damage, 0);
-    }
-
     private IEnumerator DecreaseHealthBattle(BattleEvent e)
     {
-        yield return new WaitForSeconds(timeToDeplay);
-
         var bea = e as BattleEventAttack;
         if (bea == null)
             yield break;
+        yield return new WaitForSeconds(bea.castTime);
 
         var chamAnim = GetAnimationCham(bea.targetUid, bea.targetTeam);
         if (chamAnim == null)
@@ -151,14 +143,28 @@ public class BattlePlayback : TGTHMonoBehaviour
         int damage = bea.damage;
         health.DecreaseHealth(damage, 0);
     }
-    public void PlayAnimationSkill(ChampionAnimationPlayback chamAnim, string skillId)
+    public void PlayAnimationSkill(BattleEvent e)
     {
-        chamAnim.PlayAnimationSkill(skillId);
+        var skill = e as BattleEventSkill;
+        if (skill == null)
+            return;
+        var atkCham = GetAnimationCham(skill.attackerUid, skill.team);
+        var defCham = GetAnimationCham(skill.targetUid, skill.targetTeam);
+        if (atkCham == null || defCham == null)
+            return;
+        atkCham.PlayAnimationAttack();
+        atkCham.GetComponent<AIChampionMovement>().SetTarget(defCham.transform);
+
+        atkCham.PlayAnimationSkill(skill.skillId);
+        StartCoroutine(DecreaseHealthBattle(skill));
     }
-    public void PlayMovement(BattleEvent chamId, TeamId team)
+    public void PlayMovement(BattleEvent e)
     {
-        var eventMove = chamId as BattleEventMove;
-        var chamAnim = GetAnimationCham(eventMove.ownerUid, team);
+        var eventMove = e as BattleEventMove;
+        var ownerCham = GetAnimationCham(eventMove.ownerUid, eventMove.team);
+        var targetCham = GetAnimationCham(eventMove.targetUid, eventMove.targetTeam);
+        if (ownerCham == null || targetCham == null)
+            return;
         int xPos = Mathf.RoundToInt(origin.position.x + eventMove.to.y);
         int yPos = Mathf.RoundToInt(origin.position.z + eventMove.to.x);
         Vector3 destination = new Vector3(
@@ -166,24 +172,26 @@ public class BattlePlayback : TGTHMonoBehaviour
                 0,
                 (yPos + posOrigin.y) * offsetOrigin.y
             );
-        chamAnim.PlayMovement(destination);
+
+        ownerCham.GetComponent<AIChampionMovement>().SetTarget(targetCham.transform);
+        ownerCham.PlayMovement(destination);
     }
-    public void PlayAttack(ChampionAnimationPlayback chamAnim)
+    public void PlayAttack(BattleEvent e)
     {
-        chamAnim.PlayAnimationAttack();
+        var eventAttack = e as BattleEventAttack;
+        if (eventAttack == null)
+            return;
+        var atkCham = GetAnimationCham(eventAttack.attackerUid, eventAttack.team);
+        var defCham = GetAnimationCham(eventAttack.targetUid, eventAttack.targetTeam);
+        if (atkCham == null || defCham == null)
+            return;
+        atkCham.GetComponent<AIChampionMovement>().SetTarget(defCham.transform);
+        atkCham.PlayAnimationAttack();
+        StartCoroutine(DecreaseHealthBattle(e));
     }
-    public void PlayDeath(string chamId, TeamId team)
+    public void PlayDeath(BattleEvent e)
     {
-        var chamAnim = GetAnimationCham(chamId, team);
-        chamAnim.PlayAnimationDeath();
-        if (team == TeamId.Heroes)
-        {
-            champions.Remove(chamId);
-        }
-        else
-        {
-            championsEnemies.Remove(chamId);
-        }
+
     }
     private ChampionAnimationPlayback GetAnimationCham(string chamId, TeamId team)
     {

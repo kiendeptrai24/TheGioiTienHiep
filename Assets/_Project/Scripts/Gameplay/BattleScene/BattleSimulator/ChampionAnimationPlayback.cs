@@ -39,18 +39,15 @@ public class ChampionAnimationPlayback : TGTHMonoBehaviour, IChampionAnimation
 
     public void PlayAnimationSkill(string skillid)
     {
-
-
         if (chamSkills.HasSkill(skillid))
         {
             var skillData = chamSkills.GetSkill(skillid);
+            if (skillData.Skill == null)
+            {
+                return;
+            }
             m_machine.ChangeState(skillData.Skill.skillAnimationClass);
         }
-    }
-
-    public void PlayAnimationDeath()
-    {
-        Destroy(gameObject);
     }
     override protected void LoadComponent()
     {

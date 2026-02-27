@@ -1,6 +1,4 @@
 
-
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +6,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
 {
     // SkillController to manage the hero's skills
     private SkillController m_SkillController;
-    private HeroLoadData m_HeroLoadData;
+    private StatsData m_StatsData;
     private FindTarget m_FindTargetEnemy;
     public SkillController SkillController => m_SkillController;
     // List of SkillData to be assigned in the Inspector
@@ -22,22 +20,13 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
         timeProvider = new UnityTimeProvider();
         m_SkillController = new SkillController(GetComponent<ISkillCaster>(), timeProvider);
         m_SkillsDataRuntimes = new();
-        m_SkillsData = new();
-
-        if (m_HeroLoadData != null)
-        {
-            m_HeroLoadData.OnHeroDataLoaded += LoadHeroData;
-        }
-    }
-
-    private void LoadHeroData(HeroData data)
-    {
-        m_SkillsData.AddRange(data.skillDatas);
         SetupSkills();
     }
 
     public void SetupSkills()
     {
+        var data = m_StatsData.heroPreset.GetSkillDatas();
+        m_SkillsData = data;
         foreach (var skillData in m_SkillsData)
         {
             if (skillData == null) continue;
@@ -50,7 +39,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
         {
             case SkillType.DonTram:
                 var skillruntime = new IdentifySkill(skillData, skillData.skillEffectPrefab,
-                skillData.itemId, skillData.itemName, skillData.cooldown);
+                skillData.itemId, skillData.itemName, skillData.cooldown, typeof(DonTramState_Champion));
 
                 m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
@@ -62,7 +51,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
                 break;
             case SkillType.LinhTien:
                 var skillruntime2 = new FocusSkill(skillData, skillData.skillEffectPrefab,
-                 skillData.itemId, skillData.itemName, skillData.cooldown);
+                 skillData.itemId, skillData.itemName, skillData.cooldown, typeof(LinhTienState_Champion));
 
                 m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
@@ -74,7 +63,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
                 break;
             case SkillType.LienKichChiThuat:
                 var skillruntime3 = new IdentifySkill(skillData, skillData.skillEffectPrefab,
-                 skillData.itemId, skillData.itemName, skillData.cooldown);
+                 skillData.itemId, skillData.itemName, skillData.cooldown, typeof(LienKichChiThuatState_Champion));
 
                 m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
@@ -86,7 +75,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
                 break;
             case SkillType.ToanLucNhatKich:
                 var skillruntime4 = new IdentifySkill(skillData, skillData.skillEffectPrefab,
-                 skillData.itemId, skillData.itemName, skillData.cooldown);
+                 skillData.itemId, skillData.itemName, skillData.cooldown, typeof(ToanLucNhatKichState_Champion));
 
                 m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
@@ -98,7 +87,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
                 break;
             case SkillType.NhamChuan:
                 var skillruntime5 = new FocusSkill(skillData, skillData.skillEffectPrefab,
-                 skillData.itemId, skillData.itemName, skillData.cooldown);
+                 skillData.itemId, skillData.itemName, skillData.cooldown, typeof(NhamChuanState_Champion));
 
                 m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
@@ -110,7 +99,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
                 break;
             case SkillType.VanLinhTien:
                 var skillruntime6 = new FocusSkill(skillData, skillData.skillEffectPrefab,
-                 skillData.itemId, skillData.itemName, skillData.cooldown);
+                skillData.itemId, skillData.itemName, skillData.cooldown, typeof(VanLinhTienState_Champion));
 
                 m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
@@ -122,7 +111,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
                 break;
             case SkillType.LinhTram:
                 var skillruntime7 = new IdentifySkill(skillData, skillData.skillEffectPrefab,
-                 skillData.itemId, skillData.itemName, skillData.cooldown);
+                 skillData.itemId, skillData.itemName, skillData.cooldown, typeof(LinhTramState_Champion));
 
                 m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
@@ -134,7 +123,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
                 break;
             case SkillType.VuTien:
                 var skillruntime8 = new FocusSkill(skillData, skillData.skillEffectPrefab,
-                 skillData.itemId, skillData.itemName, skillData.cooldown);
+                 skillData.itemId, skillData.itemName, skillData.cooldown, typeof(VuTienState_Champion));
 
                 m_SkillsDataRuntimes.Add(new SkillDataRuntime()
                 {
@@ -181,6 +170,6 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
     {
         base.LoadComponent();
         m_FindTargetEnemy = GetComponent<FindTarget>();
-        m_HeroLoadData = GetComponent<HeroLoadData>();
+        m_StatsData = GetComponent<StatsData>();
     }
 }

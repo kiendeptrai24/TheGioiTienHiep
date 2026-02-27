@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class IdentifySkill : BaseSkill
 {
-    public IdentifySkill(SkillData data, GameObject skillEffectPrefab, string skillId, string displayName, float cooldownSeconds = 1f)
-        : base(data, skillEffectPrefab, skillId, displayName, cooldownSeconds)
+    public IdentifySkill(SkillData data, GameObject skillEffectPrefab, string skillId, string displayName, float cooldownSeconds = 1f, Type skillAnimationClass = null)
+        : base(data, skillEffectPrefab, skillId, displayName, cooldownSeconds, skillAnimationClass)
     {
     }
 

@@ -23,7 +23,8 @@ public static class BattleEventMapper
             fromX = 0,
             fromY = 0,
             toX = 0,
-            toY = 0
+            toY = 0,
+            castTime = 0f 
         };
         if (ev.ownerUid == null)
         {
@@ -37,6 +38,8 @@ public static class BattleEventMapper
                 dto.fromY = (short)m.from.y;
                 dto.toX = (short)m.to.x;
                 dto.toY = (short)m.to.y;
+                dto.targetTeam = m.targetTeam;
+                dto.targetUid = m.targetUid;
                 break;
 
             case BattleEventSkill s:
@@ -46,6 +49,7 @@ public static class BattleEventMapper
                 dto.damage = s.damage;
                 dto.isCrit = s.isCrit;
                 dto.targetHpAfter = s.targetHpAfter;
+                dto.castTime = s.castTime;
 
                 dto.skillId = s.skillId;
                 break;
@@ -57,6 +61,7 @@ public static class BattleEventMapper
                 dto.damage = a.damage;
                 dto.isCrit = a.isCrit;
                 dto.targetHpAfter = a.targetHpAfter;
+                dto.castTime = a.castTime;
                 break;
             case BattleEventDealth d:
                 dto.targetTeam = d.targetTeam;
@@ -90,6 +95,8 @@ public static class BattleEventMapper
                     type = dto.type,
                     team = dto.team,
                     ownerUid = dto.ownerUid,
+                    targetTeam = dto.targetTeam,
+                    targetUid = dto.targetUid,
                     from = new Vector2Int(dto.fromX, dto.fromY),
                     to = new Vector2Int(dto.toX, dto.toY),
                 };
@@ -101,6 +108,7 @@ public static class BattleEventMapper
                     type = dto.type,
                     ownerUid = dto.ownerUid,
                     team = dto.team,
+                    castTime = dto.castTime,
                     targetTeam = dto.targetTeam,
                     attackerUid = dto.attackerUid,
                     targetUid = dto.targetUid,
@@ -123,6 +131,7 @@ public static class BattleEventMapper
                     damage = dto.damage,
                     isCrit = dto.isCrit,
                     targetHpAfter = dto.targetHpAfter,
+                    castTime = dto.castTime
                 };
             case BattleEventType.Death:
                 return new BattleEventDealth

@@ -40,7 +40,7 @@ public class ChampionController : TGTHMonoBehaviour, ISkillCaster
         base.Awake();
         LoadComponent();
         m_championSM = new ChampionStateMachine(this);
-        //healthController.OnDead += OnDead;
+        healthController.OnDead += OnDead;
     }
 
     override protected void Start()

@@ -113,9 +113,7 @@ public static class BattleSimulator
             if (step != from && board.TryMove(a, from, step, s.units))
             {
                 cellTomove = board.Dist(from, step);
-                // schedule cell update at t + move duration
                 sched.ApplyCell(s, a, step, t, board.moveInterval * cellTomove);
-                Debug.Log($"Moved unit {a} from {from} to {step} {board.moveInterval * cellTomove}s");
                 moved = true;
                 if (recordEvents)
                     events.Add(new BattleEventMove
@@ -124,6 +122,8 @@ public static class BattleSimulator
                         team = s.units[a].team,
                         type = BattleEventType.Move,
                         ownerUid = s.units[a].uid,
+                        targetTeam = s.units[target].team,
+                        targetUid = s.units[target].uid,
                         from = from,
                         to = step
                     });

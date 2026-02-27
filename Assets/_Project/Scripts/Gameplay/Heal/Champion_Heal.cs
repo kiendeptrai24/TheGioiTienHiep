@@ -26,7 +26,6 @@ public class Champion_Heal : TGTHMonoBehaviour, HealthController
     }
     public void DecreaseHealth(float damage, ulong attackerId)
     {
-        Debug.Log("Champion Decrease Health: " + currentHealth + "/" + maxHealth);
         if (ShouldDie())
             return;
         currentHealth = Mathf.RoundToInt(Mathf.Max(0, currentHealth - (damage * damageMultiplier)));

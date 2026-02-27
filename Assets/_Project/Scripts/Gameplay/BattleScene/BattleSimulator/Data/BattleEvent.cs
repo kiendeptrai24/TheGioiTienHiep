@@ -13,6 +13,8 @@ public class BattleEvent
 [Serializable]
 public class BattleEventMove : BattleEvent
 {
+    public TeamId targetTeam;
+    public string targetUid;
     public Vector2Int from;
     public Vector2Int to;
 }
@@ -26,6 +28,7 @@ public class BattleEventAttack : BattleEvent
     public int damage;
     public bool isCrit;
     public int targetHpAfter;
+    public float castTime;
 }
 
 [Serializable]

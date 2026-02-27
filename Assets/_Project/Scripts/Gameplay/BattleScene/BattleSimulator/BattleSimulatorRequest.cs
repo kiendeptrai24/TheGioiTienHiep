@@ -63,7 +63,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         {
             width = 10,
             height = 10,
-            moveInterval = .5f,
+            moveInterval = .3f,
             allowDiagonal = true
         };
 
@@ -111,7 +111,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             switch (ev)
             {
                 case BattleEventMove m:
-                    text += $"{m.time:0.00}s MOVE uid: {m.ownerUid} team {m.team} {m.from} -> {m.to}\n\n";
+                    text += $"{m.time:0.00}s MOVE uid: {m.ownerUid} team {m.team} {m.from} -> {m.to} to {m.targetUid}\n\n";
                     break;
 
                 case BattleEventSkill s:

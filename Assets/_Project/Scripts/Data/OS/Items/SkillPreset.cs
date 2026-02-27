@@ -72,6 +72,9 @@ public class SkillPreset : ItemPreset
     [Header("Summary")]
     public float totalQualityAndLevel;
     public int statCount;
+    [Header("Animation")]
+    public float animationDuration;
+    public float castTime;
 
     [ContextMenu("Reset To Default")]
     public void ResetToDefault()
@@ -475,7 +478,9 @@ public class SkillPreset : ItemPreset
             bonusSpirit = bonusSpirit,
 
             totalQualityAndLevel = totalQualityAndLevel,
-            statCount = statCount
+            statCount = statCount,
+            animationDuration = animationDuration,
+            castTime = castTime
         };
     }
 }

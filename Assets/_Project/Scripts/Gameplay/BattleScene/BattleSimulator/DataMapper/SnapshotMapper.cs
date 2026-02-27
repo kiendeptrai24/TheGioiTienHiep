@@ -42,7 +42,9 @@ public static class SnapshotMapper
                 reflect = s.ReflectDamage,
 
                 attackSpeed = Mathf.Max(1, s.AttackSpeed),
-                attackRange = Mathf.Max(1, heroData.attackRange)
+                attackRange = Mathf.Max(1, heroData.attackRange),
+                animationDuration = 1f,
+                castTime = .5f,
             },
             skills = skills
         };

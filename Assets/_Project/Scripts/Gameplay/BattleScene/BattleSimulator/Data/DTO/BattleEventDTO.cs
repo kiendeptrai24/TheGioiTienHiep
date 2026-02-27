@@ -20,6 +20,7 @@ public struct BattleEventDTO : INetworkSerializable
 
     public string skillId;
     public Vector2Int cell;
+    public float castTime;
 
     public short fromX, fromY, toX, toY; // chỉ dùng khi Move
 
@@ -44,5 +45,6 @@ public struct BattleEventDTO : INetworkSerializable
         serializer.SerializeValue(ref toX);
         serializer.SerializeValue(ref toY);
         serializer.SerializeValue(ref cell);
+        serializer.SerializeValue(ref castTime);
     }
 }

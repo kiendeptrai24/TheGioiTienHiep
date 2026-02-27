@@ -18,7 +18,6 @@ public static class BattleCombatResolver
         int skillIndex = GetReadySkillIndexInRange(s.skillsByUnit[attackerIndex], sched.nextSkill[attackerIndex], t, dist, myRange);
         if (skillIndex < 0)
         {
-            // sched.PutSkillOnCooldown(attackerIndex, -1, t, 0f);
             return false;
         }
         if (s.units[attackerIndex].nextActionTime > t)
@@ -34,7 +33,9 @@ public static class BattleCombatResolver
         int dmg; bool isCrit; float ls; float rf;
         (dmg, isCrit, ls, rf) = DamageFormula.CalcWithSkill(in atk, in def, skill, ref rng);
 
-        sched.PutSkillOnCooldown(attackerIndex, skillIndex, t, skill.cooldown);
+        sched.PutSkillOnCooldown(attackerIndex, skillIndex, t, skill.cooldown + skill.animationDuration);
+        s.units[attackerIndex].nextActionTime = t + skill.animationDuration;
+
 
         ApplyDamageAndReturn(ref atk, ref def, dmg, ls, rf);
 
@@ -55,7 +56,8 @@ public static class BattleCombatResolver
                 damage = dmg,
                 isCrit = isCrit,
                 targetHpAfter = def.hp,
-                skillId = skill.itemId
+                skillId = skill.itemId,
+                castTime = skill.castTime
             });
         }
 
@@ -116,9 +118,11 @@ public static class BattleCombatResolver
                 damage = dmg,
                 isCrit = isCrit,
                 targetHpAfter = def.hp,
+                castTime = atk.castTime
             });
         }
         sched.ScheduleNextBasic(s, attackerIndex, t);
+        s.units[attackerIndex].nextActionTime = t + atk.animationDuration;
         return true;
     }
 

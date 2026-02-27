@@ -19,10 +19,11 @@ public abstract class BaseSkill
     /// Root condition để quyết định có cast được không
     protected ISkillCondition RootCondition;
 
-    protected BaseSkill(SkillData data, GameObject skillEffectPrefab, string skillId, string displayName, float cooldownSeconds = 1f)
+    protected BaseSkill(SkillData data, GameObject skillEffectPrefab, string skillId, string displayName, float cooldownSeconds = 1f, Type skillAnimationClass = null)
     {
         this.data = data;
         this.skillEffectPrefab = skillEffectPrefab;
+        this.skillAnimationClass = skillAnimationClass;
         _skillId = skillId;
         _displayName = displayName;
         _cooldownSeconds = cooldownSeconds;

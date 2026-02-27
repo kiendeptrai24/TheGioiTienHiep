@@ -87,4 +87,7 @@ public class SkillData : ItemData
     [Header("Summary")]
     public float totalQualityAndLevel;   // Tổng (phẩm + cấp)
     public int statCount;                // Số chỉ số kích hoạt
+    [Header("Animation")]
+    public float animationDuration;       // Thời gian animation (giây)
+    public float castTime;               // Thời gian cast (giây)
 }

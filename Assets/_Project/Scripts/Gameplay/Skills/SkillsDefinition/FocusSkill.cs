@@ -1,11 +1,12 @@
 
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
 public class FocusSkill : BaseSkill
 {
-    public FocusSkill(SkillData data, GameObject skillEffectPrefab, string skillId, string displayName, float cooldownSeconds = 1f)
-        : base(data, skillEffectPrefab, skillId, displayName, cooldownSeconds)
+    public FocusSkill(SkillData data, GameObject skillEffectPrefab, string skillId, string displayName, float cooldownSeconds = 1f, Type skillAnimationClass = null)
+        : base(data, skillEffectPrefab, skillId, displayName, cooldownSeconds, skillAnimationClass)
     {
     }
 

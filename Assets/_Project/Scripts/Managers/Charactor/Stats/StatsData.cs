@@ -9,7 +9,6 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     [SerializeField] private bool canLoadData = true;
     [SerializeField] private bool isHero = true;
     public event Action OnValueChanged;
-    private HeroLoadData heroLoadData;
     public HeroPreset heroPreset;
     public ItemData heroData;
     public List<TechniqueData> techniqueData;

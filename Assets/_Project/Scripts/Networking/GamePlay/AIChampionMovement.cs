@@ -7,12 +7,11 @@ public class AIChampionMovement : TGTHMonoBehaviour
 {
     // Components
     private StatsData statsData;
-    private FindTarget findTarget;
     private NavMeshAgent agent;
     // Properties
     [SerializeField] private float turnSpeed = 5f;
     // Target
-    private Transform m_Target;
+    public Transform m_Target;
     public Transform Target { get { return m_Target; } }
     protected override void Awake()
     {
@@ -34,7 +33,6 @@ public class AIChampionMovement : TGTHMonoBehaviour
     private void Update()
     {
         CheckArrived();
-        FindTargetNearest();
         RotateToMoveDirection();
     }
     [ContextMenu("Set Target to Player")]
@@ -47,28 +45,16 @@ public class AIChampionMovement : TGTHMonoBehaviour
     }
     public void SetTarget(Transform newTarget)
     {
+        if (newTarget == null || newTarget == m_Target)
+            return;
         m_Target = newTarget;
-        if (agent != null && m_Target != null)
-        {
-            agent.isStopped = false;
-            agent.SetDestination(m_Target.position);
-        }
     }
     public void SetTarget(Vector3 destination)
     {
-        m_Target = null;
         if (agent != null)
         {
             agent.isStopped = false;
             agent.SetDestination(destination);
-        }
-    }
-    public void FindTargetNearest()
-    {
-        if (findTarget != null && m_Target == null)
-        {
-            m_Target = findTarget.target;
-            return;
         }
     }
     public void CheckArrived()
@@ -77,7 +63,7 @@ public class AIChampionMovement : TGTHMonoBehaviour
         {
             if (!agent.pathPending)
             {
-                if (agent.remainingDistance <= agent.stoppingDistance)
+                if (agent.remainingDistance <= agent.stoppingDistance && agent.isStopped == false)
                 {
                     OnArrived();
                 }
@@ -98,7 +84,6 @@ public class AIChampionMovement : TGTHMonoBehaviour
     {
         agent.velocity = Vector3.zero;
         agent.isStopped = true;
-        Debug.Log("AI Champion Arrived at Target");
     }
     public bool IsMoving()
     {
@@ -112,7 +97,6 @@ public class AIChampionMovement : TGTHMonoBehaviour
         base.LoadComponent();
         agent = GetComponent<NavMeshAgent>();
         statsData = GetComponent<StatsData>();
-        findTarget = GetComponent<FindTarget>();
     }
 
 }

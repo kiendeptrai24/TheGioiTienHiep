@@ -37,6 +37,9 @@ public class UnitSnapshot
 
     public int attackSpeed;    // dùng để tính interval
     public float attackRange;
+
+    public float animationDuration;
+    public float castTime;
 }
 
 public enum BattleEventType : byte
