@@ -154,7 +154,7 @@ public class BattlePlayback : TGTHMonoBehaviour
             return;
         atkCham.PlayAnimationAttack();
         atkCham.GetComponent<AIChampionMovement>().SetTarget(defCham.transform);
-
+        Debug.Log("Skill");
         atkCham.PlayAnimationSkill(skill.skillId);
         StartCoroutine(DecreaseHealthBattle(skill));
     }

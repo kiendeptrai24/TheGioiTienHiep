@@ -20,7 +20,8 @@ public static class BattleCombatResolver
         {
             return false;
         }
-        if (s.units[attackerIndex].nextActionTime > t)
+        // if skill is ready but out of range, try to move first
+        if (s.units[attackerIndex].startActionTime < t && s.units[attackerIndex].nextActionTime > t)
         {
             sched.ScheduleNextBasic(s, attackerIndex, t);
             return false;
@@ -35,7 +36,7 @@ public static class BattleCombatResolver
 
         sched.PutSkillOnCooldown(attackerIndex, skillIndex, t, skill.cooldown + skill.animationDuration);
         s.units[attackerIndex].nextActionTime = t + skill.animationDuration;
-
+        s.units[attackerIndex].startActionTime = t;
 
         ApplyDamageAndReturn(ref atk, ref def, dmg, ls, rf);
 
@@ -75,7 +76,7 @@ public static class BattleCombatResolver
         List<BattleEvent> events,
         bool recordEvents)
     {
-        if (s.units[attackerIndex].nextActionTime > t)
+        if (s.units[attackerIndex].startActionTime < t && s.units[attackerIndex].nextActionTime > t)
         {
             sched.ScheduleNextBasic(s, attackerIndex, t);
             return false;
@@ -122,6 +123,7 @@ public static class BattleCombatResolver
             });
         }
         sched.ScheduleNextBasic(s, attackerIndex, t);
+        s.units[attackerIndex].startActionTime = t;
         s.units[attackerIndex].nextActionTime = t + atk.animationDuration;
         return true;
     }

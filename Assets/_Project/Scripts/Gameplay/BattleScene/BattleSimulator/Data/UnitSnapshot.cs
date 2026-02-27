@@ -6,6 +6,7 @@ public enum TeamId : byte { Heroes = 0, Enemies = 1 }
 [Serializable]
 public class UnitSnapshot
 {
+    public float startActionTime; // dùng để sắp xếp action giữa các tick, vd: unit nào có startActionTime nhỏ hơn sẽ hành động trước
     public float nextActionTime; // dùng để sắp xếp action trong 1 tick, vd: move trước rồi attack sau
     public string uid;          // index trong list
     public TeamId team;

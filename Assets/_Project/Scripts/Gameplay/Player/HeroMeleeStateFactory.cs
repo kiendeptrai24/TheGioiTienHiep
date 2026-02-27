@@ -9,7 +9,7 @@ public class HeroMeleeStateFactory : HeroStateFactory
     public override Dictionary<Type, IState> CreateState()
     {
         base.CreateState();
-        _statesDictionary.Add(typeof(AttackState_Hero), new AttackState_Hero(_hero, _machine, "StandingAttack1"));
+        _statesDictionary.Add(typeof(AttackState_Hero), new AttackState_Hero(_hero, _machine, "Atk_Melee"));
         return _statesDictionary;
     }
 }

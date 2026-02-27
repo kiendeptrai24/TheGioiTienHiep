@@ -85,7 +85,7 @@ public sealed class BattleScheduler
     public void ScheduleNextBasic(BattleSimState s, int a, float t)
     {
         float spd = Mathf.Max(1f, s.units[a].attackSpeed);
-        nextBasic[a] = t + (1f / spd) + 1f;
+        nextBasic[a] = t + (1f / spd);
     }
     // Schedule the cell change to occur after moveDuration has elapsed (relative to now)
     public void ApplyCell(BattleSimState s, int a, Vector2Int cell, float now, float moveDuration)

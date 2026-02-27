@@ -9,7 +9,7 @@ public class HeroRangeStateFactory : HeroStateFactory
     public override Dictionary<Type, IState> CreateState()
     {
         base.CreateState();
-        _statesDictionary.Add(typeof(AttackState_Hero), new AttackState_Hero(_hero, _machine, "StandingMagicAttack"));
+        _statesDictionary.Add(typeof(AttackState_Hero), new AttackState_Hero(_hero, _machine, "Atk_Range"));
         return _statesDictionary;
     }
 }
