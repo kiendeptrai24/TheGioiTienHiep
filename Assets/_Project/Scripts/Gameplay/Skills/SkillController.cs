@@ -34,12 +34,12 @@ public sealed class SkillController
 
     public SkillCastResult TryCast(string skillId, ISkillTarget target, SpawnPoint targetDirection)
     {
+        Debug.Log("TryCast: " + skillId);
         if (!_skills.TryGetValue(skillId, out var rt))
             return SkillCastResult.Fail(SkillCastFailReason.Custom, "Skill not found");
         var ctx = new SkillContext(_time, _owner, target, rt, targetDirection);
         var can = rt.Skill.CanCast(ctx);
         if (!can.Ok) return SkillCastResult.Fail(can.Reason, can.DebugNote);
-
         rt.Skill.OnCastSucceeded(ctx);
         return SkillCastResult.Success();
     }

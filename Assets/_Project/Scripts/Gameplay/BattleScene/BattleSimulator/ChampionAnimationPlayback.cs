@@ -1,6 +1,7 @@
 
 
 using UnityEngine;
+using UnityEngine.InputSystem.Interactions;
 
 public class ChampionAnimationPlayback : TGTHMonoBehaviour, IChampionAnimation
 {
@@ -8,6 +9,7 @@ public class ChampionAnimationPlayback : TGTHMonoBehaviour, IChampionAnimation
     private IStateMachine m_machine;
     private ChampionBaseSkill chamSkills;
     private AIChampionMovement aiMovement;
+    private ChampionBaseSkill skillController;
     protected override void Awake()
     {
         base.Awake();
@@ -33,7 +35,7 @@ public class ChampionAnimationPlayback : TGTHMonoBehaviour, IChampionAnimation
     {
         if (aiMovement != null)
         {
-            aiMovement.SetTarget(destination);
+            aiMovement.SetDitition(destination);
         }
     }
 
@@ -46,6 +48,7 @@ public class ChampionAnimationPlayback : TGTHMonoBehaviour, IChampionAnimation
             {
                 return;
             }
+            champion.currentSkillId = skillid;
             m_machine.ChangeState(skillData.Skill.skillAnimationClass);
         }
     }

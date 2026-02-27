@@ -1500,6 +1500,7 @@ GameObject:
   - component: {fileID: 3558168196593711159}
   - component: {fileID: -7687026051896085084}
   - component: {fileID: 3619257116578786200}
+  - component: {fileID: -7889436267449201550}
   m_Layer: 7
   m_Name: "L\xED T\u1EE9"
   m_TagString: Untagged
@@ -1814,7 +1815,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIChampionMovement
   turnSpeed: 5
-  m_Target: {fileID: 0}
 --- !u!114 &3558168196593711159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1855,6 +1855,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d9893e9e19d22644b8dcb124753f0e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChampionBaseSkill
+--- !u!114 &-7889436267449201550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6500683585075202634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ff95828526931f4bb2cab62394ece05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ManualTargetFinder
+  target: {fileID: 0}
 --- !u!1 &6523486563544564867
 GameObject:
   m_ObjectHideFlags: 0

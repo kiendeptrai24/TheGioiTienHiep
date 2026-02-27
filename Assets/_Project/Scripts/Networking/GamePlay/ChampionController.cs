@@ -9,7 +9,7 @@ public class ChampionController : TGTHMonoBehaviour, ISkillCaster
     protected IStateMachine m_championSM;
     public AIChampionMovement m_aiMovement;
     public ChampionBaseSkill skillController;
-    public SkillDataRuntime currentSkillData;
+    public string currentSkillId;
     protected HealthController healthController;
     [HideInInspector] public IMoveable moveable;
     [HideInInspector] public Animator anim;

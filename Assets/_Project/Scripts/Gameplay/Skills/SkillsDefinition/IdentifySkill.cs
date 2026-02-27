@@ -16,38 +16,34 @@ public class IdentifySkill : BaseSkill
 
         Vector3 targetPosition = ctx.TargetDirection.position;
         Quaternion targetRotation = ctx.TargetDirection.rotation;
-
-        var skillEffect = NetworkObjectPool.Singleton.GetNetworkObject(skillEffectPrefab, targetPosition, targetRotation, true);
-        var networkObject = skillEffect.GetComponent<NetworkObject>();
-        if (networkObject != null)
-        {
-            NetworkObjectPool.Singleton.ReturnNetworkObject(networkObject);
-        }
+        Debug.Log("Skill effect: " + targetPosition);
+        var skillEffect = ObjectPool.Instance.GetObject(skillEffectPrefab, targetPosition, targetRotation);
+        ObjectPool.Instance.ReturnObject(skillEffect, 1f);
         StatsData statsData = ctx.Caster.GetStats();
 
         var partical = skillEffect.GetComponent<ParticleSystem>();
         if (partical != null)
         {
             partical.Play();
-            Collider[] colliders = Physics.OverlapSphere(
-                targetPosition,
-                data.attackRange
-            );
-            
-            foreach (Collider col in colliders)
-            {
-                if(col.TryGetComponent<ISkillCaster>(out var caster))
-                {
-                    if(caster.TeamId == ctx.Caster.TeamId)
-                    {
-                        continue;
-                    }
-                }
-                if (col.TryGetComponent<IDamageable>(out var damageable))
-                {
-                    damageable.TakeDamage(statsData);
-                }
-            }
+            // Collider[] colliders = Physics.OverlapSphere(
+            //     targetPosition,
+            //     data.attackRange
+            // );
+
+            // foreach (Collider col in colliders)
+            // {
+            //     if (col.TryGetComponent<ISkillCaster>(out var caster))
+            //     {
+            //         if (caster.TeamId == ctx.Caster.TeamId)
+            //         {
+            //             continue;
+            //         }
+            //     }
+            //     if (col.TryGetComponent<IDamageable>(out var damageable))
+            //     {
+            //         damageable.TakeDamage(statsData);
+            //     }
+            // }
         }
     }
     override public void BuildDefaultConditions()

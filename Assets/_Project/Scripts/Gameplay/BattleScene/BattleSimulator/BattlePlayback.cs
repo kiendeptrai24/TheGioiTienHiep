@@ -153,8 +153,7 @@ public class BattlePlayback : TGTHMonoBehaviour
         if (atkCham == null || defCham == null)
             return;
         atkCham.PlayAnimationAttack();
-        atkCham.GetComponent<AIChampionMovement>().SetTarget(defCham.transform);
-        Debug.Log("Skill");
+        atkCham.GetComponent<TargetFinderBase>().SetTarget(defCham.transform);
         atkCham.PlayAnimationSkill(skill.skillId);
         StartCoroutine(DecreaseHealthBattle(skill));
     }
@@ -173,7 +172,7 @@ public class BattlePlayback : TGTHMonoBehaviour
                 (yPos + posOrigin.y) * offsetOrigin.y
             );
 
-        ownerCham.GetComponent<AIChampionMovement>().SetTarget(targetCham.transform);
+        ownerCham.GetComponent<TargetFinderBase>().SetTarget(targetCham.transform);
         ownerCham.PlayMovement(destination);
     }
     public void PlayAttack(BattleEvent e)
@@ -185,7 +184,8 @@ public class BattlePlayback : TGTHMonoBehaviour
         var defCham = GetAnimationCham(eventAttack.targetUid, eventAttack.targetTeam);
         if (atkCham == null || defCham == null)
             return;
-        atkCham.GetComponent<AIChampionMovement>().SetTarget(defCham.transform);
+        atkCham.GetComponent<AIChampionMovement>().SetDetinition(defCham.transform);
+        atkCham.GetComponent<TargetFinderBase>().SetTarget(defCham.transform);
         atkCham.PlayAnimationAttack();
         StartCoroutine(DecreaseHealthBattle(e));
     }

@@ -12,11 +12,11 @@ public class LinhTramState_Champion : ChampionState, ISkillTrigger, IAnimationTr
         direction.position = m_champion.transform.position;
         direction.rotation = m_champion.transform.rotation;
 
-        direction.position += direction.rotation * Vector3.forward * 10f;
+        direction.position += direction.rotation * Vector3.forward;
         direction.position += Vector3.up * 1f;
 
-        m_champion.skillController.ActiveSkill(
-            m_champion.currentSkillData.skillId,
+        m_champion.skillController.PlayBackActiveSkill(
+            m_champion.currentSkillId,
             direction
         );
     }

@@ -11,7 +11,7 @@ public class ToanLucNhatKichState_Champion : ChampionState, ISkillTrigger, IAnim
         SpawnPoint direction = new SpawnPoint();
         direction.position = m_champion.transform.position;
         direction.rotation = m_champion.transform.rotation;
-        m_champion.skillController.ActiveSkill(m_champion.currentSkillData.skillId, direction);
+        m_champion.skillController.PlayBackActiveSkill(m_champion.currentSkillId, direction);
     }
 
     public void ActiveTrigger()

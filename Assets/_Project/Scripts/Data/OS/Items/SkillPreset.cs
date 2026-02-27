@@ -24,6 +24,7 @@ public class SkillPreset : ItemPreset
     public CultivationStage realm;
     [Header("Animation")]
     public GameObject skillEffectPrefab;
+    public GameObject networkSkillEffectPrefab;
 
 
     [Header("Combat")]
@@ -437,6 +438,8 @@ public class SkillPreset : ItemPreset
             elementType = elementType,
             realm = realm,
             skillEffectPrefab = skillEffectPrefab,
+            networkSkillEffectPrefab = networkSkillEffectPrefab,
+
             // combat
             attackRange = attackRange,
             cooldown = cooldown,

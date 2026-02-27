@@ -13,12 +13,12 @@ public class VanLinhTienState_Champion : ChampionState, ISkillTrigger, IAnimatio
         direction.rotation = m_champion.transform.rotation;
 
         // dùng forward của hero, KHÔNG phải Vector3.forward
-        direction.position += direction.rotation * Vector3.forward * 10f;
+        direction.position += direction.rotation * Vector3.forward;
         direction.position += Vector3.up * 1f;
 
 
-        m_champion.skillController.ActiveSkill(
-            m_champion.currentSkillData.skillId,
+        m_champion.skillController.PlayBackActiveSkill(
+            m_champion.currentSkillId,
             direction
         );
     }

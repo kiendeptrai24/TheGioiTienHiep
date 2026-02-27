@@ -2805,6 +2805,7 @@ GameObject:
   - component: {fileID: 2316725853203523196}
   - component: {fileID: 1708305590459793148}
   - component: {fileID: 4204008323711351163}
+  - component: {fileID: 439560938269273497}
   m_Layer: 7
   m_Name: Monster
   m_TagString: Untagged
@@ -3067,7 +3068,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIChampionMovement
   turnSpeed: 5
-  m_Target: {fileID: 0}
 --- !u!114 &2316725853203523196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3108,6 +3108,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d9893e9e19d22644b8dcb124753f0e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChampionBaseSkill
+--- !u!114 &439560938269273497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8492805549545443054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ff95828526931f4bb2cab62394ece05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ManualTargetFinder
+  target: {fileID: 0}
 --- !u!1 &8667105146718270571
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
     // SkillController to manage the hero's skills
     private SkillController m_SkillController;
     private StatsData m_StatsData;
-    private FindTarget m_FindTargetEnemy;
+    private TargetFinderBase m_FindTargetEnemy;
     public SkillController SkillController => m_SkillController;
     // List of SkillData to be assigned in the Inspector
     private List<SkillData> m_SkillsData;
@@ -137,21 +137,22 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
                 break;
         }
     }
-    public void ActiveSkill(string skillname, SpawnPoint targetDirection)
+    public void PlayBackActiveSkill(string skillname, SpawnPoint targetDirection)
     {
         if (m_FindTargetEnemy == null) return;
         ISkillTarget target = m_FindTargetEnemy;
         var skill = m_SkillController.GetRuntime(skillname);
         if (skill != null)
         {
-            if (skill.IsReady(Time.time))
+            var result = m_SkillController.TryCast(skillname, target, targetDirection);
+            if (!result.Ok)
             {
-                m_SkillController.TryCast(skillname, target, targetDirection);
+                Debug.Log("Reason " + result.Reason);
             }
-            else
-            {
-                Debug.Log($"Skill {skill.Skill.DisplayName} is on cooldown.");
-            }
+        }
+        else
+        {
+            Debug.Log("Skill not found");
         }
     }
     public List<SkillDataRuntime> GetAllSkills()
@@ -169,7 +170,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        m_FindTargetEnemy = GetComponent<FindTarget>();
+        m_FindTargetEnemy = GetComponent<TargetFinderBase>();
         m_StatsData = GetComponent<StatsData>();
     }
 }

@@ -14,7 +14,7 @@ public class ChaseState_Champion : ChampionState
     public override void Excute()
     {
         base.Excute();
-        m_champion.m_aiMovement.SetTarget(m_champion.m_aiMovement.Target);
+        m_champion.m_aiMovement.SetDetinition(m_champion.m_aiMovement.Target);
     }
 
     public override void Exit()

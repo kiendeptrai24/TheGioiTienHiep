@@ -2480,6 +2480,7 @@ GameObject:
   - component: {fileID: 7609753734204416325}
   - component: {fileID: -4306709646525917225}
   - component: {fileID: -2948891884187972104}
+  - component: {fileID: -6601436522301780286}
   m_Layer: 7
   m_Name: "Tr\u01B0\u01A1ng Tam"
   m_TagString: Untagged
@@ -2794,7 +2795,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIChampionMovement
   turnSpeed: 5
-  m_Target: {fileID: 0}
 --- !u!114 &7609753734204416325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2835,6 +2835,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d9893e9e19d22644b8dcb124753f0e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChampionBaseSkill
+--- !u!114 &-6601436522301780286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8300485707256373238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ff95828526931f4bb2cab62394ece05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ManualTargetFinder
+  target: {fileID: 0}
 --- !u!1 &8981826002109671611
 GameObject:
   m_ObjectHideFlags: 0

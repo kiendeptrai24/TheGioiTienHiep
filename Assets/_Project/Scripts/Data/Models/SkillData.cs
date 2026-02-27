@@ -90,4 +90,5 @@ public class SkillData : ItemData
     [Header("Animation")]
     public float animationDuration;       // Thời gian animation (giây)
     public float castTime;               // Thời gian cast (giây)
+    internal GameObject networkSkillEffectPrefab;
 }

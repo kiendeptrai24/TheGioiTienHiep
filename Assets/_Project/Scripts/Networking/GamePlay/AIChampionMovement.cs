@@ -11,8 +11,8 @@ public class AIChampionMovement : TGTHMonoBehaviour
     // Properties
     [SerializeField] private float turnSpeed = 5f;
     // Target
-    public Transform m_Target;
-    public Transform Target { get { return m_Target; } }
+    private TargetFinderBase targetFinder;
+    public Transform Target => targetFinder.Target;
     protected override void Awake()
     {
         base.Awake();
@@ -38,18 +38,18 @@ public class AIChampionMovement : TGTHMonoBehaviour
     [ContextMenu("Set Target to Player")]
     public void SetDefaultTarget()
     {
-        if (agent != null && m_Target != null)
+        if (agent != null && Target != null)
         {
-            agent.SetDestination(m_Target.position);
+            agent.SetDestination(Target.position);
         }
     }
-    public void SetTarget(Transform newTarget)
+    public void SetDetinition(Transform newTarget)
     {
-        if (newTarget == null || newTarget == m_Target)
+        if (newTarget == null || newTarget == Target)
             return;
-        m_Target = newTarget;
+        targetFinder.SetTarget(newTarget);
     }
-    public void SetTarget(Vector3 destination)
+    public void SetDitition(Vector3 destination)
     {
         if (agent != null)
         {
@@ -72,8 +72,8 @@ public class AIChampionMovement : TGTHMonoBehaviour
     }
     void RotateToMoveDirection()
     {
-        if (m_Target == null) return;
-        Quaternion targetRot = Quaternion.LookRotation(m_Target.position - transform.position);
+        if (Target == null) return;
+        Quaternion targetRot = Quaternion.LookRotation(Target.position - transform.position);
         transform.rotation = Quaternion.Slerp(
             transform.rotation,
             targetRot,
@@ -97,6 +97,7 @@ public class AIChampionMovement : TGTHMonoBehaviour
         base.LoadComponent();
         agent = GetComponent<NavMeshAgent>();
         statsData = GetComponent<StatsData>();
+        targetFinder = GetComponent<TargetFinderBase>();
     }
 
 }
