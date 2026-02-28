@@ -45,21 +45,29 @@ public static class BattleCombatResolver
 
         if (recordEvents)
         {
-            events.Add(new BattleEventSkill
+            if (HasEnnoughMana(s, attackerIndex, skillIndex))
             {
-                time = t,
-                type = BattleEventType.Skill,
-                team = atk.team,
-                targetTeam = def.team,
-                ownerUid = atk.uid,
-                attackerUid = atk.uid,
-                targetUid = def.uid,
-                damage = dmg,
-                isCrit = isCrit,
-                targetHpAfter = def.hp,
-                skillId = skill.itemId,
-                castTime = skill.castTime
-            });
+                atk.mana -= Mathf.RoundToInt(skill.manaCost);
+                events.Add(new BattleEventSkill
+                {
+                    time = t,
+                    type = BattleEventType.Skill,
+                    team = atk.team,
+                    targetTeam = def.team,
+                    ownerUid = atk.uid,
+                    attackerUid = atk.uid,
+                    targetUid = def.uid,
+                    damage = dmg,
+                    isCrit = isCrit,
+                    targetHpAfter = def.hp,
+                    skillId = skill.itemId,
+                    castTime = skill.castTime
+                });
+            }
+            else
+            {
+                sched.ScheduleNextBasic(s, attackerIndex, t);
+            }
         }
 
         return true;
@@ -135,7 +143,12 @@ public static class BattleCombatResolver
         if (ls > 0 && atk.hp > 0) atk.hp = Mathf.Min(atk.hpMax, atk.hp + Mathf.RoundToInt(ls));
         if (rf > 0 && def.hp > 0) atk.hp = Mathf.Max(0, atk.hp - Mathf.RoundToInt(rf));
     }
-
+    static bool HasEnnoughMana(BattleSimState s, int attackerIndex, int skillIndex)
+    {
+        var skill = s.skillsByUnit[attackerIndex][skillIndex];
+        var atk = s.units[attackerIndex];
+        return atk.mana >= skill.manaCost;
+    }
     static int GetReadySkillIndexInRange(List<SkillData> skills, float[] nextSkillTimes, float t, int distToTarget, int fallbackRange)
     {
         if (skills == null || nextSkillTimes == null) return -1;

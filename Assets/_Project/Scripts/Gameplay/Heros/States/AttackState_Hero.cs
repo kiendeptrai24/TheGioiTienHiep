@@ -15,7 +15,7 @@ public class AttackState_Hero : HeroState, ISkillTrigger, IAnimationTrigger
         var networkSlash = GameObject.Instantiate(m_hero.attackPrefab, pos, rot);
         networkSlash.Spawn();
         var bullet = networkSlash.GetComponent<BulletBase>();
-        var target = m_hero.target.target;
+        var target = m_hero.target.Target;
         bullet.SetUpTarGet(m_hero, target, m_hero.GetStats());
     }
 

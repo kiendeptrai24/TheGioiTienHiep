@@ -12,6 +12,8 @@ public class UnitSnapshot
     public TeamId team;
     public int hpMax;
     public int hp;
+    public int manaMax;
+    public int mana;
 
     public int physicalDmg;
     public int magicalDmg;

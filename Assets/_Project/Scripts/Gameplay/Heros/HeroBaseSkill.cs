@@ -16,7 +16,7 @@ public class HeroBaseSkill : TGTHMonoBehaviour
     // SkillController to manage the hero's skills
     private SkillController m_SkillController;
     private StatsData statsData;
-    private FindTarget m_FindTargetEnemy;
+    private TargetFinderBase m_FindTargetEnemy;
     public SkillController SkillController => m_SkillController;
     // List of SkillData to be assigned in the Inspector
     private List<SkillData> m_SkillsData;
@@ -186,7 +186,7 @@ public class HeroBaseSkill : TGTHMonoBehaviour
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        m_FindTargetEnemy = GetComponent<FindTarget>();
+        m_FindTargetEnemy = GetComponent<TargetFinderBase>();
         statsData = GetComponent<StatsData>();
     }
 }

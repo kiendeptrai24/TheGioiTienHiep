@@ -17,6 +17,8 @@ public static class SnapshotMapper
                 team = team,
                 hpMax = hp,
                 hp = hp,
+                manaMax = s.Mana,
+                mana = s.Mana,
 
                 physicalDmg = s.PhysicalDamage,
                 magicalDmg = s.MagicalDamage,

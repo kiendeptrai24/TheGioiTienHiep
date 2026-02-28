@@ -76,7 +76,6 @@ public class BattleService : NetworkBehaviour
 
             var heroController = hero.GetComponent<HeroController>();
             if (heroController != null) heroController.SetTeamId(0);
-            heroController.target.battleState = true;
 
             hero.Spawn(true); // server-owned
             s.SpawnedObjects.Add(hero);
@@ -102,7 +101,6 @@ public class BattleService : NetworkBehaviour
 
             var enemyController = enemy.GetComponent<HeroController>();
             if (enemyController != null) enemyController.SetTeamId(1);
-            enemyController.target.battleState = true;
 
             enemy.Spawn(true);
             s.SpawnedObjects.Add(enemy);

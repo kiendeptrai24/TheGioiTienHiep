@@ -7,7 +7,7 @@ public class AIMovement : TGTHNetworkBehaviour
 {
     // Components
     private StatsData statsData;
-    private FindTarget findTarget;
+    private TargetFinderBase findTarget;
     private NavMeshAgent agent;
     // Properties
     [SerializeField] private float turnSpeed = 5f;
@@ -59,7 +59,7 @@ public class AIMovement : TGTHNetworkBehaviour
     {
         if (findTarget != null && m_Target == null)
         {
-            m_Target = findTarget.target;
+            m_Target = findTarget.Target;
             return;
         }
     }
@@ -106,7 +106,7 @@ public class AIMovement : TGTHNetworkBehaviour
         base.LoadComponent();
         agent = GetComponent<NavMeshAgent>();
         statsData = GetComponent<StatsData>();
-        findTarget = GetComponent<FindTarget>();
+        findTarget = GetComponent<TargetFinderBase>();
     }
 
 }

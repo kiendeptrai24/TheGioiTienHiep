@@ -37,14 +37,14 @@ public class BattleManager : TGTHNetworkBehaviour
     [ContextMenu("Start Game")]
     public void StartGame()
     {
-        foreach (var hero in heroes)
-        {
-            hero.GetComponent<FindTarget>().battleState = true;
-        }
-        foreach (var enemy in enemies)
-        {
-            enemy.GetComponent<FindTarget>().battleState = true;
-        }
+        // foreach (var hero in heroes)
+        // {
+        //     hero.GetComponent<TargetFinderBase>().battleState = true;
+        // }
+        // foreach (var enemy in enemies)
+        // {
+        //     enemy.GetComponent<TargetFinderBase>().battleState = true;
+        // }
         state = GameState.StartGame;
         OnStartGame?.Invoke();
     }

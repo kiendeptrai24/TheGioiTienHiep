@@ -14,7 +14,7 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
     public HeroBaseSkill skillController;
     public SkillDataRuntime currentSkillData;
     protected HealthController healthController;
-    public FindTarget target;
+    public TargetFinderBase target;
     [SerializeField] public HeroData heroData;
     [HideInInspector] public IMoveable moveable;
     [HideInInspector] public Animator anim;
@@ -84,7 +84,7 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
         skillController = GetComponent<HeroBaseSkill>();
         stats = GetComponent<StatsData>();
         healthController = GetComponent<HealthController>();
-        target = GetComponent<FindTarget>();
+        target = GetComponent<TargetFinderBase>();
     }
 
     public void ConsumeMana(float amount)

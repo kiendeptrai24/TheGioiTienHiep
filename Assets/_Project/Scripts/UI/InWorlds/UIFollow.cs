@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class UIFollow : MonoBehaviour
+public class UIFollow : TGTHMonoBehaviour
 {
     [SerializeField] private Transform worldTarget; // quái hoặc UIAnchor
     [SerializeField] private RectTransform uiRect;
@@ -8,9 +8,14 @@ public class UIFollow : MonoBehaviour
 
     private Camera mainCam;
 
-    private void Awake()
+    protected override void Awake()
     {
-        mainCam = Camera.main;
+        LoadComponent();
+    }
+
+    protected override void Start()
+    {
+        uiRect.gameObject.SetActive(false);
     }
 
     private void LateUpdate()
@@ -30,5 +35,10 @@ public class UIFollow : MonoBehaviour
 
         uiRect.gameObject.SetActive(true);
         uiRect.position = screenPos;
+    }
+    protected override void LoadComponent()
+    {
+        mainCam = Camera.main;
+        worldTarget = transform.root.GetComponent<Transform>();
     }
 }
