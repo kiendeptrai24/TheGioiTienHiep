@@ -2,14 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BattlePlayback : TGTHMonoBehaviour
+public class BattlePlayback : Singleton<BattlePlayback>
 {
     public float timeToDeplay = 0.5f;
-    public int timeScale = 1;
     public int[,] framesUnit = new int[10, 10];
     public Transform origin;
     public List<ChampionController> objects;
-    public List<BattleEvent> events;
+    public List<BattleEvent> curEvents;
     public Vector2 offsetOrigin = new Vector2(1, 1);
     public Vector2 posOrigin = new Vector2(-5, -5);
     public bool playBattle = false;
@@ -29,20 +28,10 @@ public class BattlePlayback : TGTHMonoBehaviour
             championsObject.Add(id, champ);
         }
     }
-    [ContextMenu("set battle time scale")]
-    public void SetBattleTimeScale()
-    {
-        Time.timeScale = timeScale;
-    }
-    [ContextMenu("set battle events")]
-    public void SetBattleEvent()
-    {
-        events = BattleSimulatorRequest.Instance.battleEvents;
-        StartBattle();
-    }
     [ContextMenu("start battle events")]
-    public void StartBattle()
+    public void StartBattle(List<BattleEvent> events)
     {
+        curEvents = events;
         playBattle = true;
         List<BattleEventInit> eventsInit = new();
 
@@ -81,9 +70,19 @@ public class BattlePlayback : TGTHMonoBehaviour
     }
     private void ResetBattle()
     {
+        Debug.Log("Reset Battle");
         playBattle = false;
         currentEventIndex = 0;
+        championsEnemies.Clear();
+        champions.Clear();
     }
+    public IEnumerator OnEndGame(float timeToDeplay = 1)
+    {
+        yield return new WaitForSeconds(timeToDeplay);
+
+        CameraSwitchManager.Instance.ResetToPlayer();
+    }
+
     public void SetStartBattle()
     {
         playBattle = true;
@@ -92,16 +91,16 @@ public class BattlePlayback : TGTHMonoBehaviour
     void Update()
     {
         if (!playBattle) return;
-        if (currentEventIndex < events.Count &&
-           Time.time - battleTimer >= events[currentEventIndex].time)
+        if (currentEventIndex < curEvents.Count &&
+           Time.time - battleTimer >= curEvents[currentEventIndex].time)
         {
-            Dispatch(events[currentEventIndex]);
+            Dispatch(curEvents[currentEventIndex]);
             currentEventIndex++;
         }
-        if (currentEventIndex >= events.Count)
-        {
-            ResetBattle();
-        }
+        // if (currentEventIndex >= curEvents.Count)
+        // {
+        //     ResetBattle();
+        // }
     }
     void Dispatch(BattleEvent e)
     {
@@ -118,6 +117,10 @@ public class BattlePlayback : TGTHMonoBehaviour
                 break;
             case BattleEventType.Death:
                 PlayDeath(e);
+                break;
+            case BattleEventType.End:
+                ResetBattle();
+                StartCoroutine(OnEndGame(2));
                 break;
             default:
                 Debug.Log($"Unknown event type {e.type} for champion id {e.ownerUid}");

@@ -4,5 +4,7 @@ public enum GameState
 {
     ReadyGame,
     StartGame,
-    EndGame
+    EndGame,
+    PauseGame,
+    ResumeGame,
 }

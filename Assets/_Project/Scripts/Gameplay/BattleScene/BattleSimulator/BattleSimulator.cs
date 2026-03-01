@@ -91,7 +91,7 @@ public static class BattleSimulator
 
             }
         }
-
+        
         return End(TeamId.Enemies, timeLimit, events, recordEvents);
     }
 

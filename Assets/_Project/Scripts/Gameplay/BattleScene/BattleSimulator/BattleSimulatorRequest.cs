@@ -8,6 +8,17 @@ using UnityEngine;
 public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
 {
     public List<BattleEvent> battleEvents = new();
+    public BattleHistoryController battleHistoryController;
+    protected override void Awake()
+    {
+        base.Awake();
+        LoadComponent();
+    }
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        battleHistoryController = GetComponent<BattleHistoryController>();
+    }
     private void RequestBattleSimulator(ulong playerClientId, ulong monsterNetId)
     {
         if (!IsServer) return;
@@ -81,7 +92,8 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             dto[i] = BattleEventMapper.ToDTO(ev);
         }
 
-        SendReplayToClientClientRpc(res.winner.ToString(), res.duration, dto,
+        SendReplayToClientClientRpc(heroRoster.name, enemyRoster.name,
+            res.winner.ToString(), res.duration, dto,
             new ClientRpcParams
             {
                 Send = new ClientRpcSendParams { TargetClientIds = new[] { playerClientId } }
@@ -93,7 +105,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         RequestBattleSimulator(playerClientId, monsterNetId);
     }
     [ClientRpc]
-    private void SendReplayToClientClientRpc(string winner, float duration, BattleEventDTO[] events, ClientRpcParams rpcParams = default)
+    private void SendReplayToClientClientRpc(string namePlayer, string nameEnemy, string winner, float duration, BattleEventDTO[] events, ClientRpcParams rpcParams = default)
     {
         Debug.Log($"Đội chiến thắng là: {winner} với thời gian {duration} giây");
         string text = "";
@@ -104,6 +116,18 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             battleEvents.Add(BattleEventMapper.FromDTO(dto));
         }
         this.battleEvents = battleEvents;
+
+        BattleHistory battleHistory = new BattleHistory();
+        battleHistory.winner = winner;
+        battleHistory.duration = duration;
+        battleHistory.name = namePlayer + "/" + nameEnemy;
+        battleHistory.namePlayer = namePlayer;
+        battleHistory.nameEnemy = nameEnemy;
+        battleHistory.dateTime = DateTime.Now;
+        battleHistory.battleEvents = battleEvents;
+
+        battleHistoryController.AddBattleHistory(battleHistory);
+
         for (int i = 0; i < battleEvents.Count; i++)
         {
             var ev = battleEvents[i];
