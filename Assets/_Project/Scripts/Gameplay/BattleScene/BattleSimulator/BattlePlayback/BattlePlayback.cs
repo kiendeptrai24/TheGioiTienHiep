@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BattlePlayback : Singleton<BattlePlayback>
@@ -70,14 +71,26 @@ public class BattlePlayback : Singleton<BattlePlayback>
     }
     private void ResetBattle()
     {
-        Debug.Log("Reset Battle");
         playBattle = false;
         currentEventIndex = 0;
-        championsEnemies.Clear();
+
+        var enemies = championsEnemies.Where(c => c.Value != null);
+        var heroes = champions.Where(c => c.Value != null);
+        foreach (var hero in heroes)
+        {
+            Destroy(hero.Value.gameObject);
+        }
+        foreach (var enemy in enemies)
+        {
+            Destroy(enemy.Value.gameObject);
+        }
         champions.Clear();
+        championsEnemies.Clear();
     }
     public IEnumerator OnEndGame(float timeToDeplay = 1)
     {
+        yield return new WaitForSeconds(timeToDeplay / 2);
+        ResetBattle();
         yield return new WaitForSeconds(timeToDeplay);
 
         CameraSwitchManager.Instance.ResetToPlayer();
@@ -119,8 +132,7 @@ public class BattlePlayback : Singleton<BattlePlayback>
                 PlayDeath(e);
                 break;
             case BattleEventType.End:
-                ResetBattle();
-                StartCoroutine(OnEndGame(2));
+                StartCoroutine(OnEndGame(5));
                 break;
             default:
                 Debug.Log($"Unknown event type {e.type} for champion id {e.ownerUid}");

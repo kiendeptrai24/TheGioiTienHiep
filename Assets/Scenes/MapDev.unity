@@ -840,6 +840,66 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.1631907, y: 0.1, z: 1.152337}
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!1 &109665050
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 109665052}
+  - component: {fileID: 109665051}
+  - component: {fileID: 109665053}
+  m_Layer: 0
+  m_Name: PlayerChoseObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &109665051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109665050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b797bded9763fd84da2dbd0eca7858f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIFollow
+  worldTarget: {fileID: 109665052}
+  uiRect: {fileID: 1032522013}
+  offset: {x: 0, y: 0, z: 0}
+--- !u!4 &109665052
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109665050}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &109665053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109665050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0d59efd3ff428c4aa8adc6d58a7669f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerChoseObject
 --- !u!1 &118219508
 GameObject:
   m_ObjectHideFlags: 0
@@ -5380,6 +5440,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WorldClickSystem
   mainCamera: {fileID: 1243152619}
   input: {fileID: 1385615353}
+  antiPlayer:
+    serializedVersion: 2
+    m_Bits: 4096
 --- !u!4 &441853267
 Transform:
   m_ObjectHideFlags: 0
@@ -11147,33 +11210,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1297995517}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &928372039 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4546658479400525563, guid: 03819744be33c024db9b04fb221c6a08,
-    type: 3}
-  m_PrefabInstance: {fileID: 4605298242583024415}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &928372050 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5674988850956882470, guid: 03819744be33c024db9b04fb221c6a08,
-    type: 3}
-  m_PrefabInstance: {fileID: 4605298242583024415}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &928372051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 928372039}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b797bded9763fd84da2dbd0eca7858f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIFollow
-  worldTarget: {fileID: 928372050}
-  uiRect: {fileID: 1032522013}
-  offset: {x: 0, y: 0, z: 0}
 --- !u!1 &929889163
 GameObject:
   m_ObjectHideFlags: 0
@@ -12637,7 +12673,6 @@ MonoBehaviour:
   attackButton: {fileID: 1475585831}
   infoButton: {fileID: 1439361016}
   root: {fileID: 533379301}
-  player: {fileID: 0}
 --- !u!1 &1034358601
 GameObject:
   m_ObjectHideFlags: 0
@@ -21949,7 +21984,7 @@ PrefabInstance:
     - target: {fileID: 4268446132248703050, guid: 4777f38ce11c157438b220faeeb88fe7,
         type: 3}
       propertyPath: m_CullingMask.m_Bits
-      value: 3063
+      value: 7159
       objectReference: {fileID: 0}
     - target: {fileID: 5598093685540396198, guid: 4777f38ce11c157438b220faeeb88fe7,
         type: 3}
@@ -209303,14 +209338,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7595186681768438443, guid: 03819744be33c024db9b04fb221c6a08,
+        type: 3}
+      propertyPath: m_Radius
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4546658479400525563, guid: 03819744be33c024db9b04fb221c6a08,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 928372051}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03819744be33c024db9b04fb221c6a08, type: 3}
 --- !u!222 &4605360466371645180
 CanvasRenderer:
@@ -391831,3 +391867,4 @@ SceneRoots:
   - {fileID: 1957753995}
   - {fileID: 762180693}
   - {fileID: 540521891}
+  - {fileID: 109665052}

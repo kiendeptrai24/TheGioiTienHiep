@@ -6,7 +6,7 @@ public abstract class EntityClickable : NetworkBehaviour, IWorldClickable
     public ulong EntityNetId => NetworkObjectId;
     public void OnClicked()
     {
-        MonsterOptionUI.Instance.Show(this);
+        PlayerChoseObject.Instance.SetupEntity(this);
     }
     public abstract void OnEntityClickedAccept(NetworkObject network);
 }

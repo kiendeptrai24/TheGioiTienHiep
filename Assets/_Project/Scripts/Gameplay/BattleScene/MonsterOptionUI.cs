@@ -5,17 +5,15 @@ using UnityEngine.UI;
 
 public class MonsterOptionUI : MonoBehaviour
 {
-    public static MonsterOptionUI Instance;
     [SerializeField] private Button leaveButton;
     [SerializeField] private Button attackButton;
     [SerializeField] private Button infoButton;
     [SerializeField] private GameObject root;
-    [SerializeField] private NetworkObject player;
-    private EntityClickable currentEntity;
-
+    private PlayerChoseObject choseObject;
     private void Awake()
     {
-        Instance = this;
+        choseObject = PlayerChoseObject.Instance;
+        choseObject.OnEntityClicked += OnEntityClicked;
         leaveButton.onClick.AddListener(() =>
         {
             OnLeaveClicked();
@@ -24,24 +22,11 @@ public class MonsterOptionUI : MonoBehaviour
         {
             OnAttackClicked();
         });
-        PlayerNetManager.Instance.OnPlayerExiststed += OnPlayerExists;
     }
 
-    private void OnPlayerExists(NetworkObject @object)
+    private void OnEntityClicked(EntityClickable entity)
     {
-        player = @object;
-    }
-
-    public void Show(EntityClickable entity)
-    {
-        currentEntity = entity;
-        root.SetActive(true);
-    }
-
-    public void Hide()
-    {
-        currentEntity = null;
-        root.SetActive(false);
+        Show();
     }
 
     public void OnLeaveClicked()
@@ -51,7 +36,16 @@ public class MonsterOptionUI : MonoBehaviour
 
     public void OnAttackClicked()
     {
-        currentEntity?.OnEntityClickedAccept(player);
+        choseObject.RequestBattleSimulator();
         Hide();
+    }
+    public void Show()
+    {
+        root.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        root.SetActive(false);
     }
 }
