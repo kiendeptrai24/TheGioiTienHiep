@@ -67,7 +67,7 @@ public class MinimapController : TGTHMonoBehaviour
         if (minimapManager == null || minimapManager.minimapCamera == null || minimapManager.cinemachineCamera == null
         || input == null || minimapRect == null || target == null) return;
 
-        bool pressed = input.IsPointerPressed();
+        bool pressed = input.IsUIPointerPressed();
         bool over = IsPointerOverMinimap();
 
         if (pressed && !_prevPressed)
@@ -91,7 +91,7 @@ public class MinimapController : TGTHMonoBehaviour
 
     private bool IsPointerOverMinimap()
     {
-        Vector2 screenPos = input.GetPointerPosition();
+        Vector2 screenPos = input.GetUIPointerPosition();
 
         Camera uiCam = null;
         if (rootCanvas != null && rootCanvas.renderMode != RenderMode.ScreenSpaceOverlay)
@@ -115,7 +115,7 @@ public class MinimapController : TGTHMonoBehaviour
 
     private void HandlePan()
     {
-        Vector2 delta = input.GetPointerDelta();
+        Vector2 delta = input.GetUIPointerDelta();
         if (delta.sqrMagnitude < 0.01f) return;
 
         float worldPerPixelY = (2f * minimapManager.minimapCamera.orthographicSize) / Screen.height;

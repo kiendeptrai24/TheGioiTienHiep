@@ -79,7 +79,7 @@ public class MinimapIconClickRaycaster : TGTHMonoBehaviour
     {
         if (minimapCamera == null || minimapRect == null || input == null || target == null) return;
 
-        Vector2 screenPos = input.GetPointerPosition();
+        Vector2 screenPos = input.GetUIPointerPosition();
 
         Camera uiCam = null;
         if (rootCanvas != null && rootCanvas.renderMode != RenderMode.ScreenSpaceOverlay)
