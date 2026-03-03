@@ -35,6 +35,7 @@ public class BattlePlayback : Singleton<BattlePlayback>
     public void SetBattleEvents(List<BattleEvent> events)
     {
         curEvents = events;
+        BattlePlaybackManager.Instance.ReadyGame();
     }
     [ContextMenu("start battle events")]
     public void StartBattle()
@@ -79,6 +80,11 @@ public class BattlePlayback : Singleton<BattlePlayback>
         }
 
         SetStartBattle();
+    }
+    public void StopBattle()
+    {
+        playBattle = false;
+        StartCoroutine(OnEndGame(1));
     }
     private void ResetBattle()
     {
@@ -222,5 +228,13 @@ public class BattlePlayback : Singleton<BattlePlayback>
             return champEnemy;
 
         return null;
+    }
+    public void SetBattleTimer(float time)
+    {
+        TimeScaleManager.SetUnityTimeScale(time);
+    }
+    override protected void LoadComponent()
+    {
+        base.LoadComponent();
     }
 }

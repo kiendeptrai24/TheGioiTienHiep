@@ -1,8 +1,8 @@
 
 using System;
 using UnityEngine;
-  
-public class BattlePlaybackManager : TGTHMonoBehaviour
+
+public class BattlePlaybackManager : Singleton<BattlePlaybackManager>
 {
     private GameState state;
     public event Action OnStartGame;
@@ -26,22 +26,21 @@ public class BattlePlaybackManager : TGTHMonoBehaviour
     [ContextMenu("Test Init Battle")]
     public void InitBattle()
     {
-        OnReadyGame?.Invoke();
-        state = GameState.ReadyGame;
         ReadyGame();
+    }
+
+    public void StartGame()
+    {
         state = GameState.StartGame;
-        OnStartGame?.Invoke();
-        StartGame();
-    }
-
-    private void StartGame()
-    {
         battlePlayback.StartBattle();
+        OnStartGame?.Invoke();
     }
 
-    private void ReadyGame()
+    public void ReadyGame()
     {
-        
+        state = GameState.ReadyGame;
+        OnReadyGame?.Invoke();
+
     }
 
 }
