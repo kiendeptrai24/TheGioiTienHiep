@@ -1,4 +1,5 @@
 using System;
+using FeatureToggles;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +11,8 @@ public class MonsterOptionUI : MonoBehaviour
     [SerializeField] private Button infoButton;
     [SerializeField] private GameObject root;
     private PlayerChoseObject choseObject;
+    [SerializeField] private FeatureId gate = FeatureId.WorldClick_Enabled;
+    private FeatureManager _mgr;
     private void Awake()
     {
         choseObject = PlayerChoseObject.Instance;
@@ -22,6 +25,28 @@ public class MonsterOptionUI : MonoBehaviour
         {
             OnAttackClicked();
         });
+    }
+    private void Start()
+    {
+        _mgr = FeatureManager.Instance;
+        LockUI(_mgr.IsEnabled(gate));
+        _mgr.OnFeatureEffectiveChanged += OnChanged;
+    }
+
+    private void OnChanged(FeatureId id, bool arg2)
+    {
+        if (id.Equals(gate)) LockUI(arg2);
+    }
+    private void LockUI(bool unlock)
+    {
+        if (unlock)
+        {
+            Show();
+        }
+        else
+        {
+            Hide();
+        }
     }
 
     private void OnEntityClicked(EntityClickable entity)
@@ -41,6 +66,7 @@ public class MonsterOptionUI : MonoBehaviour
     }
     public void Show()
     {
+        if(!_mgr.IsEnabled(gate)) return;
         root.SetActive(true);
     }
 

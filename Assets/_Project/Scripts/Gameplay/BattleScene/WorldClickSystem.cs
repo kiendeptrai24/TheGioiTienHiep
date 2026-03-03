@@ -1,11 +1,19 @@
+using FeatureToggles;
 using UnityEngine;
 
 public class WorldClickSystem : TGTHMonoBehaviour
 {
+    [Header("Refs")]
     [SerializeField] private Camera mainCamera;
     [SerializeField] private InputManager input;
     private bool _wasPressed;
     public LayerMask antiPlayer;
+    protected override void Awake()
+    {
+        base.Awake();
+        input = FindAnyObjectByType<InputManager>();
+        mainCamera = Camera.main;
+    }
     private void Update()
     {
         bool pressed = input.IsPointerPressed();
@@ -28,10 +36,5 @@ public class WorldClickSystem : TGTHMonoBehaviour
                 clickable.OnClicked();
             }
         }
-    }
-    protected override void LoadComponent()
-    {
-        base.LoadComponent();
-        if (input == null) input = FindAnyObjectByType<InputManager>();
     }
 }

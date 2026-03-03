@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Profiling;
 using UnityEngine;
 
 public class BattlePlayback : Singleton<BattlePlayback>
@@ -18,6 +20,7 @@ public class BattlePlayback : Singleton<BattlePlayback>
     private Dictionary<string, ChampionAnimationPlayback> champions = new();
     private Dictionary<string, ChampionAnimationPlayback> championsEnemies = new();
     private Dictionary<string, ChampionController> championsObject = new();
+    public event Action OnEndBattle;
     protected override void Awake()
     {
         base.Awake();
@@ -29,14 +32,22 @@ public class BattlePlayback : Singleton<BattlePlayback>
             championsObject.Add(id, champ);
         }
     }
-    [ContextMenu("start battle events")]
-    public void StartBattle(List<BattleEvent> events)
+    public void SetBattleEvents(List<BattleEvent> events)
     {
         curEvents = events;
+    }
+    [ContextMenu("start battle events")]
+    public void StartBattle()
+    {
+        if (curEvents == null || curEvents.Count == 0)
+        {
+            Debug.Log("No battle events to play.");
+            return;
+        }
         playBattle = true;
         List<BattleEventInit> eventsInit = new();
 
-        foreach (var eventInit in events)
+        foreach (var eventInit in curEvents)
         {
             if (eventInit is BattleEventInit)
             {
@@ -92,7 +103,7 @@ public class BattlePlayback : Singleton<BattlePlayback>
         yield return new WaitForSeconds(timeToDeplay / 2);
         ResetBattle();
         yield return new WaitForSeconds(timeToDeplay);
-
+        OnEndBattle?.Invoke();
         CameraSwitchManager.Instance.ResetToPlayer();
     }
 
@@ -110,10 +121,6 @@ public class BattlePlayback : Singleton<BattlePlayback>
             Dispatch(curEvents[currentEventIndex]);
             currentEventIndex++;
         }
-        // if (currentEventIndex >= curEvents.Count)
-        // {
-        //     ResetBattle();
-        // }
     }
     void Dispatch(BattleEvent e)
     {

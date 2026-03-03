@@ -1,19 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FeatureToggles;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PopupManager : Singleton<PopupManager>
 {
-    private Dictionary<Type, IPopup> _popups = new Dictionary<Type, IPopup>();
-    private List<IPopup> _popupStack = new List<IPopup>();
+    private readonly Dictionary<Type, IPopup> _popups = new();
+    private readonly List<IPopup> _popupStack = new();
+
+    private FeatureManager _mgr;
+    private const string BLOCK_SRC = "Popup"; // lý do chặn
 
     protected override void Awake()
     {
-        base.Start();
-        RegisterAllPopups();
+        base.Awake(); // (bạn đang gọi base.Start() là sai vòng đời, nên để Awake)
         DontDestroyOnLoad(gameObject);
+
+        _mgr = FeatureManager.Instance;   // lấy instance ở đây an toàn hơn
+        RegisterAllPopups();
     }
 
     private void RegisterAllPopups()
@@ -27,64 +33,63 @@ public class PopupManager : Singleton<PopupManager>
             .Where(m => m is IPopup)
             .Cast<IPopup>()
             .ToList();
+
         foreach (var popup in allPopups)
         {
-            Type popupType = popup.GetType();
-            _popups[popupType] = popup;
+            _popups[popup.GetType()] = popup;
         }
     }
 
     public T GetPopup<T>() where T : class, IPopup
     {
-        if (_popups.TryGetValue(typeof(T), out IPopup popup))
-        {
-            return popup as T;
-        }
-        return null;
+        return _popups.TryGetValue(typeof(T), out var popup) ? popup as T : null;
     }
 
     public void ShowPopup<T>(IPopup popup) where T : class, IPopup
     {
-        if (popup != null)
-        {
-            popup.Show();
-            _popupStack.Add(popup);
+        if (popup == null) return;
 
-            if (popup is MonoBehaviour mb)
-            {
-                mb.transform.SetAsLastSibling();
-            }
-        }
+        // Nếu popup đã ở trong stack rồi thì khỏi add lại (tránh double)
+        if (_popupStack.Contains(popup)) return;
+
+        bool wasEmpty = _popupStack.Count == 0;
+
+        popup.Show();
+        _popupStack.Add(popup);
+
+        // chỉ add blocker khi stack từ 0 -> 1
+        if (wasEmpty)
+            _mgr.AddBlocker(FeatureId.WorldClick_Enabled, BLOCK_SRC);
+
+        if (popup is MonoBehaviour mb)
+            mb.transform.SetAsLastSibling();
     }
 
     public void HidePopup(IPopup popup)
     {
-        if (popup != null)
-        {
-            popup.Hide();
-            _popupStack.Remove(popup);
-        }
+        if (popup == null) return;
+        if (!_popupStack.Remove(popup)) return;
+
+        popup.Hide();
+
+        // chỉ remove blocker khi stack về 0
+        if (_popupStack.Count == 0)
+            _mgr.RemoveBlocker(FeatureId.WorldClick_Enabled, BLOCK_SRC);
     }
 
     public void HideAllPopups()
     {
         foreach (var popup in _popupStack.ToList())
-        {
             popup.Hide();
-        }
+
         _popupStack.Clear();
-    }
-    private void OnEnable()
-    {
-        SceneManager.activeSceneChanged += OnSceneLoaded;
+        _mgr.RemoveBlocker(FeatureId.WorldClick_Enabled, BLOCK_SRC);
     }
 
-    private void OnDisable()
-    {
-        SceneManager.activeSceneChanged -= OnSceneLoaded;
-    }
+    private void OnEnable() => SceneManager.activeSceneChanged += OnSceneLoaded;
+    private void OnDisable() => SceneManager.activeSceneChanged -= OnSceneLoaded;
 
-    private void OnSceneLoaded(Scene arg0, Scene arg1)
+    private void OnSceneLoaded(Scene oldScene, Scene newScene)
     {
         RegisterAllPopups();
     }

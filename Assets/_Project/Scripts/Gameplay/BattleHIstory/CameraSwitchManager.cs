@@ -21,7 +21,6 @@ public class CameraSwitchManager : Singleton<CameraSwitchManager>
             cameraPoints.Add(point.target.name, point);
         }
         PlayerNetManager.Instance.OnPlayerExiststed += OnPlayerExiststed;
-        Debug.Log(cameraPoints.Count);
     }
 
     private void OnPlayerExiststed(NetworkObject playerNet)

@@ -16,7 +16,7 @@ public class UIitemBattleHistory : TGTHMonoBehaviour
     }
     private void OnStartShowClicked()
     {
-        BattlePlayback.Instance.StartBattle(battleEvents);
+        BattlePlayback.Instance.SetBattleEvents(battleEvents);
         CameraSwitchManager.Instance.SwitchToBattle();
         PopupManager.Instance.HideAllPopups();
     }

@@ -1,6 +1,7 @@
 
 
 using System;
+using FeatureToggles;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public enum InputType
@@ -15,24 +16,51 @@ public class InputManager : MonoBehaviour
     public InputHandler inputHandler;
     public InputType inputType;
     public Action OnEnterClick;
+    private FeatureManager _mgr;
     public void Awake()
     {
         inputHandler = new InputHandler();
         inputHandler.UI.Enter.performed += (InputAction.CallbackContext context) => { OnEnterClick?.Invoke(); };
+        _mgr = FeatureManager.Instance;
+        _mgr.OnFeatureEffectiveChanged += OnChanged;
+    }
+
+    private void OnChanged(FeatureId id, bool unlockInput)
+    {
+        switch (id)
+        {
+            case FeatureId.WorldClick_Enabled:
+                if (unlockInput)
+                    TurnOnPlayerInput();
+                else
+                    TurnOffPlayerInput();
+                break;
+            case FeatureId.BattleScene_Enabled:
+                if (unlockInput)
+                    TurnOnPlayerInput();
+                else
+                    TurnOffPlayerInput();
+                break;
+            default:
+                break;
+        }
     }
 
     #region Player
     public Vector2 GetInputDirection()
     {
+        if (!inputHandler.Player.enabled) return Vector2.zero;
         return inputHandler.Player.Move.ReadValue<Vector2>();
     }
     public bool IsPointerPressed()
     {
+        if (!inputHandler.Player.enabled) return false;
         return inputHandler.Player.PointerPress.IsPressed();
     }
 
     public Vector2 GetPointerPosition()
     {
+        if (!inputHandler.Player.enabled) return Vector2.zero;
         return inputHandler.Player.PointerPosition.ReadValue<Vector2>();
     }
     #endregion
@@ -85,6 +113,14 @@ public class InputManager : MonoBehaviour
     }
 
     #endregion
+    public void TurnOffAllInput()
+    {
+        inputHandler.Disable();
+    }
+    public void TurnOnAllInput()
+    {
+        inputHandler.Enable();
+    }
     private void OnEnable()
     {
         inputHandler.Enable();
