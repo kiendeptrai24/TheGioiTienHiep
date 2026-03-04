@@ -1,38 +1,57 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExitGames.Client.Photon.StructWrapping;
 using UnityEngine;
 using UnityEngine.EventSystems;
 namespace TGTH.Mobile
 {
-    public class HeroPresenter : TGTHMonoBehaviour, IPointerClickHandler, IEndDragHandler
+    public class ChooseHeroPresenter : TGTHMonoBehaviour, IPointerClickHandler, IEndDragHandler
     {
-        [SerializeField] private HeroPageView view;
+        [SerializeField] private ChooseHeroPageView view;
         [SerializeField] private IItemDetailPageView itemDetailPageView;
-        private InventoryCenterManager inventoryCenterManager;
+        [SerializeField] private TeamDetailPagePresenter teamDetailPagePresenter;
         private List<InventoryItem> listItemDatas;
         private UIItemSlotBase currentItemSelect;
         private int currentlyDraggedItemIndex = -1;
         public event Action<int> OnItemActionRequested;
         public event Action<int> OnStartDragging;
         private bool isDraging = false;
+        private UIItemSlotBase currentItem;
+        [SerializeField] private InventoryCenterManager inventoryCenterManager;
 
         protected override void Awake()
         {
             view.OnRefreshClicked += ShowItem;
             view.OnSortClicked += SortInventory;
-
             view.ToggleMouseFollower(false);
+
             InitializeInventoryUI(50);
             ShowAllItems();
-            LoadItem();
+            LoadDataCenter();
+            teamDetailPagePresenter.OnSwapItemRequested += (item) =>
+            {
+                Debug.Log("Swap item: " + item.data.itemName);
+                inventoryCenterManager.UnUseData(item.data);
+            };
         }
-
-        private void LoadItem()
+        private void LoadDataCenter()
         {
             inventoryCenterManager = InventoryCenterManager.Instance;
-            inventoryCenterManager.OnItemChampionDataChanged += SetItemData;
+            inventoryCenterManager.OnItemExistingChampionDataChanged += SetItemData;
             SetItemData(inventoryCenterManager.GetDataType(ItemType.Champion));
+        }
+
+        private void SetItemData(List<ItemData> list)
+        {
+            var temp = new List<InventoryItem>();
+            foreach (var item in list)
+            {
+                if (item is HeroData)
+                    temp.Add(new InventoryItem(item));
+            }
+            listItemDatas = temp;
+            ShowAllItems();
         }
 
         private void InitializeInventoryUI(int amount)
@@ -47,18 +66,6 @@ namespace TGTH.Mobile
                 uiItem.OnItemEndDrag += HandleEndDrag;
                 uiItem.OnRightMouseBtnClick += HandleItemRightClick;
             }
-        }
-
-        private void SetItemData(List<ItemData> list)
-        {
-            var temp = new List<InventoryItem>();
-            foreach (var item in list)
-            {
-                if (item is HeroData)
-                    temp.Add(new InventoryItem(item));
-            }
-            listItemDatas = temp;
-            ShowAllItems();
         }
 
         public void SetInventoryData(List<InventoryItem> items)
@@ -103,10 +110,42 @@ namespace TGTH.Mobile
                 isDraging = false;
                 return;
             }
-            ItemClicked(uiItem);
-            Navigation(uiItem);
-        }
+            var popup = PopupManager.Instance.GetPopup<UseItemPopup>();
+            BaseSetupData data = new BaseSetupData("Bạn có muốn sử dụng tướng này không?");
 
+            if (popup != null)
+            {
+                popup.ShowPopup(data,
+                onConfirm: (BasePopupData result) =>
+                {
+                    var item = currentItem as UIChoseChampionItem;
+                    if (currentItem.HasItem())
+                    {
+                        teamDetailPagePresenter.SwapItem(uiItem.inventoryItem.data, item.championIndex);
+                        inventoryCenterManager.UseData(uiItem.inventoryItem.data);
+                    }
+                    else
+                    {
+                        if (item != null)
+                            teamDetailPagePresenter.AddItem(uiItem.inventoryItem.data, item.championIndex);
+                        inventoryCenterManager.UseData(uiItem.inventoryItem.data);
+                    }
+                },
+                onCancel: () =>
+                {
+                    
+                },
+                onInfo: () =>
+                {
+                    ItemClicked(uiItem);
+                    Navigation(uiItem);
+                });
+            }
+        }
+        public void ChooseItem(UIItemSlotBase item)
+        {
+            currentItem = item;
+        }
         private void Navigation(UIItemSlotBase uiItem)
         {
             uiItem?.navigation.OnClick();
@@ -227,7 +266,7 @@ namespace TGTH.Mobile
         protected override void LoadComponent()
         {
             base.LoadComponent();
-            view = GetComponent<HeroPageView>();
+            view = GetComponent<ChooseHeroPageView>();
         }
     }
 }

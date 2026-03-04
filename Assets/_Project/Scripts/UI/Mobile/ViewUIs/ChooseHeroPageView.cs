@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace TGTH.Mobile
 {
-    public class HeroPageView : MonoBehaviour
+    public class ChooseHeroPageView : MonoBehaviour
     {
         [Header("UI References")]
         public Button sortBtn;
@@ -16,13 +16,12 @@ namespace TGTH.Mobile
         public TMP_Dropdown qualityTypeDrop;
 
         public RectTransform contentHeroExists;
-        public RectTransform contentHeroNotYetOwned;
         public UIInventoryItem itemPrefab;
         public MouseFollower mouseFollower;
         public List<UIItemSlotBase> listOfUIItemsAlreadyOwned = new List<UIItemSlotBase>();
-        public List<UIItemSlotBase> listOfUIItemsNotYetOwned = new List<UIItemSlotBase>();
         public event Action OnSortClicked;
         public event Action OnRefreshClicked;
+        private InventoryItem currentItemSelect;
 
         private void Awake()
         {
@@ -62,13 +61,6 @@ namespace TGTH.Mobile
                 UIInventoryItem uiItem = Instantiate(itemPrefab, contentHeroExists);
                 listOfUIItemsAlreadyOwned.Add(uiItem);
             }
-            for (int i = 0; i < amount; i++)
-            {
-                if (contentHeroNotYetOwned == null) break;;
-                UIInventoryItem uiItem = Instantiate(itemPrefab, contentHeroNotYetOwned);
-                listOfUIItemsNotYetOwned.Add(uiItem);
-            }
-
         }
         public void DeselectItem(UIItemSlotBase uiItem)
         {

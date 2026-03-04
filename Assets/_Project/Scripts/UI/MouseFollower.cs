@@ -6,15 +6,16 @@ public class MouseFollower : TGTHMonoBehaviour
     private Canvas canvas;
     [SerializeField]
     private InputManager inputManager;
+    [SerializeField]
     private UIInventoryItem item;
 
     protected override void Awake()
     {
-        LoadComponent();
     }
 
     protected override void LoadComponent()
     {
+        inputManager = FindAnyObjectByType<InputManager>();
         canvas = transform.root.GetComponent<Canvas>();
         item = GetComponentInChildren<UIInventoryItem>(true);
     }
