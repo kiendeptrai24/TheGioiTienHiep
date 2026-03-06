@@ -39,22 +39,26 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
 
         List<UnitInput> enemySnaps = new();
         List<UnitInput> heroSnaps = new();
+        Board board = new Board
+        {
+            width = 10,
+            height = 5,
+            moveInterval = .3f,
+            allowDiagonal = true
+        };
         // HERO uid: 0..H-1
-        int heroCount = 0;
         foreach (var heroPrefab in heroRoster.chamPrefabs)
         {
             if (heroPrefab == null) continue;
 
             var stats = heroPrefab.GetComponent<StatsData>();
-            stats.SetupDataPreset();
+            stats.SetUpHeroItem(stats.heroData);
             var snap = SnapshotMapper.FromStats(stats, TeamId.Heroes);
-            snap.placement.cell = new Vector2Int(0, heroCount);
+            snap.placement.cell = (stats.heroData as HeroData).championIndex;
             snap.placement.attackRange = (int)snap.snap.attackRange;
             heroSnaps.Add(snap);
-            heroCount++;
         }
 
-        int enemyCount = 10;
 
         // ENEMY uid: heroCount..heroCount+E-1
         foreach (var enemyPrefab in enemyRoster.chamPrefabs)
@@ -62,21 +66,19 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             if (enemyPrefab == null) continue;
 
             var stats = enemyPrefab.GetComponent<StatsData>();
-            stats.SetupDataPreset();
+            stats.SetUpHeroItem(stats.heroData);
 
             var snap = SnapshotMapper.FromStats(stats, TeamId.Enemies);
-            snap.placement.cell = new Vector2Int(9, 19 - enemyCount);
+
+            Vector2Int pos = (stats.heroData as HeroData).championIndex;
+            pos.x = board.width - 1 - pos.x;
+            pos.y = board.height - 1 - pos.y;
+            snap.placement.cell = pos;
+
             snap.placement.attackRange = (int)snap.snap.attackRange;
             enemySnaps.Add(snap);
-            enemyCount++;
         }
-        Board board = new Board
-        {
-            width = 10,
-            height = 10,
-            moveInterval = .3f,
-            allowDiagonal = true
-        };
+
 
         uint seed = (uint)(playerClientId.GetHashCode() ^ monsterNetId.GetHashCode() ^ Environment.TickCount);
 

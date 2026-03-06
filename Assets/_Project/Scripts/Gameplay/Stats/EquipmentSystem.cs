@@ -4,7 +4,7 @@ using UnityEngine;
 public class EquipmentSystem : StatsSystem
 {
     // private CharacterStats charStats;
-    [SerializeField] private EquipmentPresenter equipmentPresenter;
+    [SerializeField] private EquipmentBasePagePresenter equipmentPresenter;
     protected override void Awake()
     {
         base.Awake();

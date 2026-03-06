@@ -11,6 +11,7 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     public event Action OnValueChanged;
     public HeroPreset heroPreset;
     public ItemData heroData;
+    public HeroData heroData2;
     public List<TechniqueData> techniqueData;
     public List<SkillData> skillDatas;
     [Header("Preset base stats")]
@@ -182,9 +183,10 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     {
         this.skillDatas = items;
     }
-    public void SetUpItem(ItemData item)
+    public void SetUpHeroItem(ItemData item)
     {
         this.heroData = item;
+        this.heroData2 = item as HeroData;
         var data = item as HeroData;
         SetUpTechnique(data.techniqueDatas);
         SetupData(data.statsCultivationPathData, data.statsRealmData, data.statsRaceData);
@@ -193,7 +195,7 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     public void SetupDataPreset()
     {
         if (heroPreset == null) return;
-        SetUpItem(heroPreset.GetItemData());
+        SetUpHeroItem(heroPreset.GetItemData());
         Setup();
     }
     public void StatChange()

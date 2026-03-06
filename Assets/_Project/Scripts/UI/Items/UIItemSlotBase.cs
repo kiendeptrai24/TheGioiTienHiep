@@ -57,7 +57,6 @@ public abstract class UIItemSlotBase : TGTHMonoBehaviour,
         empty = false;
         itemImage.gameObject.SetActive(true);
         itemImage.sprite = sprite;
-
     }
 
 

@@ -15,10 +15,12 @@ namespace TGTH.Mobile
         [SerializeField] private EquipmentSystem equipmentSystem;
         [SerializeField] private SkillSystem skillSystem;
         [SerializeField] private TechniqueSystem techniqueSystem;
-
+        private InventoryCenterManager inventoryCenterManager;
         private bool setup = false;
         protected override void Awake()
         {
+            inventoryCenterManager = InventoryCenterManager.Instance;
+            inventoryCenterManager.OnItemExistingEquitmentDataChanged += SetItemData;
             foreach (var uiItem in view.uIEquipmentSlots)
             {
                 uiItem.OnItemClicked += HandleItemClicked;
@@ -35,9 +37,27 @@ namespace TGTH.Mobile
             view.OnHeroStatsClicked += ShowHeroInfo;
             view.OnHeroDetailClicked += ShowHeroDetail;
         }
-        private void OnEnable()
+        
+        private void SetItemData(List<ItemData> list)
         {
-            ShowData(new InventoryItem(statsManager.heroData));
+            for (int i = 0; i < list.Count; i++)
+            {
+                var item = list[i];
+                if (item.itemId == statsManager.heroData.itemId)
+                {
+                    ShowData(new InventoryItem(item));
+                    break;
+                }
+            }
+            foreach (var uiItem in view.uIEquipmentSlots)
+            {
+                uiItem.ResetData();
+            }
+            var heroData = statsManager.heroData as HeroData;
+            foreach (var item in heroData.equitmentDatas)
+            {
+                view.equipmentSlotsDictionary[item.equipmentType].SetItem(new InventoryItem(item));
+            }
         }
         private void Init()
         {
@@ -90,7 +110,7 @@ namespace TGTH.Mobile
             statsManager.ResetStats();
             var heroData = item.data as HeroData;
             if (heroData == null) return;
-            statsManager.SetUpItem(heroData);
+            statsManager.SetUpHeroItem(heroData);
             statsManager.SetupData(heroData.statsCultivationPathData, heroData.statsRealmData, heroData.statsRaceData);
             characterIdentity.SetupData(heroData.statsCultivationPathData, heroData.statsRealmData, heroData.statsRaceData);
             foreach (var eq in heroData.equitmentDatas)

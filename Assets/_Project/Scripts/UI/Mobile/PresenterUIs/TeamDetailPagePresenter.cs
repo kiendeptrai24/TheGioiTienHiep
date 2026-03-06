@@ -8,21 +8,34 @@ using UnityEngine;
 
 public class TeamDetailPagePresenter : TGTHMonoBehaviour
 {
+    private class ChampionData
+    {
+        public InventoryItem item;
+        public Vector2 championIndex;
+    }
     [SerializeField] private TeamDetailPageView view;
     [SerializeField] private ChooseHeroPresenter chooseHeroPresenter;
-    [SerializeField] private List<InventoryItem> listItemDatas = new();
-    public event Action<InventoryItem> OnSwapItemRequested;
+    private InventoryCenterManager inventoryCenterManager;
+    [SerializeField] private List<ItemData> listDatas = new();
     private UIItemSlotBase currentItemSelect;
-    public List<ItemPreset> GetDatas;
     private int currentlyDraggedItemIndex = -1;
     private bool isDraging;
 
     protected override void Awake()
     {
         base.Awake();
+        inventoryCenterManager = InventoryCenterManager.Instance;
         InitializeInventoryUI();
     }
-
+    public List<ItemData> GetAllItems()
+    {
+        var items = new List<ItemData>();
+        foreach (var item in listDatas)
+        {
+            items.Add(item);
+        }
+        return items;
+    }
     private void InitializeInventoryUI()
     {
 
@@ -37,22 +50,24 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
             item.OnItemEndDrag += HandleEndDrag;
             item.OnEmptySlotClicked += HandleEmptySlotClicked;
         }
-        for (int i = 0; i < GetDatas.Count; i++)
-        {
-            if (i < view.listOfUIItems.Count)
-            {
-                view.listOfUIItems[i].SetItem(new InventoryItem(GetDatas[i].GetItemData()));
-            }
-        }
+
     }
-    public void AddItem(InventoryItem item)
+    public void AddItem(ItemData data)
     {
-        listItemDatas.Add(item);
+        listDatas.Add(data);
+        inventoryCenterManager.UseData(data);
+        inventoryCenterManager.SetItemChampionData(GetAllItems());
+    }
+    public void RemoveItem(ItemData data)
+    {
+        listDatas.Remove(data);
+        inventoryCenterManager.UnUseData(data);
+        inventoryCenterManager.SetItemChampionData(GetAllItems());
     }
     private void HandleEmptySlotClicked(UIChoseChampionItem item)
     {
         chooseHeroPresenter.ChooseItem(item);
-        item?.navigation.OnClick();
+        Navigation(item);
     }
 
     private void HandleEndDrag(UIItemSlotBase uiItem)
@@ -78,11 +93,15 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
             view.listOfUIItems[i].SetItem(new InventoryItem(itemData));
             break;
         }
-        var item = new InventoryItem(itemData);
-        listItemDatas.Add(item);
+        int x = (int)index.x;
+        int y = (int)index.y;
+        (itemData as HeroData).championIndex = new Vector2Int(x, y);
+        AddItem(itemData);
+
     }
     public void SwapItem(ItemData itemData, Vector2 index)
     {
+
         for (int i = 0; i < view.listOfUIItems.Count; i++)
         {
             var itemChoseChampion = view.listOfUIItems[i] as UIChoseChampionItem;
@@ -92,13 +111,11 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
 
             if (itemChoseChampion.championIndex != index)
                 continue;
-            OnSwapItemRequested?.Invoke(view.listOfUIItems[i].inventoryItem);
+            RemoveItem(view.listOfUIItems[i].inventoryItem.data);
             view.listOfUIItems[i].SetItem(new InventoryItem(itemData));
             break;
         }
-
-        var item = new InventoryItem(itemData);
-        listItemDatas.Add(item);
+        AddItem(itemData);
     }
     private void HandleItemDropped(UIItemSlotBase uiItem)
     {
@@ -155,7 +172,30 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
             isDraging = false;
             return;
         }
-        if (uiItem.HasItem()) return;
+        var popup = PopupManager.Instance.GetPopup<UseItemPopup>();
+        BaseSetupData data = new BaseSetupData("Bạn có muốn loại bỏ tướng này khỏi đội không?");
+
+        if (popup != null)
+        {
+            popup.ShowPopup(data,
+            onConfirm: (BasePopupData result) =>
+            {
+                RemoveItem(uiItem.inventoryItem.data);
+                uiItem.ResetData();
+            },
+            onCancel: () =>
+            {
+
+            },
+            onInfo: () =>
+            {
+                ItemClicked(uiItem);
+                Navigation(uiItem);
+            });
+        }
+    }
+    private void Navigation(UIItemSlotBase uiItem)
+    {
         uiItem?.navigation.OnClick();
     }
     private void ResetDrag()

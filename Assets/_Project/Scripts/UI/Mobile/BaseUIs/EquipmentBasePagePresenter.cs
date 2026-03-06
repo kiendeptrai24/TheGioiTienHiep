@@ -6,11 +6,12 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour 
+public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
 {
     [SerializeField] protected EquipmentBasePageView view;
     [SerializeField] protected IItemDetailPageView itemDetailPageView;
     [SerializeField] protected EquipmentSystem equipmentSystem;
+    [SerializeField] protected StatsData statsManager;
     [SerializeField] protected InventoryCenterManager inventoryCenterManager;
     [SerializeField] protected List<InventoryItem> listItemDatas;
     protected UIItemSlotBase currentItemSelect;
@@ -19,21 +20,49 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
     protected bool isSWapped = false;
     public event Action<int> OnItemActionRequested;
     public event Action<int> OnStartDragging;
+    private bool isShowEquipment = false;
+    private bool isOwnEquipmentPage = false;
     protected override void Awake()
     {
         view.ToggleMouseFollower(false);
         InitializeInventoryUI(50);
+        view.OnRefreshClicked += ShowAllItemInInventory;
+        view.OnSortClicked += SortInventory;
+
+        LoadData();
+    }
+
+    private void LoadData()
+    {
         inventoryCenterManager = InventoryCenterManager.Instance;
         inventoryCenterManager.OnItemEquitmentDataChanged += SetItemData;
-        SetItemData(inventoryCenterManager.GetDataType(ItemType.Equipment)); 
-        view.OnRefreshClicked += ShowAllItemsInInventory;
-        view.OnSortClicked += SortInventory;
+        SetItemData(inventoryCenterManager.GetDataType(ItemType.Equipment, true));
+        isShowEquipment = true;
+        view.ShowEquipmentItems(statsManager.heroData);
+        isShowEquipment = false;
     }
-    protected virtual void OnEnable() {
-        SetItemData(inventoryCenterManager.GetDataType(ItemType.Equipment));
+
+    protected virtual void OnEnable()
+    {
+        ShowItemEquipment();
+        isOwnEquipmentPage = true;
     }
+
+    protected virtual void OnDisable()
+    {
+        isOwnEquipmentPage = false;
+    }
+
+    private void ShowItemEquipment()
+    {
+        isShowEquipment = true;
+        view.ShowEquipmentItems(statsManager.heroData);
+        isShowEquipment = false;
+    }
+
     private void SetItemData(List<ItemData> items)
     {
+        if (isOwnEquipmentPage) return;
         if (listItemDatas == null)
             listItemDatas = new List<InventoryItem>();
         else
@@ -42,7 +71,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         {
             listItemDatas.Add(new InventoryItem(item));
         }
-        ShowAllItems();
+        ShowAllItemInInventory();
     }
 
     protected override void Start()
@@ -65,9 +94,9 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         foreach (var item in view.listOfEquitmentItems)
         {
             if (item is UIEquipmentSlot uIEquipmentSlot)
-            {
                 uIEquipmentSlot.OnEquippedChanged += HandleEquippedChanged;
-            }
+
+            view.equipmentSlotsDictionary.Add(item.equipmentType, item);
         }
     }
     public void SetEquipmentSystem(EquipmentSystem system)
@@ -76,39 +105,24 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
     }
     protected virtual bool HandleEquippedChanged(InventoryItem item1, InventoryItem item2)
     {
+        if (isShowEquipment) return false;
         if (equipmentSystem == null) return false;
         equipmentSystem.Unequip(item1);
         equipmentSystem.Equip(item2);
-        if(item1 != null && item1.data != null)
+        if (item1 != null && item1.data != null)
         {
-            Debug.Log("Add back to inventory: " + item1.data.itemName);
             inventoryCenterManager.AddData(item1.data);
-            inventoryCenterManager.ItemChange(item1.data);
         }
-        if(item2 != null && item2.data != null)
+        if (item2 != null && item2.data != null)
         {
             inventoryCenterManager.RemoveData(item2.data);
-            inventoryCenterManager.ItemChange(item2.data);
         }
         return true;
     }
 
-    private void ShowAllItems()
+    private void ShowAllItemInInventory()
     {
-        view.ShowAllItems(listItemDatas);
-    }
-    private void ShowAllItemsInInventory()
-    {
-        var equip = GetListItemEquipment();
-        List<InventoryItem> filteredList = new();
-
-        foreach (var item in listItemDatas)
-        {
-            if (!equip.Contains(item.data))
-                filteredList.Add(item);
-        }
-
-        view.ShowAllItemInInventory(filteredList);
+        view.ShowAllItemInInventory(listItemDatas);
     }
 
     protected virtual void SortInventory()
@@ -165,8 +179,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
     }
     public void RefreshInventory()
     {
-        for (int i = 0; i < listItemDatas.Count; i++)
-            view.SetItem(i, listItemDatas[i]);
+        view.ShowAllItemInInventory(listItemDatas);
     }
 
     protected virtual void HandleItemClicked(UIItemSlotBase uiItem)
@@ -184,7 +197,6 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         int index = view.listOfUIItems.IndexOf(uiItem);
         if (index < 0) return;
 
-        view.DeselectItem(currentItemSelect);
         view.SelectUIItem(currentItemSelect, uiItem);
 
         currentItemSelect = uiItem;
@@ -200,7 +212,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         OnItemActionRequested?.Invoke(index);
     }
 
-    protected virtual  void HandleBeginDrag(UIItemSlotBase uiItem)
+    protected virtual void HandleBeginDrag(UIItemSlotBase uiItem)
     {
         isDraging = true;
         int index = view.listOfUIItems.IndexOf(uiItem);
@@ -231,10 +243,9 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         if (dropIndex == -1) return;
 
         SwapItemsUI(currentlyDraggedItemIndex, dropIndex);
-        if (isSWapped)
-            ItemClicked(uiItem);
-        else
-            ItemClicked(curUIItem);
+
+        var item = isSWapped ? uiItem : curUIItem;
+        ItemClicked(item);
     }
 
     protected void SwapItemsUI(int from, int to)
@@ -248,7 +259,6 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
             return;
         }
         isSWapped = true;
-
         fromSlot.SwapWith(toSlot);
     }
     protected void ResetDrag()

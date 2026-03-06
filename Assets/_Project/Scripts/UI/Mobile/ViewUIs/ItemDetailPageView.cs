@@ -31,7 +31,14 @@ public class ItemDetailPageView : IItemDetailPageView
 
     private void SetData(InventoryItem inventoryItem)
     {
-
+        if (inventoryItem == null || inventoryItem.data == null)
+        {
+            itemNameTxt.text = "";
+            qualityTypeTxt.text = "";
+            realmTxt.text = "";
+            itemIconImge.sprite = null;
+            return;
+        }
         itemNameTxt.text = inventoryItem.data.itemName;
         qualityTypeTxt.text = EnumTranslator.ToVietnamese(inventoryItem.data.qualityType);
         realmTxt.text = EnumTranslator.ToVietnamese(inventoryItem.data.cultivationStage);

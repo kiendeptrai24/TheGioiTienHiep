@@ -3,12 +3,23 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using UnityEditor.Rendering.Universal.ShaderGUI;
 
 public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveable
 {
     [SerializeField] private List<ItemData> listItemDatas = new List<ItemData>();
     [SerializeField] private List<ItemData> listItemDatasUsed = new List<ItemData>();
     [SerializeField] private List<ItemData> listItemDatasExisting = new List<ItemData>();
+    public List<HeroData> listItemDatasChampion = new List<HeroData>();
+    override protected void Awake()
+    {
+        base.Awake();
+        listItemDatas.Clear();
+        listItemDatasExisting.Clear();
+        listItemDatasUsed.Clear();
+    }
+    public event Action<List<ItemData>> OnListItemDatasChampionChanged;
 
     public event Action<List<ItemData>> OnItemDataChanged;
     public event Action<List<ItemData>> OnItemEquitmentDataChanged;
@@ -16,12 +27,12 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public event Action<List<ItemData>> OnItemChampionDataChanged;
     public event Action<List<ItemData>> OnItemTechniqueDataChanged;
 
-
     public event Action<List<ItemData>> OnItemExistingDataChanged;
     public event Action<List<ItemData>> OnItemExistingEquitmentDataChanged;
     public event Action<List<ItemData>> OnItemExistingSkillDataChanged;
     public event Action<List<ItemData>> OnItemExistingChampionDataChanged;
     public event Action<List<ItemData>> OnItemExistingTechniqueDataChanged;
+    public event Action<ItemData> OnItemChanged;
     private bool isItemChange = false;
     private bool isEquitmentChange = false;
     private bool isSkillChange = false;
@@ -29,6 +40,14 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     private bool isTechniqueChange = false;
     //public event Action OnDataChanged;
 
+    public void SetItemChampionData(List<ItemData> data)
+    {
+        Debug.Log(data.Count);
+        listItemDatasChampion = data
+            .OfType<HeroData>()
+            .ToList();
+        OnListItemDatasChampionChanged?.Invoke(data);
+    }
     public void CheckDataChange()
     {
         if (isItemChange)
@@ -38,22 +57,22 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         }
         if (isEquitmentChange)
         {
-            OnItemEquitmentDataChanged.Invoke(GetDataType(ItemType.Equipment));
+            OnItemEquitmentDataChanged?.Invoke(GetDataType(ItemType.Equipment));
             isEquitmentChange = false;
         }
         if (isChampionChange)
         {
-            OnItemChampionDataChanged.Invoke(GetDataType(ItemType.Champion));
+            OnItemChampionDataChanged?.Invoke(GetDataType(ItemType.Champion));
             isChampionChange = false;
         }
         if (isSkillChange)
         {
-            OnItemSkillDataChanged.Invoke(GetDataType(ItemType.Skill));
+            OnItemSkillDataChanged?.Invoke(GetDataType(ItemType.Skill));
             isSkillChange = false;
         }
         if (isTechniqueChange)
         {
-            OnItemTechniqueDataChanged.Invoke(GetDataType(ItemType.Technique));
+            OnItemTechniqueDataChanged?.Invoke(GetDataType(ItemType.Technique));
         }
     }
     public void CheckExistingDataChange()
@@ -65,26 +84,25 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         }
         if (isEquitmentChange)
         {
-            OnItemExistingEquitmentDataChanged.Invoke(GetDataType(ItemType.Equipment, true));
+            OnItemExistingEquitmentDataChanged?.Invoke(GetDataType(ItemType.Equipment, true));
             isEquitmentChange = false;
         }
         if (isChampionChange)
         {
-            OnItemExistingChampionDataChanged.Invoke(GetDataType(ItemType.Champion, true));
+            OnItemExistingChampionDataChanged?.Invoke(GetDataType(ItemType.Champion, true));
             isChampionChange = false;
         }
         if (isSkillChange)
         {
-            OnItemExistingSkillDataChanged.Invoke(GetDataType(ItemType.Skill, true));
+            OnItemExistingSkillDataChanged?.Invoke(GetDataType(ItemType.Skill, true));
             isSkillChange = false;
         }
         if (isTechniqueChange)
         {
-            OnItemExistingTechniqueDataChanged.Invoke(GetDataType(ItemType.Technique, true));
+            OnItemExistingTechniqueDataChanged?.Invoke(GetDataType(ItemType.Technique, true));
             isTechniqueChange = false;
         }
     }
-
     public List<ItemData> GetItemData()
     {
         return listItemDatas;
@@ -93,7 +111,23 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     {
         if (listItemDatas.Contains(item))
             return false;
+
         listItemDatas.Add(item);
+        listItemDatasExisting.Add(item);
+
+        ItemChange(item);
+        ItemExistingChange(item);
+        return true;
+    }
+    public bool RemoveData(ItemData item)
+    {
+        if (!listItemDatas.Contains(item))
+            return false;
+
+        listItemDatas.Remove(item);
+        listItemDatasExisting.Remove(item);
+
+        ItemExistingChange(item);
         ItemChange(item);
         return true;
     }
@@ -111,14 +145,6 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
             return false;
         listItemDatasExisting.Add(item);
         ItemExistingChange(item);
-        return true;
-    }   
-    public bool RemoveData(ItemData item)
-    {
-        if (!listItemDatas.Contains(item))
-            return false;
-        listItemDatas.Remove(item);
-        ItemChange(item);
         return true;
     }
     public void ItemExistingChange(ItemData item)
@@ -170,6 +196,12 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         {
             isChampionChange = true;
             CheckDataChange();
+        }
+        else if (item is HeroData)
+        {
+            isItemChange = true;
+            CheckDataChange();
+            OnItemChanged?.Invoke(item);
         }
         else
         {
@@ -260,8 +292,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         foreach (var item in _data.itemDatas)
         {
             listItemDatas.Add(item);
+            listItemDatasExisting.Add(item);
         }
-        listItemDatasExisting = new List<ItemData>(listItemDatas);
     }
     public void SaveGame(ref GameData _data)
     {

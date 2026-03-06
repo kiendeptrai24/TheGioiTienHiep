@@ -1,7 +1,8 @@
 
 
 using System.Collections.Generic;
-
+using UnityEngine;
+[System.Serializable]
 public class HeroData : ItemData
 {
     public StatsRealmData statsRealmData;
@@ -22,6 +23,7 @@ public class HeroData : ItemData
     public float physicalDefensePoint; // value
     public float magicalDefensePoint; // value
     public float spiritDefensePoint; // value
+    public Vector2Int championIndex;
     public List<EquitmentData> equitmentDatas;
     public List<SkillData> skillDatas;
     public List<TechniqueData> techniqueDatas;

@@ -54,8 +54,7 @@ namespace TGTH.Mobile
             var temp = new List<InventoryItem>();
             foreach (var item in list)
             {
-                if (item is HeroData)
-                    temp.Add(new InventoryItem(item));
+                temp.Add(new InventoryItem(item));
             }
             listItemDatas = temp;
             ShowAllItems();

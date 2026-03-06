@@ -29,11 +29,6 @@ namespace TGTH.Mobile
             InitializeInventoryUI(50);
             ShowAllItems();
             LoadDataCenter();
-            teamDetailPagePresenter.OnSwapItemRequested += (item) =>
-            {
-                Debug.Log("Swap item: " + item.data.itemName);
-                inventoryCenterManager.UnUseData(item.data);
-            };
         }
         private void LoadDataCenter()
         {
@@ -122,18 +117,16 @@ namespace TGTH.Mobile
                     if (currentItem.HasItem())
                     {
                         teamDetailPagePresenter.SwapItem(uiItem.inventoryItem.data, item.championIndex);
-                        inventoryCenterManager.UseData(uiItem.inventoryItem.data);
                     }
                     else
                     {
                         if (item != null)
                             teamDetailPagePresenter.AddItem(uiItem.inventoryItem.data, item.championIndex);
-                        inventoryCenterManager.UseData(uiItem.inventoryItem.data);
                     }
                 },
                 onCancel: () =>
                 {
-                    
+
                 },
                 onInfo: () =>
                 {

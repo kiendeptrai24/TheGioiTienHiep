@@ -2,10 +2,11 @@
 using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class EquipmentBasePageView : TGTHMonoBehaviour 
+public abstract class EquipmentBasePageView : TGTHMonoBehaviour
 {
     [Header("UI References")]
     public Button sortBtn;
@@ -16,8 +17,8 @@ public abstract class EquipmentBasePageView : TGTHMonoBehaviour
     public RectTransform contentPanel;
     public UIInventoryItem itemPrefab;
     public MouseFollower mouseFollower;
-    public List<UIEquipmentSlot> listOfEquitmentItems = new List<UIEquipmentSlot>();   
-    public Dictionary<EquipmentType, UIItemSlotBase> equipmentSlotsDictionary; 
+    public List<UIEquipmentSlot> listOfEquitmentItems = new List<UIEquipmentSlot>();
+    public Dictionary<EquipmentType, UIItemSlotBase> equipmentSlotsDictionary = new();
     public List<UIItemSlotBase> listOfUIItemsInInventory = new List<UIItemSlotBase>();
     public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
     protected int currentlyDraggedItemIndex = -1;
@@ -80,16 +81,6 @@ public abstract class EquipmentBasePageView : TGTHMonoBehaviour
         uiItemOld = uiItemNew;
         uiItemOld.Select();
     }
-    public void ShowAllItems(List<InventoryItem> listItemDatas)
-    {
-        if (listItemDatas == null) return;
-        if (listOfUIItems.Count < listItemDatas.Count) return;
-        for (int i = 0; i < listItemDatas.Count; i++)
-        {
-            if(i >= 50) return;
-            listOfUIItems[i].SetItem(listItemDatas[i]);
-        }
-    }
     public virtual void ShowEquipmentItems(ItemData data)
     {
         HeroData heroData = data as HeroData;
@@ -98,18 +89,23 @@ public abstract class EquipmentBasePageView : TGTHMonoBehaviour
         {
             item.ResetData();
         }
-        for (int i = 0; i < heroData.equitmentDatas.Count; i++)
+        var equipDatas = heroData.equitmentDatas;
+        for (int i = 0; i < equipDatas.Count; i++)
         {
-            equipmentSlotsDictionary[heroData.equitmentDatas[i].equipmentType].SetItem(new InventoryItem(heroData.equitmentDatas[i]));
+            if (equipDatas[i] == null) continue;
+
+            equipmentSlotsDictionary[equipDatas[i].equipmentType].
+            SetItem(new InventoryItem(equipDatas[i]));
         }
     }
     public void ShowAllItemInInventory(List<InventoryItem> listItemDatas)
     {
+        Debug.Log("Show All Item In Inventory");
         if (listItemDatas == null) return;
         if (listOfUIItems.Count < listItemDatas.Count) return;
         for (int i = 0; i < listOfUIItemsInInventory.Count; i++)
         {
-            if(i < listItemDatas.Count)
+            if (i < listItemDatas.Count)
             {
                 listOfUIItemsInInventory[i].SetItem(listItemDatas[i]);
             }
@@ -119,16 +115,6 @@ public abstract class EquipmentBasePageView : TGTHMonoBehaviour
             }
         }
     }
-    public void SetItem(int index, InventoryItem item)
-    {
-        listOfUIItems[index].SetItem(item);
-    }
-
-    public void SetItemData(int index, Sprite sprite, int qty, string name)
-    {
-        listOfUIItems[index].SetData(sprite, qty);
-    }
-
     public void Show()
     {
         gameObject.SetActive(true);

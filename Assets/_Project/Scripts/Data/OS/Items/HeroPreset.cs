@@ -25,6 +25,8 @@ public class HeroPreset : ItemStatsPreset
     public List<ItemEquipmentPreset> equitmentDatas;
     public List<SkillPreset> skillDatas;
     public List<TechniquePreset> techniqueDatas;
+    public Vector2Int championIndex = new Vector2Int(0, 0);
+    public GameObject heroPrefab;
 
     public override ItemData GetItemData()
     {
@@ -41,7 +43,7 @@ public class HeroPreset : ItemStatsPreset
             itemPrice = data.itemPrice,
             cultivationStage = data.cultivationStage,
             qualityType = data.qualityType,
-            
+
             raceType = raceType,
             level = level,
             attackRange = attackRange,
@@ -55,6 +57,7 @@ public class HeroPreset : ItemStatsPreset
             physicalDefensePoint = physicalDefensePoint,
             magicalDefensePoint = magicalDefensePoint,
             spiritDefensePoint = spiritDefensePoint,
+            championIndex = championIndex,
         };
         heroPreset.statsRealmData = statsRealmPreset.GetStats();
         heroPreset.statsRaceData = statsRacePreset.GetStats();
