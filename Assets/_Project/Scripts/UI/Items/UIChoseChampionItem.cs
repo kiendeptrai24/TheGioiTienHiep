@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class UIChoseChampionItem : UIItemSlotBase
 {
-    public Vector2 championIndex = new Vector2(0, 0);
+    public Vector2Int championIndex = new Vector2Int(0, 0);
     [SerializeField] private Image emptySlot;
     public event Action<UIChoseChampionItem> OnEmptySlotClicked;
     protected override void Awake()

@@ -12,7 +12,8 @@ namespace TGTH.Mobile
         [SerializeField] private TechniquePageView view;
         [SerializeField] private ItemTechniqueDetailPageView itemTechniqueDetailPageView;
         private TechniqueSystem techniqueSystem;
-        private List<InventoryItem> listItemDatas;
+        private InventoryCenterManager inventoryCenterManager;
+        private List<InventoryItem> listItemDatas = new List<InventoryItem>();
         private UIItemSlotBase currentItemSelect;
         private int currentlyDraggedItemIndex = -1;
         public event Action<int> OnItemActionRequested;
@@ -23,20 +24,34 @@ namespace TGTH.Mobile
         {
             view.ToggleMouseFollower(false);
             InitializeInventoryUI(50);
-            ShowAllItems();
+            inventoryCenterManager = InventoryCenterManager.Instance;
+            inventoryCenterManager.OnItemTechniqueDataChanged += SetItemData;
+            SetItemData(inventoryCenterManager.GetDataType(ItemType.Technique));
         }
+
         public void UnlockItem(int count)
         {
             for (int i = 0; i < view.listOfEquitmentItems.Count; i++)
             {
-                if(i >= count)
+                if (i >= count)
                     break;
                 view.listOfEquitmentItems[i].Unlock();
             }
         }
+        private void SetItemData(List<ItemData> items)
+        {
+            if (listItemDatas == null)
+                listItemDatas = new List<InventoryItem>();
+            else
+                listItemDatas.Clear();
+            foreach (var item in items)
+            {
+                listItemDatas.Add(new InventoryItem(item));
+            }
+            ShowAllItems();
+        }
         private void InitializeInventoryUI(int amount)
         {
-            Debug.Log("InitializeInventoryUI");
             view.CreateInventorySlots(amount);
 
             foreach (var uiItem in view.listOfUIItems)
@@ -66,29 +81,9 @@ namespace TGTH.Mobile
             techniqueSystem.Equip(item2);
         }
 
-        public void SetInventoryData(List<InventoryItem> items)
-        {
-            listItemDatas = items;
-            ShowAllItems();
-        }
-        public void SetTechniqueData(InventoryItem items)
-        {
-            listItemDatas.Add(items);
-            ShowAllItems();
-        }
-
         public void ShowAllItems()
         {
             view.ShowInventory(listItemDatas);
-        }
-        public void SortAllItems()
-        {
-            view.SortInventory(listItemDatas);
-        }
-        public void RefreshInventory()
-        {
-            for (int i = 0; i < listItemDatas.Count; i++)
-                view.SetItem(i, listItemDatas[i]);
         }
 
         private void HandleItemClicked(UIItemSlotBase uiItem)
@@ -180,33 +175,12 @@ namespace TGTH.Mobile
             currentlyDraggedItemIndex = -1;
         }
 
-        private void SortItems()
-        {
-            List<InventoryItem> tempList = new List<InventoryItem>();
-
-            List<UIInventoryItem> inventoryItems =
-                view.listOfUIItems.OfType<UIInventoryItem>().ToList();
-
-            foreach (var slot in inventoryItems)
-            {
-                if (slot.inventoryItem != null)
-                    tempList.Add(slot.inventoryItem);
-
-                slot.ResetData();
-                slot.Deselect();
-            }
-
-            for (int i = 0; i < tempList.Count; i++)
-                view.SetItem(i, tempList[i]);
-        }
-        [ContextMenu("Add")]
         public void AddItem()
         {
             if (currentItemSelect == null) return;
             currentItemSelect.inventoryItem.AddStack();
             currentItemSelect.SetItem(currentItemSelect.inventoryItem);
         }
-        [ContextMenu("Remove")]
         public void RemoveItem()
         {
             if (currentItemSelect == null) return;

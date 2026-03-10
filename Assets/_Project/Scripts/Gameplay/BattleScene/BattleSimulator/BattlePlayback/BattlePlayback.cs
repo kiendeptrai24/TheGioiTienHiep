@@ -36,16 +36,21 @@ public class BattlePlayback : Singleton<BattlePlayback>
     {
         curEvents = events;
         BattlePlaybackManager.Instance.ReadyGame();
+        InitChampions();
     }
-    [ContextMenu("start battle events")]
     public void StartBattle()
+    {
+        playBattle = true;
+        battleTimer = Time.time;
+    }
+
+    private void InitChampions()
     {
         if (curEvents == null || curEvents.Count == 0)
         {
             Debug.Log("No battle events to play.");
             return;
         }
-        playBattle = true;
         List<BattleEventInit> eventsInit = new();
 
         foreach (var eventInit in curEvents)
@@ -60,27 +65,34 @@ public class BattlePlayback : Singleton<BattlePlayback>
             if (!championsObject.TryGetValue(eventInit.ownerUid, out var champion))
                 continue;
 
-            Vector3 rotOffset = eventInit.team == TeamId.Heroes ? Vector3.zero : Vector3.back;
+            Vector3 rotOffset = eventInit.team == TeamId.Heroes ? Vector3.forward : Vector3.back;
             Quaternion rot = Quaternion.LookRotation(rotOffset);
 
-            int xPos = Mathf.RoundToInt(origin.position.x + eventInit.cell.y);
-            int yPos = Mathf.RoundToInt(origin.position.z + eventInit.cell.x);
-
-            Vector3 pos = new Vector3(
-                (xPos + posOrigin.x) * offsetOrigin.x,
-                0,
-                (yPos + posOrigin.y) * offsetOrigin.y
+            Vector3 boardOrigin = new Vector3(
+                origin.position.x + posOrigin.x * offsetOrigin.x,
+                0f,
+                origin.position.z + posOrigin.y * offsetOrigin.y
             );
+
+            Vector3 pos = BattleBoardLayout.CellToWorld(
+                eventInit.cell,
+                offsetOrigin.x,
+                offsetOrigin.y,
+                boardOrigin
+            );
+
+            Debug.Log($"cell={eventInit.cell} pos={pos}");
+
             var cham = Instantiate(champion, pos, rot);
             var chamAnim = cham.GetComponent<ChampionAnimationPlayback>();
+
             if (eventInit.team == TeamId.Heroes)
                 champions.Add(eventInit.ownerUid, chamAnim);
             else
                 championsEnemies.Add(eventInit.ownerUid, chamAnim);
         }
-
-        SetStartBattle();
     }
+
     public void StopBattle()
     {
         playBattle = false;
@@ -113,11 +125,7 @@ public class BattlePlayback : Singleton<BattlePlayback>
         CameraSwitchManager.Instance.ResetToPlayer();
     }
 
-    public void SetStartBattle()
-    {
-        playBattle = true;
-        battleTimer = Time.time;
-    }
+
     void Update()
     {
         if (!playBattle) return;
@@ -187,17 +195,28 @@ public class BattlePlayback : Singleton<BattlePlayback>
     public void PlayMovement(BattleEvent e)
     {
         var eventMove = e as BattleEventMove;
+        if (eventMove == null) return;
+
         var ownerCham = GetAnimationCham(eventMove.ownerUid, eventMove.team);
         var targetCham = GetAnimationCham(eventMove.targetUid, eventMove.targetTeam);
         if (ownerCham == null || targetCham == null)
             return;
-        int xPos = Mathf.RoundToInt(origin.position.x + eventMove.to.y);
-        int yPos = Mathf.RoundToInt(origin.position.z + eventMove.to.x);
-        Vector3 destination = new Vector3(
-                (xPos + posOrigin.x) * offsetOrigin.x,
-                0,
-                (yPos + posOrigin.y) * offsetOrigin.y
-            );
+
+        Vector3 boardOrigin = new Vector3(
+            origin.position.x + posOrigin.x * offsetOrigin.x,
+            0f,
+            origin.position.z + posOrigin.y * offsetOrigin.y
+        );
+
+        Vector3 destination = BattleBoardLayout.CellToWorld(
+            eventMove.to,
+            offsetOrigin.x,
+            offsetOrigin.y,
+            boardOrigin
+        );
+
+        lastDestination = destination;
+        hasDestination = true;
 
         ownerCham.GetComponent<TargetFinderBase>().SetTarget(targetCham.transform);
         ownerCham.PlayMovement(destination);
@@ -236,5 +255,16 @@ public class BattlePlayback : Singleton<BattlePlayback>
     override protected void LoadComponent()
     {
         base.LoadComponent();
+    }
+    private Vector3 lastDestination;
+    private bool hasDestination;
+    private void OnDrawGizmos()
+    {
+        if (!hasDestination) return;
+
+        Gizmos.color = Color.green;
+        var pos = lastDestination;
+        pos.y = 1;
+        Gizmos.DrawSphere(pos, 1f);
     }
 }

@@ -41,26 +41,32 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         List<UnitInput> heroSnaps = new();
         Board board = new Board
         {
-            width = 10,
-            height = 5,
-            moveInterval = .3f,
+            width = 5,
+            height = 9,
+            moveInterval = .7f,
             allowDiagonal = true
         };
-        // HERO uid: 0..H-1
+
+        BattleBoardGrid boardGrid = new BattleBoardGrid(board.moveInterval, board.allowDiagonal);
+
+        // HERO
         foreach (var heroPrefab in heroRoster.chamPrefabs)
         {
             if (heroPrefab == null) continue;
 
             var stats = heroPrefab.GetComponent<StatsData>();
             stats.SetUpHeroItem(stats.heroData);
+
             var snap = SnapshotMapper.FromStats(stats, TeamId.Heroes);
-            snap.placement.cell = (stats.heroData as HeroData).championIndex;
+            var pos = (stats.heroData as HeroData).championIndex;
+            pos = boardGrid.ClampToValidCell(pos);
+
+            snap.placement.cell = pos;
             snap.placement.attackRange = (int)snap.snap.attackRange;
             heroSnaps.Add(snap);
         }
 
-
-        // ENEMY uid: heroCount..heroCount+E-1
+        // ENEMY
         foreach (var enemyPrefab in enemyRoster.chamPrefabs)
         {
             if (enemyPrefab == null) continue;
@@ -73,17 +79,17 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             Vector2Int pos = (stats.heroData as HeroData).championIndex;
             pos.x = board.width - 1 - pos.x;
             pos.y = board.height - 1 - pos.y;
-            snap.placement.cell = pos;
+            pos = boardGrid.ClampToValidCell(pos);
 
+            snap.placement.cell = pos;
             snap.placement.attackRange = (int)snap.snap.attackRange;
             enemySnaps.Add(snap);
         }
 
 
+
         uint seed = (uint)(playerClientId.GetHashCode() ^ monsterNetId.GetHashCode() ^ Environment.TickCount);
 
-
-        BattleBoardGrid boardGrid = new BattleBoardGrid(board.width, board.height, board.moveInterval, board.allowDiagonal);
 
         var res = BattleSimulator.Simulate(heroSnaps, enemySnaps, seed, boardGrid, 60f);
         // convert to DTO

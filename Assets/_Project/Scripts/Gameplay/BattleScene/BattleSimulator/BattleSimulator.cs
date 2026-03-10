@@ -127,7 +127,7 @@ public static class BattleSimulator
                         from = from,
                         to = step
                     });
-                s.units[a].nextActionTime = t + board.moveInterval * cellTomove;
+                s.units[a].nextActionTime = t + board.moveInterval * cellTomove + 1;
             }
         }
 

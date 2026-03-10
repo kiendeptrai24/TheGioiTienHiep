@@ -23,7 +23,6 @@ public class BattlePlaybackManager : Singleton<BattlePlaybackManager>
         OnEndGame?.Invoke();
     }
 
-    [ContextMenu("Test Init Battle")]
     public void InitBattle()
     {
         ReadyGame();
@@ -40,7 +39,6 @@ public class BattlePlaybackManager : Singleton<BattlePlaybackManager>
     {
         state = GameState.ReadyGame;
         OnReadyGame?.Invoke();
-
     }
 
 }

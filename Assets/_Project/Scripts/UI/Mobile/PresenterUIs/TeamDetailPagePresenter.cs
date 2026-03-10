@@ -162,8 +162,29 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
             ResetDrag();
             return;
         }
-
+        ChangePosition(fromSlot, toSlot);
         fromSlot.SwapWith(toSlot);
+    }
+    public void ChangePosition(UIItemSlotBase from, UIItemSlotBase to)
+    {
+        var fromItem = from as UIChoseChampionItem;
+        var toItem = to as UIChoseChampionItem;
+
+        var fromHero = fromItem?.inventoryItem?.data as HeroData;
+        var toHero = toItem?.inventoryItem?.data as HeroData;
+
+        if (fromHero == null && toHero == null)
+            return;
+
+        if (fromHero != null)
+        {
+            fromHero.championIndex = toItem.championIndex;
+        }
+
+        if (toHero != null)
+        {
+            toHero.championIndex = fromItem.championIndex;
+        }
     }
     private void HandleItemClicked(UIItemSlotBase uiItem)
     {

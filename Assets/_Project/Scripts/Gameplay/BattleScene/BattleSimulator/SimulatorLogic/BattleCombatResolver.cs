@@ -35,7 +35,7 @@ public static class BattleCombatResolver
         (dmg, isCrit, ls, rf) = DamageFormula.CalcWithSkill(in atk, in def, skill, ref rng);
 
         sched.PutSkillOnCooldown(attackerIndex, skillIndex, t, skill.cooldown + skill.animationDuration);
-        s.units[attackerIndex].nextActionTime = t + skill.animationDuration;
+        s.units[attackerIndex].nextActionTime = t + skill.animationDuration + 1;
         s.units[attackerIndex].startActionTime = t;
 
         ApplyDamageAndReturn(ref atk, ref def, dmg, ls, rf);
@@ -132,7 +132,7 @@ public static class BattleCombatResolver
         }
         sched.ScheduleNextBasic(s, attackerIndex, t);
         s.units[attackerIndex].startActionTime = t;
-        s.units[attackerIndex].nextActionTime = t + atk.animationDuration;
+        s.units[attackerIndex].nextActionTime = t + atk.animationDuration + 1;
         return true;
     }
 

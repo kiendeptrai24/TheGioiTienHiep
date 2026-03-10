@@ -36,7 +36,7 @@ public class TeamDetailPageView : TGTHMonoBehaviour
             for (int col = 0; col < colsThisRow && index < listOfUIItems.Count; col++)
             {
                 var item = listOfUIItems[index] as UIChoseChampionItem;
-                item.championIndex = new Vector2(col, rows - 1 - row); // (x=col, y=row)
+                item.championIndex = new Vector2Int(col, rows - 1 - row); // (x=col, y=row)
                 index++;
             }
         }

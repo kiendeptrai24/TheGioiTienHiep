@@ -15,7 +15,6 @@ public class ActiveBattleStateNotifier : ActiveStateNotifier
 
     private void OnEndGame()
     {
-        Debug.Log("end game");
         RaiseUnActive();
     }
 
@@ -26,7 +25,6 @@ public class ActiveBattleStateNotifier : ActiveStateNotifier
 
     private void OnReadyGame()
     {
-        Debug.Log("ready game");
         RaiseActive();
     }
 }
