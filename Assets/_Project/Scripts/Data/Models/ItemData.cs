@@ -2,7 +2,7 @@
 
 using UnityEngine;
 [System.Serializable]
-public class ItemData  
+public class ItemData
 {
     public string itemId;
     public ItemType itemType;
@@ -12,9 +12,10 @@ public class ItemData
     public bool canStack;
     public string itemDescription;
     public int currentstack;
-    public CultivationStage cultivationStage;
+    public RealmType realmType;
     public QualityType qualityType;
-    
+    public ElementType elementType;
+
     //Offensive Stats
     public float physicalDamage;
     public float magicalDamage;

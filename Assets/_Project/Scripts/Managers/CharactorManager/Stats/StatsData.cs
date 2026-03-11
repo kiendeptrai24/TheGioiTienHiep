@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class StatsData : TGTHMonoBehaviour
 {
-    [SerializeField] private bool canLoadData = true;
     [SerializeField] private bool isHero = true;
     public event Action OnValueChanged;
     public HeroPreset heroPreset;

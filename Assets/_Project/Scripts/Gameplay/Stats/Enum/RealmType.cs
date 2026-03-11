@@ -1,4 +1,4 @@
-public enum CultivationStage
+public enum RealmType
 {
     // Luyện Khí
     LuyenKhi_1,

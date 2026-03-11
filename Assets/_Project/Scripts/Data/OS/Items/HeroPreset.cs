@@ -41,7 +41,7 @@ public class HeroPreset : ItemStatsPreset
             currentstack = data.currentstack,
             canStack = data.canStack,
             itemPrice = data.itemPrice,
-            cultivationStage = data.cultivationStage,
+            realmType = data.realmType,
             qualityType = data.qualityType,
 
             raceType = raceType,

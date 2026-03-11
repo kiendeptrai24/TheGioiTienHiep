@@ -4,7 +4,7 @@ public class CharacterIdentity : MonoBehaviour, ISaveable
 {
     [SerializeField] private bool canLoadData = true;
     [Header("Cultivation")]
-    public CultivationStage cultivationStage;
+    public RealmType cultivationStage;
 
     [Header("Origin")]
     public RaceType raceType;
@@ -26,13 +26,13 @@ public class CharacterIdentity : MonoBehaviour, ISaveable
         statsCultivationPathData = _data.statsCultivationPathData;
         statsRealmData = _data.statsRealmData;
 
-        cultivationStage = statsRealmData.cultivationStage;
+        cultivationStage = statsRealmData.realmType;
         essenceType = statsCultivationPathData.essenceType;
         raceType = statsRaceData.raceType;
     }
 
     public void SaveGame(ref GameData _data)
     {
-        
+
     }
 }

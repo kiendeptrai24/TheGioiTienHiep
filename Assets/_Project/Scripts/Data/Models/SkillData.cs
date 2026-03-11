@@ -13,8 +13,7 @@ public class SkillData : ItemData
     public int enhanceLevel;             // Cường hóa
     public RaceType raceType;            // Tộc
     public EssenceType mainEssence;      // Chủ tu
-    public ElementType elementType;      // Hệ
-    public CultivationStage realm;       // Cảnh giới
+    public RealmType realm;       // Cảnh giới
     public GameObject skillEffectPrefab; // Prefab hiệu ứng kỹ năng
 
     // ============================

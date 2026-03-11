@@ -1,0 +1,50 @@
+
+
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.PlayerLoop;
+namespace TGTH.Mobile
+{
+    public class CharacterPagePresenter : TGTHMonoBehaviour
+    {
+        [SerializeField] private CharacterPageView view;
+        [SerializeField] private IItemDetailPageView itemDetailPageView;
+        private InventoryCenterManager inventoryCenterManager;
+        protected override void Awake()
+        {
+            base.Awake();
+            LoadComponent();
+            Init();
+            OnItemPlayerChanged(inventoryCenterManager.heroData);
+            inventoryCenterManager.OnItemPlayerChanged += OnItemPlayerChanged;
+        }
+
+        private void Init()
+        {
+            foreach (var uiItem in view.uIEquipmentSlots)
+            {
+                uiItem.OnItemClicked += HandleItemClicked;
+            }
+            view.Init();
+        }
+
+        private void HandleItemClicked(UIItemSlotBase uiItem)
+        {
+            uiItem.navigation.OnClick();
+            itemDetailPageView?.HandleItemClicked(uiItem.inventoryItem);
+        }
+        private void OnItemPlayerChanged(ItemData data)
+        {
+            view.ShowData(data);
+        }
+
+        protected override void LoadComponent()
+        {
+            base.LoadComponent();
+            view = GetComponent<CharacterPageView>();
+            inventoryCenterManager = InventoryCenterManager.Instance;
+
+        }
+    }
+}

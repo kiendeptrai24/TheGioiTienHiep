@@ -40,7 +40,7 @@ namespace TGTH.Mobile
                 return;
             }
             itemNameTxt.text = heroData.itemName;
-            realmTxt.text = EnumTranslator.ToVietnamese(heroData.cultivationStage);
+            realmTxt.text = EnumTranslator.ToVietnamese(heroData.realmType);
             qualityTypeTxt.text = EnumTranslator.ToVietnamese(heroData.qualityType);
             itemIconImge.sprite = heroData.itemIcon;
 

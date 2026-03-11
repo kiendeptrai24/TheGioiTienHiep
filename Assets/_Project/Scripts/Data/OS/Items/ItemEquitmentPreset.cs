@@ -79,7 +79,7 @@ public class ItemEquipmentPreset : ItemStatsPreset
             currentstack = data.currentstack,
             canStack = data.canStack,
             itemPrice = data.itemPrice,
-            cultivationStage = data.cultivationStage,
+            realmType = data.realmType,
             qualityType = data.qualityType,
 
             // equipment meta

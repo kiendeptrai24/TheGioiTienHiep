@@ -5,10 +5,10 @@ public class ShopDataPopup
     public string title;
     public Sprite itemIcon;
     public string type;
-    public CultivationStage realm;
+    public RealmType realm;
     public QualityType quanlity;
     public int price;
-    public ShopDataPopup(string title, Sprite itemIcon, string type, CultivationStage realm, QualityType quanlity, int price)
+    public ShopDataPopup(string title, Sprite itemIcon, string type, RealmType realm, QualityType quanlity, int price)
     {
         this.title = title;
         this.itemIcon = itemIcon;

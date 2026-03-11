@@ -39,7 +39,7 @@ namespace TGTH.Mobile
             realmSlider.onValueChanged.AddListener((value) =>
             {
                 OnRealmSliderChanged?.Invoke((int)value);
-                CultivationStage realm = (CultivationStage)value;
+                RealmType realm = (RealmType)value;
                 realmTxt.text = EnumTranslator.ToVietnamese(realm);
 
             });

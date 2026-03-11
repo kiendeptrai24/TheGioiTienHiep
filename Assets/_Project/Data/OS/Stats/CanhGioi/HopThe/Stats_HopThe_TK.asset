@@ -12,109 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ed6194698f6fa64db3d2313ed54c4cc, type: 3}
   m_Name: Stats_HopThe_TK
   m_EditorClassIdentifier: Assembly-CSharp::StatsPreset
-  cultivationStage: 26
-  health:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 8500
-    statType: 0
-  mana:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 8500
-    statType: 1
-  spirit:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 8500
-    statType: 2
-  physicalDamage:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 850
-    statType: 3
-  magicalDamage:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 850
-    statType: 4
-  spiritDamage:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 850
-    statType: 5
-  critChance:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 0
-    statType: 0
-  critPower:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 0
-    statType: 0
-  physicalDefense:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 425
-    statType: 6
-  magicalDefense:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 425
-    statType: 7
-  spiritDefense:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 425
-    statType: 8
-  evasion:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 0
-    statType: 0
-  spiritPenetration:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 50
-    statType: 17
-  mindPenetration:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 0
-    statType: 0
-  movementSpeed:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 7
-    statType: 11
-  attackSpeed:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 0
-    statType: 0
-  castSpeed:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 0
-    statType: 0
-  potential:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 300
-    statType: 14
-  skillPoints:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 3
-    statType: 15
-  combatPower:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 50000
-    statType: 16
-  spiritRange:
-    BaseValue:
-      m_InternalValue: 0
-    baseValue: 0
-    statType: 0
+  realmType: 26
+  mana: 8500
+  health: 8500
+  spirit: 8500
+  physicalDamage: 850
+  magicalDamage: 850
+  spiritDamage: 850
+  critChance: 5
+  critPower: 150
+  physicalDefense: 425
+  magicalDefense: 425
+  spiritDefense: 425
+  evasion: 2
+  spiritPenetration: 50
+  movementSpeed: 7
+  attackSpeed: 1
+  castSpeed: 1
+  potential: 300
+  skillPoints: 3
+  combatPower: 50000
+  spiritRange: 0

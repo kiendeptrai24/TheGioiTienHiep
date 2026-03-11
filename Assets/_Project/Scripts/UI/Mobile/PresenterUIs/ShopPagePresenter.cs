@@ -188,7 +188,7 @@ namespace TGTH.Mobile
             shopData.title = uiItem.inventoryItem.data.itemName;
             shopData.itemIcon = uiItem.inventoryItem.data.itemIcon;
             shopData.type = uiItem.inventoryItem.data.itemType.ToString();
-            shopData.realm = uiItem.inventoryItem.data.cultivationStage;
+            shopData.realm = uiItem.inventoryItem.data.realmType;
             shopData.quanlity = uiItem.inventoryItem.data.qualityType;
             shopData.price = uiItem.inventoryItem.data.itemPrice;
 

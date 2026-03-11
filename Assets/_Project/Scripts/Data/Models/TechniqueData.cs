@@ -14,8 +14,7 @@ public class TechniqueData : ItemData
     public int enhanceLevel;             // Cường hóa
     public RaceType raceType;            // Tộc
     public EssenceType mainEssence;      // Chủ tu
-    public ElementType elementType;      // Hệ
-    public CultivationStage realm;       // Cảnh giới
+    public RealmType realm;       // Cảnh giới
 
     // ============================
     // COMBAT BEHAVIOR

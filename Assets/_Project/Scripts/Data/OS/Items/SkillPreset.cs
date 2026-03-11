@@ -21,7 +21,7 @@ public class SkillPreset : ItemPreset
     public RaceType raceType;
     public EssenceType mainEssence;
     public ElementType elementType;
-    public CultivationStage realm;
+    public RealmType realm;
     [Header("Animation")]
     public GameObject skillEffectPrefab;
     public GameObject networkSkillEffectPrefab;
@@ -196,15 +196,15 @@ public class SkillPreset : ItemPreset
     {
         healthCost = realm switch
         {
-            CultivationStage.LuyenKhi_9 => 9,
-            CultivationStage.TrucCo_SK => 13,
-            CultivationStage.KetDan_SK => 25,
-            CultivationStage.NguyenAnh_SK => 50,
-            CultivationStage.HoaThan_SK => 150,
-            CultivationStage.HopThe_SK => 350,
-            CultivationStage.DoKiep_SK => 650,
-            CultivationStage.DaiThua_SK => 1250,
-            CultivationStage.PhiThang => 2500,
+            RealmType.LuyenKhi_9 => 9,
+            RealmType.TrucCo_SK => 13,
+            RealmType.KetDan_SK => 25,
+            RealmType.NguyenAnh_SK => 50,
+            RealmType.HoaThan_SK => 150,
+            RealmType.HopThe_SK => 350,
+            RealmType.DoKiep_SK => 650,
+            RealmType.DaiThua_SK => 1250,
+            RealmType.PhiThang => 2500,
             _ => healthCost
         };
     }
@@ -213,15 +213,15 @@ public class SkillPreset : ItemPreset
     {
         return realm switch
         {
-            CultivationStage.LuyenKhi_9 => 1,
-            CultivationStage.TrucCo_SK => 2,
-            CultivationStage.KetDan_SK => 3,
-            CultivationStage.NguyenAnh_SK => 4,
-            CultivationStage.HoaThan_SK => 5,
-            CultivationStage.HopThe_SK => 6,
-            CultivationStage.DoKiep_SK => 7,
-            CultivationStage.DaiThua_SK => 8,
-            CultivationStage.PhiThang => 9,
+            RealmType.LuyenKhi_9 => 1,
+            RealmType.TrucCo_SK => 2,
+            RealmType.KetDan_SK => 3,
+            RealmType.NguyenAnh_SK => 4,
+            RealmType.HoaThan_SK => 5,
+            RealmType.HopThe_SK => 6,
+            RealmType.DoKiep_SK => 7,
+            RealmType.DaiThua_SK => 8,
+            RealmType.PhiThang => 9,
             _ => 1
         };
     }
@@ -239,15 +239,15 @@ public class SkillPreset : ItemPreset
 
         physicalDamage = realm switch
         {
-            CultivationStage.LuyenKhi_9 => 20,
-            CultivationStage.TrucCo_SK => 30,
-            CultivationStage.KetDan_SK => 50,
-            CultivationStage.NguyenAnh_SK => 70,
-            CultivationStage.HoaThan_SK => 90,
-            CultivationStage.HopThe_SK => 110,
-            CultivationStage.DoKiep_SK => 130,
-            CultivationStage.DaiThua_SK => 160,
-            CultivationStage.PhiThang => 210,
+            RealmType.LuyenKhi_9 => 20,
+            RealmType.TrucCo_SK => 30,
+            RealmType.KetDan_SK => 50,
+            RealmType.NguyenAnh_SK => 70,
+            RealmType.HoaThan_SK => 90,
+            RealmType.HopThe_SK => 110,
+            RealmType.DoKiep_SK => 130,
+            RealmType.DaiThua_SK => 160,
+            RealmType.PhiThang => 210,
             _ => 0
         };
 
@@ -263,17 +263,17 @@ public class SkillPreset : ItemPreset
         enhanceLevel = EnhanceFromRealm();
 
         // bảng bạn có 3 mức: LK9 / Trúc Cơ / Kết Đan
-        if (realm == CultivationStage.LuyenKhi_9)
+        if (realm == RealmType.LuyenKhi_9)
         {
             physicalDamage = 15;
             physicalDefense = 5;
         }
-        else if (realm == CultivationStage.TrucCo_SK)
+        else if (realm == RealmType.TrucCo_SK)
         {
             physicalDamage = 23;
             physicalDefense = 7;
         }
-        else if (realm == CultivationStage.KetDan_SK)
+        else if (realm == RealmType.KetDan_SK)
         {
             physicalDamage = 35;
             physicalDefense = 15;
@@ -290,9 +290,9 @@ public class SkillPreset : ItemPreset
         ApplyCommonHealthCostByRealm();
         enhanceLevel = EnhanceFromRealm();
 
-        if (realm == CultivationStage.LuyenKhi_9) physicalDamage = 20;
-        else if (realm == CultivationStage.TrucCo_SK) physicalDamage = 30;
-        else if (realm == CultivationStage.KetDan_SK) physicalDamage = 50;
+        if (realm == RealmType.LuyenKhi_9) physicalDamage = 20;
+        else if (realm == RealmType.TrucCo_SK) physicalDamage = 30;
+        else if (realm == RealmType.KetDan_SK) physicalDamage = 50;
 
         specialEffect = $"Sát thương linh thể là {physicalDamage:0.##}%";
         statCount = 1;
@@ -305,17 +305,17 @@ public class SkillPreset : ItemPreset
         ApplyCommonHealthCostByRealm();
         enhanceLevel = EnhanceFromRealm();
 
-        if (realm == CultivationStage.LuyenKhi_9)
+        if (realm == RealmType.LuyenKhi_9)
         {
             physicalDamage = 17;
             critDamage = 1.5f; // theo cột số bạn paste
         }
-        else if (realm == CultivationStage.TrucCo_SK)
+        else if (realm == RealmType.TrucCo_SK)
         {
             physicalDamage = 25;
             critDamage = 2.5f;
         }
-        else if (realm == CultivationStage.KetDan_SK)
+        else if (realm == RealmType.KetDan_SK)
         {
             physicalDamage = 40;
             critDamage = 5f;
@@ -332,9 +332,9 @@ public class SkillPreset : ItemPreset
         ApplyCommonHealthCostByRealm();
         enhanceLevel = EnhanceFromRealm();
 
-        if (realm == CultivationStage.LuyenKhi_9) critRate = 10;
-        else if (realm == CultivationStage.TrucCo_SK) critRate = 15;
-        else if (realm == CultivationStage.KetDan_SK) critRate = 25;
+        if (realm == RealmType.LuyenKhi_9) critRate = 10;
+        else if (realm == RealmType.TrucCo_SK) critRate = 15;
+        else if (realm == RealmType.KetDan_SK) critRate = 25;
 
         specialEffect = $"Tỷ lệ chí mạng là {critRate:0.##}%";
         statCount = 1;
@@ -347,9 +347,9 @@ public class SkillPreset : ItemPreset
         ApplyCommonHealthCostByRealm();
         enhanceLevel = EnhanceFromRealm();
 
-        if (realm == CultivationStage.LuyenKhi_9) magicalDamage = 20;
-        else if (realm == CultivationStage.TrucCo_SK) magicalDamage = 30;
-        else if (realm == CultivationStage.KetDan_SK) magicalDamage = 50;
+        if (realm == RealmType.LuyenKhi_9) magicalDamage = 20;
+        else if (realm == RealmType.TrucCo_SK) magicalDamage = 30;
+        else if (realm == RealmType.KetDan_SK) magicalDamage = 50;
 
         specialEffect = $"Sát thương linh lực là {magicalDamage:0.##}%";
         statCount = 1;
@@ -363,9 +363,9 @@ public class SkillPreset : ItemPreset
         enhanceLevel = EnhanceFromRealm();
 
         // bảng bạn: magicalDamage 15/25/45, critDamage 2.5, (mình set critRate = 5 theo cột 5% bạn paste)
-        if (realm == CultivationStage.LuyenKhi_9) magicalDamage = 15;
-        else if (realm == CultivationStage.TrucCo_SK) magicalDamage = 25;
-        else if (realm == CultivationStage.KetDan_SK) magicalDamage = 45;
+        if (realm == RealmType.LuyenKhi_9) magicalDamage = 15;
+        else if (realm == RealmType.TrucCo_SK) magicalDamage = 25;
+        else if (realm == RealmType.KetDan_SK) magicalDamage = 45;
 
         critDamage = 2.5f;
         critRate = 5f;
@@ -381,19 +381,19 @@ public class SkillPreset : ItemPreset
         ApplyCommonHealthCostByRealm();
         enhanceLevel = EnhanceFromRealm();
 
-        if (realm == CultivationStage.LuyenKhi_9)
+        if (realm == RealmType.LuyenKhi_9)
         {
             magicalDamage = 10;
             critDamage = 5;
             critRate = 10;
         }
-        else if (realm == CultivationStage.TrucCo_SK)
+        else if (realm == RealmType.TrucCo_SK)
         {
             magicalDamage = 17;
             critDamage = 6.5f;
             critRate = 13;
         }
-        else if (realm == CultivationStage.KetDan_SK)
+        else if (realm == RealmType.KetDan_SK)
         {
             magicalDamage = 32;
             critDamage = 9;
@@ -419,7 +419,7 @@ public class SkillPreset : ItemPreset
             currentstack = data.currentstack,
             canStack = data.canStack,
             itemPrice = data.itemPrice,
-            cultivationStage = data.cultivationStage,
+            realmType = data.realmType,
             qualityType = data.qualityType,
 
             // base stats trong ItemData

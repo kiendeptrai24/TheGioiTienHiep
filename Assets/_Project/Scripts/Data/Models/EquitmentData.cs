@@ -10,7 +10,6 @@ public class EquitmentData : ItemData
     public EquipmentType equipmentType;
     public int level;
     public RaceType raceType;
-    public ElementType elementType;
 
     // ============================
     // 1. DAMAGE STATS

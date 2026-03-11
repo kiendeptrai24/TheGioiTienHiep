@@ -11,7 +11,6 @@ public class NavigationItemDetail : ActionNavigation
     }
     public override void OnClick()
     {
-        Debug.Log("OnClick");
         m_ScreenManager.NavigateTo(m_ScreenName);
     }
 }

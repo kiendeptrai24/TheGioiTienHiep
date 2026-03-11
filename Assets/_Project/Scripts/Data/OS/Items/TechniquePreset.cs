@@ -22,7 +22,7 @@ public class TechniquePreset : ItemPreset
     public RaceType raceType;            // Tộc
     public EssenceType mainEssence;      // Chủ tu
     public ElementType elementType;      // Hệ
-    public CultivationStage realm;       // Cảnh giới
+    public RealmType realm;       // Cảnh giới
 
     // ============================
     // COMBAT BEHAVIOR
@@ -161,55 +161,55 @@ public class TechniquePreset : ItemPreset
     {
         switch (realm)
         {
-            case CultivationStage.LuyenKhi_9:
+            case RealmType.LuyenKhi_9:
                 bonusHealth = .20f;
                 bonusMana = .20f;
                 enhanceLevel = 1;
                 break;
 
-            case CultivationStage.TrucCo_SK:
+            case RealmType.TrucCo_SK:
                 bonusHealth = .30f;
                 bonusMana = .30f;
                 enhanceLevel = 2;
                 break;
 
-            case CultivationStage.KetDan_SK:
+            case RealmType.KetDan_SK:
                 bonusHealth = .50f;
                 bonusMana = .50f;
                 enhanceLevel = 3;
                 break;
 
-            case CultivationStage.NguyenAnh_SK:
+            case RealmType.NguyenAnh_SK:
                 bonusHealth = .70f;
                 bonusMana = .70f;
                 enhanceLevel = 4;
                 break;
 
-            case CultivationStage.HoaThan_SK:
+            case RealmType.HoaThan_SK:
                 bonusHealth = .90f;
                 bonusMana = .90f;
                 enhanceLevel = 5;
                 break;
 
-            case CultivationStage.HopThe_SK:
+            case RealmType.HopThe_SK:
                 bonusHealth = 1.10f;
                 bonusMana = 1.10f;
                 enhanceLevel = 6;
                 break;
 
-            case CultivationStage.DoKiep_SK:
+            case RealmType.DoKiep_SK:
                 bonusHealth = 1.30f;
                 bonusMana = 1.30f;
                 enhanceLevel = 7;
                 break;
 
-            case CultivationStage.DaiThua_SK:
+            case RealmType.DaiThua_SK:
                 bonusHealth = 1.60f;
                 bonusMana = 1.60f;
                 enhanceLevel = 8;
                 break;
 
-            case CultivationStage.PhiThang:
+            case RealmType.PhiThang:
                 bonusHealth = 2.10f;
                 bonusMana = 2.10f;
                 enhanceLevel = 9;
@@ -223,21 +223,21 @@ public class TechniquePreset : ItemPreset
     {
         switch (realm)
         {
-            case CultivationStage.LuyenKhi_9:
+            case RealmType.LuyenKhi_9:
                 physicalDefense = .05f;
                 magicalDefense = .05f;
                 bonusHealth = .20f;
                 enhanceLevel = 1;
                 break;
 
-            case CultivationStage.TrucCo_SK:
+            case RealmType.TrucCo_SK:
                 physicalDefense = .075f;
                 magicalDefense = .075f;
                 bonusHealth = .30f;
                 enhanceLevel = 2;
                 break;
 
-            case CultivationStage.KetDan_SK:
+            case RealmType.KetDan_SK:
                 physicalDefense = .125f;
                 magicalDefense = .125f;
                 bonusHealth = .50f;
@@ -252,19 +252,19 @@ public class TechniquePreset : ItemPreset
     {
         switch (realm)
         {
-            case CultivationStage.LuyenKhi_9:
+            case RealmType.LuyenKhi_9:
                 magicalDamage = .10f;
                 bonusHealth = .20f;
                 enhanceLevel = 1;
                 break;
 
-            case CultivationStage.TrucCo_SK:
+            case RealmType.TrucCo_SK:
                 magicalDamage = .15f;
                 bonusHealth = .30f;
                 enhanceLevel = 2;
                 break;
 
-            case CultivationStage.KetDan_SK:
+            case RealmType.KetDan_SK:
                 magicalDamage = .25f;
                 bonusHealth = .50f;
                 enhanceLevel = 3;
@@ -279,21 +279,21 @@ public class TechniquePreset : ItemPreset
 
         switch (realm)
         {
-            case CultivationStage.LuyenKhi_9:
+            case RealmType.LuyenKhi_9:
                 physicalDamage = .05f;
                 physicalDefense = .05f;
                 bonusHealth = .20f;
                 enhanceLevel = 1;
                 break;
 
-            case CultivationStage.TrucCo_SK:
+            case RealmType.TrucCo_SK:
                 physicalDamage = .10f;
                 physicalDefense = .05f;
                 bonusHealth = .30f;
                 enhanceLevel = 2;
                 break;
 
-            case CultivationStage.KetDan_SK:
+            case RealmType.KetDan_SK:
                 physicalDamage = .20f;
                 physicalDefense = .05f;
                 bonusHealth = .50f;
@@ -319,7 +319,7 @@ public class TechniquePreset : ItemPreset
             currentstack = data.currentstack,
             canStack = data.canStack,
             itemPrice = data.itemPrice,
-            cultivationStage = data.cultivationStage,
+            realmType = data.realmType,
             qualityType = data.qualityType,
 
             // base stats trong ItemData

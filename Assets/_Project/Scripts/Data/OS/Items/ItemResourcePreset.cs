@@ -6,7 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewMaterialPreset", menuName = "RPG/Items/Resourse Preset")]
 public class ItemResourcePreset : ItemPreset
 {
-    public CultivationStage cultivationStage;
+    public RealmType cultivationStage;
     public ResourceType resourceType;
     private void OnValidate()
     {
@@ -27,7 +27,7 @@ public class ItemResourcePreset : ItemPreset
         data.currentstack = currentstack;
         data.canStack = canStack;
         data.qualityType = qualityType;
-        data.cultivationStage = cultivationStage;
+        data.realmType = cultivationStage;
         data.resourceType = resourceType;
         return data;
     }

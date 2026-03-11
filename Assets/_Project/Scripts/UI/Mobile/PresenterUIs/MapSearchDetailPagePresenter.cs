@@ -12,7 +12,7 @@ namespace TGTH.Mobile
         [SerializeField] private MapSearchResultPagePresenter presenter;
         [SerializeField] private ResourceManager resource;
         private ResourceType resourceType = ResourceType.SpiritStone;
-        private CultivationStage cultivationStage;
+        private RealmType cultivationStage;
         [SerializeField] private PathTest pathTest;
         public NavigationFindMapResult navigationFindMapResult;
         public UIItemResourse curItem;
@@ -115,7 +115,7 @@ namespace TGTH.Mobile
         }
         public void SetRealmType(int value)
         {
-            this.cultivationStage = (CultivationStage)value;
+            this.cultivationStage = (RealmType)value;
         }
         public void SetResourceType(ResourceType value)
         {
@@ -126,7 +126,7 @@ namespace TGTH.Mobile
             SetRealmType(value);
 
             var filteredItems = view.items
-                .Where(item => item.cultivationStage == this.cultivationStage
+                .Where(item => item.realmType == this.cultivationStage
                     && item is ItemResourseData resData && resData.resourceType == this.resourceType)
                 .ToList();
 

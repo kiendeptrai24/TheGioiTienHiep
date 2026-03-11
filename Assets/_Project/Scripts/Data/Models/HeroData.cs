@@ -10,7 +10,6 @@ public class HeroData : ItemData
     public StatsRaceData statsRaceData;
     public RaceType raceType;
     public EssenceType essenceType;
-    public ElementType elementType;
     public int level;
     public float attackRange;
     public float moveSpeed;
