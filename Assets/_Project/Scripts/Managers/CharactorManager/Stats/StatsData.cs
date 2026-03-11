@@ -4,14 +4,13 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StatsData : TGTHMonoBehaviour, ISaveable
+public class StatsData : TGTHMonoBehaviour
 {
     [SerializeField] private bool canLoadData = true;
     [SerializeField] private bool isHero = true;
     public event Action OnValueChanged;
     public HeroPreset heroPreset;
     public ItemData heroData;
-    public HeroData heroData2;
     public List<TechniqueData> techniqueData;
     public List<SkillData> skillDatas;
     [Header("Preset base stats")]
@@ -93,20 +92,6 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     public int CombatPower => GetStatValue(StatType.CombatPower);
 
     public event Action<StatsData> OnStatReady;
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-    protected override void Start()
-    {
-        base.Start();
-    }
-    private void InitStatsPreset()
-    {
-        ResetStatsModifiers();
-    }
-
-    [ContextMenu("Reset Stats Modifiers")]
     private void ResetStatsModifiers()
     {
         stats.Clear();
@@ -115,6 +100,7 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
             stats.Add(type, new Stat(type, 0f));
         }
     }
+
     public void ResetStats()
     {
         ResetStatsModifiers();
@@ -148,7 +134,7 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
         }
         Debug.Log(debugMsg);
     }
-    public void Setup()
+    private void Setup()
     {
         ResetStats();
         statsModifier.AddStatsRaceData(stats, statsRaceData);
@@ -159,16 +145,7 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
         StatChange();
         OnStatReady?.Invoke(this);
     }
-    public void LoadData(GameData _data)
-    {
-        if (!canLoadData) return;
-        ResetStatsModifiers();
-        this.statsCultivationPathData = _data.statsCultivationPathData;
-        this.statsRealmData = _data.statsRealmData;
-        this.statsRaceData = _data.statsRaceData;
-        Setup();
-    }
-    public void SetupData(StatsCultivationPathData statsCultivationPathData, StatsRealmData statsRealmData, StatsRaceData statsRaceData)
+    private void SetupData(StatsCultivationPathData statsCultivationPathData, StatsRealmData statsRealmData, StatsRaceData statsRaceData)
     {
         this.statsCultivationPathData = statsCultivationPathData;
         this.statsRealmData = statsRealmData;
@@ -186,7 +163,6 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     public void SetUpHeroItem(ItemData item)
     {
         this.heroData = item;
-        this.heroData2 = item as HeroData;
         var data = item as HeroData;
         SetUpTechnique(data.techniqueDatas);
         SetupData(data.statsCultivationPathData, data.statsRealmData, data.statsRaceData);
@@ -196,14 +172,9 @@ public class StatsData : TGTHMonoBehaviour, ISaveable
     {
         if (heroPreset == null) return;
         SetUpHeroItem(heroPreset.GetItemData());
-        Setup();
     }
     public void StatChange()
     {
         OnValueChanged?.Invoke();
-    }
-    public void SaveGame(ref GameData _data)
-    {
-
     }
 }

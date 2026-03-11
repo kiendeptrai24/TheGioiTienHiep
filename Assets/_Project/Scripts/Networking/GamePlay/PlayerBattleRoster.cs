@@ -10,8 +10,18 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
     public List<GameObject> chamPrefabs = new();
     // Bạn có thể thêm logic chọn đội hình (chỉ spawn N con đầu tiên)
     public int maxHeroesToSpawn = 5;
+    protected override void Awake()
+    {
+        base.Awake();
+        foreach (var cham in chamPrefabs)
+        {
+            var stats = cham.GetComponent<StatsData>();
+            stats.SetupDataPreset();
+        }
+    }
     protected override void Start()
     {
+        if (!IsOwner) return;
         base.Start();
         ItemPrefabDatabase.Instance.OnPlayerPrefabChanged += OnPlayerPrefabChanged;
     }

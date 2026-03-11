@@ -4,24 +4,28 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using UnityEditor.Rendering.Universal.ShaderGUI;
 
 public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveable
 {
+    [SerializeField] private HeroPreset heroPreset;
+    public ItemData playerCham;
+    public HeroData heroData;
     [SerializeField] private List<ItemData> listItemDatas = new List<ItemData>();
     [SerializeField] private List<ItemData> listItemDatasUsed = new List<ItemData>();
     [SerializeField] private List<ItemData> listItemDatasExisting = new List<ItemData>();
     public List<HeroData> listItemDatasChampion = new List<HeroData>();
+    public int maxChampion = 4;
     override protected void Awake()
     {
         base.Awake();
         listItemDatas.Clear();
         listItemDatasExisting.Clear();
         listItemDatasUsed.Clear();
+        playerCham = heroPreset.GetItemData();
+        heroData = playerCham as HeroData;
     }
-    public event Action<List<ItemData>> OnListItemDatasChampionChanged;
-
     public event Action<List<ItemData>> OnItemDataChanged;
+    public event Action<List<ItemData>> OnListItemDatasChampionChanged;
     public event Action<List<ItemData>> OnItemEquitmentDataChanged;
     public event Action<List<ItemData>> OnItemSkillDataChanged;
     public event Action<List<ItemData>> OnItemChampionDataChanged;
@@ -33,6 +37,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public event Action<List<ItemData>> OnItemExistingChampionDataChanged;
     public event Action<List<ItemData>> OnItemExistingTechniqueDataChanged;
     public event Action<ItemData> OnItemChanged;
+    public event Action<ItemData> OnItemPlayerChanged;
     private bool isItemChange = false;
     private bool isEquitmentChange = false;
     private bool isSkillChange = false;
@@ -42,11 +47,15 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
 
     public void SetItemChampionData(List<ItemData> data)
     {
-        Debug.Log(data.Count);
         listItemDatasChampion = data
             .OfType<HeroData>()
             .ToList();
         OnListItemDatasChampionChanged?.Invoke(data);
+    }
+    public void ItemPlayerChanged(ItemData item)
+    {
+        playerCham = item;
+        OnItemPlayerChanged?.Invoke(item);
     }
     public void CheckDataChange()
     {
@@ -73,6 +82,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         if (isTechniqueChange)
         {
             OnItemTechniqueDataChanged?.Invoke(GetDataType(ItemType.Technique));
+            isTechniqueChange = false;
         }
     }
     public void CheckExistingDataChange()
@@ -152,62 +162,49 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         if (item is EquitmentData)
         {
             isEquitmentChange = true;
-            CheckExistingDataChange();
         }
         else if (item is SkillData)
         {
             isSkillChange = true;
-            CheckExistingDataChange();
         }
         else if (item is TechniqueData)
         {
             isTechniqueChange = true;
-            CheckExistingDataChange();
         }
         else if (item is HeroData)
         {
             isChampionChange = true;
-            CheckExistingDataChange();
         }
-        else
-        {
-            isItemChange = true;
-            CheckExistingDataChange();
-        }
+
+        isItemChange = true;
+        CheckExistingDataChange();
     }
     public void ItemChange(ItemData item)
     {
         if (item is EquitmentData)
         {
             isEquitmentChange = true;
-            CheckDataChange();
         }
         else if (item is SkillData)
         {
             isSkillChange = true;
-            CheckDataChange();
         }
         else if (item is TechniqueData)
         {
             isTechniqueChange = true;
-            CheckDataChange();
         }
         else if (item is HeroData)
         {
             isChampionChange = true;
-            CheckDataChange();
         }
         else if (item is HeroData)
         {
             isItemChange = true;
-            CheckDataChange();
             OnItemChanged?.Invoke(item);
         }
-        else
-        {
-            isItemChange = true;
-            CheckDataChange();
-        }
+
+        isItemChange = true;
+        CheckDataChange();
     }
     protected override void LoadComponent()
     {

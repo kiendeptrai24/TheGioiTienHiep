@@ -20,15 +20,56 @@ namespace TGTH.Mobile
         public event Action<int> OnStartDragging;
         private bool isDraging = false;
         private bool isSWapped = false;
+        private bool isOwnPage = false;
+        private bool isShowEquipment = false;
+        private bool isNew = true;
+        private HeroData heroData;
+        [SerializeField] private StatsData stats;
         protected override void Awake()
         {
             view.ToggleMouseFollower(false);
             InitializeInventoryUI(50);
+
             inventoryCenterManager = InventoryCenterManager.Instance;
-            inventoryCenterManager.OnItemTechniqueDataChanged += SetItemData;
-            SetItemData(inventoryCenterManager.GetDataType(ItemType.Technique));
+            inventoryCenterManager.OnItemExistingTechniqueDataChanged += SetListDataChanged;
+            SetListDataChanged(inventoryCenterManager.GetDataType(ItemType.Technique, true));
+        }
+        private void OnEnable()
+        {
+            isOwnPage = true;
+        }
+        private void OnDisable()
+        {
+            isOwnPage = false;
+        }
+        protected override void Start()
+        {
+            base.Start();
+            OnPlayerChamChanged(stats.heroData);
+            isNew = false;
+            inventoryCenterManager.OnItemPlayerChanged += OnPlayerChamChanged;
         }
 
+        private void OnPlayerChamChanged(ItemData heroData)
+        {
+            if (isOwnPage && isNew == false) return;
+            if (heroData == null) return;
+            this.heroData = heroData as HeroData;
+            var techniques = this.heroData.techniqueDatas;
+            var listItems = new List<InventoryItem>();
+
+            foreach (var item in techniques)
+            {
+                listItems.Add(new InventoryItem(item));
+            }
+            ShowItemEquipment(listItems);
+        }
+        private void ShowItemEquipment(List<InventoryItem> listItemDatas)
+        {
+            isShowEquipment = true;
+            view.ShowItemEquipment(listItemDatas);
+            isShowEquipment = false;
+        }
         public void UnlockItem(int count)
         {
             for (int i = 0; i < view.listOfEquitmentItems.Count; i++)
@@ -38,7 +79,7 @@ namespace TGTH.Mobile
                 view.listOfEquitmentItems[i].Unlock();
             }
         }
-        private void SetItemData(List<ItemData> items)
+        private void SetListDataChanged(List<ItemData> items)
         {
             if (listItemDatas == null)
                 listItemDatas = new List<InventoryItem>();
@@ -48,6 +89,7 @@ namespace TGTH.Mobile
             {
                 listItemDatas.Add(new InventoryItem(item));
             }
+            if (isOwnPage) return;
             ShowAllItems();
         }
         private void InitializeInventoryUI(int amount)
@@ -76,14 +118,38 @@ namespace TGTH.Mobile
         }
         private void HandleEquippedChanged(InventoryItem item1, InventoryItem item2)
         {
+            if (isShowEquipment) return;
             if (techniqueSystem == null) return;
+
             techniqueSystem.Unequip(item1);
             techniqueSystem.Equip(item2);
+
+            if (item1 != null && item1.data != null)
+            {
+
+                var result = inventoryCenterManager.AddData(item1.data);
+                if (result)
+                {
+                    var techniqueData = item1.data as TechniqueData;
+                    heroData.techniqueDatas.Remove(techniqueData);
+                    inventoryCenterManager.ItemPlayerChanged(heroData);
+                }
+            }
+            if (item2 != null && item2.data != null)
+            {
+                var result = inventoryCenterManager.RemoveData(item2.data);
+                if (result)
+                {
+                    var techniqueData = item2.data as TechniqueData;
+                    heroData.techniqueDatas.Add(techniqueData);
+                    inventoryCenterManager.ItemPlayerChanged(heroData);
+                }
+            }
         }
 
         public void ShowAllItems()
         {
-            view.ShowInventory(listItemDatas);
+            view.ShowItemsInventory(listItemDatas);
         }
 
         private void HandleItemClicked(UIItemSlotBase uiItem)

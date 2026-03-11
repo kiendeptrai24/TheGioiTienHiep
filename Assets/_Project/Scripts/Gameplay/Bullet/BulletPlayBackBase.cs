@@ -2,7 +2,7 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
-public abstract class BulletBase : TGTHMonoBehaviour
+public abstract class BulletPlayBackBase : TGTHMonoBehaviour
 {
     protected ISkillCaster caster;
     protected StatsData statsData;
@@ -15,10 +15,7 @@ public abstract class BulletBase : TGTHMonoBehaviour
     }
     protected virtual void OnHit(Collider col)
     {
-        if (col.TryGetComponent(out IDamageable target))
-        {
-            target.TakeDamage(statsData);
-        }
+
     }
     protected bool IsTeam(ISkillCaster caster)
     {

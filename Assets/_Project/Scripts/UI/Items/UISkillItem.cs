@@ -18,6 +18,16 @@ public class UISkillItem : UIItemSlotLockable
     public override void ResetData()
     {
         base.ResetData();
+        if (IsLocked() == false)
+        {
+            emptySlot.gameObject.SetActive(true);
+            lockIcon.gameObject.SetActive(false);
+        }
+        else
+        {
+            emptySlot.gameObject.SetActive(false);
+            lockIcon.gameObject.SetActive(true);
+        }
     }
     public override bool HasItem()
     {
@@ -43,7 +53,7 @@ public class UISkillItem : UIItemSlotLockable
     }
     public override bool CanReceive(ItemDragContext ctx)
     {
-        if(base.CanReceive(ctx) == false)
+        if (base.CanReceive(ctx) == false)
             return false;
         if (ctx.ItemOfFrom.data is SkillData)
         {

@@ -100,7 +100,6 @@ public abstract class EquipmentBasePageView : TGTHMonoBehaviour
     }
     public void ShowAllItemInInventory(List<InventoryItem> listItemDatas)
     {
-        Debug.Log("Show All Item In Inventory");
         if (listItemDatas == null) return;
         if (listOfUIItems.Count < listItemDatas.Count) return;
         for (int i = 0; i < listOfUIItemsInInventory.Count; i++)

@@ -3,6 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 namespace TGTH.Mobile
@@ -19,17 +21,78 @@ namespace TGTH.Mobile
         public event Action<int> OnStartDragging;
         private bool isDraging = false;
         private bool isSWapped = false;
+        [SerializeField] private StatsData stats;
+        private bool isOwnPage = false;
+        private bool isNew = true;
+        private bool isShowEquipment = false;
+        private HeroData heroData;
+        private InventoryCenterManager inventoryCenterManager;
+
         protected override void Awake()
         {
             view.ToggleMouseFollower(false);
             InitializeInventoryUI(50);
-            ShowAllItems();
+
+            inventoryCenterManager = InventoryCenterManager.Instance;
+            inventoryCenterManager.OnItemExistingSkillDataChanged += OnListItemDataChanged;
+
+            OnListItemDataChanged(inventoryCenterManager.GetDataType(ItemType.Skill, true));
         }
+        private void OnEnable()
+        {
+            isOwnPage = true;
+        }
+        private void OnDisable()
+        {
+            isOwnPage = false;
+        }
+        protected override void Start()
+        {
+            base.Start();
+            OnPlayerChamChanged(stats.heroData);
+            isNew = false;
+            inventoryCenterManager.OnItemPlayerChanged += OnPlayerChamChanged;
+        }
+        private void OnListItemDataChanged(List<ItemData> itemDatas)
+        {
+            if (itemDatas == null) return;
+            var temp = new List<InventoryItem>();
+            foreach (var item in itemDatas)
+            {
+                temp.Add(new InventoryItem(item));
+            }
+            listItemDatas = temp;
+            if (isOwnPage) return;
+            ShowItemsInInventory();
+        }
+
+        private void OnPlayerChamChanged(ItemData data)
+        {
+            if (isOwnPage && isNew == false) return;
+            if (data == null) return;
+
+            heroData = data as HeroData;
+            var skills = heroData.skillDatas;
+            var listItems = new List<InventoryItem>();
+
+            foreach (var item in skills)
+            {
+                listItems.Add(new InventoryItem(item));
+            }
+            ShowItemEquipment(listItems);
+        }
+        private void ShowItemEquipment(List<InventoryItem> listItemDatas)
+        {
+            isShowEquipment = true;
+            view.ShowItemEquipment(listItemDatas);
+            isShowEquipment = false;
+        }
+
         public void UnlockItem(int count)
         {
             for (int i = 0; i < view.listOfEquitmentItems.Count; i++)
             {
-                if(i >= count)
+                if (i >= count)
                     break;
                 view.listOfEquitmentItems[i].Unlock();
             }
@@ -60,36 +123,45 @@ namespace TGTH.Mobile
         }
         private void HandleEquippedChanged(InventoryItem item1, InventoryItem item2)
         {
+            if (isShowEquipment) return;
             if (skillSystem == null) return;
+
             skillSystem.Unequip(item1);
             skillSystem.Equip(item2);
+
+            if (item1 != null && item1.data != null)
+            {
+
+                var result = inventoryCenterManager.AddData(item1.data);
+                if (result)
+                {
+                    var skillData = item1.data as SkillData;
+                    heroData.skillDatas.Remove(skillData);
+                    inventoryCenterManager.ItemPlayerChanged(heroData);
+                }
+
+            }
+            if (item2 != null && item2.data != null)
+            {
+                var result = inventoryCenterManager.RemoveData(item2.data);
+                if (result)
+                {
+                    var skillData = item2.data as SkillData;
+                    heroData.skillDatas.Add(skillData);
+                    inventoryCenterManager.ItemPlayerChanged(heroData);
+                }
+            }
+
         }
         public void Refesh()
         {
             view.RefreshInventory(listItemDatas);
         }
-        public void SetInventoryData(List<InventoryItem> items)
-        {
-            listItemDatas = items;
-            ShowAllItems();
-        }
-        public void SetSkillData(InventoryItem items)
-        {
-            listItemDatas.Add(items);
-            ShowAllItems();
-        }
 
-        private void ShowAllItems()
+        private void ShowItemsInInventory()
         {
-            view.ShowAllItems(listItemDatas);
+            view.ShowItemsInInventory(listItemDatas);
         }
-
-        public void RefreshInventory()
-        {
-            for (int i = 0; i < listItemDatas.Count; i++)
-                view.SetItem(i, listItemDatas[i]);
-        }
-
         private void HandleItemClicked(UIItemSlotBase uiItem)
         {
             if (isDraging)
@@ -179,25 +251,6 @@ namespace TGTH.Mobile
             currentlyDraggedItemIndex = -1;
         }
 
-        private void SortItems()
-        {
-            List<InventoryItem> tempList = new List<InventoryItem>();
-
-            List<UIInventoryItem> inventoryItems =
-                view.listOfUIItems.OfType<UIInventoryItem>().ToList();
-
-            foreach (var slot in inventoryItems)
-            {
-                if (slot.inventoryItem != null)
-                    tempList.Add(slot.inventoryItem);
-
-                slot.ResetData();
-                slot.Deselect();
-            }
-
-            for (int i = 0; i < tempList.Count; i++)
-                view.SetItem(i, tempList[i]);
-        }
         [ContextMenu("Add")]
         public void AddItem()
         {

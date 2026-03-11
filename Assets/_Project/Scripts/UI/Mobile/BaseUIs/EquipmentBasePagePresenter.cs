@@ -62,7 +62,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
 
     private void SetItemData(List<ItemData> items)
     {
-        if (isOwnEquipmentPage) return;
+
         if (listItemDatas == null)
             listItemDatas = new List<InventoryItem>();
         else
@@ -71,6 +71,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         {
             listItemDatas.Add(new InventoryItem(item));
         }
+        if (isOwnEquipmentPage) return;
         ShowAllItemInInventory();
     }
 
@@ -111,11 +112,24 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         equipmentSystem.Equip(item2);
         if (item1 != null && item1.data != null)
         {
-            inventoryCenterManager.AddData(item1.data);
+            var result = inventoryCenterManager.AddData(item1.data);
+            if (result)
+            {
+                var heroData = statsManager.heroData as HeroData;
+                var equipmentData = item1.data as EquitmentData;
+                heroData.equitmentDatas.Remove(equipmentData);
+            }
+
         }
         if (item2 != null && item2.data != null)
         {
-            inventoryCenterManager.RemoveData(item2.data);
+            var result = inventoryCenterManager.RemoveData(item2.data);
+            if (result)
+            {
+                var heroData = statsManager.heroData as HeroData;
+                var equipmentData = item2.data as EquitmentData;
+                heroData.equitmentDatas.Add(equipmentData);
+            }
         }
         return true;
     }

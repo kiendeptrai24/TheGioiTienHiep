@@ -105,6 +105,11 @@ namespace TGTH.Mobile
                 isDraging = false;
                 return;
             }
+            if (teamDetailPagePresenter.CheckTeamIsFull())
+            {
+                ShowPopup(uiItem);
+                return;
+            }
             var popup = PopupManager.Instance.GetPopup<UseItemPopup>();
             BaseSetupData data = new BaseSetupData("Bạn có muốn sử dụng tướng này không?");
 
@@ -120,9 +125,31 @@ namespace TGTH.Mobile
                     }
                     else
                     {
-                        if (item != null)
-                            teamDetailPagePresenter.AddItem(uiItem.inventoryItem.data, item.championIndex);
+                        teamDetailPagePresenter.AddItem(uiItem.inventoryItem.data, item.championIndex);
                     }
+                },
+                onCancel: () =>
+                {
+
+                },
+                onInfo: () =>
+                {
+                    ItemClicked(uiItem);
+                    Navigation(uiItem);
+                });
+            }
+        }
+        private void ShowPopup(UIItemSlotBase uiItem)
+        {
+            var popup = PopupManager.Instance.GetPopup<UseItemPopup>();
+            BaseSetupData data = new BaseSetupData("Đội hình của bạn đã đầy đủ tướng cần thiết");
+
+            if (popup != null)
+            {
+                popup.ShowPopup(data,
+                onConfirm: (BasePopupData result) =>
+                {
+
                 },
                 onCancel: () =>
                 {

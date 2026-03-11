@@ -22,9 +22,9 @@ public class ItemPrefabDatabase : Singleton<ItemPrefabDatabase>
         playerNetManager.OnPlayerExiststed += LoadPrefab;
         foreach (var entry in itemPrefabs)
         {
-            if (!lookup.ContainsKey(entry.heroData.itemId))
+            if (!lookup.ContainsKey(entry.heroPreset.itemId))
             {
-                lookup.Add(entry.heroData.itemId, entry.gameObject);
+                lookup.Add(entry.heroPreset.itemId, entry.gameObject);
             }
         }
     }
@@ -36,7 +36,7 @@ public class ItemPrefabDatabase : Singleton<ItemPrefabDatabase>
 
     private void LoadPrefab(NetworkObject playerNet)
     {
-       OnPlayerPrefabChanged?.Invoke(GetPrefab());
+        OnPlayerPrefabChanged?.Invoke(GetPrefab());
     }
 
     public List<GameObject> GetPrefab()

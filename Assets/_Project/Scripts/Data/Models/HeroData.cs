@@ -24,7 +24,7 @@ public class HeroData : ItemData
     public float magicalDefensePoint; // value
     public float spiritDefensePoint; // value
     public Vector2Int championIndex;
-    public List<EquitmentData> equitmentDatas;
-    public List<SkillData> skillDatas;
-    public List<TechniqueData> techniqueDatas;
+    public List<EquitmentData> equitmentDatas = new();
+    public List<SkillData> skillDatas = new();
+    public List<TechniqueData> techniqueDatas = new();
 }

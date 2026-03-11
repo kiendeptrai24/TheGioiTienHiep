@@ -2,7 +2,7 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
-public abstract class BulletBase : TGTHMonoBehaviour
+public abstract class BulletBaseNet : TGTHNetworkBehaviour
 {
     protected ISkillCaster caster;
     protected StatsData statsData;
@@ -15,6 +15,7 @@ public abstract class BulletBase : TGTHMonoBehaviour
     }
     protected virtual void OnHit(Collider col)
     {
+        if (!IsServer) return;
         if (col.TryGetComponent(out IDamageable target))
         {
             target.TakeDamage(statsData);
@@ -30,14 +31,22 @@ public abstract class BulletBase : TGTHMonoBehaviour
     }
     protected virtual void OnBulletDespawn(float delay = 0f)
     {
+        if (!IsServer) return;
+
         if (delay <= 0f)
         {
-            ObjectPool.Instance.ReturnObject(this.gameObject);
+            NetworkObject.Despawn();
+            Destroy(gameObject);
         }
         else
         {
-            ObjectPool.Instance.ReturnObject(this.gameObject, delay);
+            StartCoroutine(DespawnAfterDelay(delay));
         }
     }
 
+    private IEnumerator DespawnAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        NetworkObject.Despawn();
+    }
 }

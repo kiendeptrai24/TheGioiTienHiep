@@ -25,15 +25,6 @@ namespace TGTH.Mobile
             mouseFollower.SetData(sprite, quantity);
         }
 
-        public void ClearAllSlots()
-        {
-            foreach (var item in listOfUIItems)
-            {
-                item.ResetData();
-                item.Deselect();
-            }
-        }
-
         public void DeselectAll()
         {
             foreach (var item in listOfUIItems)
@@ -51,6 +42,7 @@ namespace TGTH.Mobile
             }
             listOfUIItems.AddRange(listOfEquitmentItems);
         }
+
         public void DeselectItem(UIItemSlotBase uiItem)
         {
             if (uiItem)
@@ -59,6 +51,7 @@ namespace TGTH.Mobile
                 uiItem = null;
             }
         }
+
         public void SelectUIItem(UIItemSlotBase uiItemOld, UIItemSlotBase uiItemNew)
         {
             if (uiItemOld != null)
@@ -66,75 +59,22 @@ namespace TGTH.Mobile
             uiItemOld = uiItemNew;
             uiItemOld.Select();
         }
-        public void ShowInventory(List<InventoryItem> listItemDatas)
+
+        public void ShowItemsInventory(List<InventoryItem> listItemDatas)
         {
-            HashSet<InventoryItem> equippedItems = new HashSet<InventoryItem>();
-
-            foreach (var slot in listOfEquitmentItems)
-            {
-                if (slot.inventoryItem != null)
-                    equippedItems.Add(slot.inventoryItem);
-            }
-
+            if (listItemDatas == null) return;
             for (int i = 0; i < listOfUIItemsInInventory.Count; i++)
             {
+                if (i >= 50) return;
                 if (i >= listItemDatas.Count)
-                {
-                    listOfUIItemsInInventory[i].ResetData();
-                    continue;
-                }
-
-                InventoryItem item = listItemDatas[i];
-
-                if (equippedItems.Contains(item))
                 {
                     listOfUIItemsInInventory[i].ResetData();
                 }
                 else
                 {
-                    listOfUIItemsInInventory[i].SetItem(item);
+                    listOfUIItemsInInventory[i].SetItem(listItemDatas[i]);
                 }
             }
-        }
-        public void SortInventory(List<InventoryItem> listItemDatas)
-        {
-            // 1) Build set item đang equip
-            HashSet<InventoryItem> equippedItems = new HashSet<InventoryItem>();
-            foreach (var slot in listOfEquitmentItems)
-            {
-                if (slot.inventoryItem != null)
-                    equippedItems.Add(slot.inventoryItem);
-            }
-
-            // 2) Sort: chưa equip trước, đang equip sau
-            // Nếu bạn không muốn thay đổi list gốc, hãy tạo copy rồi sort copy.
-            listItemDatas.Sort((a, b) =>
-            {
-                bool aEq = equippedItems.Contains(a);
-                bool bEq = equippedItems.Contains(b);
-                return aEq.CompareTo(bEq); // false < true => non-equip lên trước
-            });
-
-            // 3) Render UI theo list đã sort
-            for (int i = 0; i < listOfUIItemsInInventory.Count; i++)
-            {
-                if (i >= listItemDatas.Count)
-                {
-                    listOfUIItemsInInventory[i].ResetData();
-                    continue;
-                }
-
-                listOfUIItemsInInventory[i].SetItem(listItemDatas[i]);
-            }
-        }
-        public void SetItem(int index, InventoryItem item)
-        {
-            listOfUIItems[index].SetItem(item);
-        }
-
-        public void SetItemData(int index, Sprite sprite, int qty, string name)
-        {
-            listOfUIItems[index].SetData(sprite, qty);
         }
 
         public void Show()
@@ -145,6 +85,23 @@ namespace TGTH.Mobile
         public void Hide()
         {
             gameObject.SetActive(false);
+        }
+
+        internal void ShowItemEquipment(List<InventoryItem> listItems)
+        {
+            if (listItems == null) return;
+            int itemIndex = 0;
+            for (int i = 0; i < listOfEquitmentItems.Count; i++)
+            {
+                if (itemIndex >= listItems.Count)
+                {
+                    listOfEquitmentItems[i].ResetData();
+                    continue;
+                }
+                if (listOfEquitmentItems[i].IsLocked()) continue;
+                listOfEquitmentItems[i].SetItem(listItems[itemIndex]);
+                itemIndex++;
+            }
         }
     }
 }

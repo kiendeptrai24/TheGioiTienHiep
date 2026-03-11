@@ -15,9 +15,9 @@ public class TechniquePageManager : TGTHMonoBehaviour
     {
         base.Awake();
         isAwake = true;
+        UnLockTechnique();
     }
     protected override void Start() {
-        UnLockTechnique();
     }
     public void SetInventoryData(List<InventoryItem> items)
     {

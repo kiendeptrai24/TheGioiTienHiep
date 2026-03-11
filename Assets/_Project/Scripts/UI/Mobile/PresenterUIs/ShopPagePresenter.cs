@@ -275,6 +275,7 @@ namespace TGTH.Mobile
 
         private void HandleItemDropped(UIItemSlotBase uiItem)
         {
+            return;
             if (currentlyDraggedItemIndex == -1) return;
             int dropIndex = view.listOfUIItems.IndexOf(uiItem);
 

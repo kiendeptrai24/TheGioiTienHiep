@@ -67,31 +67,44 @@ namespace TGTH.Mobile
             uiItemOld = uiItemNew;
             uiItemOld.Select();
         }
-        public void ShowAllItems(List<InventoryItem> listItemDatas)
+        public void ShowItemsInInventory(List<InventoryItem> listItemDatas)
         {
             if (listItemDatas == null) return;
-            if (listOfUIItems.Count < listItemDatas.Count) return;
-            for (int i = 0; i < listItemDatas.Count; i++)
+            for (int i = 0; i < listOfUIItemsInInventory.Count; i++)
             {
                 if (i >= 50) return;
-                listOfUIItems[i].SetItem(listItemDatas[i]);
+                if (i >= listItemDatas.Count)
+                {
+                    listOfUIItemsInInventory[i].ResetData();
+                }
+                else
+                {
+                    listOfUIItemsInInventory[i].SetItem(listItemDatas[i]);
+                }
+            }
+        }
+        public void ShowItemEquipment(List<InventoryItem> listItemDatas)
+        {
+            if (listItemDatas == null) return;
+            for (int i = 0; i < listOfEquitmentItems.Count; i++)
+            {
+                if (listOfEquitmentItems[i].IsLocked()) continue;
+                if (i >= listItemDatas.Count)
+                {
+                    listOfEquitmentItems[i].ResetData();
+                }
+                else
+                {
+                    listOfEquitmentItems[i].SetItem(listItemDatas[i]);
+                }
             }
         }
         public void RefreshInventory(List<InventoryItem> listItemDatas)
         {
-            // 1️⃣ Tập item đang equip
-            HashSet<InventoryItem> equippedItems = new HashSet<InventoryItem>();
+            if (listItemDatas == null) return;
 
-            foreach (var slot in listOfEquitmentItems)
-            {
-                if (slot.inventoryItem != null)
-                    equippedItems.Add(slot.inventoryItem);
-            }
-
-            // 2️⃣ Duyệt theo index – GIỮ NGUYÊN VỊ TRÍ
             for (int i = 0; i < listOfUIItemsInInventory.Count; i++)
             {
-                // Không có item ở index này
                 if (i >= listItemDatas.Count)
                 {
                     listOfUIItemsInInventory[i].ResetData();
@@ -99,16 +112,7 @@ namespace TGTH.Mobile
                 }
 
                 InventoryItem item = listItemDatas[i];
-
-                // Item đang equip → slot trống
-                if (equippedItems.Contains(item))
-                {
-                    listOfUIItemsInInventory[i].ResetData();
-                }
-                else
-                {
-                    listOfUIItemsInInventory[i].SetItem(item);
-                }
+                listOfUIItemsInInventory[i].SetItem(item);
             }
         }
         public void SetItem(int index, InventoryItem item)

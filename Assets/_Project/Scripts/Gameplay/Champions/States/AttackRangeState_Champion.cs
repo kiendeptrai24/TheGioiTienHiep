@@ -3,17 +3,16 @@ using UnityEngine;
 
 public class AttackRangeState_Champion : ChampionState, ISkillTrigger, IAnimationTrigger
 {
-    private SkillContext skillContext;
     public AttackRangeState_Champion(ChampionController champion, IStateMachine stateMachine, string anim) : base(champion, stateMachine, anim)
     {
     }
 
     public void ActiveSkill()
     {
-        var networkSlash = GameObject.Instantiate(m_champion.attackPrefab, m_champion.transform.position, m_champion.transform.rotation);
-        var bullet = networkSlash.GetComponent<BulletBase>();
-        var target = m_champion.Target;
-        bullet.SetUpTarGet(m_champion, target, m_champion.GetStats());
+        var bullet = ObjectPool.Instance.GetObject(m_champion.attackPrefab, m_champion.transform.position, m_champion.transform.rotation);
+        var bulletBase = bullet.GetComponent<BulletPlayBackBase>();
+        var target = m_champion.findTarget.Target;
+        bulletBase.SetUpTarGet(m_champion, target, m_champion.GetStats());
     }
 
     public void ActiveTrigger()

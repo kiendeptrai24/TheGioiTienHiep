@@ -1,9 +1,10 @@
 using UnityEngine;
 
 
-public class OneHitBullet : BulletBase
+public class OneHitBulletPlayback : BulletPlayBackBase
 {
     [SerializeField] protected float moveSpeed;
+
     private void FixedUpdate()
     {
         if (targetToChase == null) return;

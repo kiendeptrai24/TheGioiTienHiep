@@ -33,6 +33,6 @@ public class PlayerChoseObject : Singleton<PlayerChoseObject>
             Debug.Log("object null");
             return;
         }
-        BattleSimulatorRequest.Instance.RequestBattleSimulatorServerRpc(playerNet.OwnerClientId, currentEntity.EntityNetId);
+        currentEntity.OnEntityClickedAccept(playerNet);
     }
 }

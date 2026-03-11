@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using Unity.Profiling;
 using UnityEngine;
 
@@ -85,7 +86,7 @@ public class BattlePlayback : Singleton<BattlePlayback>
 
             var cham = Instantiate(champion, pos, rot);
             var chamAnim = cham.GetComponent<ChampionAnimationPlayback>();
-
+            chamAnim.GetComponent<ChampionController>().SetTeamId((int)eventInit.team);
             if (eventInit.team == TeamId.Heroes)
                 champions.Add(eventInit.ownerUid, chamAnim);
             else

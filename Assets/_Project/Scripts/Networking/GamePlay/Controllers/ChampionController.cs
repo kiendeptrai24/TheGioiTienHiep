@@ -13,7 +13,6 @@ public class ChampionController : TGTHMonoBehaviour, ISkillCaster
     protected HealthController healthController;
     [HideInInspector] public IMoveable moveable;
     [HideInInspector] public Animator anim;
-    public Transform Target => m_target;
 
     [SerializeField] protected float _mana = 100f;
     [SerializeField] protected float _stamina = 100f;
@@ -29,8 +28,7 @@ public class ChampionController : TGTHMonoBehaviour, ISkillCaster
     public Vector3 Center => transform.position + Vector3.up * 1.5f;
 
     public ulong Id => 1;
-
-    public Transform m_target;
+    public TargetFinderBase findTarget;
     public void SetTeamId(int teamId)
     {
         _teamId = teamId;
@@ -71,6 +69,7 @@ public class ChampionController : TGTHMonoBehaviour, ISkillCaster
         skillController = GetComponent<ChampionBaseSkill>();
         stats = GetComponent<StatsData>();
         healthController = GetComponent<HealthController>();
+        findTarget = GetComponent<TargetFinderBase>();
     }
     public StatsData GetStats() => stats;
 

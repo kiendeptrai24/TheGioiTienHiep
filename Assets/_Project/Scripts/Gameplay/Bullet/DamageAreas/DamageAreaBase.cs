@@ -15,9 +15,8 @@ public class DamageAreaBase : BulletBase
         }
         OnBulletDespawn(1);
     }
-    private void OnTriggerEnter(Collider other) {
-        if (!IsServer) return;
-        
+    private void OnTriggerEnter(Collider other)
+    {
         OnHit(other);
     }
 }

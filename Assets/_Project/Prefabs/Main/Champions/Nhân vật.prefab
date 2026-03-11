@@ -1769,10 +1769,27 @@ MonoBehaviour:
   isHero: 1
   heroPreset: {fileID: 11400000, guid: 507aebb1253c2b04499862d9bad54180, type: 2}
   heroData:
-    itemId: 856e38a0a3999b743985fad6c670c593
-    itemType: 4
-    itemName: "A Nh\u1ECB"
-    itemIcon: {fileID: -1351563598, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
+    itemId: 507aebb1253c2b04499862d9bad54180
+    itemType: 5
+    itemName: "Nh\xE2n V\u1EADt"
+    itemIcon: {fileID: -1848583977, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
+    itemPrice: 100
+    canStack: 0
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 1
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+  techniqueData:
+  - itemId: daac526b3d0862e4780f81c2f4dc93a9
+    itemType: 2
+    itemName: "Linh V\u1EADn Quy\u1EBFt C1"
+    itemIcon: {fileID: -235380508, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
     itemPrice: 100
     canStack: 0
     itemDescription: 
@@ -1782,10 +1799,45 @@ MonoBehaviour:
     physicalDamage: 0
     magicalDamage: 0
     spiritDamage: 0
-    physicalDefense: 0
-    magicalDefense: 0
+    physicalDefense: 0.05
+    magicalDefense: 0.05
     spiritDefense: 0
-  techniqueData:
+    hasLearned: 0
+    techniqueType: 0
+    enhanceLevel: 1
+    raceType: 4
+    mainEssence: 3
+    elementType: 0
+    realm: 8
+    attackRange: 0
+    cooldown: 0
+    specialEffect: 
+    healthCost: 0
+    manaCost: 0
+    spiritCost: 0
+    requiredCharacterLevel: 0
+    learnCondition: 
+    powerCost: 0
+    lthaoCost: 0
+    mineralCost: 0
+    demonCoreCost: 0
+    devilCoreCost: 0
+    spiritStoneCost: 0
+    itemCost: 0
+    critDamage: 0
+    critRate: 0
+    armorPenetration: 0
+    trueDamage: 0
+    lifeSteal: 0
+    attackSpeed: 0
+    penetrationReduction: 0
+    critDamageReduction: 0
+    trueDamageReduction: 0
+    bonusHealth: 0.2
+    bonusMana: 0
+    bonusSpirit: 0
+    totalQualityAndLevel: 0
+    statCount: 3
   - itemId: 967ca2419ba9971429f2d3f826cf9c0b
     itemType: 2
     itemName: "Man Ng\u01B0u B\xED Ph\xE1p C1"
@@ -1838,6 +1890,58 @@ MonoBehaviour:
     bonusSpirit: 0
     totalQualityAndLevel: 0
     statCount: 3
+  - itemId: 3ab19980313ce064a824ad4e15a621a3
+    itemType: 2
+    itemName: "Ph\xE0m Nh\xE2n Luy\u1EC7n Linh Quy\u1EBFt C1"
+    itemIcon: {fileID: -235380508, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
+    itemPrice: 100
+    canStack: 0
+    itemDescription: 
+    currentstack: 0
+    cultivationStage: 0
+    qualityType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    hasLearned: 0
+    techniqueType: 0
+    enhanceLevel: 1
+    raceType: 4
+    mainEssence: 3
+    elementType: 0
+    realm: 8
+    attackRange: 0
+    cooldown: 0
+    specialEffect: 
+    healthCost: 0
+    manaCost: 0
+    spiritCost: 0
+    requiredCharacterLevel: 0
+    learnCondition: 
+    powerCost: 0
+    lthaoCost: 0
+    mineralCost: 0
+    demonCoreCost: 0
+    devilCoreCost: 0
+    spiritStoneCost: 0
+    itemCost: 0
+    critDamage: 0
+    critRate: 0
+    armorPenetration: 0
+    trueDamage: 0
+    lifeSteal: 0
+    attackSpeed: 0
+    penetrationReduction: 0
+    critDamageReduction: 0
+    trueDamageReduction: 0
+    bonusHealth: 0.2
+    bonusMana: 0.2
+    bonusSpirit: 0
+    totalQualityAndLevel: 0.1
+    statCount: 2
   skillDatas: []
   statsRaceData:
     itemId: 
@@ -1850,16 +1954,16 @@ MonoBehaviour:
     currentstack: 0
     cultivationStage: 0
     qualityType: 0
-    physicalDamage: 0.1
-    magicalDamage: 0.1
-    spiritDamage: 0.1
-    physicalDefense: 0.1
-    magicalDefense: 0.1
-    spiritDefense: 0.1
-    raceType: 1
-    maxHealth: 0.1
-    maxMana: 0.5
-    maxSpirit: 0.2
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    raceType: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
     spiritRange: 0
     movementSpeed: 0
   statsCultivationPathData:
@@ -1896,27 +2000,27 @@ MonoBehaviour:
     canStack: 0
     itemDescription: 
     currentstack: 0
-    cultivationStage: 2
+    cultivationStage: 14
     qualityType: 0
-    physicalDamage: 12
-    magicalDamage: 12
-    spiritDamage: 12
-    physicalDefense: 6
-    magicalDefense: 6
-    spiritDefense: 6
-    maxHealth: 120
-    maxMana: 120
-    maxSpirit: 120
+    physicalDamage: 60
+    magicalDamage: 60
+    spiritDamage: 60
+    physicalDefense: 30
+    magicalDefense: 30
+    spiritDefense: 30
+    maxHealth: 600
+    maxMana: 600
+    maxSpirit: 600
     critRate: 150
     critDamage: 5
     evasion: 2
-    armorPenetration: 10
-    movementSpeed: 4
+    armorPenetration: 20
+    movementSpeed: 3
     attackSpeed: 1
     castSpeed: 1
-    potential: 5
+    potential: 20
     skillPoints: 3
-    combatPower: 40
+    combatPower: 3500
     spiritRange: 0
 --- !u!114 &3190878175914024010
 MonoBehaviour:
@@ -1947,12 +2051,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChampionController
   isMeleeChampion: 1
-  attackPrefab: {fileID: 5503505460791601945, guid: 74c549d1b06b6b140a1fd9536eea637f,
+  attackPrefab: {fileID: 5503505460791601945, guid: 7e3d0340c44548b47ad934005108822c,
     type: 3}
   m_aiMovement: {fileID: 5522076161520491088}
   skillController: {fileID: 0}
-  currentSkillData:
-    skillId: 
+  currentSkillId: 
   anim: {fileID: 2497535060774596429}
   _mana: 100
   _stamina: 100

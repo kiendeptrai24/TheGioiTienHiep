@@ -41,6 +41,5 @@ public abstract class StatsSystem : TGTHMonoBehaviour
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        statsManager = GetComponent<StatsData>();
     }
 }

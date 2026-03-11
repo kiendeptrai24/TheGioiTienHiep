@@ -37,7 +37,7 @@ namespace TGTH.Mobile
             view.OnHeroStatsClicked += ShowHeroInfo;
             view.OnHeroDetailClicked += ShowHeroDetail;
         }
-        
+
         private void SetItemData(List<ItemData> list)
         {
             for (int i = 0; i < list.Count; i++)
@@ -69,9 +69,7 @@ namespace TGTH.Mobile
         }
         public void ShowData(InventoryItem inventoryItem)
         {
-            Debug.Log("Show Data Hero Detail Page Presenter");
             SetStatManager(inventoryItem);
-            Debug.Log((inventoryItem.data as HeroData).equitmentDatas.Count);
             view.ShowData(inventoryItem.data as HeroData);
         }
         public override void HandleItemClicked(InventoryItem inventoryItem)
@@ -111,7 +109,6 @@ namespace TGTH.Mobile
             var heroData = item.data as HeroData;
             if (heroData == null) return;
             statsManager.SetUpHeroItem(heroData);
-            statsManager.SetupData(heroData.statsCultivationPathData, heroData.statsRealmData, heroData.statsRaceData);
             characterIdentity.SetupData(heroData.statsCultivationPathData, heroData.statsRealmData, heroData.statsRaceData);
             foreach (var eq in heroData.equitmentDatas)
             {

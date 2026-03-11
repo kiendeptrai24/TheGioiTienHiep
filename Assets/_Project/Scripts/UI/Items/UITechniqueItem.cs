@@ -16,6 +16,14 @@ public class UITechniqueItem : UIItemSlotLockable
     public override void ResetData()
     {
         base.ResetData();
+        if (IsLocked() == false)
+        {
+            lockIcon.gameObject.SetActive(false);
+        }
+        else
+        {
+            lockIcon.gameObject.SetActive(true);
+        }
     }
     public override bool HasItem()
     {
@@ -26,7 +34,7 @@ public class UITechniqueItem : UIItemSlotLockable
 
         var oldItem = inventoryItem;
         inventoryItem = newItem;
-        
+
         OnEquippedChanged?.Invoke(oldItem, inventoryItem);
 
         if (inventoryItem == null)
@@ -41,7 +49,7 @@ public class UITechniqueItem : UIItemSlotLockable
     }
     public override bool CanReceive(ItemDragContext ctx)
     {
-        if(base.CanReceive(ctx) == false)
+        if (base.CanReceive(ctx) == false)
             return false;
         if (ctx.ItemOfFrom.data is TechniqueData)
         {

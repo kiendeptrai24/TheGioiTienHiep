@@ -12,10 +12,8 @@ public class AttackState_Champion : ChampionState, ISkillTrigger, IAnimationTrig
     {
         Vector3 pos = m_champion.transform.position + Vector3.up * 1f;
         Quaternion rot = m_champion.transform.rotation;
-        var networkSlash = GameObject.Instantiate(m_champion.attackPrefab, pos, rot);
-        var bullet = networkSlash.GetComponent<BulletBase>();
-        var target = m_champion.Target;
-        bullet.SetUpTarGet(m_champion, target, m_champion.GetStats());
+        var slash = ObjectPool.Instance.GetObject(m_champion.attackPrefab, pos, rot);
+        ObjectPool.Instance.ReturnObject(slash, 1);
     }
 
     public void ActiveTrigger()

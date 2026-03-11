@@ -23,7 +23,7 @@ namespace TGTH.Mobile
             inventoryCenterManager = InventoryCenterManager.Instance;
             view.OnRefreshClicked += ShowItem;
             view.OnSortClicked += SortInventory;
-            inventoryCenterManager.OnItemDataChanged += SetItemData;
+            inventoryCenterManager.OnItemDataChanged += OnItemDataChanged;
             ProfileManager.Instance.OnProfileChanged += (profile) =>
             {
                 view.priceText.text = profile.price.ToString();
@@ -31,7 +31,7 @@ namespace TGTH.Mobile
             view.ToggleMouseFollower(false);
             InitializeInventoryUI(50);
             ShowAllItems();
-            SetItemData(inventoryCenterManager.GetItemData());
+            OnItemDataChanged(inventoryCenterManager.GetItemData());
         }
         private void InitializeInventoryUI(int amount)
         {
@@ -50,8 +50,9 @@ namespace TGTH.Mobile
         {
             view.RefreshInventory(listItemDatas);
         }
-        private void SetItemData(List<ItemData> items)
+        private void OnItemDataChanged(List<ItemData> items)
         {
+            Debug.Log("OnItemDataChanged");
             if (listItemDatas == null)
                 listItemDatas = new List<InventoryItem>();
             listItemDatas.Clear();
@@ -73,10 +74,6 @@ namespace TGTH.Mobile
             view.ShowAllItems(listItemDatas);
         }
 
-        public void RefreshInventory()
-        {
-
-        }
         public void SortInventory()
         {
             int type = view.itemtypeDrop.value;

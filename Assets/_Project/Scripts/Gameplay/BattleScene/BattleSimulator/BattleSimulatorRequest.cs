@@ -22,7 +22,6 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
     private void RequestBattleSimulator(ulong playerClientId, ulong monsterNetId)
     {
         if (!IsServer) return;
-
         if (!NetworkManager.ConnectedClients.TryGetValue(playerClientId, out var playerNet)) return;
         if (!NetworkManager.SpawnManager.SpawnedObjects
             .TryGetValue(monsterNetId, out var enemyNO))
@@ -43,7 +42,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         {
             width = 5,
             height = 9,
-            moveInterval = .7f,
+            moveInterval = .6f,
             allowDiagonal = true
         };
 
