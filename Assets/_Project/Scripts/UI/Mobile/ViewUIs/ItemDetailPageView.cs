@@ -40,7 +40,8 @@ public class ItemDetailPageView : IItemDetailPageView
         qualityTypeTxt.text = EnumTranslator.ToVietnamese(inventoryItem.data.qualityType);
         realmTxt.text = inventoryItem.data is SkillData ? EnumTranslator.ToVietnamese(((SkillData)inventoryItem.data).realm) :
         inventoryItem.data is TechniqueData ? EnumTranslator.ToVietnamese(((TechniqueData)inventoryItem.data).realm) :
-        inventoryItem.data is EquitmentData ? EnumTranslator.ToVietnamese(((EquitmentData)inventoryItem.data).realmType) : "";
+        inventoryItem.data is EquitmentData ? EnumTranslator.ToVietnamese(((EquitmentData)inventoryItem.data).realmType) :
+        inventoryItem.data is HeroData ? EnumTranslator.ToVietnamese(((HeroData)inventoryItem.data).realmType) : "";
         itemIconImge.sprite = inventoryItem.data.itemIcon;
 
         if (inventoryItem.data is SkillData skillData) SetItemSkillData(skillData);

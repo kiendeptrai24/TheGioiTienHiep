@@ -39,9 +39,17 @@ namespace TGTH.Mobile
             mouseFollower.SetData(sprite, quantity);
         }
 
-        public void ClearAllSlots()
+        public void ClearAllAlreadyOwnedSlots()
         {
             foreach (var item in listOfUIItemsAlreadyOwned)
+            {
+                item.ResetData();
+                item.Deselect();
+            }
+        }
+        public void ClearAllNotYetOwnedSlots()
+        {
+            foreach (var item in listOfUIItemsNotYetOwned)
             {
                 item.ResetData();
                 item.Deselect();
@@ -64,7 +72,7 @@ namespace TGTH.Mobile
             }
             for (int i = 0; i < amount; i++)
             {
-                if (contentHeroNotYetOwned == null) break;;
+                if (contentHeroNotYetOwned == null) break; ;
                 UIInventoryItem uiItem = Instantiate(itemPrefab, contentHeroNotYetOwned);
                 listOfUIItemsNotYetOwned.Add(uiItem);
             }
@@ -85,17 +93,28 @@ namespace TGTH.Mobile
             uiItemOld = uiItemNew;
             uiItemOld.Select();
         }
-        public void ShowAllItems(List<InventoryItem> listItemDatas)
+
+        public void ShowAllItemsAlreadyOwned(List<InventoryItem> listItemDatas)
         {
             if (listItemDatas == null) return;
+
             if (listOfUIItemsAlreadyOwned.Count < listItemDatas.Count) return;
-            ClearAllSlots();
+            ClearAllAlreadyOwnedSlots();
             for (int i = 0; i < listItemDatas.Count; i++)
             {
                 listOfUIItemsAlreadyOwned[i].SetItem(listItemDatas[i]);
             }
         }
-
+        public void ShowAllItemsNotYetOwned(List<InventoryItem> listItemDatas)
+        {
+            if (listItemDatas == null) return;
+            if (listOfUIItemsNotYetOwned.Count < listItemDatas.Count) return;
+            ClearAllNotYetOwnedSlots();
+            for (int i = 0; i < listItemDatas.Count; i++)
+            {
+                listOfUIItemsNotYetOwned[i].SetItem(listItemDatas[i]);
+            }
+        }
         public void SetItem(int index, InventoryItem item)
         {
             listOfUIItemsAlreadyOwned[index].SetItem(item);

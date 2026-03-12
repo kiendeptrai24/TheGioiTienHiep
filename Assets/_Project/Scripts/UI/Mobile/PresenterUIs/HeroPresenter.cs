@@ -11,6 +11,7 @@ namespace TGTH.Mobile
         [SerializeField] private IItemDetailPageView itemDetailPageView;
         private InventoryCenterManager inventoryCenterManager;
         private List<InventoryItem> listItemDatas;
+        private List<ItemData> rootListDatas;
         private UIItemSlotBase currentItemSelect;
         private int currentlyDraggedItemIndex = -1;
         public event Action<int> OnItemActionRequested;
@@ -19,12 +20,11 @@ namespace TGTH.Mobile
 
         protected override void Awake()
         {
-            view.OnRefreshClicked += ShowItem;
+            view.OnRefreshClicked += ShowItemsAlreadyOwned;
             view.OnSortClicked += SortInventory;
 
             view.ToggleMouseFollower(false);
             InitializeInventoryUI(50);
-            ShowAllItems();
             LoadItem();
         }
 
@@ -32,7 +32,25 @@ namespace TGTH.Mobile
         {
             inventoryCenterManager = InventoryCenterManager.Instance;
             inventoryCenterManager.OnItemChampionDataChanged += SetItemData;
+            inventoryCenterManager.OnItemChampionDataChanged += SetItemDataDontHave;
+
+            rootListDatas = inventoryCenterManager.GetAllDataType(ItemType.Champion);
             SetItemData(inventoryCenterManager.GetDataType(ItemType.Champion));
+            SetItemDataDontHave(inventoryCenterManager.GetDataType(ItemType.Champion));
+        }
+
+        private void SetItemDataDontHave(List<ItemData> list)
+        {
+            var temp = new List<InventoryItem>();
+            foreach (var item in list)
+            {
+                if (item is HeroData)
+                {
+                    if (!rootListDatas.Contains(item))
+                        temp.Add(new InventoryItem(item));
+                }
+            }
+            view.ShowAllItemsNotYetOwned(temp);
         }
 
         private void InitializeInventoryUI(int amount)
@@ -47,6 +65,11 @@ namespace TGTH.Mobile
                 uiItem.OnItemEndDrag += HandleEndDrag;
                 uiItem.OnRightMouseBtnClick += HandleItemRightClick;
             }
+            foreach (var uiItem in view.listOfUIItemsNotYetOwned)
+            {
+                uiItem.OnItemClicked += HandleItemClicked;
+            }
+
         }
 
         private void SetItemData(List<ItemData> list)
@@ -57,20 +80,8 @@ namespace TGTH.Mobile
                 temp.Add(new InventoryItem(item));
             }
             listItemDatas = temp;
-            ShowAllItems();
+            view.ShowAllItemsAlreadyOwned(listItemDatas);
         }
-
-        public void SetInventoryData(List<InventoryItem> items)
-        {
-            listItemDatas = items;
-            ShowAllItems();
-        }
-
-        private void ShowAllItems()
-        {
-            view.ShowAllItems(listItemDatas);
-        }
-
         public void RefreshInventory()
         {
             for (int i = 0; i < listItemDatas.Count; i++)
@@ -93,7 +104,7 @@ namespace TGTH.Mobile
 
             if (sortedList.Count == 0)
                 sortedList = new();
-            view.ShowAllItems(sortedList);
+            view.ShowAllItemsAlreadyOwned(sortedList);
         }
         private void HandleItemClicked(UIItemSlotBase uiItem)
         {
@@ -184,9 +195,9 @@ namespace TGTH.Mobile
             currentlyDraggedItemIndex = -1;
         }
 
-        private void ShowItem()
+        private void ShowItemsAlreadyOwned()
         {
-            view.ShowAllItems(listItemDatas);
+            view.ShowAllItemsAlreadyOwned(listItemDatas);
         }
         [ContextMenu("Add")]
         public void AddItem()

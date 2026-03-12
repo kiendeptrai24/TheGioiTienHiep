@@ -14,6 +14,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     [SerializeField] private List<ItemData> listItemDatasUsed = new List<ItemData>();
     [SerializeField] private List<ItemData> listItemDatasExisting = new List<ItemData>();
     public List<HeroData> listItemDatasChampion = new List<HeroData>();
+    public List<ItemData> allItemDatas = new List<ItemData>();
     public int maxChampion = 4;
     override protected void Awake()
     {
@@ -24,6 +25,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         playerCham = heroPreset.GetItemData();
         heroData = playerCham as HeroData;
     }
+    #region Event General
+
     public event Action<List<ItemData>> OnItemDataChanged;
     public event Action<List<ItemData>> OnListItemDatasChampionChanged;
     public event Action<List<ItemData>> OnItemEquitmentDataChanged;
@@ -37,6 +40,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public event Action<List<ItemData>> OnItemExistingChampionDataChanged;
     public event Action<List<ItemData>> OnItemExistingTechniqueDataChanged;
     public event Action<ItemData> OnItemChanged;
+    #endregion
     public event Action<ItemData> OnItemPlayerChanged;
     private bool isItemChange = false;
     private bool isEquitmentChange = false;
@@ -212,26 +216,44 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     }
     public List<ItemData> GetDataType(ItemType type, bool onlyExisting = false)
     {
-        List<ItemData> temp = new List<ItemData>();
+        var listDatas = onlyExisting ? listItemDatasExisting : listItemDatas;
         switch (type)
         {
             case ItemType.Material:
-                return ListItemData(temp, onlyExisting);
+                return ListItemData(listDatas);
             case ItemType.Equipment:
-                return ListEquipmentData(temp, onlyExisting);
+                return ListEquipmentData(listDatas);
             case ItemType.Technique:
-                return ListTechniqueData(temp, onlyExisting);
+                return ListTechniqueData(listDatas);
             case ItemType.Skill:
-                return ListSkillData(temp, onlyExisting);
+                return ListSkillData(listDatas);
             case ItemType.Champion:
-                return ListChampionData(temp, onlyExisting);
+                return ListChampionData(listDatas);
         }
-        return temp;
+        return listDatas;
     }
-
-    private List<ItemData> ListChampionData(List<ItemData> temp, bool onlyExisting = false)
+    public List<ItemData> GetAllDataType(ItemType type)
     {
-        var temps = onlyExisting ? listItemDatasExisting : listItemDatas;
+        List<ItemData> listDatas = allItemDatas;
+
+        switch (type)
+        {
+            case ItemType.Material:
+                return ListItemData(listDatas);
+            case ItemType.Equipment:
+                return ListEquipmentData(listDatas);
+            case ItemType.Technique:
+                return ListTechniqueData(listDatas);
+            case ItemType.Skill:
+                return ListSkillData(listDatas);
+            case ItemType.Champion:
+                return ListChampionData(listDatas);
+        }
+        return listDatas;
+    }
+    private List<ItemData> ListChampionData(List<ItemData> temps)
+    {
+        List<ItemData> temp = new();
         foreach (var item in temps)
         {
             if (item is HeroData)
@@ -240,9 +262,9 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         return temp;
     }
 
-    private List<ItemData> ListSkillData(List<ItemData> temp, bool onlyExisting = false)
+    private List<ItemData> ListSkillData(List<ItemData> temps)
     {
-        var temps = onlyExisting ? listItemDatasExisting : listItemDatas;
+        List<ItemData> temp = new();
         foreach (var item in temps)
         {
             if (item is SkillData)
@@ -251,9 +273,9 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         return temp;
     }
 
-    private List<ItemData> ListTechniqueData(List<ItemData> temp, bool onlyExisting = false)
+    private List<ItemData> ListTechniqueData(List<ItemData> temps)
     {
-        var temps = onlyExisting ? listItemDatasExisting : listItemDatas;
+        List<ItemData> temp = new();
         foreach (var item in temps)
         {
             if (item is TechniqueData)
@@ -262,9 +284,9 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         return temp;
     }
 
-    private List<ItemData> ListItemData(List<ItemData> temp, bool onlyExisting = false)
+    private List<ItemData> ListItemData(List<ItemData> temps)
     {
-        var temps = onlyExisting ? listItemDatasExisting : listItemDatas;
+        List<ItemData> temp = new();
         foreach (var item in temps)
         {
             if (item is ItemData)
@@ -273,9 +295,9 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         return temp;
     }
 
-    private List<ItemData> ListEquipmentData(List<ItemData> temp, bool onlyExisting = false)
+    private List<ItemData> ListEquipmentData(List<ItemData> temps)
     {
-        var temps = onlyExisting ? listItemDatasExisting : listItemDatas;
+        List<ItemData> temp = new();
         foreach (var item in temps)
         {
             if (item is EquitmentData)
@@ -290,6 +312,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         {
             listItemDatas.Add(item);
             listItemDatasExisting.Add(item);
+            allItemDatas.Add(item);
         }
     }
     public void SaveGame(ref GameData _data)
