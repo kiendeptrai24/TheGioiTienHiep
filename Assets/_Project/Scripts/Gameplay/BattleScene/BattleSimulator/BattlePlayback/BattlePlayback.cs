@@ -154,7 +154,7 @@ public class BattlePlayback : Singleton<BattlePlayback>
                 PlayDeath(e);
                 break;
             case BattleEventType.End:
-                StartCoroutine(OnEndGame(5));
+                
                 break;
             default:
                 Debug.Log($"Unknown event type {e.type} for champion id {e.ownerUid}");
