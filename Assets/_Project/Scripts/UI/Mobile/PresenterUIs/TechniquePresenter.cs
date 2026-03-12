@@ -11,7 +11,6 @@ namespace TGTH.Mobile
     {
         [SerializeField] private TechniquePageView view;
         [SerializeField] private ItemTechniqueDetailPageView itemTechniqueDetailPageView;
-        private TechniqueSystem techniqueSystem;
         private InventoryCenterManager inventoryCenterManager;
         private List<InventoryItem> listItemDatas = new List<InventoryItem>();
         private UIItemSlotBase currentItemSelect;
@@ -112,17 +111,9 @@ namespace TGTH.Mobile
                 }
             }
         }
-        public void SetEquipmentSystem(TechniqueSystem system)
-        {
-            techniqueSystem = system;
-        }
         private void HandleEquippedChanged(InventoryItem item1, InventoryItem item2)
         {
             if (isShowEquipment) return;
-            if (techniqueSystem == null) return;
-
-            techniqueSystem.Unequip(item1);
-            techniqueSystem.Equip(item2);
 
             if (item1 != null && item1.data != null)
             {

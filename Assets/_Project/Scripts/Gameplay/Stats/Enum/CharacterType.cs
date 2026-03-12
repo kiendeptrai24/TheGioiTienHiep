@@ -1,5 +1,5 @@
 public enum CharacterType {
-    CultivationStage,
+    Realm,
     EssenceType,
     RaceType,
 }

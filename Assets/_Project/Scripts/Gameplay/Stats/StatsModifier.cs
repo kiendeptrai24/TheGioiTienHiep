@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class StatsModifier
 {
@@ -96,37 +96,28 @@ public class StatsModifier
         stats.TryGetValue(StatType.Health, out Stat healthStat);
         stats.TryGetValue(StatType.Mana, out Stat manaStat);
         stats.TryGetValue(StatType.Spirit, out Stat spiritStat);
-
         stats.TryGetValue(StatType.PhysicalDamage, out Stat physicalDamageStat);
         stats.TryGetValue(StatType.MagicalDamage, out Stat magicalDamageStat);
         stats.TryGetValue(StatType.SpiritDamage, out Stat spiritDamageStat);
-
         stats.TryGetValue(StatType.PhysicalDefense, out Stat physicalDefenseStat);
         stats.TryGetValue(StatType.MagicalDefense, out Stat magicalDefenseStat);
         stats.TryGetValue(StatType.SpiritDefense, out Stat spiritDefenseStat);
-
         stats.TryGetValue(StatType.MovementSpeed, out Stat movementSpeedStat);
         stats.TryGetValue(StatType.SpiritRange, out Stat spiritRangeStat);
-
         stats.TryGetValue(StatType.CounterPercentage, out Stat counterPercentageStat);
 
         healthStat.AddModifier(data.maxHealth);
         manaStat.AddModifier(data.maxMana);
         spiritStat.AddModifier(data.maxSpirit);
-
         physicalDamageStat.AddModifier(data.physicalDamage);
         magicalDamageStat.AddModifier(data.magicalDamage);
         spiritDamageStat.AddModifier(data.spiritDamage);
-
         physicalDefenseStat.AddModifier(data.physicalDefense);
         magicalDefenseStat.AddModifier(data.magicalDefense);
         spiritDefenseStat.AddModifier(data.spiritDefense);
-
         movementSpeedStat.AddModifier(data.movementSpeed);
         spiritRangeStat.AddModifier(data.spiritRange);
-
         counterPercentageStat.AddModifier(data.counterPercentage);
-
     }
     public void AddStatsHeroData(Dictionary<StatType, Stat> stats, ItemData data)
     {
@@ -169,27 +160,21 @@ public class StatsModifier
         stats.TryGetValue(StatType.Health, out Stat healthStat);
         stats.TryGetValue(StatType.Mana, out Stat manaStat);
         stats.TryGetValue(StatType.Spirit, out Stat spiritStat);
-
         stats.TryGetValue(StatType.CritPower, out Stat critPower);
         stats.TryGetValue(StatType.CritChance, out Stat critChance);
-        
-
         stats.TryGetValue(StatType.PhysicalDamage, out Stat physicalDamageStat);
         stats.TryGetValue(StatType.MagicalDamage, out Stat magicalDamageStat);
         stats.TryGetValue(StatType.SpiritDamage, out Stat spiritDamageStat);
-
         stats.TryGetValue(StatType.ArmorPenetration, out Stat armorPenetrationStat);
         stats.TryGetValue(StatType.CritDamageReduction, out Stat critDamageReduction);
         stats.TryGetValue(StatType.TrueDamage, out Stat trueDamage);
-
         stats.TryGetValue(StatType.PhysicalDefense, out Stat physicalDefenseStat);
         stats.TryGetValue(StatType.MagicalDefense, out Stat magicalDefenseStat);
         stats.TryGetValue(StatType.SpiritDefense, out Stat spiritDefenseStat);
-
         stats.TryGetValue(StatType.AttackSpeed, out Stat attackSpeedStat);
 
-       foreach (var item in datas)
-       {
+        foreach (var item in datas)
+        {
             healthStat.AddModifierPercent(item.bonusHealth);
             manaStat.AddModifierPercent(item.bonusMana);
             spiritStat.AddModifierPercent(item.bonusSpirit);
@@ -199,15 +184,22 @@ public class StatsModifier
             physicalDefenseStat.AddModifierPercent(item.physicalDefense);
             magicalDefenseStat.AddModifierPercent(item.magicalDefense);
             spiritDefenseStat.AddModifierPercent(item.spiritDefense);
-
             critPower.AddModifierPercent(item.critDamage);
             critChance.AddModifierPercent(item.critRate);
-
             armorPenetrationStat.AddModifierPercent(item.armorPenetration);
             critDamageReduction.AddModifierPercent(item.critDamageReduction);
             trueDamage.AddModifierPercent(item.trueDamage);
-
             attackSpeedStat.AddModifier(item.attackSpeed);
-       }
-    }    
+        }
+    }
+
+    internal void AddStatsSkillData(Dictionary<StatType, Stat> stats, List<SkillData> skillDatas)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal void AddStatsEquitmentData(Dictionary<StatType, Stat> stats, List<EquitmentData> equiDatas)
+    {
+        throw new NotImplementedException();
+    }
 }

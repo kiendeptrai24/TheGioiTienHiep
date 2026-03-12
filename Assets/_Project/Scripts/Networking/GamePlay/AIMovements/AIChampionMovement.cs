@@ -20,14 +20,13 @@ public class AIChampionMovement : TGTHMonoBehaviour
         if (statsData != null)
         {
             statsData.SetupDataPreset();
-            agent.stoppingDistance = 0.3f;
+            agent.stoppingDistance = 0.5f;
             agent.speed = statsData.MovementSpeed;
         }
     }
     protected override void Start()
     {
         base.Start();
-        agent.autoBraking = false;
         agent.angularSpeed = turnSpeed;
     }
     private void Update()
@@ -49,7 +48,7 @@ public class AIChampionMovement : TGTHMonoBehaviour
             return;
         targetFinder.SetTarget(newTarget);
     }
-    public void SetDitition(Vector3 destination)
+    public void SetDetinition(Vector3 destination)
     {
         if (agent != null)
         {

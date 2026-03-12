@@ -12,7 +12,7 @@ public class RootGameUIScreenManager : ScreenManager
         m_Screens.Add(m_UIBG.gameObject.name, m_UIBG);
         defaultScreen = m_UI.gameObject.name;
     }
-    protected override void Start() 
+    protected override void Start()
     {
         base.Start();
         BattlePlaybackManager.Instance.OnReadyGame += OnReadyGame;

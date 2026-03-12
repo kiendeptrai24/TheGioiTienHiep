@@ -2,26 +2,30 @@
 
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class StatsData : TGTHMonoBehaviour
 {
-    [SerializeField] private bool isHero = true;
     public event Action OnValueChanged;
     public HeroPreset heroPreset;
+
     public ItemData heroData;
     public List<TechniqueData> techniqueData;
     public List<SkillData> skillDatas;
+    public List<EquitmentData> equiDatas;
+
     [Header("Preset base stats")]
     public StatsRaceData statsRaceData;
     public StatsCultivationPathData statsCultivationPathData;
     public StatsRealmData statsRealmData;
-    private StatsModifier statsModifier = new StatsModifier();
     public Dictionary<StatType, Stat> stats = new Dictionary<StatType, Stat>();
+
+    #region Base Stats
     public int Health => GetStatValue(StatType.Health);
     public int Mana => GetStatValue(StatType.Mana);
     public int Spirit => GetStatValue(StatType.Spirit);
-
+    #endregion
     #region Damage
     public int PhysicalDamage => GetStatValue(StatType.PhysicalDamage);
     public int MagicalDamage => GetStatValue(StatType.MagicalDamage);
@@ -89,8 +93,24 @@ public class StatsData : TGTHMonoBehaviour
     #endregion
 
     public int CombatPower => GetStatValue(StatType.CombatPower);
-
     public event Action<StatsData> OnStatReady;
+    public List<IStatsModifier> statsModifiers;
+    protected override void Awake()
+    {
+        base.Awake();
+        InitStatsModifier();
+        Setup();
+    }
+    public void InitStatsModifier()
+    {
+        statsModifiers = new();
+        statsModifiers.Add(new StatsRaceModifier());
+        statsModifiers.Add(new StatsRealmModifier());
+        statsModifiers.Add(new StatsCultivationPathModifier());
+        statsModifiers.Add(new StatsSkillModifier());
+        statsModifiers.Add(new StatsTechniqueModifier());
+        statsModifiers.Add(new StatsEquipmentModifier());
+    }
     private void ResetStatsModifiers()
     {
         stats.Clear();
@@ -105,6 +125,8 @@ public class StatsData : TGTHMonoBehaviour
         ResetStatsModifiers();
         StatChange();
     }
+    #region Stats Emplement
+
     public int GetStatValue(StatType type)
     {
         if (stats.TryGetValue(type, out Stat stat))
@@ -133,45 +155,44 @@ public class StatsData : TGTHMonoBehaviour
         }
         Debug.Log(debugMsg);
     }
+    #endregion
+    #region Setup Item
     private void Setup()
     {
+        if (statsModifiers == null) InitStatsModifier();
         ResetStats();
-        statsModifier.AddStatsRaceData(stats, statsRaceData);
-        statsModifier.AddStatsRealmData(stats, statsRealmData);
-        statsModifier.AddStatsCultivationPathData(stats, statsCultivationPathData);
-        statsModifier.AddStatsHeroData(stats, heroData);
-        statsModifier.AddStatsTechniqueData(stats, techniqueData);
+        foreach (var modifier in statsModifiers)
+        {
+            modifier.AddStats(stats, heroData);
+        }
         StatChange();
+        SetupDebbug();
         OnStatReady?.Invoke(this);
     }
-    private void SetupData(StatsCultivationPathData statsCultivationPathData, StatsRealmData statsRealmData, StatsRaceData statsRaceData)
+    private void SetupDebbug()
     {
-        this.statsCultivationPathData = statsCultivationPathData;
-        this.statsRealmData = statsRealmData;
-        this.statsRaceData = statsRaceData;
-        Setup();
+        var hero = heroData as HeroData;
+        if (hero == null) return;
+        techniqueData = hero.techniqueDatas;
+        skillDatas = hero.skillDatas;
+        equiDatas = hero.equitmentDatas;
+
+        statsRaceData = hero.statsRaceData;
+        statsRealmData = hero.statsRealmData;
+        statsCultivationPathData = hero.statsCultivationPathData;
     }
-    public void SetUpTechnique(List<TechniqueData> items)
-    {
-        this.techniqueData = items;
-    }
-    public void SetUpSkill(List<SkillData> items)
-    {
-        this.skillDatas = items;
-    }
-    public void SetUpHeroItem(ItemData item)
+    public void SetUpItem(ItemData item)
     {
         this.heroData = item;
-        var data = item as HeroData;
-        SetUpTechnique(data.techniqueDatas);
-        SetupData(data.statsCultivationPathData, data.statsRealmData, data.statsRaceData);
         Setup();
     }
     public void SetupDataPreset()
     {
         if (heroPreset == null) return;
-        SetUpHeroItem(heroPreset.GetItemData());
+        SetUpItem(heroPreset.GetItemData());
     }
+    #endregion
+
     public void StatChange()
     {
         OnValueChanged?.Invoke();

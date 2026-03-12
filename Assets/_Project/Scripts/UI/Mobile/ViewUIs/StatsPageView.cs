@@ -79,11 +79,14 @@ namespace TGTH.Mobile
             spiritDefenseTxt.text = stats[StatType.SpiritDefense].GetValue().ToString();
             critDamageReductionTxt.text = stats[StatType.CritDamageReduction].GetValue().ToString();
         }
-        public void ShowCharactorIdentifyData(CharacterIdentity characterIdentity)
+        public void ShowCharactorIdentifyData(ItemData itemData)
         {
-            cultivationStageTxt.text = characterIdentity.cultivationStage.ToString();
-            classTxt.text = characterIdentity.essenceType.ToString();
-            raceTxt.text = characterIdentity.raceType.ToString();
+            HeroData heroData = itemData as HeroData;
+            if (heroData == null) return;
+
+            cultivationStageTxt.text = EnumTranslator.ToVietnamese(heroData.statsCultivationPathData.realmType);
+            classTxt.text = EnumTranslator.ToVietnamese(heroData.essenceType);
+            raceTxt.text = EnumTranslator.ToVietnamese(heroData.raceType);
         }
     }
 }

@@ -57,7 +57,7 @@ public class ChampionController : TGTHMonoBehaviour, ISkillCaster
     }
     protected void OnDead()
     {
-        Destroy(gameObject);
+        Destroy(gameObject, .1f);
     }
 
     override protected void LoadComponent()

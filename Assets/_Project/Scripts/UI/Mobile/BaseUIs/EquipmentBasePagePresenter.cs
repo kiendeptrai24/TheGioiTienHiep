@@ -10,7 +10,6 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
 {
     [SerializeField] protected EquipmentBasePageView view;
     [SerializeField] protected IItemDetailPageView itemDetailPageView;
-    [SerializeField] protected EquipmentSystem equipmentSystem;
     [SerializeField] protected StatsData statsManager;
     [SerializeField] protected InventoryCenterManager inventoryCenterManager;
     [SerializeField] protected List<InventoryItem> listItemDatas;
@@ -100,16 +99,10 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
             view.equipmentSlotsDictionary.Add(item.equipmentType, item);
         }
     }
-    public void SetEquipmentSystem(EquipmentSystem system)
-    {
-        equipmentSystem = system;
-    }
+
     protected virtual bool HandleEquippedChanged(InventoryItem item1, InventoryItem item2)
     {
         if (isShowEquipment) return false;
-        if (equipmentSystem == null) return false;
-        equipmentSystem.Unequip(item1);
-        equipmentSystem.Equip(item2);
         if (item1 != null && item1.data != null)
         {
             var result = inventoryCenterManager.AddData(item1.data);

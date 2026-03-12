@@ -1290,6 +1290,7 @@ GameObject:
   - component: {fileID: 6948272949833217649}
   - component: {fileID: 3333912109796703734}
   - component: {fileID: -4700634645540344532}
+  - component: {fileID: -1811419393468301219}
   m_Layer: 7
   m_Name: "A Nh\u1ECB"
   m_TagString: Untagged
@@ -1398,7 +1399,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f37fcc50bcd34fd42a17a7f9d9e5482d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatsData
-  canLoadData: 0
   isHero: 1
   heroPreset: {fileID: 11400000, guid: 856e38a0a3999b743985fad6c670c593, type: 2}
   heroData:
@@ -1410,8 +1410,9 @@ MonoBehaviour:
     canStack: 0
     itemDescription: 
     currentstack: 0
-    cultivationStage: 0
+    realmType: 0
     qualityType: 0
+    elementType: 0
     physicalDamage: 0
     magicalDamage: 0
     spiritDamage: 0
@@ -1427,8 +1428,9 @@ MonoBehaviour:
     canStack: 0
     itemDescription: 
     currentstack: 0
-    cultivationStage: 0
+    realmType: 0
     qualityType: 0
+    elementType: 0
     physicalDamage: 0.05
     magicalDamage: 0
     spiritDamage: 0
@@ -1440,7 +1442,6 @@ MonoBehaviour:
     enhanceLevel: 1
     raceType: 4
     mainEssence: 3
-    elementType: 0
     realm: 8
     attackRange: 0
     cooldown: 0
@@ -1481,8 +1482,9 @@ MonoBehaviour:
     canStack: 0
     itemDescription: 
     currentstack: 0
-    cultivationStage: 0
+    realmType: 0
     qualityType: 0
+    elementType: 0
     physicalDamage: 0.1
     magicalDamage: 0.1
     spiritDamage: 0.1
@@ -1504,8 +1506,9 @@ MonoBehaviour:
     canStack: 0
     itemDescription: 
     currentstack: 0
-    cultivationStage: 0
+    realmType: 0
     qualityType: 0
+    elementType: 0
     physicalDamage: 1
     magicalDamage: 0
     spiritDamage: 0
@@ -1529,8 +1532,9 @@ MonoBehaviour:
     canStack: 0
     itemDescription: 
     currentstack: 0
-    cultivationStage: 2
+    realmType: 0
     qualityType: 0
+    elementType: 0
     physicalDamage: 12
     magicalDamage: 12
     spiritDamage: 12
@@ -1589,7 +1593,7 @@ MonoBehaviour:
   _mana: 100
   _stamina: 100
   _teamId: 0
-  m_target: {fileID: 0}
+  findTarget: {fileID: 0}
 --- !u!114 &2068183329775231569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1643,6 +1647,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d9893e9e19d22644b8dcb124753f0e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChampionBaseSkill
+--- !u!114 &-1811419393468301219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4976055003734315949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ff95828526931f4bb2cab62394ece05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ManualTargetFinder
+  target: {fileID: 0}
 --- !u!1 &5068131831834174039
 GameObject:
   m_ObjectHideFlags: 0

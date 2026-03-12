@@ -22,6 +22,7 @@ public class BattlePlayback : Singleton<BattlePlayback>
     private Dictionary<string, ChampionAnimationPlayback> championsEnemies = new();
     private Dictionary<string, ChampionController> championsObject = new();
     public event Action OnEndBattle;
+    public event Action OnResultGame;
     protected override void Awake()
     {
         base.Awake();
@@ -82,8 +83,6 @@ public class BattlePlayback : Singleton<BattlePlayback>
                 boardOrigin
             );
 
-            Debug.Log($"cell={eventInit.cell} pos={pos}");
-
             var cham = Instantiate(champion, pos, rot);
             var chamAnim = cham.GetComponent<ChampionAnimationPlayback>();
             chamAnim.GetComponent<ChampionController>().SetTeamId((int)eventInit.team);
@@ -93,11 +92,16 @@ public class BattlePlayback : Singleton<BattlePlayback>
                 championsEnemies.Add(eventInit.ownerUid, chamAnim);
         }
     }
+    public IEnumerator CheckChampion()
+    {
+        yield return new WaitForSeconds(.1f);
 
+        OnResultGame?.Invoke();
+    }
     public void StopBattle()
     {
         playBattle = false;
-        StartCoroutine(OnEndGame(1));
+        StartCoroutine(OnEndGame(0));
     }
     private void ResetBattle()
     {
@@ -117,7 +121,7 @@ public class BattlePlayback : Singleton<BattlePlayback>
         champions.Clear();
         championsEnemies.Clear();
     }
-    public IEnumerator OnEndGame(float timeToDeplay = 1)
+    public IEnumerator OnEndGame(float timeToDeplay = 0)
     {
         yield return new WaitForSeconds(timeToDeplay / 2);
         ResetBattle();
@@ -154,10 +158,9 @@ public class BattlePlayback : Singleton<BattlePlayback>
                 PlayDeath(e);
                 break;
             case BattleEventType.End:
-                
+                StartCoroutine(CheckChampion());
                 break;
             default:
-                Debug.Log($"Unknown event type {e.type} for champion id {e.ownerUid}");
                 break;
         }
     }
@@ -231,7 +234,6 @@ public class BattlePlayback : Singleton<BattlePlayback>
         var defCham = GetAnimationCham(eventAttack.targetUid, eventAttack.targetTeam);
         if (atkCham == null || defCham == null)
             return;
-        atkCham.GetComponent<AIChampionMovement>().SetDetinition(defCham.transform);
         atkCham.GetComponent<TargetFinderBase>().SetTarget(defCham.transform);
         atkCham.PlayAnimationAttack();
         StartCoroutine(DecreaseHealthBattle(e));

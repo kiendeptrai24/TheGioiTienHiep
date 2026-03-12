@@ -42,7 +42,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         {
             width = 5,
             height = 9,
-            moveInterval = .6f,
+            moveInterval = .3f,
             allowDiagonal = true
         };
 
@@ -54,8 +54,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             if (heroPrefab == null) continue;
 
             var stats = heroPrefab.GetComponent<StatsData>();
-            stats.SetUpHeroItem(stats.heroData);
-
+            stats.SetUpItem(stats.heroData);
             var snap = SnapshotMapper.FromStats(stats, TeamId.Heroes);
             var pos = (stats.heroData as HeroData).championIndex;
             pos = boardGrid.ClampToValidCell(pos);
@@ -71,7 +70,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             if (enemyPrefab == null) continue;
 
             var stats = enemyPrefab.GetComponent<StatsData>();
-            stats.SetUpHeroItem(stats.heroData);
+            stats.SetUpItem(stats.heroData);
 
             var snap = SnapshotMapper.FromStats(stats, TeamId.Enemies);
 

@@ -13,7 +13,6 @@ namespace TGTH.Mobile
     {
         [SerializeField] private SkillPageView view;
         [SerializeField] private ItemSkillDetailPageView itemSkillDetailPageView;
-        private SkillSystem skillSystem;
         private List<InventoryItem> listItemDatas;
         private UIItemSlotBase currentItemSelect;
         private int currentlyDraggedItemIndex = -1;
@@ -117,17 +116,9 @@ namespace TGTH.Mobile
                 }
             }
         }
-        public void SetEquipmentSystem(SkillSystem system)
-        {
-            skillSystem = system;
-        }
         private void HandleEquippedChanged(InventoryItem item1, InventoryItem item2)
         {
             if (isShowEquipment) return;
-            if (skillSystem == null) return;
-
-            skillSystem.Unequip(item1);
-            skillSystem.Equip(item2);
 
             if (item1 != null && item1.data != null)
             {

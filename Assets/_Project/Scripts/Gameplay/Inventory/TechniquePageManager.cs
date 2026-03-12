@@ -9,7 +9,6 @@ public class TechniquePageManager : TGTHMonoBehaviour
     [SerializeField] private TechniquePresenter presenter;
     [SerializeField] private List<InventoryItem> listItemDatas;
     [SerializeField] private List<InventoryItem> listItemUsed = new List<InventoryItem>();
-    [SerializeField] private CharacterIdentity characterIdentity;
     public bool isAwake = false;
     protected override void Awake()
     {

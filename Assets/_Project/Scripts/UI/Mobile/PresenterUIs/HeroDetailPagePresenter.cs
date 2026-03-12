@@ -11,10 +11,6 @@ namespace TGTH.Mobile
         [SerializeField] private HeroDetailPageView view;
         [SerializeField] private IItemDetailPageView itemDetailPageView;
         [SerializeField] private StatsData statsManager;
-        [SerializeField] private CharacterIdentity characterIdentity;
-        [SerializeField] private EquipmentSystem equipmentSystem;
-        [SerializeField] private SkillSystem skillSystem;
-        [SerializeField] private TechniqueSystem techniqueSystem;
         private InventoryCenterManager inventoryCenterManager;
         private bool setup = false;
         protected override void Awake()
@@ -108,20 +104,7 @@ namespace TGTH.Mobile
             statsManager.ResetStats();
             var heroData = item.data as HeroData;
             if (heroData == null) return;
-            statsManager.SetUpHeroItem(heroData);
-            characterIdentity.SetupData(heroData.statsCultivationPathData, heroData.statsRealmData, heroData.statsRaceData);
-            foreach (var eq in heroData.equitmentDatas)
-            {
-                equipmentSystem.Equip(new InventoryItem(eq));
-            }
-            foreach (var skill in heroData.skillDatas)
-            {
-                skillSystem.Equip(new InventoryItem(skill));
-            }
-            foreach (var technique in heroData.techniqueDatas)
-            {
-                techniqueSystem.Equip(new InventoryItem(technique));
-            }
+            statsManager.SetUpItem(heroData);
         }
 
         private void HandleItemClicked(UIItemSlotBase uiItem)

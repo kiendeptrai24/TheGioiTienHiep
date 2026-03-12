@@ -13,7 +13,7 @@ public class CharacterStatsManager : Singleton<CharacterStatsManager>
         base.Awake();
         inventoryCenterManager = InventoryCenterManager.Instance;
         playerCham = inventoryCenterManager.playerCham;
-        stats.SetUpHeroItem(playerCham);
+        stats.SetUpItem(playerCham);
     }
     protected override void Start()
     {
