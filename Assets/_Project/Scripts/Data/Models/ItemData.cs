@@ -25,4 +25,9 @@ public class ItemData
     public float physicalDefense;
     public float magicalDefense;
     public float spiritDefense;
+    public ItemData Clone()
+    {
+        return (ItemData)this.MemberwiseClone();
+    }
+
 }

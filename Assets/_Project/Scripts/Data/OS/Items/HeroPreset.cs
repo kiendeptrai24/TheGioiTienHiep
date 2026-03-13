@@ -4,6 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewHeroPreset", menuName = "RPG/Items/Hero Preset")]
 public class HeroPreset : ItemStatsPreset
 {
+    public bool isCharactor = false;
     public StatsRealmPreset statsRealmPreset;
     public StatsRacePreset statsRacePreset;
     public StatsCultivationPathPreset statsCultivationPathPreset;
@@ -44,6 +45,7 @@ public class HeroPreset : ItemStatsPreset
             realmType = data.realmType,
             qualityType = data.qualityType,
 
+            isCharactor = isCharactor,
             raceType = raceType,
             level = level,
             attackRange = attackRange,

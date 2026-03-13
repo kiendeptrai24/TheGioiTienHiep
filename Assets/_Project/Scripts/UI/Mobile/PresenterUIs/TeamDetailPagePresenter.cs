@@ -55,6 +55,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
     }
     public void AddItem(ItemData data)
     {
+        Debug.Log(data.itemName);
         if (listDatas.Count >= maxChampion)
         {
             Debug.Log("Max Champion");
@@ -66,6 +67,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
     }
     public void RemoveItem(ItemData data)
     {
+        Debug.Log(data.itemName);
         listDatas.Remove(data);
         inventoryCenterManager.UnUseData(data);
         inventoryCenterManager.SetItemChampionData(GetAllItems());

@@ -6,6 +6,7 @@ public class GameUIScreenManager : ScreenManager
     [SerializeField] private GameObject m_UI;
     [SerializeField] private GameObject m_MapScreen;
     [SerializeField] private GameObject m_TeamScreen;
+    [SerializeField] private GameObject m_CreateAccountScreen;
     protected override void Awake()
     {
         base.Awake();
@@ -13,9 +14,10 @@ public class GameUIScreenManager : ScreenManager
         m_Screens.Add(m_UI.gameObject.name, m_UI);
         m_Screens.Add(m_MapScreen.gameObject.name, m_MapScreen);
         m_Screens.Add(m_TeamScreen.gameObject.name, m_TeamScreen);
-        defaultScreen = m_InGameUI.gameObject.name;
+        m_Screens.Add(m_CreateAccountScreen.gameObject.name, m_CreateAccountScreen);
+        defaultScreen = m_CreateAccountScreen.gameObject.name;
     }
-    protected override void Start() 
+    protected override void Start()
     {
         base.Start();
     }

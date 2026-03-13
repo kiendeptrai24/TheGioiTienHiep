@@ -37,7 +37,7 @@ public abstract class UIItemSlotBase : TGTHMonoBehaviour,
 
     protected override void Awake()
     {
-        if(resetDataOnAwake)
+        if (resetDataOnAwake)
             ResetData();
         Deselect();
     }
@@ -68,12 +68,12 @@ public abstract class UIItemSlotBase : TGTHMonoBehaviour,
     }
     public virtual void Select()
     {
-        borderImage.enabled = true;
+        borderImage.gameObject.SetActive(true);
     }
 
     public virtual void Deselect()
     {
-        borderImage.enabled = false;
+        borderImage.gameObject.SetActive(false);
     }
     #endregion
 

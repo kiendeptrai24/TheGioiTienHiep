@@ -47,6 +47,7 @@ public class ItemPrefabDatabase : Singleton<ItemPrefabDatabase>
             if (lookup.TryGetValue(item.itemId, out var prefab))
             {
                 prefab.GetComponent<StatsData>().heroData = item;
+                Debug.Log(item.championIndex);
                 prefabs.Add(prefab);
             }
         }

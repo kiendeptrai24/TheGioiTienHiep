@@ -1658,7 +1658,7 @@ GameObject:
   - component: {fileID: 1577761538810142019}
   - component: {fileID: 1890561918863097241}
   m_Layer: 7
-  m_Name: "Nh\xE2n v\u1EADt"
+  m_Name: Human
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1765,9 +1765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f37fcc50bcd34fd42a17a7f9d9e5482d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatsData
-  canLoadData: 0
-  isHero: 1
-  heroPreset: {fileID: 11400000, guid: 507aebb1253c2b04499862d9bad54180, type: 2}
+  heroPreset: {fileID: 11400000, guid: e242250a5ce2ff645a26bf4766c9dae4, type: 2}
   heroData:
     itemId: 507aebb1253c2b04499862d9bad54180
     itemType: 5
@@ -1777,8 +1775,9 @@ MonoBehaviour:
     canStack: 0
     itemDescription: 
     currentstack: 0
-    cultivationStage: 0
+    realmType: 0
     qualityType: 1
+    elementType: 0
     physicalDamage: 0
     magicalDamage: 0
     spiritDamage: 0
@@ -1794,8 +1793,9 @@ MonoBehaviour:
     canStack: 0
     itemDescription: 
     currentstack: 0
-    cultivationStage: 0
+    realmType: 0
     qualityType: 0
+    elementType: 0
     physicalDamage: 0
     magicalDamage: 0
     spiritDamage: 0
@@ -1807,7 +1807,6 @@ MonoBehaviour:
     enhanceLevel: 1
     raceType: 4
     mainEssence: 3
-    elementType: 0
     realm: 8
     attackRange: 0
     cooldown: 0
@@ -1846,8 +1845,9 @@ MonoBehaviour:
     canStack: 0
     itemDescription: 
     currentstack: 0
-    cultivationStage: 0
+    realmType: 0
     qualityType: 0
+    elementType: 0
     physicalDamage: 0.05
     magicalDamage: 0
     spiritDamage: 0
@@ -1859,7 +1859,6 @@ MonoBehaviour:
     enhanceLevel: 1
     raceType: 4
     mainEssence: 3
-    elementType: 0
     realm: 8
     attackRange: 0
     cooldown: 0
@@ -1898,8 +1897,9 @@ MonoBehaviour:
     canStack: 0
     itemDescription: 
     currentstack: 0
-    cultivationStage: 0
+    realmType: 0
     qualityType: 0
+    elementType: 0
     physicalDamage: 0
     magicalDamage: 0
     spiritDamage: 0
@@ -1911,7 +1911,6 @@ MonoBehaviour:
     enhanceLevel: 1
     raceType: 4
     mainEssence: 3
-    elementType: 0
     realm: 8
     attackRange: 0
     cooldown: 0
@@ -1943,6 +1942,7 @@ MonoBehaviour:
     totalQualityAndLevel: 0.1
     statCount: 2
   skillDatas: []
+  equiDatas: []
   statsRaceData:
     itemId: 
     itemType: 0
@@ -1952,8 +1952,9 @@ MonoBehaviour:
     canStack: 0
     itemDescription: 
     currentstack: 0
-    cultivationStage: 0
+    realmType: 0
     qualityType: 0
+    elementType: 0
     physicalDamage: 0
     magicalDamage: 0
     spiritDamage: 0
@@ -1975,8 +1976,9 @@ MonoBehaviour:
     canStack: 0
     itemDescription: 
     currentstack: 0
-    cultivationStage: 0
+    realmType: 0
     qualityType: 0
+    elementType: 0
     physicalDamage: 1
     magicalDamage: 0
     spiritDamage: 0
@@ -2000,8 +2002,9 @@ MonoBehaviour:
     canStack: 0
     itemDescription: 
     currentstack: 0
-    cultivationStage: 14
+    realmType: 0
     qualityType: 0
+    elementType: 0
     physicalDamage: 60
     magicalDamage: 60
     spiritDamage: 60
@@ -2060,7 +2063,7 @@ MonoBehaviour:
   _mana: 100
   _stamina: 100
   _teamId: 0
-  m_target: {fileID: 0}
+  findTarget: {fileID: 0}
 --- !u!114 &5522076161520491088
 MonoBehaviour:
   m_ObjectHideFlags: 0

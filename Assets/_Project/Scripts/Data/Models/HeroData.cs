@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class HeroData : ItemData
 {
+    public bool isCharactor;
     public StatsRealmData statsRealmData;
     public StatsCultivationPathData statsCultivationPathData;
     public StatsRaceData statsRaceData;
