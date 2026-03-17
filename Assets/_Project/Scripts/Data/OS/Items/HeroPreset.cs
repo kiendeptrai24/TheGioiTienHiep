@@ -40,6 +40,7 @@ public class HeroPreset : ItemStatsPreset
             itemIcon = data.itemIcon,
             itemDescription = data.itemDescription,
             currentstack = data.currentstack,
+            itemIconPath = data.itemIconPath,
             canStack = data.canStack,
             itemPrice = data.itemPrice,
             realmType = data.realmType,

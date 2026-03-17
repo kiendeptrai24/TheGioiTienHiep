@@ -315,6 +315,7 @@ public class TechniquePreset : ItemPreset
             itemName = data.itemName,
             itemType = data.itemType,
             itemIcon = data.itemIcon,
+            itemIconPath = data.itemIconPath,
             itemDescription = data.itemDescription,
             currentstack = data.currentstack,
             canStack = data.canStack,

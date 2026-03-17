@@ -22,6 +22,7 @@ public class ItemResourcePreset : ItemPreset
         data.itemName = itemName;
         data.itemType = itemType;
         data.itemIcon = itemIcon;
+        data.itemIconPath = itemIconPath;
         data.itemPrice = itemPrice;
         data.itemDescription = itemDescription;
         data.currentstack = currentstack;

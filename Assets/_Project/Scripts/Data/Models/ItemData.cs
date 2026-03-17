@@ -1,5 +1,6 @@
 
 
+using Newtonsoft.Json;
 using UnityEngine;
 [System.Serializable]
 public class ItemData
@@ -7,7 +8,9 @@ public class ItemData
     public string itemId;
     public ItemType itemType;
     public string itemName;
+    [JsonIgnore]
     public Sprite itemIcon;
+    public string itemIconPath;
     public int itemPrice;
     public bool canStack;
     public string itemDescription;

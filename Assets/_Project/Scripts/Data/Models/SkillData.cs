@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json;
 using UnityEngine;
 
 [Serializable]
@@ -14,6 +15,7 @@ public class SkillData : ItemData
     public RaceType raceType;            // Tộc
     public EssenceType mainEssence;      // Chủ tu
     public RealmType realm;       // Cảnh giới
+    [JsonIgnore]
     public GameObject skillEffectPrefab; // Prefab hiệu ứng kỹ năng
 
     // ============================
@@ -89,5 +91,6 @@ public class SkillData : ItemData
     [Header("Animation")]
     public float animationDuration;       // Thời gian animation (giây)
     public float castTime;               // Thời gian cast (giây)
-    internal GameObject networkSkillEffectPrefab;
+    [JsonIgnore]
+    public GameObject networkSkillEffectPrefab;
 }
