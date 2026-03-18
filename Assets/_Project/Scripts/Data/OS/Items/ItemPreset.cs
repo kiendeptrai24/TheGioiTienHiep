@@ -2,6 +2,7 @@
 using UnityEditor;
 #endif
 using UnityEngine;
+using UnityEngine.ResourceManagement.ResourceProviders.Simulation;
 
 [CreateAssetMenu(fileName = "NewMaterialPreset", menuName = "RPG/Items/Material Preset")]
 public abstract class ItemPreset : ScriptableObject
@@ -12,6 +13,7 @@ public abstract class ItemPreset : ScriptableObject
 
     public Sprite itemIcon;
     public string itemIconPath;
+    public string itemFilePath;
 
     public string itemDescription;
     public int itemPrice = 100;
@@ -19,7 +21,7 @@ public abstract class ItemPreset : ScriptableObject
     public bool canStack = false;
     public QualityType qualityType;
 
-    private void OnValidate()
+    public virtual void OnValidate()
     {
 #if UNITY_EDITOR
         string path = AssetDatabase.GetAssetPath(this);
@@ -27,16 +29,8 @@ public abstract class ItemPreset : ScriptableObject
 
         if (itemIcon != null)
         {
-            string iconPath = AssetDatabase.GetAssetPath(itemIcon);
-
-            int index = iconPath.IndexOf("Resources/");
-            if (index >= 0)
-            {
-                iconPath = iconPath.Substring(index + "Resources/".Length);
-                iconPath = System.IO.Path.ChangeExtension(iconPath, null);
-            }
-
-            itemIconPath = iconPath + "_" + itemIcon.name.Split('_')[^1];
+            itemIconPath = itemIcon.name;
+            itemFilePath = "";
         }
 #endif
     }
@@ -49,9 +43,8 @@ public abstract class ItemPreset : ScriptableObject
         data.itemName = itemName;
         data.itemType = itemType;
 
-        // ❌ không serialize sprite
-        // data.itemIcon = itemIcon;
-
+        data.itemIcon = itemIcon;
+        data.itemFilePath = itemFilePath;
         data.itemIconPath = itemIconPath;
 
         data.itemPrice = itemPrice;

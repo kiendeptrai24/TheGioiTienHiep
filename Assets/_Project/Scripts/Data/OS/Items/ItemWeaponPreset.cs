@@ -365,6 +365,7 @@ public class ItemWeaponPreset : ItemEquipmentPreset
             itemIcon = itemIcon,
             itemDescription = itemDescription,
             itemIconPath = itemIconPath,
+            itemPrice = itemPrice,
             currentstack = currentstack,
 
             // equipment meta

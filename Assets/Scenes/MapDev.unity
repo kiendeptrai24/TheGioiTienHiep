@@ -2064,6 +2064,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -7847,6 +7848,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -7879,10 +7881,10 @@ RectTransform:
   - {fileID: 1613742182}
   m_Father: {fileID: 3524562793853545093}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 300}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: -900}
+  m_SizeDelta: {x: 298.33334, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &142089725
 MonoBehaviour:
@@ -10107,10 +10109,10 @@ RectTransform:
   - {fileID: 1747558128}
   m_Father: {fileID: 3524562793853545093}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 300}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: -600}
+  m_SizeDelta: {x: 298.33334, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &178116869
 MonoBehaviour:
@@ -10218,6 +10220,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -12081,6 +12084,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -13232,6 +13236,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -13883,6 +13888,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -14786,6 +14792,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -15434,6 +15441,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -15675,6 +15683,7 @@ MonoBehaviour:
       itemName: "Qu\xE1i v\u1EADt"
       itemIcon: {fileID: -1138557387, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 100
       canStack: 0
       itemDescription: 
@@ -18885,6 +18894,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -19222,6 +19232,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -19730,6 +19741,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -24114,6 +24126,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -27410,6 +27423,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -36017,6 +36031,8 @@ GameObject:
   m_Component:
   - component: {fileID: 610075770}
   - component: {fileID: 610075769}
+  - component: {fileID: 610075771}
+  - component: {fileID: 610075772}
   m_Layer: 0
   m_Name: GameObject (1)
   m_TagString: Untagged
@@ -36036,7 +36052,112 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67aa9f06da833594c8f081fb35c47222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayFabLogin
-  presets:
+  itemsData:
+    items: []
+  itemsShop:
+    items: []
+  itemdad:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemIconPath: 
+    itemFilePath: 
+    itemPrice: 0
+    canStack: 0
+    itemDescription: 
+    currentstack: 0
+    realmType: 0
+    qualityType: 0
+    elementType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    hasLearned: 0
+    skillType: 0
+    enhanceLevel: 0
+    raceType: 0
+    mainEssence: 0
+    realm: 0
+    skillEffectPrefab: {fileID: 0}
+    attackRange: 0
+    cooldown: 0
+    specialEffect: 
+    healthCost: 0
+    manaCost: 0
+    spiritCost: 0
+    requiredCharacterLevel: 0
+    learnCondition: 
+    otherNote: 
+    powerCost: 0
+    lthaoCost: 0
+    mineralCost: 0
+    demonCoreCost: 0
+    devilCoreCost: 0
+    spiritStoneCost: 0
+    itemCost: 0
+    critDamage: 0
+    critRate: 0
+    armorPenetration: 0
+    trueDamage: 0
+    lifeSteal: 0
+    attackSpeed: 0
+    penetrationReduction: 0
+    critDamageReduction: 0
+    trueDamageReduction: 0
+    bonusHealth: 0
+    bonusMana: 0
+    bonusSpirit: 0
+    totalQualityAndLevel: 0
+    statCount: 0
+    animationDuration: 0
+    castTime: 0
+    networkSkillEffectPrefab: {fileID: 0}
+  playerLoginId: testLogin1
+--- !u!4 &610075770
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610075768}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 567.46344, y: 853.1888, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &610075771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610075768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 499d99c189be4e14696e04179d3af7a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AddressableLoader
+--- !u!114 &610075772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610075768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e3a54f6863b42c489a32ca98de68a5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjectLoader
+  TestJson: 1
+  baseItems:
   - {fileID: 11400000, guid: 856e38a0a3999b743985fad6c670c593, type: 2}
   - {fileID: 11400000, guid: b927363ac8b7260448d4eb5d9f9d4a0b, type: 2}
   - {fileID: 11400000, guid: 0e3ccebc96fdca34ebe149bf547493c7, type: 2}
@@ -36191,23 +36312,95 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 99031801a39c0d24aa9e21a7261e7bd4, type: 2}
   - {fileID: 11400000, guid: 89fef0405bf181b4082ed7baa858ddcd, type: 2}
   - {fileID: 11400000, guid: 45ad4a3100f668e4a8fda36f1a53205d, type: 2}
-  itemsData:
-    items: []
---- !u!4 &610075770
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 610075768}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 567.46344, y: 853.1888, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  testItems:
+  - {fileID: 11400000, guid: 856e38a0a3999b743985fad6c670c593, type: 2}
+  - {fileID: 11400000, guid: b927363ac8b7260448d4eb5d9f9d4a0b, type: 2}
+  - {fileID: 11400000, guid: 3beecca7ea6af2c458d1993524170063, type: 2}
+  - {fileID: 11400000, guid: cabc28e71564cca40b938fa3fc677824, type: 2}
+  - {fileID: 11400000, guid: 6d058f5fd97344749ac307896bbec68e, type: 2}
+  - {fileID: 11400000, guid: 57e1ab6972e6b6a4ca70a32bcde3b060, type: 2}
+  - {fileID: 11400000, guid: d735b0ed9e0b56f42b4f1452981a3216, type: 2}
+  - {fileID: 11400000, guid: f6bc2ba1f7e839541b174564eb50d07a, type: 2}
+  - {fileID: 11400000, guid: 111fb32159fc0ad46bc89af205015f97, type: 2}
+  - {fileID: 11400000, guid: 202a3b4730bff944e9d0a766d8b956cd, type: 2}
+  - {fileID: 11400000, guid: 72d4852848f489f479fdd80141f0c7f0, type: 2}
+  - {fileID: 11400000, guid: 8b00fca00421a0745ad299f88936c9dd, type: 2}
+  - {fileID: 11400000, guid: 2e47cea8e8b4ce54c8cca745dfa60e3a, type: 2}
+  - {fileID: 11400000, guid: 20f0219e08ceb844196887c11b9f50cd, type: 2}
+  - {fileID: 11400000, guid: 1c5af255f6dbb644b8ea294910f5f643, type: 2}
+  - {fileID: 11400000, guid: cc03d8ec30844d84882866aaff1ac238, type: 2}
+  - {fileID: 11400000, guid: 4a0ecc5e82301144ca75f075dae18a23, type: 2}
+  - {fileID: 11400000, guid: 2bb18361301415044b8958f9f8d13f36, type: 2}
+  - {fileID: 11400000, guid: be38cd025d041df48972cc1a657362ae, type: 2}
+  - {fileID: 11400000, guid: f95b0b813a8ce4745af854e00ecdd92c, type: 2}
+  - {fileID: 11400000, guid: 1410e98833cdef24b9cd6eec369aa4cc, type: 2}
+  - {fileID: 11400000, guid: fcf3cc8807f345d499bca7cc2a876676, type: 2}
+  - {fileID: 11400000, guid: e6db09b6db2c1a74a95b2022905ac1a6, type: 2}
+  - {fileID: 11400000, guid: d3606e815a292e1408112770861e24b5, type: 2}
+  - {fileID: 11400000, guid: ffb9ddc499c8ffe4c8d2689e500c5825, type: 2}
+  - {fileID: 11400000, guid: 29c07046574439c4bad53513de57d2f2, type: 2}
+  - {fileID: 11400000, guid: 7609086ac6ceae943b25378163023aeb, type: 2}
+  - {fileID: 11400000, guid: 900b8cea0c4b4cc42bb55a6cfe8da858, type: 2}
+  - {fileID: 11400000, guid: 4b29a8eb2da75874ab1876519f770263, type: 2}
+  - {fileID: 11400000, guid: f535fd3c61f65c74f8db6db371ee98ca, type: 2}
+  - {fileID: 11400000, guid: 222923353a5d0d742b8a0ca1bea08987, type: 2}
+  - {fileID: 11400000, guid: 762b659e1f3fdac4187e852ad46a7e6b, type: 2}
+  - {fileID: 11400000, guid: 28c4f095dfd61a547929f50a1883db18, type: 2}
+  - {fileID: 11400000, guid: 4ab9e308e93deb5479a188bf8cb26cb1, type: 2}
+  - {fileID: 11400000, guid: d9959f312c9ec3f4cb9d19dca196b44c, type: 2}
+  - {fileID: 11400000, guid: af589ff0a0034fd4a83715bb47429d6f, type: 2}
+  - {fileID: 11400000, guid: 15ef4412387b78f46971c79471c9e0db, type: 2}
+  - {fileID: 11400000, guid: cc4a40c1ff3362f4294e9c194a66f55b, type: 2}
+  - {fileID: 11400000, guid: 240f19ac1dd44db4fbb17bfd6d359808, type: 2}
+  - {fileID: 11400000, guid: 829f69a100d40a342ae470ebc151f018, type: 2}
+  - {fileID: 11400000, guid: 6f50e5992dc714144aabfdcad5524027, type: 2}
+  - {fileID: 11400000, guid: 24b50bb62a69b4e4bba49b097ff3896c, type: 2}
+  - {fileID: 11400000, guid: bb141fd28e706254c9926d955131d574, type: 2}
+  - {fileID: 11400000, guid: 9442308326f19fc4da4fefc59d4a81a3, type: 2}
+  - {fileID: 11400000, guid: 2e30802540e866747a3bddd99c6cb65e, type: 2}
+  - {fileID: 11400000, guid: 38a2fd278ddcfc4458ee4b12545b4ec9, type: 2}
+  - {fileID: 11400000, guid: 3a6d38e91011bdf448e8efc1c4d49df8, type: 2}
+  - {fileID: 11400000, guid: 08a79e11f1a346e49b0c634fef7d7f75, type: 2}
+  - {fileID: 11400000, guid: af773f78e7a115b4d97e86cf4deebc7c, type: 2}
+  - {fileID: 11400000, guid: f8c476a72bff44d48a30a6eb7c1374b2, type: 2}
+  - {fileID: 11400000, guid: c5895f0fa6971df4bac7e5b0b67d5dd8, type: 2}
+  - {fileID: 11400000, guid: a9c5607734f303a4e8bbe93c6c7a16d0, type: 2}
+  - {fileID: 11400000, guid: d914b8c274cfad94a93637c0d93b6506, type: 2}
+  - {fileID: 11400000, guid: 818490649d7aea1448a567122953e94c, type: 2}
+  - {fileID: 11400000, guid: edf93d97a81014044ad33de04a9619be, type: 2}
+  - {fileID: 11400000, guid: 42ec2110328ba6a438669f99c3fa3213, type: 2}
+  - {fileID: 11400000, guid: 5e50d8fce12358c40ae723c341db8238, type: 2}
+  - {fileID: 11400000, guid: 7a8b7f4a6b14a1e4282240d42152e5a5, type: 2}
+  - {fileID: 11400000, guid: 17d8535bbf8ee2244863df8801a5bb4e, type: 2}
+  - {fileID: 11400000, guid: 3e3cc3882f9edd045a03ffbb3bcbe4c4, type: 2}
+  - {fileID: 11400000, guid: 76664da6f903d7748bf654ff9336e375, type: 2}
+  - {fileID: 11400000, guid: 17ef9b4573ad4614abbeee455ed88c43, type: 2}
+  - {fileID: 11400000, guid: 54e80a07bab29e942a1f249bc01f4199, type: 2}
+  - {fileID: 11400000, guid: 4d055848a282c7a458bdf622c2225a89, type: 2}
+  - {fileID: 11400000, guid: cbe5b9b0a74019f4bb0b1a4d5ec9ebb4, type: 2}
+  - {fileID: 11400000, guid: 6ba11e1b2ad979740a682f854932ec7a, type: 2}
+  - {fileID: 11400000, guid: 09604c690f18af04cb5b5c092e58bbea, type: 2}
+  - {fileID: 11400000, guid: 99031801a39c0d24aa9e21a7261e7bd4, type: 2}
+  - {fileID: 11400000, guid: 89fef0405bf181b4082ed7baa858ddcd, type: 2}
+  - {fileID: 11400000, guid: 45ad4a3100f668e4a8fda36f1a53205d, type: 2}
+  - {fileID: 11400000, guid: daac526b3d0862e4780f81c2f4dc93a9, type: 2}
+  - {fileID: 11400000, guid: f73ffe71d2d51694cb9e662cbce65ef4, type: 2}
+  - {fileID: 11400000, guid: bb9fa538b44f99542acd5ac420430ebb, type: 2}
+  - {fileID: 11400000, guid: 967ca2419ba9971429f2d3f826cf9c0b, type: 2}
+  - {fileID: 11400000, guid: 5acb6840bdec69b4d866266f6238630f, type: 2}
+  - {fileID: 11400000, guid: 66908d3cff374ff45936ac54eccb474c, type: 2}
+  - {fileID: 11400000, guid: 3ab19980313ce064a824ad4e15a621a3, type: 2}
+  - {fileID: 11400000, guid: d8f826a10ed0b2f4982803b28346a8cb, type: 2}
+  - {fileID: 11400000, guid: 939af7cb60f359047ac475bb85fd1fa1, type: 2}
+  - {fileID: 11400000, guid: 31296e8841d68524b8cdf3a2a30e6b02, type: 2}
+  - {fileID: 11400000, guid: 710f2e1600fb8b24db1a141c2d941fe5, type: 2}
+  - {fileID: 11400000, guid: ef1fc292e485aa34abd9b46229c02878, type: 2}
+  - {fileID: 11400000, guid: 7087dca445e911f49946c5523229220c, type: 2}
+  - {fileID: 11400000, guid: 769d6f8edb13e4f41a69db67c641450f, type: 2}
+  - {fileID: 11400000, guid: fbd26270c7717af44aa752a9b68263e8, type: 2}
+  - {fileID: 11400000, guid: 0883b5bf14c481a4090d4583c2e25aa7, type: 2}
+  - {fileID: 11400000, guid: 55b793070526af645b8c9d98679c2111, type: 2}
+  - {fileID: 11400000, guid: 4c38edc1c8cf78c4bb37e6fb70621c7c, type: 2}
 --- !u!1 &610533540
 GameObject:
   m_ObjectHideFlags: 0
@@ -37906,6 +38099,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -37931,6 +38125,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -37956,6 +38151,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -38159,6 +38355,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -39320,6 +39517,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -39497,6 +39695,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -41634,6 +41833,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -41908,6 +42108,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -42275,6 +42476,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -47004,6 +47206,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -47387,6 +47590,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -49070,6 +49274,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -50155,6 +50360,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -50428,6 +50634,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -53709,6 +53916,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -58059,6 +58267,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -59570,6 +59779,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -60942,6 +61152,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -62341,6 +62552,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -63803,6 +64015,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -64049,6 +64262,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -66085,6 +66299,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -68691,6 +68906,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -75596,6 +75812,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -77538,10 +77755,10 @@ RectTransform:
   - {fileID: 778563674}
   m_Father: {fileID: 3524562793853545093}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 300}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: -300}
+  m_SizeDelta: {x: 298.33334, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1289203294
 MonoBehaviour:
@@ -77649,6 +77866,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -79372,6 +79590,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -84997,6 +85216,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -85080,6 +85300,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -85567,6 +85788,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -87400,6 +87622,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -89116,6 +89339,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -89290,6 +89514,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -90251,6 +90476,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -93023,6 +93249,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -93625,6 +93852,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -94424,6 +94652,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -95210,6 +95439,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -96865,6 +97095,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -98196,6 +98427,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -98645,6 +98877,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -101031,6 +101264,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -110435,6 +110669,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -111096,6 +111331,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -115409,6 +115645,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -115938,6 +116175,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 657366318, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 100
       canStack: 0
       itemDescription: 
@@ -116979,6 +117217,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -118576,6 +118815,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -120982,6 +121222,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -123258,6 +123499,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -123699,6 +123941,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -124654,6 +124897,7 @@ MonoBehaviour:
       itemName: "M\u1ECF"
       itemIcon: {fileID: -1935324340, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 100
       canStack: 0
       itemDescription: 
@@ -125357,6 +125601,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -125549,6 +125794,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -126359,6 +126605,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -129395,6 +129642,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -129957,6 +130205,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -130366,6 +130615,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -130971,9 +131221,71 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67aa9f06da833594c8f081fb35c47222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayFabLogin
-  presets: []
   itemsData:
     items: []
+  itemsShop:
+    items: []
+  itemdad:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemIconPath: 
+    itemFilePath: 
+    itemPrice: 0
+    canStack: 0
+    itemDescription: 
+    currentstack: 0
+    realmType: 0
+    qualityType: 0
+    elementType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    hasLearned: 0
+    skillType: 0
+    enhanceLevel: 0
+    raceType: 0
+    mainEssence: 0
+    realm: 0
+    skillEffectPrefab: {fileID: 0}
+    attackRange: 0
+    cooldown: 0
+    specialEffect: 
+    healthCost: 0
+    manaCost: 0
+    spiritCost: 0
+    requiredCharacterLevel: 0
+    learnCondition: 
+    otherNote: 
+    powerCost: 0
+    lthaoCost: 0
+    mineralCost: 0
+    demonCoreCost: 0
+    devilCoreCost: 0
+    spiritStoneCost: 0
+    itemCost: 0
+    critDamage: 0
+    critRate: 0
+    armorPenetration: 0
+    trueDamage: 0
+    lifeSteal: 0
+    attackSpeed: 0
+    penetrationReduction: 0
+    critDamageReduction: 0
+    trueDamageReduction: 0
+    bonusHealth: 0
+    bonusMana: 0
+    bonusSpirit: 0
+    totalQualityAndLevel: 0
+    statCount: 0
+    animationDuration: 0
+    castTime: 0
+    networkSkillEffectPrefab: {fileID: 0}
+  playerLoginId: testLogin1
 --- !u!4 &2115921116
 Transform:
   m_ObjectHideFlags: 0
@@ -141950,6 +142262,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -145441,6 +145754,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -149088,10 +149402,10 @@ RectTransform:
   - {fileID: 7463104391810607830}
   m_Father: {fileID: 7144273505542250941}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 960, y: -3291.9446}
+  m_SizeDelta: {x: 1920, y: 242.77777}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &424645721053953668
 MonoBehaviour:
@@ -149926,10 +150240,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7902089405149136628}
   m_LocalEulerAnglesHint: {x: 194.36, y: 0, z: 180}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 225, y: -37.5}
+  m_SizeDelta: {x: 450, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &443430493800343422
 MonoBehaviour:
@@ -152171,6 +152485,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -158245,7 +158560,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!222 &651492208097822124
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -159198,6 +159513,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -163371,6 +163687,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -165219,6 +165536,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -175825,10 +176143,10 @@ RectTransform:
   - {fileID: 8243718476301053496}
   m_Father: {fileID: 3277370119124277131}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1457.5583, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 745.8334, y: 0}
+  m_SizeDelta: {x: 1457.5583, y: 2732.5928}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1108400736814086586
 MonoBehaviour:
@@ -177089,6 +177407,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -177585,6 +177904,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -177642,6 +177962,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -178113,6 +178434,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -178941,6 +179263,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -182601,6 +182924,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -183562,10 +183886,10 @@ RectTransform:
   - {fileID: 3629413878582694335}
   m_Father: {fileID: 3312437829682627999}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 627.291, y: -539.69995}
-  m_SizeDelta: {x: 1254.582, y: 155.00728}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 155.00728}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1293654947100644324
 CanvasRenderer:
@@ -186934,6 +187258,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -188635,6 +188960,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -193935,6 +194261,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -201432,6 +201759,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -201874,7 +202202,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1801271527771599323
 GameObject:
   m_ObjectHideFlags: 0
@@ -204542,6 +204870,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -207088,6 +207417,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -208182,6 +208512,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -210540,6 +210871,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -212264,10 +212596,10 @@ RectTransform:
   - {fileID: 1369401065196432821}
   m_Father: {fileID: 7339813758783123949}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 845.8334, y: -1463.8889}
+  m_SizeDelta: {x: 1491.6667, y: 2927.7778}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2066717755551798712
 GameObject:
@@ -212345,6 +212677,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -213286,6 +213619,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -215550,6 +215884,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -218492,6 +218827,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -221555,6 +221891,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -222828,6 +223165,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -223801,6 +224139,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -224301,6 +224640,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -235568,6 +235908,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -239091,10 +239432,10 @@ RectTransform:
   - {fileID: 5155784606551090306}
   m_Father: {fileID: 7144273505542250941}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 960, y: -121.388885}
+  m_SizeDelta: {x: 1920, y: 242.77777}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2766048322478442426
 MonoBehaviour:
@@ -240547,6 +240888,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -241765,10 +242107,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3277370119124277131}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1491.6667, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 745.8334, y: -2830.1853}
+  m_SizeDelta: {x: 1491.6667, y: 195.1852}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &2824735235760607671
 RectTransform:
@@ -242857,6 +243199,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -243468,6 +243811,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -245122,6 +245466,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -245921,6 +246266,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -246889,6 +247235,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -252114,6 +252461,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -252611,6 +252959,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -258461,10 +258810,10 @@ RectTransform:
   - {fileID: 6646637346195370390}
   m_Father: {fileID: 3312437829682627999}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 627.291, y: -335.95297}
-  m_SizeDelta: {x: 1254.582, y: 195.4507}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 195.4507}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3250148483902954663
 MonoBehaviour:
@@ -263903,6 +264252,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -264247,6 +264597,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -264553,6 +264904,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -278422,6 +278774,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -285863,6 +286216,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -286210,10 +286564,10 @@ RectTransform:
   - {fileID: 4039324786618372301}
   m_Father: {fileID: 7339813758783123949}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1740.8334, y: -1463.8889}
+  m_SizeDelta: {x: 298.33334, y: 2927.7778}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3954673450046286632
 GameObject:
@@ -297994,6 +298348,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -313901,6 +314256,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -326947,6 +327303,7 @@ MonoBehaviour:
     itemName: 
     itemIcon: {fileID: 0}
     itemIconPath: 
+    itemFilePath: 
     itemPrice: 0
     canStack: 0
     itemDescription: 
@@ -326969,6 +327326,7 @@ MonoBehaviour:
     itemName: 
     itemIcon: {fileID: 0}
     itemIconPath: 
+    itemFilePath: 
     itemPrice: 0
     canStack: 0
     itemDescription: 
@@ -326994,6 +327352,7 @@ MonoBehaviour:
     itemName: 
     itemIcon: {fileID: 0}
     itemIconPath: 
+    itemFilePath: 
     itemPrice: 0
     canStack: 0
     itemDescription: 
@@ -327021,6 +327380,7 @@ MonoBehaviour:
     itemName: 
     itemIcon: {fileID: 0}
     itemIconPath: 
+    itemFilePath: 
     itemPrice: 0
     canStack: 0
     itemDescription: 
@@ -331655,6 +332015,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -336913,6 +337274,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -340707,6 +341069,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -347168,6 +347531,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -348231,6 +348595,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -352831,6 +353196,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -358096,6 +358462,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -366509,6 +366876,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -367056,6 +367424,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -367655,10 +368024,10 @@ RectTransform:
   - {fileID: 1570994856}
   m_Father: {fileID: 3524562793853545093}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 300}
+  m_SizeDelta: {x: 298.33334, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &6066545454480905931
 GameObject:
@@ -370975,10 +371344,10 @@ RectTransform:
   - {fileID: 8175458317637857400}
   m_Father: {fileID: 3312437829682627999}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 627.291, y: -111.98433}
-  m_SizeDelta: {x: 1254.582, y: 195.4507}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 195.4507}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6159433531262224647
 GameObject:
@@ -371796,6 +372165,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -374587,6 +374957,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -383184,6 +383555,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -385070,6 +385442,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -389340,6 +389713,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -392936,6 +393310,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -397600,10 +397975,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7902089405149136628}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 225, y: -112.5}
+  m_SizeDelta: {x: 450, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6817400414402632675
 GameObject:
@@ -411075,6 +411450,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -411583,6 +411959,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -411969,6 +412346,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -417553,6 +417931,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -417921,10 +418300,10 @@ RectTransform:
   - {fileID: 3954000140844010236}
   m_Father: {fileID: 7144273505542250941}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 960, y: -1706.6667}
+  m_SizeDelta: {x: 1920, y: 2927.7778}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7341528214264273071
 CanvasRenderer:
@@ -421448,10 +421827,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 8122035117380248260}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 225, y: -37.5}
+  m_SizeDelta: {x: 450, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7440918738440396280
 MonoBehaviour:
@@ -426161,6 +426540,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -426608,6 +426988,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -434202,6 +434583,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -437119,6 +437501,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -441018,10 +441401,10 @@ RectTransform:
   - {fileID: 6816749362370266448}
   m_Father: {fileID: 5174703193769741149}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 225, y: -75}
+  m_SizeDelta: {x: 450, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7902248819206671805
 CanvasRenderer:
@@ -449576,10 +449959,10 @@ RectTransform:
   - {fileID: 9176428212836170649}
   m_Father: {fileID: 5174703193769741149}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 675, y: -75}
+  m_SizeDelta: {x: 450, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8122251938002647850
 MonoBehaviour:
@@ -453902,6 +454285,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -456450,6 +456834,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -458040,6 +458425,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -470360,6 +470746,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -470654,6 +471041,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -472326,6 +472714,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -485362,6 +485751,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -487461,6 +487851,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 
@@ -490550,10 +490941,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 8122035117380248260}
   m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 225, y: -112.5}
+  m_SizeDelta: {x: 450, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9176579878284813229
 CanvasRenderer:
@@ -491911,6 +492302,7 @@ MonoBehaviour:
       itemName: 
       itemIcon: {fileID: 0}
       itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
       canStack: 0
       itemDescription: 

@@ -80,6 +80,7 @@ public class ItemEquipmentPreset : ItemStatsPreset
             canStack = data.canStack,
             itemPrice = data.itemPrice,
             itemIconPath = data.itemIconPath,
+            itemFilePath = data.itemFilePath,
             realmType = data.realmType,
             qualityType = data.qualityType,
 

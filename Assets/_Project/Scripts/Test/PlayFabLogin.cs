@@ -1,25 +1,27 @@
 using PlayFab;
 using PlayFab.ClientModels;
 using PlayFab.DataModels;
-using PlayFab.Internal;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 using Newtonsoft.Json;
+using ExitGames.Client.Photon.StructWrapping;
 
 [Serializable]
 public class ItemTest
 {
     public List<ItemData> items = new List<ItemData>();
 }
-
 public class PlayFabLogin : MonoBehaviour
 {
-    PlayFabPlayer player1 = new PlayFabPlayer();
-    public List<ItemPreset> presets;
+    PlayFabPlayer player = new PlayFabPlayer();
+    PlayFabClientInstanceAPI clientApi;
     public ItemTest itemsData;
+    public ItemTest itemsShop;
+    public SkillData itemdad;
+    public string playerLoginId = "testLogin1";
 
     // Start is called before the first frame update
     void Start()
@@ -30,81 +32,176 @@ public class PlayFabLogin : MonoBehaviour
             PlayFabSettings.staticSettings.TitleId = "";
         }
 
-        player1.Login("testLogin1");
+        player.Login(playerLoginId, (clientApi) =>
+        {
+            this.clientApi = clientApi;
+            UpdateDisplayName();
+        });
     }
 
     [ContextMenu("Set Data")]
     public void SetData()
     {
-        player1.SetData(new ItemTest());
+        player.SetData(itemsData);
     }
     [ContextMenu("Get Data")]
-    public void GetData()
+    public async void GetData()
     {
-        player1.LoadData((gameData) =>
+        player.LoadPlayerData((gameData) =>
         {
             itemsData = gameData;
-            foreach (var item in itemsData.items)
-            {
-                Sprite icon = Resources.Load<Sprite>(item.itemIconPath);
-                item.itemIcon = icon;
-            }
 
+            var iconLoader = AddressableLoader.Instance.GetLoader<IconLoader>(AddressableLoaderType.Sprite.ToString());
+            var prefabLoader = AddressableLoader.Instance.GetLoader<PrefabLoader>(AddressableLoaderType.Prefab.ToString());
+            var SODataBase = ScriptableObjectLoader.Instance;
+
+            for (int i = 0; i < itemsData.items.Count; i++)
+            {
+                var item = itemsData.items[i];
+                var itemData = SODataBase.GetItem(item.itemId);
+
+                var sprite = iconLoader.Get(item.itemIconPath);
+                itemData.itemIcon = sprite;
+
+                if (itemData is HeroData heroData)
+                {
+                    var heroPrefab = prefabLoader.Get(itemData.itemFilePath);
+                    heroData.heroPrefab = heroPrefab;
+
+                    for (int h = 0; h < heroData.skillDatas.Count; h++)
+                    {
+                        var skill = heroData.skillDatas[h];
+
+                        var skillData = SODataBase.GetItem(skill.itemId) as SkillData;
+                        SetSkilldata(iconLoader, prefabLoader, h, skillData);
+                        heroData.skillDatas[h] = skillData;
+                        itemdad = heroData.skillDatas[h];
+                    }
+
+                    for (int s = 0; s < heroData.techniqueDatas.Count; s++)
+                    {
+                        var technique = heroData.techniqueDatas[s];
+                        var techniqueData = SODataBase.GetItem(technique.itemId) as TechniqueData;
+
+                        heroData.techniqueDatas[s] = techniqueData;
+                    }
+
+                    itemsData.items[i] = heroData;
+                    continue;
+                }
+
+                if (itemData is SkillData skillDatas)
+                {
+                    SetSkilldata(iconLoader, prefabLoader, i, skillDatas);
+                    continue;
+                }
+
+                itemsData.items[i] = itemData;
+            }
         });
     }
-    [ContextMenu("To Json")]
-    public void ToJson()
+    [ContextMenu("Get Shop Data")]
+    public async void GetShopData()
     {
-        List<ItemData> items = new List<ItemData>();
-        foreach (var item in presets)
+        player.LoadShopData((gameData) =>
         {
-            items.Add(item.GetItemData());
-        }
-        ItemJsonCreator.CreateItemJson(items);
+            itemsShop = gameData;
+
+            var iconLoader = AddressableLoader.Instance.GetLoader<IconLoader>(AddressableLoaderType.Sprite.ToString());
+            var prefabLoader = AddressableLoader.Instance.GetLoader<PrefabLoader>(AddressableLoaderType.Prefab.ToString());
+            var SODataBase = ScriptableObjectLoader.Instance;
+
+            for (int i = 0; i < itemsShop.items.Count; i++)
+            {
+                var item = itemsShop.items[i];
+                var itemData = SODataBase.GetItem(item.itemId);
+
+                var sprite = iconLoader.Get(item.itemIconPath);
+                itemData.itemIcon = sprite;
+
+                if (itemData is HeroData heroData)
+                {
+                    var heroPrefab = prefabLoader.Get(itemData.itemFilePath);
+                    heroData.heroPrefab = heroPrefab;
+
+                    for (int h = 0; h < heroData.skillDatas.Count; h++)
+                    {
+                        var skill = heroData.skillDatas[h];
+
+                        var skillData = SODataBase.GetItem(skill.itemId) as SkillData;
+                        SetSkillShopdata(iconLoader, prefabLoader, h, skillData);
+                        heroData.skillDatas[h] = skillData;
+                        itemdad = heroData.skillDatas[h];
+                    }
+
+                    for (int s = 0; s < heroData.techniqueDatas.Count; s++)
+                    {
+                        var technique = heroData.techniqueDatas[s];
+                        var techniqueData = SODataBase.GetItem(technique.itemId) as TechniqueData;
+
+                        heroData.techniqueDatas[s] = techniqueData;
+                    }
+
+                    itemsShop.items[i] = heroData;
+                    continue;
+                }
+
+                if (itemData is SkillData skillDatas)
+                {
+                    SetSkillShopdata(iconLoader, prefabLoader, i, skillDatas);
+                    continue;
+                }
+
+                itemsShop.items[i] = itemData;
+            }
+        });
     }
-    [ContextMenu("Load item preset")]
-    public void LoadItemsPreset()
+
+    private void SetSkilldata(IconLoader iconLoader, PrefabLoader prefabLoader, int i, SkillData skillDatas)
     {
-        presets = ItemPresetLoader.GetAllItemPresets();
+        skillDatas.itemIcon = iconLoader.Get(skillDatas.itemIconPath);
+        skillDatas.skillEffectPrefab = prefabLoader.Get(skillDatas.itemFilePath);
+
+        itemsData.items[i] = skillDatas;
     }
-}
-public static class ItemJsonCreator
-{
-    public static void CreateItemJson(List<ItemData> itemList)
+    private void SetSkillShopdata(IconLoader iconLoader, PrefabLoader prefabLoader, int i, SkillData skillDatas)
     {
-        ItemTest itemTest = new ItemTest();
-        itemTest.items = itemList;
-        string json = JsonConvert.SerializeObject(itemTest);
+        skillDatas.itemIcon = iconLoader.Get(skillDatas.itemIconPath);
+        skillDatas.skillEffectPrefab = prefabLoader.Get(skillDatas.itemFilePath);
 
-        string path = Application.dataPath + "/item.json";
-
-        File.WriteAllText(path, json);
-
-        Debug.Log("JSON created at: " + path);
-        Debug.Log(json);
+        itemsShop.items[i] = skillDatas;
     }
-}
-public static class ItemPresetLoader
-{
-    public static List<ItemPreset> GetAllItemPresets()
+    private void UpdateDisplayName()
     {
-        List<ItemPreset> items = new List<ItemPreset>();
-
-        string[] guids = AssetDatabase.FindAssets("t:ItemPreset",
-            new[] { "Assets/_Project/Data/OS" });
-
-        foreach (string guid in guids)
+        clientApi.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest
         {
-            string path = AssetDatabase.GUIDToAssetPath(guid);
-            ItemPreset item = AssetDatabase.LoadAssetAtPath<ItemPreset>(path);
+            DisplayName = "Kiên ngô"
+        }, result =>
+        {
+            Debug.Log("The player's display name is now: " + result.DisplayName);
+        }, error => Debug.LogError(error.GenerateErrorReport()));
+    }
 
-            if (item != null)
-                items.Add(item);
-        }
+    [ContextMenu("Get Player Profile")]
+    public void GetPlayerProfile()
+    {
+        clientApi.GetPlayerProfile(new GetPlayerProfileRequest()
+        {
+            PlayFabId = playerLoginId,
+            ProfileConstraints = new PlayerProfileViewConstraints()
+            {
+                ShowDisplayName = true
+            }
+        },
+        result =>
+        {
 
-        return items;
+            Debug.Log("The player's DisplayName profile data is: " + result.PlayerProfile.DisplayName);
+        },
+        error => Debug.LogError(error.GenerateErrorReport()));
     }
 }
+
 class PlayFabPlayer
 {
     public bool loggedIn = false;
@@ -117,7 +214,7 @@ class PlayFabPlayer
     private PlayFabClientInstanceAPI clientApi;
     private PlayFabDataInstanceAPI dataApi;
 
-    public void Login(string customId)
+    public void Login(string customId, Action<PlayFabClientInstanceAPI> callback)
     {
         clientApi = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
 
@@ -128,6 +225,7 @@ class PlayFabPlayer
             PlayFabId = result.PlayFabId;
             loggedIn = true;
             dataApi = new PlayFabDataInstanceAPI(clientApi.authenticationContext);
+            callback?.Invoke(clientApi);
             Debug.Log("Login call succeeded.");
         }, error =>
         {
@@ -160,11 +258,67 @@ class PlayFabPlayer
             Debug.LogError(error.GenerateErrorReport());
         });
     }
+    public void LoadShopData(Action<ItemTest> callback)
+    {
+        clientApi.GetTitleData(new GetTitleDataRequest(),
+        r =>
+        {
+            if (r.Data != null && r.Data.ContainsKey("shop"))
+            {
+                string json = r.Data["shop"];
+
+                Debug.Log(json);
+
+                ItemTest item = JsonConvert.DeserializeObject<ItemTest>(json);
+
+                callback?.Invoke(item);
+
+                Debug.Log(item.items.Count);
+                Debug.Log("Load success");
+            }
+        },
+        error =>
+        {
+            Debug.LogError(error.GenerateErrorReport());
+        });
+    }
+    public void LoadPlayerData(Action<ItemTest> callback)
+    {
+        clientApi.GetUserData(new GetUserDataRequest(),
+        result =>
+        {
+            if (result.Data != null)
+            {
+                var r = result;
+                if (r.Data != null && r.Data.ContainsKey("inventory"))
+                {
+                    string json = r.Data["inventory"].Value;
+
+                    Debug.Log(json);
+
+                    ItemTest item = JsonConvert.DeserializeObject<ItemTest>(json);
+                    callback?.Invoke(item);
+                    Debug.Log("Load success");
+                }
+            }
+            else
+            {
+                Debug.Log("Không có player data");
+            }
+        },
+        error =>
+        {
+            Debug.LogError(error.GenerateErrorReport());
+        });
+    }
+
+
+
     public void SetData(ItemTest items)
     {
-        string key = "Inventory";
+        string key = "inventory";
 
-        string json = JsonUtility.ToJson(items);
+        string json = JsonConvert.SerializeObject(items);
         clientApi.UpdateUserData(new UpdateUserDataRequest
         {
             Data = new Dictionary<string, string> { { key, json } }

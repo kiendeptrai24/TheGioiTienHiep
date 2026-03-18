@@ -1,4 +1,8 @@
 using System.Collections.Generic;
+using NUnit.Framework;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewHeroPreset", menuName = "RPG/Items/Hero Preset")]
@@ -28,7 +32,16 @@ public class HeroPreset : ItemStatsPreset
     public List<TechniquePreset> techniqueDatas;
     public Vector2Int championIndex = new Vector2Int(0, 0);
     public GameObject heroPrefab;
-
+    public override void OnValidate()
+    {
+#if UNITY_EDITOR
+        base.OnValidate();
+        if (heroPrefab != null)
+        {
+            itemFilePath = heroPrefab.name;
+        }
+#endif
+    }
     public override ItemData GetItemData()
     {
         ItemData data = base.GetItemData();
@@ -61,6 +74,8 @@ public class HeroPreset : ItemStatsPreset
             magicalDefensePoint = magicalDefensePoint,
             spiritDefensePoint = spiritDefensePoint,
             championIndex = championIndex,
+            heroPrefab = heroPrefab,
+            itemFilePath = itemFilePath
         };
         heroPreset.statsRealmData = statsRealmPreset.GetStats();
         heroPreset.statsRaceData = statsRacePreset.GetStats();

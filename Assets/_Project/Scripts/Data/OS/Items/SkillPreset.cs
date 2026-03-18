@@ -76,7 +76,17 @@ public class SkillPreset : ItemPreset
     [Header("Animation")]
     public float animationDuration;
     public float castTime;
+    public override void OnValidate()
+    {
 
+#if UNITY_EDITOR
+        base.OnValidate();
+        if (skillEffectPrefab != null)
+        {
+            itemFilePath = skillEffectPrefab.name;
+        }
+#endif
+    }
     [ContextMenu("Reset To Default")]
     public void ResetToDefault()
     {
@@ -484,7 +494,8 @@ public class SkillPreset : ItemPreset
             totalQualityAndLevel = totalQualityAndLevel,
             statCount = statCount,
             animationDuration = animationDuration,
-            castTime = castTime
+            castTime = castTime,
+            itemFilePath = itemFilePath
         };
     }
 }

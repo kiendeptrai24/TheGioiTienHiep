@@ -1,6 +1,7 @@
 
 
 
+using Newtonsoft.Json;
 using UnityEngine;
 
 public abstract class ItemStatsPreset : ItemPreset
