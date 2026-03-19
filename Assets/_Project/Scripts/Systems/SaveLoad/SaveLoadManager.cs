@@ -1,5 +1,6 @@
 
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,41 +8,22 @@ using UnityEngine;
 public class SaveLoadManager : Singleton<SaveLoadManager>
 {
     public ISaveManager saveManager;
-    [SerializeField] private List<ItemPreset> listItemPreset;
-    private GameData gameData;
-
+    [SerializeField] private GameData gameData;
     protected override void Awake()
     {
         base.Awake();
-        SetupData();
-        saveManager = new SaveLoadOS(gameData, FindAllSaveManagers());
+        saveManager = GetComponent<ISaveManager>();
+        saveManager.OnDataReadyToLoad += OnItemPlayerLoad;
     }
-    protected override void Start()
+
+    private void OnItemPlayerLoad(GameData data)
     {
-        base.Start();
+        gameData = data;
         saveManager.LoadGame();
     }
-    private void SetupData()
+    protected override void OnApplicationQuit()
     {
-        FindAllSaveManagers();
-        LoadOSToGameData();
-    }
-    private List<ISaveable> FindAllSaveManagers()
-    {
-        IEnumerable<ISaveable> saveManagers = Resources.FindObjectsOfTypeAll<MonoBehaviour>().OfType<ISaveable>();
-
-        return new List<ISaveable>(saveManagers);
-    }
-    private void LoadOSToGameData()
-    {
-        gameData = new GameData();
-        foreach (var itemData in listItemPreset)
-        {
-            gameData.itemDatas.Add(itemData.GetItemData());
-        }
-    }
-    new private void OnDestroy()
-    {
+        base.OnApplicationQuit();
         saveManager.SaveGame();
     }
 }

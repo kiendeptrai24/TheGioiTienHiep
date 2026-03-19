@@ -34,7 +34,7 @@ namespace TGTH.Mobile
         {
             inventoryCenterManager = InventoryCenterManager.Instance;
             inventoryCenterManager.OnItemExistingChampionDataChanged += SetItemData;
-            SetItemData(inventoryCenterManager.GetDataType(ItemType.Champion));
+            SetItemData(inventoryCenterManager.GetDataType(ItemType.Champion, true));
         }
 
         private void SetItemData(List<ItemData> list)

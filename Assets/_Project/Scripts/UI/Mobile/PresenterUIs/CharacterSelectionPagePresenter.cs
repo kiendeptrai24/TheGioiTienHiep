@@ -18,6 +18,8 @@ namespace TGTH.Mobile
             Init();
             inventoryCenterManager = InventoryCenterManager.Instance;
             inventoryCenterManager.OnItemCharacterChanged += OnItemCharacterChanged;
+            OnItemCharacterChanged(inventoryCenterManager.GetCharacterYouHave());
+
             view.OnStartClicked += OnStartClicked;
         }
 

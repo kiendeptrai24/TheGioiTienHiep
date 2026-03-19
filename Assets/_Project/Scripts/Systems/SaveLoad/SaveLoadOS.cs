@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,6 +8,9 @@ public class SaveLoadOS : ISaveManager
 {
     private GameData gameData;
     private List<ISaveable> saveables = new List<ISaveable>();
+
+    public event Action<GameData> OnDataReadyToLoad;
+
     public SaveLoadOS(GameData gameData, List<ISaveable> saveables)
     {
         this.gameData = gameData;

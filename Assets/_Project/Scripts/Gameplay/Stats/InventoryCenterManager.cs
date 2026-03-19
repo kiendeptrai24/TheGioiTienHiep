@@ -11,13 +11,42 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     [SerializeField] private HeroPreset heroPreset;
     public ItemData playerCham;
     public HeroData heroData;
+
+    /// <summary>
+    /// all character
+    /// </summary>
     [SerializeField] private List<ItemData> allItemsCharacter = new List<ItemData>();
-    [SerializeField] private List<ItemData> listItemCharacter = new List<ItemData>();
-    [SerializeField] private List<ItemData> listItemDatas = new List<ItemData>();
-    [SerializeField] private List<ItemData> listItemDatasUsed = new List<ItemData>();
-    [SerializeField] private List<ItemData> listItemDatasExisting = new List<ItemData>();
-    public List<HeroData> listItemDatasChampion = new List<HeroData>();
+
+    /// <summary>
+    /// all item
+    /// </summary>
     public List<ItemData> allItemDatas = new List<ItemData>();
+
+    /// <summary>
+    /// character you have
+    /// </summary>
+    [SerializeField] private List<ItemData> listItemCharacter = new List<ItemData>();
+
+    /// <summary>
+    /// Item Shop
+    /// </summary>
+    [SerializeField] private List<ItemData> listItemShopDatas = new List<ItemData>();
+
+    /// <summary>
+    /// item player own
+    /// </summary>
+    [SerializeField] private List<ItemData> listItemDatas = new List<ItemData>();
+
+    /// <summary>
+    /// item exist when player use
+    /// </summary>
+    [SerializeField] private List<ItemData> listItemDatasExisting = new List<ItemData>();
+
+    /// <summary>
+    /// charactor use in team
+    /// </summary>
+    public List<HeroData> listItemDatasChampion = new List<HeroData>();
+
     public int maxChampion = 4;
     override protected void Awake()
     {
@@ -27,6 +56,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
             playerCham = heroPreset.GetItemData();
             heroData = playerCham as HeroData;
         }
+        LoadComponent();
     }
     #region Event General
 
@@ -44,17 +74,20 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public event Action<List<ItemData>> OnItemExistingTechniqueDataChanged;
     public event Action<ItemData> OnItemChanged;
     #endregion
-    public event Action<ItemData> OnItemPlayerChanged;
 
+    public event Action<ItemData> OnItemPlayerChanged;
     public event Action<List<ItemData>> OnItemCharacterChanged;
+
     private bool isItemChange = false;
     private bool isEquitmentChange = false;
     private bool isSkillChange = false;
     private bool isChampionChange = false;
     private bool isTechniqueChange = false;
     //public event Action OnDataChanged;
+    public List<ItemData> GetItemShopData() => listItemShopDatas;
     public List<ItemData> GetAllCharacter() => allItemsCharacter;
     public List<ItemData> GetCharacterYouHave() => listItemCharacter;
+
     public void AddCharacter(ItemData item)
     {
         listItemCharacter.Add(item);
@@ -234,8 +267,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         base.LoadComponent();
         listItemDatas.Clear();
         listItemDatasExisting.Clear();
-        listItemDatasUsed.Clear();
         allItemsCharacter.Clear();
+        listItemShopDatas.Clear();
         listItemCharacter.Clear();
         listItemDatasChampion.Clear();
         allItemDatas.Clear();
@@ -334,19 +367,32 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
 
     public void LoadData(GameData _data)
     {
+        // load item you is owned
         foreach (var item in _data.itemDatas)
         {
             var heroData = item as HeroData;
             if (heroData != null && heroData.isCharactor)
             {
+                listItemCharacter.Add(item);
+            }
+
+            listItemDatas.Add(item);
+            listItemDatasExisting.Add(item);
+        }
+        // load all item and all character item
+        foreach (var item in _data.allItemsDatas)
+        {
+            allItemDatas.Add(item);
+            var heroData = item as HeroData;
+            if (heroData != null && heroData.isCharactor)
+            {
                 allItemsCharacter.Add(item);
             }
-            else
-            {
-                listItemDatas.Add(item);
-                listItemDatasExisting.Add(item);
-                allItemDatas.Add(item);
-            }
+        }
+        // load item shop
+        foreach (var item in _data.itemShopDatas)
+        {
+            listItemShopDatas.Add(item);
         }
     }
     public void SaveGame(ref GameData _data)

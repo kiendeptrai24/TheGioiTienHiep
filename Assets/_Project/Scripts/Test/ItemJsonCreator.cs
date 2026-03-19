@@ -7,8 +7,8 @@ public static class ItemJsonCreator
 {
     public static void CreateItemJson(List<ItemData> itemList)
     {
-        ItemTest itemTest = new ItemTest();
-        itemTest.items = itemList;
+        PlayerDataDTO itemTest = new PlayerDataDTO();
+        itemTest.inventoryItems = itemList;
         string json = JsonConvert.SerializeObject(itemTest);
 
         string path = Application.dataPath + "/item.json";

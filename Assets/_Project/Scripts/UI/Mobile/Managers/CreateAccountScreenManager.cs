@@ -16,7 +16,7 @@ public class CreateAccountScreenManager : ScreenManager
         m_Screens.Add(m_CreateNV1Screen.gameObject.name, m_CreateNV1Screen);
         m_Screens.Add(m_CreateNV2Screen.gameObject.name, m_CreateNV2Screen);
         m_Screens.Add(m_CreateNV3Screen.gameObject.name, m_CreateNV3Screen);
-        defaultScreen = m_CreateNV1Screen.gameObject.name;
+        defaultScreen = m_LoginScreen.gameObject.name;
     }
 
 

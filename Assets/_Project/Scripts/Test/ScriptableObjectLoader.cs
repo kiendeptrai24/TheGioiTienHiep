@@ -15,6 +15,8 @@ public class ScriptableObjectLoader : Singleton<ScriptableObjectLoader>
         base.Awake();
         foreach (var item in baseItems)
         {
+            if (items.ContainsKey(item.itemId))
+                continue;
             items.Add(item.itemId, item);
         }
     }

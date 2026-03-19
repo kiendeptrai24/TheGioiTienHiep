@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ShopUseSystem : TGTHMonoBehaviour, IUsable
 {
-    private ShopPageManager shopPageManager;
     [SerializeField] private InventoryPageManager inventoryPageManager;
     protected override void Awake()
     {
@@ -15,19 +14,11 @@ public class ShopUseSystem : TGTHMonoBehaviour, IUsable
     {
         var inventoryItem = uiItem.inventoryItem;
         if (inventoryItem == null) return;
-        var isSuccess = inventoryPageManager.AddItemData(inventoryItem.data, quantity);
-        if (isSuccess)
-        {
-            if(shopPageManager.RemoveInventoryItem(inventoryItem) == false)
-            {
-                inventoryPageManager.RemoveInventoryItem(inventoryItem);
-            }
-        }
+        inventoryPageManager.AddItemData(inventoryItem.data, quantity);
     }
 
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        shopPageManager = GetComponent<ShopPageManager>();
     }
 }

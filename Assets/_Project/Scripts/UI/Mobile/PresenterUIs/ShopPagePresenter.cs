@@ -13,12 +13,13 @@ namespace TGTH.Mobile
         [SerializeField] private ShopPageView view;
         [SerializeField] private IItemDetailPageView itemDetailPageView;
         [SerializeField] private ShopUseSystem shopUseSystem;
-        private List<InventoryItem> listItemDatas;
+        private List<InventoryItem> listItemDatas = new List<InventoryItem>();
         private UIItemSlotBase currentItemSelect;
         private int currentlyDraggedItemIndex = -1;
         public event Action<int> OnItemActionRequested;
         public event Action<int> OnStartDragging;
         private bool isDraging = false;
+        private InventoryCenterManager inventoryCenterManager;
         private static string RemoveDiacritics(string text)
         {
             if (string.IsNullOrEmpty(text))
@@ -37,6 +38,9 @@ namespace TGTH.Mobile
         }
         protected override void Awake()
         {
+            base.Awake();
+            inventoryCenterManager = InventoryCenterManager.Instance;
+
             ProfileManager.Instance.OnProfileChanged += (profile) =>
             {
                 view.priceText.text = profile.price.ToString();
@@ -48,8 +52,10 @@ namespace TGTH.Mobile
             view.OnSearchItemSubmit += SearchItemInventory;
             view.ToggleMouseFollower(false);
 
-            InitializeInventoryUI(50);
-            ShowAllItems();
+            var itemdatas = inventoryCenterManager.GetItemShopData();
+
+            InitializeInventoryUI(itemdatas.Count);
+            SetInventoryData(itemdatas);
         }
 
         private void SearchItemInventory(string value)
@@ -86,7 +92,6 @@ namespace TGTH.Mobile
             {
                 uiItem.OnItemClicked += HandleItemClicked;
                 uiItem.OnItemBeginDrag += HandleBeginDrag;
-                uiItem.OnItemDroppedOn += HandleItemDropped;
                 uiItem.OnItemEndDrag += HandleEndDrag;
                 uiItem.OnRightMouseBtnClick += HandleItemRightClick;
             }
@@ -95,21 +100,14 @@ namespace TGTH.Mobile
         {
             view.RefreshInventory(listItemDatas);
         }
-        private void SetItemData(List<ItemData> items)
+
+        public void SetInventoryData(List<ItemData> items)
         {
-            if (listItemDatas == null)
-                listItemDatas = new List<InventoryItem>();
             listItemDatas.Clear();
             foreach (var item in items)
             {
                 listItemDatas.Add(new InventoryItem(item));
             }
-            ShowAllItems();
-        }
-
-        public void SetInventoryData(List<InventoryItem> items)
-        {
-            listItemDatas = items;
             ShowAllItems();
         }
 
@@ -271,18 +269,6 @@ namespace TGTH.Mobile
         {
             isDraging = false;
             ResetDrag();
-        }
-
-        private void HandleItemDropped(UIItemSlotBase uiItem)
-        {
-            return;
-            if (currentlyDraggedItemIndex == -1) return;
-            int dropIndex = view.listOfUIItems.IndexOf(uiItem);
-
-            if (dropIndex == -1) return;
-
-            SwapItemsUI(currentlyDraggedItemIndex, dropIndex);
-            ItemClicked(uiItem);
         }
 
         private void SwapItemsUI(int from, int to)
