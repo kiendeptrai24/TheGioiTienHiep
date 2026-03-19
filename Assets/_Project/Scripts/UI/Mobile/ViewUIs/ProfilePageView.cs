@@ -25,7 +25,6 @@ namespace TGTH.Mobile
         }
         public void ShowUserName(string userName)
         {
-            Debug.Log(userName);
             userNameField.text = userName;
             userIdTxt.text = userName;
         }

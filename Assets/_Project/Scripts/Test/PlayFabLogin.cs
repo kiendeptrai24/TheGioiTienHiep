@@ -11,7 +11,7 @@ public class PlayFabLogin : MonoBehaviour
 {
     public PlayFabPlayer player = new PlayFabPlayer();
     PlayFabClientInstanceAPI clientApi;
-    public PlayerDataDTO itemsData;
+    public ItemDataDTO itemsData;
     public GameData gameData = new GameData();
     public string playerLoginId = "testLogin1";
     public Action<GameData> OnLoadGameFormPlayfab;
@@ -27,9 +27,11 @@ public class PlayFabLogin : MonoBehaviour
         {
             this.clientApi = clientApi;
             UpdateDisplayName();
+            saveLoadRemotes.Add(new ProfileService(this));
             saveLoadRemotes.Add(new PlayerItemInventoryService(this));
             saveLoadRemotes.Add(new ShopService(this));
             saveLoadRemotes.Add(new InventoryService(this));
+            saveLoadRemotes.Add(new TeamInventoryService(this));
             LoadGameData();
         });
     }
@@ -51,12 +53,12 @@ public class PlayFabLogin : MonoBehaviour
             });
         }
     }
-
-    public void SetData(GameData gameData)
+    public void SaveGameData()
     {
-        itemsData = new PlayerDataDTO();
-        itemsData.inventoryItems = gameData.itemDatas;
-        player.SetData(itemsData);
+        foreach (var item in saveLoadRemotes)
+        {
+            item.SaveGame(gameData);
+        }
     }
     private void UpdateDisplayName()
     {

@@ -56,11 +56,18 @@ namespace TGTH.Mobile
         public void ShowAllItems(List<InventoryItem> listItemDatas)
         {
             if (listItemDatas == null) return;
-            if (listOfUIItems.Count < listItemDatas.Count) return;
             ClearAllSlots();
-            for (int i = 0; i < listItemDatas.Count; i++)
+            for (int i = 0; i < listOfUIItems.Count; i++)
             {
-                listOfUIItems[i].SetItem(listItemDatas[i]);
+                if (i >= listItemDatas.Count)
+                {
+                    listOfUIItems[i].ResetData();
+                    Debug.Log("ResetData");
+                }
+                else
+                {
+                    listOfUIItems[i].SetItem(listItemDatas[i]);
+                }
             }
         }
     }

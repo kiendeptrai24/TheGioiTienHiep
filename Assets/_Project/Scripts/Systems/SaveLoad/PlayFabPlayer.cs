@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
 using PlayFab.DataModels;
+using PlayFab.Internal;
 using UnityEngine;
 
 public class PlayFabPlayer
@@ -39,7 +40,7 @@ public class PlayFabPlayer
             Debug.LogError(error.GenerateErrorReport());
         });
     }
-    public void LoadData(Action<PlayerDataDTO> callback)
+    public void LoadData(Action<ItemDataDTO> callback)
     {
         clientApi.GetTitleData(new GetTitleDataRequest(),
         r =>
@@ -48,7 +49,7 @@ public class PlayFabPlayer
             {
                 string json = r.Data["inventory"];
 
-                PlayerDataDTO item = JsonConvert.DeserializeObject<PlayerDataDTO>(json);
+                ItemDataDTO item = JsonConvert.DeserializeObject<ItemDataDTO>(json);
                 callback?.Invoke(item);
             }
         },
@@ -57,7 +58,49 @@ public class PlayFabPlayer
             Debug.LogError(error.GenerateErrorReport());
         });
     }
-    public void LoadShopData(Action<PlayerDataDTO> callback)
+    public void LoadTeamData(Action<HeroDataDTO> callback)
+    {
+        clientApi.GetUserData(new GetUserDataRequest(),
+        result =>
+        {
+            if (result.Data != null)
+            {
+                var r = result;
+                if (r.Data != null && r.Data.ContainsKey("team"))
+                {
+                    string json = r.Data["team"].Value;
+
+                    HeroDataDTO item = JsonConvert.DeserializeObject<HeroDataDTO>(json);
+
+                    callback?.Invoke(item);
+                }
+            }
+        },
+        error =>
+        {
+            Debug.LogError(error.GenerateErrorReport());
+        });
+    }
+    public void SetTeamData(GameData gameData)
+    {
+        string key = "team";
+        HeroDataDTO items = new HeroDataDTO();
+        foreach (var item in gameData.itemDatasInTeam)
+        {
+            items.inventoryItems.Add(item);
+            if (item is HeroData heroData)
+            {
+                items.championsIndex.Add(heroData.championIndex);
+            }
+        }
+
+        string json = JsonConvert.SerializeObject(items);
+        clientApi.UpdateUserData(new UpdateUserDataRequest
+        {
+            Data = new Dictionary<string, string> { { key, json } }
+        }, r => { }, e => Debug.LogError(e.GenerateErrorReport()));
+    }
+    public void LoadShopData(Action<ItemDataDTO> callback)
     {
         clientApi.GetTitleData(new GetTitleDataRequest(),
         r =>
@@ -66,7 +109,7 @@ public class PlayFabPlayer
             {
                 string json = r.Data["shop"];
 
-                PlayerDataDTO item = JsonConvert.DeserializeObject<PlayerDataDTO>(json);
+                ItemDataDTO item = JsonConvert.DeserializeObject<ItemDataDTO>(json);
 
                 callback?.Invoke(item);
             }
@@ -76,7 +119,7 @@ public class PlayFabPlayer
             Debug.LogError(error.GenerateErrorReport());
         });
     }
-    public void LoadPlayerData(Action<PlayerDataDTO> callback)
+    public void LoadPlayerData(Action<ItemDataDTO> callback)
     {
         clientApi.GetUserData(new GetUserDataRequest(),
         result =>
@@ -88,7 +131,7 @@ public class PlayFabPlayer
                 {
                     string json = r.Data["inventory"].Value;
 
-                    PlayerDataDTO item = JsonConvert.DeserializeObject<PlayerDataDTO>(json);
+                    ItemDataDTO item = JsonConvert.DeserializeObject<ItemDataDTO>(json);
                     callback?.Invoke(item);
                 }
             }
@@ -99,14 +142,53 @@ public class PlayFabPlayer
         });
     }
 
-    public void SetData(PlayerDataDTO items)
+    public void SetItemInvenoryData(GameData gameData)
     {
         string key = "inventory";
+        ItemDataDTO items = new ItemDataDTO();
+        items.inventoryItems = gameData.itemDatas;
 
         string json = JsonConvert.SerializeObject(items);
         clientApi.UpdateUserData(new UpdateUserDataRequest
         {
             Data = new Dictionary<string, string> { { key, json } }
-        }, r => {}, e => Debug.LogError(e.GenerateErrorReport()));
+        }, r => { }, e => Debug.LogError(e.GenerateErrorReport()));
+    }
+
+    public void LoadProfile(Action<PlayerProfileDTO> callback)
+    {
+        clientApi.GetUserData(new GetUserDataRequest(),
+        result =>
+        {
+            if (result.Data != null)
+            {
+                var r = result;
+                if (r.Data != null && r.Data.ContainsKey("profile"))
+                {
+                    string json = r.Data["profile"].Value;
+
+                    PlayerProfileDTO item = JsonConvert.DeserializeObject<PlayerProfileDTO>(json);
+                    callback?.Invoke(item);
+                }
+            }
+        },
+        error =>
+        {
+            Debug.LogError(error.GenerateErrorReport());
+        });
+    }
+    public void SetProfile(GameData gameData)
+    {
+        string key = "profile";
+        PlayerProfileDTO profile = new PlayerProfileDTO();
+        profile.coins = gameData.coins;
+        profile.playerName = gameData.playerName;
+
+
+        string json = JsonConvert.SerializeObject(profile);
+        clientApi.UpdateUserData(new UpdateUserDataRequest
+        {
+            Data = new Dictionary<string, string> { { key, json } }
+        }, r => { }, e => Debug.LogError(e.GenerateErrorReport()));
     }
 }

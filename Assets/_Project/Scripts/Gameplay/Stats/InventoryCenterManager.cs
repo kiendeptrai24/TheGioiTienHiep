@@ -45,7 +45,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     /// <summary>
     /// charactor use in team
     /// </summary>
-    public List<HeroData> listItemDatasChampion = new List<HeroData>();
+    public List<ItemData> listItemDatasChampion = new List<ItemData>();
 
     public int maxChampion = 4;
     override protected void Awake()
@@ -87,6 +87,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public List<ItemData> GetItemShopData() => listItemShopDatas;
     public List<ItemData> GetAllCharacter() => allItemsCharacter;
     public List<ItemData> GetCharacterYouHave() => listItemCharacter;
+    public List<ItemData> GetDatasChampion() => listItemDatasChampion;
+
 
     public void AddCharacter(ItemData item)
     {
@@ -102,9 +104,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     }
     public void SetItemChampionData(List<ItemData> data)
     {
-        listItemDatasChampion = data
-            .OfType<HeroData>()
-            .ToList();
+        listItemDatasChampion = data;
         OnListItemDatasChampionChanged?.Invoke(data);
     }
     public void ItemPlayerChanged(ItemData item)
@@ -389,6 +389,10 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
                 allItemsCharacter.Add(item);
             }
         }
+        foreach (var item in _data.itemDatasInTeam)
+        {
+            listItemDatasChampion.Add(item);
+        }
         // load item shop
         foreach (var item in _data.itemShopDatas)
         {
@@ -397,6 +401,10 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     }
     public void SaveGame(ref GameData _data)
     {
+        _data.itemDatas.Clear();
+        _data.itemDatasInTeam.Clear();
 
+        _data.itemDatas = listItemDatasExisting;
+        _data.itemDatasInTeam = listItemDatasChampion;
     }
 }

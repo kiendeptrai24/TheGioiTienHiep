@@ -56,7 +56,7 @@ namespace Photon.Chat.TGTHChat
             chatClient.UseBackgroundWorkerForSending = true;
 #endif
 
-            var auth = new AuthenticationValues(profileManager.GetProfileUser().userId);
+            var auth = new AuthenticationValues(profileManager.GetProfile().userId);
 
             clientState = ClientChatState.Connecting;
             chatClient.ChatRegion = "Asia";
@@ -93,7 +93,7 @@ namespace Photon.Chat.TGTHChat
         public void OnDisconnected()
         {
             clientState = ClientChatState.Disconnected;
-            chatClient.SetOnlineStatus((int)UserStatus.Online, profileManager.GetProfileUser().userName);
+            chatClient.SetOnlineStatus((int)UserStatus.Online, profileManager.GetProfile().userName);
             OnClientChatDisconnected?.Invoke();
         }
 
@@ -102,7 +102,7 @@ namespace Photon.Chat.TGTHChat
             Debug.Log("[PhotonChat] Connected");
 
             clientState = ClientChatState.Connected;
-            chatClient.SetOnlineStatus((int)UserStatus.Online, profileManager.GetProfileUser().userName);
+            chatClient.SetOnlineStatus((int)UserStatus.Online, profileManager.GetProfile().userName);
 
             chatClient.Subscribe(new[] { "Global" });
             OnClientChatConnected?.Invoke();

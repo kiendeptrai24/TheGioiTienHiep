@@ -22,7 +22,7 @@ namespace TGTH.Mobile
         }
         private void Init()
         {
-            var listFriend = profileManager.GetProfileUser().GetListFriend();
+            var listFriend = profileManager.GetProfile().GetListFriend();
             for (int i = 0; i < listFriend.Count; i++)
             {
                 UIItemFriend uiItemFriend = Instantiate(view.uIItemFriend, view.contentPanel);

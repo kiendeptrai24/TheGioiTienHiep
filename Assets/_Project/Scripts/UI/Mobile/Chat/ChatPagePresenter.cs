@@ -108,7 +108,7 @@ public class ChatPagePresenter : TGTHMonoBehaviour
 
         var msg = new Hashtable
         {
-            { "name", profileManager.GetProfileUser().userName },
+            { "name", profileManager.GetProfile().userName },
             { "text", text }
         };
 
@@ -126,7 +126,7 @@ public class ChatPagePresenter : TGTHMonoBehaviour
             return;
         var msg = new Hashtable
         {
-            { "name", profileManager.GetProfileUser().userName },
+            { "name", profileManager.GetProfile().userName },
             { "text", text }
         };
         Debug.Log("SendPrivateMessage: " + nameFriend);

@@ -33,6 +33,7 @@ namespace TGTH.Mobile
         private void OnItemCharacterChanged(List<ItemData> list)
         {
             var temp = new List<InventoryItem>();
+            Debug.Log(list.Count);
             foreach (var item in list)
             {
                 temp.Add(new InventoryItem(item));

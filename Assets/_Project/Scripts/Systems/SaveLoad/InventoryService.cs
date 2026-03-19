@@ -1,5 +1,6 @@
 
 using System;
+using UnityEngine;
 
 public class InventoryService : ISaveLoadRemote
 {
@@ -13,7 +14,7 @@ public class InventoryService : ISaveLoadRemote
     {
         playFabLogin.player.LoadData((gameDataDTO) =>
         {
-            var itemsShop = new PlayerDataDTO();
+            var itemsShop = new ItemDataDTO();
             itemsShop = gameDataDTO;
 
             var iconLoader = AddressableLoader.Instance.GetLoader<IconLoader>(AddressableLoaderType.Sprite.ToString());
@@ -48,7 +49,7 @@ public class InventoryService : ISaveLoadRemote
         });
     }
 
-    private void SetHeroData(PlayerDataDTO itemsShop, IconLoader iconLoader, PrefabLoader prefabLoader, ScriptableObjectLoader SODataBase, int i, ItemData itemData, HeroData heroData)
+    private void SetHeroData(ItemDataDTO itemsShop, IconLoader iconLoader, PrefabLoader prefabLoader, ScriptableObjectLoader SODataBase, int i, ItemData itemData, HeroData heroData)
     {
         var heroPrefab = prefabLoader.Get(itemData.itemFilePath);
         heroData.heroPrefab = heroPrefab;
@@ -60,7 +61,8 @@ public class InventoryService : ISaveLoadRemote
             var skillData = SODataBase.GetItem(skill.itemId) as SkillData;
             if (skillData == null)
                 continue;
-            SetSkilldata(itemsShop, iconLoader, prefabLoader, h, skillData);
+            skillData.itemIcon = iconLoader.Get(skillData.itemIconPath);
+            skillData.skillEffectPrefab = prefabLoader.Get(skillData.itemFilePath);
             heroData.skillDatas[h] = skillData;
         }
 
@@ -76,14 +78,14 @@ public class InventoryService : ISaveLoadRemote
         itemsShop.inventoryItems[i] = heroData;
     }
 
-    private void SetSkilldata(PlayerDataDTO itemsShop, IconLoader iconLoader, PrefabLoader prefabLoader, int i, SkillData skillDatas)
+    private void SetSkilldata(ItemDataDTO itemsShop, IconLoader iconLoader, PrefabLoader prefabLoader, int i, SkillData skillDatas)
     {
         skillDatas.itemIcon = iconLoader.Get(skillDatas.itemIconPath);
         skillDatas.skillEffectPrefab = prefabLoader.Get(skillDatas.itemFilePath);
 
         itemsShop.inventoryItems[i] = skillDatas;
     }
-    public void SaveGame()
+    public void SaveGame(GameData gameData)
     {
 
     }

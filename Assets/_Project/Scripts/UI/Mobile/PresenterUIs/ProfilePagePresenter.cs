@@ -14,19 +14,18 @@ namespace TGTH.Mobile
             view.OnUserIdChanged += OnUserIdChanged;
             view.OnUserNameChanged += OnUserNameChanged;
             profileManager.OnProfileChanged += OnProfileChanged;
-            view.ShowUser(profileManager.GetProfileUser());
+            view.ShowUser(profileManager.GetProfile());
         }
 
         private void OnProfileChanged(ProfileUser user)
         {
-            Debug.Log($"OnProfileChanged {user.userId} {user.userName}");
             view.ShowUser(user);
         }
 
         private void OnUserNameChanged(string text)
         {
-            var userId = profileManager.GetProfileUser().userId;
-            profileManager.GetProfileUser().userName = text;
+            var userId = profileManager.GetProfile().userId;
+            profileManager.GetProfile().userName = text;
             profileManager.SetProfileUser(userId, text);
             view.ShowUserName(text);
         }

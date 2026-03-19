@@ -2,56 +2,55 @@
 using System;
 using UnityEngine;
 
-public class ShopService : ISaveLoadRemote
+public class TeamInventoryService : ISaveLoadRemote
 {
     private PlayFabLogin playFabLogin;
-    public ShopService(PlayFabLogin playFabLogin)
+    public TeamInventoryService(PlayFabLogin playFabLogin)
     {
         this.playFabLogin = playFabLogin;
     }
 
     public void LoadGame(GameData gameData, Action callback)
     {
-        playFabLogin.player.LoadShopData((gameDataDTO) =>
+        playFabLogin.player.LoadTeamData((gameDataDTO) =>
         {
-            var itemsShop = new ItemDataDTO();
-            itemsShop = gameDataDTO;
+            var itemTeam = new HeroDataDTO();
+            itemTeam = gameDataDTO;
 
             var iconLoader = AddressableLoader.Instance.GetLoader<IconLoader>(AddressableLoaderType.Sprite.ToString());
             var prefabLoader = AddressableLoader.Instance.GetLoader<PrefabLoader>(AddressableLoaderType.Prefab.ToString());
             var SODataBase = ScriptableObjectLoader.Instance;
 
-            for (int i = 0; i < itemsShop.inventoryItems.Count; i++)
+            for (int i = 0; i < itemTeam.inventoryItems.Count; i++)
             {
-                var item = itemsShop.inventoryItems[i];
+                var item = itemTeam.inventoryItems[i];
                 var itemData = SODataBase.GetItem(item.itemId);
                 if (itemData == null)
                     continue;
                 var sprite = iconLoader.Get(item.itemIconPath);
-                if (sprite != null)
-                    itemData.itemIcon = sprite;
-
+                itemData.itemIcon = sprite;
 
                 if (itemData is HeroData heroData)
                 {
-                    SetHeroData(itemsShop, iconLoader, prefabLoader, SODataBase, i, itemData, heroData);
+                    heroData.championIndex = itemTeam.championsIndex[i];
+                    SetHeroData(itemTeam, iconLoader, prefabLoader, SODataBase, i, itemData, heroData);
                     continue;
                 }
 
                 if (itemData is SkillData skillDatas)
                 {
-                    SetSkilldata(itemsShop, iconLoader, prefabLoader, i, skillDatas);
+                    SetSkilldata(itemTeam, iconLoader, prefabLoader, i, skillDatas);
                     continue;
                 }
 
-                itemsShop.inventoryItems[i] = itemData;
+                itemTeam.inventoryItems[i] = itemData;
             }
-            gameData.itemShopDatas = itemsShop.inventoryItems;
+            gameData.itemDatasInTeam = itemTeam.inventoryItems;
             callback?.Invoke();
         });
     }
 
-    private void SetHeroData(ItemDataDTO itemsShop, IconLoader iconLoader, PrefabLoader prefabLoader, ScriptableObjectLoader SODataBase, int i, ItemData itemData, HeroData heroData)
+    private void SetHeroData(ItemDataDTO itemsteam, IconLoader iconLoader, PrefabLoader prefabLoader, ScriptableObjectLoader SODataBase, int i, ItemData itemData, HeroData heroData)
     {
         var heroPrefab = prefabLoader.Get(itemData.itemFilePath);
         heroData.heroPrefab = heroPrefab;
@@ -77,18 +76,18 @@ public class ShopService : ISaveLoadRemote
             heroData.techniqueDatas[s] = techniqueData;
         }
 
-        itemsShop.inventoryItems[i] = heroData;
+        itemsteam.inventoryItems[i] = heroData;
     }
 
-    private void SetSkilldata(ItemDataDTO itemsShop, IconLoader iconLoader, PrefabLoader prefabLoader, int i, SkillData skillDatas)
+    private void SetSkilldata(ItemDataDTO itemsteam, IconLoader iconLoader, PrefabLoader prefabLoader, int i, SkillData skillDatas)
     {
         skillDatas.itemIcon = iconLoader.Get(skillDatas.itemIconPath);
         skillDatas.skillEffectPrefab = prefabLoader.Get(skillDatas.itemFilePath);
 
-        itemsShop.inventoryItems[i] = skillDatas;
+        itemsteam.inventoryItems[i] = skillDatas;
     }
     public void SaveGame(GameData gameData)
     {
-
+        playFabLogin.player.SetTeamData(gameData);
     }
 }

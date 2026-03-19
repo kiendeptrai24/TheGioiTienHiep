@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 [Serializable]
-public class PlayerDataDTO
+public class ItemDataDTO
 {
     public List<ItemData> inventoryItems = new List<ItemData>();
 }

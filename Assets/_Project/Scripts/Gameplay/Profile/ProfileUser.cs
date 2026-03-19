@@ -7,7 +7,7 @@ public class ProfileUser
 {
     public string userId;
     public string userName;
-    public int price;
+    public ulong coins;
     public int level;
     public int experience;
     private List<string> listFriend;

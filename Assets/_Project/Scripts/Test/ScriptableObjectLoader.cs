@@ -3,11 +3,23 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 using UnityEngine;
-
+public enum DataDTOType
+{
+    ItemDTO,
+    HeroDTO,
+}
+public enum ItemConvertType
+{
+    AllItem,
+    ShopItem,
+}
 public class ScriptableObjectLoader : Singleton<ScriptableObjectLoader>
 {
     public bool TestJson = false;
+    public DataDTOType dataDTOType;
+    public ItemConvertType itemConvertType;
     public List<ItemPreset> baseItems = new();
+    public List<ItemPreset> baseShopItems = new();
     public List<ItemPreset> testItems = new();
     private Dictionary<string, ItemPreset> items = new();
     protected override void Awake()
@@ -46,15 +58,38 @@ public class ScriptableObjectLoader : Singleton<ScriptableObjectLoader>
     [ContextMenu("To Json")]
     public void ToJson()
     {
-        List<ItemData> items = new List<ItemData>();
         var Listtems = TestJson ? testItems : baseItems;
-        foreach (var item in Listtems)
+        if (itemConvertType == ItemConvertType.ShopItem)
         {
-            var itemData = item.GetItemData();
-            items.Add(itemData);
-
+            var itemDataDTO = new ItemDataDTO();
+            foreach (var item in baseShopItems)
+            {
+                itemDataDTO.inventoryItems.Add(item.GetItemData());
+            }
+            ItemJsonCreator.CreateItemJson(itemDataDTO);
+            return;
         }
-        ItemJsonCreator.CreateItemJson(items);
+        if (dataDTOType == DataDTOType.HeroDTO)
+        {
+            var HeroDataDTO = new HeroDataDTO();
+            foreach (var item in Listtems)
+            {
+                var itemData = item.GetItemData();
+                var heroData = itemData as HeroData;
+                HeroDataDTO.inventoryItems.Add(itemData);
+                HeroDataDTO.championsIndex.Add(heroData.championIndex);
+            }
+            ItemJsonCreator.CreateItemJson(HeroDataDTO);
+        }
+        else
+        {
+            var itemDataDTO = new ItemDataDTO();
+            foreach (var item in Listtems)
+            {
+                itemDataDTO.inventoryItems.Add(item.GetItemData());
+            }
+            ItemJsonCreator.CreateItemJson(itemDataDTO);
+        }
     }
 #endif
 

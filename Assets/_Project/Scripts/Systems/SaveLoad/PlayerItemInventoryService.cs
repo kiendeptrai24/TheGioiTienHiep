@@ -14,7 +14,7 @@ public class PlayerItemInventoryService : ISaveLoadRemote
     {
         playFabLogin.player.LoadPlayerData((gameDataDTO) =>
         {
-            var itemsData = new PlayerDataDTO();
+            var itemsData = new ItemDataDTO();
             itemsData = gameDataDTO;
 
             var iconLoader = AddressableLoader.Instance.GetLoader<IconLoader>(AddressableLoaderType.Sprite.ToString());
@@ -49,7 +49,7 @@ public class PlayerItemInventoryService : ISaveLoadRemote
         });
     }
 
-    private static void SetHeroData(PlayerDataDTO itemsData, IconLoader iconLoader, PrefabLoader prefabLoader, ScriptableObjectLoader SODataBase, int i, ItemData itemData, HeroData heroData)
+    private static void SetHeroData(ItemDataDTO itemsData, IconLoader iconLoader, PrefabLoader prefabLoader, ScriptableObjectLoader SODataBase, int i, ItemData itemData, HeroData heroData)
     {
         var heroPrefab = prefabLoader.Get(itemData.itemFilePath);
         heroData.heroPrefab = heroPrefab;
@@ -78,15 +78,15 @@ public class PlayerItemInventoryService : ISaveLoadRemote
         itemsData.inventoryItems[i] = heroData;
     }
 
-    private void SetSkilldata(PlayerDataDTO itemsData, IconLoader iconLoader, PrefabLoader prefabLoader, int i, SkillData skillDatas)
+    private void SetSkilldata(ItemDataDTO itemsData, IconLoader iconLoader, PrefabLoader prefabLoader, int i, SkillData skillDatas)
     {
         skillDatas.itemIcon = iconLoader.Get(skillDatas.itemIconPath);
         skillDatas.skillEffectPrefab = prefabLoader.Get(skillDatas.itemFilePath);
 
         itemsData.inventoryItems[i] = skillDatas;
     }
-    public void SaveGame()
+    public void SaveGame(GameData gameData)
     {
-        throw new System.NotImplementedException();
+        playFabLogin.player.SetItemInvenoryData(gameData);
     }
 }

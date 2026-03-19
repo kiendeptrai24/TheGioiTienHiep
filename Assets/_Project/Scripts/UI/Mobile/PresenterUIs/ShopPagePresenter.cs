@@ -41,10 +41,11 @@ namespace TGTH.Mobile
             base.Awake();
             inventoryCenterManager = InventoryCenterManager.Instance;
 
-            ProfileManager.Instance.OnProfileChanged += (profile) =>
+            ProfileManager.Instance.OnCoinsChanged += (profile) =>
             {
-                view.priceText.text = profile.price.ToString();
+                view.priceText.text = profile.coins.ToString();
             };
+            view.priceText.text = ProfileManager.Instance.GetProfile().coins.ToString();
             view.OnRefreshClicked += ShowItem;
             view.OnEquipmentTypeChanged += SortInventoryEquipmentType;
             view.OnTechniqueAndSkillTypeChanged += SortInventoryTechniqueAndSkillType;

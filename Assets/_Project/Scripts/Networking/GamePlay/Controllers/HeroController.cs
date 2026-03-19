@@ -9,7 +9,6 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
     protected StatsData stats;
     public NetworkObject attackPrefab;
     protected IStateMachine m_heroSM;
-    protected HeroLoadData m_heroLoadData;
     public AIMovement m_aiMovement;
     public HeroBaseSkill skillController;
     public SkillDataRuntime currentSkillData;
@@ -39,7 +38,6 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
     {
         base.Awake();
         LoadComponent();
-        m_heroLoadData.OnHeroDataLoaded += LoadHeroData;
     }
     public override void OnNetworkSpawn()
     {
@@ -78,7 +76,6 @@ public class HeroController : TGTHNetworkBehaviour, ISkillCaster
     {
         base.LoadComponent();
         anim = GetComponentInChildren<Animator>();
-        m_heroLoadData = GetComponent<HeroLoadData>();
         moveable = GetComponent<IMoveable>();
         m_aiMovement = GetComponent<AIMovement>();
         skillController = GetComponent<HeroBaseSkill>();

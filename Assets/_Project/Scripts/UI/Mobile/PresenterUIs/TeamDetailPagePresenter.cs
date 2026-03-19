@@ -28,6 +28,42 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
         inventoryCenterManager = InventoryCenterManager.Instance;
         InitializeInventoryUI();
     }
+    protected override void Start()
+    {
+        base.Start();
+        listDatas = inventoryCenterManager.GetDatasChampion();
+        ShowData();
+    }
+    public void ShowData()
+    {
+        int index = 0;
+        foreach (var item in listDatas)
+        {
+            if (index >= maxChampion)
+                break;
+            SetItemData(item, (item as HeroData).championIndex);
+            index++;
+        }
+    }
+    private void SetItemData(ItemData itemData, Vector2 index)
+    {
+        for (int i = 0; i < view.listOfUIItems.Count; i++)
+        {
+            if (view.listOfUIItems[i].HasItem())
+                continue;
+
+            var itemChoseChampion = view.listOfUIItems[i] as UIChoseChampionItem;
+
+            if (itemChoseChampion == null)
+                continue;
+
+            if (itemChoseChampion.championIndex != index)
+                continue;
+
+            view.listOfUIItems[i].SetItem(new InventoryItem(itemData));
+            break;
+        }
+    }
     public List<ItemData> GetAllItems()
     {
         var items = new List<ItemData>();
@@ -37,6 +73,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
         }
         return items;
     }
+
     private void InitializeInventoryUI()
     {
 
@@ -53,9 +90,9 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
         }
 
     }
+
     public void AddItem(ItemData data)
     {
-        Debug.Log(data.itemName);
         if (listDatas.Count >= maxChampion)
         {
             Debug.Log("Max Champion");
@@ -67,7 +104,6 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
     }
     public void RemoveItem(ItemData data)
     {
-        Debug.Log(data.itemName);
         listDatas.Remove(data);
         inventoryCenterManager.UnUseData(data);
         inventoryCenterManager.SetItemChampionData(GetAllItems());
@@ -88,11 +124,11 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
     }
     public bool AddItem(ItemData itemData, Vector2 index)
     {
-        if(listDatas.Count >= maxChampion)
+        if (listDatas.Count >= maxChampion)
         {
             return false;
         }
-        
+
         for (int i = 0; i < view.listOfUIItems.Count; i++)
         {
             if (view.listOfUIItems[i].HasItem())
@@ -116,7 +152,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
         return true;
     }
 
-    
+
 
     public void SwapItem(ItemData itemData, Vector2 index)
     {

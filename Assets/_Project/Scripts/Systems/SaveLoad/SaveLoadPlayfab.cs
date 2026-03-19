@@ -28,10 +28,6 @@ public class SaveLoadPlayfab : TGTHMonoBehaviour, ISaveManager
         gameData = new GameData();
     }
 
-    private void SaveDataFormGame()
-    {
-        playFabLogin.SetData(gameData);
-    }
 
     public void LoadGame()
     {
@@ -46,14 +42,14 @@ public class SaveLoadPlayfab : TGTHMonoBehaviour, ISaveManager
             saveManager.LoadData(gameData);
         }
     }
-
+    [ContextMenu("Save Game")]
     public void SaveGame()
     {
         foreach (ISaveable saveManager in saveManagers)
         {
             saveManager.SaveGame(ref gameData);
         }
-        //SaveDataFormGame();
+        playFabLogin.SaveGameData();
     }
 
     public void Register(ISaveable saveManager)
@@ -69,7 +65,7 @@ public class SaveLoadPlayfab : TGTHMonoBehaviour, ISaveManager
 
     private List<ISaveable> FindAllSaveManagers()
     {
-        IEnumerable<ISaveable> saveManagers = Resources.FindObjectsOfTypeAll<MonoBehaviour>().OfType<ISaveable>();
+        IEnumerable<ISaveable> saveManagers = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).OfType<ISaveable>();
         return new List<ISaveable>(saveManagers);
     }
     protected override void LoadComponent()
