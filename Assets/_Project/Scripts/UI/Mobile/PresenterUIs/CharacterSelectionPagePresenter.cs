@@ -8,32 +8,31 @@ namespace TGTH.Mobile
         [SerializeField] private CharacterSelectionPageView view;
         [SerializeField] private IItemClickHandler itemOnClick;
         [SerializeField] private ActionNavigation navigation;
-        private InventoryCenterManager inventoryCenterManager;
         [SerializeField] private UIItemSlotBase currentItemSelect;
-
+        private PlayfabDataManager playfabDataManager;
         protected override void Awake()
         {
             base.Awake();
+            playfabDataManager = PlayfabDataManager.Instance;
             LoadComponent();
             Init();
-            inventoryCenterManager = InventoryCenterManager.Instance;
-            inventoryCenterManager.OnItemCharacterChanged += OnItemCharacterChanged;
-            OnItemCharacterChanged(inventoryCenterManager.GetCharacterYouHave());
-
+            playfabDataManager.OnCharacterChanged += OnItemCharacterChanged;
+            playfabDataManager.OnLoadCharacterFormPlayfab += OnItemCharacterChanged;
+            OnItemCharacterChanged(playfabDataManager.GetCharactersData());
             view.OnStartClicked += OnStartClicked;
         }
 
         private void OnStartClicked()
         {
             if (currentItemSelect == null || currentItemSelect.HasItem() == false) return;
-            inventoryCenterManager.ItemPlayerChanged(currentItemSelect.inventoryItem.data);
+            string playerName = currentItemSelect.inventoryItem.data.itemName;
+            PlayfabDataManager.Instance.OnCharacterLoaded(playerName);
             navigation.OnClick();
         }
 
         private void OnItemCharacterChanged(List<ItemData> list)
         {
             var temp = new List<InventoryItem>();
-            Debug.Log(list.Count);
             foreach (var item in list)
             {
                 temp.Add(new InventoryItem(item));

@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class ShopService : ISaveLoadRemote
 {
-    private PlayFabLogin playFabLogin;
-    public ShopService(PlayFabLogin playFabLogin)
+    private PlayFabDataService service;
+    public ShopService(PlayFabDataService service)
     {
-        this.playFabLogin = playFabLogin;
+        this.service = service;
     }
 
     public void LoadGame(GameData gameData, Action callback)
     {
-        playFabLogin.player.LoadShopData((gameDataDTO) =>
+        service.LoadShopData((gameDataDTO) =>
         {
             var itemsShop = new ItemDataDTO();
             itemsShop = gameDataDTO;

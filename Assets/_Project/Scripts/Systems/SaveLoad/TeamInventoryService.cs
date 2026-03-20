@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class TeamInventoryService : ISaveLoadRemote
 {
-    private PlayFabLogin playFabLogin;
-    public TeamInventoryService(PlayFabLogin playFabLogin)
+    private PlayFabDataService service;
+    public TeamInventoryService(PlayFabDataService service)
     {
-        this.playFabLogin = playFabLogin;
+        this.service = service;
     }
 
     public void LoadGame(GameData gameData, Action callback)
     {
-        playFabLogin.player.LoadTeamData((gameDataDTO) =>
+        service.LoadTeamData(gameData.playerName ,(gameDataDTO) =>
         {
+            if (gameDataDTO == null)
+            {
+                callback?.Invoke();
+                return;
+            }
             var itemTeam = new HeroDataDTO();
             itemTeam = gameDataDTO;
 
@@ -88,6 +93,6 @@ public class TeamInventoryService : ISaveLoadRemote
     }
     public void SaveGame(GameData gameData)
     {
-        playFabLogin.player.SetTeamData(gameData);
+        service.SetTeamData(gameData);
     }
 }

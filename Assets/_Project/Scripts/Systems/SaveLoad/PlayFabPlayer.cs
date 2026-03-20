@@ -11,14 +11,9 @@ using UnityEngine;
 public class PlayFabPlayer
 {
     public bool loggedIn = false;
-    public bool dataLoading = false;
-    public bool dataLoaded = false;
     public string PlayFabId;
-    public Dictionary<string, ObjectResult> playerData;
-    public Dictionary<string, UserDataRecord> data;
 
     private PlayFabClientInstanceAPI clientApi;
-    private PlayFabDataInstanceAPI dataApi;
 
     public void Login(string customId, Action<PlayFabClientInstanceAPI> callback)
     {
@@ -30,7 +25,6 @@ public class PlayFabPlayer
         {
             PlayFabId = result.PlayFabId;
             loggedIn = true;
-            dataApi = new PlayFabDataInstanceAPI(clientApi.authenticationContext);
             callback?.Invoke(clientApi);
             Debug.Log("Login call succeeded.");
         }, error =>
@@ -39,6 +33,16 @@ public class PlayFabPlayer
             Debug.LogError("Here's some debug information:");
             Debug.LogError(error.GenerateErrorReport());
         });
+    }
+    public void Login(AuthResult result)
+    {
+        loggedIn = true;
+        clientApi = result.clientApi;
+        PlayFabId = result.userId;
+    }
+    public void Logout()
+    {
+
     }
     public void LoadData(Action<ItemDataDTO> callback)
     {
@@ -141,7 +145,6 @@ public class PlayFabPlayer
             Debug.LogError(error.GenerateErrorReport());
         });
     }
-
     public void SetItemInvenoryData(GameData gameData)
     {
         string key = "inventory";
@@ -154,7 +157,6 @@ public class PlayFabPlayer
             Data = new Dictionary<string, string> { { key, json } }
         }, r => { }, e => Debug.LogError(e.GenerateErrorReport()));
     }
-
     public void LoadProfile(Action<PlayerProfileDTO> callback)
     {
         clientApi.GetUserData(new GetUserDataRequest(),

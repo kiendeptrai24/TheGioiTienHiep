@@ -2,54 +2,62 @@
 using System;
 using UnityEngine;
 
-public class InventoryService : ISaveLoadRemote
+public class ItemCharacterService : ISaveLoadRemote
 {
     private PlayFabDataService service;
-    public InventoryService(PlayFabDataService service)
+    public ItemCharacterService(PlayFabDataService service)
     {
         this.service = service;
     }
 
     public void LoadGame(GameData gameData, Action callback)
     {
-        service.LoadData((gameDataDTO) =>
+        service.LoadCharacter((gameDataDTO) =>
         {
-            var itemsShop = new ItemDataDTO();
-            itemsShop = gameDataDTO;
+            if (gameDataDTO == null)
+            {
+                callback?.Invoke();
+                return;
+            }
+
+            var itemsData = new ItemCharacterDataDTO();
+            itemsData = gameDataDTO;
 
             var iconLoader = AddressableLoader.Instance.GetLoader<IconLoader>(AddressableLoaderType.Sprite.ToString());
             var prefabLoader = AddressableLoader.Instance.GetLoader<PrefabLoader>(AddressableLoaderType.Prefab.ToString());
             var SODataBase = ScriptableObjectLoader.Instance;
 
-            for (int i = 0; i < itemsShop.inventoryItems.Count; i++)
+            for (int i = 0; i < itemsData.inventoryItems.Count; i++)
             {
-                var item = itemsShop.inventoryItems[i];
+                var item = itemsData.inventoryItems[i];
                 var itemData = SODataBase.GetItem(item.itemId);
                 if (itemData == null)
                     continue;
+                itemData.itemName = itemsData.characterNames[i];
+                
                 var sprite = iconLoader.Get(item.itemIconPath);
                 itemData.itemIcon = sprite;
 
                 if (itemData is HeroData heroData)
                 {
-                    SetHeroData(itemsShop, iconLoader, prefabLoader, SODataBase, i, itemData, heroData);
+                    SetHeroData(itemsData, iconLoader, prefabLoader, SODataBase, i, itemData, heroData);
                     continue;
                 }
 
                 if (itemData is SkillData skillDatas)
                 {
-                    SetSkilldata(itemsShop, iconLoader, prefabLoader, i, skillDatas);
+                    SetSkilldata(itemsData, iconLoader, prefabLoader, i, skillDatas);
                     continue;
                 }
 
-                itemsShop.inventoryItems[i] = itemData;
+                itemsData.inventoryItems[i] = itemData;
             }
-            gameData.allItemsDatas = itemsShop.inventoryItems;
+            gameData.itemDatasCharacter = itemsData.inventoryItems;
             callback?.Invoke();
         });
     }
 
-    private void SetHeroData(ItemDataDTO itemsShop, IconLoader iconLoader, PrefabLoader prefabLoader, ScriptableObjectLoader SODataBase, int i, ItemData itemData, HeroData heroData)
+    private static void SetHeroData(ItemDataDTO itemsData, IconLoader iconLoader, PrefabLoader prefabLoader, ScriptableObjectLoader SODataBase, int i, ItemData itemData, HeroData heroData)
     {
         var heroPrefab = prefabLoader.Get(itemData.itemFilePath);
         heroData.heroPrefab = heroPrefab;
@@ -75,18 +83,18 @@ public class InventoryService : ISaveLoadRemote
             heroData.techniqueDatas[s] = techniqueData;
         }
 
-        itemsShop.inventoryItems[i] = heroData;
+        itemsData.inventoryItems[i] = heroData;
     }
 
-    private void SetSkilldata(ItemDataDTO itemsShop, IconLoader iconLoader, PrefabLoader prefabLoader, int i, SkillData skillDatas)
+    private void SetSkilldata(ItemDataDTO itemsData, IconLoader iconLoader, PrefabLoader prefabLoader, int i, SkillData skillDatas)
     {
         skillDatas.itemIcon = iconLoader.Get(skillDatas.itemIconPath);
         skillDatas.skillEffectPrefab = prefabLoader.Get(skillDatas.itemFilePath);
 
-        itemsShop.inventoryItems[i] = skillDatas;
+        itemsData.inventoryItems[i] = skillDatas;
     }
     public void SaveGame(GameData gameData)
     {
-
+        service.SetItemCharacter(gameData);
     }
 }

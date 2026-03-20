@@ -10,14 +10,13 @@ namespace TGTH.Mobile
     public class ConfirmationPagePresenter : IItemDetailPageView
     {
         [SerializeField] private ConfirmationPageView view;
-        private InventoryCenterManager inventoryCenterManager;
-
+        private PlayfabDataManager playfabDataManager;
         private ItemData itemData;
         protected override void Awake()
         {
             base.Awake();
             LoadComponent();
-            inventoryCenterManager = InventoryCenterManager.Instance;
+            playfabDataManager = PlayfabDataManager.Instance;
             view.OnOkClicked += HandleOkClicked;
             view.OnExitClicked += HandleExitClicked;
         }
@@ -30,8 +29,7 @@ namespace TGTH.Mobile
         private void HandleOkClicked()
         {
             if (itemData == null) return;
-
-            inventoryCenterManager.AddCharacter(itemData.Clone());
+            playfabDataManager.AddCharacter(itemData);
         }
         public override void HandleItemClicked(InventoryItem inventoryItem)
         {

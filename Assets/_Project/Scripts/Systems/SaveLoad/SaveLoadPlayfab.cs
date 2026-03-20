@@ -2,18 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TGTH.Mobile;
 using UnityEngine;
 
 public class SaveLoadPlayfab : TGTHMonoBehaviour, ISaveManager
 {
-    public PlayFabLogin playFabLogin;
+    public PlayfabDataManager playfabDataManager;
     private GameData gameData = new GameData();
     private List<ISaveable> saveManagers = new List<ISaveable>();
     public event Action<GameData> OnDataReadyToLoad;
     protected override void Awake()
     {
         base.Awake();
-        playFabLogin.OnLoadGameFormPlayfab += OnItemPlayerLoad;
+        playfabDataManager = PlayfabDataManager.Instance;
+        playfabDataManager.OnLoadGameFormPlayfab += OnItemPlayerLoad;
         saveManagers = FindAllSaveManagers();
     }
 
@@ -49,7 +51,7 @@ public class SaveLoadPlayfab : TGTHMonoBehaviour, ISaveManager
         {
             saveManager.SaveGame(ref gameData);
         }
-        playFabLogin.SaveGameData();
+        playfabDataManager.SaveGameData();
     }
 
     public void Register(ISaveable saveManager)
@@ -71,6 +73,5 @@ public class SaveLoadPlayfab : TGTHMonoBehaviour, ISaveManager
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        playFabLogin = FindAnyObjectByType<PlayFabLogin>();
     }
 }

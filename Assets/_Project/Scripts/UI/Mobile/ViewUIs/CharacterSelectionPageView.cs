@@ -62,7 +62,6 @@ namespace TGTH.Mobile
                 if (i >= listItemDatas.Count)
                 {
                     listOfUIItems[i].ResetData();
-                    Debug.Log("ResetData");
                 }
                 else
                 {

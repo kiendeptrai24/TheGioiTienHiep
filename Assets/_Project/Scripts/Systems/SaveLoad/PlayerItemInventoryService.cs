@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class PlayerItemInventoryService : ISaveLoadRemote
 {
-    private PlayFabLogin playFabLogin;
-    public PlayerItemInventoryService(PlayFabLogin playFabLogin)
+    private PlayFabDataService service;
+    public PlayerItemInventoryService(PlayFabDataService service)
     {
-        this.playFabLogin = playFabLogin;
+        this.service = service;
     }
 
     public void LoadGame(GameData gameData, Action callback)
     {
-        playFabLogin.player.LoadPlayerData((gameDataDTO) =>
+        service.LoadPlayerData(gameData.playerName, (gameDataDTO) =>
         {
+            if (gameDataDTO == null)
+            {
+                callback?.Invoke();
+                return;
+            }
             var itemsData = new ItemDataDTO();
             itemsData = gameDataDTO;
 
@@ -41,7 +46,6 @@ public class PlayerItemInventoryService : ISaveLoadRemote
                     SetSkilldata(itemsData, iconLoader, prefabLoader, i, skillDatas);
                     continue;
                 }
-
                 itemsData.inventoryItems[i] = itemData;
             }
             gameData.itemDatas = itemsData.inventoryItems;
@@ -87,6 +91,6 @@ public class PlayerItemInventoryService : ISaveLoadRemote
     }
     public void SaveGame(GameData gameData)
     {
-        playFabLogin.player.SetItemInvenoryData(gameData);
+        service.SetItemInventoryData(gameData);
     }
 }

@@ -10,12 +10,13 @@ namespace TGTH.Mobile
     public class CharacterCreationPagePresenter : IItemClickHandler
     {
         [SerializeField] private CharacterCreationPageView view;
-        private InventoryCenterManager inventoryCenterManager;
         [SerializeField] private IItemDetailPageView itemOnClick;
         [SerializeField] private ActionNavigation navigation;
         [SerializeField] private UIItemSlotBase currentItemSelect;
         [SerializeField] private UIItemSlotBase currentItemCharacter;
         [SerializeField] private string nameCharacter = "";
+        [SerializeField] private List<ItemPreset> allCharacter;
+        private List<ItemData> itemDatas = new List<ItemData>();
         protected override void Awake()
         {
             base.Awake();
@@ -23,7 +24,6 @@ namespace TGTH.Mobile
             view.OnStartClicked += OnStartClicked;
             view.OnFieldEndEdit += OnFieldEndEdit;
             Init();
-            inventoryCenterManager = InventoryCenterManager.Instance;
         }
 
         private void OnFieldEndEdit(string obj)
@@ -37,7 +37,7 @@ namespace TGTH.Mobile
             var itemData = currentItemSelect.inventoryItem.data as HeroData;
             itemData.itemName = nameCharacter;
             InventoryItem inventoryItem = new InventoryItem(itemData);
-            
+
             itemOnClick.HandleItemClicked(inventoryItem);
             navigation.OnClick();
         }
@@ -45,7 +45,11 @@ namespace TGTH.Mobile
         protected override void Start()
         {
             base.Start();
-            ShowItem(inventoryCenterManager.GetAllCharacter());
+            foreach (var item in allCharacter)
+            {
+                itemDatas.Add(item.GetItemData());
+            }
+            ShowItem(itemDatas);
 
         }
         private void ShowItem(List<ItemData> listItem)

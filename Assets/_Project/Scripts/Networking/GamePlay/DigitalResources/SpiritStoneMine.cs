@@ -7,13 +7,14 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
     public int stonePerSecond = 1;
 
     [SerializeField] private ResourceStorage _ownerStorage;
-
+    private NetworkObject _owner;
     private double _lastProduceTime;
     private double now;
     public void SetOwner(NetworkObject owner)
     {
         if (!IsServer) return;
-
+        if (owner == _owner) return;
+        _owner = owner;
         _ownerStorage = owner.GetComponent<ResourceStorage>();
         _lastProduceTime = NetworkManager.ServerTime.Time;
     }
@@ -39,6 +40,6 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
 
     private void Produce(int times)
     {
-        _ownerStorage.Add(stonePerSecond * times);
+        _ownerStorage.Add(stonePerSecond);
     }
 }

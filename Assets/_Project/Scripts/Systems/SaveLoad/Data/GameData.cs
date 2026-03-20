@@ -9,14 +9,13 @@ public class GameData
     public ulong coins;
     public List<ItemData> itemDatas;
     public List<ItemData> itemDatasInTeam;
-    public List<ItemData> itemDatasExisting;
     public List<ItemData> itemShopDatas;
     public List<ItemData> allItemsDatas;
+    public List<ItemData> itemDatasCharacter;
     public GameData()
     {
         itemDatas = new List<ItemData>();
         itemDatasInTeam = new List<ItemData>();
-        itemDatasExisting = new List<ItemData>();
         itemShopDatas = new List<ItemData>();
         allItemsDatas = new List<ItemData>();
     }

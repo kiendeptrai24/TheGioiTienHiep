@@ -13,19 +13,9 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public HeroData heroData;
 
     /// <summary>
-    /// all character
-    /// </summary>
-    [SerializeField] private List<ItemData> allItemsCharacter = new List<ItemData>();
-
-    /// <summary>
     /// all item
     /// </summary>
     public List<ItemData> allItemDatas = new List<ItemData>();
-
-    /// <summary>
-    /// character you have
-    /// </summary>
-    [SerializeField] private List<ItemData> listItemCharacter = new List<ItemData>();
 
     /// <summary>
     /// Item Shop
@@ -85,23 +75,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     private bool isTechniqueChange = false;
     //public event Action OnDataChanged;
     public List<ItemData> GetItemShopData() => listItemShopDatas;
-    public List<ItemData> GetAllCharacter() => allItemsCharacter;
-    public List<ItemData> GetCharacterYouHave() => listItemCharacter;
     public List<ItemData> GetDatasChampion() => listItemDatasChampion;
 
-
-    public void AddCharacter(ItemData item)
-    {
-        listItemCharacter.Add(item);
-        AddData(item);
-        OnItemCharacterChanged?.Invoke(listItemCharacter);
-    }
-    public void RemoveCharacter(ItemData item)
-    {
-        listItemCharacter.Remove(item);
-        RemoveData(item);
-        OnItemCharacterChanged?.Invoke(listItemCharacter);
-    }
     public void SetItemChampionData(List<ItemData> data)
     {
         listItemDatasChampion = data;
@@ -262,17 +237,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         isItemChange = true;
         CheckDataChange();
     }
-    protected override void LoadComponent()
-    {
-        base.LoadComponent();
-        listItemDatas.Clear();
-        listItemDatasExisting.Clear();
-        allItemsCharacter.Clear();
-        listItemShopDatas.Clear();
-        listItemCharacter.Clear();
-        listItemDatasChampion.Clear();
-        allItemDatas.Clear();
-    }
+
     public List<ItemData> GetDataType(ItemType type, bool onlyExisting = false)
     {
         var listDatas = onlyExisting ? listItemDatasExisting : listItemDatas;
@@ -291,6 +256,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         }
         return listDatas;
     }
+
     public List<ItemData> GetAllDataType(ItemType type)
     {
         List<ItemData> listDatas = allItemDatas;
@@ -310,6 +276,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         }
         return listDatas;
     }
+
     private List<ItemData> ListChampionData(List<ItemData> temps)
     {
         List<ItemData> temp = new();
@@ -370,12 +337,11 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         // load item you is owned
         foreach (var item in _data.itemDatas)
         {
-            var heroData = item as HeroData;
-            if (heroData != null && heroData.isCharactor)
+            if (item is HeroData heroData)
             {
-                listItemCharacter.Add(item);
+                if (heroData.isCharactor)
+                    ItemPlayerChanged(item);
             }
-
             listItemDatas.Add(item);
             listItemDatasExisting.Add(item);
         }
@@ -383,11 +349,6 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         foreach (var item in _data.allItemsDatas)
         {
             allItemDatas.Add(item);
-            var heroData = item as HeroData;
-            if (heroData != null && heroData.isCharactor)
-            {
-                allItemsCharacter.Add(item);
-            }
         }
         foreach (var item in _data.itemDatasInTeam)
         {
@@ -406,5 +367,19 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
 
         _data.itemDatas = listItemDatasExisting;
         _data.itemDatasInTeam = listItemDatasChampion;
+    }
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        ResetData();
+    }
+
+    private void ResetData()
+    {
+        listItemDatas.Clear();
+        listItemDatasExisting.Clear();
+        listItemShopDatas.Clear();
+        listItemDatasChampion.Clear();
+        allItemDatas.Clear();
     }
 }

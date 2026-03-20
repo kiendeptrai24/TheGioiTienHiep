@@ -4,17 +4,23 @@ using UnityEngine;
 
 public class ProfileService : ISaveLoadRemote
 {
-    private PlayFabLogin playFabLogin;
-    public ProfileService(PlayFabLogin playFabLogin)
-    {
-        this.playFabLogin = playFabLogin;
-    }
+    private PlayFabDataService service;
 
+    public ProfileService(PlayFabDataService service)
+    {
+        this.service = service;
+    }
     public void LoadGame(GameData gameData, Action callback)
     {
-        playFabLogin.player.LoadProfile((profileDataDTO) =>
+        service.LoadProfile(gameData.playerName, (profileDataDTO) =>
         {
-            gameData.playerName = profileDataDTO.playerName;
+            if (profileDataDTO == null)
+            {
+                callback?.Invoke();
+                return;
+            }
+            if (string.IsNullOrEmpty(profileDataDTO.playerName) == false)
+                gameData.playerName = profileDataDTO.playerName;
             gameData.coins = profileDataDTO.coins;
             callback?.Invoke();
         });
@@ -22,6 +28,6 @@ public class ProfileService : ISaveLoadRemote
 
     public void SaveGame(GameData gameData)
     {
-        playFabLogin.player.SetProfile(gameData);
+        service.SetProfile(gameData);
     }
 }

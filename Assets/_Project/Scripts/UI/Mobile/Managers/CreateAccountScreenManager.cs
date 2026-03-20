@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CreateAccountScreenManager : ScreenManager
 {
+    [SerializeField] private GameObject m_RegisterScreen;
     [SerializeField] private GameObject m_LoginScreen;
     [SerializeField] private GameObject m_CreateNV1Screen;
     [SerializeField] private GameObject m_CreateNV2Screen;
@@ -12,11 +13,12 @@ public class CreateAccountScreenManager : ScreenManager
     protected override void Awake()
     {
         base.Awake();
+        m_Screens.Add(m_RegisterScreen.gameObject.name, m_RegisterScreen);
         m_Screens.Add(m_LoginScreen.gameObject.name, m_LoginScreen);
         m_Screens.Add(m_CreateNV1Screen.gameObject.name, m_CreateNV1Screen);
         m_Screens.Add(m_CreateNV2Screen.gameObject.name, m_CreateNV2Screen);
         m_Screens.Add(m_CreateNV3Screen.gameObject.name, m_CreateNV3Screen);
-        defaultScreen = m_LoginScreen.gameObject.name;
+        defaultScreen = m_RegisterScreen.gameObject.name;
     }
 
 

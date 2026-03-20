@@ -1,33 +1,38 @@
 
 using System;
 using System.Collections.Generic;
+
 using UnityEngine;
 namespace TGTH.Mobile
 {
     public class LoginPresenter : TGTHMonoBehaviour
     {
         [SerializeField] private LoginPageView view;
-        private InventoryCenterManager inventoryCenterManager;
+
+        private PlayfabDataManager playfabDataManager;
         protected override void Awake()
         {
             base.Awake();
-            inventoryCenterManager = InventoryCenterManager.Instance;
-            view.OnStartClicked += OnStartClicked;
-            view.OnFieldEndEdit += OnFieldEndEdit;
-            view.OnPasswordFieldEndEdit += OnPasswordFieldEndEdit;
+            playfabDataManager = PlayfabDataManager.Instance;
+            playfabDataManager.LoginSuccess += onSuccess;
+            playfabDataManager.LoginError += onError;
+            view.OnLoginClicked += OnStartClicked;
         }
 
-        private void OnPasswordFieldEndEdit(string obj)
+        private void OnStartClicked(LoginData data)
         {
+            PlayfabDataManager.Instance.Login(data);
         }
 
-        private void OnFieldEndEdit(string obj)
+        private void onSuccess(AuthResult result)
         {
+            view.ShowMessege(result.message);
+
+        }
+        private void onError(AuthError error)
+        {
+            view.ShowMessege(error.message);
         }
 
-        private void OnStartClicked()
-        {
-            
-        }
     }
 }
