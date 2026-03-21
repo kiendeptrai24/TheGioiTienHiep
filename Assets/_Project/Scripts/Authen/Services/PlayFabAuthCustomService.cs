@@ -5,25 +5,32 @@ using UnityEngine;
 
 public class PlayFabAuthCustomService : AuthServiceBase
 {
+    private PlayFabClientInstanceAPI clientAPI;
+    public PlayFabAuthCustomService(PlayFabClientInstanceAPI clientAPI)
+    {
+        this.clientAPI = clientAPI;
+    }
+    private const string CUSTOM_ID_KEY = "CUSTOM_ID";
     public override void Login(LoginData data, Action<AuthResult> onSuccess, Action<AuthError> onError)
     {
 
         string playerLoginId = "testLogin1";
-        var clientApi = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
 
         var request = new LoginWithCustomIDRequest { CustomId = playerLoginId, CreateAccount = true };
 
-        clientApi.LoginWithCustomID(request,
+        clientAPI.LoginWithCustomID(request,
         onResSuccess =>
         {
             onSuccess?.Invoke(new AuthResult
             {
-                clientApi = clientApi,
+                clientApi = clientAPI,
                 userId = onResSuccess.PlayFabId,
                 email = data.email,
-                accessToken = "playfab_token",
+                accessToken = onResSuccess.EntityToken.EntityToken,
                 message = "Đăng nhập thành công"
             });
+            PlayerPrefs.SetString(CUSTOM_ID_KEY, playerLoginId);
+            PlayerPrefs.Save();
             Debug.Log("Login call succeeded.");
         }, onResError =>
         {
@@ -39,5 +46,47 @@ public class PlayFabAuthCustomService : AuthServiceBase
     public override void ForgotPassword(ForgotPasswordData data, Action<string> onSuccess, Action<AuthError> onError)
     {
 
+    }
+
+    public override void Logout(Action<AuthResult> onSuccess, Action<AuthError> onError)
+    {
+        clientAPI = null;
+        PlayerPrefs.DeleteKey(CUSTOM_ID_KEY);
+        PlayerPrefs.Save();
+        onSuccess?.Invoke(new AuthResult
+        {
+            message = "Đăng xuất thành công"
+        });
+    }
+
+    public override void AutoLogin(Action<AuthResult> onSuccess, Action<AuthError> onError)
+    {
+        if (!PlayerPrefs.HasKey(CUSTOM_ID_KEY))
+        {
+            Debug.Log("Chưa có thông tin login");
+            return;
+        }
+
+        string custemId = PlayerPrefs.GetString(CUSTOM_ID_KEY);
+
+        var request = new LoginWithCustomIDRequest { CustomId = custemId, CreateAccount = true };
+
+        // Demo giả lập
+
+        clientAPI.LoginWithCustomID(request,
+        onResSuccess =>
+        {
+            onSuccess?.Invoke(new AuthResult
+            {
+                clientApi = clientAPI,
+                userId = onResSuccess.PlayFabId,
+                accessToken = onResSuccess.SessionTicket,
+                message = "Đăng nhập thành công"
+            });
+        }
+        , onResError =>
+        {
+            onError?.Invoke(new AuthError("PLAYFAB_LOGIN_FAILED", onResError.GenerateErrorReport()));
+        });
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DuloGames.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace TGTH.Mobile
@@ -12,6 +13,8 @@ namespace TGTH.Mobile
         [SerializeField] private Button startBtn;
         [SerializeField] private TMP_InputField nameNvField;
         [SerializeField] private TextMeshProUGUI descriptionTxt;
+        [SerializeField] private TextMeshProUGUI descriptionReasonFailTxt;
+        [SerializeField] private GameObject contentDescriptionReasonFail;
         [SerializeField] private Image itemIconImge;
         public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
         public event Action OnStartClicked;
@@ -28,6 +31,16 @@ namespace TGTH.Mobile
             if (uiItem.inventoryItem == null) return;
             descriptionTxt.text = uiItem.inventoryItem.data.itemDescription;
             itemIconImge.sprite = uiItem.inventoryItem.data.itemIcon;
+        }
+        public void ShowReasonFail(string reason)
+        {
+            contentDescriptionReasonFail.SetActive(true);
+            descriptionReasonFailTxt.text = reason;
+        }
+        public void HideReasonFail()
+        {
+            contentDescriptionReasonFail.SetActive(false);
+            descriptionReasonFailTxt.text = "";
         }
         public void ClearAllSlots()
         {

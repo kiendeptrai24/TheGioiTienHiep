@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class PlayFabAuthService : AuthServiceBase
 {
+    public PlayFabClientInstanceAPI clientAPI;
+    public PlayFabAuthService(PlayFabClientInstanceAPI clientAPI)
+    {
+        this.clientAPI = clientAPI;
+    }
+    private const string EMAIL_KEY = "EMAIL";
+    private const string PASSWORD_KEY = "PASSWORD";
     public override void Login(LoginData data, Action<AuthResult> onSuccess, Action<AuthError> onError)
     {
         if (!ValidateLogin(data, onError))
@@ -15,19 +22,20 @@ public class PlayFabAuthService : AuthServiceBase
             Password = data.password,
         };
         // Demo giả lập
-        var clientApi = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
-
-        clientApi.LoginWithEmailAddress(request,
+        clientAPI.LoginWithEmailAddress(request,
         onResSuccess =>
         {
             onSuccess?.Invoke(new AuthResult
             {
-                clientApi = clientApi,
+                clientApi = clientAPI,
                 userId = onResSuccess.PlayFabId,
                 email = data.email,
-                accessToken = "playfab_token",
+                accessToken = onResSuccess.SessionTicket,
                 message = "Đăng nhập thành công"
             });
+            PlayerPrefs.SetString(EMAIL_KEY, data.email);
+            PlayerPrefs.SetString(PASSWORD_KEY, data.password);
+            PlayerPrefs.Save();
         }
         , onResError =>
         {
@@ -36,7 +44,6 @@ public class PlayFabAuthService : AuthServiceBase
         });
 
     }
-
     public override void Register(RegisterData data, Action<AuthResult> onSuccess, Action<AuthError> onError)
     {
         if (!ValidateRegister(data, onError))
@@ -56,7 +63,6 @@ public class PlayFabAuthService : AuthServiceBase
         {
             onSuccess?.Invoke(new AuthResult
             {
-
                 userId = "PF_NEW_001",
                 email = data.email,
                 accessToken = "playfab_register_token",
@@ -89,6 +95,53 @@ public class PlayFabAuthService : AuthServiceBase
         , onResError =>
         {
             onError?.Invoke(new AuthError("PLAYFAB_FORGOT_FAILED", onResError.GenerateErrorReport()));
+        });
+    }
+
+    public override void Logout(Action<AuthResult> onSuccess, Action<AuthError> onError)
+    {
+        PlayerPrefs.DeleteKey(EMAIL_KEY);
+        PlayerPrefs.DeleteKey(PASSWORD_KEY);
+        PlayerPrefs.Save();
+        onSuccess?.Invoke(new AuthResult
+        {
+            message = "Đăng xuất thành công"
+        });
+    }
+
+    public override void AutoLogin(Action<AuthResult> onSuccess, Action<AuthError> onError)
+    {
+        if (!PlayerPrefs.HasKey(EMAIL_KEY) || !PlayerPrefs.HasKey(PASSWORD_KEY))
+        {
+            Debug.Log("Chưa có thông tin login");
+            return;
+        }
+
+        string email = PlayerPrefs.GetString(EMAIL_KEY);
+        string password = PlayerPrefs.GetString(PASSWORD_KEY);
+
+        var request = new LoginWithEmailAddressRequest
+        {
+            Email = email,
+            Password = password
+        };
+
+
+        clientAPI.LoginWithEmailAddress(request,
+        onResSuccess =>
+        {
+            onSuccess?.Invoke(new AuthResult
+            {
+                clientApi = clientAPI,
+                userId = onResSuccess.PlayFabId,
+                email = email,
+                accessToken = onResSuccess.SessionTicket,
+                message = "Đăng nhập thành công"
+            });
+        }
+        , onResError =>
+        {
+            onError?.Invoke(new AuthError("PLAYFAB_LOGIN_FAILED", onResError.GenerateErrorReport()));
         });
     }
 }

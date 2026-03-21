@@ -12,7 +12,7 @@ public class PlayerItemInventoryService : ISaveLoadRemote
 
     public void LoadGame(GameData gameData, Action callback)
     {
-        service.LoadPlayerData(gameData.playerName, (gameDataDTO) =>
+        service.LoadPlayerData(gameData.characterId, (gameDataDTO) =>
         {
             if (gameDataDTO == null)
             {
@@ -30,6 +30,7 @@ public class PlayerItemInventoryService : ISaveLoadRemote
             {
                 var item = itemsData.inventoryItems[i];
                 var itemData = SODataBase.GetItem(item.itemId);
+                itemData.itemName = gameDataDTO.inventoryItems[i].itemName;
                 if (itemData == null)
                     continue;
                 var sprite = iconLoader.Get(item.itemIconPath);

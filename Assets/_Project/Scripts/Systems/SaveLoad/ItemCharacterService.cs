@@ -31,10 +31,11 @@ public class ItemCharacterService : ISaveLoadRemote
             {
                 var item = itemsData.inventoryItems[i];
                 var itemData = SODataBase.GetItem(item.itemId);
+                itemData.itemName = gameDataDTO.inventoryItems[i].itemName;
                 if (itemData == null)
                     continue;
                 itemData.itemName = itemsData.characterNames[i];
-                
+                (itemData as HeroData).characterId = itemsData.characterIds[i];
                 var sprite = iconLoader.Get(item.itemIconPath);
                 itemData.itemIcon = sprite;
 

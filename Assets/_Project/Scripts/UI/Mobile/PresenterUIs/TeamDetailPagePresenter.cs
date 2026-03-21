@@ -31,17 +31,17 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
     protected override void Start()
     {
         base.Start();
-        listDatas = inventoryCenterManager.GetDatasChampion();
-        ShowData();
+        
+        SetInit(inventoryCenterManager.GetDatasChampion());
     }
-    public void ShowData()
+    public void SetInit(List<ItemData> itemDatas)
     {
         int index = 0;
-        foreach (var item in listDatas)
+        foreach (var item in itemDatas)
         {
             if (index >= maxChampion)
                 break;
-            SetItemData(item, (item as HeroData).championIndex);
+            AddItem(item, (item as HeroData).championIndex);
             index++;
         }
     }

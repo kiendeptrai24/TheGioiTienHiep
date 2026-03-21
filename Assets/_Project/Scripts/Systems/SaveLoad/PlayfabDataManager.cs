@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PlayFab;
 using UnityEngine;
 
 public class PlayfabDataManager : Singleton<PlayfabDataManager>
@@ -17,17 +18,28 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private PlayFabDataService service;
     public List<ItemData> GetCharactersData() => gameData.itemDatasCharacter;
     private ISaveLoadRemote characterService;
+    private PlayFabClientInstanceAPI clientAPI;
+    public AuthManager GetAuthManager() => authManager;
     protected override void Awake()
     {
         base.Awake();
-        IAuthService authService = new PlayFabAuthCustomService();
+        clientAPI = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
+        IAuthService authService = new PlayFabAuthService(clientAPI);
         authManager = new AuthManager(authService);
+    }
+    protected override void Start()
+    {
+        base.Start();
+        authManager.AutoLogin(onSuccess, onError);
     }
     public void Login(LoginData loginData)
     {
         authManager.Login(loginData, onSuccess, onError);
     }
-
+    public void Logout()
+    {
+        authManager.Logout(default, default);
+    }
     private void onError(AuthError error)
     {
         LoginError?.Invoke(error);
@@ -47,8 +59,10 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     }
     public void AddCharacter(ItemData itemCharacter)
     {
+        var heroData = itemCharacter as HeroData;
 
-        gameData.playerName = itemCharacter.itemName;
+        gameData.characterName = itemCharacter.itemName;
+        gameData.characterId = heroData.characterId;
         gameData.itemDatas.Add(itemCharacter);
         gameData.itemDatasCharacter.Add(itemCharacter);
         OnCharacterChanged?.Invoke(gameData.itemDatasCharacter);
@@ -58,11 +72,11 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         playerInventoryService.SaveGame(gameData);
         characterService.SaveGame(gameData);
     }
-    public void OnCharacterLoaded(string playerName)
+    public void OnCharacterLoaded(string characterId)
     {
         saveLoadRemotes.Clear();
         gameData = new GameData();
-        gameData.playerName = playerName;
+        gameData.characterId = characterId;
         saveLoadRemotes.Add(new ProfileService(service));
         saveLoadRemotes.Add(new ShopService(service));
         saveLoadRemotes.Add(new InventoryService(service));

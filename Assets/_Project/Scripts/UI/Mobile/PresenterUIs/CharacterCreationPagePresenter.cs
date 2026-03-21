@@ -30,7 +30,10 @@ namespace TGTH.Mobile
         {
             nameCharacter = obj;
         }
-
+        private void OnEnable()
+        {
+            view.HideReasonFail();
+        }
         private void OnStartClicked()
         {
             if (currentItemCharacter == null || currentItemSelect == null || nameCharacter == "") return;

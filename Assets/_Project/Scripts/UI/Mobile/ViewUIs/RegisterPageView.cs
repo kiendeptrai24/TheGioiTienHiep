@@ -30,7 +30,11 @@ namespace TGTH.Mobile
                 OnRegisterClicked?.Invoke(data);
             });
         }
-        public void ShowError(string error)
+        public void HideMessege()
+        {
+            descriptionErrorTxt.text = "";
+        }
+        public void ShowMessege(string error)
         {
             descriptionErrorTxt.text = "+ " + error;
         }

@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using PlayFab;
 using UnityEditor.Search;
 using UnityEngine;
 namespace TGTH.Mobile
@@ -9,15 +10,19 @@ namespace TGTH.Mobile
     {
         [SerializeField] private RegisterPageView view;
         private AuthManager authManager;
-
+        [SerializeField] private ActionNavigation navigation;
         protected override void Awake()
         {
             base.Awake();
-            IAuthService authService = new PlayFabAuthService();
+            var clientAPI = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
+            IAuthService authService = new PlayFabAuthService(clientAPI);
             authManager = new AuthManager(authService);
             view.OnRegisterClicked += OnRegisterClicked;
         }
-
+        private void OnEnable()
+        {
+            view.HideMessege();
+        }
         private void OnRegisterClicked(RegisterData data)
         {
             authManager.Register(data, onSuccess, onError);
@@ -25,12 +30,13 @@ namespace TGTH.Mobile
 
         private void onError(AuthError error)
         {
-            view.ShowError(error.message);
+            view.ShowMessege(error.message);
         }
 
         private void onSuccess(AuthResult result)
         {
             Debug.Log(result.message);
+            navigation.OnClick();
         }
     }
 }

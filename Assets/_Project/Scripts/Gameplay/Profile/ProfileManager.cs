@@ -60,12 +60,12 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
     public void LoadData(GameData _data)
     {
         profileUser.coins = _data.coins;
-        profileUser.userName = _data.playerName;
+        profileUser.userName = _data.characterName;
     }
 
     public void SaveGame(ref GameData _data)
     {
         _data.coins = profileUser.coins;
-        _data.playerName = profileUser.userName;
+        _data.characterName = profileUser.userName;
     }
 }

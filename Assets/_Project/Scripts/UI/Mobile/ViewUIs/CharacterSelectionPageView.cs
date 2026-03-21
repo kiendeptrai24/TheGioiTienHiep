@@ -10,14 +10,17 @@ namespace TGTH.Mobile
     public class CharacterSelectionPageView : TGTHMonoBehaviour
     {
         [SerializeField] private Button startBtn;
+        [SerializeField] private Button logoutBtn;
         [SerializeField] private TextMeshProUGUI nameNvTxt;
         [SerializeField] private Image iconNvImge;
         public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
         public event Action OnStartClicked;
+        public event Action OnLogoutClicked;
         protected override void Awake()
         {
             base.Awake();
             startBtn.onClick.AddListener(() => OnStartClicked?.Invoke());
+            logoutBtn.onClick.AddListener(() => OnLogoutClicked?.Invoke());
         }
         public void ClearAllSlots()
         {

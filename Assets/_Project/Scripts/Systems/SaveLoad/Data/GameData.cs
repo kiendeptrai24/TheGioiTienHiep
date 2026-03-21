@@ -5,7 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class GameData
 {
-    public string playerName;
+    public string characterName;
+    public string characterId;
     public ulong coins;
     public List<ItemData> itemDatas;
     public List<ItemData> itemDatasInTeam;
@@ -18,5 +19,6 @@ public class GameData
         itemDatasInTeam = new List<ItemData>();
         itemShopDatas = new List<ItemData>();
         allItemsDatas = new List<ItemData>();
+        itemDatasCharacter = new List<ItemData>();
     }
 }

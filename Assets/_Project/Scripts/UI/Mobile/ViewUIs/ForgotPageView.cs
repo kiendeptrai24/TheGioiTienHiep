@@ -11,15 +11,16 @@ namespace TGTH.Mobile
 {
     public class ForgotPageView : TGTHMonoBehaviour
     {
-        [SerializeField] private Button registerBtn;
-        [SerializeField] private Button navLoginBtn;
+        [SerializeField] private Button backBtn;
+        [SerializeField] private Button confirmBtn;
         [SerializeField] private TextMeshProUGUI descriptionErrorTxt;
         [SerializeField] private TMP_InputField emailField;
+        public string descriptionTurtorial = "Vui Lòng nhập Email của tài khoản đã quên mật khẩu";
         public event Action<ForgotPasswordData> OnStartClicked;
         protected override void Awake()
         {
             base.Awake();
-            navLoginBtn.onClick.AddListener(() =>
+            confirmBtn.onClick.AddListener(() =>
             {
                 ForgotPasswordData data = new ForgotPasswordData();
                 data.email = emailField.text;
@@ -27,9 +28,13 @@ namespace TGTH.Mobile
                 OnStartClicked?.Invoke(data);
             });
         }
-        public void ShowError(string error)
+        public void ShowMessege(string error)
         {
             descriptionErrorTxt.text = "+ " + error;
+        }
+        public void HideMessege()
+        {
+            descriptionErrorTxt.text = descriptionTurtorial;
         }
 
     }

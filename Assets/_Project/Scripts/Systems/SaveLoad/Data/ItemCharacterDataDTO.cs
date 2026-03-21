@@ -5,5 +5,6 @@ using System.Collections.Generic;
 public class ItemCharacterDataDTO : ItemDataDTO
 {
     public List<string> characterNames = new List<string>();
+    public List<string> characterIds = new List<string>();
 
 }

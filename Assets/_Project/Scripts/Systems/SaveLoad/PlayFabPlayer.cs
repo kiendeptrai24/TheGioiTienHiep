@@ -34,12 +34,6 @@ public class PlayFabPlayer
             Debug.LogError(error.GenerateErrorReport());
         });
     }
-    public void Login(AuthResult result)
-    {
-        loggedIn = true;
-        clientApi = result.clientApi;
-        PlayFabId = result.userId;
-    }
     public void Logout()
     {
 
@@ -184,7 +178,7 @@ public class PlayFabPlayer
         string key = "profile";
         PlayerProfileDTO profile = new PlayerProfileDTO();
         profile.coins = gameData.coins;
-        profile.playerName = gameData.playerName;
+        profile.playerName = gameData.characterName;
 
 
         string json = JsonConvert.SerializeObject(profile);

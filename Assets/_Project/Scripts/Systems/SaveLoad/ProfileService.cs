@@ -12,7 +12,7 @@ public class ProfileService : ISaveLoadRemote
     }
     public void LoadGame(GameData gameData, Action callback)
     {
-        service.LoadProfile(gameData.playerName, (profileDataDTO) =>
+        service.LoadProfile(gameData.characterId, (profileDataDTO) =>
         {
             if (profileDataDTO == null)
             {
@@ -20,7 +20,9 @@ public class ProfileService : ISaveLoadRemote
                 return;
             }
             if (string.IsNullOrEmpty(profileDataDTO.playerName) == false)
-                gameData.playerName = profileDataDTO.playerName;
+                gameData.characterName = profileDataDTO.playerName;
+            if (string.IsNullOrEmpty(profileDataDTO.characterId) == false)
+                gameData.characterId = profileDataDTO.characterId;
             gameData.coins = profileDataDTO.coins;
             callback?.Invoke();
         });

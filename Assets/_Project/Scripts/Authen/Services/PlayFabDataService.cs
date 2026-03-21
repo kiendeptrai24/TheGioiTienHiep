@@ -26,23 +26,23 @@ public class PlayFabDataService
         LoadTitleData("shop", callback);
     }
 
-    public void LoadPlayerData(string playerName, Action<ItemDataDTO> callback)
+    public void LoadPlayerData(string characterId, Action<ItemDataDTO> callback)
     {
-        LoadUserData($"inventory {playerName}", callback);
+        LoadUserData($"inventory {characterId}", callback);
     }
 
-    public void LoadTeamData(string playerName, Action<HeroDataDTO> callback)
+    public void LoadTeamData(string characterId, Action<HeroDataDTO> callback)
     {
-        LoadUserData($"team {playerName}", callback);
+        LoadUserData($"team {characterId}", callback);
     }
 
-    public void LoadProfile(string playerName, Action<PlayerProfileDTO> callback)
+    public void LoadProfile(string characterId, Action<PlayerProfileDTO> callback)
     {
-        LoadUserData($"profile {playerName}", callback);
+        LoadUserData($"profile {characterId}", callback);
     }
-    public void LoadPlayerProfile(string playerName, Action<PlayerProfileDTO> callback)
+    public void LoadPlayerProfile(string characterId, Action<PlayerProfileDTO> callback)
     {
-        LoadUserData($"profile {playerName}", callback);
+        LoadUserData($"profile {characterId}", callback);
     }
     public void LoadCharacter(Action<ItemCharacterDataDTO> callback)
     {
@@ -75,7 +75,7 @@ public class PlayFabDataService
             }
         }
 
-        SaveUserData($"team {gameData.playerName}", teamData);
+        SaveUserData($"team {gameData.characterId}", teamData);
     }
 
     public void SetItemInventoryData(GameData gameData)
@@ -91,7 +91,7 @@ public class PlayFabDataService
             inventoryItems = gameData.itemDatas ?? new List<ItemData>()
         };
 
-        SaveUserData($"inventory {gameData.playerName}", inventoryData);
+        SaveUserData($"inventory {gameData.characterId}", inventoryData);
     }
     public void SetItemCharacter(GameData gameData)
     {
@@ -108,6 +108,10 @@ public class PlayFabDataService
             {
                 inventoryData.inventoryItems.Add(item);
                 inventoryData.characterNames.Add(item.itemName);
+                if (item is HeroData heroData)
+                {
+                    inventoryData.characterIds.Add(heroData.characterId);
+                }
             }
         }
         else
@@ -128,11 +132,12 @@ public class PlayFabDataService
 
         PlayerProfileDTO profile = new PlayerProfileDTO
         {
+            characterId = gameData.characterId,
             coins = gameData.coins,
-            playerName = gameData.playerName
+            playerName = gameData.characterName
         };
 
-        SaveUserData($"profile {gameData.playerName}", profile);
+        SaveUserData($"profile {gameData.characterId}", profile);
     }
 
     #endregion

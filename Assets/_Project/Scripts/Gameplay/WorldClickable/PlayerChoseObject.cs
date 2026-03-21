@@ -12,7 +12,6 @@ public class PlayerChoseObject : Singleton<PlayerChoseObject>
     {
         base.Awake();
         PlayerNetManager.Instance.OnPlayerExiststed += OnPlayerExists;
-
     }
 
     private void OnPlayerExists(NetworkObject @object)

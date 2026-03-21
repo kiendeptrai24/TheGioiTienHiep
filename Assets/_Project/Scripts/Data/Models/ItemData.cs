@@ -6,43 +6,42 @@ using UnityEngine;
 public class ItemData
 {
     public string itemId;
-    [JsonIgnore] 
+    [JsonIgnore]
     public ItemType itemType;
-    [JsonIgnore] 
     public string itemName;
     [JsonIgnore]
     public Sprite itemIcon;
     public string itemIconPath;
     public string itemFilePath;
-    [JsonIgnore] 
+    [JsonIgnore]
     public int itemPrice;
-    [JsonIgnore] 
+    [JsonIgnore]
     public bool canStack;
-    [JsonIgnore] 
+    [JsonIgnore]
     public string itemDescription;
-    [JsonIgnore] 
+    [JsonIgnore]
     public int currentstack;
-    [JsonIgnore] 
+    [JsonIgnore]
     public RealmType realmType;
-    [JsonIgnore] 
+    [JsonIgnore]
     public QualityType qualityType;
-    [JsonIgnore] 
+    [JsonIgnore]
     public ElementType elementType;
     //Offensive Stats
 
-    [JsonIgnore] 
+    [JsonIgnore]
     public float physicalDamage;
-    [JsonIgnore] 
+    [JsonIgnore]
     public float magicalDamage;
-    [JsonIgnore] 
+    [JsonIgnore]
     public float spiritDamage;
 
     //Defensive Stats
-    [JsonIgnore] 
+    [JsonIgnore]
     public float physicalDefense;
-    [JsonIgnore] 
+    [JsonIgnore]
     public float magicalDefense;
-    [JsonIgnore] 
+    [JsonIgnore]
     public float spiritDefense;
     public ItemData Clone()
     {

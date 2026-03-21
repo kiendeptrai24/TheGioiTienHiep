@@ -3,8 +3,10 @@ using System;
 public abstract class AuthServiceBase : IAuthService
 {
     public abstract void Login(LoginData data, Action<AuthResult> onSuccess, Action<AuthError> onError);
+    public abstract void AutoLogin(Action<AuthResult> onSuccess, Action<AuthError> onError);
     public abstract void Register(RegisterData data, Action<AuthResult> onSuccess, Action<AuthError> onError);
     public abstract void ForgotPassword(ForgotPasswordData data, Action<string> onSuccess, Action<AuthError> onError);
+    public abstract void Logout(Action<AuthResult> onSuccess, Action<AuthError> onError);
 
     protected bool IsNullOrEmpty(string value)
     {

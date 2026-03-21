@@ -52,7 +52,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         foreach (var heroPrefab in heroRoster.chamPrefabs)
         {
             if (heroPrefab == null) continue;
-
+            Debug.Log(heroPrefab.name);
             var stats = heroPrefab.GetComponent<StatsData>();
             stats.SetUpItem(stats.heroData);
             var snap = SnapshotMapper.FromStats(stats, TeamId.Heroes);
@@ -68,7 +68,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         foreach (var enemyPrefab in enemyRoster.chamPrefabs)
         {
             if (enemyPrefab == null) continue;
-
+            Debug.Log(enemyPrefab.name);
             var stats = enemyPrefab.GetComponent<StatsData>();
             stats.SetUpItem(stats.heroData);
 
@@ -83,8 +83,6 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             snap.placement.attackRange = (int)snap.snap.attackRange;
             enemySnaps.Add(snap);
         }
-
-
 
         uint seed = (uint)(playerClientId.GetHashCode() ^ monsterNetId.GetHashCode() ^ Environment.TickCount);
 

@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 namespace TGTH.Mobile
@@ -18,15 +19,23 @@ namespace TGTH.Mobile
             Init();
             playfabDataManager.OnCharacterChanged += OnItemCharacterChanged;
             playfabDataManager.OnLoadCharacterFormPlayfab += OnItemCharacterChanged;
-            OnItemCharacterChanged(playfabDataManager.GetCharactersData());
             view.OnStartClicked += OnStartClicked;
+            view.OnLogoutClicked += OnLogoutClicked;
+        }
+        private void OnEnable()
+        {
+            OnItemCharacterChanged(playfabDataManager.GetCharactersData());
+        }
+        private void OnLogoutClicked()
+        {
+            playfabDataManager.Logout();
         }
 
         private void OnStartClicked()
         {
             if (currentItemSelect == null || currentItemSelect.HasItem() == false) return;
-            string playerName = currentItemSelect.inventoryItem.data.itemName;
-            PlayfabDataManager.Instance.OnCharacterLoaded(playerName);
+            string characterId = (currentItemSelect.inventoryItem.data as HeroData).characterId;
+            PlayfabDataManager.Instance.OnCharacterLoaded(characterId);
             navigation.OnClick();
         }
 

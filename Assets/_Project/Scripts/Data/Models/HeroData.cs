@@ -8,6 +8,7 @@ public class HeroData : ItemData
 {
     [JsonIgnore]
     public bool isCharactor;
+    public string characterId;
     [JsonIgnore]
     public StatsRealmData statsRealmData;
     [JsonIgnore]
