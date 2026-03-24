@@ -2,21 +2,28 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
-
+[System.Serializable]
+public class ChampionSetUp
+{
+    public ItemPreset champion;
+    public Vector2Int championIndex;
+}
 public class PlayerBattleRoster : TGTHNetworkBehaviour
 {
+    [SerializeField] private List<ChampionSetUp> championSetUps = new();
     [Header("Hero prefabs of this player (must be NetworkObject prefabs + registered in NetworkManager)")]
-    public List<NetworkObject> heroNetPrefabs = new();
-    public List<GameObject> chamPrefabs = new();
+    public List<ItemData> itemDatas = new();
     // Bạn có thể thêm logic chọn đội hình (chỉ spawn N con đầu tiên)
     public int maxHeroesToSpawn = 5;
-    protected override void Awake()
+    public override void OnNetworkSpawn()
     {
-        base.Awake();
-        foreach (var cham in chamPrefabs)
+        base.OnNetworkSpawn();
+        if (!IsServer) return;
+        foreach (var item in championSetUps)
         {
-            var stats = cham.GetComponent<StatsData>();
-            stats.SetupDataPreset();
+            var itemData = item.champion.GetItemData() as HeroData;
+            itemData.championIndex = item.championIndex;
+            itemDatas.Add(itemData);
         }
     }
     protected override void Start()
@@ -25,9 +32,8 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
         base.Start();
         ItemPrefabDatabase.Instance.OnPlayerPrefabChanged += OnPlayerPrefabChanged;
     }
-
-    private void OnPlayerPrefabChanged(List<GameObject> list)
+    private void OnPlayerPrefabChanged(List<ItemData> list)
     {
-        chamPrefabs = list;
+        itemDatas = list;
     }
 }

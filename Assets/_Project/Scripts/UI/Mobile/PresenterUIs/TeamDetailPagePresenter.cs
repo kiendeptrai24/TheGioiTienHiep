@@ -31,7 +31,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
     protected override void Start()
     {
         base.Start();
-        
+
         SetInit(inventoryCenterManager.GetDatasChampion());
     }
     public void SetInit(List<ItemData> itemDatas)
@@ -248,8 +248,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
             return;
         }
         var popup = PopupManager.Instance.GetPopup<UseItemPopup>();
-        BaseSetupData data = new BaseSetupData("Bạn có muốn loại bỏ tướng này khỏi đội không?");
-
+        BaseSetupData data = new BaseSetupData($"Bạn có muốn loại bỏ tướng <color=green>{uiItem.inventoryItem.data.itemName}</color> khỏi đội không?");
         if (popup != null)
         {
             popup.ShowPopup(data,

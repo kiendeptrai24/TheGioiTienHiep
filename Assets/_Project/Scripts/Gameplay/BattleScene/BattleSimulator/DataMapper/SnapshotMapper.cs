@@ -7,7 +7,7 @@ public static class SnapshotMapper
     {
         int hp = s.Health;
 
-        var heroData = s.heroPreset.GetItemData() as HeroData;
+        var heroData = s.heroData as HeroData;
         List<SkillData> skills = heroData != null ? heroData.skillDatas : new List<SkillData>();
         return new UnitInput
         {

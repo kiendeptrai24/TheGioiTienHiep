@@ -111,7 +111,10 @@ namespace TGTH.Mobile
                 return;
             }
             var popup = PopupManager.Instance.GetPopup<UseItemPopup>();
-            BaseSetupData data = new BaseSetupData("Bạn có muốn sử dụng tướng này không?");
+            BaseSetupData data = new BaseSetupData(
+                $"Bạn có muốn đặt tướng \n" +
+                $"<color=green>{uiItem.inventoryItem.data.itemName}</color> vào ô {(currentItem as UIChoseChampionItem).championIndex.ToString()}\n"
+                + "không?");
 
             if (popup != null)
             {

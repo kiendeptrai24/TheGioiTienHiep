@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class GameUIScreenManager : ScreenManager
 {
+    [SerializeField] private GameObject m_CreateAccountScreen;
     [SerializeField] private GameObject m_InGameUI;
     [SerializeField] private GameObject m_UI;
     [SerializeField] private GameObject m_MapScreen;
     [SerializeField] private GameObject m_TeamScreen;
-    [SerializeField] private GameObject m_CreateAccountScreen;
+    [SerializeField] private GameObject m_EnemyInfoScreen;
+    [SerializeField] private GameObject m_MineInfoScreen;
     protected override void Awake()
     {
         base.Awake();
@@ -15,7 +17,9 @@ public class GameUIScreenManager : ScreenManager
         m_Screens.Add(m_MapScreen.gameObject.name, m_MapScreen);
         m_Screens.Add(m_TeamScreen.gameObject.name, m_TeamScreen);
         m_Screens.Add(m_CreateAccountScreen.gameObject.name, m_CreateAccountScreen);
-        defaultScreen = m_CreateAccountScreen.gameObject.name;
+        m_Screens.Add(m_EnemyInfoScreen.gameObject.name, m_EnemyInfoScreen);
+        m_Screens.Add(m_MineInfoScreen.gameObject.name, m_MineInfoScreen);
+        defaultScreen = m_InGameUI.gameObject.name;
     }
     protected override void Start()
     {

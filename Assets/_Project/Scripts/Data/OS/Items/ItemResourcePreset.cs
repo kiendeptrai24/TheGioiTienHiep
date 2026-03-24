@@ -5,7 +5,12 @@ public class ItemResourcePreset : ItemPreset
 {
     public RealmType cultivationStage;
     public ResourceType resourceType;
-
+    public int yieldPerHarvest;
+    public float miningTime;
+    public float currentMiningProgress;
+    public int maxStorage;
+    public int currentAmount;
+    public int level;
     public override ItemData GetItemData()
     {
         ItemResourseData data = new ItemResourseData();
@@ -21,6 +26,12 @@ public class ItemResourcePreset : ItemPreset
         data.qualityType = qualityType;
         data.realmType = cultivationStage;
         data.resourceType = resourceType;
+        data.yieldPerHarvest = yieldPerHarvest;
+        data.miningTime = miningTime;
+        data.currentMiningProgress = currentMiningProgress;
+        data.maxStorage = maxStorage;
+        data.currentAmount = currentAmount;
+        data.level = level;
         return data;
     }
 

@@ -6,50 +6,17 @@ using UnityEngine;
 
 public class ItemPrefabDatabase : Singleton<ItemPrefabDatabase>
 {
-    [SerializeField] private List<StatsData> itemPrefabs = new();
-    private Dictionary<string, GameObject> lookup;
     private InventoryCenterManager inventoryCenterManager;
-    private PlayerNetManager playerNetManager;
-    public event Action<List<GameObject>> OnPlayerPrefabChanged;
+    public event Action<List<ItemData>> OnPlayerPrefabChanged;
     protected override void Awake()
     {
         base.Awake();
-        lookup = new Dictionary<string, GameObject>();
         inventoryCenterManager = InventoryCenterManager.Instance;
-        playerNetManager = PlayerNetManager.Instance;
         inventoryCenterManager.OnListItemDatasChampionChanged += OnListItemDatasChampionChanged;
-
-        playerNetManager.OnPlayerExiststed += LoadPrefab;
-        foreach (var entry in itemPrefabs)
-        {
-            if (!lookup.ContainsKey(entry.heroPreset.itemId))
-            {
-                lookup.Add(entry.heroPreset.itemId, entry.gameObject);
-            }
-        }
     }
 
-    private void OnListItemDatasChampionChanged(List<ItemData> list)
+    public void OnListItemDatasChampionChanged(List<ItemData> list)
     {
-        OnPlayerPrefabChanged?.Invoke(GetPrefab());
-    }
-
-    private void LoadPrefab(NetworkObject playerNet)
-    {
-        OnPlayerPrefabChanged?.Invoke(GetPrefab());
-    }
-
-    public List<GameObject> GetPrefab()
-    {
-        var prefabs = new List<GameObject>();
-        foreach (var item in inventoryCenterManager.listItemDatasChampion)
-        {
-            if (lookup.TryGetValue(item.itemId, out var prefab))
-            {
-                prefab.GetComponent<StatsData>().heroData = item;
-                prefabs.Add(prefab);
-            }
-        }
-        return prefabs;
+        OnPlayerPrefabChanged?.Invoke(list);
     }
 }

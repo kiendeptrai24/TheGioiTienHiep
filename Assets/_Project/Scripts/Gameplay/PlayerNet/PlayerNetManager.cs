@@ -20,7 +20,10 @@ public class PlayerNetManager : Singleton<PlayerNetManager>
     {
         playerObject = _playerObject;
         SetPlayerProfile();
+        var itemData = InventoryCenterManager.Instance.listItemDatasChampion;
+        ItemPrefabDatabase.Instance.OnListItemDatasChampionChanged(itemData);
         OnPlayerExiststed?.Invoke(playerObject);
+
     }
     public void SetPlayerProfile()
     {

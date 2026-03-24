@@ -1,77 +1,74 @@
-using System;
-using FeatureToggles;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MonsterOptionUI : MonoBehaviour
+public class MonsterOptionUI : TGTHMonoBehaviour, IEntityOptionUI
 {
-    [SerializeField] private Button leaveButton;
-    [SerializeField] private Button attackButton;
     [SerializeField] private Button infoButton;
-    [SerializeField] private GameObject root;
+    [SerializeField] private Button attackButton;
+    [SerializeField] private Button chatButton;
+    [SerializeField] private Button leaveButton;
+    [SerializeField] private IEnemyInfo enemyInfo;
     private PlayerChoseObject choseObject;
-    [SerializeField] private FeatureId gate = FeatureId.WorldClick_Enabled;
-    private FeatureManager _mgr;
-    private void Awake()
+    private EntityOptionManager entityOptionManager;
+    public void SetEntity(PlayerChoseObject entity)
     {
-        choseObject = PlayerChoseObject.Instance;
-        choseObject.OnEntityClicked += OnEntityClicked;
+        choseObject = entity;
+        ShowUI();
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        entityOptionManager = GetComponentInParent<EntityOptionManager>();
         leaveButton.onClick.AddListener(() =>
         {
-            OnLeaveClicked();
+            LeaveUI();
+        });
+        chatButton.onClick.AddListener(() =>
+        {
+            ChatUI();
+        });
+        infoButton.onClick.AddListener(() =>
+        {
+            ShowInfo();
         });
         attackButton.onClick.AddListener(() =>
         {
-            OnAttackClicked();
+            Attack();
         });
     }
-    private void Start()
+
+    private void ChatUI()
     {
-        _mgr = FeatureManager.Instance;
-        LockUI(_mgr.IsEnabled(gate));
-        _mgr.OnFeatureEffectiveChanged += OnChanged;
+
     }
 
-    private void OnChanged(FeatureId id, bool arg2)
-    {
-        if (id.Equals(gate)) LockUI(arg2);
-    }
-    private void LockUI(bool unlock)
-    {
-        if (unlock)
-        {
-            Show();
-        }
-        else
-        {
-            Hide();
-        }
-    }
-
-    private void OnEntityClicked(EntityClickable entity)
-    {
-        Show();
-    }
-
-    public void OnLeaveClicked()
-    {
-        Hide();
-    }
-
-    public void OnAttackClicked()
+    private void Attack()
     {
         choseObject.RequestBattleSimulator();
-        Hide();
-    }
-    public void Show()
-    {
-        if(!_mgr.IsEnabled(gate)) return;
-        root.SetActive(true);
+        LeaveUI();
     }
 
+    private void ShowInfo()
+    {
+        var entity = choseObject.GetCurrentEntity();
+        var roster = entity.GetComponent<PlayerBattleRoster>();
+        enemyInfo.SetupDataInfo(roster.itemDatas);
+    }
+    private void ShowUI()
+    {
+        gameObject.SetActive(true);
+        leaveButton.gameObject.SetActive(true);
+        chatButton.gameObject.SetActive(true);
+        infoButton.gameObject.SetActive(true);
+        attackButton.gameObject.SetActive(true);
+    }
+    private void LeaveUI()
+    {
+        entityOptionManager.Hide();
+    }
     public void Hide()
     {
-        root.SetActive(false);
+        gameObject.SetActive(false);
     }
 }

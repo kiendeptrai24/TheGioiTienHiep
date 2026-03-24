@@ -37,11 +37,13 @@ public class UIInventoryItem : UIItemSlotBase
     public override void ResetData()
     {
         base.ResetData();
+        if (quantityTxt == null) return;
         quantityTxt.text = string.Empty;
     }
     public override void SetData(Sprite sprite, int quantity)
     {
         base.SetData(sprite, quantity);
+        if (quantityTxt == null) return;
         quantityTxt.text = quantity > 1 ? quantity.ToString() : string.Empty;
     }
     public override bool CanReceive(ItemDragContext ctx)

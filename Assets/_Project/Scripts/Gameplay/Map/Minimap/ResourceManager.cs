@@ -16,9 +16,15 @@ public class ResourceManager : TGTHMonoBehaviour
             itemResources.Add(item.GetItemData());
         }
     }
-    protected override void Start()
+    public void AddItemMapWorld(ItemMapWorld item)
     {
-        base.Start();
+        items.Add(item);
+        itemResources.Add(item.GetItemData());
+    }
+    public void RemoveItemMapWorld(ItemMapWorld item)
+    {
+        items.Remove(item);
+        itemResources.Remove(item.GetItemData());
     }
     public List<ItemData> GetItems()
     {

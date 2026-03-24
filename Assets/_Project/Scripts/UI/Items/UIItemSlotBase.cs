@@ -68,11 +68,13 @@ public abstract class UIItemSlotBase : TGTHMonoBehaviour,
     }
     public virtual void Select()
     {
+        if (borderImage == null) return;
         borderImage.gameObject.SetActive(true);
     }
 
     public virtual void Deselect()
     {
+        if (borderImage == null) return;
         borderImage.gameObject.SetActive(false);
     }
     #endregion
