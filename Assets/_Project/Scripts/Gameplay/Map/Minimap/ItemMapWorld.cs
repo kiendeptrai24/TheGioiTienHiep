@@ -17,7 +17,14 @@ public class ItemMapWorld : TGTHMonoBehaviour
         base.Start();
     }
     public void ItemInteract() => OnItemInteract?.Invoke(destination);
-
+    public Destination GetDestination()
+    {
+        if (destination.spawnPoint == null)
+        {
+            destination.spawnPoint = transform;
+        }
+        return destination;
+    }
     public ItemData GetItemData()
     {
         destination.itemData = itemDataPreset.GetItemData();

@@ -10,6 +10,7 @@ public class ChampionSetUp
 }
 public class PlayerBattleRoster : TGTHNetworkBehaviour
 {
+    public bool player = false;
     [SerializeField] private List<ChampionSetUp> championSetUps = new();
     [Header("Hero prefabs of this player (must be NetworkObject prefabs + registered in NetworkManager)")]
     public List<ItemData> itemDatas = new();
@@ -29,6 +30,7 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
     protected override void Start()
     {
         if (!IsOwner) return;
+        if (player == false) return;
         base.Start();
         ItemPrefabDatabase.Instance.OnPlayerPrefabChanged += OnPlayerPrefabChanged;
     }

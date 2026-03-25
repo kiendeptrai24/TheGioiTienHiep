@@ -41,7 +41,7 @@ namespace TGTH.Mobile
         {
             if (findPathResults.Count == 0) return;
 
-            var maxIndex = findPathResults.Count - 1;
+            var maxIndex = findPathResults.Count;
             currentIndex++;
 
             if (currentIndex >= maxIndex)

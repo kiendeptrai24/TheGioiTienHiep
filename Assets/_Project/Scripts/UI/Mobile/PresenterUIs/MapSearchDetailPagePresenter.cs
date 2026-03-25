@@ -159,8 +159,9 @@ namespace TGTH.Mobile
 
         private void OnItemClicked(UIItemResourse item)
         {
-            Debug.Log("OnItemClicked");
+            curItem?.UnSelect();
             curItem = item;
+            curItem.Select();
             view.SetModeIcon(item.itemData);
         }
         protected override void Start()

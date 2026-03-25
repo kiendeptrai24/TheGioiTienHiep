@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExitGames.Client.Photon.StructWrapping;
 using UnityEngine;
 using WorldMap.Travel;
 
@@ -12,9 +13,16 @@ namespace WorldMap.UI
         [SerializeField] private string searchText;
         [SerializeField] private List<Destination> destititions;
         private TeleportService teleport = new TeleportService();
+        private ResourceManager resourceManager;
         protected override void Awake()
         {
-
+            base.Awake();
+            resourceManager = GetComponent<ResourceManager>();
+        }
+        protected override void Start()
+        {
+            base.Start();
+            destititions.Clear();
         }
         public void TeleportById(string destinationId)
         {
