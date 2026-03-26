@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MonsterOptionUI : TGTHMonoBehaviour, IEntityOptionUI
+public class PlayerOptionUI : TGTHMonoBehaviour, IEntityOptionUI
 {
     [SerializeField] private Button infoButton;
     [SerializeField] private Button attackButton;
+    [SerializeField] private Button chatButton;
     [SerializeField] private Button leaveButton;
     [SerializeField] private IEnemyInfo enemyInfo;
     private PlayerChoseObject choseObject;
@@ -23,6 +24,10 @@ public class MonsterOptionUI : TGTHMonoBehaviour, IEntityOptionUI
         {
             LeaveUI();
         });
+        chatButton.onClick.AddListener(() =>
+        {
+            ChatUI();
+        });
         infoButton.onClick.AddListener(() =>
         {
             ShowInfo();
@@ -32,6 +37,12 @@ public class MonsterOptionUI : TGTHMonoBehaviour, IEntityOptionUI
             Attack();
         });
     }
+
+    private void ChatUI()
+    {
+
+    }
+
     private void Attack()
     {
         choseObject.RequestBattleSimulator();
@@ -52,6 +63,7 @@ public class MonsterOptionUI : TGTHMonoBehaviour, IEntityOptionUI
     {
         gameObject.SetActive(true);
         leaveButton.gameObject.SetActive(true);
+        chatButton.gameObject.SetActive(true);
         infoButton.gameObject.SetActive(true);
         attackButton.gameObject.SetActive(true);
     }

@@ -1,6 +1,5 @@
 
 using System;
-using UnityEngine;
 
 public class TeamInventoryService : ISaveLoadRemote
 {
@@ -12,7 +11,7 @@ public class TeamInventoryService : ISaveLoadRemote
 
     public void LoadGame(GameData gameData, Action callback)
     {
-        service.LoadTeamData(gameData.characterId ,(gameDataDTO) =>
+        service.LoadTeamData(gameData.characterId, (gameDataDTO) =>
         {
             if (gameDataDTO == null)
             {

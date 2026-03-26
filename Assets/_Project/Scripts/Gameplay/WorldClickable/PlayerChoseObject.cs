@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerChoseObject : Singleton<PlayerChoseObject>
 {
     private EntityClickable currentEntity;
+    private UIFollow uIFollow;
     private NetworkObject playerNet;
     public event Action<EntityClickable> OnEntityClicked;
     public EntityClickable GetCurrentEntity()
@@ -14,6 +15,7 @@ public class PlayerChoseObject : Singleton<PlayerChoseObject>
     protected override void Awake()
     {
         base.Awake();
+        uIFollow = GetComponent<UIFollow>();
         PlayerNetManager.Instance.OnPlayerExiststed += OnPlayerExists;
     }
 
@@ -24,8 +26,9 @@ public class PlayerChoseObject : Singleton<PlayerChoseObject>
 
     public void SetupEntity(EntityClickable entity)
     {
+        if (entity == playerNet) return;
         currentEntity = entity;
-        transform.position = entity.transform.position;
+        uIFollow.SetTarget(currentEntity.transform);
         OnEntityClicked?.Invoke(entity);
     }
     public void RequestBattleSimulator()

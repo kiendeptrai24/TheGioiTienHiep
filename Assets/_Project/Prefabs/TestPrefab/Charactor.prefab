@@ -2189,11 +2189,11 @@ GameObject:
   - component: {fileID: 3100323945643275413}
   - component: {fileID: 7901223169405952457}
   - component: {fileID: 2303058893719603686}
-  - component: {fileID: 7294590751173965482}
   - component: {fileID: 6332937592598727563}
   - component: {fileID: 3855082729364616063}
   - component: {fileID: 439217955596202718}
   - component: {fileID: -6129814544419183229}
+  - component: {fileID: 75129623076662156}
   m_Layer: 12
   m_Name: Charactor
   m_TagString: Untagged
@@ -2230,7 +2230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3254898076
+  GlobalObjectIdHash: 2343071046
   InScenePlacedSourceGlobalObjectIdHash: 3254898076
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2457,25 +2457,6 @@ MonoBehaviour:
   championSetUps: []
   itemDatas: []
   maxHeroesToSpawn: 5
---- !u!114 &7294590751173965482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7804178499550283321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b6a02185be28e243847e62c1d5b2ed3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerBattleState
-  ShowTopMostFoldoutHeaderGroup: 1
-  InBattle:
-    m_InternalValue: 0
-  SessionId:
-    m_InternalValue: 0
-  EngagedMonsterNetId:
-    m_InternalValue: 0
 --- !u!114 &6332937592598727563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2542,6 +2523,20 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 2
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &75129623076662156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67d8384cd000a8c419afb443846507a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerClickable
+  ShowTopMostFoldoutHeaderGroup: 1
+  entityWorldType: 2
 --- !u!1 &7825434533555785058
 GameObject:
   m_ObjectHideFlags: 0

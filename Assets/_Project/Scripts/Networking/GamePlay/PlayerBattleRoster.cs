@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Unity.Netcode;
 using UnityEngine;
 [System.Serializable]
@@ -16,9 +17,16 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
     public List<ItemData> itemDatas = new();
     // Bạn có thể thêm logic chọn đội hình (chỉ spawn N con đầu tiên)
     public int maxHeroesToSpawn = 5;
+
+    public Action result = default;
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+
+        if (IsOwner)
+        {
+            ItemPrefabDatabase.Instance.OnPlayerPrefabChanged += OnPlayerPrefabChanged;
+        }
         if (!IsServer) return;
         foreach (var item in championSetUps)
         {
@@ -27,15 +35,67 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
             itemDatas.Add(itemData);
         }
     }
-    protected override void Start()
-    {
-        if (!IsOwner) return;
-        if (player == false) return;
-        base.Start();
-        ItemPrefabDatabase.Instance.OnPlayerPrefabChanged += OnPlayerPrefabChanged;
-    }
     private void OnPlayerPrefabChanged(List<ItemData> list)
     {
         itemDatas = list;
+        string json = ItemJsonConverter.ToJson(list);
+        Debug.Log("send to server");
+        SendToServerOnPlayerPrefabChangedServerRpc(json);
+    }
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    private void SendToServerOnPlayerPrefabChangedServerRpc(string itemDataDTO)
+    {
+        if (!IsServer) return;
+        Debug.Log("receive from server");
+        var itemDatas = ItemJsonConverter.FromJson(itemDataDTO);
+        this.itemDatas = itemDatas;
+    }
+    /// <summary>
+    /// Client gọi hàm này trên object roster của người chơi mà mình muốn lấy team.
+    /// Ví dụ muốn lấy team đối thủ thì gọi opponentRoster.GetPlayerTeam();
+    /// </summary>
+    public void GetPlayerTeam(Action result = default)
+    {
+        this.result = result;
+        if (IsServer)
+        {
+            // Nếu đang chạy trên server luôn thì khỏi RPC
+            OnPlayerTeamReceived(OwnerClientId, new List<ItemData>(itemDatas));
+            return;
+        }
+        GetPlayerTeamServerRpc();
+    }
+
+    /// <summary>
+    /// Client request server lấy team của object roster này.
+    /// </summary>
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    public void GetPlayerTeamServerRpc(RpcParams rpcParams = default)
+    {
+        if (!IsServer) return;
+
+        ulong requesterClientId = rpcParams.Receive.SenderClientId;
+        string json = ItemJsonConverter.ToJson(itemDatas);
+
+        ReturnPlayerTeamClientRpc(requesterClientId, json);
+    }
+
+    /// <summary>
+    /// Server trả dữ liệu team lại cho đúng client đã request.
+    /// </summary>
+    [Rpc(SendTo.NotServer)]
+    private void ReturnPlayerTeamClientRpc(ulong requesterClientId, string itemDataDTO)
+    {
+        if (NetworkManager.Singleton.LocalClientId != requesterClientId)
+            return;
+
+        var list = ItemJsonConverter.FromJson(itemDataDTO);
+        OnPlayerTeamReceived(requesterClientId, list);
+        Debug.Log($"Received team of player {OwnerClientId}, count = {list?.Count ?? 0}");
+    }
+    public void OnPlayerTeamReceived(ulong requesterClientId, List<ItemData> list)
+    {
+        itemDatas = list;
+        result?.Invoke();
     }
 }

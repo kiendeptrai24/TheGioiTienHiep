@@ -18,7 +18,7 @@ public class UIFollow : TGTHMonoBehaviour
         uiRect.gameObject.SetActive(false);
     }
 
-    private void LateUpdate()
+    private void Update()
     {
         if (worldTarget == null) return;
 
@@ -36,9 +36,12 @@ public class UIFollow : TGTHMonoBehaviour
         uiRect.gameObject.SetActive(true);
         uiRect.position = screenPos;
     }
+    public void SetTarget(Transform target)
+    {
+        worldTarget = target;
+    }
     protected override void LoadComponent()
     {
         mainCam = Camera.main;
-        worldTarget = transform.root.GetComponent<Transform>();
     }
 }

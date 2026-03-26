@@ -1,4 +1,5 @@
 using FeatureToggles;
+using Unity.Netcode;
 using UnityEngine;
 
 public class WorldClickSystem : TGTHMonoBehaviour
@@ -33,6 +34,12 @@ public class WorldClickSystem : TGTHMonoBehaviour
         {
             if (hit.collider.TryGetComponent<IWorldClickable>(out var clickable))
             {
+                var playerNet = hit.collider.GetComponent<NetworkObject>();
+                if (playerNet != null)
+                {
+                    if (playerNet.IsOwner)
+                        return;
+                }
                 clickable.OnClicked();
             }
         }

@@ -3,5 +3,6 @@
 public enum EntityWorldType
 {
     Mine,
-    Monster
+    Monster,
+    Player
 }

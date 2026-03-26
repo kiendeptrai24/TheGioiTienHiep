@@ -2,7 +2,6 @@
 using UnityEditor;
 #endif
 using UnityEngine;
-using UnityEngine.ResourceManagement.ResourceProviders.Simulation;
 
 [CreateAssetMenu(fileName = "NewMaterialPreset", menuName = "RPG/Items/Material Preset")]
 public abstract class ItemPreset : ScriptableObject

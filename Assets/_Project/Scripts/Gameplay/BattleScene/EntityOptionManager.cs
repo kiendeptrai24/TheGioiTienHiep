@@ -1,8 +1,5 @@
-using System;
 using FeatureToggles;
-using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class EntityOptionManager : MonoBehaviour
 {
@@ -12,13 +9,12 @@ public class EntityOptionManager : MonoBehaviour
     private FeatureManager _mgr;
     [SerializeField] private MineOptionUI mineOpptionUI;
     [SerializeField] private MonsterOptionUI monsterOptionUI;
+    [SerializeField] private PlayerOptionUI playerOptionUI;
     private void Awake()
     {
         choseObject = PlayerChoseObject.Instance;
         choseObject.OnEntityClicked += OnEntityClicked;
-    }
-    private void Start()
-    {
+
         _mgr = FeatureManager.Instance;
         LockUI(_mgr.IsEnabled(gate));
         _mgr.OnFeatureEffectiveChanged += OnChanged;
@@ -47,11 +43,19 @@ public class EntityOptionManager : MonoBehaviour
         {
             mineOpptionUI.SetEntity(choseObject);
             monsterOptionUI.Hide();
+            playerOptionUI.Hide();
         }
-        else
+        else if (entity.entityWorldType == EntityWorldType.Monster)
         {
             monsterOptionUI.SetEntity(choseObject);
             mineOpptionUI.Hide();
+            playerOptionUI.Hide();
+        }
+        else if (entity.entityWorldType == EntityWorldType.Player)
+        {
+            playerOptionUI.SetEntity(choseObject);
+            mineOpptionUI.Hide();
+            monsterOptionUI.Hide();
         }
     }
     public void OnInfoClicked()

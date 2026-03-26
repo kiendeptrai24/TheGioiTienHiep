@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.Netcode;
-using UnityEngine;
 
 
 public class ItemPrefabDatabase : Singleton<ItemPrefabDatabase>
@@ -14,7 +12,7 @@ public class ItemPrefabDatabase : Singleton<ItemPrefabDatabase>
         inventoryCenterManager = InventoryCenterManager.Instance;
         inventoryCenterManager.OnListItemDatasChampionChanged += OnListItemDatasChampionChanged;
     }
-
+    
     public void OnListItemDatasChampionChanged(List<ItemData> list)
     {
         OnPlayerPrefabChanged?.Invoke(list);
