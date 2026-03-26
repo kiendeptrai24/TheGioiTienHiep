@@ -43,7 +43,7 @@ public class ItemData
     public float magicalDefense;
     [JsonIgnore]
     public float spiritDefense;
-    public ItemData Clone()
+    public virtual ItemData Clone()
     {
         return (ItemData)this.MemberwiseClone();
     }

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using ExitGames.Client.Photon.StructWrapping;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -21,16 +22,23 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         base.LoadComponent();
         battleHistoryController = GetComponent<BattleHistoryController>();
     }
-    private void RequestBattleSimulator(ulong playerClientId, ulong monsterNetId)
+    private void RequestBattleSimulator(ulong playerNetId, ulong monsterNetId)
     {
         if (!IsServer) return;
-        if (!NetworkManager.ConnectedClients.TryGetValue(playerClientId, out var playerNet)) return;
-        if (!NetworkManager.SpawnManager.SpawnedObjects
-            .TryGetValue(monsterNetId, out var enemyNO))
-            return;
 
+        if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(playerNetId, out var playerNet))
+            return;
+        if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(monsterNetId, out var enemyNO))
+            return;
         var enemyObj = enemyNO.gameObject;
-        var playerObj = playerNet.PlayerObject;
+        var playerObj = playerNet.gameObject;
+        if (playerObj == null || enemyObj == null) return;
+
+        var senderNet = playerObj.GetComponent<NetworkBehaviour>();
+
+        if (senderNet == null) return;
+
+        ulong senderClientId = senderNet.OwnerClientId;
 
         if (playerObj == null) return;
         if (enemyObj == null) return;
@@ -83,7 +91,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             enemySnaps.Add(snap);
         }
 
-        uint seed = (uint)(playerClientId.GetHashCode() ^ monsterNetId.GetHashCode() ^ Environment.TickCount);
+        uint seed = (uint)(playerNetId.GetHashCode() ^ monsterNetId.GetHashCode() ^ Environment.TickCount);
 
 
         var res = BattleSimulator.Simulate(heroSnaps, enemySnaps, seed, boardGrid, 60f);
@@ -94,18 +102,19 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             var ev = res.events[i];
             dto[i] = BattleEventMapper.ToDTO(ev);
         }
-
+        Debug.Log("RequestBattleSimulator");
+        RewardsAndPunishments(res.winner, playerObj, enemyObj);
         SendReplayToClientClientRpc(heroRoster.name, enemyRoster.name,
             res.winner.ToString(), res.duration, dto,
             new ClientRpcParams
             {
-                Send = new ClientRpcSendParams { TargetClientIds = new[] { playerClientId } }
+                Send = new ClientRpcSendParams { TargetClientIds = new[] { senderClientId } }
             });
     }
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    public void RequestBattleSimulatorServerRpc(ulong playerClientId, ulong monsterNetId)
+    public void RequestBattleSimulatorServerRpc(ulong playerNetId, ulong monsterNetId)
     {
-        RequestBattleSimulator(playerClientId, monsterNetId);
+        RequestBattleSimulator(playerNetId, monsterNetId);
     }
     [ClientRpc]
     private void SendReplayToClientClientRpc(string namePlayer, string nameEnemy, string winner, float duration, BattleEventDTO[] events, ClientRpcParams rpcParams = default)
@@ -163,5 +172,30 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
 
         Debug.Log(text);
     }
+    private void RewardsAndPunishments(TeamId winner, GameObject hero, GameObject enemy)
+    {
+        if (!IsServer) return;
 
+        var heroProfile = hero.GetComponent<ResourceStorage>();
+        var enemyProfile = enemy.GetComponent<ResourceStorage>();
+        if (heroProfile == null || enemyProfile == null) return;
+
+        ulong heroCoins = heroProfile.Coins.Value;
+        ulong enemyCoins = enemyProfile.Coins.Value;
+
+        if (winner == TeamId.Heroes)
+        {
+            ulong reward = (ulong)(enemyCoins * 0.7f);
+
+            heroProfile.PlusCost(reward);
+            enemyProfile.MinusCost(reward);
+        }
+        else
+        {
+            ulong reward = (ulong)(heroCoins * 0.7f);
+
+            enemyProfile.PlusCost(reward);
+            heroProfile.MinusCost(reward);
+        }
+    }
 }

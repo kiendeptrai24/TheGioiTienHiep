@@ -21,18 +21,20 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         base.OnNetworkSpawn();
         miningData = mine.GetItemData() as ItemResourseData;
     }
-    public void SetOwner(NetworkObject owner)
+    public void SetOwner(ulong netId)
     {
         if (!IsServer) return;
+        var owner = NetworkManager.SpawnManager.SpawnedObjects[netId];
         if (owner == _owner) return;
         _owner = owner;
         _ownerStorage = owner.GetComponent<ResourceStorage>();
         _lastProduceTime = NetworkManager.ServerTime.Time;
         _lastSecondTime = NetworkManager.ServerTime.Time;
     }
-    public void UnLink(NetworkObject owner)
+    public void UnLink(ulong netId)
     {
         if (!IsServer) return;
+        var owner = NetworkManager.SpawnManager.SpawnedObjects[netId];
         if (IsObjectOwner(owner) == false) return;
         _owner = null;
         _ownerStorage = null;
@@ -72,6 +74,7 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
     private void Produce(int times)
     {
         miningData.currentAmount += miningData.yieldPerHarvest;
-        _ownerStorage.Add(miningData.yieldPerHarvest);
+        Debug.Log("Produce");
+        _ownerStorage.PlusCost((ulong)miningData.yieldPerHarvest);
     }
 }

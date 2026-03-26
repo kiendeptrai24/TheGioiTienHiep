@@ -6,8 +6,8 @@ public class PlayerTrigger : TGTHNetworkBehaviour
     {
         if (!IsOwner) return;
         var entity = other.gameObject.GetComponent<EntityClickable>();
-        if (entity.entityWorldType == EntityWorldType.Player) return;
         if (entity == null) return;
+        if (entity.entityWorldType == EntityWorldType.Player) return;
         PlayerChoseObject.Instance.SetupEntity(entity);
     }
 }

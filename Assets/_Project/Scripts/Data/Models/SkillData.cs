@@ -131,4 +131,8 @@ public class SkillData : ItemData
     public float castTime;               // Thời gian cast (giây)
     [JsonIgnore]
     public GameObject networkSkillEffectPrefab;
+    public override ItemData Clone()
+    {
+        return (SkillData)this.MemberwiseClone();
+    }
 }

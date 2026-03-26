@@ -16,8 +16,7 @@ public class ShopUseSystem : TGTHMonoBehaviour, IUsable
     {
         var inventoryItem = uiItem.inventoryItem;
         if (inventoryItem == null) return;
-        //inventoryPageManager.AddItemData(inventoryItem.data, quantity);
-        inventoryCenterManager.AddData(inventoryItem.data);
+        inventoryCenterManager.AddData(inventoryItem.data, quantity);
     }
 
     protected override void LoadComponent()

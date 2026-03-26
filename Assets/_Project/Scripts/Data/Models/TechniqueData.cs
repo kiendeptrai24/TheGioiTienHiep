@@ -120,4 +120,8 @@ public class TechniqueData : ItemData
     public float totalQualityAndLevel;    // Tổng (phẩm + cấp)
     [JsonIgnore]
     public int statCount;                 // Số chỉ số kích hoạt
+    public override ItemData Clone()
+    {
+        return (TechniqueData)this.MemberwiseClone();
+    }
 }

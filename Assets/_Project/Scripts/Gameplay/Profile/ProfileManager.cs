@@ -1,13 +1,11 @@
 
 using System;
-using Unity.Netcode;
-using UnityEditor;
 using UnityEngine;
 
 public class ProfileManager : Singleton<ProfileManager>, ISaveable
 {
     [SerializeField] private ProfileUser profileUser;
-    public event Action<ProfileUser> OnCoinsChanged;
+    public event Action<ProfileUser> OnProfileCoinsChanged;
     public event Action<ProfileUser> OnProfileChanged;
     protected override void Awake()
     {
@@ -17,17 +15,12 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
     }
     public void BindResource(ResourceStorage storage)
     {
-        storage.OnSpiritStoneChanged += OnSpiritStoneChanged;
+        storage.OnCoinsChanged += OnCoinsChanged;
     }
-    public void UnbindResource(ResourceStorage storage)
+    private void OnCoinsChanged(ulong newAmount)
     {
-        storage.OnSpiritStoneChanged -= OnSpiritStoneChanged;
-    }
-
-    private void OnSpiritStoneChanged(int newAmount)
-    {
-        profileUser.coins = (ulong)newAmount;
-        OnCoinsChanged?.Invoke(profileUser);
+        profileUser.coins = newAmount;
+        OnProfileCoinsChanged?.Invoke(profileUser);
     }
     protected override void Start()
     {
@@ -52,20 +45,14 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
     {
         profileUser.RemoveFriend(friend);
     }
-    protected override void LoadComponent()
-    {
-        base.LoadComponent();
-    }
 
     public void LoadData(GameData _data)
     {
-        profileUser.coins = _data.coins;
         profileUser.userName = _data.characterName;
     }
 
     public void SaveGame(ref GameData _data)
     {
-        _data.coins = profileUser.coins;
         _data.characterName = profileUser.userName;
     }
 }

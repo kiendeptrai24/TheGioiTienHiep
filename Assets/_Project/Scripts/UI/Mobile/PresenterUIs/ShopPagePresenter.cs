@@ -41,7 +41,7 @@ namespace TGTH.Mobile
             base.Awake();
             inventoryCenterManager = InventoryCenterManager.Instance;
 
-            ProfileManager.Instance.OnCoinsChanged += (profile) =>
+            ProfileManager.Instance.OnProfileCoinsChanged += (profile) =>
             {
                 view.priceText.text = profile.coins.ToString();
             };
@@ -199,7 +199,7 @@ namespace TGTH.Mobile
                 onConfirm: (QuantityPopupData result) =>
                 {
                     int price = uiItem.inventoryItem.data.itemPrice * result.quantity;
-                    ShopRequester.Instance.RequestBuy(price, (success, message) =>
+                    ShopRequester.Instance.RequestBuy((ulong)price, (success, message) =>
                     {
                         if (success)
                         {

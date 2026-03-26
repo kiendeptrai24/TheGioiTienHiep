@@ -18889,7 +18889,7 @@ PrefabInstance:
     - target: {fileID: 2076128579728566113, guid: 77d575c3f1b873048be4af3e2b129fb1,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2380032360749291135, guid: 77d575c3f1b873048be4af3e2b129fb1,
         type: 3}
@@ -18988,7 +18988,8 @@ PrefabInstance:
       value: 0.000061035156
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1190262768718033161, guid: 77d575c3f1b873048be4af3e2b129fb1, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 927408333242385425, guid: 77d575c3f1b873048be4af3e2b129fb1,
         type: 3}
@@ -28151,7 +28152,7 @@ PrefabInstance:
     - target: {fileID: 2076128579728566113, guid: 77d575c3f1b873048be4af3e2b129fb1,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2380032360749291135, guid: 77d575c3f1b873048be4af3e2b129fb1,
         type: 3}
@@ -59307,11 +59308,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 75129623076662156, guid: af2be233763273441af0db4df42c2033,
-        type: 3}
-      propertyPath: isPlayer
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 902700492962400439, guid: af2be233763273441af0db4df42c2033,
         type: 3}
       propertyPath: GlobalObjectIdHash
@@ -99704,7 +99700,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceStorage
   ShowTopMostFoldoutHeaderGroup: 1
-  SpiritStone:
+  Coins:
     m_InternalValue: 0
 --- !u!4 &1452346003
 Transform:
@@ -242647,7 +242643,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2451444707321867281
 RectTransform:
   m_ObjectHideFlags: 0

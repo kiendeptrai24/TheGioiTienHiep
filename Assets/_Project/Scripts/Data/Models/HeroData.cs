@@ -50,4 +50,8 @@ public class HeroData : ItemData
     public List<TechniqueData> techniqueDatas = new();
     [JsonIgnore]
     public GameObject heroPrefab;
+    public override ItemData Clone()
+    {
+        return (HeroData)this.MemberwiseClone();
+    }
 }

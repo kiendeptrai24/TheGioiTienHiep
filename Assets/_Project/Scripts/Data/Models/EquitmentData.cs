@@ -111,4 +111,8 @@ public class EquitmentData : ItemData
     public float reduceEffectDuration;  // Giảm thời gian dính hiệu ứng (%)
     [JsonIgnore]
     public float effectResistance;      // Kháng hiệu ứng (%)
+    public override ItemData Clone()
+    {
+        return (EquitmentData)this.MemberwiseClone();
+    }
 }

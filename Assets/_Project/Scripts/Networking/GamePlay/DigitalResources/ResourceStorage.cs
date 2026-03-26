@@ -1,50 +1,54 @@
 using System;
-using ExitGames.Client.Photon.StructWrapping;
-using NUnit.Framework;
 using Unity.Netcode;
-using UnityEngine;
 
-public class ResourceStorage : TGTHNetworkBehaviour
+public class ResourceStorage : TGTHNetworkBehaviour, ISaveable
 {
-
-    public NetworkVariable<int> SpiritStone = new(
+    public NetworkVariable<ulong> Coins = new(
         0,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
-    public event Action<int> OnSpiritStoneChanged;
+    public event Action<ulong> OnCoinsChanged;
 
-    private void OnCoinsChanged(ProfileUser user)
-    {
-        if (!IsServer) return;
-        SpiritStone.Value = (int)user.coins;
-    }
     public override void OnNetworkSpawn()
     {
-        SpiritStone.OnValueChanged += HandleSpiritStoneChanged;
-        OnCoinsChanged(ProfileManager.Instance.GetProfile());
+        Coins.OnValueChanged += HandleCoinsChanged;
+        HandleCoinsChanged(0, Coins.Value);
     }
 
-    private void HandleSpiritStoneChanged(int oldValue, int newValue)
+    private void HandleCoinsChanged(ulong oldValue, ulong newValue)
     {
-        OnSpiritStoneChanged?.Invoke(newValue);
+        OnCoinsChanged?.Invoke(newValue);
     }
 
-    public bool HasEnough(int amount)
+    public bool HasEnough(ulong amount)
     {
-        return SpiritStone.Value >= amount;
+        if (!IsServer) return false;
+        return Coins.Value >= amount;
     }
 
     // ===== SERVER ONLY =====
-    public void Add(int amount)
+    public void PlusCost(ulong amount)
     {
         if (!IsServer) return;
-        SpiritStone.Value += amount;
+        Coins.Value += amount;
     }
 
-    public void Remove(int amount)
+    public void MinusCost(ulong amount)
     {
         if (!IsServer) return;
-        SpiritStone.Value -= amount;
+        Coins.Value -= amount;
+    }
+
+    public void LoadData(GameData _data)
+    {
+        if (!IsServer) return;
+        Coins.Value = _data.coins;
+    }
+
+    public void SaveGame(ref GameData _data)
+    {
+        if (!IsServer) return;
+        _data.coins = (ulong)Coins.Value;
     }
 }

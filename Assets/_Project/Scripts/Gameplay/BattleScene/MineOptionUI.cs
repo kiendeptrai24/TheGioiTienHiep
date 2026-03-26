@@ -48,6 +48,7 @@ public class MineOptionUI : TGTHMonoBehaviour, IEntityOptionUI
     }
     private void Mine()
     {
+        Debug.Log("Mine");
         choseObject.RequestBattleSimulator();
         LeaveUI();
     }

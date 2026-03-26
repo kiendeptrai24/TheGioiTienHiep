@@ -148,14 +148,47 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     {
         return listItemDatas;
     }
-    public bool AddData(ItemData item)
+    public bool AddData(ItemData item, int quantity = 1)
     {
-        if (listItemDatas.Contains(item))
-            return false;
+        var existingItem = listItemDatas.Find(x => x.itemId == item.itemId);
 
-        listItemDatas.Add(item);
-        listItemDatasExisting.Add(item);
+        if (existingItem != null)
+        {
+            if (item.canStack)
+            {
+                existingItem.currentstack += quantity;
+                ItemChange(existingItem);
+            }
+            else
+            {
+                for (int i = 0; i < quantity; i++)
+                {
+                    var newItem = item.Clone();
+                    listItemDatas.Add(newItem);
+                    listItemDatasExisting.Add(newItem);
+                }
+            }
+        }
+        else
+        {
+            if (item.canStack)
+            {
+                var newItem = item.Clone();
+                newItem.currentstack = quantity;
 
+                listItemDatas.Add(newItem);
+                listItemDatasExisting.Add(newItem);
+            }
+            else
+            {
+                for (int i = 0; i < quantity; i++)
+                {
+                    var newItem = item.Clone();
+                    listItemDatas.Add(newItem);
+                    listItemDatasExisting.Add(newItem);
+                }
+            }
+        }
         ItemChange(item);
         ItemExistingChange(item);
         return true;

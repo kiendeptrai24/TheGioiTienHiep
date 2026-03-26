@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using Unity.Netcode;
 using UnityEngine;
-[System.Serializable]
+[Serializable]
 public class ChampionSetUp
 {
     public ItemPreset champion;
@@ -39,14 +38,12 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
     {
         itemDatas = list;
         string json = ItemJsonConverter.ToJson(list);
-        Debug.Log("send to server");
         SendToServerOnPlayerPrefabChangedServerRpc(json);
     }
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     private void SendToServerOnPlayerPrefabChangedServerRpc(string itemDataDTO)
     {
         if (!IsServer) return;
-        Debug.Log("receive from server");
         var itemDatas = ItemJsonConverter.FromJson(itemDataDTO);
         this.itemDatas = itemDatas;
     }

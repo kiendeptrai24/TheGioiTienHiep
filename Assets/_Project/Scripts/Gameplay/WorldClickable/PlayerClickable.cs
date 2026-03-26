@@ -8,6 +8,6 @@ public class PlayerClickable : EntityClickable
     }
     public override void OnEntityClickedAccept(NetworkObject network)
     {
-        BattleSimulatorRequest.Instance.RequestBattleSimulatorServerRpc(network.OwnerClientId, EntityNetId);
+        BattleSimulatorRequest.Instance.RequestBattleSimulatorServerRpc(network.NetworkObjectId, EntityNetId);
     }
 }
