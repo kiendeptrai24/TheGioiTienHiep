@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using PlayFab;
+using Unity.Netcode;
 using UnityEngine;
 
 public class PlayfabDataManager : Singleton<PlayfabDataManager>
@@ -24,7 +25,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     {
         base.Awake();
         clientAPI = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
-        IAuthService authService = new PlayFabAuthService(clientAPI);
+        IAuthService authService = new PlayFabAuthCustomService(clientAPI);
         authManager = new AuthManager(authService);
     }
     protected override void Start()

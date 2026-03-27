@@ -13,6 +13,10 @@ public class GameData
     public List<ItemData> itemShopDatas;
     public List<ItemData> allItemsDatas;
     public List<ItemData> itemDatasCharacter;
+
+    // ===== OFFLINE MINING STORAGE =====
+    public MineOfflineDataList mineOfflineDataList = new MineOfflineDataList();  // Replaces Dictionary
+
     public GameData()
     {
         itemDatas = new List<ItemData>();
@@ -20,5 +24,6 @@ public class GameData
         itemShopDatas = new List<ItemData>();
         allItemsDatas = new List<ItemData>();
         itemDatasCharacter = new List<ItemData>();
+        mineOfflineDataList = new MineOfflineDataList();
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using Unity.Netcode;
+using UnityEngine;
 
 public class ResourceStorage : TGTHNetworkBehaviour, ISaveable
 {
@@ -38,6 +39,14 @@ public class ResourceStorage : TGTHNetworkBehaviour, ISaveable
     {
         if (!IsServer) return;
         Coins.Value -= amount;
+    }
+
+    // ===== OFFLINE COINS =====
+    public void AddOfflineCoins(ulong amount)
+    {
+        if (!IsServer) return;
+        Coins.Value += amount;
+        Debug.Log($"[OfflineCoins] Added {amount} coins. Total: {Coins.Value}");
     }
 
     public void LoadData(GameData _data)

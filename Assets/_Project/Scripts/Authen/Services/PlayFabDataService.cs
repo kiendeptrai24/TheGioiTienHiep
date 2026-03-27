@@ -40,10 +40,6 @@ public class PlayFabDataService
     {
         LoadUserData($"profile {characterId}", callback);
     }
-    public void LoadPlayerProfile(string characterId, Action<PlayerProfileDTO> callback)
-    {
-        LoadUserData($"profile {characterId}", callback);
-    }
     public void LoadCharacter(Action<ItemCharacterDataDTO> callback)
     {
         LoadUserData("character", callback);
@@ -134,7 +130,9 @@ public class PlayFabDataService
         {
             characterId = gameData.characterId,
             coins = gameData.coins,
-            playerName = gameData.characterName
+            playerName = gameData.characterName,
+            // ===== OFFLINE MINING SAVE =====
+            mineOfflineDataList = gameData.mineOfflineDataList ?? new MineOfflineDataList()
         };
 
         SaveUserData($"profile {gameData.characterId}", profile);

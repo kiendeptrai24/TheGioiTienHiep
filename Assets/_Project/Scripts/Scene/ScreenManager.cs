@@ -133,6 +133,12 @@ public abstract class ScreenManager : TGTHMonoBehaviour
     }
     public int GetStackSize() => m_NavigationStack.Count;
     public string GetCurrentScreenName() => m_CurrentScreen?.gameObject.name;
+    public void HideAll()
+    {
+        foreach (var ui in m_Screens)
+            Hide(ui.Value);
+    }
+    
     private void Show(GameObject gameObject) => gameObject.SetActive(true);
     private void Hide(GameObject gameObject) => gameObject.SetActive(false);
 }

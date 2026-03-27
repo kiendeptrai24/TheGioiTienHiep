@@ -26,4 +26,9 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
         base.OnApplicationQuit();
         saveManager.SaveGame();
     }
+    private new void OnDestroy()
+    {
+        if (saveManager != null)
+            saveManager.OnDataReadyToLoad -= OnItemPlayerLoad;
+    }
 }

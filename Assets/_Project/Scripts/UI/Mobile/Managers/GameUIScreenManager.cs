@@ -19,7 +19,7 @@ public class GameUIScreenManager : ScreenManager
         m_Screens.Add(m_CreateAccountScreen.gameObject.name, m_CreateAccountScreen);
         m_Screens.Add(m_EnemyInfoScreen.gameObject.name, m_EnemyInfoScreen);
         m_Screens.Add(m_MineInfoScreen.gameObject.name, m_MineInfoScreen);
-        defaultScreen = m_InGameUI.gameObject.name;
+        defaultScreen = m_CreateAccountScreen.gameObject.name;
     }
     protected override void Start()
     {

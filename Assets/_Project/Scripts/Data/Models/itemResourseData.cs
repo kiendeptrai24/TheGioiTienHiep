@@ -22,4 +22,10 @@ public class ItemResourseData : ItemData
     public int currentAmount;
     [JsonIgnore]
     public int level;
+
+    // ===== OFFLINE MINING FIELDS =====
+    [JsonIgnore]
+    public ulong accumulatedOfflineCoins;  // Coins accumulated while owner offline
+    [JsonIgnore]
+    public double lastOwnerClaimTime;      // Server time when owner last received coins
 }

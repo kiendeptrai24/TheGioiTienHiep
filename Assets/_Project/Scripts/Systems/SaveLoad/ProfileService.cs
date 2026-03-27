@@ -24,6 +24,13 @@ public class ProfileService : ISaveLoadRemote
             if (string.IsNullOrEmpty(profileDataDTO.characterId) == false)
                 gameData.characterId = profileDataDTO.characterId;
             gameData.coins = profileDataDTO.coins;
+
+            // ===== LOAD OFFLINE MINING DATA =====
+            if (profileDataDTO.mineOfflineDataList != null && profileDataDTO.mineOfflineDataList.Count > 0)
+            {
+                gameData.mineOfflineDataList = profileDataDTO.mineOfflineDataList;
+            }
+
             callback?.Invoke();
         });
     }
