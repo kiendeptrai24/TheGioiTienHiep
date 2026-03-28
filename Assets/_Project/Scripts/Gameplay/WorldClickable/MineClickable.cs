@@ -11,9 +11,7 @@ public class MineClickable : EntityClickable
         mine = GetComponent<SpiritStoneMine>();
         entityWorldType = EntityWorldType.Mine;
 
-        // ===== NEW: Generate unique mine ID =====
         mineId = $"mine_{NetworkObjectId}";
-        Debug.Log($"[MineClickable] Mine ID: {mineId}");
     }
 
     public bool IsObjectOwner(NetworkObject owner)

@@ -23,9 +23,4 @@ public class ItemResourseData : ItemData
     [JsonIgnore]
     public int level; // cấp của mỏ
 
-    // ===== OFFLINE MINING FIELDS =====
-    [JsonIgnore]
-    public ulong accumulatedOfflineCoins;  // Số xu tích lũy được khi chủ sở hữu ngoại tuyến.
-    [JsonIgnore]
-    public double lastOwnerClaimTime;      // Thời gian máy chủ khi chủ sở hữu nhận được tiền xu lần cuối
 }

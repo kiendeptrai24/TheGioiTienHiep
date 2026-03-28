@@ -1,6 +1,14 @@
+using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
-
+[Serializable]
+public class MineOwnershipSegment
+{
+    public string OwnerId;
+    public float StartTime;
+    public float EndTime;
+}
 public class SpiritStoneMine : TGTHNetworkBehaviour
 {
     [Header("Owner PlayerId")]
@@ -14,13 +22,17 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
     [SerializeField] ItemPreset mine;
     [SerializeField] private ItemResourseData miningData;
 
+    public List<MineOwnershipSegment> history;
+
     private double _lastProduceTime;
     private double _lastSecondTime;
     private double now;
 
     // ===== OFFLINE MINING =====
     private bool _lastTimeOffline = false;
+    [SerializeField] private MineOwnershipSegment oldSegment;
 
+    [SerializeField] private MineOwnershipSegment newSegment;
 
     public ItemData GetItemResourseData()
     {
@@ -51,11 +63,28 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         var owner = NetworkManager.SpawnManager.SpawnedObjects[netId];
         if (owner == _owner) return;
 
-        _owner = owner;
         _ownerStorage = owner.GetComponent<ResourceStorage>();
-        var playerProfile = _owner.GetComponent<PlayerProfile>();
+        var playerProfile = owner.GetComponent<PlayerProfile>();
 
         if (playerProfile == null) return;
+        if (PlayerIsOwner(playerId))
+        {
+            if (PlayerIsOnline())
+            {
+                oldSegment = GetSegment(playerId);
+                history.Remove(oldSegment);
+                oldSegment = null;
+            }
+            else
+            {
+                oldSegment = GetSegment(playerId);
+                if (oldSegment != null)
+                    oldSegment.EndTime = (float)now;
+            }
+        }
+        newSegment = AddHistory(playerProfile.GetPlayerId());
+
+        _owner = owner;
         playerId = playerProfile.GetPlayerId();
         _lastProduceTime = NetworkManager.ServerTime.Time;
         _lastSecondTime = NetworkManager.ServerTime.Time;
@@ -63,11 +92,31 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         // ===== OFFLINE MINING INIT =====
         _lastTimeOffline = true;
 
-        miningData.lastOwnerClaimTime = NetworkManager.ServerTime.Time;
-
         var mineLinker = _owner.GetComponent<PlayerMineRelinker>();
         mineLinker?.AddResource(NetworkObjectId);
     }
+
+    private MineOwnershipSegment AddHistory(string playerId, float startTime = -1, float endTime = -1)
+    {
+        MineOwnershipSegment segment = new MineOwnershipSegment();
+        segment.OwnerId = playerId;
+        segment.StartTime = startTime;
+        segment.EndTime = endTime;
+        history.Add(segment);
+        return segment;
+    }
+    private MineOwnershipSegment GetSegment(string playerId)
+    {
+        foreach (var seg in history)
+        {
+            if (seg.OwnerId == playerId)
+            {
+                return seg;
+            }
+        }
+        return null;
+    }
+
     public void UnLink(ulong netId)
     {
         if (!IsServer) return;
@@ -88,7 +137,7 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
 
     private bool PlayerIsOnline()
     {
-        return _owner && string.IsNullOrEmpty(playerId) == false;
+        return _owner != null && string.IsNullOrEmpty(playerId) == false;
     }
     private void Update()
     {
@@ -123,7 +172,8 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
             {
                 _lastTimeOffline = false;
                 _lastProduceTime = now;
-                miningData.lastOwnerClaimTime = now;
+                newSegment.StartTime = (float)now;
+                newSegment.EndTime = -1;
             }
         }
 
@@ -153,43 +203,71 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         _ownerStorage.PlusCost((ulong)cost);
     }
 
-    private void CalculatePendingOfflineCoins()
+    private ulong CalculatePendingOfflineCoins(float startTime, float endTime)
     {
-        double offlineDuration = now - miningData.lastOwnerClaimTime;
+        double offlineDuration = endTime - startTime;
         float yieldPerSecond = miningData.yieldPerHarvest / miningData.miningTime;
         ulong offlineCoinsEarned = (ulong)(yieldPerSecond * offlineDuration);
-
-        miningData.accumulatedOfflineCoins = offlineCoinsEarned;
-
-        Debug.Log($"[SpiritStoneMine] CalculatePending: duration={offlineDuration}s, yield/sec={yieldPerSecond}, total={miningData.accumulatedOfflineCoins}");
+        return offlineCoinsEarned;
     }
-
-    public ulong GetPendingOfflineCoins()
+    public ulong GetPendingOfflineCoins(string playerId)
     {
         if (!IsServer)
             return 0;
-        CalculatePendingOfflineCoins();
-        return miningData.accumulatedOfflineCoins;
+        ulong cost = 1;
+        foreach (var seg in history)
+        {
+            if (seg.OwnerId == playerId)
+            {
+                if (seg.EndTime == -1)
+                {
+                    cost = CalculatePendingOfflineCoins(seg.StartTime, (float)now);
+                }
+                else
+                {
+                    cost = CalculatePendingOfflineCoins(seg.StartTime, seg.EndTime);
+                }
+                break;
+            }
+        }
+        return cost;
     }
 
     public void AddOfflineCoinsToOwner(ulong netId, string playerId)
     {
         if (!IsServer)
             return;
-        if (PlayerIsOwner(playerId) == false)
-            return;
-
-        var targetStorage = NetworkManager.SpawnManager.SpawnedObjects[netId].GetComponent<ResourceStorage>();
-
-        if (targetStorage == null)
-            return;
-
-        CalculatePendingOfflineCoins();
-
-        if (miningData.accumulatedOfflineCoins > 0)
+        MineOwnershipSegment segment = null;
+        foreach (var seg in history)
         {
-            targetStorage.AddOfflineCoins(miningData.accumulatedOfflineCoins);
+            if (seg.OwnerId == playerId && seg.EndTime != -1)
+            {
+                var targetStorage = NetworkManager.SpawnManager.SpawnedObjects[netId].GetComponent<ResourceStorage>();
+
+                if (targetStorage == null)
+                    return;
+
+                ulong cost = CalculatePendingOfflineCoins(seg.StartTime, seg.EndTime);
+                targetStorage.AddOfflineCoins(cost);
+                segment = seg;
+                break;
+            }
+            else if (seg.OwnerId == playerId && seg.EndTime == -1)
+            {
+
+                var targetStorage = NetworkManager.SpawnManager.SpawnedObjects[netId].GetComponent<ResourceStorage>();
+
+                if (targetStorage == null)
+                    return;
+
+                ulong cost = CalculatePendingOfflineCoins(seg.StartTime, (float)now);
+                targetStorage.AddOfflineCoins(cost);
+                SetOwner(targetStorage.NetworkObjectId);
+                segment = seg;
+                break;
+            }
         }
-        SetOwner(targetStorage.NetworkObjectId);
+        if (segment == null) return;
+        history.Remove(segment);
     }
 }
