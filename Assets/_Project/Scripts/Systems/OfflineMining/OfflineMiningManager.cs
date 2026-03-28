@@ -25,63 +25,88 @@ public class OfflineMiningManager : Singleton<OfflineMiningManager>
 
     /// <summary>
     /// Called when player data is loaded from PlayFab after reconnecting
+    /// Triggers mine re-linking process
     /// </summary>
     private void HandleOfflineCoinsOnLoad(GameData gameData)
     {
         if (gameData?.mineOfflineDataList == null || gameData.mineOfflineDataList.Count == 0)
         {
-            Debug.Log("[OfflineMiningManager] No offline coins to process");
+            Debug.Log("[OfflineMiningManager] No offline data to process");
             return;
         }
 
-        // Sum up all pending offline coins from all mines
-        ulong totalOfflineCoins = 0;
-        foreach (var mineData in gameData.mineOfflineDataList.mines)
-        {
-            totalOfflineCoins += mineData.accumulatedOfflineCoins;
-        }
+        Debug.Log($"[OfflineMiningManager] Processing {gameData.mineOfflineDataList.Count} mines for reconnect");
 
-        if (totalOfflineCoins > 0)
-        {
-            // Add offline coins to player when server is ready
-            StartCoroutine(WaitForNetworkAndAddOfflineCoins(totalOfflineCoins, gameData));
-        }
-
-        // Clear offline mining data
-        gameData.mineOfflineDataList.Clear();
+        // Trigger mine re-linking on server
+        StartCoroutine(ProcessMineRelinking(gameData));
     }
-    private IEnumerator WaitForNetworkAndAddOfflineCoins(ulong coins, GameData gameData)
+
+    /// <summary>
+    /// Process mine re-linking when player reconnects
+    /// Requests server to validate and re-link mines
+    /// </summary>
+    private IEnumerator ProcessMineRelinking(GameData gameData)
     {
         // Wait for network to be ready and player to spawn
-        yield return new WaitForSeconds(1f);
+        yield return new WaitUntil(() =>
+            NetworkManager.Singleton != null &&
+            NetworkManager.Singleton.IsConnectedClient &&
+            NetworkManager.Singleton.LocalClient != null
+        );
 
-        if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsServer)
+        yield return new WaitForSeconds(2f);  // Give time for scene setup
+
+        // Find player's NetworkObject
+        var playerNetObj = NetworkManager.Singleton.LocalClient.PlayerObject;
+        if (playerNetObj == null)
         {
-            Debug.LogWarning("[OfflineMiningManager] Server not ready, waiting...");
-            yield return new WaitForSeconds(1f);
+            Debug.LogWarning("[OfflineMiningManager] Player object not found");
+            yield break;
         }
 
-        // Try to find player's ResourceStorage and add offline coins
-        var players = FindObjectsByType<ResourceStorage>(FindObjectsSortMode.None);
-        ResourceStorage playerStorage = null;
-
-        foreach (var storage in players)
+        var playerStorage = playerNetObj.GetComponent<ResourceStorage>();
+        if (playerStorage == null)
         {
-            if (storage.GetComponent<NetworkObject>()?.OwnerClientId == NetworkManager.Singleton.LocalClientId)
-            {
-                playerStorage = storage;
-                break;
-            }
+            Debug.LogWarning("[OfflineMiningManager] ResourceStorage not found on player");
+            yield break;
         }
 
-        if (playerStorage != null)
+        // Get list of mines to relink (stored in mineOfflineDataList)
+        var minesToRelink = new List<ulong>();
+        foreach (var mineData in gameData.mineOfflineDataList.mines)
         {
-            playerStorage.AddOfflineCoins(coins);
-            Debug.Log($"[OfflineMiningManager] Added {coins} offline coins to player!");
+            // mineId is already ulong network object ID
+            minesToRelink.Add(mineData.mineId);
+        }
+
+        if (minesToRelink.Count == 0)
+        {
+            Debug.Log("[OfflineMiningManager] No mines to relink");
+            gameData.mineOfflineDataList.Clear();
+            yield break;
+        }
+
+        // Request server to process mine relinking
+        RequestMineRelinking(minesToRelink.ToArray(), gameData.characterId);
+
+        // Clear offline data after requesting
+        gameData.mineOfflineDataList.Clear();
+    }
+
+    /// <summary>
+    /// Send RPC request to server to relink mines
+    /// </summary>
+    private void RequestMineRelinking(ulong[] mineNetworkIds, string playerId)
+    {
+        var playerMineRelinker = FindFirstObjectByType<PlayerMineRelinker>();
+        if (playerMineRelinker != null)
+        {
+            Debug.Log($"[OfflineMiningManager] Requesting relink for {mineNetworkIds.Length} mines");
+            playerMineRelinker.RequestMineRelinkServerRpc(mineNetworkIds, NetworkManager.Singleton.LocalClient.ClientId, playerId);
         }
         else
         {
-            Debug.LogWarning("[OfflineMiningManager] Could not find player ResourceStorage");
+            Debug.LogWarning("[OfflineMiningManager] PlayerMineRelinker not found in scene");
         }
     }
 
@@ -145,11 +170,5 @@ public class OfflineMiningManager : Singleton<OfflineMiningManager>
             return;
 
         gameData.mineOfflineDataList.Remove(mineId);
-    }
-
-    private void OnDestroy()
-    {
-        if (saveLoadManager != null)
-            saveLoadManager.OnDataReadyToLoad -= HandleOfflineCoinsOnLoad;
     }
 }

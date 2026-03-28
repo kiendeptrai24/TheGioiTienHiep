@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 namespace TGTH.Mobile
@@ -119,11 +120,14 @@ namespace TGTH.Mobile
         private void HandleEquippedChanged(InventoryItem item1, InventoryItem item2)
         {
             if (isShowEquipment) return;
-
+            ItemData item = null;
             if (item1 != null && item1.data != null)
             {
-
-                var result = inventoryCenterManager.AddData(item1.data);
+                if (item1.data.canStack == false)
+                {
+                    item = item1.data.Clone();
+                }
+                var result = inventoryCenterManager.AddData(item);
                 if (result)
                 {
                     var skillData = item1.data as SkillData;
@@ -141,6 +145,10 @@ namespace TGTH.Mobile
                     heroData.skillDatas.Add(skillData);
                     inventoryCenterManager.ItemPlayerChanged(heroData);
                 }
+            }
+            if (item1 != null && item1.data != null)
+            {
+                item1.data = item;
             }
 
         }

@@ -10,22 +10,22 @@ public class ItemResourseData : ItemData
     [JsonIgnore]
     public Vector3 position;
     [JsonIgnore]
-    public int yieldPerHarvest;
+    public int yieldPerHarvest; // số lượng coins thu hoach được trong 1 lần
 
     [JsonIgnore]
-    public float miningTime;
+    public float miningTime; // thời gian để thu hoạch
     [JsonIgnore]
-    public float currentMiningProgress;
+    public float currentMiningProgress; // thời gian đã thu hoạch
     [JsonIgnore]
-    public int maxStorage;
+    public int maxStorage; // max coins có thể thu hoạch
     [JsonIgnore]
-    public int currentAmount;
+    public int currentAmount; // số coins đã bị thu hoạch
     [JsonIgnore]
-    public int level;
+    public int level; // cấp của mỏ
 
     // ===== OFFLINE MINING FIELDS =====
     [JsonIgnore]
-    public ulong accumulatedOfflineCoins;  // Coins accumulated while owner offline
+    public ulong accumulatedOfflineCoins;  // Số xu tích lũy được khi chủ sở hữu ngoại tuyến.
     [JsonIgnore]
-    public double lastOwnerClaimTime;      // Server time when owner last received coins
+    public double lastOwnerClaimTime;      // Thời gian máy chủ khi chủ sở hữu nhận được tiền xu lần cuối
 }

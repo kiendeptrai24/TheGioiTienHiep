@@ -2,7 +2,7 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
-public class ResourceStorage : TGTHNetworkBehaviour, ISaveable
+public class ResourceStorage : TGTHNetworkBehaviour
 {
     public NetworkVariable<ulong> Coins = new(
         0,
@@ -13,10 +13,25 @@ public class ResourceStorage : TGTHNetworkBehaviour, ISaveable
 
     public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
         Coins.OnValueChanged += HandleCoinsChanged;
-        HandleCoinsChanged(0, Coins.Value);
+        if (!IsOwner) return;
+        ProfileManager.Instance.OnProfileReady += OnProfileReady;
+        ulong coins = ProfileManager.Instance.GetProfile().coins;
+        OnLoadCoinsServerRpc(coins);
     }
 
+    private void OnProfileReady(ProfileUser user)
+    {
+        ulong coins = user.coins;
+        OnLoadCoinsServerRpc(coins);
+    }
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+    private void OnLoadCoinsServerRpc(ulong coins)
+    {
+        if (!IsServer) return;
+        Coins.Value = coins;
+    }
     private void HandleCoinsChanged(ulong oldValue, ulong newValue)
     {
         OnCoinsChanged?.Invoke(newValue);
@@ -47,17 +62,5 @@ public class ResourceStorage : TGTHNetworkBehaviour, ISaveable
         if (!IsServer) return;
         Coins.Value += amount;
         Debug.Log($"[OfflineCoins] Added {amount} coins. Total: {Coins.Value}");
-    }
-
-    public void LoadData(GameData _data)
-    {
-        if (!IsServer) return;
-        Coins.Value = _data.coins;
-    }
-
-    public void SaveGame(ref GameData _data)
-    {
-        if (!IsServer) return;
-        _data.coins = (ulong)Coins.Value;
     }
 }

@@ -16,7 +16,7 @@ namespace TGTH.Mobile
             base.Awake();
             LoadComponent();
             Init();
-            OnItemPlayerChanged(inventoryCenterManager.heroData);
+            OnItemPlayerChanged(inventoryCenterManager.playerCham);
             inventoryCenterManager.OnItemPlayerChanged += OnItemPlayerChanged;
         }
 

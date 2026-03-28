@@ -2194,6 +2194,8 @@ GameObject:
   - component: {fileID: 439217955596202718}
   - component: {fileID: -6129814544419183229}
   - component: {fileID: 75129623076662156}
+  - component: {fileID: 3528530155531641631}
+  - component: {fileID: 2860028719030235241}
   m_Layer: 12
   m_Name: Charactor
   m_TagString: Untagged
@@ -2318,8 +2320,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   ShowTopMostFoldoutHeaderGroup: 1
   anim: {fileID: 0}
-  heroes:
-  - {fileID: 2647006064603823742, guid: 49443871d6f86594a82135f360567133, type: 3}
+  heroes: []
 --- !u!114 &432532413510505737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2538,6 +2539,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerClickable
   ShowTopMostFoldoutHeaderGroup: 1
   entityWorldType: 2
+--- !u!114 &3528530155531641631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53bc9df966b22e44a8fabdfd495141f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerProfile
+  ShowTopMostFoldoutHeaderGroup: 1
+  playerId: 
+--- !u!114 &2860028719030235241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12320e85444146a4b8ff45f047950972, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMineRelinker
+  ShowTopMostFoldoutHeaderGroup: 1
+  _resourceIds: 
 --- !u!1 &7825434533555785058
 GameObject:
   m_ObjectHideFlags: 0

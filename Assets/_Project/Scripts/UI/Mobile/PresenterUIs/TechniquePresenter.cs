@@ -114,11 +114,14 @@ namespace TGTH.Mobile
         private void HandleEquippedChanged(InventoryItem item1, InventoryItem item2)
         {
             if (isShowEquipment) return;
-
+            ItemData item = null;
             if (item1 != null && item1.data != null)
             {
-
-                var result = inventoryCenterManager.AddData(item1.data);
+                if (item1.data.canStack == false)
+                {
+                    item = item1.data.Clone();
+                }
+                var result = inventoryCenterManager.AddData(item);
                 if (result)
                 {
                     var techniqueData = item1.data as TechniqueData;
@@ -135,6 +138,10 @@ namespace TGTH.Mobile
                     heroData.techniqueDatas.Add(techniqueData);
                     inventoryCenterManager.ItemPlayerChanged(heroData);
                 }
+            }
+            if (item1 != null && item1.data != null)
+            {
+                item1.data = item;
             }
         }
 

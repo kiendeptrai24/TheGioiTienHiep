@@ -24,9 +24,8 @@ namespace TGTH.Mobile
 
         private void OnUserNameChanged(string text)
         {
-            var userId = profileManager.GetProfile().userId;
             profileManager.GetProfile().userName = text;
-            profileManager.SetProfileUser(userId, text);
+            profileManager.SetProfileUser(text);
             view.ShowUserName(text);
         }
 

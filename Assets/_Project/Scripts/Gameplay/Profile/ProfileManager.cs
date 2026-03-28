@@ -1,22 +1,33 @@
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ProfileManager : Singleton<ProfileManager>, ISaveable
 {
     [SerializeField] private ProfileUser profileUser;
+    public List<ulong> resourceIds = new List<ulong>();
     public event Action<ProfileUser> OnProfileCoinsChanged;
     public event Action<ProfileUser> OnProfileChanged;
+    public event Action<ProfileUser> OnProfileReady;
     protected override void Awake()
     {
         base.Awake();
-        string userId = Guid.NewGuid().ToString();
+        string userId = "";
         profileUser = new ProfileUser(userId, "người chơi");
     }
     public void BindResource(ResourceStorage storage)
     {
         storage.OnCoinsChanged += OnCoinsChanged;
+        var relinker = storage.GetComponent<PlayerMineRelinker>();
+        relinker.OnResourceIdsChanged += OnResourceIdsChanged;
     }
+
+    private void OnResourceIdsChanged(List<ulong> list)
+    {
+        resourceIds = list;
+    }
+
     private void OnCoinsChanged(ulong newAmount)
     {
         profileUser.coins = newAmount;
@@ -31,9 +42,8 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
     {
         return profileUser;
     }
-    public void SetProfileUser(string userId, string userName)
+    public void SetProfileUser(string userName)
     {
-        profileUser.userId = userId;
         profileUser.userName = userName;
         OnProfileChanged?.Invoke(profileUser);
     }
@@ -49,10 +59,18 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
     public void LoadData(GameData _data)
     {
         profileUser.userName = _data.characterName;
+        profileUser.coins = _data.coins;
+        profileUser.userId = _data.characterId;
+        OnProfileReady?.Invoke(profileUser);
     }
 
     public void SaveGame(ref GameData _data)
     {
-        _data.characterName = profileUser.userName;
+        _data.mineOfflineDataList.Clear();
+        _data.coins = profileUser.coins;
+        foreach (var resourceId in resourceIds)
+        {
+            _data.mineOfflineDataList.AddOrUpdate(resourceId, 0, 0, "");
+        }
     }
 }

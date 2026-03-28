@@ -10,7 +10,6 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public bool getDataPreset;
     [SerializeField] private HeroPreset heroPreset;
     public ItemData playerCham;
-    public HeroData heroData;
 
     /// <summary>
     /// all item
@@ -44,7 +43,6 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         if (getDataPreset)
         {
             playerCham = heroPreset.GetItemData();
-            heroData = playerCham as HeroData;
         }
         LoadComponent();
     }
@@ -85,7 +83,6 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public void ItemPlayerChanged(ItemData item)
     {
         playerCham = item;
-        heroData = item as HeroData;
         OnItemPlayerChanged?.Invoke(item);
     }
     public void CheckDataChange()
@@ -150,47 +147,21 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     }
     public bool AddData(ItemData item, int quantity = 1)
     {
-        var existingItem = listItemDatas.Find(x => x.itemId == item.itemId);
-
-        if (existingItem != null)
+        listItemDatas.Add(item);
+        listItemDatasExisting.Add(item);
+        if (quantity > 1)
         {
-            if (item.canStack)
+            for (int i = 0; i < quantity - 1; i++)
             {
-                existingItem.currentstack += quantity;
-                ItemChange(existingItem);
-            }
-            else
-            {
-                for (int i = 0; i < quantity; i++)
-                {
-                    var newItem = item.Clone();
-                    listItemDatas.Add(newItem);
-                    listItemDatasExisting.Add(newItem);
-                }
+                listItemDatas.Add(item.Clone());
+                listItemDatasExisting.Add(item.Clone());
             }
         }
-        else
-        {
-            if (item.canStack)
-            {
-                var newItem = item.Clone();
-                newItem.currentstack = quantity;
 
-                listItemDatas.Add(newItem);
-                listItemDatasExisting.Add(newItem);
-            }
-            else
-            {
-                for (int i = 0; i < quantity; i++)
-                {
-                    var newItem = item.Clone();
-                    listItemDatas.Add(newItem);
-                    listItemDatasExisting.Add(newItem);
-                }
-            }
-        }
+        // Notify đúng object
         ItemChange(item);
         ItemExistingChange(item);
+
         return true;
     }
     public bool RemoveData(ItemData item)
@@ -201,8 +172,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         listItemDatas.Remove(item);
         listItemDatasExisting.Remove(item);
 
-        ItemExistingChange(item);
         ItemChange(item);
+        ItemExistingChange(item);
         return true;
     }
     public bool UseData(ItemData item)
@@ -385,6 +356,11 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         }
         foreach (var item in _data.itemDatasInTeam)
         {
+            if (item is HeroData heroData)
+            {
+                if (heroData.isCharactor)
+                    ItemPlayerChanged(item);
+            }
             listItemDatasChampion.Add(item);
         }
         // load item shop

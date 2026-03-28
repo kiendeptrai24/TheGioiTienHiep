@@ -8,14 +8,6 @@ public class PlayerNetManager : Singleton<PlayerNetManager>
 {
     [SerializeField] private NetworkObject playerObject;
     public event Action<NetworkObject> OnPlayerExiststed;
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-    protected override void Start()
-    {
-        base.Start();
-    }
     public void SetPlayerObject(NetworkObject _playerObject)
     {
         playerObject = _playerObject;

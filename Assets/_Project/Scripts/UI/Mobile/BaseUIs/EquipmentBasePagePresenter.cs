@@ -103,9 +103,14 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
     protected virtual bool HandleEquippedChanged(InventoryItem item1, InventoryItem item2)
     {
         if (isShowEquipment) return false;
+        ItemData item = null;
         if (item1 != null && item1.data != null)
         {
-            var result = inventoryCenterManager.AddData(item1.data);
+            if (item1.data.canStack == false)
+            {
+                item = item1.data.Clone();
+            }
+            var result = inventoryCenterManager.AddData(item);
             if (result)
             {
                 var heroData = statsManager.heroData as HeroData;
@@ -123,6 +128,10 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
                 var equipmentData = item2.data as EquitmentData;
                 heroData.equitmentDatas.Add(equipmentData);
             }
+        }
+        if (item1 != null && item1.data != null)
+        {
+            item1.data = item;
         }
         return true;
     }

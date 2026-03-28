@@ -59361,12 +59361,12 @@ PrefabInstance:
     - target: {fileID: 5232829450382649437, guid: af2be233763273441af0db4df42c2033,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 13.88606
+      value: 13.886047
       objectReference: {fileID: 0}
     - target: {fileID: 5232829450382649437, guid: af2be233763273441af0db4df42c2033,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.09072
+      value: 3.0906982
       objectReference: {fileID: 0}
     - target: {fileID: 5232829450382649437, guid: af2be233763273441af0db4df42c2033,
         type: 3}
@@ -59381,17 +59381,17 @@ PrefabInstance:
     - target: {fileID: 5232829450382649437, guid: af2be233763273441af0db4df42c2033,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5232829450382649437, guid: af2be233763273441af0db4df42c2033,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5232829450382649437, guid: af2be233763273441af0db4df42c2033,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5232829450382649437, guid: af2be233763273441af0db4df42c2033,
         type: 3}
@@ -72612,6 +72612,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69ac7f47c12a1ee46b2ae304b7b2a024, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayfabDataManager
+  serverClientTest: {fileID: 55128280}
   gameData:
     characterName: 
     characterId: 
@@ -178839,7 +178840,6 @@ GameObject:
   - component: {fileID: 1984804637538154500}
   - component: {fileID: 1954680830614863862}
   - component: {fileID: 1067212301212126139}
-  - component: {fileID: 8406523673387379237}
   m_Layer: 5
   m_Name: Skills
   m_TagString: Untagged
@@ -400713,7 +400713,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6594532625940375211
 RectTransform:
   m_ObjectHideFlags: 0
@@ -471137,18 +471137,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 762668226188781712}
   m_CullTransparentMesh: 1
---- !u!114 &8406523673387379237
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 762668226188781712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d17ee63e636c674aa243b0dbc6ff243, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SkillSystem
 --- !u!114 &8407705170540268306
 MonoBehaviour:
   m_ObjectHideFlags: 0

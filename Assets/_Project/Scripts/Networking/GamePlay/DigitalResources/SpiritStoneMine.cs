@@ -3,20 +3,25 @@ using UnityEngine;
 
 public class SpiritStoneMine : TGTHNetworkBehaviour
 {
+    [Header("Owner PlayerId")]
+    [SerializeField] private NetworkObject _owner;
+    [SerializeField] private ResourceStorage _ownerStorage;
+    [SerializeField] private string playerId;
+
+    [Space]
+
     [Header("Mine Config")]
     [SerializeField] ItemPreset mine;
     [SerializeField] private ItemResourseData miningData;
 
-    [SerializeField] private ResourceStorage _ownerStorage;
-    private NetworkObject _owner;
     private double _lastProduceTime;
     private double _lastSecondTime;
     private double now;
 
     // ===== OFFLINE MINING =====
-    private bool _ownerIsOffline = false;
-    private ulong _pendingOfflineCoins = 0;
-    private double _offlineMiningStartTime = 0;
+    private bool _lastTimeOffline = false;
+
+
     public ItemData GetItemResourseData()
     {
         return miningData;
@@ -26,65 +31,82 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         base.OnNetworkSpawn();
         miningData = mine.GetItemData() as ItemResourseData;
     }
+    public void ResetResource()
+    {
+        if (!IsServer) return;
+        if (_owner != null)
+            UnLink(_owner.NetworkObjectId);
+
+
+        _owner = null;
+        _ownerStorage = null;
+        playerId = "";
+
+        _lastTimeOffline = true;
+        miningData = mine.GetItemData() as ItemResourseData;
+    }
     public void SetOwner(ulong netId)
     {
         if (!IsServer) return;
         var owner = NetworkManager.SpawnManager.SpawnedObjects[netId];
         if (owner == _owner) return;
+
         _owner = owner;
         _ownerStorage = owner.GetComponent<ResourceStorage>();
+        var playerProfile = _owner.GetComponent<PlayerProfile>();
+
+        if (playerProfile == null) return;
+        playerId = playerProfile.GetPlayerId();
         _lastProduceTime = NetworkManager.ServerTime.Time;
         _lastSecondTime = NetworkManager.ServerTime.Time;
 
         // ===== OFFLINE MINING INIT =====
-        _ownerIsOffline = false;
-        _pendingOfflineCoins = 0;
-        _offlineMiningStartTime = NetworkManager.ServerTime.Time;
+        _lastTimeOffline = true;
+
         miningData.lastOwnerClaimTime = NetworkManager.ServerTime.Time;
-        Debug.Log($"[SpiritStoneMine] SetOwner: {netId}, offlineStart={_offlineMiningStartTime}");
+
+        var mineLinker = _owner.GetComponent<PlayerMineRelinker>();
+        mineLinker?.AddResource(NetworkObjectId);
     }
     public void UnLink(ulong netId)
     {
         if (!IsServer) return;
         var owner = NetworkManager.SpawnManager.SpawnedObjects[netId];
+
         if (IsObjectOwner(owner) == false) return;
 
-        // ===== CALCULATE PENDING COINS BEFORE UNLINK =====
-        CalculatePendingOfflineCoins();
-        if (_pendingOfflineCoins > 0 && _ownerStorage != null)
-        {
-            _ownerStorage.AddOfflineCoins(_pendingOfflineCoins);
-            miningData.accumulatedOfflineCoins += _pendingOfflineCoins;
-            Debug.Log($"[SpiritStoneMine] UnLink: Sent {_pendingOfflineCoins} pending coins, total accumulated: {miningData.accumulatedOfflineCoins}");
-        }
+        var mineLinker = _owner.GetComponent<PlayerMineRelinker>();
+        mineLinker?.AddResource(NetworkObjectId);
 
         _owner = null;
         _ownerStorage = null;
-        _ownerIsOffline = false;
-        _pendingOfflineCoins = 0;
     }
-    public bool HasOnwer()
+    public bool PlayerIsOwner(string playerId)
     {
-        return _owner != null;
+        return this.playerId == playerId;
     }
 
+    private bool PlayerIsOnline()
+    {
+        return _owner && string.IsNullOrEmpty(playerId) == false;
+    }
     private void Update()
     {
         if (!IsServer)
             return;
 
+        if (miningData.currentMiningProgress >= miningData.maxStorage)
+        {
+            ResetResource();
+            NetworkObjectPool.Singleton.ReturnNetworkObject(NetworkObject);
+            return;
+        }
+
         now = NetworkManager.ServerTime.Time;
 
         // ===== OFFLINE MINING LOGIC =====
-        if (_owner != null)
+        if (PlayerIsOnline())
         {
-            // Owner is online - normal mining
-            if (_ownerIsOffline)
-            {
-                _ownerIsOffline = false;
-                Debug.Log("[SpiritStoneMine] Owner is back online!");
-            }
-
             if (_ownerStorage == null)
                 return;
 
@@ -95,28 +117,25 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
                 Produce(ticks);
             }
         }
-        else if (!_ownerIsOffline && _offlineMiningStartTime > 0)
+        else
         {
-            // Owner went offline - start accumulating
-            _ownerIsOffline = true;
-            _lastProduceTime = now;
-            Debug.Log("[SpiritStoneMine] Owner is offline, starting offline mining accumulation");
+            if (_lastTimeOffline)
+            {
+                _lastTimeOffline = false;
+                _lastProduceTime = now;
+                miningData.lastOwnerClaimTime = now;
+            }
         }
 
-        // Update mining progress (both online and offline)
+        // Update mining progress
         if (now - _lastSecondTime >= 1)
         {
             int ticks = Mathf.FloorToInt((float)(now - _lastSecondTime));
             miningData.currentMiningProgress += ticks;
             _lastSecondTime += ticks;
-
-            // Accumulate offline coins every second
-            if (_ownerIsOffline && _offlineMiningStartTime > 0)
-            {
-                CalculateOfflineMiningPerSecond();
-            }
         }
     }
+
     public bool IsObjectOwner(NetworkObject owner)
     {
         return _owner == owner;
@@ -124,35 +143,25 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
 
     private void Produce(int times)
     {
-        miningData.currentAmount += miningData.yieldPerHarvest;
-        Debug.Log("Produce");
-        _ownerStorage.PlusCost((ulong)miningData.yieldPerHarvest);
-    }
-
-    // ===== OFFLINE MINING HELPERS =====
-    private void CalculateOfflineMiningPerSecond()
-    {
-        // Calculate mining per second: yieldPerHarvest / miningTime
-        float yieldPerSecond = miningData.yieldPerHarvest / miningData.miningTime;
-        ulong coinsPerSecond = (ulong)yieldPerSecond;
-
-        if (coinsPerSecond > 0)
+        var cost = miningData.yieldPerHarvest;
+        if (miningData.currentAmount + miningData.yieldPerHarvest > miningData.maxStorage)
         {
-            _pendingOfflineCoins += coinsPerSecond;
+            cost = miningData.maxStorage - miningData.currentAmount;
         }
+        miningData.currentAmount += cost;
+        Debug.Log("Produce");
+        _ownerStorage.PlusCost((ulong)cost);
     }
 
     private void CalculatePendingOfflineCoins()
     {
-        if (_offlineMiningStartTime <= 0)
-            return;
-
         double offlineDuration = now - miningData.lastOwnerClaimTime;
         float yieldPerSecond = miningData.yieldPerHarvest / miningData.miningTime;
         ulong offlineCoinsEarned = (ulong)(yieldPerSecond * offlineDuration);
 
-        _pendingOfflineCoins = offlineCoinsEarned;
-        Debug.Log($"[SpiritStoneMine] CalculatePending: duration={offlineDuration}s, yield/sec={yieldPerSecond}, total={_pendingOfflineCoins}");
+        miningData.accumulatedOfflineCoins = offlineCoinsEarned;
+
+        Debug.Log($"[SpiritStoneMine] CalculatePending: duration={offlineDuration}s, yield/sec={yieldPerSecond}, total={miningData.accumulatedOfflineCoins}");
     }
 
     public ulong GetPendingOfflineCoins()
@@ -160,22 +169,27 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         if (!IsServer)
             return 0;
         CalculatePendingOfflineCoins();
-        return _pendingOfflineCoins;
+        return miningData.accumulatedOfflineCoins;
     }
 
-    public void AddOfflineCoinsToOwner(ResourceStorage targetStorage)
+    public void AddOfflineCoinsToOwner(ulong netId, string playerId)
     {
         if (!IsServer)
             return;
+        if (PlayerIsOwner(playerId) == false)
+            return;
+
+        var targetStorage = NetworkManager.SpawnManager.SpawnedObjects[netId].GetComponent<ResourceStorage>();
+
+        if (targetStorage == null)
+            return;
 
         CalculatePendingOfflineCoins();
-        if (_pendingOfflineCoins > 0 && targetStorage != null)
+
+        if (miningData.accumulatedOfflineCoins > 0)
         {
-            targetStorage.AddOfflineCoins(_pendingOfflineCoins);
-            miningData.accumulatedOfflineCoins += _pendingOfflineCoins;
-            miningData.lastOwnerClaimTime = NetworkManager.ServerTime.Time;
-            Debug.Log($"[SpiritStoneMine] AddOfflineToOwner: Added {_pendingOfflineCoins} coins");
+            targetStorage.AddOfflineCoins(miningData.accumulatedOfflineCoins);
         }
-        _pendingOfflineCoins = 0;
+        SetOwner(targetStorage.NetworkObjectId);
     }
 }

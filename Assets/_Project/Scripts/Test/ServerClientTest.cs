@@ -12,6 +12,10 @@ public class ServerClientTest : TGTHMonoBehaviour
     protected override void Awake()
     {
         base.Awake();
+    }
+    protected override void Start()
+    {
+        base.Start();
         networkManager = NetworkManager.Singleton;
         if (type == ServerClientType.Server)
         {
