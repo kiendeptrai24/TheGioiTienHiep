@@ -363,6 +363,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
             }
             listItemDatasChampion.Add(item);
         }
+        OnListItemDatasChampionChanged?.Invoke(_data.itemDatasInTeam);
         // load item shop
         foreach (var item in _data.itemShopDatas)
         {

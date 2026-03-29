@@ -40,11 +40,12 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
         string json = ItemJsonConverter.ToJson(list);
         SendToServerOnPlayerPrefabChangedServerRpc(json);
     }
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
     private void SendToServerOnPlayerPrefabChangedServerRpc(string itemDataDTO)
     {
         if (!IsServer) return;
         var itemDatas = ItemJsonConverter.FromJson(itemDataDTO);
+        Debug.Log("SendToServerOnPlayerPrefabChangedServerRpc");
         this.itemDatas = itemDatas;
     }
     /// <summary>

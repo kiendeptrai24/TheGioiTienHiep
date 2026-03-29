@@ -22,7 +22,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         base.LoadComponent();
         battleHistoryController = GetComponent<BattleHistoryController>();
     }
-    private void RequestBattleSimulator(ulong playerNetId, ulong monsterNetId)
+    public void RequestBattleSimulator(ulong playerNetId, ulong monsterNetId, Action<bool> result = default)
     {
         if (!IsServer) return;
 
@@ -103,18 +103,21 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             dto[i] = BattleEventMapper.ToDTO(ev);
         }
         Debug.Log("RequestBattleSimulator");
-        RewardsAndPunishments(res.winner, playerObj, enemyObj);
+        if (res.winner == TeamId.Heroes)
+        {
+            result?.Invoke(true);
+        }
+        else
+        {
+            result?.Invoke(false);
+        }
+        // RewardsAndPunishments(res.winner, playerObj, enemyObj);
         SendReplayToClientClientRpc(heroRoster.name, enemyRoster.name,
             res.winner.ToString(), res.duration, dto,
             new ClientRpcParams
             {
-                Send = new ClientRpcSendParams { TargetClientIds = new[] { senderClientId } }
+                Send = new ClientRpcSendParams { TargetClientIds = new[] { playerNet.OwnerClientId } }
             });
-    }
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    public void RequestBattleSimulatorServerRpc(ulong playerNetId, ulong monsterNetId)
-    {
-        RequestBattleSimulator(playerNetId, monsterNetId);
     }
     [ClientRpc]
     private void SendReplayToClientClientRpc(string namePlayer, string nameEnemy, string winner, float duration, BattleEventDTO[] events, ClientRpcParams rpcParams = default)
@@ -172,30 +175,5 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
 
         Debug.Log(text);
     }
-    private void RewardsAndPunishments(TeamId winner, GameObject hero, GameObject enemy)
-    {
-        if (!IsServer) return;
 
-        var heroProfile = hero.GetComponent<ResourceStorage>();
-        var enemyProfile = enemy.GetComponent<ResourceStorage>();
-        if (heroProfile == null || enemyProfile == null) return;
-
-        ulong heroCoins = heroProfile.Coins.Value;
-        ulong enemyCoins = enemyProfile.Coins.Value;
-
-        if (winner == TeamId.Heroes)
-        {
-            ulong reward = (ulong)(enemyCoins * 0.7f);
-
-            heroProfile.PlusCost(reward);
-            enemyProfile.MinusCost(reward);
-        }
-        else
-        {
-            ulong reward = (ulong)(heroCoins * 0.7f);
-
-            enemyProfile.PlusCost(reward);
-            heroProfile.MinusCost(reward);
-        }
-    }
 }

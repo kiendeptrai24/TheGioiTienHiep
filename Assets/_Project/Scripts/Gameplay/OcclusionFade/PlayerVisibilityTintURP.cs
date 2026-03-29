@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public class PlayerVisibilityTintURP : TGTHMonoBehaviour
+public class PlayerVisibilityTintURP : TGTHNetworkBehaviour
 {
     [Header("Renderers")]
     public Renderer[] renderers;
@@ -30,12 +30,18 @@ public class PlayerVisibilityTintURP : TGTHMonoBehaviour
 
         CacheOriginal();
 
+    }
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        if (!IsOwner) return;
         if (!fader) fader = FindAnyObjectByType<CameraOcclusionFader>();
         if (fader) fader.OnOccluded += OnOccludedChanged;
-    }
 
+    }
     protected void OnDestroy()
     {
+        if (!IsOwner) return;
         if (fader) fader.OnOccluded -= OnOccludedChanged;
         RestoreOriginal();
     }

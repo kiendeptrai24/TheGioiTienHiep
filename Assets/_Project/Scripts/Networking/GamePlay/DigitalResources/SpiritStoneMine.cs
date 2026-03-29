@@ -57,16 +57,25 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         _lastTimeOffline = true;
         miningData = mine.GetItemData() as ItemResourseData;
     }
-    public void SetOwner(ulong netId)
+    public void SetOwner(ulong netId, Action success = null, Action<string> fail = null)
     {
         if (!IsServer) return;
         var owner = NetworkManager.SpawnManager.SpawnedObjects[netId];
-        if (owner == _owner) return;
+        if (owner == _owner)
+        {
+            fail?.Invoke("Không tìm thấy tài khoản");
+            return;
+        } 
 
         _ownerStorage = owner.GetComponent<ResourceStorage>();
         var playerProfile = owner.GetComponent<PlayerProfile>();
 
-        if (playerProfile == null) return;
+        if (playerProfile == null)
+        {
+            fail?.Invoke("Không tìm thấy tài khoản");
+            return;
+        }
+
         if (PlayerIsOwner(playerId))
         {
             if (PlayerIsOnline())
@@ -94,6 +103,7 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
 
         var mineLinker = _owner.GetComponent<PlayerMineRelinker>();
         mineLinker?.AddResource(NetworkObjectId);
+        success?.Invoke();
     }
 
     private MineOwnershipSegment AddHistory(string playerId, float startTime = -1, float endTime = -1)
@@ -139,6 +149,11 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
     {
         return _owner != null && string.IsNullOrEmpty(playerId) == false;
     }
+    public bool HasOwner()
+    {
+        return string.IsNullOrEmpty(playerId) == false;
+    }
+
     private void Update()
     {
         if (!IsServer)

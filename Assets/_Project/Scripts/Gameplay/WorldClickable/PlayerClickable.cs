@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using UnityEngine;
 
 public class PlayerClickable : EntityClickable
 {
@@ -8,6 +9,77 @@ public class PlayerClickable : EntityClickable
     }
     public override void OnEntityClickedAccept(NetworkObject network)
     {
-        BattleSimulatorRequest.Instance.RequestBattleSimulatorServerRpc(network.NetworkObjectId, EntityNetId);
+        EntityAcceptServerRpc(network.NetworkObjectId, EntityNetId);
+    }
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    private void EntityAcceptServerRpc(ulong heroId, ulong enemyId)
+    {
+        if (!IsServer) return;
+        BattleSimulatorRequest.Instance.RequestBattleSimulator(heroId, enemyId, (win) =>
+        {
+            if (win)
+            {
+                Debug.Log("You won");
+                RewardsAndPunishments(heroId, enemyId);
+            }
+            else
+            {
+                Debug.Log("You lost");
+            }
+        });
+    }
+    private void RewardsAndPunishments(ulong heroId, ulong enemyId)
+    {
+        if (!IsServer) return;
+
+        var heroObject = NetworkManager.SpawnManager.SpawnedObjects[heroId];
+        var enemyObject = NetworkManager.SpawnManager.SpawnedObjects[enemyId];
+
+        if (heroObject == null || enemyObject == null) return;
+
+        // phải là player hết
+        if (!heroObject.IsPlayerObject || !enemyObject.IsPlayerObject) return;
+
+        var heroResource = heroObject.GetComponent<ResourceStorage>();
+        var enemyResource = enemyObject.GetComponent<ResourceStorage>();
+
+        if (heroResource == null || enemyResource == null) return;
+
+        ulong enemyCoins = enemyResource.Coins.Value;
+
+        if (enemyCoins < 100) return;
+
+        ulong reward = (ulong)(enemyCoins * 0.7f);
+
+        heroResource.PlusCost(reward);
+        enemyResource.MinusCost(reward);
+
+        var heroClientId = heroObject.OwnerClientId;
+        var enemyClientId = enemyObject.OwnerClientId;
+
+        NotifyResultClientRpc(
+            $"You won {reward} coins!",
+            new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new[] { heroClientId }
+                }
+            });
+
+        NotifyResultClientRpc(
+            $"You lost {reward} coins!",
+            new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new[] { enemyClientId }
+                }
+            });
+    }
+    [ClientRpc]
+    private void NotifyResultClientRpc(string message, ClientRpcParams clientRpcParams = default)
+    {
+        Debug.Log(message);
     }
 }

@@ -5,12 +5,12 @@ public class MineClickable : EntityClickable
 {
     private SpiritStoneMine mine;
     private string mineId;  // ===== NEW: Track mine identity
-
+    private PlayerBattleRoster battleRoster;
     public override void OnNetworkSpawn()
     {
         mine = GetComponent<SpiritStoneMine>();
         entityWorldType = EntityWorldType.Mine;
-
+        battleRoster = GetComponent<PlayerBattleRoster>();
         mineId = $"mine_{NetworkObjectId}";
     }
 
@@ -32,13 +32,38 @@ public class MineClickable : EntityClickable
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void EntityAcceptServerRpc(ulong mineId, ulong ownerId)
     {
-        if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(mineId, out var mineObj))
+        if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(ownerId, out var ownerObj))
             return;
-        var mineComponent = mineObj.GetComponent<SpiritStoneMine>();
-        if (mineComponent == null) return;
+        if (mine == null) return;
+        if (mine.HasOwner())
+        {
+            BattleSimulatorRequest.Instance.RequestBattleSimulator(ownerId, mineId, (win) =>
+            {
+                if (win)
+                {
+                    SetOwner(ownerId, ownerObj);
+                }
+            });
+        }
+        else
+        {
+            SetOwner(ownerId, ownerObj);
+        }
 
-        // ===== NEW: Set mine ownership in GameData for offline tracking =====
-        mineComponent.SetOwner(ownerId);
+    }
+
+    private void SetOwner(ulong ownerId, NetworkObject ownerObj)
+    {
+        mine.SetOwner(ownerId,
+        () =>
+        {
+            if (battleRoster == null) return;
+            battleRoster.itemDatas = ownerObj.GetComponent<PlayerBattleRoster>().itemDatas;
+        },
+        (reason) =>
+        {
+            Debug.Log("Fail: " + reason);
+        });
         UpdateMineOwnershipInGameData(ownerId);
     }
 

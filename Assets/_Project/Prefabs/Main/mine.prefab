@@ -228,6 +228,7 @@ GameObject:
   - component: {fileID: 6257989718052333689}
   - component: {fileID: 3320275896062033219}
   - component: {fileID: 7861756317221577165}
+  - component: {fileID: 501182798790496068}
   m_Layer: 0
   m_Name: mine
   m_TagString: Untagged
@@ -340,7 +341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3795494971
+  GlobalObjectIdHash: 2327066888
   InScenePlacedSourceGlobalObjectIdHash: 3795494971
   DeferredDespawnTick: 0
   Ownership: 1
@@ -380,6 +381,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiritStoneMine
   ShowTopMostFoldoutHeaderGroup: 1
+  _owner: {fileID: 0}
+  _ownerStorage: {fileID: 0}
+  playerId: 
   mine: {fileID: 11400000, guid: 2ced2b0ffda301b479d52f1120f8f036, type: 2}
   miningData:
     itemId: 
@@ -409,7 +413,15 @@ MonoBehaviour:
     maxStorage: 0
     currentAmount: 0
     level: 0
-  _ownerStorage: {fileID: 0}
+  history: []
+  oldSegment:
+    OwnerId: 
+    StartTime: 0
+    EndTime: 0
+  newSegment:
+    OwnerId: 
+    StartTime: 0
+    EndTime: 0
 --- !u!114 &7861756317221577165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -450,3 +462,20 @@ MonoBehaviour:
     spawnPoint: {fileID: 0}
     unlocked: 1
     keywords: []
+--- !u!114 &501182798790496068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6005652078421769025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b3128f2cc120ad479078232f32ca0fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerBattleRoster
+  ShowTopMostFoldoutHeaderGroup: 1
+  player: 0
+  championSetUps: []
+  itemDatas: []
+  maxHeroesToSpawn: 5

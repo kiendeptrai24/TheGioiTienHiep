@@ -25,6 +25,7 @@ public class WorldMonsterBattleTrigger : NetworkBehaviour
 
         var loadout = GetComponent<MonsterBattleLoadout>();
         if (loadout == null || loadout.enemyPrefabs.Count == 0) return;
-        BattleSimulatorRequest.Instance.RequestBattleSimulatorServerRpc(playerNO.NetworkObjectId, NetworkObjectId);
+        //BattleSimulatorRequest.Instance.RequestBattleSimulatorServerRpc(playerNO.NetworkObjectId, NetworkObjectId);
     }
+
 }

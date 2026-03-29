@@ -1320,7 +1320,6 @@ GameObject:
   - component: {fileID: 6879133659155713536}
   - component: {fileID: 6894223928933206975}
   - component: {fileID: 7595186681768438443}
-  - component: {fileID: 3110366432968102501}
   - component: {fileID: 4653743167290161615}
   - component: {fileID: 7956332767049086533}
   - component: {fileID: 2282876554760011189}
@@ -1514,19 +1513,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 3
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3110366432968102501
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4546658479400525563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2b7f61df1da41b4b9b3e8327fb28a7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WorldMonsterBattleTrigger
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &4653743167290161615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1540,6 +1526,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBattleRoster
   ShowTopMostFoldoutHeaderGroup: 1
+  player: 0
   championSetUps:
   - champion: {fileID: 11400000, guid: 856e38a0a3999b743985fad6c670c593, type: 2}
     championIndex: {x: 0, y: 0}
@@ -1560,7 +1547,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterClickable
   ShowTopMostFoldoutHeaderGroup: 1
-  entityWorldType: 0
+  entityWorldType: 1
 --- !u!114 &2282876554760011189
 MonoBehaviour:
   m_ObjectHideFlags: 0
