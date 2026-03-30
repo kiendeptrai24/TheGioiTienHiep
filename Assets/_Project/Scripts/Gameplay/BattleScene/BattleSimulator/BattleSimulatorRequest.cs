@@ -102,15 +102,10 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             var ev = res.events[i];
             dto[i] = BattleEventMapper.ToDTO(ev);
         }
+
+        result?.Invoke(res.winner == TeamId.Heroes);
+
         Debug.Log("RequestBattleSimulator");
-        if (res.winner == TeamId.Heroes)
-        {
-            result?.Invoke(true);
-        }
-        else
-        {
-            result?.Invoke(false);
-        }
         // RewardsAndPunishments(res.winner, playerObj, enemyObj);
         SendReplayToClientClientRpc(heroRoster.name, enemyRoster.name,
             res.winner.ToString(), res.duration, dto,

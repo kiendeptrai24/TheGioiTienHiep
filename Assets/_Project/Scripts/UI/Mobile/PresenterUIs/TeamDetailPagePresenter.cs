@@ -45,25 +45,6 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
             index++;
         }
     }
-    private void SetItemData(ItemData itemData, Vector2 index)
-    {
-        for (int i = 0; i < view.listOfUIItems.Count; i++)
-        {
-            if (view.listOfUIItems[i].HasItem())
-                continue;
-
-            var itemChoseChampion = view.listOfUIItems[i] as UIChoseChampionItem;
-
-            if (itemChoseChampion == null)
-                continue;
-
-            if (itemChoseChampion.championIndex != index)
-                continue;
-
-            view.listOfUIItems[i].SetItem(new InventoryItem(itemData));
-            break;
-        }
-    }
     public List<ItemData> GetAllItems()
     {
         var items = new List<ItemData>();
@@ -239,6 +220,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
         {
             toHero.championIndex = fromItem.championIndex;
         }
+        inventoryCenterManager.SetItemChampionData(GetAllItems());
     }
     private void HandleItemClicked(UIItemSlotBase uiItem)
     {
@@ -267,6 +249,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
                 Navigation(uiItem);
             });
         }
+        view.ShowItemSelected(uiItem.inventoryItem.data);
     }
     private void Navigation(UIItemSlotBase uiItem)
     {

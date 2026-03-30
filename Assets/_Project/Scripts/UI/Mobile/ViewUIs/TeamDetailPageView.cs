@@ -11,6 +11,7 @@ public class TeamDetailPageView : TGTHMonoBehaviour
     [SerializeField] private TextMeshProUGUI itemNameTxt;
     [SerializeField] private TextMeshProUGUI realmTxt;
     [SerializeField] private TextMeshProUGUI qualityTypeTxt;
+    [SerializeField] private TextMeshProUGUI championIndexTxt;
     [SerializeField] private Image itemIconImge;
     [SerializeField] private Transform content;
     public MouseFollower mouseFollower;
@@ -65,9 +66,14 @@ public class TeamDetailPageView : TGTHMonoBehaviour
         uiItemOld = uiItemNew;
         uiItemOld.Select();
     }
-
-    internal void CreateInventorySlots()
+    public void ShowItemSelected(ItemData itemData)
     {
-        
+        var champion = itemData as HeroData;
+        itemNameTxt.text = champion.itemName;
+        realmTxt.text = EnumTranslator.ToVietnamese(champion.realmType);
+        qualityTypeTxt.text = EnumTranslator.ToVietnamese(champion.qualityType);
+        itemIconImge.sprite = champion.itemIcon;
+        championIndexTxt.text = $"Vị trí Hiện tại: {champion.championIndex.x},{champion.championIndex.y}";
+
     }
 }

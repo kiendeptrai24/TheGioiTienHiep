@@ -18,13 +18,16 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
     public int maxHeroesToSpawn = 5;
 
     public Action result = default;
+    public Action<List<ItemData>> OnChampionPlayerChanged = default;
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
 
         if (IsOwner)
         {
-            ItemPrefabDatabase.Instance.OnPlayerPrefabChanged += OnPlayerPrefabChanged;
+            var itemPrefabDatabase = ItemPrefabDatabase.Instance;
+            itemPrefabDatabase.OnPlayerPrefabChanged += OnPlayerPrefabChanged;
+            OnPlayerPrefabChanged(itemPrefabDatabase.ListIteDataChampion());
         }
         if (!IsServer) return;
         foreach (var item in championSetUps)
@@ -40,13 +43,18 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
         string json = ItemJsonConverter.ToJson(list);
         SendToServerOnPlayerPrefabChangedServerRpc(json);
     }
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     private void SendToServerOnPlayerPrefabChangedServerRpc(string itemDataDTO)
     {
         if (!IsServer) return;
         var itemDatas = ItemJsonConverter.FromJson(itemDataDTO);
-        Debug.Log("SendToServerOnPlayerPrefabChangedServerRpc");
+        foreach (var item in itemDatas)
+        {
+            var itemData = item as HeroData;
+            Debug.Log(itemData.championIndex);
+        }
         this.itemDatas = itemDatas;
+        OnChampionPlayerChanged?.Invoke(itemDatas);
     }
     /// <summary>
     /// Client gọi hàm này trên object roster của người chơi mà mình muốn lấy team.
@@ -74,7 +82,6 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
 
         ulong requesterClientId = rpcParams.Receive.SenderClientId;
         string json = ItemJsonConverter.ToJson(itemDatas);
-
         ReturnPlayerTeamClientRpc(requesterClientId, json);
     }
 

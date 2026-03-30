@@ -26,11 +26,11 @@ public class MineClickable : EntityClickable
 
     public override void OnEntityClickedAccept(NetworkObject network)
     {
-        EntityAcceptServerRpc(NetworkObjectId, network.NetworkObjectId);
+        EntityAcceptServerRpc(network.NetworkObjectId, NetworkObjectId);
     }
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    public void EntityAcceptServerRpc(ulong mineId, ulong ownerId)
+    public void EntityAcceptServerRpc(ulong ownerId, ulong mineId)
     {
         if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(ownerId, out var ownerObj))
             return;
