@@ -106,8 +106,6 @@ public class MinimapIconClickRaycaster : TGTHMonoBehaviour
             var icon = hit.collider.GetComponentInParent<MinimapWorldIcon>();
             if (icon != null)
             {
-                icon.OnItemInteract();
-                // ✅ set điểm đến 1 lần, không theo dõi nữa
                 _destination = icon.transform.position;
                 _moving = true;
             }

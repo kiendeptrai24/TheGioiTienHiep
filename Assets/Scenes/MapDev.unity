@@ -17051,34 +17051,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e07bb547079c531438aede0295e41187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemMapWorld
+  ShowTopMostFoldoutHeaderGroup: 1
   itemDataPreset: {fileID: 11400000, guid: edf8cee749ec17041a20aec6031eb236, type: 2}
-  destination:
-    id: 
-    displayName: 
-    type: 0
-    itemData:
-      itemId: edf8cee749ec17041a20aec6031eb236
-      itemType: 4
-      itemName: "Qu\xE1i v\u1EADt"
-      itemIcon: {fileID: -1138557387, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
-      itemIconPath: 
-      itemFilePath: 
-      itemPrice: 100
-      canStack: 0
-      itemDescription: 
-      currentstack: 0
-      realmType: 0
-      qualityType: 0
-      elementType: 0
-      physicalDamage: 0
-      magicalDamage: 0
-      spiritDamage: 0
-      physicalDefense: 0
-      magicalDefense: 0
-      spiritDefense: 0
-    spawnPoint: {fileID: 0}
-    unlocked: 1
-    keywords: []
 --- !u!1 &259959809
 GameObject:
   m_ObjectHideFlags: 0
@@ -40612,7 +40586,6 @@ MonoBehaviour:
   - {fileID: 2033387974}
   - {fileID: 1899933434}
   - {fileID: 259091840}
-  destinations: []
   itemResources: []
 --- !u!4 &610533542
 Transform:
@@ -122484,7 +122457,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1763549227
 RectTransform:
   m_ObjectHideFlags: 0
@@ -131659,34 +131632,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e07bb547079c531438aede0295e41187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemMapWorld
+  ShowTopMostFoldoutHeaderGroup: 1
   itemDataPreset: {fileID: 11400000, guid: 2ced2b0ffda301b479d52f1120f8f036, type: 2}
-  destination:
-    id: 
-    displayName: 
-    type: 0
-    itemData:
-      itemId: 2ced2b0ffda301b479d52f1120f8f036
-      itemType: 4
-      itemName: 
-      itemIcon: {fileID: 657366318, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
-      itemIconPath: 
-      itemFilePath: 
-      itemPrice: 100
-      canStack: 0
-      itemDescription: 
-      currentstack: 0
-      realmType: 0
-      qualityType: 0
-      elementType: 0
-      physicalDamage: 0
-      magicalDamage: 0
-      spiritDamage: 0
-      physicalDefense: 0
-      magicalDefense: 0
-      spiritDefense: 0
-    spawnPoint: {fileID: 0}
-    unlocked: 1
-    keywords: []
 --- !u!1 &1900200410
 GameObject:
   m_ObjectHideFlags: 0
@@ -141200,34 +141147,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e07bb547079c531438aede0295e41187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemMapWorld
+  ShowTopMostFoldoutHeaderGroup: 1
   itemDataPreset: {fileID: 11400000, guid: 9ee9071b3be3cd747ab2f029acd3a826, type: 2}
-  destination:
-    id: 
-    displayName: 
-    type: 0
-    itemData:
-      itemId: 9ee9071b3be3cd747ab2f029acd3a826
-      itemType: 4
-      itemName: "M\u1ECF"
-      itemIcon: {fileID: -1935324340, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
-      itemIconPath: 
-      itemFilePath: 
-      itemPrice: 100
-      canStack: 0
-      itemDescription: 
-      currentstack: 0
-      realmType: 0
-      qualityType: 0
-      elementType: 0
-      physicalDamage: 0
-      magicalDamage: 0
-      spiritDamage: 0
-      physicalDefense: 0
-      magicalDefense: 0
-      spiritDefense: 0
-    spawnPoint: {fileID: 0}
-    unlocked: 1
-    keywords: []
 --- !u!1 &2035780541
 GameObject:
   m_ObjectHideFlags: 0
@@ -232264,6 +232185,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: mine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7156025912132096766, guid: b8b0aa52c18ec2f4ab792232c9bfd721,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

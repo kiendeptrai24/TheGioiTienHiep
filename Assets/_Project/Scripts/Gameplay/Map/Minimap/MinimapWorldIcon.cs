@@ -13,5 +13,4 @@ public class MinimapWorldIcon : TGTHMonoBehaviour
         base.LoadComponent();
         item = GetComponentInParent<ItemMapWorld>();
     }
-    public void OnItemInteract() => item.ItemInteract();
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using ExitGames.Client.Photon.StructWrapping;
 using Unity.Netcode;
 using UnityEngine;
@@ -31,7 +32,6 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
     [Space]
 
     [Header("Mine Config")]
-    [SerializeField] ItemPreset mine;
     [SerializeField] private ItemResourseData miningData;
 
     public List<MineOwnershipSegment> history;
@@ -46,7 +46,7 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
 
     [SerializeField] private MineOwnershipSegment newSegment;
     private PlayerBattleRoster battleRoster;
-
+    private ItemMapWorld itemMapWorld;
     public ItemData GetItemResourseData()
     {
         if (miningData != null)
@@ -60,12 +60,15 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        miningData = mine.GetItemData() as ItemResourseData;
+        itemMapWorld = GetComponent<ItemMapWorld>();
+
+        miningData = itemMapWorld.GetItemData() as ItemResourseData;
         battleRoster = GetComponent<PlayerBattleRoster>();
     }
     public void ResetResource()
     {
-        miningData = mine.GetItemData() as ItemResourseData;
+        itemMapWorld.ResetItemData();
+        miningData = itemMapWorld.GetItemData() as ItemResourseData;
         if (!IsServer)
             return;
 

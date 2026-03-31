@@ -37,7 +37,6 @@ public class ServiceUserController : TGTHNetworkBehaviour
             Debug.LogError("No prefab selected!");
             yield break;
         }
-        Debug.Log(playerNetManager.GetPos() + " " + playerNetManager.GetRot());
         SpawnPlayerServerRpc(itemData.itemId, playerNetManager.GetPos(), playerNetManager.GetRot());
     }
 

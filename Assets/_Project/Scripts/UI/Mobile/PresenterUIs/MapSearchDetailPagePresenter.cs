@@ -16,12 +16,15 @@ namespace TGTH.Mobile
         [SerializeField] private PathTest pathTest;
         public NavigationFindMapResult navigationFindMapResult;
         public UIItemResourse curItem;
+        private UIItemResourceType curFocusItem;
         private List<FindPathResult> findPathResults = new List<FindPathResult>();
         private int xPos = 0;
         private int yPos = 0;
+        private PlayerNetManager playerNet;
         protected override void Awake()
         {
             base.Awake();
+            playerNet = PlayerNetManager.Instance;
             view.OnOkClicked += OnOkClicked;
             view.OnRealmSliderChanged += OnRealmSliderChanged;
             view.OnAddClicked += OnAddClicked;
@@ -29,12 +32,19 @@ namespace TGTH.Mobile
             view.OnCreateNewItem += OnAddEventItem;
             view.OnXPosChanged += OnXPosChanged;
             view.OnYPosChanged += OnYPosChanged;
-
             Init();
+        }
+        void OnEnable()
+        {
+            AddItemNearBy();
         }
         private void OnDisable()
         {
+
+            curItem?.UnSelect();
             curItem = null;
+            curFocusItem?.UnFocusItem();
+            curFocusItem = null;
         }
         private void OnYPosChanged(int value)
         {
@@ -53,6 +63,7 @@ namespace TGTH.Mobile
             {
                 var itemResources = curItem.itemData as ItemResourseData;
                 var resource = pathTest.mapSpawn.WorldToGrid(itemResources.position);
+                Debug.Log(itemResources.position);
                 foreach (var item in findPathResults)
                 {
                     if (item.goal.x == resource.x && item.goal.z == resource.z)
@@ -124,22 +135,32 @@ namespace TGTH.Mobile
         private void OnRealmSliderChanged(int value)
         {
             SetRealmType(value);
-
+            view.items = resource.GetItemsRange(playerNet.GetPos(), 100);
             var filteredItems = view.items
                 .Where(item => item.realmType == this.cultivationStage
                     && item is ItemResourseData resData && resData.resourceType == this.resourceType)
                 .ToList();
 
             view.ShowItemsByStage(filteredItems);
+            AddItemEvent();
         }
-        private void Init()
+        private void AddItemNearBy()
         {
-            view.items = resource.GetItems();
-            view.Init();
+            view.items = resource.GetItemsRange(playerNet.GetPos(), 100);
+            view.ShowAllItem(view.items);
+            AddItemEvent();
+        }
+
+        private void AddItemEvent()
+        {
             foreach (var item in view.uIItemNearBy)
             {
                 item.OnItemClicked += OnItemClicked;
             }
+        }
+
+        private void Init()
+        {
             foreach (var item in view.choseItemType)
             {
                 item.OnItemClicked += OnFocusItem;
@@ -148,11 +169,13 @@ namespace TGTH.Mobile
 
         private void OnFocusItem(UIItemResourceType item)
         {
+            curFocusItem?.UnFocusItem();
+            curFocusItem = item;
+            curFocusItem.FocusItem();
             foreach (var itemUnfocus in view.choseItemType)
             {
                 itemUnfocus.UnFocusItem();
             }
-            item.FocusItem();
             SetResourceType(item.resourceType);
             OnRealmSliderChanged((int)cultivationStage);
         }
@@ -164,10 +187,7 @@ namespace TGTH.Mobile
             curItem.Select();
             view.SetModeIcon(item.itemData);
         }
-        protected override void Start()
-        {
-            base.Start();
-        }
+
         protected override void LoadComponent()
         {
             base.LoadComponent();

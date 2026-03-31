@@ -2,35 +2,30 @@ using System;
 using UnityEngine;
 using WorldMap.Travel;
 
-public class ItemMapWorld : TGTHMonoBehaviour
+public class ItemMapWorld : TGTHNetworkBehaviour
 {
     [SerializeField] private ItemResourcePreset itemDataPreset;
-    public Destination destination;
-    public event Action<Destination> OnItemInteract;
+    private ItemData itemData;
     protected override void Awake()
     {
         base.Awake();
-        destination.spawnPoint = transform;
+
     }
-    protected override void Start()
+    public override void OnNetworkSpawn()
     {
-        base.Start();
-    }
-    public void ItemInteract() => OnItemInteract?.Invoke(destination);
-    public Destination GetDestination()
-    {
-        if (destination.spawnPoint == null)
-        {
-            destination.spawnPoint = transform;
-        }
-        return destination;
+        base.OnNetworkSpawn();
+        ResetItemData();
     }
     public ItemData GetItemData()
     {
-        destination.itemData = itemDataPreset.GetItemData();
-        var itemResources = destination.itemData as ItemResourseData;
+        return itemData;
+    }
+    public void ResetItemData()
+    {
+        itemData = itemDataPreset.GetItemData();
+        var itemResources = itemData as ItemResourseData;
         itemResources.position = transform.position;
-        return destination.itemData;
+        Debug.Log(itemResources.position);
     }
     protected override void LoadComponent()
     {

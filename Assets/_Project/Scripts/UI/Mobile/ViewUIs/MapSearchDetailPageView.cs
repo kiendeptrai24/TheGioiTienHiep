@@ -74,14 +74,24 @@ namespace TGTH.Mobile
             });
         }
 
-        public void Init()
+        public void ShowAllItem(List<ItemData> items)
         {
+            ClearAllSlots();
             foreach (var data in items)
             {
                 var item = Instantiate(uIItemPrefab, resourceContent);
                 item.SetData(data);
                 uIItemNearBy.Add(item);
             }
+        }
+        private void ClearAllSlots()
+        {
+            foreach (var item in uIItemNearBy)
+            {
+                if (item != null)
+                    Destroy(item.gameObject);
+            }
+            uIItemNearBy.Clear();
         }
         protected override void Start()
         {
@@ -118,26 +128,8 @@ namespace TGTH.Mobile
         }
         public void ShowItemsByStage(List<ItemData> filteredItems)
         {
-            int i = 0;
-            for (; i < filteredItems.Count; i++)
-            {
-                if (i < uIItemNearBy.Count)
-                {
-                    uIItemNearBy[i].SetData(filteredItems[i]);
-                    uIItemNearBy[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    var item = Instantiate(uIItemPrefab, resourceContent);
-                    item.SetData(filteredItems[i]);
-                    uIItemNearBy.Add(item);
-                    OnCreateNewItem?.Invoke(item);
-                }
-            }
-            for (; i < uIItemNearBy.Count; i++)
-            {
-                uIItemNearBy[i].gameObject.SetActive(false);
-            }
+            ClearAllSlots();
+            ShowAllItem(filteredItems);
         }
     }
 }

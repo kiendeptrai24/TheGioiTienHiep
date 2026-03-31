@@ -24,7 +24,7 @@ public class SpawnManager : TGTHNetworkBehaviour
 
         foreach (var point in points)
         {
-            NetworkObject go = NetworkObjectPool.Singleton.GetNetworkObject(prefab, point, Quaternion.identity, parent);
+            NetworkObject go = NetworkObjectPool.Singleton.GetNetworkObject(prefab, point, Quaternion.identity);
             var itemMapworld = go.GetComponent<ItemMapWorld>();
             ResourceManager.Instance.AddItemMapWorld(itemMapworld);
         }

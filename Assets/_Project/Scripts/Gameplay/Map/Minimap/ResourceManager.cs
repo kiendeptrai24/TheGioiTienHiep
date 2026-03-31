@@ -7,38 +7,49 @@ using WorldMap.Travel;
 public class ResourceManager : Singleton<ResourceManager>
 {
     [SerializeField] private List<ItemMapWorld> items;
-    [SerializeField] private List<Destination> destinations;
     [SerializeField] private List<ItemData> itemResources;
     protected override void Awake()
     {
         base.Awake();
         LoadComponent();
+    }
+    protected override void Start()
+    {
+        base.Start();
         foreach (var item in items)
         {
             itemResources.Add(item.GetItemData());
-            destinations.Add(item.GetDestination());
         }
     }
     public void AddItemMapWorld(ItemMapWorld item)
     {
         items.Add(item);
         itemResources.Add(item.GetItemData());
-        destinations.Add(item.GetDestination());
     }
     public void RemoveItemMapWorld(ItemMapWorld item)
     {
         items.Remove(item);
         itemResources.Remove(item.GetItemData());
-        destinations.Remove(item.GetDestination());
     }
-    public List<Destination> GetDestination()
-    {
-        return destinations;
-    }
-
     public List<ItemData> GetItems()
     {
         return itemResources;
+    }
+    public List<ItemData> GetItemsRange(Vector3 position, float range)
+    {
+        var result = new List<ItemData>();
+
+        Collider[] colliders = Physics.OverlapSphere(position, range);
+
+        foreach (var col in colliders)
+        {
+            var itemWorld = col.GetComponent<ItemMapWorld>();
+            if (itemWorld != null)
+            {
+                result.Add(itemWorld.GetItemData());
+            }
+        }
+        return result;
     }
     protected override void LoadComponent()
     {
