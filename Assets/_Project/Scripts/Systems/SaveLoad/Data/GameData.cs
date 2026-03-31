@@ -6,6 +6,8 @@ using UnityEngine;
 public class GameData
 {
     public string characterName;
+    public Vector3 position;
+    public Quaternion rotation;
     public string characterId;
     public ulong coins;
     public List<ItemData> itemDatas;
@@ -25,5 +27,7 @@ public class GameData
         allItemsDatas = new List<ItemData>();
         itemDatasCharacter = new List<ItemData>();
         mineOfflineDataList = new MineOfflineDataList();
+        position = new Vector3(0, 0, 0);
+        rotation = Quaternion.identity;
     }
 }

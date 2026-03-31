@@ -36,6 +36,7 @@ namespace TGTH.Mobile
         {
             if (currentItemSelect == null || currentItemSelect.HasItem() == false) return;
             string characterId = (currentItemSelect.inventoryItem.data as HeroData).characterId;
+            PlayerPrefabSelector.Instance.SetItemData(currentItemSelect.inventoryItem.data);
             PlayfabDataManager.Instance.OnCharacterLoaded(characterId);
             navigation.OnClick();
             NetworkManager.Singleton.StartClient();

@@ -89,7 +89,7 @@ public class NetworkObjectPool : NetworkBehaviour
     /// <param name="position">The position to spawn the object at.</param>
     /// <param name="rotation">The rotation to spawn the object with.</param>
     /// <returns></returns>
-    public NetworkObject GetNetworkObject(GameObject prefab, Vector3 position, Quaternion rotation, bool ChangeOwnership = false, bool autoSpawn = true)
+    public NetworkObject GetNetworkObject(GameObject prefab, Vector3 position, Quaternion rotation, bool autoSpawn = true)
     {
         NetworkObject networkObject = null;
         try
@@ -103,8 +103,6 @@ public class NetworkObjectPool : NetworkBehaviour
                 releasedObjects.Add(networkObject);
             if (autoSpawn)
                 networkObject.Spawn();
-            if (ChangeOwnership)
-                networkObject.ChangeOwnership(NetworkManager.Singleton.LocalClientId);
 
             networkObject.TryRemoveParent();
 

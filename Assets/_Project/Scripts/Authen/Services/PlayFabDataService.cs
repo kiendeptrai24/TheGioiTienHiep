@@ -125,12 +125,19 @@ public class PlayFabDataService
             Debug.LogError("SetProfile failed: gameData is null");
             return;
         }
+        Vector3DTO posDTO = new Vector3DTO(gameData.position);
+
+        Vector3 rot = new Vector3(gameData.rotation.eulerAngles.x, gameData.rotation.eulerAngles.x, gameData.rotation.eulerAngles.x);
+
+        Vector3DTO rotDTO = new Vector3DTO(rot);
 
         PlayerProfileDTO profile = new PlayerProfileDTO
         {
             characterId = gameData.characterId,
             coins = gameData.coins,
             playerName = gameData.characterName,
+            position = posDTO,
+            rotation = rotDTO,
             // ===== OFFLINE MINING SAVE =====
             mineOfflineDataList = gameData.mineOfflineDataList ?? new MineOfflineDataList()
         };

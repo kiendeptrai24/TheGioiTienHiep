@@ -25,6 +25,19 @@ public class ProfileService : ISaveLoadRemote
                 gameData.characterId = profileDataDTO.characterId;
             gameData.coins = profileDataDTO.coins;
 
+
+            gameData.position = profileDataDTO.position.ToVector3();
+            gameData.rotation = Quaternion.LookRotation(profileDataDTO.rotation.ToVector3());
+
+            if (profileDataDTO.position.Equals(default(Vector3DTO)))
+            {
+                gameData.position = new Vector3(500, 0, 440);
+            }
+            if (profileDataDTO.rotation.Equals(default(Vector3DTO)))
+            {
+                gameData.rotation = Quaternion.identity;
+            }
+
             // ===== LOAD OFFLINE MINING DATA =====
             if (profileDataDTO.mineOfflineDataList != null && profileDataDTO.mineOfflineDataList.Count > 0)
             {

@@ -51,7 +51,6 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
         foreach (var item in itemDatas)
         {
             var itemData = item as HeroData;
-            Debug.Log(itemData.championIndex);
         }
         this.itemDatas = itemDatas;
         OnChampionPlayerChanged?.Invoke(itemDatas);
