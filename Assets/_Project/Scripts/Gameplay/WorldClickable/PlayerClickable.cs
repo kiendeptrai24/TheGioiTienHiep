@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class PlayerClickable : EntityClickable
 {
@@ -58,7 +59,7 @@ public class PlayerClickable : EntityClickable
         var enemyClientId = enemyObject.OwnerClientId;
 
         NotifyResultClientRpc(
-            $"You won {reward} coins!",
+            $"Bạn đã thắng! nhận dược {reward} Linh Thạch! 70% tổng số Linh Thạch nhận từ đối thủ",
             new ClientRpcParams
             {
                 Send = new ClientRpcSendParams
@@ -68,7 +69,7 @@ public class PlayerClickable : EntityClickable
             });
 
         NotifyResultClientRpc(
-            $"You lost {reward} coins!",
+            $"Bạn đã thua! bị trừ {reward} Linh Thạch! 70% tổng số Linh Thạch bị trừ",
             new ClientRpcParams
             {
                 Send = new ClientRpcSendParams
@@ -80,6 +81,6 @@ public class PlayerClickable : EntityClickable
     [ClientRpc]
     private void NotifyResultClientRpc(string message, ClientRpcParams clientRpcParams = default)
     {
-        Debug.Log(message);
+        TopNotificationUI.Instance.Show(message);
     }
 }

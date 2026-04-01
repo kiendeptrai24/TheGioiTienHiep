@@ -118,6 +118,14 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
     private void SendReplayToClientClientRpc(string namePlayer, string nameEnemy, string winner, float duration, BattleEventDTO[] events, ClientRpcParams rpcParams = default)
     {
         Debug.Log($"Đội chiến thắng là: {winner} với thời gian {duration} giây");
+        if (winner == "Heroes")
+        {
+            TopNotificationUI.Instance.Show($"Bạn đã thắng! với thời gian {duration} giây");
+        }
+        else
+        {
+            TopNotificationUI.Instance.Show($"Bạn đã thua! với thời gian {duration} giây");
+        }
         string text = "";
         // convert to Data
         List<BattleEvent> battleEvents = new List<BattleEvent>();

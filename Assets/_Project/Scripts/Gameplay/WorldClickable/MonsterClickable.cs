@@ -17,38 +17,37 @@ public class MonsterClickable : EntityClickable
         if (!IsServer) return;
         BattleSimulatorRequest.Instance.RequestBattleSimulator(heroId, enemyId, (win) =>
         {
+            var playerNet = NetworkManager.SpawnManager.SpawnedObjects[heroId];
+            if (playerNet == null) return;
+            ulong networkOwner = playerNet.OwnerClientId;
             if (win)
             {
                 NotifyResultClientRpc(
-                $"You won ",
+                $"Bạn đã thắng",
                 new ClientRpcParams
                 {
                     Send = new ClientRpcSendParams
                     {
-                        TargetClientIds = new[] { heroId }
+                        TargetClientIds = new[] { networkOwner }
                     }
                 });
-                Debug.Log("heroId win");
                 SpawnMonter.Instance.RemoveNetObject(NetworkObject);
             }
             else
             {
-                var playerNet = NetworkManager.SpawnManager.SpawnedObjects[heroId];
                 if (playerNet)
                 {
-                    Debug.Log("playerNet");
                     playerNet.transform.position = new Vector3(500, 0, 440);
                     playerNet.transform.rotation = Quaternion.identity;
                 }
-                Debug.Log("enemyId win");
 
                 NotifyResultClientRpc(
-                $"You lost ",
+                $"Bạn đã thua và sẽ được đưa tông môn",
                 new ClientRpcParams
                 {
                     Send = new ClientRpcSendParams
                     {
-                        TargetClientIds = new[] { enemyId }
+                        TargetClientIds = new[] { networkOwner }
                     }
                 });
             }
@@ -57,7 +56,7 @@ public class MonsterClickable : EntityClickable
     [ClientRpc]
     private void NotifyResultClientRpc(string message, ClientRpcParams clientRpcParams = default)
     {
-        Debug.Log(message);
+        TopNotificationUI.Instance.Show(message);
     }
 
 }
