@@ -28,6 +28,7 @@ public class MonsterClickable : EntityClickable
                         TargetClientIds = new[] { heroId }
                     }
                 });
+                Debug.Log("heroId win");
                 SpawnMonter.Instance.RemoveNetObject(NetworkObject);
             }
             else
@@ -35,9 +36,12 @@ public class MonsterClickable : EntityClickable
                 var playerNet = NetworkManager.SpawnManager.SpawnedObjects[heroId];
                 if (playerNet)
                 {
+                    Debug.Log("playerNet");
                     playerNet.transform.position = new Vector3(500, 0, 440);
                     playerNet.transform.rotation = Quaternion.identity;
                 }
+                Debug.Log("enemyId win");
+
                 NotifyResultClientRpc(
                 $"You lost ",
                 new ClientRpcParams

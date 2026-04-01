@@ -2232,7 +2232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2586384919
+  GlobalObjectIdHash: 3348537847
   InScenePlacedSourceGlobalObjectIdHash: 3254898076
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2269,7 +2269,7 @@ MonoBehaviour:
   RotationMaxInterpolationTime: 0.1
   ScaleLerpSmoothing: 1
   ScaleMaxInterpolationTime: 0.1
-  AuthorityMode: 1
+  AuthorityMode: 0
   TickSyncChildren: 0
   UseUnreliableDeltas: 0
   SyncPositionX: 1
@@ -2337,8 +2337,10 @@ MonoBehaviour:
   currentState: 0
   mapSpawn: {fileID: 0}
   mapSearchController: {fileID: 0}
-  turnSpeed: 12
+  turnSpeed: 100
   moveSpeed: 5
+  Direction:
+    m_InternalValue: {x: 0, y: 0}
 --- !u!114 &2997244800495556665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2470,6 +2472,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 713edccdfd4df9a4c92f971121b37848, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerVisibilityTintURP
+  ShowTopMostFoldoutHeaderGroup: 1
   renderers:
   - {fileID: 2417816037525526889}
   - {fileID: 4577024574730961590}

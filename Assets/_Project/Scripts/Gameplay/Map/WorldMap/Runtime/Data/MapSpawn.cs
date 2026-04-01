@@ -19,9 +19,9 @@ public class MapSpawn : TGTHMonoBehaviour
         PlayerNetManager.Instance.OnPlayerExiststed += OnPlayerExists;
     }
 
-    private void OnPlayerExists(NetworkObject @object)
+    private void OnPlayerExists(NetworkObject playerNet)
     {
-        this.player = @object.transform;
+        this.player = playerNet.transform;
     }
     protected override void Start()
     {

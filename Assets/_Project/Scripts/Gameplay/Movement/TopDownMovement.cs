@@ -7,7 +7,7 @@ public class TopDownMovement : IMoveable
         this.rb = rb;
     }
     public Rigidbody rb;
-    Vector2 inputDirection = Vector2.zero;
+    private Vector2 inputDirection = Vector2.zero;
     public void Move(Transform transform, Vector2 direction, float speed)
     {
         Vector3 v = new Vector3(direction.x, 0f, direction.y);

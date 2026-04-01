@@ -36,11 +36,6 @@ namespace WorldMap.UI
 
             var des = destititions.FirstOrDefault(d => d.id == searchText);
             if (des == null) return;
-
-            actorController.RequestTeleportServerRpc(
-                des.spawnPoint.position,
-                des.spawnPoint.rotation
-            );
         }
 
 

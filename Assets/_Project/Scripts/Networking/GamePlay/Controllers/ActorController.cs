@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 using WorldMap.UI;
@@ -12,15 +13,20 @@ public class ActorController : TGTHNetworkBehaviour
     private Rigidbody rig;
     public ActorState currentState = ActorState.TopDown;
     [Header("Components")]
-    [SerializeField] private MapSpawn mapSpawn;
     public MapSearchController mapSearchController;
     [SerializeField] private float turnSpeed = 10f;
     [SerializeField] private float moveSpeed = 5f;
+
     private IRotable characterRotation;
     private InputManager inputManager;
     public IMoveable moveable;
     private bool _autoMove;
     private Vector2 _autoDir;
+    public NetworkVariable<Vector2> Direction = new(
+        Vector2.zero,
+        NetworkVariableReadPermission.Owner,
+        NetworkVariableWritePermission.Server
+    );
     public void SetAutoMove(Vector2 dir)
     {
         _autoMove = true;
@@ -31,7 +37,7 @@ public class ActorController : TGTHNetworkBehaviour
     {
         _autoMove = false;
         _autoDir = Vector2.zero;
-        Stop();
+        StopServerRpc();
     }
     protected override void Awake()
     {
@@ -48,82 +54,56 @@ public class ActorController : TGTHNetworkBehaviour
     protected override void Start()
     {
         base.Start();
-        mapSpawn = FindAnyObjectByType<MapSpawn>();
-        mapSpawn.player = transform;
     }
+    
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        Direction.OnValueChanged += HandleDirectionChanged;
+    }
+
+    private void HandleDirectionChanged(Vector2 previousValue, Vector2 newValue)
+    {
+        moveable.Move(transform, newValue, moveSpeed);
+    }
+
     private void FixedUpdate()
     {
         if (!IsOwner) return;
         if (currentState == ActorState.TopDown)
             TopDownControl();
     }
+    
     private void TopDownControl()
     {
         Vector2 inputDirection = _autoMove ? _autoDir : inputManager.GetInputDirection();
 
-        // deadzone
-        if (inputDirection.sqrMagnitude < 0.0001f)
+        MoveServerRpc(inputDirection);
+    }
+    
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+    public void MoveServerRpc(Vector2 dir)
+    {
+        if (!IsServer) return;
+
+        Direction.Value = dir;
+        if (dir.sqrMagnitude < 0.0001f)
         {
             moveable.Move(transform, Vector2.zero, 0);
             return;
         }
 
-        characterRotation.Rotate(transform, new Vector3(inputDirection.x, 0, inputDirection.y), turnSpeed);
-        moveable.Move(transform, inputDirection, moveSpeed);
-    }
-    public void Move(Vector2 dir)
-    {
-        if (!IsOwner) return;
         Vector2 inputDirection = dir;
         moveable.Move(transform, inputDirection, moveSpeed);
         characterRotation.Rotate(transform, new Vector3(inputDirection.x, 0, inputDirection.y), turnSpeed);
     }
-    public void RequestTeleport(Vector3 pos, Quaternion rot)
-    {
-        Debug.Log("RequestTeleport");
-        RequestTeleportServerRpc(pos, rot);
 
-    }
-    [ServerRpc]
-    public void RequestTeleportServerRpc(Vector3 pos, Quaternion rot)
-    {
-        Debug.Log("RequestTeleportServerRpc");
-        // SERVER xác nhận quyền
-        TeleportInternal(pos, rot);
-
-        ClientRpcParams rpcParams = new ClientRpcParams
-        {
-            Send = new ClientRpcSendParams
-            {
-                TargetClientIds = new[] { OwnerClientId }
-            }
-        };
-
-        TeleportClientRpc(pos, rot, rpcParams);
-    }
-    private void TeleportInternal(Vector3 pos, Quaternion rot)
-    {
-        Debug.Log("TeleportInternal");
-        rig.position = pos;
-        rig.rotation = rot;
-        rig.linearVelocity = Vector3.zero;
-    }
-
-    [ClientRpc]
-    private void TeleportClientRpc(
-        Vector3 pos,
-        Quaternion rot,
-        ClientRpcParams rpcParams = default)
-    {
-        Debug.Log("TeleportClientRpc");
-        rig.position = pos;
-        rig.rotation = rot;
-        rig.linearVelocity = Vector3.zero;
-    }
-    public void Stop()
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+    public void StopServerRpc()
     {
         moveable.Move(transform, Vector2.zero, 0);
     }
+    
     protected override void LoadComponent()
     {
         base.LoadComponent();
