@@ -14,7 +14,7 @@ public class SpawnTree : MonoBehaviour
         ISpawnArea area = new RectSpawnArea(new Vector3(700, 0, 700), new Vector2(200, 200));
         ISpawnPattern pattern = new RandomSpawnPattern();
 
-        spawnManager.Spawn(prefab, area, pattern, settings);
+        // spawnManager.Spawn(prefab, area, pattern, settings);
     }
 
 }

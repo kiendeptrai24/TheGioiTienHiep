@@ -28,6 +28,25 @@ public class MonsterClickable : EntityClickable
                         TargetClientIds = new[] { heroId }
                     }
                 });
+                SpawnMonter.Instance.RemoveNetObject(NetworkObject);
+            }
+            else
+            {
+                var playerNet = NetworkManager.SpawnManager.SpawnedObjects[heroId];
+                if (playerNet)
+                {
+                    playerNet.transform.position = new Vector3(500, 0, 440);
+                    playerNet.transform.rotation = Quaternion.identity;
+                }
+                NotifyResultClientRpc(
+                $"You lost ",
+                new ClientRpcParams
+                {
+                    Send = new ClientRpcSendParams
+                    {
+                        TargetClientIds = new[] { enemyId }
+                    }
+                });
             }
         });
     }

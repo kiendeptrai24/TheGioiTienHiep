@@ -6,8 +6,6 @@ using WorldMap.Travel;
 
 public class ResourceManager : Singleton<ResourceManager>
 {
-    [SerializeField] private List<ItemMapWorld> items;
-    [SerializeField] private List<ItemData> itemResources;
     protected override void Awake()
     {
         base.Awake();
@@ -16,24 +14,6 @@ public class ResourceManager : Singleton<ResourceManager>
     protected override void Start()
     {
         base.Start();
-        foreach (var item in items)
-        {
-            itemResources.Add(item.GetItemData());
-        }
-    }
-    public void AddItemMapWorld(ItemMapWorld item)
-    {
-        items.Add(item);
-        itemResources.Add(item.GetItemData());
-    }
-    public void RemoveItemMapWorld(ItemMapWorld item)
-    {
-        items.Remove(item);
-        itemResources.Remove(item.GetItemData());
-    }
-    public List<ItemData> GetItems()
-    {
-        return itemResources;
     }
     public List<ItemData> GetItemsRange(Vector3 position, float range)
     {
