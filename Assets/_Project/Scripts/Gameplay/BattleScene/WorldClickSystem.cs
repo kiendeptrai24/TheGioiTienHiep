@@ -30,7 +30,7 @@ public class WorldClickSystem : TGTHMonoBehaviour
     {
         Ray ray = mainCamera.ScreenPointToRay(input.GetPointerPosition());
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 1000f, ~antiPlayer))
+        if (Physics.Raycast(ray, out RaycastHit hit, 1000f, antiPlayer))
         {
             if (hit.collider.TryGetComponent<IWorldClickable>(out var clickable))
             {

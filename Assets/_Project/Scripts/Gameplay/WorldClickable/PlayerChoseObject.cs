@@ -12,6 +12,7 @@ public class PlayerChoseObject : Singleton<PlayerChoseObject>
     {
         return currentEntity;
     }
+    public NetworkObject GetPlayerNet() => playerNet;
     protected override void Awake()
     {
         base.Awake();
@@ -38,8 +39,6 @@ public class PlayerChoseObject : Singleton<PlayerChoseObject>
             Debug.Log("object null");
             return;
         }
-        if (CheckIsOwner()) return;
-
         currentEntity.OnEntityClickedAccept(playerNet);
     }
     public void UnLink()
@@ -49,11 +48,5 @@ public class PlayerChoseObject : Singleton<PlayerChoseObject>
         if (mine == null) return;
         mine.UnLink(playerNet);
     }
-    public bool CheckIsOwner()
-    {
-        var mine = currentEntity.GetComponent<MineClickable>();
-        if (mine == null) return false;
 
-        return mine.IsObjectOwner(playerNet);
-    }
 }

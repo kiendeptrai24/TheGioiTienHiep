@@ -52,7 +52,6 @@ public class ServiceUserController : TGTHNetworkBehaviour
             return;
         }
         var networkObject = Instantiate(prefab, position, rotation).GetComponent<NetworkObject>();
-        Debug.Log(networkObject.gameObject.name);
         networkObject.SpawnAsPlayerObject(clientId);
     }
 

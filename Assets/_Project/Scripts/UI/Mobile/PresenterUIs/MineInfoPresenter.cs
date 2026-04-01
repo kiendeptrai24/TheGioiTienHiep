@@ -11,9 +11,11 @@ public class MineInfoPresenter : TGTHMonoBehaviour
     private float currentMiningProgress = 0;
     private float lastTimeClick = 0;
     private float interval = 1;
+    private ProfileManager profileManager;
     protected override void Awake()
     {
         view.OnMineClicked += StartMine;
+        profileManager = ProfileManager.Instance;
     }
 
     public void Show(ItemData itemData)
@@ -46,7 +48,12 @@ public class MineInfoPresenter : TGTHMonoBehaviour
     }
     private void StartMine()
     {
-        if (lastTimeClick + interval < Time.time && PlayerChoseObject.Instance.CheckIsOwner() == false)
+        var playerChose = PlayerChoseObject.Instance;
+        if (playerChose.GetCurrentEntity() == null) return;
+        var mine = playerChose.GetCurrentEntity().GetComponent<SpiritStoneMine>();
+        if (mine == null || !mine.PlayerIsOwner(profileManager.GetProfile().userId)) return;
+
+        if (lastTimeClick + interval < Time.time)
         {
             lastTimeClick = Time.time;
             PlayerChoseObject.Instance.RequestBattleSimulator();

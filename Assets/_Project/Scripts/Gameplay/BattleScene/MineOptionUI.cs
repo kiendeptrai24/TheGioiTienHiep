@@ -1,4 +1,5 @@
 using System;
+using ExitGames.Client.Photon.StructWrapping;
 using FeatureToggles;
 using PlayFab.Internal;
 using Unity.Netcode;
@@ -12,12 +13,16 @@ public class MineOptionUI : TGTHMonoBehaviour, IEntityOptionUI
     [SerializeField] private Button stopMineButton;
     [SerializeField] private Button mineButton;
     [SerializeField] private Button infoButton;
+    [SerializeField] private Button enemyInfoBtn;
     private PlayerChoseObject choseObject;
     private EntityOptionManager entityOptionManager;
     [SerializeField] private MineInfoPresenter mineInfoPresenter;
+    [SerializeField] private IEnemyInfo enemyInfo;
+    private PlayerProfile playerProfile;
     public void SetEntity(PlayerChoseObject entity)
     {
         choseObject = entity;
+        playerProfile = choseObject.GetPlayerNet().GetComponent<PlayerProfile>();
         ShowUI();
     }
 
@@ -41,14 +46,29 @@ public class MineOptionUI : TGTHMonoBehaviour, IEntityOptionUI
         {
             Mine();
         });
+        enemyInfoBtn.onClick.AddListener(() =>
+        {
+            ShowEnemyInfo();
+        });
     }
+
+    private void ShowEnemyInfo()
+    {
+        var entity = choseObject.GetCurrentEntity();
+        var roster = entity.GetComponent<PlayerBattleRoster>();
+        if (roster == null) return;
+        roster.GetPlayerTeam(() =>
+        {
+            enemyInfo.SetupDataInfo(roster.itemDatas);
+        });
+    }
+
     void OnEnable()
     {
         ShowUI();
     }
     private void Mine()
     {
-        Debug.Log("Mine");
         choseObject.RequestBattleSimulator();
         LeaveUI();
     }
@@ -62,7 +82,11 @@ public class MineOptionUI : TGTHMonoBehaviour, IEntityOptionUI
 
     private void StopMine()
     {
-        if (choseObject.CheckIsOwner())
+        if (choseObject == null) return;
+        if (choseObject.GetCurrentEntity() == null) return;
+        var mine = choseObject.GetCurrentEntity().GetComponent<SpiritStoneMine>();
+        if (mine == null) return;
+        if (mine.PlayerIsOwner(playerProfile.GetPlayerId()))
         {
             choseObject.UnLink();
             LeaveUI();
@@ -73,12 +97,15 @@ public class MineOptionUI : TGTHMonoBehaviour, IEntityOptionUI
     {
         entityOptionManager.Hide();
     }
+    #region UI
+
     public void ShowUIOwner()
     {
         leaveButton.gameObject.SetActive(true);
         stopMineButton.gameObject.SetActive(true);
         infoButton.gameObject.SetActive(true);
         mineButton.gameObject.SetActive(false);
+        enemyInfoBtn.gameObject.SetActive(false);
     }
     public void ShowUINotOwner()
     {
@@ -86,14 +113,31 @@ public class MineOptionUI : TGTHMonoBehaviour, IEntityOptionUI
         stopMineButton.gameObject.SetActive(false);
         infoButton.gameObject.SetActive(true);
         mineButton.gameObject.SetActive(true);
+        enemyInfoBtn.gameObject.SetActive(false);
+    }
+    public void ShowUIOther()
+    {
+        leaveButton.gameObject.SetActive(true);
+        stopMineButton.gameObject.SetActive(false);
+        infoButton.gameObject.SetActive(true);
+        mineButton.gameObject.SetActive(true);
+        enemyInfoBtn.gameObject.SetActive(true);
     }
     private void ShowUI()
     {
         gameObject.SetActive(true);
         if (choseObject == null) return;
-        if (choseObject.CheckIsOwner())
+        var mineClick = choseObject.GetCurrentEntity();
+        if (mineClick == null) return;
+        var resourse = mineClick.GetComponent<SpiritStoneMine>();
+        if (resourse == null) return;
+
+        if (resourse.HasOwner())
         {
-            ShowUIOwner();
+            if (resourse.PlayerIsOwner(playerProfile.GetPlayerId()))
+                ShowUIOwner();
+            else
+                ShowUIOther();
         }
         else
         {
@@ -104,4 +148,6 @@ public class MineOptionUI : TGTHMonoBehaviour, IEntityOptionUI
     {
         gameObject.SetActive(false);
     }
+    #endregion
+
 }

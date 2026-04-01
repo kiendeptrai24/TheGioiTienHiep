@@ -229,7 +229,7 @@ GameObject:
   - component: {fileID: 3320275896062033219}
   - component: {fileID: 7861756317221577165}
   - component: {fileID: 501182798790496068}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: mine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -381,10 +381,77 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiritStoneMine
   ShowTopMostFoldoutHeaderGroup: 1
+  playerId:
+    m_InternalValue:
+      utf8LengthInBytes: 0
+      bytes:
+        offset0000:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0016:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0032:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        byte0048: 0
+        byte0049: 0
+        byte0050: 0
+        byte0051: 0
+        byte0052: 0
+        byte0053: 0
+        byte0054: 0
+        byte0055: 0
+        byte0056: 0
+        byte0057: 0
+        byte0058: 0
+        byte0059: 0
+        byte0060: 0
+        byte0061: 0
   _owner: {fileID: 0}
   _ownerStorage: {fileID: 0}
-  playerId: 
-  mine: {fileID: 11400000, guid: 2ced2b0ffda301b479d52f1120f8f036, type: 2}
   miningData:
     itemId: 
     itemType: 0
@@ -415,13 +482,148 @@ MonoBehaviour:
     level: 0
   history: []
   oldSegment:
-    OwnerId: 
+    OwnerId:
+      utf8LengthInBytes: 0
+      bytes:
+        offset0000:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0016:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0032:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        byte0048: 0
+        byte0049: 0
+        byte0050: 0
+        byte0051: 0
+        byte0052: 0
+        byte0053: 0
+        byte0054: 0
+        byte0055: 0
+        byte0056: 0
+        byte0057: 0
+        byte0058: 0
+        byte0059: 0
+        byte0060: 0
+        byte0061: 0
     StartTime: 0
     EndTime: 0
   newSegment:
-    OwnerId: 
+    OwnerId:
+      utf8LengthInBytes: 0
+      bytes:
+        offset0000:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0016:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0032:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        byte0048: 0
+        byte0049: 0
+        byte0050: 0
+        byte0051: 0
+        byte0052: 0
+        byte0053: 0
+        byte0054: 0
+        byte0055: 0
+        byte0056: 0
+        byte0057: 0
+        byte0058: 0
+        byte0059: 0
+        byte0060: 0
+        byte0061: 0
     StartTime: 0
     EndTime: 0
+  itemMapWorld: {fileID: 0}
 --- !u!114 &7861756317221577165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,34 +636,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e07bb547079c531438aede0295e41187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemMapWorld
+  ShowTopMostFoldoutHeaderGroup: 1
   itemDataPreset: {fileID: 11400000, guid: 2ced2b0ffda301b479d52f1120f8f036, type: 2}
-  destination:
-    id: 
-    displayName: 
-    type: 0
-    itemData:
-      itemId: 9ee9071b3be3cd747ab2f029acd3a826
-      itemType: 4
-      itemName: "M\u1ECF"
-      itemIcon: {fileID: -1935324340, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
-      itemIconPath: 
-      itemFilePath: 
-      itemPrice: 100
-      canStack: 0
-      itemDescription: 
-      currentstack: 0
-      realmType: 0
-      qualityType: 0
-      elementType: 0
-      physicalDamage: 0
-      magicalDamage: 0
-      spiritDamage: 0
-      physicalDefense: 0
-      magicalDefense: 0
-      spiritDefense: 0
-    spawnPoint: {fileID: 0}
-    unlocked: 1
-    keywords: []
 --- !u!114 &501182798790496068
 MonoBehaviour:
   m_ObjectHideFlags: 0

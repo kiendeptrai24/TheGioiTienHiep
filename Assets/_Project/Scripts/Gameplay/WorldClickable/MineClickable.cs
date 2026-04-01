@@ -1,22 +1,19 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
 public class MineClickable : EntityClickable
 {
     private SpiritStoneMine mine;
-    private string mineId;  // ===== NEW: Track mine identity
+    private string mineId;
+
     private PlayerBattleRoster battleRoster;
     public override void OnNetworkSpawn()
     {
         mine = GetComponent<SpiritStoneMine>();
         entityWorldType = EntityWorldType.Mine;
         battleRoster = GetComponent<PlayerBattleRoster>();
-        mineId = $"mine_{NetworkObjectId}";
-    }
-
-    public bool IsObjectOwner(NetworkObject owner)
-    {
-        return mine.IsObjectOwner(owner);
+        mineId = Guid.NewGuid().ToString();
     }
 
     public void UnLink(NetworkObject network)
@@ -64,7 +61,6 @@ public class MineClickable : EntityClickable
         {
             Debug.Log("Fail: " + reason);
         });
-        UpdateMineOwnershipInGameData(ownerId);
     }
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
@@ -78,11 +74,10 @@ public class MineClickable : EntityClickable
 
         // ===== NEW: Clear mine ownership before unlink =====
         mineComponent.UnLink(ownerId);
-        ClearMineOwnershipFromGameData();
     }
 
     // ===== HELPER: Update mine ownership in GameData =====
-    private void UpdateMineOwnershipInGameData(ulong ownerId)
+    private void UpdateMineOwnershipInGameData(ulong ownerId, ulong mineId)
     {
         if (!NetworkManager.Singleton.IsServer)
             return;
@@ -92,22 +87,9 @@ public class MineClickable : EntityClickable
         Debug.Log($"[MineClickable] Mine {mineId} claimed by player {ownerId}");
     }
 
-    // ===== HELPER: Clear mine ownership =====
-    private void ClearMineOwnershipFromGameData()
-    {
-        if (!NetworkManager.Singleton.IsServer)
-            return;
-
-        Debug.Log($"[MineClickable] Mine {mineId} unlinked");
-    }
-
     public string GetMineId()
     {
         return mineId;
     }
 
-    public SpiritStoneMine GetMine()
-    {
-        return mine;
-    }
 }
