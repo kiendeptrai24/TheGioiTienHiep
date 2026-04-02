@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using UnityEngine;
 
 public class StatsData : TGTHMonoBehaviour
@@ -11,6 +10,7 @@ public class StatsData : TGTHMonoBehaviour
     public HeroPreset heroPreset;
 
     public ItemData heroData;
+    public HeroData hero1;
     public List<TechniqueData> techniqueData;
     public List<SkillData> skillDatas;
     public List<EquitmentData> equiDatas;
@@ -110,6 +110,7 @@ public class StatsData : TGTHMonoBehaviour
         statsModifiers.Add(new StatsSkillModifier());
         statsModifiers.Add(new StatsTechniqueModifier());
         statsModifiers.Add(new StatsEquipmentModifier());
+        statsModifiers.Add(new StatsPointModifier());
     }
     private void ResetStatsModifiers()
     {
@@ -184,6 +185,7 @@ public class StatsData : TGTHMonoBehaviour
     public void SetUpItem(ItemData item)
     {
         this.heroData = item;
+        hero1 = item as HeroData;
         Setup();
     }
     public void SetupDataPreset()

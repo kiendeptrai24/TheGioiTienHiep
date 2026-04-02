@@ -204,11 +204,11 @@ namespace TGTH.Mobile
                         if (success)
                         {
                             shopUseSystem.UseItem(uiItem, result.quantity);
-                            Debug.Log(message);
+                            TopNotificationUI.Instance.Show(message);
                         }
                         else
                         {
-                            Debug.Log(message);
+                            TopNotificationUI.Instance.Show(message);
                         }
                     });
                 },
@@ -218,7 +218,6 @@ namespace TGTH.Mobile
                 },
                 onShowInfo: () =>
                 {
-                    Debug.Log("Show Info");
                     if (uiItem == null)
                     {
                         Debug.Log("uiItem is null");

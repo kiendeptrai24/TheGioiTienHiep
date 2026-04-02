@@ -39,6 +39,23 @@ public class PlayerItemInventoryService : ISaveLoadRemote
                 if (itemData is HeroData heroData)
                 {
                     SetHeroData(itemsData, iconLoader, prefabLoader, SODataBase, i, itemData, heroData);
+                    if (heroData.isCharactor)
+                    {
+                        if (gameData.itemDataPoint != null)
+                        {
+                            heroData.physicalDamagePoint = gameData.itemDataPoint.damagePoint;
+                            heroData.magicalDamagePoint = gameData.itemDataPoint.damagePoint;
+                            heroData.spiritDamagePoint = gameData.itemDataPoint.damagePoint;
+                            heroData.physicalDefensePoint = gameData.itemDataPoint.defensePoint;
+                            heroData.magicalDefensePoint = gameData.itemDataPoint.defensePoint;
+                            heroData.spiritDefensePoint = gameData.itemDataPoint.defensePoint;
+                            heroData.healthPoint = gameData.itemDataPoint.healthPoint;
+                            heroData.manaPoint = gameData.itemDataPoint.manaPoint;
+                            heroData.spiritPoint = gameData.itemDataPoint.spiritPoint;
+                            heroData.moveSpeedPoint = gameData.itemDataPoint.moveSpeed;
+                            heroData.spititRangePoint = gameData.itemDataPoint.spititRange;
+                        }
+                    }
                     continue;
                 }
 

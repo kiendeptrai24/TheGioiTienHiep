@@ -72658,6 +72658,34 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: 0, w: 1}
     characterId: 
     coins: 0
+    point: 0
+    itemDataPoint:
+      itemId: 
+      itemType: 0
+      itemName: 
+      itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
+      itemPrice: 0
+      canStack: 0
+      itemDescription: 
+      currentstack: 0
+      realmType: 0
+      qualityType: 0
+      elementType: 0
+      physicalDamage: 0
+      magicalDamage: 0
+      spiritDamage: 0
+      physicalDefense: 0
+      magicalDefense: 0
+      spiritDefense: 0
+      damagePoint: 0
+      defensePoint: 0
+      healthPoint: 0
+      manaPoint: 0
+      spiritPoint: 0
+      moveSpeed: 0
+      spititRange: 0
     itemDatas: []
     itemDatasInTeam: []
     itemShopDatas: []
@@ -91119,6 +91147,140 @@ MonoBehaviour:
     physicalDefense: 0
     magicalDefense: 0
     spiritDefense: 0
+  hero1:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemIconPath: 
+    itemFilePath: 
+    itemPrice: 0
+    canStack: 0
+    itemDescription: 
+    currentstack: 0
+    realmType: 0
+    qualityType: 0
+    elementType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    isCharactor: 0
+    characterId: 
+    statsRealmData:
+      itemId: 
+      itemType: 0
+      itemName: 
+      itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
+      itemPrice: 0
+      canStack: 0
+      itemDescription: 
+      currentstack: 0
+      realmType: 0
+      qualityType: 0
+      elementType: 0
+      physicalDamage: 0
+      magicalDamage: 0
+      spiritDamage: 0
+      physicalDefense: 0
+      magicalDefense: 0
+      spiritDefense: 0
+      maxHealth: 0
+      maxMana: 0
+      maxSpirit: 0
+      critRate: 0
+      critDamage: 0
+      evasion: 0
+      armorPenetration: 0
+      movementSpeed: 0
+      attackSpeed: 0
+      castSpeed: 0
+      potential: 0
+      skillPoints: 0
+      combatPower: 0
+      spiritRange: 0
+    statsCultivationPathData:
+      itemId: 
+      itemType: 0
+      itemName: 
+      itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
+      itemPrice: 0
+      canStack: 0
+      itemDescription: 
+      currentstack: 0
+      realmType: 0
+      qualityType: 0
+      elementType: 0
+      physicalDamage: 0
+      magicalDamage: 0
+      spiritDamage: 0
+      physicalDefense: 0
+      magicalDefense: 0
+      spiritDefense: 0
+      essenceType: 0
+      counterEssenceType: 0
+      counterPercentage: 0
+      maxHealth: 0
+      maxMana: 0
+      maxSpirit: 0
+      movementSpeed: 0
+      spiritRange: 0
+    statsRaceData:
+      itemId: 
+      itemType: 0
+      itemName: 
+      itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
+      itemPrice: 0
+      canStack: 0
+      itemDescription: 
+      currentstack: 0
+      realmType: 0
+      qualityType: 0
+      elementType: 0
+      physicalDamage: 0
+      magicalDamage: 0
+      spiritDamage: 0
+      physicalDefense: 0
+      magicalDefense: 0
+      spiritDefense: 0
+      raceType: 0
+      maxHealth: 0
+      maxMana: 0
+      maxSpirit: 0
+      spiritRange: 0
+      movementSpeed: 0
+    raceType: 0
+    essenceType: 0
+    level: 0
+    attackRange: 0
+    moveSpeed: 0
+    health: 0
+    mana: 0
+    spirit: 0
+    physicalDamagePoint: 0
+    magicalDamagePoint: 0
+    spiritDamagePoint: 0
+    physicalDefensePoint: 0
+    magicalDefensePoint: 0
+    spiritDefensePoint: 0
+    healthPoint: 0
+    manaPoint: 0
+    spiritPoint: 0
+    moveSpeedPoint: 0
+    spititRangePoint: 0
+    championIndex: {x: 0, y: 0}
+    equitmentDatas: []
+    skillDatas: []
+    techniqueDatas: []
+    heroPrefab: {fileID: 0}
   techniqueData: []
   skillDatas: []
   equiDatas: []
@@ -111505,6 +111667,34 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: 0, w: 1}
     characterId: 
     coins: 0
+    point: 0
+    itemDataPoint:
+      itemId: 
+      itemType: 0
+      itemName: 
+      itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
+      itemPrice: 0
+      canStack: 0
+      itemDescription: 
+      currentstack: 0
+      realmType: 0
+      qualityType: 0
+      elementType: 0
+      physicalDamage: 0
+      magicalDamage: 0
+      spiritDamage: 0
+      physicalDefense: 0
+      magicalDefense: 0
+      spiritDefense: 0
+      damagePoint: 0
+      defensePoint: 0
+      healthPoint: 0
+      manaPoint: 0
+      spiritPoint: 0
+      moveSpeed: 0
+      spititRange: 0
     itemDatas: []
     itemDatasInTeam: []
     itemShopDatas: []
@@ -214805,7 +214995,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a357e00527a7c16448571c15274fb842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IncreasePointBtn
-  statType: 0
+  statType: 61
 --- !u!1 &1751237577967145856
 GameObject:
   m_ObjectHideFlags: 0
@@ -281217,7 +281407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a357e00527a7c16448571c15274fb842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IncreasePointBtn
-  statType: 48
+  statType: 65
 --- !u!114 &3485230276239343995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320024,7 +320214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a357e00527a7c16448571c15274fb842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IncreasePointBtn
-  statType: 0
+  statType: 58
 --- !u!1 &4456458364171941765
 GameObject:
   m_ObjectHideFlags: 0
@@ -322416,7 +322606,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a357e00527a7c16448571c15274fb842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IncreasePointBtn
-  statType: 2
+  statType: 63
 --- !u!1 &4516125632907610142
 GameObject:
   m_ObjectHideFlags: 0
@@ -339254,6 +339444,140 @@ MonoBehaviour:
     physicalDefense: 0
     magicalDefense: 0
     spiritDefense: 0
+  hero1:
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemIconPath: 
+    itemFilePath: 
+    itemPrice: 0
+    canStack: 0
+    itemDescription: 
+    currentstack: 0
+    realmType: 0
+    qualityType: 0
+    elementType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    isCharactor: 0
+    characterId: 
+    statsRealmData:
+      itemId: 
+      itemType: 0
+      itemName: 
+      itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
+      itemPrice: 0
+      canStack: 0
+      itemDescription: 
+      currentstack: 0
+      realmType: 0
+      qualityType: 0
+      elementType: 0
+      physicalDamage: 0
+      magicalDamage: 0
+      spiritDamage: 0
+      physicalDefense: 0
+      magicalDefense: 0
+      spiritDefense: 0
+      maxHealth: 0
+      maxMana: 0
+      maxSpirit: 0
+      critRate: 0
+      critDamage: 0
+      evasion: 0
+      armorPenetration: 0
+      movementSpeed: 0
+      attackSpeed: 0
+      castSpeed: 0
+      potential: 0
+      skillPoints: 0
+      combatPower: 0
+      spiritRange: 0
+    statsCultivationPathData:
+      itemId: 
+      itemType: 0
+      itemName: 
+      itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
+      itemPrice: 0
+      canStack: 0
+      itemDescription: 
+      currentstack: 0
+      realmType: 0
+      qualityType: 0
+      elementType: 0
+      physicalDamage: 0
+      magicalDamage: 0
+      spiritDamage: 0
+      physicalDefense: 0
+      magicalDefense: 0
+      spiritDefense: 0
+      essenceType: 0
+      counterEssenceType: 0
+      counterPercentage: 0
+      maxHealth: 0
+      maxMana: 0
+      maxSpirit: 0
+      movementSpeed: 0
+      spiritRange: 0
+    statsRaceData:
+      itemId: 
+      itemType: 0
+      itemName: 
+      itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
+      itemPrice: 0
+      canStack: 0
+      itemDescription: 
+      currentstack: 0
+      realmType: 0
+      qualityType: 0
+      elementType: 0
+      physicalDamage: 0
+      magicalDamage: 0
+      spiritDamage: 0
+      physicalDefense: 0
+      magicalDefense: 0
+      spiritDefense: 0
+      raceType: 0
+      maxHealth: 0
+      maxMana: 0
+      maxSpirit: 0
+      spiritRange: 0
+      movementSpeed: 0
+    raceType: 0
+    essenceType: 0
+    level: 0
+    attackRange: 0
+    moveSpeed: 0
+    health: 0
+    mana: 0
+    spirit: 0
+    physicalDamagePoint: 0
+    magicalDamagePoint: 0
+    spiritDamagePoint: 0
+    physicalDefensePoint: 0
+    magicalDefensePoint: 0
+    spiritDefensePoint: 0
+    healthPoint: 0
+    manaPoint: 0
+    spiritPoint: 0
+    moveSpeedPoint: 0
+    spititRangePoint: 0
+    championIndex: {x: 0, y: 0}
+    equitmentDatas: []
+    skillDatas: []
+    techniqueDatas: []
+    heroPrefab: {fileID: 0}
   techniqueData: []
   skillDatas: []
   equiDatas: []
@@ -366110,7 +366434,6 @@ GameObject:
   - component: {fileID: 2046932557274273779}
   - component: {fileID: 3215507056761770339}
   - component: {fileID: 1369868880359852483}
-  - component: {fileID: 8771177372963477328}
   m_Layer: 5
   m_Name: Technique
   m_TagString: Untagged
@@ -399706,7 +400029,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6594532625940375211
 RectTransform:
   m_ObjectHideFlags: 0
@@ -443122,7 +443445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a357e00527a7c16448571c15274fb842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IncreasePointBtn
-  statType: 1
+  statType: 62
 --- !u!224 &7701719414309467636
 RectTransform:
   m_ObjectHideFlags: 0
@@ -482769,7 +483092,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a357e00527a7c16448571c15274fb842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IncreasePointBtn
-  statType: 0
+  statType: 55
 --- !u!1 &8733057308398873481
 GameObject:
   m_ObjectHideFlags: 0
@@ -484127,18 +484450,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &8771177372963477328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5692000408413442724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43d116ac2ab5e4b479cdc29d79de070e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TechniqueSystem
 --- !u!1 &8772803340605361873
 GameObject:
   m_ObjectHideFlags: 0
@@ -495140,7 +495451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a357e00527a7c16448571c15274fb842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IncreasePointBtn
-  statType: 42
+  statType: 64
 --- !u!114 &9060521462692998112
 MonoBehaviour:
   m_ObjectHideFlags: 0

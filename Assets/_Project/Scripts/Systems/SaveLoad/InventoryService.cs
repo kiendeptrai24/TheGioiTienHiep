@@ -20,7 +20,6 @@ public class InventoryService : ISaveLoadRemote
             var iconLoader = AddressableLoader.Instance.GetLoader<IconLoader>(AddressableLoaderType.Sprite.ToString());
             var prefabLoader = AddressableLoader.Instance.GetLoader<PrefabLoader>(AddressableLoaderType.Prefab.ToString());
             var SODataBase = ScriptableObjectLoader.Instance;
-
             for (int i = 0; i < itemsShop.inventoryItems.Count; i++)
             {
                 var item = itemsShop.inventoryItems[i];

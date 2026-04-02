@@ -32,17 +32,27 @@ public class HeroData : ItemData
     [JsonIgnore]
     public float spirit; // persent
     [JsonIgnore]
-    public float physicalDamagePoint; // value
+    public int physicalDamagePoint; // value
     [JsonIgnore]
-    public float magicalDamagePoint; // value
+    public int magicalDamagePoint; // value
     [JsonIgnore]
-    public float spiritDamagePoint; // value
+    public int spiritDamagePoint; // value
     [JsonIgnore]
-    public float physicalDefensePoint; // value
+    public int physicalDefensePoint; // value
     [JsonIgnore]
-    public float magicalDefensePoint; // value
+    public int magicalDefensePoint; // value
     [JsonIgnore]
-    public float spiritDefensePoint; // value
+    public int spiritDefensePoint; // value
+    [JsonIgnore]
+    public int healthPoint;
+    [JsonIgnore]
+    public int manaPoint;
+    [JsonIgnore]
+    public int spiritPoint;
+    [JsonIgnore]
+    public int moveSpeedPoint;
+    [JsonIgnore]
+    public int spititRangePoint;
     [JsonIgnore]
     public Vector2Int championIndex;
     public List<EquitmentData> equitmentDatas = new();

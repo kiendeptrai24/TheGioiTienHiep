@@ -131,6 +131,12 @@ public class PlayFabDataService
 
         Vector3DTO rotDTO = new Vector3DTO(rot);
 
+        ItemDataPoint itemDataPoint = gameData.itemDataPoint;
+
+        if (itemDataPoint == null)
+        {
+            itemDataPoint = new ItemDataPoint();
+        }
         PlayerProfileDTO profile = new PlayerProfileDTO
         {
             characterId = gameData.characterId,
@@ -138,6 +144,8 @@ public class PlayFabDataService
             playerName = gameData.characterName,
             position = posDTO,
             rotation = rotDTO,
+            point = gameData.point,
+            itemDataPoint = itemDataPoint,
             // ===== OFFLINE MINING SAVE =====
             mineOfflineDataList = gameData.mineOfflineDataList ?? new MineOfflineDataList()
         };

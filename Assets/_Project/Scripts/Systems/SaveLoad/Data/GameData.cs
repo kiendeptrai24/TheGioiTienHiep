@@ -10,6 +10,8 @@ public class GameData
     public Quaternion rotation;
     public string characterId;
     public ulong coins;
+    public int point;
+    public ItemDataPoint itemDataPoint;
     public List<ItemData> itemDatas;
     public List<ItemData> itemDatasInTeam;
     public List<ItemData> itemShopDatas;
@@ -27,6 +29,7 @@ public class GameData
         allItemsDatas = new List<ItemData>();
         itemDatasCharacter = new List<ItemData>();
         mineOfflineDataList = new MineOfflineDataList();
+        itemDataPoint = new ItemDataPoint();
         position = new Vector3(0, 0, 0);
         rotation = Quaternion.identity;
     }

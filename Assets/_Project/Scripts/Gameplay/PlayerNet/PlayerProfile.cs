@@ -11,10 +11,11 @@ public class PlayerProfile : TGTHNetworkBehaviour
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
-    protected override void Awake()
-    {
-        base.Awake();
-    }
+    private NetworkVariable<int> point = new(
+        0,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server
+    );
     private void OnProfileReady(ProfileUser user)
     {
         OnLoadPlayerIdServerRpc(user.userId);

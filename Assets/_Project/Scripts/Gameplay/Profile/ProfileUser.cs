@@ -10,6 +10,8 @@ public class ProfileUser
     public ulong coins;
     public int level;
     public int experience;
+    public int point;
+    public ItemDataPoint itemDataPoint;
     private List<string> listFriend;
     public ProfileUser(string userId, string userName)
     {

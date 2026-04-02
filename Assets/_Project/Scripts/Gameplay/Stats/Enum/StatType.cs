@@ -97,4 +97,11 @@ public enum StatType
     PhicialDefensePoint,
     MagicalDefensePoint,
     SpiritDefensePoint,
+    
+    HealthPoint,
+    ManaPoint,
+    SpiritPoint,
+
+    MoveSpeedPoint,
+    SpiritRangePoint,
 }

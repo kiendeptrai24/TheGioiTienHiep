@@ -21,12 +21,6 @@ public class HeroPreset : ItemStatsPreset
     public float health; // persent
     public float mana; // persent
     public float spirit; // persent
-    public float physicalDamagePoint; // value
-    public float magicalDamagePoint; // value
-    public float spiritDamagePoint; // value
-    public float physicalDefensePoint; // value
-    public float magicalDefensePoint; // value
-    public float spiritDefensePoint; // value
     public List<ItemEquipmentPreset> equitmentDatas;
     public List<SkillPreset> skillDatas;
     public List<TechniquePreset> techniqueDatas;
@@ -67,12 +61,6 @@ public class HeroPreset : ItemStatsPreset
             health = health,
             mana = mana,
             spirit = spirit,
-            physicalDamagePoint = physicalDamagePoint,
-            magicalDamagePoint = magicalDamagePoint,
-            spiritDamagePoint = spiritDamagePoint,
-            physicalDefensePoint = physicalDefensePoint,
-            magicalDefensePoint = magicalDefensePoint,
-            spiritDefensePoint = spiritDefensePoint,
             championIndex = championIndex,
             heroPrefab = heroPrefab,
             itemFilePath = itemFilePath

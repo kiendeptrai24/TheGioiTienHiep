@@ -10,6 +10,8 @@ public class PlayerProfileDTO
     public ulong coins;
     public Vector3DTO position;
     public Vector3DTO rotation;
+    public int point;
+    public ItemDataPoint itemDataPoint;
 
     // ===== OFFLINE MINING =====
     public MineOfflineDataList mineOfflineDataList = new MineOfflineDataList();  // Replaces Dictionary

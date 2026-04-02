@@ -28,7 +28,12 @@ public class ProfileService : ISaveLoadRemote
 
             gameData.position = profileDataDTO.position.ToVector3();
             gameData.rotation = Quaternion.LookRotation(profileDataDTO.rotation.ToVector3());
-
+            gameData.point = profileDataDTO.point;
+            gameData.itemDataPoint = profileDataDTO.itemDataPoint;
+            if (profileDataDTO.itemDataPoint == null)
+            {
+                gameData.itemDataPoint = new ItemDataPoint();
+            }
             if (profileDataDTO.position.Equals(default(Vector3DTO)))
             {
                 gameData.position = new Vector3(500, 0, 440);
