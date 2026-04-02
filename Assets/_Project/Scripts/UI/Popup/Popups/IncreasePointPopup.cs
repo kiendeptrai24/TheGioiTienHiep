@@ -1,13 +1,14 @@
+using System.Drawing;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class IncreasePointPopup : BasePopup<BaseSetupData, StatsPointPopupData>
+public class IncreasePointPopup : BasePopup<PointSetupData, StatsPointPopupData>
 {
     [SerializeField] private Button cancelBtn;
     [SerializeField] private TMP_InputField inputField;
     [SerializeField] private TextMeshProUGUI attributeTxt;
-
+    [SerializeField] private TextMeshProUGUI pointText;
 
     public override void Show()
     {
@@ -44,8 +45,14 @@ public class IncreasePointPopup : BasePopup<BaseSetupData, StatsPointPopupData>
     {
         base.LoadComponent();
     }
-    protected override void SetupPopupData(BaseSetupData data)
+    protected override void SetupPopupData(PointSetupData data)
     {
         attributeTxt.text = data.Title;
+        pointText.text = data.pointValue.ToString();
+        inputField.characterLimit = data.CharacterLimit;
+        inputField.onValidateInput = (text, charIndex, addedChar) =>
+        {
+            return ValidateChar(data.ValidCharacters, addedChar);
+        };
     }
 }

@@ -15,7 +15,7 @@ public class IncreasePointBtn : TGTHMonoBehaviour
     private void OnIncreasePointClicked()
     {
         var popup = PopupManager.Instance.GetPopup<IncreasePointPopup>();
-        var data = new BaseSetupData(StatTypeViName.ToVietnamese(statType));
+        var data = new PointSetupData(StatTypeViName.ToVietnamese(statType), "0123456789", 3, 90);
 
         popup?.ShowPopup(data,
         onConfirm: (StatsPointPopupData result) =>
