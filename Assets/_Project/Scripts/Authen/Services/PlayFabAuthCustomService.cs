@@ -50,7 +50,6 @@ public class PlayFabAuthCustomService : AuthServiceBase
 
     public override void Logout(Action<AuthResult> onSuccess, Action<AuthError> onError)
     {
-        clientAPI = null;
         PlayerPrefs.DeleteKey(CUSTOM_ID_KEY);
         PlayerPrefs.Save();
         onSuccess?.Invoke(new AuthResult

@@ -9,7 +9,9 @@ public class ActionBattleHistoryButton : TGTHMonoBehaviour
     protected override void Awake()
     {
         base.Awake();
+        okeBtn = GetComponent<Button>();
         okeBtn.onClick.AddListener(OnClickBtn);
+        battleHistoryController = BattleHistoryController.Instance;
     }
 
     private void OnClickBtn()
@@ -22,6 +24,5 @@ public class ActionBattleHistoryButton : TGTHMonoBehaviour
     protected override void Start()
     {
         base.Start();
-        okeBtn = GetComponent<Button>();
     }
 }

@@ -56,7 +56,7 @@ public class MonsterClickable : EntityClickable
     [ClientRpc]
     private void NotifyResultClientRpc(string message, ClientRpcParams clientRpcParams = default)
     {
-        TopNotificationUI.Instance.Show(message);
+        TopNotificationUI.Instance.ShowNotification(message);
     }
 
 }

@@ -204,11 +204,11 @@ namespace TGTH.Mobile
                         if (success)
                         {
                             shopUseSystem.UseItem(uiItem, result.quantity);
-                            TopNotificationUI.Instance.Show(message);
+                            TopNotificationUI.Instance.ShowNotification(message);
                         }
                         else
                         {
-                            TopNotificationUI.Instance.Show(message);
+                            TopNotificationUI.Instance.ShowNotification(message);
                         }
                     });
                 },

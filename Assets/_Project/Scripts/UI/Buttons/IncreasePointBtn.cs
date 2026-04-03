@@ -25,7 +25,7 @@ public class IncreasePointBtn : TGTHMonoBehaviour
             if (result == null) return;
             if (result.value > profileManager.GetProfile().point)
             {
-                TopNotificationUI.Instance.Show("Số điểm hiện tại của bạn không đủ!");
+                TopNotificationUI.Instance.ShowNotification("Số điểm hiện tại của bạn không đủ!");
                 return;
             }
 
@@ -42,7 +42,7 @@ public class IncreasePointBtn : TGTHMonoBehaviour
 
             AddPoint(hero, profileManager.GetProfile().itemDataPoint, result.value, statType);
             statsManager.SetUpItem(hero);
-            TopNotificationUI.Instance.Show($"bạn đã cộng {result.value} điểm vào {StatTypeViName.ToVietnamese(statType)}");
+            TopNotificationUI.Instance.ShowNotification($"bạn đã cộng {result.value} điểm vào {StatTypeViName.ToVietnamese(statType)}");
         },
         onCancel: () =>
         {

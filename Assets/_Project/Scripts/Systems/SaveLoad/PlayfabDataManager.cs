@@ -22,10 +22,13 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private ISaveLoadRemote characterService;
     private PlayFabClientInstanceAPI clientAPI;
     public AuthManager GetAuthManager() => authManager;
+    public PlayFabClientInstanceAPI GetClientAPI() => clientAPI;
+    public ActionNavigationSpecificScreen navigationToCharacterSelectionScreen;
     protected override void Awake()
     {
         base.Awake();
         if (serverClientTest.type == ServerClientType.Server) return;
+        navigationToCharacterSelectionScreen = GetComponent<ActionNavigationSpecificScreen>();
         clientAPI = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
         IAuthService authService = new PlayFabAuthCustomService(clientAPI);
         authManager = new AuthManager(authService);
@@ -42,7 +45,10 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     }
     public void Logout()
     {
-        authManager.Logout(default, default);
+        authManager.Logout((result) =>
+        {
+            navigationToCharacterSelectionScreen.OnClick();
+        }, default);
     }
     private void onError(AuthError error)
     {

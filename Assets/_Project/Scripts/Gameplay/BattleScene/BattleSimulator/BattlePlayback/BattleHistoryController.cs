@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BattleHistoryController : TGTHMonoBehaviour 
+public class BattleHistoryController : Singleton<BattleHistoryController> 
 {
     public List<BattleHistory> battleEventsHistory;
     public void AddBattleHistory(BattleHistory battleEvents)

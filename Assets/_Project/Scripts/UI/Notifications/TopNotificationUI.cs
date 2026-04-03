@@ -24,7 +24,7 @@ public class TopNotificationUI : Singleton<TopNotificationUI>
         currentCount = 0;
     }
 
-    public void Show(string message)
+    public void ShowNotification(string message)
     {
         // Gộp message
         if (currentCount >= maxCount)

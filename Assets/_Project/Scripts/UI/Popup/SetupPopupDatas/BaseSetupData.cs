@@ -14,4 +14,5 @@ public class BaseSetupData : IPopupData
     {
         Title = title;
     }
+    public BaseSetupData() { }
 }
