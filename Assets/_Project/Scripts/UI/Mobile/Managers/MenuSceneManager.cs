@@ -17,7 +17,6 @@ public class MenuSceneManager : ScreenManager
     [SerializeField] private GameObject m_ShopScreen;
     [SerializeField] private GameObject m_ProfileScreen;
     [SerializeField] private GameObject m_SettingScreen;
-    [SerializeField] private GameObject m_HistoryScreen;
     protected override void Awake()
     {
         base.Awake();
@@ -31,8 +30,7 @@ public class MenuSceneManager : ScreenManager
         m_Screens.Add(m_HeroeDetailScreen.gameObject.name, m_HeroeDetailScreen);
         m_Screens.Add(m_ShopScreen.gameObject.name, m_ShopScreen);
         m_Screens.Add(m_ProfileScreen.gameObject.name, m_ProfileScreen);
-        // m_Screens.Add(MenuScreenType.Setting.ToString(), m_SettingScreen);
-        // m_Screens.Add(MenuScreenType.History.ToString(), m_HistoryScreen);  
+        m_Screens.Add(m_SettingScreen.gameObject.name, m_SettingScreen);
         defaultScreen = m_MenuScreen.gameObject.name;
     }
     protected override void Start()
