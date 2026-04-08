@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class UIFollow : TGTHMonoBehaviour
 {
-    [SerializeField] private Transform worldTarget; // quái hoặc UIAnchor
+    [SerializeField] private Transform worldTarget;
     [SerializeField] private RectTransform uiRect;
     [SerializeField] private Vector3 offset;
 

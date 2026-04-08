@@ -95,6 +95,7 @@ public class StatsData : TGTHMonoBehaviour
     public int CombatPower => GetStatValue(StatType.CombatPower);
     public event Action<StatsData> OnStatReady;
     public List<IStatsModifier> statsModifiers;
+
     protected override void Awake()
     {
         base.Awake();
@@ -120,14 +121,13 @@ public class StatsData : TGTHMonoBehaviour
             stats.Add(type, new Stat(type, 0f));
         }
     }
-
     public void ResetStats()
     {
         ResetStatsModifiers();
         StatChange();
     }
-    #region Stats Emplement
-
+    
+    #region Stats Emplementation
     public int GetStatValue(StatType type)
     {
         if (stats.TryGetValue(type, out Stat stat))
@@ -157,7 +157,7 @@ public class StatsData : TGTHMonoBehaviour
         Debug.Log(debugMsg);
     }
     #endregion
-    #region Setup Item
+    #region Setup Item Data
     private void Setup()
     {
         if (statsModifiers == null) InitStatsModifier();

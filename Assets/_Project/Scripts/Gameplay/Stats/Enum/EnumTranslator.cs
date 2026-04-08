@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 public static class EnumTranslator
 {
-    private static readonly Dictionary<Enum, string> _translations = new Dictionary<Enum, string>
+    
+private static readonly Dictionary<Enum, string> _translations = new Dictionary<Enum, string>
     {
         // CultivationStage
         { RealmType.LuyenKhi_1, "Luyện Khí Kỳ - tần 1" },
@@ -115,8 +116,125 @@ public static class EnumTranslator
         { SkillType.VanLinhTien, "Vận Lịnh Tiễn" },
         { SkillType.VuTien, "Vũ Tiễn" },
     };
+    private static readonly Dictionary<Enum, string> _translationsAcronym = new Dictionary<Enum, string>
+    {
+        // CultivationStage
+        { RealmType.LuyenKhi_1, "LK1" },
+        { RealmType.LuyenKhi_2, "LK2" },
+        { RealmType.LuyenKhi_3, "LK3" },
+        { RealmType.LuyenKhi_4, "LK4" },
+        { RealmType.LuyenKhi_5, "LK5" },
+        { RealmType.LuyenKhi_6, "LK6" },
+        { RealmType.LuyenKhi_7, "LK7" },
+        { RealmType.LuyenKhi_8, "LK8" },
+        { RealmType.LuyenKhi_9, "LK9" },
+        { RealmType.TrucCo_SK, "TC1" },
+        { RealmType.TrucCo_TK, "TC2" },
+        { RealmType.TrucCo_HK, "TC3" },
+        { RealmType.TrucCo_DVM, "TC4" },
+        { RealmType.KetDan_SK, "KD1" },
+        { RealmType.KetDan_TK, "KD2" },
+        { RealmType.KetDan_HK, "KD3" },
+        { RealmType.KetDan_DVM, "KD4" },
+        { RealmType.NguyenAnh_SK, "NA1" },
+        { RealmType.NguyenAnh_TK, "NA2" },
+        { RealmType.NguyenAnh_HK, "NA3" },
+        { RealmType.NguyenAnh_DVM, "NA4" },
+        { RealmType.HoaThan_SK, "HT1" },
+        { RealmType.HoaThan_TK, "HT2" },
+        { RealmType.HoaThan_HK, "HT3" },
+        { RealmType.HoaThan_DVM, "HT4" },
+        { RealmType.HopThe_SK, "HT1" },
+        { RealmType.HopThe_TK, "HT2" },
+        { RealmType.HopThe_HK, "HT3" },
+        { RealmType.HopThe_DVM, "HT4" },
+        { RealmType.DoKiep_SK, "ĐK1" },
+        { RealmType.DoKiep_TK, "ĐK2" },
+        { RealmType.DoKiep_HK, "ĐK3" },
+        { RealmType.DoKiep_DVM, "ĐK4" },
+        { RealmType.DaiThua_SK, "DT1" },
+        { RealmType.DaiThua_TK, "DT2" },
+        { RealmType.DaiThua_HK, "DT3" },
+        { RealmType.DaiThua_DVM, "DT4" },
+        { RealmType.PhiThang, "PT" },
 
+        // EssenceType
+        { EssenceType.General, "Chung" },
+        { EssenceType.Physical, "Linh Thể" },
+        { EssenceType.Magical, "Linh Lực" },
+        { EssenceType.Spirit, "Linh Thức" },
+
+        // RaceType
+        { RaceType.General, "Chung" },
+        { RaceType.Human, "Nhân" },
+        { RaceType.Beast, "Yêu" },
+        { RaceType.Celestial, "Thiên" },
+        { RaceType.Demon, "Ma" },
+
+        // ElementType
+        { ElementType.Neutral, "Chung" },
+        { ElementType.Metal, "Kim" },
+        { ElementType.Wood, "Mộc" },
+        { ElementType.Water, "Thủy" },
+        { ElementType.Fire, "Hỏa" },
+        { ElementType.Earth, "Thổ" },
+        { ElementType.Wind, "Phong" },
+        { ElementType.Lightning, "Lôi" },
+        { ElementType.Yin, "Âm" },
+        { ElementType.Yang, "Dương" },
+        { ElementType.Soul, "Hồn" },
+        { ElementType.Divine, "Thần" },
+
+        // EquipmentType
+        { EquipmentType.None, "Không có trang bị" },
+        { EquipmentType.Helmet, "Nón" },
+        { EquipmentType.Weapon, "Vũ Khí" },
+        { EquipmentType.Armor, "Áo" },
+        { EquipmentType.Necklace, "Dây Chuyền" },
+        { EquipmentType.Pants, "Quần" },
+        { EquipmentType.Ring, "Nhẫn" },
+        { EquipmentType.Belt, "Thắt Lưng" },
+        { EquipmentType.Gloves, "Bao Tay" },
+        { EquipmentType.Boots, "Giày" },
+        { EquipmentType.Pet, "Thú cưng" },
+
+        // ItemType
+        { ItemType.Material, "Nguyên liệu" },
+        { ItemType.Equipment, "Trang bị" },
+        { ItemType.Technique, "Công pháp" },
+        { ItemType.Skill, "Kỹ năng" },
+        { ItemType.Other, "Khác" },
+
+        // QualityType
+        { QualityType.Mortal, "Phàm" },
+        { QualityType.Yellow, "Hoàng" },
+        { QualityType.Mystic, "Huyền" },
+        { QualityType.Earth, "Địa" },
+        { QualityType.Heaven, "Thiên" },
+
+        // TechniqueType
+        { TechniqueType.PhamNhanLuyenLinhQuyet, "PN" },
+        { TechniqueType.LinhVanQuyet, "LV" },
+        { TechniqueType.YeuLinhQuyet, "YL" },
+        { TechniqueType.ManNguuBiPhap, "MN" },
+
+        // SkillType
+        { SkillType.DonTram, "DT" },
+        { SkillType.LinhTram, "LT" },
+        { SkillType.LienKichChiThuat, "LKC" },
+        { SkillType.ToanLucNhatKich, "TLNK" },
+        { SkillType.NhamChuan, "NC" },
+        { SkillType.LinhTien, "LT" },
+        { SkillType.VanLinhTien, "VLT" },
+        { SkillType.VuTien, "VT" },
+    };
     public static string ToVietnamese(Enum value)
+    {
+        if (_translations.TryGetValue(value, out var result))
+            return result;
+        return value.ToString();
+    }
+    public static string ToVietnameseAcronym(Enum value)
     {
         if (_translations.TryGetValue(value, out var result))
             return result;
