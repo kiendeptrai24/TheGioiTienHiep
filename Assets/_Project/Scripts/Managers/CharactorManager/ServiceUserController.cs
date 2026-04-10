@@ -37,12 +37,18 @@ public class ServiceUserController : TGTHNetworkBehaviour
             Debug.LogError("No prefab selected!");
             yield break;
         }
-        SpawnPlayerServerRpc(itemData.itemId, playerNetManager.GetPos(), playerNetManager.GetRot());
+        SpawnPlayerServerRpc(itemData.instanceId, playerNetManager.GetPos(), playerNetManager.GetRot());
     }
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
     private void SpawnPlayerServerRpc(string id, Vector3 position, Quaternion rotation, RpcParams rpcParams = default)
     {
+        if (!IsServer) return;
+        position.y = 0;
+        if (position == Vector3.zero)
+        {
+            position = new Vector3(Random.Range(490f, 500f), 0, Random.Range(450f, 440f));
+        }
         ulong clientId = rpcParams.Receive.SenderClientId;
 
         var prefab = GetPrefabById(id);

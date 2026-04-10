@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -26,12 +27,16 @@ public class PlayFabDataService
         LoadTitleData("shop", callback);
     }
 
+    public void LoadPlayerHeroData(string characterId, Action<HeroDataDTO> callback)
+    {
+        LoadUserData($"hero inventory {characterId}", callback);
+    }
     public void LoadPlayerData(string characterId, Action<ItemDataDTO> callback)
     {
         LoadUserData($"inventory {characterId}", callback);
     }
 
-    public void LoadTeamData(string characterId, Action<HeroDataDTO> callback)
+    public void LoadTeamData(string characterId, Action<HeroInTeamDataDTO> callback)
     {
         LoadUserData($"team {characterId}", callback);
     }
@@ -47,110 +52,190 @@ public class PlayFabDataService
     #endregion
 
     #region Public Save Methods
+    public void LoadPlayerHeroData(GameData gameData)
+    {
+        try
+        {
+            if (gameData == null)
+            {
+                Debug.LogError("LoadPlayerHeroData failed: gameData is null");
+                return;
+            }
 
+            if (gameData == null)
+            {
+                Debug.LogError("SetTeamData failed: gameData is null");
+                return;
+            }
+
+            List<HeroData> listItemData = gameData.itemDatas
+            .OfType<HeroData>()
+            .ToList();
+            if (listItemData == null)
+            {
+                Debug.LogError("null or empty");
+                return;
+            }
+            HeroDataDTO inventoryData = new HeroDataDTO
+            {
+                inventoryItems = listItemData ?? new List<HeroData>()
+            };
+
+            SaveUserData($"hero inventory {gameData.characterId}", inventoryData);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.Log("Error " + ex.Message);
+        }
+    }
     public void SetTeamData(GameData gameData)
     {
-        if (gameData == null)
+        try
         {
-            Debug.LogError("SetTeamData failed: gameData is null");
-            return;
-        }
-
-        HeroDataDTO teamData = new HeroDataDTO();
-
-        if (gameData.itemDatasInTeam != null)
-        {
-            foreach (var item in gameData.itemDatasInTeam)
+            if (gameData == null)
             {
-                teamData.inventoryItems.Add(item);
+                Debug.LogError("SetTeamData failed: gameData is null");
+                return;
+            }
 
-                if (item is HeroData heroData)
+            HeroInTeamDataDTO teamData = new HeroInTeamDataDTO();
+
+            if (gameData.itemDatasInTeam != null)
+            {
+                foreach (var item in gameData.itemDatasInTeam)
                 {
-                    teamData.championsIndex.Add(heroData.championIndex);
+                    teamData.inventoryItems.Add(item as HeroData);
+
+                    if (item is HeroData heroData)
+                    {
+                        teamData.championsIndex.Add(heroData.championIndex);
+                    }
                 }
             }
-        }
 
-        SaveUserData($"team {gameData.characterId}", teamData);
+            SaveUserData($"team {gameData.characterId}", teamData);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.Log("Error " + ex.Message);
+        }
     }
 
     public void SetItemInventoryData(GameData gameData)
     {
-        if (gameData == null)
+        try
         {
-            Debug.LogError("SetItemInventoryData failed: gameData is null");
-            return;
+            if (gameData == null)
+            {
+                Debug.LogError("SetItemInventoryData failed: gameData is null");
+                return;
+            }
+            var listItemData = gameData.itemDatas?.FindAll(x => x is not HeroData) ?? new List<ItemData>();
+
+            if (listItemData == null)
+            {
+                Debug.LogError("null or empty");
+                return;
+            }
+
+            ItemDataDTO inventoryData = new ItemDataDTO
+            {
+                inventoryItems = listItemData
+            };
+
+            SaveUserData($"inventory {gameData.characterId}", inventoryData);
         }
-
-        ItemDataDTO inventoryData = new ItemDataDTO
+        catch (System.Exception ex)
         {
-            inventoryItems = gameData.itemDatas ?? new List<ItemData>()
-        };
-
-        SaveUserData($"inventory {gameData.characterId}", inventoryData);
+            Debug.Log("Error " + ex.Message);
+        }
     }
     public void SetItemCharacter(GameData gameData)
     {
-        if (gameData == null)
+        try
         {
-            Debug.LogError("SetItemCharacter failed: gameData is null");
-            return;
-        }
-
-        ItemCharacterDataDTO inventoryData = new ItemCharacterDataDTO();
-        if (gameData.itemDatasCharacter != null)
-        {
-            foreach (var item in gameData.itemDatasCharacter)
+            if (gameData == null)
             {
-                inventoryData.inventoryItems.Add(item);
-                inventoryData.characterNames.Add(item.itemName);
-                if (item is HeroData heroData)
+                Debug.LogError("SetItemCharacter failed: gameData is null");
+                return;
+            }
+
+            ItemCharacterDataDTO inventoryData = new ItemCharacterDataDTO();
+            if (gameData.itemDatasCharacter != null)
+            {
+                inventoryData.inventoryItems = new List<HeroData>();
+                inventoryData.characterNames = new List<string>();
+                inventoryData.characterIds = new List<string>();
+                foreach (var item in gameData.itemDatasCharacter)
                 {
-                    inventoryData.characterIds.Add(heroData.characterId);
+                    var itemHero = item as HeroData;
+
+                    inventoryData.inventoryItems.Add(itemHero);
+                    inventoryData.characterNames.Add(item.itemName);
+                    if (item is HeroData heroData)
+                    {
+                        inventoryData.characterIds.Add(heroData.characterId);
+                    }
+                    else
+                    {
+                        Debug.Log("SetItemCharacter: item is not HeroData");
+                    }
                 }
             }
+            else
+            {
+                inventoryData.inventoryItems = new List<HeroData>();
+                inventoryData.characterNames = new List<string>();
+                inventoryData.characterIds = new List<string>();
+            }
+            SaveUserData("character", inventoryData);
         }
-        else
+        catch (System.Exception ex)
         {
-            inventoryData.inventoryItems = new List<ItemData>();
-            inventoryData.characterNames = new List<string>();
+            Debug.Log("Error " + ex.Message);
         }
-        SaveUserData("character", inventoryData);
 
     }
     public void SetProfile(GameData gameData)
     {
-        if (gameData == null)
+        try
         {
-            Debug.LogError("SetProfile failed: gameData is null");
-            return;
+            if (gameData == null)
+            {
+                Debug.LogError("SetProfile failed: gameData is null");
+                return;
+            }
+            Vector3DTO posDTO = new Vector3DTO(gameData.position);
+
+            Vector3 rot = new Vector3(gameData.rotation.eulerAngles.x, gameData.rotation.eulerAngles.x, gameData.rotation.eulerAngles.x);
+
+            Vector3DTO rotDTO = new Vector3DTO(rot);
+
+            ItemDataPoint itemDataPoint = gameData.itemDataPoint;
+
+            if (itemDataPoint == null)
+            {
+                itemDataPoint = new ItemDataPoint();
+            }
+            PlayerProfileDTO profile = new PlayerProfileDTO
+            {
+                characterId = gameData.characterId,
+                coins = gameData.coins,
+                playerName = gameData.characterName,
+                position = posDTO,
+                rotation = rotDTO,
+                point = gameData.point,
+                itemDataPoint = itemDataPoint,
+                // ===== OFFLINE MINING SAVE =====
+                mineOfflineDataList = gameData.mineOfflineDataList ?? new MineOfflineDataList()
+            };
+
+            SaveUserData($"profile {gameData.characterId}", profile);
         }
-        Vector3DTO posDTO = new Vector3DTO(gameData.position);
-
-        Vector3 rot = new Vector3(gameData.rotation.eulerAngles.x, gameData.rotation.eulerAngles.x, gameData.rotation.eulerAngles.x);
-
-        Vector3DTO rotDTO = new Vector3DTO(rot);
-
-        ItemDataPoint itemDataPoint = gameData.itemDataPoint;
-
-        if (itemDataPoint == null)
+        catch (System.Exception ex)
         {
-            itemDataPoint = new ItemDataPoint();
+            Debug.Log("Error " + ex.Message);
         }
-        PlayerProfileDTO profile = new PlayerProfileDTO
-        {
-            characterId = gameData.characterId,
-            coins = gameData.coins,
-            playerName = gameData.characterName,
-            position = posDTO,
-            rotation = rotDTO,
-            point = gameData.point,
-            itemDataPoint = itemDataPoint,
-            // ===== OFFLINE MINING SAVE =====
-            mineOfflineDataList = gameData.mineOfflineDataList ?? new MineOfflineDataList()
-        };
-
-        SaveUserData($"profile {gameData.characterId}", profile);
     }
 
     #endregion

@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewMaterialPreset", menuName = "RPG/Items/Material Preset")]
 public abstract class ItemPreset : ScriptableObject
 {
+    public string instanceId;
     public string itemId;
     public string itemName;
     public ItemType itemType;
@@ -24,7 +25,8 @@ public abstract class ItemPreset : ScriptableObject
     {
 #if UNITY_EDITOR
         string path = AssetDatabase.GetAssetPath(this);
-        itemId = AssetDatabase.AssetPathToGUID(path);
+        instanceId = AssetDatabase.AssetPathToGUID(path);
+        itemId = System.Guid.NewGuid().ToString();
 
         if (itemIcon != null)
         {
@@ -37,7 +39,7 @@ public abstract class ItemPreset : ScriptableObject
     public virtual ItemData GetItemData()
     {
         ItemData data = new ItemData();
-
+        data.instanceId = instanceId;
         data.itemId = itemId;
         data.itemName = itemName;
         data.itemType = itemType;

@@ -236,7 +236,7 @@ private static readonly Dictionary<Enum, string> _translations = new Dictionary<
     }
     public static string ToVietnameseAcronym(Enum value)
     {
-        if (_translations.TryGetValue(value, out var result))
+        if (_translationsAcronym.TryGetValue(value, out var result))
             return result;
         return value.ToString();
     }

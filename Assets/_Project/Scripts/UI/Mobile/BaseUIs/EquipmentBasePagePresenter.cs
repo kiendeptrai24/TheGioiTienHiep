@@ -109,13 +109,14 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
             if (item1.data.canStack == false)
             {
                 item = item1.data.Clone();
+                item.itemId = Guid.NewGuid().ToString();
             }
             var result = inventoryCenterManager.AddData(item);
             if (result)
             {
                 var heroData = statsManager.heroData as HeroData;
                 var equipmentData = item1.data as EquitmentData;
-                heroData.equitmentDatas.Remove(equipmentData);
+                heroData.equipmentDatas.Remove(equipmentData);
             }
 
         }
@@ -126,7 +127,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
             {
                 var heroData = statsManager.heroData as HeroData;
                 var equipmentData = item2.data as EquitmentData;
-                heroData.equitmentDatas.Add(equipmentData);
+                heroData.equipmentDatas.Add(equipmentData);
             }
         }
         if (item1 != null && item1.data != null)

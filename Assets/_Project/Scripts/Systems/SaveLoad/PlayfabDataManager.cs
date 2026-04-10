@@ -1,9 +1,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using PlayFab;
-using Unity.Netcode;
 using UnityEngine;
 
 public class PlayfabDataManager : Singleton<PlayfabDataManager>
@@ -77,7 +75,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         gameData.itemDatasCharacter.Add(itemCharacter);
         OnCharacterChanged?.Invoke(gameData.itemDatasCharacter);
 
-        var playerInventoryService = new PlayerItemInventoryService(service);
+        var playerInventoryService = new PlayerHeroItemInventoryService(service);
 
         playerInventoryService.SaveGame(gameData);
         characterService.SaveGame(gameData);
@@ -92,6 +90,8 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         saveLoadRemotes.Add(new InventoryService(service));
         saveLoadRemotes.Add(new TeamInventoryService(service));
         saveLoadRemotes.Add(new PlayerItemInventoryService(service));
+        saveLoadRemotes.Add(new PlayerHeroItemInventoryService(service));
+        saveLoadRemotes.Add(characterService);
         LoadGameData();
     }
     private void LoadGameData()

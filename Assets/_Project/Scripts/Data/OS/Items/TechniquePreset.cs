@@ -19,6 +19,7 @@ public class TechniquePreset : ItemPreset
 
     public TechniqueType techniqueType;
     public int enhanceLevel;             // Cường hóa
+    public int maxEnhanceLevel;          // Cường hóa tối đa
     public RaceType raceType;            // Tộc
     public EssenceType mainEssence;      // Chủ tu
     public ElementType elementType;      // Hệ
@@ -52,12 +53,12 @@ public class TechniquePreset : ItemPreset
     // ============================
     [Header("Upgrade Materials")]
     public float powerCost;               // Power
-    public float lthaoCost;               // Linh thảo
-    public float mineralCost;             // Khoáng thạch
-    public float demonCoreCost;           // Yêu đan
-    public float devilCoreCost;           // Ma hạch
-    public float spiritStoneCost;         // Linh thạch
-    public float itemCost;                // Vật phẩm khác
+    public int lthaoCost;               // Linh thảo
+    public int mineralCost;             // Khoáng thạch
+    public int demonCoreCost;           // Yêu đan
+    public int devilCoreCost;           // Ma hạch
+    public int spiritStoneCost;         // Linh thạch
+    public int itemCost;                // Vật phẩm khác
 
     // ============================
     // OFFENSIVE STATS BONUS
@@ -308,79 +309,81 @@ public class TechniquePreset : ItemPreset
     public override ItemData GetItemData()
     {
         ItemData data = base.GetItemData();
-        return new TechniqueData
-        {
-            // base
-            itemId = data.itemId,
-            itemName = data.itemName,
-            itemType = data.itemType,
-            itemIcon = data.itemIcon,
-            itemIconPath = data.itemIconPath,
-            itemDescription = data.itemDescription,
-            currentstack = data.currentstack,
-            canStack = data.canStack,
-            itemPrice = data.itemPrice,
-            realmType = data.realmType,
-            qualityType = data.qualityType,
+        TechniqueData techniqueData = new TechniqueData();
+        // base
+        techniqueData.instanceId = data.instanceId;
+        techniqueData.itemId = data.itemId;
+        techniqueData.itemName = data.itemName;
+        techniqueData.itemType = data.itemType;
+        techniqueData.itemIcon = data.itemIcon;
+        techniqueData.itemIconPath = data.itemIconPath;
+        techniqueData.itemDescription = data.itemDescription;
+        techniqueData.currentstack = data.currentstack;
+        techniqueData.canStack = data.canStack;
+        techniqueData.itemPrice = data.itemPrice;
+        techniqueData.realmType = data.realmType;
+        techniqueData.qualityType = data.qualityType;
 
-            // base stats trong ItemData
-            physicalDamage = physicalDamage,
-            magicalDamage = magicalDamage,
-            spiritDamage = spiritDamage,
-            physicalDefense = physicalDefense,
-            magicalDefense = magicalDefense,
-            spiritDefense = spiritDefense,
+        // base stats trong ItemData
+        techniqueData.physicalDamage = physicalDamage;
+        techniqueData.magicalDamage = magicalDamage;
+        techniqueData.spiritDamage = spiritDamage;
+        techniqueData.physicalDefense = physicalDefense;
+        techniqueData.magicalDefense = magicalDefense;
+        techniqueData.spiritDefense = spiritDefense;
 
-            // meta
-            enhanceLevel = enhanceLevel,
-            raceType = raceType,
-            mainEssence = mainEssence,
-            elementType = elementType,
-            realm = realm,
+        // meta
+        techniqueData.enhanceLevel = enhanceLevel;
+        techniqueData.maxEnhanceLevel = maxEnhanceLevel;
+        techniqueData.raceType = raceType;
+        techniqueData.mainEssence = mainEssence;
+        techniqueData.elementType = elementType;
+        techniqueData.realm = realm;
 
-            // combat
-            attackRange = attackRange,
-            cooldown = cooldown,
-            specialEffect = specialEffect,
+        // combat
+        techniqueData.attackRange = attackRange;
+        techniqueData.cooldown = cooldown;
+        techniqueData.specialEffect = specialEffect;
 
-            // costs
-            healthCost = healthCost,
-            manaCost = manaCost,
-            spiritCost = spiritCost,
+        // costs
+        techniqueData.healthCost = healthCost;
+        techniqueData.manaCost = manaCost;
+        techniqueData.spiritCost = spiritCost;
 
-            // learn
-            requiredCharacterLevel = requiredCharacterLevel,
-            learnCondition = learnCondition,
+        // learn
+        techniqueData.requiredCharacterLevel = requiredCharacterLevel;
+        techniqueData.learnCondition = learnCondition;
 
-            // materials
-            powerCost = powerCost,
-            lthaoCost = lthaoCost,
-            mineralCost = mineralCost,
-            demonCoreCost = demonCoreCost,
-            devilCoreCost = devilCoreCost,
-            spiritStoneCost = spiritStoneCost,
-            itemCost = itemCost,
+        // materials
+        techniqueData.powerCost = powerCost;
+        techniqueData.lthaoCost = lthaoCost;
+        techniqueData.mineralCost = mineralCost;
+        techniqueData.demonCoreCost = demonCoreCost;
+        techniqueData.devilCoreCost = devilCoreCost;
+        techniqueData.spiritStoneCost = spiritStoneCost;
+        techniqueData.itemCost = itemCost;
 
-            // bonus
-            critDamage = critDamage,
-            critRate = critRate,
-            armorPenetration = armorPenetration,
-            trueDamage = trueDamage,
-            lifeSteal = lifeSteal,
-            attackSpeed = attackSpeed,
+        // bonus
+        techniqueData.critDamage = critDamage;
+        techniqueData.critRate = critRate;
+        techniqueData.armorPenetration = armorPenetration;
+        techniqueData.trueDamage = trueDamage;
+        techniqueData.lifeSteal = lifeSteal;
+        techniqueData.attackSpeed = attackSpeed;
 
-            penetrationReduction = penetrationReduction,
-            critDamageReduction = critDamageReduction,
-            trueDamageReduction = trueDamageReduction,
+        techniqueData.penetrationReduction = penetrationReduction;
+        techniqueData.critDamageReduction = critDamageReduction;
+        techniqueData.trueDamageReduction = trueDamageReduction;
 
-            bonusHealth = bonusHealth,
-            bonusMana = bonusMana,
-            bonusSpirit = bonusSpirit,
+        techniqueData.bonusHealth = bonusHealth;
+        techniqueData.bonusMana = bonusMana;
+        techniqueData.bonusSpirit = bonusSpirit;
 
-            totalQualityAndLevel = totalQualityAndLevel,
-            statCount = statCount
-        };
+        techniqueData.totalQualityAndLevel = totalQualityAndLevel;
+        techniqueData.statCount = statCount;
+        techniqueData.itemFilePath = itemFilePath;
 
+        return techniqueData.Clone();
     }
 
 }

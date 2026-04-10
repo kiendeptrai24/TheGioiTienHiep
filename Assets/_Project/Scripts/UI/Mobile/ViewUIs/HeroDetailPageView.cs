@@ -48,9 +48,9 @@ namespace TGTH.Mobile
             {
                 item.ResetData();
             }
-            for (int i = 0; i < heroData.equitmentDatas.Count; i++)
+            for (int i = 0; i < heroData.equipmentDatas.Count; i++)
             {
-                equipmentSlotsDictionary[heroData.equitmentDatas[i].equipmentType].SetItem(new InventoryItem(heroData.equitmentDatas[i]));
+                equipmentSlotsDictionary[heroData.equipmentDatas[i].equipmentType].SetItem(new InventoryItem(heroData.equipmentDatas[i]));
             }
 
 

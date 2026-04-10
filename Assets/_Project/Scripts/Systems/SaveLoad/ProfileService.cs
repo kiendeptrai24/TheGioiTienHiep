@@ -14,42 +14,49 @@ public class ProfileService : ISaveLoadRemote
     {
         service.LoadProfile(gameData.characterId, (profileDataDTO) =>
         {
-            if (profileDataDTO == null)
+            try
             {
+                if (profileDataDTO == null)
+                {
+                    callback?.Invoke();
+                    return;
+                }
+                if (string.IsNullOrEmpty(profileDataDTO.playerName) == false)
+                    gameData.characterName = profileDataDTO.playerName;
+                if (string.IsNullOrEmpty(profileDataDTO.characterId) == false)
+                    gameData.characterId = profileDataDTO.characterId;
+                gameData.coins = profileDataDTO.coins;
+
+
+                gameData.position = profileDataDTO.position.ToVector3();
+                gameData.rotation = Quaternion.LookRotation(profileDataDTO.rotation.ToVector3());
+                gameData.point = profileDataDTO.point;
+                gameData.itemDataPoint = profileDataDTO.itemDataPoint;
+                if (profileDataDTO.itemDataPoint == null)
+                {
+                    gameData.itemDataPoint = new ItemDataPoint();
+                }
+                if (profileDataDTO.position.Equals(default(Vector3DTO)))
+                {
+                    gameData.position = new Vector3(500, 0, 440);
+                }
+                if (profileDataDTO.rotation.Equals(default(Vector3DTO)))
+                {
+                    gameData.rotation = Quaternion.identity;
+                }
+
+                // ===== LOAD OFFLINE MINING DATA =====
+                if (profileDataDTO.mineOfflineDataList != null && profileDataDTO.mineOfflineDataList.Count > 0)
+                {
+                    gameData.mineOfflineDataList = profileDataDTO.mineOfflineDataList;
+                }
+
                 callback?.Invoke();
-                return;
             }
-            if (string.IsNullOrEmpty(profileDataDTO.playerName) == false)
-                gameData.characterName = profileDataDTO.playerName;
-            if (string.IsNullOrEmpty(profileDataDTO.characterId) == false)
-                gameData.characterId = profileDataDTO.characterId;
-            gameData.coins = profileDataDTO.coins;
-
-
-            gameData.position = profileDataDTO.position.ToVector3();
-            gameData.rotation = Quaternion.LookRotation(profileDataDTO.rotation.ToVector3());
-            gameData.point = profileDataDTO.point;
-            gameData.itemDataPoint = profileDataDTO.itemDataPoint;
-            if (profileDataDTO.itemDataPoint == null)
+            catch (System.Exception ex)
             {
-                gameData.itemDataPoint = new ItemDataPoint();
+                Debug.LogError("LoadGame: Failed to load profile data " + ex.Message);
             }
-            if (profileDataDTO.position.Equals(default(Vector3DTO)))
-            {
-                gameData.position = new Vector3(500, 0, 440);
-            }
-            if (profileDataDTO.rotation.Equals(default(Vector3DTO)))
-            {
-                gameData.rotation = Quaternion.identity;
-            }
-
-            // ===== LOAD OFFLINE MINING DATA =====
-            if (profileDataDTO.mineOfflineDataList != null && profileDataDTO.mineOfflineDataList.Count > 0)
-            {
-                gameData.mineOfflineDataList = profileDataDTO.mineOfflineDataList;
-            }
-
-            callback?.Invoke();
         });
     }
 

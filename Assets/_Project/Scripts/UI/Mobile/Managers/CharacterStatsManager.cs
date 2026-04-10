@@ -13,8 +13,15 @@ public class CharacterStatsManager : Singleton<CharacterStatsManager>
         base.Awake();
         inventoryCenterManager = InventoryCenterManager.Instance;
         playerCham = inventoryCenterManager.playerCham;
+        inventoryCenterManager.OnItemPlayerChanged += OnItemPlayerChanged;
+        OnItemPlayerChanged(playerCham);
+    }
+
+    private void OnItemPlayerChanged(ItemData data)
+    {
         stats.SetUpItem(playerCham);
     }
+
     protected override void Start()
     {
         base.Start();

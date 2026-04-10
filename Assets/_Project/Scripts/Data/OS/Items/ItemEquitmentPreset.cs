@@ -71,6 +71,7 @@ public class ItemEquipmentPreset : ItemStatsPreset
         return new EquitmentData
         {
             // base
+            instanceId = data.instanceId,
             itemId = data.itemId,
             itemName = data.itemName,
             itemType = data.itemType,

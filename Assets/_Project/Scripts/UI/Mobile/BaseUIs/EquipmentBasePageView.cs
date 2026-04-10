@@ -89,7 +89,7 @@ public abstract class EquipmentBasePageView : TGTHMonoBehaviour
         {
             item.ResetData();
         }
-        var equipDatas = heroData.equitmentDatas;
+        var equipDatas = heroData.equipmentDatas;
         for (int i = 0; i < equipDatas.Count; i++)
         {
             if (equipDatas[i] == null) continue;

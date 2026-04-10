@@ -8,6 +8,7 @@ using UnityEngine;
 public class SaveLoadManager : Singleton<SaveLoadManager>
 {
     public ISaveManager saveManager;
+    public List<HeroData> heroDatas = new List<HeroData>();
     [SerializeField] private GameData gameData;
     protected override void Awake()
     {
@@ -20,6 +21,10 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
     {
         gameData = data;
         saveManager.LoadGame();
+        foreach (var item in gameData.itemDatasCharacter)
+        {
+            heroDatas.Add(item as HeroData);
+        }
     }
     protected override void OnApplicationQuit()
     {

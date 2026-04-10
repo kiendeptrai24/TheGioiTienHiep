@@ -10,6 +10,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public bool getDataPreset;
     [SerializeField] private HeroPreset heroPreset;
     public ItemData playerCham;
+    public HeroData Cham;
 
     /// <summary>
     /// all item
@@ -83,6 +84,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public void ItemPlayerChanged(ItemData item)
     {
         playerCham = item;
+        Cham = playerCham as HeroData;
         OnItemPlayerChanged?.Invoke(item);
     }
     public void CheckDataChange()
@@ -153,8 +155,10 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         {
             for (int i = 0; i < quantity - 1; i++)
             {
-                listItemDatas.Add(item.Clone());
-                listItemDatasExisting.Add(item.Clone());
+                var newItem = item.Clone();
+                newItem.itemId = Guid.NewGuid().ToString();
+                listItemDatas.Add(newItem);
+                listItemDatasExisting.Add(newItem);
             }
         }
 
@@ -175,6 +179,37 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         ItemChange(item);
         ItemExistingChange(item);
         return true;
+    }
+    public ItemData GetItemData(string itemId)
+    {
+        var item = listItemDatas.FirstOrDefault(i => i.itemId == itemId);
+        if (item != null)
+            return item;
+
+        Debug.LogWarning($"Item with itemId {itemId} not found in inventory!");
+        return null;
+    }
+    public void UpdateItemData(string itemId, ItemData updatedItem)
+    {
+        var existingItem = listItemDatas.FirstOrDefault(i => i.itemId == itemId);
+        if (existingItem != null)
+        {
+            int index = listItemDatas.IndexOf(existingItem);
+            listItemDatas[index] = updatedItem;
+
+            if (listItemDatasExisting.Contains(existingItem))
+            {
+                int existingIndex = listItemDatasExisting.IndexOf(existingItem);
+                listItemDatasExisting[existingIndex] = updatedItem;
+            }
+
+            ItemChange(updatedItem);
+            ItemExistingChange(updatedItem);
+        }
+        else
+        {
+            Debug.LogWarning($"Cannot update item. Item with itemId {updatedItem.itemId} not found in inventory!");
+        }
     }
     public bool UseData(ItemData item)
     {
@@ -374,9 +409,25 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     {
         _data.itemDatas.Clear();
         _data.itemDatasInTeam.Clear();
-
         _data.itemDatas = listItemDatasExisting;
         _data.itemDatasInTeam = listItemDatasChampion;
+        for (int i = 0; i < _data.itemDatasCharacter.Count; i++)
+        {
+            var itemcharacter = _data.itemDatasCharacter[i] as HeroData;
+
+            if (itemcharacter is not HeroData) continue;
+
+            var cham = playerCham as HeroData;
+
+            if (cham == null) continue;
+
+            if (itemcharacter.characterId == cham.characterId)
+            {
+                var player = playerCham as HeroData;
+                _data.itemDatasCharacter[i] = player;
+                break;
+            }
+        }
     }
     protected override void LoadComponent()
     {

@@ -11,11 +11,7 @@ public class PlayerProfile : TGTHNetworkBehaviour
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
-    private NetworkVariable<int> point = new(
-        0,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server
-    );
+    private InventoryCenterManager inventoryCenterManager;
     private void OnProfileReady(ProfileUser user)
     {
         OnLoadPlayerIdServerRpc(user.userId);
@@ -23,10 +19,20 @@ public class PlayerProfile : TGTHNetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        inventoryCenterManager = InventoryCenterManager.Instance;
+        inventoryCenterManager.OnItemPlayerChanged += OnItemPlayerChanged;
+        OnItemPlayerChanged(inventoryCenterManager.playerCham);
         ProfileManager.Instance.OnProfileReady += OnProfileReady;
         string playerId = ProfileManager.Instance.GetProfile().userId;
         OnLoadPlayerIdServerRpc(playerId);
     }
+
+    private void OnItemPlayerChanged(ItemData data)
+    {
+        if (data == null) return;
+        GetComponent<StatsData>().SetUpItem(data);
+    }
+
     public FixedString64Bytes GetPlayerId() => playerId.Value;
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]

@@ -10,7 +10,6 @@ public class StatsData : TGTHMonoBehaviour
     public HeroPreset heroPreset;
 
     public ItemData heroData;
-    public HeroData hero1;
     public List<TechniqueData> techniqueData;
     public List<SkillData> skillDatas;
     public List<EquitmentData> equiDatas;
@@ -126,7 +125,7 @@ public class StatsData : TGTHMonoBehaviour
         ResetStatsModifiers();
         StatChange();
     }
-    
+
     #region Stats Emplementation
     public int GetStatValue(StatType type)
     {
@@ -176,7 +175,7 @@ public class StatsData : TGTHMonoBehaviour
         if (hero == null) return;
         techniqueData = hero.techniqueDatas;
         skillDatas = hero.skillDatas;
-        equiDatas = hero.equitmentDatas;
+        equiDatas = hero.equipmentDatas;
 
         statsRaceData = hero.statsRaceData;
         statsRealmData = hero.statsRealmData;
@@ -185,7 +184,6 @@ public class StatsData : TGTHMonoBehaviour
     public void SetUpItem(ItemData item)
     {
         this.heroData = item;
-        hero1 = item as HeroData;
         Setup();
     }
     public void SetupDataPreset()

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using ExitGames.Client.Photon.StructWrapping;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -15,28 +17,42 @@ public enum ItemConvertType
 }
 public class ScriptableObjectLoader : Singleton<ScriptableObjectLoader>
 {
-    public bool TestJson = false;
     public DataDTOType dataDTOType;
     public ItemConvertType itemConvertType;
     public List<ItemPreset> baseItems = new();
+    public List<StatsRealmPreset> baseRealmItems = new();
     public List<ItemPreset> baseShopItems = new();
     public List<ItemPreset> testItems = new();
     private Dictionary<string, ItemPreset> items = new();
+    private Dictionary<RealmType, StatsRealmPreset> realmItems = new();
     protected override void Awake()
     {
         base.Awake();
         foreach (var item in baseItems)
         {
-            if (items.ContainsKey(item.itemId))
+            if (items.ContainsKey(item.instanceId))
                 continue;
-            items.Add(item.itemId, item);
+            items.Add(item.instanceId, item);
+        }
+        foreach (var item in baseRealmItems)
+        {
+            if (realmItems.ContainsKey(item.realmType))
+                continue;
+            realmItems.Add(item.realmType, item);
         }
     }
-    public ItemData GetItem(string itemId)
+    public ItemData GetItem(string instanceId)
     {
-        if (items.TryGetValue(itemId, out var item))
+        if (items.TryGetValue(instanceId, out var item))
             return item.GetItemData();
-
+        Debug.Log("Item not found for instanceId: " + instanceId);
+        return null;
+    }
+    public StatsRealmData GetRealmItem(RealmType realmType)
+    {
+        if (realmItems.TryGetValue(realmType, out var realmItem))
+            return realmItem.GetStats();
+        Debug.Log("Realm item not found for realm type: " + realmType);
         return null;
     }
 #if UNITY_EDITOR
@@ -58,7 +74,7 @@ public class ScriptableObjectLoader : Singleton<ScriptableObjectLoader>
     [ContextMenu("To Json")]
     public void ToJson()
     {
-        var Listtems = TestJson ? testItems : baseItems;
+        var Listtems = baseItems;
         if (itemConvertType == ItemConvertType.ShopItem)
         {
             var itemDataDTO = new ItemDataDTO();
@@ -71,12 +87,12 @@ public class ScriptableObjectLoader : Singleton<ScriptableObjectLoader>
         }
         if (dataDTOType == DataDTOType.HeroDTO)
         {
-            var HeroDataDTO = new HeroDataDTO();
+            var HeroDataDTO = new HeroInTeamDataDTO();
             foreach (var item in Listtems)
             {
                 var itemData = item.GetItemData();
                 var heroData = itemData as HeroData;
-                HeroDataDTO.inventoryItems.Add(itemData);
+                HeroDataDTO.inventoryItems.Add(heroData);
                 HeroDataDTO.championsIndex.Add(heroData.championIndex);
             }
             ItemJsonCreator.CreateItemJson(HeroDataDTO);

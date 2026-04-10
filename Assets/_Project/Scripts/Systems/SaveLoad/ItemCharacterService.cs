@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemCharacterService : ISaveLoadRemote
@@ -14,86 +15,152 @@ public class ItemCharacterService : ISaveLoadRemote
     {
         service.LoadCharacter((gameDataDTO) =>
         {
-            if (gameDataDTO == null)
+            try
             {
+                if (gameDataDTO == null)
+                {
+                    callback?.Invoke();
+                    return;
+                }
+
+                var itemsData = gameDataDTO;
+
+                var iconLoader = AddressableLoader.Instance.GetLoader<IconLoader>(AddressableLoaderType.Sprite.ToString());
+                var prefabLoader = AddressableLoader.Instance.GetLoader<PrefabLoader>(AddressableLoaderType.Prefab.ToString());
+                var SODataBase = ScriptableObjectLoader.Instance;
+
+                if (itemsData.inventoryItems == null)
+                {
+                    Debug.LogError("LoadGame: inventoryItems is null");
+                    callback?.Invoke();
+                    return;
+                }
+
+                for (int i = 0; i < itemsData.inventoryItems.Count; i++)
+                {
+                    var itemLoad = itemsData.inventoryItems[i];
+                    if (itemLoad == null)
+                        continue;
+
+                    var itemData = SODataBase.GetItem(itemLoad.instanceId);
+                    if (itemData == null)
+                    {
+                        Debug.LogError($"LoadGame: itemData null at index {i}, instanceId = {itemLoad.instanceId}");
+                        continue;
+                    }
+
+                    if (gameDataDTO.inventoryItems != null && i < gameDataDTO.inventoryItems.Count)
+                    {
+                        itemData.itemName = gameDataDTO.inventoryItems[i].itemName;
+                    }
+
+                    var sprite = iconLoader.Get(itemLoad.itemIconPath);
+                    itemData.itemIcon = sprite;
+                    var heroData = itemData as HeroData;
+                    if (heroData != null)
+                    {
+                        if (itemsData.characterNames != null && i < itemsData.characterNames.Count)
+                        {
+                            heroData.itemName = itemsData.characterNames[i];
+                        }
+
+                        if (itemsData.characterIds != null && i < itemsData.characterIds.Count)
+                        {
+                            heroData.characterId = itemsData.characterIds[i];
+                        }
+
+                        var realmData = SODataBase.GetRealmItem(itemData.realmType);
+                        heroData.statsRealmData = realmData;
+
+                        SetHeroData(itemsData, iconLoader, prefabLoader, SODataBase, i, itemData, heroData);
+                        continue;
+                    }
+
+                    itemsData.inventoryItems[i] = heroData;
+                }
+                var listItem = new List<ItemData>();
+                foreach (var item in itemsData.inventoryItems)
+                {
+                    listItem.Add(item);
+                }
+                gameData.itemDatasCharacter = listItem;
                 callback?.Invoke();
-                return;
             }
-
-            var itemsData = new ItemCharacterDataDTO();
-            itemsData = gameDataDTO;
-
-            var iconLoader = AddressableLoader.Instance.GetLoader<IconLoader>(AddressableLoaderType.Sprite.ToString());
-            var prefabLoader = AddressableLoader.Instance.GetLoader<PrefabLoader>(AddressableLoaderType.Prefab.ToString());
-            var SODataBase = ScriptableObjectLoader.Instance;
-
-            for (int i = 0; i < itemsData.inventoryItems.Count; i++)
+            catch (System.Exception ex)
             {
-                var item = itemsData.inventoryItems[i];
-                var itemData = SODataBase.GetItem(item.itemId);
-                itemData.itemName = gameDataDTO.inventoryItems[i].itemName;
-                if (itemData == null)
-                    continue;
-                itemData.itemName = itemsData.characterNames[i];
-                (itemData as HeroData).characterId = itemsData.characterIds[i];
-                var sprite = iconLoader.Get(item.itemIconPath);
-                itemData.itemIcon = sprite;
-
-                if (itemData is HeroData heroData)
-                {
-                    SetHeroData(itemsData, iconLoader, prefabLoader, SODataBase, i, itemData, heroData);
-                    continue;
-                }
-
-                if (itemData is SkillData skillDatas)
-                {
-                    SetSkilldata(itemsData, iconLoader, prefabLoader, i, skillDatas);
-                    continue;
-                }
-
-                itemsData.inventoryItems[i] = itemData;
+                Debug.LogError($"LoadGame: Failed to load character data\n{ex}");
             }
-            gameData.itemDatasCharacter = itemsData.inventoryItems;
-            callback?.Invoke();
         });
     }
 
-    private static void SetHeroData(ItemDataDTO itemsData, IconLoader iconLoader, PrefabLoader prefabLoader, ScriptableObjectLoader SODataBase, int i, ItemData itemData, HeroData heroData)
+    private static void SetHeroData(ItemCharacterDataDTO itemsData, IconLoader iconLoader, PrefabLoader prefabLoader, ScriptableObjectLoader SODataBase, int i, ItemData itemData, HeroData heroData)
     {
-        var heroPrefab = prefabLoader.Get(itemData.itemFilePath);
-        heroData.heroPrefab = heroPrefab;
-
-        for (int h = 0; h < heroData.skillDatas.Count; h++)
+        try
         {
-            var skill = heroData.skillDatas[h];
+            var heroPrefab = prefabLoader.Get(itemData.itemFilePath);
+            heroData.heroPrefab = heroPrefab;
+            var champion = itemsData.inventoryItems[i];
+            if (champion == null)
+                return;
+            try
+            {
+                if (champion == null)
+                {
+                    Debug.Log("champion is null");
+                    return;
+                }
+                var skillDatas = champion.skillDatas;
+                if (skillDatas == null)
+                {
+                    Debug.Log("skillDatas is null");
+                    return;
+                }
+                for (int h = 0; h < skillDatas.Count; h++)
+                {
+                    var skill = skillDatas[h];
+                    if (skill == null)
+                    {
+                        Debug.Log("skill is null");
+                        continue;
+                    }
+                    var skillData = SODataBase.GetItem(skill.instanceId) as SkillData;
+                    if (skillData == null)
+                        continue;
+                    heroData.skillDatas[h] = skillData;
+                }
+            }
+            catch (System.Exception)
+            {
+                Debug.LogError("SetHeroData: Failed to set skill data ");
+            }
 
-            var skillData = SODataBase.GetItem(skill.itemId) as SkillData;
-            if (skillData == null)
-                continue;
-            skillData.itemIcon = iconLoader.Get(skillData.itemIconPath);
-            skillData.skillEffectPrefab = prefabLoader.Get(skillData.itemFilePath);
-            heroData.skillDatas[h] = skillData;
+            var techniqueDatas = champion.techniqueDatas;
+            for (int s = 0; s < techniqueDatas.Count; s++)
+            {
+                var technique = techniqueDatas[s];
+                var techniqueData = SODataBase.GetItem(technique.instanceId) as TechniqueData;
+                if (techniqueData == null)
+                    continue;
+                heroData.techniqueDatas[s] = techniqueData;
+            }
+            var equipmentDatas = champion.equipmentDatas;
+            for (int k = 0; k < equipmentDatas.Count; k++)
+            {
+                var equipment = equipmentDatas[k];
+                var equipmentData = SODataBase.GetItem(equipment.instanceId) as EquitmentData;
+                if (equipmentData == null)
+                    continue;
+                heroData.equipmentDatas[k] = equipmentData;
+            }
+
+            itemsData.inventoryItems[i] = heroData;
         }
-
-        for (int s = 0; s < heroData.techniqueDatas.Count; s++)
+        catch (System.Exception ex)
         {
-            var technique = heroData.techniqueDatas[s];
-            var techniqueData = SODataBase.GetItem(technique.itemId) as TechniqueData;
-            if (techniqueData == null)
-                continue;
-            heroData.techniqueDatas[s] = techniqueData;
+            Debug.LogError("SetHeroData: Failed to set hero data " + ex.Message);
         }
-
-        itemsData.inventoryItems[i] = heroData;
     }
 
-    private void SetSkilldata(ItemDataDTO itemsData, IconLoader iconLoader, PrefabLoader prefabLoader, int i, SkillData skillDatas)
-    {
-        skillDatas.itemIcon = iconLoader.Get(skillDatas.itemIconPath);
-        skillDatas.skillEffectPrefab = prefabLoader.Get(skillDatas.itemFilePath);
-
-        itemsData.inventoryItems[i] = skillDatas;
-    }
     public void SaveGame(GameData gameData)
     {
         service.SetItemCharacter(gameData);

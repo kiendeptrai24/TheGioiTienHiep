@@ -18,6 +18,7 @@ public class SkillPreset : ItemPreset
     [Header("Meta")]
     public SkillType skillType;
     public int enhanceLevel;
+    public int maxEnhanceLevel;
     public RaceType raceType;
     public EssenceType mainEssence;
     public ElementType elementType;
@@ -44,12 +45,12 @@ public class SkillPreset : ItemPreset
 
     [Header("Upgrade Materials")]
     public float powerCost;
-    public float lthaoCost;
-    public float mineralCost;
-    public float demonCoreCost;
-    public float devilCoreCost;
-    public float spiritStoneCost;
-    public float itemCost;
+    public int lthaoCost;
+    public int mineralCost;
+    public int demonCoreCost;
+    public int devilCoreCost;
+    public int spiritStoneCost;
+    public int itemCost;
 
     [Header("Bonus Stats (%)")]
     public float critDamage;
@@ -418,84 +419,85 @@ public class SkillPreset : ItemPreset
     public override ItemData GetItemData()
     {
         ItemData data = base.GetItemData();
-        return new SkillData
-        {
-            // base
-            itemId = data.itemId,
-            itemName = data.itemName,
-            itemType = data.itemType,
-            itemIcon = data.itemIcon,
-            itemIconPath = data.itemIconPath,
-            itemDescription = data.itemDescription,
-            currentstack = data.currentstack,
-            canStack = data.canStack,
-            itemPrice = data.itemPrice,
-            realmType = data.realmType,
-            qualityType = data.qualityType,
+        SkillData skillData = new SkillData();
+        skillData.instanceId = data.instanceId;
+        skillData.itemId = data.itemId;
+        skillData.itemName = data.itemName;
+        skillData.itemType = data.itemType;
+        skillData.itemIcon = data.itemIcon;
+        skillData.itemIconPath = data.itemIconPath;
+        skillData.itemDescription = data.itemDescription;
+        skillData.currentstack = data.currentstack;
+        skillData.canStack = data.canStack;
+        skillData.itemPrice = data.itemPrice;
+        skillData.realmType = data.realmType;
+        skillData.qualityType = data.qualityType;
 
-            // base stats trong ItemData
-            physicalDamage = physicalDamage,
-            magicalDamage = magicalDamage,
-            spiritDamage = spiritDamage,
-            physicalDefense = physicalDefense,
-            magicalDefense = magicalDefense,
-            spiritDefense = spiritDefense,
+        // base stats trong ItemData
+        skillData.physicalDamage = physicalDamage;
+        skillData.magicalDamage = magicalDamage;
+        skillData.spiritDamage = spiritDamage;
+        skillData.physicalDefense = physicalDefense;
+        skillData.magicalDefense = magicalDefense;
+        skillData.spiritDefense = spiritDefense;
 
-            // meta
-            skillType = skillType,
-            enhanceLevel = enhanceLevel,
-            raceType = raceType,
-            mainEssence = mainEssence,
-            elementType = elementType,
-            realm = realm,
-            skillEffectPrefab = skillEffectPrefab,
-            networkSkillEffectPrefab = networkSkillEffectPrefab,
+        // meta
+        skillData.skillType = skillType;
+        skillData.enhanceLevel = enhanceLevel;
+        skillData.maxEnhanceLevel = maxEnhanceLevel;
+        skillData.raceType = raceType;
+        skillData.mainEssence = mainEssence;
+        skillData.elementType = elementType;
+        skillData.realm = realm;
+        skillData.skillEffectPrefab = skillEffectPrefab;
+        skillData.networkSkillEffectPrefab = networkSkillEffectPrefab;
 
-            // combat
-            attackRange = attackRange,
-            cooldown = cooldown,
-            specialEffect = specialEffect,
+        // combat
+        skillData.attackRange = attackRange;
+        skillData.cooldown = cooldown;
+        skillData.specialEffect = specialEffect;
 
-            // costs
-            healthCost = healthCost,
-            manaCost = manaCost,
-            spiritCost = spiritCost,
+        // costs
+        skillData.healthCost = healthCost;
+        skillData.manaCost = manaCost;
+        skillData.spiritCost = spiritCost;
 
-            // learn
-            requiredCharacterLevel = requiredCharacterLevel,
-            learnCondition = learnCondition,
-            otherNote = otherNote,
+        // learn
+        skillData.requiredCharacterLevel = requiredCharacterLevel;
+        skillData.learnCondition = learnCondition;
+        skillData.otherNote = otherNote;
 
-            // materials
-            powerCost = powerCost,
-            lthaoCost = lthaoCost,
-            mineralCost = mineralCost,
-            demonCoreCost = demonCoreCost,
-            devilCoreCost = devilCoreCost,
-            spiritStoneCost = spiritStoneCost,
-            itemCost = itemCost,
+        // materials
+        skillData.powerCost = powerCost;
+        skillData.lthaoCost = lthaoCost;
+        skillData.mineralCost = mineralCost;
+        skillData.demonCoreCost = demonCoreCost;
+        skillData.devilCoreCost = devilCoreCost;
+        skillData.spiritStoneCost = spiritStoneCost;
+        skillData.itemCost = itemCost;
 
-            // bonus
-            critDamage = critDamage,
-            critRate = critRate,
-            armorPenetration = armorPenetration,
-            trueDamage = trueDamage,
-            lifeSteal = lifeSteal,
-            attackSpeed = attackSpeed,
+        // bonus
+        skillData.critDamage = critDamage;
+        skillData.critRate = critRate;
+        skillData.armorPenetration = armorPenetration;
+        skillData.trueDamage = trueDamage;
+        skillData.lifeSteal = lifeSteal;
+        skillData.attackSpeed = attackSpeed;
 
-            penetrationReduction = penetrationReduction,
-            critDamageReduction = critDamageReduction,
-            trueDamageReduction = trueDamageReduction,
+        skillData.penetrationReduction = penetrationReduction;
+        skillData.critDamageReduction = critDamageReduction;
+        skillData.trueDamageReduction = trueDamageReduction;
 
-            bonusHealth = bonusHealth,
-            bonusMana = bonusMana,
-            bonusSpirit = bonusSpirit,
+        skillData.bonusHealth = bonusHealth;
+        skillData.bonusMana = bonusMana;
+        skillData.bonusSpirit = bonusSpirit;
 
-            totalQualityAndLevel = totalQualityAndLevel,
-            statCount = statCount,
-            animationDuration = animationDuration,
-            castTime = castTime,
-            itemFilePath = itemFilePath
-        };
+        skillData.totalQualityAndLevel = totalQualityAndLevel;
+        skillData.statCount = statCount;
+        skillData.animationDuration = animationDuration;
+        skillData.castTime = castTime;
+        skillData.itemFilePath = itemFilePath;
+
+        return skillData.Clone();
     }
 }

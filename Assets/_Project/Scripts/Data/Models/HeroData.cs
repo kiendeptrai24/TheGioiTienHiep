@@ -55,9 +55,10 @@ public class HeroData : ItemData
     public int spititRangePoint;
     [JsonIgnore]
     public Vector2Int championIndex;
-    public List<EquitmentData> equitmentDatas = new();
+    public List<EquitmentData> equipmentDatas = new();
     public List<SkillData> skillDatas = new();
     public List<TechniqueData> techniqueDatas = new();
+    public LevelUpConditionData levelUpConditionData = new();
     [JsonIgnore]
     public GameObject heroPrefab;
     public override ItemData Clone()

@@ -14,6 +14,7 @@ public class ItemResourcePreset : ItemPreset
     public override ItemData GetItemData()
     {
         ItemResourseData data = new ItemResourseData();
+        data.instanceId = instanceId;
         data.itemId = itemId;
         data.itemName = itemName;
         data.itemType = itemType;

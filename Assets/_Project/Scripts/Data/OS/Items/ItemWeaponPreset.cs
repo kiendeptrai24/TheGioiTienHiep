@@ -356,17 +356,20 @@ public class ItemWeaponPreset : ItemEquipmentPreset
 
     public override ItemData GetItemData()
     {
+        ItemData data = base.GetItemData();
+
         return new EquitmentData
         {
             // base
-            itemId = itemId,
-            itemName = itemName,
-            itemType = itemType,
-            itemIcon = itemIcon,
-            itemDescription = itemDescription,
-            itemIconPath = itemIconPath,
-            itemPrice = itemPrice,
-            currentstack = currentstack,
+            instanceId = data.instanceId,
+            itemId = data.itemId,
+            itemName = data.itemName,
+            itemType = data.itemType,
+            itemIcon = data.itemIcon,
+            itemDescription = data.itemDescription,
+            itemIconPath = data.itemIconPath,
+            itemPrice = data.itemPrice,
+            currentstack = data.currentstack,
 
             // equipment meta
             equipmentType = equipmentType,

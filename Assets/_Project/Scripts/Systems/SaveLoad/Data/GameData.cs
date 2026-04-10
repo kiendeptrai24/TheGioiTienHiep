@@ -17,9 +17,7 @@ public class GameData
     public List<ItemData> itemShopDatas;
     public List<ItemData> allItemsDatas;
     public List<ItemData> itemDatasCharacter;
-
-    // ===== OFFLINE MINING STORAGE =====
-    public MineOfflineDataList mineOfflineDataList = new MineOfflineDataList();  // Replaces Dictionary
+    public MineOfflineDataList mineOfflineDataList;
 
     public GameData()
     {

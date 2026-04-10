@@ -50,7 +50,7 @@ namespace TGTH.Mobile
                 uiItem.ResetData();
             }
             var heroData = statsManager.heroData as HeroData;
-            foreach (var item in heroData.equitmentDatas)
+            foreach (var item in heroData.equipmentDatas)
             {
                 view.equipmentSlotsDictionary[item.equipmentType].SetItem(new InventoryItem(item));
             }

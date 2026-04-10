@@ -39,8 +39,9 @@ public class HeroPreset : ItemStatsPreset
     public override ItemData GetItemData()
     {
         ItemData data = base.GetItemData();
-        HeroData heroPreset = new HeroData
+        HeroData heroData = new HeroData
         {
+            instanceId = data.instanceId,
             itemId = data.itemId,
             itemName = data.itemName,
             itemType = data.itemType,
@@ -65,16 +66,16 @@ public class HeroPreset : ItemStatsPreset
             heroPrefab = heroPrefab,
             itemFilePath = itemFilePath
         };
-        heroPreset.statsRealmData = statsRealmPreset.GetStats();
-        heroPreset.statsRaceData = statsRacePreset.GetStats();
-        heroPreset.statsCultivationPathData = statsCultivationPathPreset.GetStats();
+        heroData.statsRealmData = statsRealmPreset.GetStats();
+        heroData.statsRaceData = statsRacePreset.GetStats();
+        heroData.statsCultivationPathData = statsCultivationPathPreset.GetStats();
 
-        heroPreset.essenceType = essenceType;
-        heroPreset.elementType = elementType;
-        heroPreset.equitmentDatas = GetEquitmentDatas();
-        heroPreset.skillDatas = GetSkillDatas();
-        heroPreset.techniqueDatas = GetTechniqueDatas();
-        return heroPreset;
+        heroData.essenceType = essenceType;
+        heroData.elementType = elementType;
+        heroData.equipmentDatas = GetEquitmentDatas();
+        heroData.skillDatas = GetSkillDatas();
+        heroData.techniqueDatas = GetTechniqueDatas();
+        return heroData;
     }
     public List<SkillData> GetSkillDatas()
     {

@@ -1,8 +1,8 @@
 public enum ResourceType
 {
-    SpiritStone,// Linh thạch
-    Ore,// Quặng    
-    Wood, // Gỗ
-    Herb, // Thảo dược
-    Monster, // quái vật
+    LinhThach,// Linh thạchdược
+    LinhThao,// Linh thảo
+    KhoangThach,// Khoáng thạch
+    YeuDan,// Yêu dần
+    MaHach,// Ma hạch
 }

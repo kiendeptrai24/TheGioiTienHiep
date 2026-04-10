@@ -16,7 +16,7 @@ public static class ItemJsonCreator
         Debug.Log("JSON created at: " + path);
         Debug.Log(json);
     }
-    public static void CreateItemJson(HeroDataDTO itemTest)
+    public static void CreateItemJson(HeroInTeamDataDTO itemTest)
     {
         string json = JsonConvert.SerializeObject(itemTest);
 

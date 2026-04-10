@@ -2676,6 +2676,7 @@ GameObject:
   - component: {fileID: 3528530155531641631}
   - component: {fileID: 2860028719030235241}
   - component: {fileID: 2875922966646219981}
+  - component: {fileID: 6262961699466538744}
   m_Layer: 12
   m_Name: CharacterBeast
   m_TagString: Untagged
@@ -3132,6 +3133,282 @@ MonoBehaviour:
   healthTxt: {fileID: 6198310471741912166}
   nameTxt: {fileID: 9078119978830125459}
   levelTxt: {fileID: 4407556275542666589}
+--- !u!114 &6262961699466538744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37fcc50bcd34fd42a17a7f9d9e5482d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatsData
+  heroPreset: {fileID: 0}
+  heroData:
+    instanceId: 
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemIconPath: 
+    itemFilePath: 
+    itemPrice: 0
+    canStack: 0
+    itemDescription: 
+    currentstack: 0
+    realmType: 0
+    qualityType: 0
+    elementType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+  hero1:
+    instanceId: 
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemIconPath: 
+    itemFilePath: 
+    itemPrice: 0
+    canStack: 0
+    itemDescription: 
+    currentstack: 0
+    realmType: 0
+    qualityType: 0
+    elementType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    isCharactor: 0
+    characterId: 
+    statsRealmData:
+      instanceId: 
+      itemId: 
+      itemType: 0
+      itemName: 
+      itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
+      itemPrice: 0
+      canStack: 0
+      itemDescription: 
+      currentstack: 0
+      realmType: 0
+      qualityType: 0
+      elementType: 0
+      physicalDamage: 0
+      magicalDamage: 0
+      spiritDamage: 0
+      physicalDefense: 0
+      magicalDefense: 0
+      spiritDefense: 0
+      maxHealth: 0
+      maxMana: 0
+      maxSpirit: 0
+      critRate: 0
+      critDamage: 0
+      evasion: 0
+      armorPenetration: 0
+      movementSpeed: 0
+      attackSpeed: 0
+      castSpeed: 0
+      potential: 0
+      skillPoints: 0
+      combatPower: 0
+      spiritRange: 0
+    statsCultivationPathData:
+      instanceId: 
+      itemId: 
+      itemType: 0
+      itemName: 
+      itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
+      itemPrice: 0
+      canStack: 0
+      itemDescription: 
+      currentstack: 0
+      realmType: 0
+      qualityType: 0
+      elementType: 0
+      physicalDamage: 0
+      magicalDamage: 0
+      spiritDamage: 0
+      physicalDefense: 0
+      magicalDefense: 0
+      spiritDefense: 0
+      essenceType: 0
+      counterEssenceType: 0
+      counterPercentage: 0
+      maxHealth: 0
+      maxMana: 0
+      maxSpirit: 0
+      movementSpeed: 0
+      spiritRange: 0
+    statsRaceData:
+      instanceId: 
+      itemId: 
+      itemType: 0
+      itemName: 
+      itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
+      itemPrice: 0
+      canStack: 0
+      itemDescription: 
+      currentstack: 0
+      realmType: 0
+      qualityType: 0
+      elementType: 0
+      physicalDamage: 0
+      magicalDamage: 0
+      spiritDamage: 0
+      physicalDefense: 0
+      magicalDefense: 0
+      spiritDefense: 0
+      raceType: 0
+      maxHealth: 0
+      maxMana: 0
+      maxSpirit: 0
+      spiritRange: 0
+      movementSpeed: 0
+    raceType: 0
+    essenceType: 0
+    level: 0
+    attackRange: 0
+    moveSpeed: 0
+    health: 0
+    mana: 0
+    spirit: 0
+    physicalDamagePoint: 0
+    magicalDamagePoint: 0
+    spiritDamagePoint: 0
+    physicalDefensePoint: 0
+    magicalDefensePoint: 0
+    spiritDefensePoint: 0
+    healthPoint: 0
+    manaPoint: 0
+    spiritPoint: 0
+    moveSpeedPoint: 0
+    spititRangePoint: 0
+    championIndex: {x: 0, y: 0}
+    equitmentDatas: []
+    skillDatas: []
+    techniqueDatas: []
+    levelUpConditionData:
+      level: 0
+      levelName: 
+      linhThao: 0
+      khoangThach: 0
+      yeuDan: 0
+      maHach: 0
+      linhThach: 0
+      requiredItem: 
+      requiredCharacterLevel: 0
+    heroPrefab: {fileID: 0}
+  techniqueData: []
+  skillDatas: []
+  equiDatas: []
+  statsRaceData:
+    instanceId: 
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemIconPath: 
+    itemFilePath: 
+    itemPrice: 0
+    canStack: 0
+    itemDescription: 
+    currentstack: 0
+    realmType: 0
+    qualityType: 0
+    elementType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    raceType: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    spiritRange: 0
+    movementSpeed: 0
+  statsCultivationPathData:
+    instanceId: 
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemIconPath: 
+    itemFilePath: 
+    itemPrice: 0
+    canStack: 0
+    itemDescription: 
+    currentstack: 0
+    realmType: 0
+    qualityType: 0
+    elementType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    essenceType: 0
+    counterEssenceType: 0
+    counterPercentage: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    movementSpeed: 0
+    spiritRange: 0
+  statsRealmData:
+    instanceId: 
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemIconPath: 
+    itemFilePath: 
+    itemPrice: 0
+    canStack: 0
+    itemDescription: 
+    currentstack: 0
+    realmType: 0
+    qualityType: 0
+    elementType: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    maxHealth: 0
+    maxMana: 0
+    maxSpirit: 0
+    critRate: 0
+    critDamage: 0
+    evasion: 0
+    armorPenetration: 0
+    movementSpeed: 0
+    attackSpeed: 0
+    castSpeed: 0
+    potential: 0
+    skillPoints: 0
+    combatPower: 0
+    spiritRange: 0
 --- !u!1 &7825434533555785058
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System;
 using Newtonsoft.Json;
 using UnityEngine;
+using static LevelUpValidator;
 
 [Serializable]
 public class SkillData : ItemData
@@ -15,6 +16,8 @@ public class SkillData : ItemData
     public SkillType skillType;          // tên kỹ năng (enum)
     [JsonIgnore]
     public int enhanceLevel;             // Cường hóa
+    [JsonIgnore]
+    public int maxEnhanceLevel;          // Cường hóa tối đa    
     [JsonIgnore]
     public RaceType raceType;            // Tộc
     [JsonIgnore]
@@ -64,17 +67,17 @@ public class SkillData : ItemData
     [JsonIgnore]
     public float powerCost;              // Power
     [JsonIgnore]
-    public float lthaoCost;              // Linh thảo
+    public int lthaoCost;              // Linh thảo
     [JsonIgnore]
-    public float mineralCost;            // Khoáng thạch
+    public int mineralCost;            // Khoáng thạch
     [JsonIgnore]
-    public float demonCoreCost;          // Yêu đan
+    public int demonCoreCost;          // Yêu đan
     [JsonIgnore]
-    public float devilCoreCost;          // Ma hạch
+    public int devilCoreCost;          // Ma hạch
     [JsonIgnore]
-    public float spiritStoneCost;        // Linh thạch
+    public int spiritStoneCost;        // Linh thạch
     [JsonIgnore]
-    public float itemCost;               // Vật phẩm khác
+    public int itemCost;               // Vật phẩm khác
 
     // ============================
     // DAMAGE BONUS (%)
@@ -131,8 +134,25 @@ public class SkillData : ItemData
     public float castTime;               // Thời gian cast (giây)
     [JsonIgnore]
     public GameObject networkSkillEffectPrefab;
+    [JsonIgnore]
+    public LevelUpConditionData levelUpConditionData = new();
     public override ItemData Clone()
     {
-        return (SkillData)this.MemberwiseClone();
+        var clone = (SkillData)this.MemberwiseClone();
+
+        clone.levelUpConditionData = new LevelUpConditionData
+        {
+            level = this.enhanceLevel,
+            conditionType = LevelUpConditionType.TechniqueLevel,
+            levelName = this.itemName,
+            linhThao = this.lthaoCost,
+            khoangThach = this.mineralCost,
+            yeuDan = this.demonCoreCost,
+            maHach = this.devilCoreCost,
+            linhThach = this.spiritStoneCost,
+            requiredCharacterLevel = this.requiredCharacterLevel
+        };
+
+        return clone;
     }
 }

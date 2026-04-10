@@ -11,7 +11,7 @@ namespace TGTH.Mobile
         [SerializeField] private MapSearchDetailPageView view;
         [SerializeField] private MapSearchResultPagePresenter presenter;
         [SerializeField] private ResourceManager resource;
-        private ResourceType resourceType = ResourceType.SpiritStone;
+        private ResourceType resourceType = ResourceType.LinhThach;
         private RealmType cultivationStage;
         [SerializeField] private PathTest pathTest;
         public NavigationFindMapResult navigationFindMapResult;

@@ -5,10 +5,13 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using System;
 
 [CreateAssetMenu(fileName = "NewStatsPreset", menuName = "RPG/Stats/Stats Realm Preset")]
 public class StatsRealmPreset : ScriptableObject
 {
+    public string instanceId;
+    public string itemId;
     [Header("Cultivation Realm")]
     public RealmType realmType;
     [Header("Resources")]
@@ -49,7 +52,8 @@ public class StatsRealmPreset : ScriptableObject
             return;
 
         string newName = $"Stats_{stageName}";
-
+        itemId = Guid.NewGuid().ToString();
+        instanceId = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(this));
         if (name != newName)
         {
             string path = AssetDatabase.GetAssetPath(this);
@@ -345,6 +349,8 @@ public class StatsRealmPreset : ScriptableObject
     {
         StatsRealmData data = new StatsRealmData();
         data.realmType = realmType;
+        data.instanceId = instanceId;
+        data.itemId = itemId;
 
         data.maxHealth = Mathf.RoundToInt(health);
         data.maxMana = Mathf.RoundToInt(mana);

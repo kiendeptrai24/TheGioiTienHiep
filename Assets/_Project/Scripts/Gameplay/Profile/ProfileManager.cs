@@ -63,6 +63,7 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
         profileUser.userId = _data.characterId;
         profileUser.point = _data.point;
         profileUser.itemDataPoint = _data.itemDataPoint;
+        profileUser.playerResource.linhThach = (int)_data.coins;
         OnProfileReady?.Invoke(profileUser);
     }
 
@@ -72,7 +73,7 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
         _data.coins = profileUser.coins;
         _data.characterName = profileUser.userName;
         _data.point = profileUser.point;
-        profileUser.itemDataPoint = _data.itemDataPoint;
+        _data.itemDataPoint = profileUser.itemDataPoint;
         foreach (var resourceId in resourceIds)
         {
             _data.mineOfflineDataList.AddOrUpdate(resourceId, 0, 0, "");

@@ -37,7 +37,7 @@ namespace TGTH.Mobile
         public void ShowData(ItemData itemData)
         {
             var heroData = itemData as HeroData;
-            var equipmentDatas = heroData.equitmentDatas;
+            var equipmentDatas = heroData.equipmentDatas;
 
             for (int i = 0; i < equipmentDatas.Count; i++)
             {

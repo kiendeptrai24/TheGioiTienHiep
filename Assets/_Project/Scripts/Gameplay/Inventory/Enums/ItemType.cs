@@ -6,5 +6,6 @@ public enum ItemType
     Technique,
     Skill,
     Other,
-    Champion
+    Champion,
+    Condition
 }

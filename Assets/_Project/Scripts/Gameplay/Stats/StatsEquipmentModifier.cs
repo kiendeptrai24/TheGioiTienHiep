@@ -8,7 +8,7 @@ public class StatsEquipmentModifier : StatsModifierBase
         if (itemData == null) return;
         var heroData = itemData as HeroData;
         if (heroData == null) return;
-        var datas = heroData.equitmentDatas;
+        var datas = heroData.equipmentDatas;
         if (datas == null) return;
         base.AddStats(stats, itemData);
         foreach (var data in datas)
@@ -85,7 +85,7 @@ public class StatsEquipmentModifier : StatsModifierBase
         if (itemData == null) return;
         var heroData = itemData as HeroData;
         if (heroData == null) return;
-        var datas = heroData.equitmentDatas;
+        var datas = heroData.equipmentDatas;
         if (datas == null) return;
         base.RemoveStats(stats, itemData);
         foreach (var data in datas)

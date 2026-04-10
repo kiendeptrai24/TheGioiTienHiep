@@ -5,8 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class ItemData
 {
+    public string instanceId;
     public string itemId;
-    [JsonIgnore]
     public ItemType itemType;
     public string itemName;
     [JsonIgnore]
@@ -21,7 +21,6 @@ public class ItemData
     public string itemDescription;
     [JsonIgnore]
     public int currentstack;
-    [JsonIgnore]
     public RealmType realmType;
     [JsonIgnore]
     public QualityType qualityType;

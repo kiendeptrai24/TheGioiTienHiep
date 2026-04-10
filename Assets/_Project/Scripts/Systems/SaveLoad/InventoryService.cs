@@ -14,37 +14,50 @@ public class InventoryService : ISaveLoadRemote
     {
         service.LoadData((gameDataDTO) =>
         {
-            var itemsShop = new ItemDataDTO();
-            itemsShop = gameDataDTO;
-
-            var iconLoader = AddressableLoader.Instance.GetLoader<IconLoader>(AddressableLoaderType.Sprite.ToString());
-            var prefabLoader = AddressableLoader.Instance.GetLoader<PrefabLoader>(AddressableLoaderType.Prefab.ToString());
-            var SODataBase = ScriptableObjectLoader.Instance;
-            for (int i = 0; i < itemsShop.inventoryItems.Count; i++)
+            try
             {
-                var item = itemsShop.inventoryItems[i];
-                var itemData = SODataBase.GetItem(item.itemId);
-                if (itemData == null)
-                    continue;
-                var sprite = iconLoader.Get(item.itemIconPath);
-                itemData.itemIcon = sprite;
-
-                if (itemData is HeroData heroData)
+                ItemDataDTO itemsShop = gameDataDTO;
+                if (itemsShop == null)
                 {
-                    SetHeroData(itemsShop, iconLoader, prefabLoader, SODataBase, i, itemData, heroData);
-                    continue;
+                    Debug.Log("LoadGame: itemsShop is null");
+                    return;
                 }
 
-                if (itemData is SkillData skillDatas)
+                var iconLoader = AddressableLoader.Instance.GetLoader<IconLoader>(AddressableLoaderType.Sprite.ToString());
+                var prefabLoader = AddressableLoader.Instance.GetLoader<PrefabLoader>(AddressableLoaderType.Prefab.ToString());
+                var SODataBase = ScriptableObjectLoader.Instance;
+                for (int i = 0; i < itemsShop.inventoryItems.Count; i++)
                 {
-                    SetSkilldata(itemsShop, iconLoader, prefabLoader, i, skillDatas);
-                    continue;
-                }
+                    var item = itemsShop.inventoryItems[i];
+                    var itemData = SODataBase.GetItem(item.instanceId);
+                    if (itemData == null)
+                        continue;
+                    itemData.itemName = gameDataDTO.inventoryItems[i].itemName;
+                    itemData.realmType = gameDataDTO.inventoryItems[i].realmType;
+                    var sprite = iconLoader.Get(item.itemIconPath);
+                    itemData.itemIcon = sprite;
 
-                itemsShop.inventoryItems[i] = itemData;
+                    if (itemData is HeroData heroData)
+                    {
+                        SetHeroData(itemsShop, iconLoader, prefabLoader, SODataBase, i, itemData, heroData);
+                        continue;
+                    }
+
+                    if (itemData is SkillData skillDatas)
+                    {
+                        SetSkilldata(itemsShop, iconLoader, prefabLoader, i, skillDatas);
+                        continue;
+                    }
+
+                    itemsShop.inventoryItems[i] = itemData;
+                }
+                gameData.allItemsDatas = itemsShop.inventoryItems;
+                callback?.Invoke();
             }
-            gameData.allItemsDatas = itemsShop.inventoryItems;
-            callback?.Invoke();
+            catch (System.Exception ex)
+            {
+                Debug.LogError("LoadGame: Failed to load inventory data " + ex.Message);
+            }
         });
     }
 
@@ -57,7 +70,7 @@ public class InventoryService : ISaveLoadRemote
         {
             var skill = heroData.skillDatas[h];
 
-            var skillData = SODataBase.GetItem(skill.itemId) as SkillData;
+            var skillData = SODataBase.GetItem(skill.instanceId) as SkillData;
             if (skillData == null)
                 continue;
             skillData.itemIcon = iconLoader.Get(skillData.itemIconPath);
@@ -68,12 +81,20 @@ public class InventoryService : ISaveLoadRemote
         for (int s = 0; s < heroData.techniqueDatas.Count; s++)
         {
             var technique = heroData.techniqueDatas[s];
-            var techniqueData = SODataBase.GetItem(technique.itemId) as TechniqueData;
+            var techniqueData = SODataBase.GetItem(technique.instanceId) as TechniqueData;
             if (techniqueData == null)
                 continue;
             heroData.techniqueDatas[s] = techniqueData;
         }
-
+        for (int k = 0; k < heroData.equipmentDatas.Count; k++)
+        {
+            var equipment = heroData.equipmentDatas[k];
+            var equipmentData = SODataBase.GetItem(equipment.instanceId) as EquitmentData;
+            if (equipmentData == null)
+                continue;
+            equipmentData.itemIcon = iconLoader.Get(equipmentData.itemIconPath);
+            heroData.equipmentDatas[k] = equipmentData;
+        }
         itemsShop.inventoryItems[i] = heroData;
     }
 
