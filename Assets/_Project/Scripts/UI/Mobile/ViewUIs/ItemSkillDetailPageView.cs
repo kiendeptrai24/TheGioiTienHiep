@@ -27,15 +27,18 @@ public class ItemSkillDetailPageView : IItemDetailPageView
     private LevelUpDatabase levelUpDatabase;
     private ulong playerClientId;
     private LevelUpValidator levelUpValidator;
+    private InventoryCenterManager inventoryCenterManager;
     protected override void Awake()
     {
         base.Awake();
         levelUpValidator = LevelUpValidator.Instance;
         levelUpDatabase = LevelUpDatabase.Instance;
+        inventoryCenterManager = InventoryCenterManager.Instance;
         playerClientId = NetworkManager.Singleton.LocalClientId;
 
         levelUpBtn.onClick.AddListener(OnLevelUpButtonClicked);
         levelUpValidator.OnNotificationConditionResult += OnNotificationConditionResult;
+        inventoryCenterManager.OnItemUpdated += OnItemUpdated;
         if (itemData != null)
         {
             var conditionData = new LevelUpConditionData();
@@ -48,7 +51,22 @@ public class ItemSkillDetailPageView : IItemDetailPageView
             levelUpValidator.RequestCheckConditionResult(playerClientId, conditionData);
         }
     }
-    private void OnNotificationConditionResult(LevelUpValidator.CheckLevelUpValidationResult notifications)
+
+    private void OnItemUpdated(ItemData data, string instanceIdOld)
+    {
+        if (data == null || itemData == null) return;
+        if (itemData.instanceId == instanceIdOld)
+        {
+            var inventoryItem = new InventoryItem(data);
+            HandleItemClicked(inventoryItem);
+        }
+        else
+        {
+            Debug.Log("dsaaa");
+        }
+    }
+
+    private void OnNotificationConditionResult(CheckLevelUpValidationResult notifications)
     {
         if (notifications == null) return;
         RemoveAllNotification();

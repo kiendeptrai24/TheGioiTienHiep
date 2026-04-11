@@ -60,6 +60,9 @@ public class ItemJsonConverter
         try
         {
             var heroPrefab = prefabLoader.Get(itemData.itemFilePath);
+            heroData.skillDatas.Clear();
+            heroData.techniqueDatas.Clear();
+            heroData.equipmentDatas.Clear();
             heroData.heroPrefab = heroPrefab;
 
             var champion = itemsteam.inventoryItems[i];
@@ -74,7 +77,7 @@ public class ItemJsonConverter
                 var skillData = SODataBase.GetItem(skill.instanceId) as SkillData;
                 if (skillData == null)
                     continue;
-                heroData.skillDatas[h] = skillData;
+                heroData.skillDatas.Add(skillData);
             }
 
             var techniqueDatas = champion.techniqueDatas;
@@ -84,7 +87,7 @@ public class ItemJsonConverter
                 var techniqueData = SODataBase.GetItem(technique.instanceId) as TechniqueData;
                 if (techniqueData == null)
                     continue;
-                heroData.techniqueDatas[s] = techniqueData;
+                heroData.techniqueDatas.Add(techniqueData);
             }
             var equipmentDatas = champion.equipmentDatas;
             for (int k = 0; k < equipmentDatas.Count; k++)
@@ -93,7 +96,7 @@ public class ItemJsonConverter
                 var equipmentData = SODataBase.GetItem(equipment.instanceId) as EquitmentData;
                 if (equipmentData == null)
                     continue;
-                heroData.equipmentDatas[k] = equipmentData;
+                heroData.equipmentDatas.Add(equipmentData);
             }
 
             itemsteam.inventoryItems[i] = heroData;

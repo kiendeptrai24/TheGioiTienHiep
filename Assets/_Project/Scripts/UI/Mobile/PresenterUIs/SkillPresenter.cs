@@ -169,7 +169,7 @@ namespace TGTH.Mobile
                 return;
             }
             ItemClicked(uiItem);
-            uiItem?.navigation.OnClick();
+            uiItem?.navigation?.OnClick();
         }
         private void ItemClicked(UIItemSlotBase uiItem)
         {

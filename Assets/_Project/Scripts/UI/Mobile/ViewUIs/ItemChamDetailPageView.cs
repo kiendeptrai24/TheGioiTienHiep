@@ -28,15 +28,20 @@ public class ItemChamDetailPageView : IItemDetailPageView
     private LevelUpValidator levelUpValidator;
     private LevelUpDatabase levelUpDatabase;
     private ulong playerClientId;
+    private InventoryCenterManager inventoryCenterManager;
+    private HeroData heroData;
     protected override void Awake()
     {
         base.Awake();
         levelUpValidator = LevelUpValidator.Instance;
         levelUpDatabase = LevelUpDatabase.Instance;
+        inventoryCenterManager = InventoryCenterManager.Instance;
         playerClientId = NetworkManager.Singleton.LocalClientId;
 
         levelUpBtn.onClick.AddListener(OnLevelUpButtonClicked);
         levelUpValidator.OnNotificationConditionResult += OnNotificationConditionResult;
+        inventoryCenterManager.OnItemUpdated += OnItemUpdated;
+
         if (itemData != null)
         {
             var conditionData = new LevelUpConditionData();
@@ -50,6 +55,17 @@ public class ItemChamDetailPageView : IItemDetailPageView
             levelUpValidator.RequestCheckConditionResult(playerClientId, conditionData);
         }
     }
+
+    private void OnItemUpdated(ItemData data, string instanceIdOld)
+    {
+        if (data == null || heroData == null) return;
+        if (heroData.instanceId == instanceIdOld)
+        {
+            var inventoryItem = new InventoryItem(data);
+            HandleItemClicked(inventoryItem);
+        }
+    }
+
     private void OnNotificationConditionResult(CheckLevelUpValidationResult notifications)
     {
         if (notifications == null) return;
@@ -87,7 +103,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
 
     public override void HandleItemClicked(InventoryItem inventoryItem)
     {
-        var heroData = inventoryItem.data as HeroData;
+        heroData = inventoryItem.data as HeroData;
         itemData = heroData.realmData;
         if (itemData == null) return;
 

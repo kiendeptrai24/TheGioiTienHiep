@@ -26,15 +26,18 @@ public class ItemTechniqueDetailPageView : IItemDetailPageView
     private LevelUpValidator levelUpValidator;
     private LevelUpDatabase levelUpDatabase;
     private ulong playerClientId;
+    private InventoryCenterManager inventoryCenterManager;
     protected override void Awake()
     {
         base.Awake();
         levelUpValidator = LevelUpValidator.Instance;
         levelUpDatabase = LevelUpDatabase.Instance;
+        inventoryCenterManager = InventoryCenterManager.Instance;
         playerClientId = NetworkManager.Singleton.LocalClientId;
 
         levelUpBtn.onClick.AddListener(OnLevelUpButtonClicked);
         levelUpValidator.OnNotificationConditionResult += OnNotificationConditionResult;
+        inventoryCenterManager.OnItemUpdated += OnItemUpdated;
 
         if (itemData != null)
         {
@@ -46,6 +49,20 @@ public class ItemTechniqueDetailPageView : IItemDetailPageView
             conditionData.yeuDan = itemData.yeuDanCost;
             conditionData.maHach = itemData.maHachCost;
             levelUpValidator.RequestCheckConditionResult(playerClientId, conditionData);
+        }
+    }
+
+    private void OnItemUpdated(ItemData data, string instanceIdOld)
+    {
+        if (data == null || itemData == null) return;
+        if (itemData.instanceId == instanceIdOld)
+        {
+            var inventoryItem = new InventoryItem(data);
+            HandleItemClicked(inventoryItem);
+        }
+        else
+        {
+            Debug.Log("dsaaa");
         }
     }
 

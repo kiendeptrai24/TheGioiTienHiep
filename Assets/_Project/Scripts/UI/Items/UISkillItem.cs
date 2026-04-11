@@ -20,12 +20,10 @@ public class UISkillItem : UIItemSlotLockable
         base.ResetData();
         if (IsLocked() == false)
         {
-            emptySlot.gameObject.SetActive(true);
             lockIcon.gameObject.SetActive(false);
         }
         else
         {
-            emptySlot.gameObject.SetActive(false);
             lockIcon.gameObject.SetActive(true);
         }
     }
@@ -45,7 +43,6 @@ public class UISkillItem : UIItemSlotLockable
             ResetData();
             return;
         }
-        emptySlot.gameObject.SetActive(false);
         SetData(
             inventoryItem.data.itemIcon,
             inventoryItem.stackSize
@@ -66,14 +63,12 @@ public class UISkillItem : UIItemSlotLockable
     {
         base.Lock();
         lockIcon.gameObject.SetActive(true);
-        emptySlot.gameObject.SetActive(false);
     }
 
     public override void Unlock()
     {
         base.Unlock();
         lockIcon.gameObject.SetActive(false);
-        emptySlot.gameObject.SetActive(true);
     }
     protected override void LoadComponent()
     {

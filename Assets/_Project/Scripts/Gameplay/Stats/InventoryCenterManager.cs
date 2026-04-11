@@ -61,7 +61,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public event Action<List<ItemData>> OnItemExistingSkillDataChanged;
     public event Action<List<ItemData>> OnItemExistingChampionDataChanged;
     public event Action<List<ItemData>> OnItemExistingTechniqueDataChanged;
-    public event Action<ItemData> OnItemChanged;
+    public event Action<ItemData> OnHeroItemChanged;
+    public event Action<ItemData, string> OnItemUpdated;
     #endregion
 
     public event Action<ItemData> OnItemPlayerChanged;
@@ -86,6 +87,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         playerCham = item;
         Cham = playerCham as HeroData;
         OnItemPlayerChanged?.Invoke(item);
+        OnItemUpdated?.Invoke(item, item.instanceId);
     }
     public void CheckDataChange()
     {
@@ -114,6 +116,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
             OnItemTechniqueDataChanged?.Invoke(GetDataType(ItemType.Technique));
             isTechniqueChange = false;
         }
+
     }
     public void CheckExistingDataChange()
     {
@@ -205,6 +208,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
 
             ItemChange(updatedItem);
             ItemExistingChange(updatedItem);
+            OnItemUpdated?.Invoke(updatedItem, existingItem.instanceId);
+
         }
         else
         {
@@ -247,6 +252,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         }
 
         isItemChange = true;
+
         CheckExistingDataChange();
     }
     public void ItemChange(ItemData item)
@@ -270,9 +276,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         else if (item is HeroData)
         {
             isItemChange = true;
-            OnItemChanged?.Invoke(item);
+            OnHeroItemChanged?.Invoke(item);
         }
-
         isItemChange = true;
         CheckDataChange();
     }
