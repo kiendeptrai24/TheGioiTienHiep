@@ -67,15 +67,15 @@ public class SkillData : ItemData
     [JsonIgnore]
     public float powerCost;              // Power
     [JsonIgnore]
-    public int lthaoCost;              // Linh thảo
+    public int linhThaoCost;              // Linh thảo
     [JsonIgnore]
-    public int mineralCost;            // Khoáng thạch
+    public int khoangThachCost;            // Khoáng thạch
     [JsonIgnore]
-    public int demonCoreCost;          // Yêu đan
+    public int yeuDanCost;          // Yêu đan
     [JsonIgnore]
-    public int devilCoreCost;          // Ma hạch
+    public int maHachCost;          // Ma hạch
     [JsonIgnore]
-    public int spiritStoneCost;        // Linh thạch
+    public int linhThachCost;        // Linh thạch
     [JsonIgnore]
     public int itemCost;               // Vật phẩm khác
 
@@ -145,11 +145,11 @@ public class SkillData : ItemData
             level = this.enhanceLevel,
             conditionType = LevelUpConditionType.TechniqueLevel,
             levelName = this.itemName,
-            linhThao = this.lthaoCost,
-            khoangThach = this.mineralCost,
-            yeuDan = this.demonCoreCost,
-            maHach = this.devilCoreCost,
-            linhThach = this.spiritStoneCost,
+            linhThao = this.linhThaoCost,
+            khoangThach = this.khoangThachCost,
+            yeuDan = this.yeuDanCost,
+            maHach = this.maHachCost,
+            linhThach = this.linhThachCost,
             requiredCharacterLevel = this.requiredCharacterLevel
         };
 

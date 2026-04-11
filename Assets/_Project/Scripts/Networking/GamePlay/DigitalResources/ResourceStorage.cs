@@ -10,20 +10,12 @@ public class ResourceStorage : TGTHNetworkBehaviour
         NetworkVariableWritePermission.Server
     );
     public event Action<ulong> OnCoinsChanged;
-
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         Coins.OnValueChanged += HandleCoinsChanged;
         if (!IsOwner) return;
-        ProfileManager.Instance.OnProfileReady += OnProfileReady;
         ulong coins = ProfileManager.Instance.GetProfile().coins;
-        OnLoadCoinsServerRpc(coins);
-    }
-
-    private void OnProfileReady(ProfileUser user)
-    {
-        ulong coins = user.coins;
         OnLoadCoinsServerRpc(coins);
     }
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -61,6 +53,5 @@ public class ResourceStorage : TGTHNetworkBehaviour
     {
         if (!IsServer) return;
         Coins.Value += amount;
-        Debug.Log($"[OfflineCoins] Added {amount} coins. Total: {Coins.Value}");
     }
 }

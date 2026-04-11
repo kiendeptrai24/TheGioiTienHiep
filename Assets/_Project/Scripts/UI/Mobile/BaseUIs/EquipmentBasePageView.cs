@@ -9,6 +9,9 @@ using UnityEngine.UI;
 public abstract class EquipmentBasePageView : TGTHMonoBehaviour
 {
     [Header("UI References")]
+    [SerializeField] private TextMeshProUGUI realmTxt;
+    [SerializeField] private TextMeshProUGUI nameCharTxt;
+    [SerializeField] private Image avatarImg;
     public Button sortBtn;
     public Button showAllItemsBtn;
     public TMP_Dropdown eqipmenttypeDrop;
@@ -97,6 +100,12 @@ public abstract class EquipmentBasePageView : TGTHMonoBehaviour
             equipmentSlotsDictionary[equipDatas[i].equipmentType].
             SetItem(new InventoryItem(equipDatas[i]));
         }
+    }
+    public virtual void ShowItem(ItemData data)
+    {
+        realmTxt.text = EnumTranslator.ToVietnamese(data.realmType);
+        nameCharTxt.text = data.itemName;
+        avatarImg.sprite = data.itemIcon;
     }
     public void ShowAllItemInInventory(List<InventoryItem> listItemDatas)
     {

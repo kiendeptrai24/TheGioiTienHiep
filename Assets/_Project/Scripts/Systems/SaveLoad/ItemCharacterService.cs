@@ -70,7 +70,7 @@ public class ItemCharacterService : ISaveLoadRemote
                         }
 
                         var realmData = SODataBase.GetRealmItem(itemData.realmType);
-                        heroData.statsRealmData = realmData;
+                        heroData.realmData = realmData;
 
                         SetHeroData(itemsData, iconLoader, prefabLoader, SODataBase, i, itemData, heroData);
                         continue;

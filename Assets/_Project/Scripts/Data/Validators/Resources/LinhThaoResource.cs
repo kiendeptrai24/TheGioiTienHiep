@@ -38,4 +38,6 @@ public class LinhThaoResource : IResourceValidator
                 playerResource.linhThao = 0;
         }
     }
+
+    public int GetRequiredAmount() => requiredAmount;
 }

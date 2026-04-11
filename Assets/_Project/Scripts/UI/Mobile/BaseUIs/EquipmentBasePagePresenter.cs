@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
-using Unity.VisualScripting;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
 {
@@ -38,6 +38,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         SetItemData(inventoryCenterManager.GetDataType(ItemType.Equipment, true));
         isShowEquipment = true;
         view.ShowEquipmentItems(statsManager.heroData);
+        view.ShowItem(statsManager.heroData);
         isShowEquipment = false;
     }
 

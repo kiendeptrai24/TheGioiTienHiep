@@ -10,6 +10,7 @@ namespace TGTH.Mobile
     {
         [SerializeField] private CharacterPageView view;
         [SerializeField] private IItemDetailPageView itemDetailPageView;
+        [SerializeField] private IItemDetailPageView realmDetailPageView;
         private InventoryCenterManager inventoryCenterManager;
         protected override void Awake()
         {
@@ -18,6 +19,11 @@ namespace TGTH.Mobile
             Init();
             OnItemPlayerChanged(inventoryCenterManager.playerCham);
             inventoryCenterManager.OnItemPlayerChanged += OnItemPlayerChanged;
+            view.OnRealmButtonClicked += () =>
+            {
+                InventoryItem inventoryItem = new InventoryItem(inventoryCenterManager.playerCham);
+                realmDetailPageView?.HandleItemClicked(inventoryItem);
+            };
         }
 
         private void Init()

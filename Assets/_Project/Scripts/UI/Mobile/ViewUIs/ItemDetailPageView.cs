@@ -161,11 +161,11 @@ public class ItemDetailPageView : IItemDetailPageView
         DisplayTextIfNotEmpty("Learn Condition", data.learnCondition);
 
         DisplayStat("Power Cost", data.powerCost);
-        DisplayStat("Linh Thao Cost", data.lthaoCost);
-        DisplayStat("Mineral Cost", data.mineralCost);
-        DisplayStat("Demon Core Cost", data.demonCoreCost);
-        DisplayStat("Devil Core Cost", data.devilCoreCost);
-        DisplayStat("Spirit Stone Cost", data.spiritStoneCost);
+        DisplayStat("Linh Thao Cost", data.linhThaoCost);
+        DisplayStat("Mineral Cost", data.khoangThachCost);
+        DisplayStat("Demon Core Cost", data.yeuDanCost);
+        DisplayStat("Devil Core Cost", data.maHachCost);
+        DisplayStat("Spirit Stone Cost", data.linhThachCost);
         DisplayStat("Item Cost", data.itemCost);
 
         // Damage
@@ -245,11 +245,11 @@ public class ItemDetailPageView : IItemDetailPageView
 
         // Upgrade Materials
         DisplayStat("Power Cost", data.powerCost);
-        DisplayStat("Linh Thao Cost", data.lthaoCost);
-        DisplayStat("Mineral Cost", data.mineralCost);
-        DisplayStat("Demon Core Cost", data.demonCoreCost);
-        DisplayStat("Devil Core Cost", data.devilCoreCost);
-        DisplayStat("Spirit Stone Cost", data.spiritStoneCost);
+        DisplayStat("Linh Thao Cost", data.linhThaoCost);
+        DisplayStat("Mineral Cost", data.khoangThachCost);
+        DisplayStat("Demon Core Cost", data.yeuDanCost);
+        DisplayStat("Devil Core Cost", data.maHachCost);
+        DisplayStat("Spirit Stone Cost", data.linhThachCost);
         DisplayStat("Item Cost", data.itemCost);
 
         // Damage

@@ -1,32 +1,33 @@
 using System;
-using TGTH.Mobile;
+using System.Collections.Generic;
+using JetBrains.Annotations;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 using static LevelUpValidator;
 
-public class ItemSkillDetailPageView : IItemDetailPageView
+public class ItemChamDetailPageView : IItemDetailPageView
 {
     [SerializeField] private UIItemConditionLevelup conditionLevelupPrefab;
     [SerializeField] private Transform contentCondition;
     [SerializeField] private Image itemIcon;
-    [SerializeField] private TextMeshProUGUI skillnameTxt;
+    [SerializeField] private TextMeshProUGUI techniquenameTxt;
     [SerializeField] private TextMeshProUGUI realmTxt;
     [SerializeField] private TextMeshProUGUI effectDescriptionTxt;
     [SerializeField] private TextMeshProUGUI descriptionTxt;
     [Space]
     [SerializeField] private Image nextItemIcon;
-    [SerializeField] private TextMeshProUGUI nextSkillnameTxt;
+    [SerializeField] private TextMeshProUGUI nextTechniquenameTxt;
     [SerializeField] private TextMeshProUGUI nextRealmTxt;
     [SerializeField] private TextMeshProUGUI nextEffectDescriptionTxt;
     [SerializeField] private TextMeshProUGUI nextDescriptionTxt;
     [SerializeField] private Button levelUpBtn;
-    [SerializeField] private SkillData itemData;
-    [SerializeField] private SkillData nextItemData;
+    [SerializeField] private StatsRealmData itemData;
+    [SerializeField] private StatsRealmData nextItemData;
+    private LevelUpValidator levelUpValidator;
     private LevelUpDatabase levelUpDatabase;
     private ulong playerClientId;
-    private LevelUpValidator levelUpValidator;
     protected override void Awake()
     {
         base.Awake();
@@ -39,16 +40,17 @@ public class ItemSkillDetailPageView : IItemDetailPageView
         if (itemData != null)
         {
             var conditionData = new LevelUpConditionData();
-            conditionData.conditionType = LevelUpConditionType.SkillLevel;
+            conditionData.conditionType = LevelUpConditionType.ChampionLevel;
             conditionData.linhThach = itemData.linhThachCost;
             conditionData.linhThao = itemData.linhThaoCost;
             conditionData.khoangThach = itemData.khoangThachCost;
             conditionData.yeuDan = itemData.yeuDanCost;
             conditionData.maHach = itemData.maHachCost;
+
             levelUpValidator.RequestCheckConditionResult(playerClientId, conditionData);
         }
     }
-    private void OnNotificationConditionResult(LevelUpValidator.CheckLevelUpValidationResult notifications)
+    private void OnNotificationConditionResult(CheckLevelUpValidationResult notifications)
     {
         if (notifications == null) return;
         RemoveAllNotification();
@@ -68,36 +70,40 @@ public class ItemSkillDetailPageView : IItemDetailPageView
     private void OnLevelUpButtonClicked()
     {
         if (!NetworkManager.Singleton.IsConnectedClient) return;
-        if (levelUpDatabase == null) return;
+        if (levelUpValidator == null) return;
         if (itemData == null) return;
         if (nextItemData == null)
         {
             TopNotificationUI.Instance.ShowNotification("Đã đạt cấp độ tối đa");
             return;
         }
-        if (itemData is SkillData skillData)
+        if (itemData is StatsRealmData)
         {
             ulong PlayerNetId = NetworkManager.Singleton.LocalClientId;
-            levelUpValidator.RequestSkillEnhance(skillData.instanceId, skillData.itemId, PlayerNetId);
+
+            levelUpValidator.RequestRealmLevelUp(PlayerNetId);
         }
     }
+
     public override void HandleItemClicked(InventoryItem inventoryItem)
     {
-        itemData = inventoryItem.data as SkillData;
+        var heroData = inventoryItem.data as HeroData;
+        itemData = heroData.realmData;
         if (itemData == null) return;
 
         itemIcon.sprite = itemData.itemIcon;
-        skillnameTxt.text = itemData.itemName;
+        techniquenameTxt.text = itemData.itemName;
         realmTxt.text = EnumTranslator.ToVietnamese(itemData.realmType);
-        effectDescriptionTxt.text = itemData.specialEffect;
         descriptionTxt.text = GetDescriptionText(itemData);
-
+        effectDescriptionTxt.text = itemData.description;
         if (levelUpDatabase == null)
+        {
             levelUpDatabase = LevelUpDatabase.Instance;
+        }
         if (levelUpValidator != null)
         {
             var conditionData = new LevelUpConditionData();
-            conditionData.conditionType = LevelUpConditionType.SkillLevel;
+            conditionData.conditionType = LevelUpConditionType.ChampionLevel;
             conditionData.linhThach = itemData.linhThachCost;
             conditionData.linhThao = itemData.linhThaoCost;
             conditionData.khoangThach = itemData.khoangThachCost;
@@ -105,94 +111,81 @@ public class ItemSkillDetailPageView : IItemDetailPageView
             conditionData.maHach = itemData.maHachCost;
             levelUpValidator.RequestCheckConditionResult(playerClientId, conditionData);
         }
-        nextItemData = levelUpDatabase.GetNextSkillEnhance(itemData.instanceId, itemData.enhanceLevel);
+
+        nextItemData = levelUpDatabase.GetNextRealm(itemData.realmType);
 
         if (nextItemData != null)
         {
             nextItemIcon.gameObject.SetActive(true);
             nextItemIcon.sprite = nextItemData.itemIcon;
-            nextSkillnameTxt.text = nextItemData.itemName;
-            nextRealmTxt.text = nextItemData.realm + "";
-            nextEffectDescriptionTxt.text = nextItemData.specialEffect;
+            nextTechniquenameTxt.text = nextItemData.itemName;
+            nextRealmTxt.text = EnumTranslator.ToVietnamese(nextItemData.realmType);
+            nextEffectDescriptionTxt.text = nextItemData.description;
             nextDescriptionTxt.text = GetDescriptionText(nextItemData);
         }
         else
         {
             nextItemIcon.gameObject.SetActive(false);
-            nextSkillnameTxt.text = "";
+            nextTechniquenameTxt.text = "";
             nextRealmTxt.text = "";
             nextEffectDescriptionTxt.text = "";
             nextDescriptionTxt.text = "";
         }
+
     }
-    public string GetDescriptionText(SkillData skill)
+    public string GetDescriptionText(StatsRealmData realData)
     {
         string description = "";
+        if (realData.maxHealth > 0)
+            description += $"+ Sinh lực: {realData.maxHealth}\n";
+        if (realData.maxMana > 0)
+            description += $"+ Linh lực: {realData.maxMana}\n";
+        if (realData.maxSpirit > 0)
+            description += $"+ Linh thức: {realData.maxSpirit}\n";
 
         // Base Damage Stats (from ItemData)
-        if (skill.physicalDamage > 0)
-            description += $"+ Sát thương linh thức: {skill.physicalDamage}\n";
-        if (skill.magicalDamage > 0)
-            description += $"+ Sát thương linh vật: {skill.magicalDamage}\n";
-        if (skill.spiritDamage > 0)
-            description += $"+ Sát thương linh lực: {skill.spiritDamage}\n";
+        if (realData.physicalDamage > 0)
+            description += $"+ Sát thương Linh thức: {realData.physicalDamage}\n";
+        if (realData.magicalDamage > 0)
+            description += $"+ Sát thương linh vật: {realData.magicalDamage}\n";
+        if (realData.spiritDamage > 0)
+            description += $"+ Sát thương linh lực: {realData.spiritDamage}\n";
 
         // Base Defense Stats (from ItemData)
-        if (skill.physicalDefense > 0)
-            description += $"+ Phòng thủ linh thức: {skill.physicalDefense}\n";
-        if (skill.magicalDefense > 0)
-            description += $"+ Phòng thủ linh vật: {skill.magicalDefense}\n";
-        if (skill.spiritDefense > 0)
-            description += $"+ Phòng thủ linh lực: {skill.spiritDefense}\n";
-
-        // Resource Cost
-        if (skill.healthCost > 0)
-            description += $"+ Chi phí Sinh lực: {skill.healthCost}\n";
-        if (skill.manaCost > 0)
-            description += $"+ Chi phí Linh lực: {skill.manaCost}\n";
-        if (skill.spiritCost > 0)
-            description += $"+ Chi phí Linh thức: {skill.spiritCost}\n";
-
-        // Combat Behavior
-        if (skill.attackRange > 0)
-            description += $"+ Phạm vi tấn công: {skill.attackRange}\n";
-        if (skill.cooldown > 0)
-            description += $"+ Thời gian hồi chiêu: {skill.cooldown}\n";
-        if (skill.attackSpeed > 0)
-            description += $"+ Tốc độ tấn công: {skill.attackSpeed}\n";
-
-        // Offensive Stats Bonus
-        if (skill.critDamage > 0)
-            description += $"+ Sát thương chí mạng: {skill.critDamage}\n";
-        if (skill.critRate > 0)
-            description += $"+ Tỷ lệ chí mạng: {skill.critRate}\n";
-        if (skill.armorPenetration > 0)
-            description += $"+ Xuyên phá giáp: {skill.armorPenetration}\n";
-        if (skill.trueDamage > 0)
-            description += $"+ Sát thương thực: {skill.trueDamage}\n";
-        if (skill.lifeSteal > 0)
-            description += $"+ Hút máu: {skill.lifeSteal}\n";
-
-        // Defensive Stats Bonus
-        if (skill.penetrationReduction > 0)
-            description += $"+ Giảm xuyên phá: {skill.penetrationReduction}\n";
-        if (skill.critDamageReduction > 0)
-            description += $"+ Giảm sát thương chí mạng: {skill.critDamageReduction}\n";
-        if (skill.trueDamageReduction > 0)
-            description += $"+ Giảm sát thương thực: {skill.trueDamageReduction}\n";
-
-        // Resource Bonus
-        if (skill.bonusHealth > 0)
-            description += $"+ Tăng Sinh lực: {skill.bonusHealth}\n";
-        if (skill.bonusMana > 0)
-            description += $"+ Tăng Linh lực: {skill.bonusMana}\n";
-        if (skill.bonusSpirit > 0)
-            description += $"+ Tăng Linh thức: {skill.bonusSpirit}\n"; ;
-
+        if (realData.physicalDefense > 0)
+            description += $"+ Phòng thủ linh thức: {realData.physicalDefense}\n";
+        if (realData.magicalDefense > 0)
+            description += $"+ Phòng thủ linh vật: {realData.magicalDefense}\n";
+        if (realData.spiritDefense > 0)
+            description += $"+ Phòng thủ linh lực: {realData.spiritDefense}\n";
+        if (realData.movementSpeed > 0)
+            description += $"+ Tốc độ di chuyển: {realData.movementSpeed}\n";
+        if (realData.spiritRange > 0)
+            description += $"+ Phạp vi Linh lực: {realData.spiritRange}\n";
+        if (realData.potential > 0)
+            description += $"+ Tiềm năng: {realData.potential}\n";
+        if (realData.skillPoints > 0)
+            description += $"+ Điểm kỹ năng: {realData.skillPoints}\n";
+        if (realData.combatPower > 0)
+            description += $"+ Sức mạnh chiến đấu: {realData.combatPower}\n";
+        if (realData.critDamage > 0)
+            description += $"+ Sát thương chí mạng: {realData.critDamage}\n";
+        if (realData.critRate > 0)
+            description += $"+ Tỷ lệ chí mạng: {realData.critRate}\n";
+        if (realData.evasion > 0)
+            description += $"+ Né tránh: {realData.evasion}\n";
+        if (realData.attackSpeed > 0)
+            description += $"+ Tốc độ tấn công: {realData.attackSpeed}\n";
+        if (realData.castSpeed > 0)
+            description += $"+ Tốc độ thi triển: {realData.castSpeed}\n";
+        if (realData.armorPenetration > 0)
+            description += $"+ Xuyên phá giáp: {realData.armorPenetration}\n";
         // Remove trailing newline if exists
         if (description.EndsWith("\n"))
             description = description.Substring(0, description.Length - 1);
 
         return description;
     }
+
+
 }

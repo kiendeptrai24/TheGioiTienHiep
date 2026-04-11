@@ -66,8 +66,8 @@ public class HeroPreset : ItemStatsPreset
             heroPrefab = heroPrefab,
             itemFilePath = itemFilePath
         };
-        heroData.statsRealmData = statsRealmPreset.GetStats();
-        heroData.statsRaceData = statsRacePreset.GetStats();
+        heroData.realmData = statsRealmPreset.GetStats();
+        heroData.raceData = statsRacePreset.GetStats();
         heroData.statsCultivationPathData = statsCultivationPathPreset.GetStats();
 
         heroData.essenceType = essenceType;

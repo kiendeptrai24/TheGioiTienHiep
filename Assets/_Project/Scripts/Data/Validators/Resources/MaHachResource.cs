@@ -38,4 +38,5 @@ public class MaHachResource : IResourceValidator
                 playerResource.maHach = 0;
         }
     }
+    public int GetRequiredAmount() => requiredAmount;
 }

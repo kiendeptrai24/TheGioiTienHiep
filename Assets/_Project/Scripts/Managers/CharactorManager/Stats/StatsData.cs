@@ -177,8 +177,8 @@ public class StatsData : TGTHMonoBehaviour
         skillDatas = hero.skillDatas;
         equiDatas = hero.equipmentDatas;
 
-        statsRaceData = hero.statsRaceData;
-        statsRealmData = hero.statsRealmData;
+        statsRaceData = hero.raceData;
+        statsRealmData = hero.realmData;
         statsCultivationPathData = hero.statsCultivationPathData;
     }
     public void SetUpItem(ItemData item)

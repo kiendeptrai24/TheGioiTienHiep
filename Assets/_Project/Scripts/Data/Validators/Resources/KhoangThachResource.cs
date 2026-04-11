@@ -38,4 +38,6 @@ public class KhoangThachResource : IResourceValidator
                 playerResource.khoangThach = 0;
         }
     }
+
+    public int GetRequiredAmount() => requiredAmount;
 }

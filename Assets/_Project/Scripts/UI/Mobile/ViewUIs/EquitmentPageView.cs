@@ -1,6 +1,7 @@
+
 namespace TGTH.Mobile
 {
-    public class EquitmentPageView : EquipmentBasePageView 
+    public class EquitmentPageView : EquipmentBasePageView
     {
     }
 }

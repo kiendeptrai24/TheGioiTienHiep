@@ -25,6 +25,10 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
             Message = msg;
         }
     }
+    public class CheckLevelUpValidationResult
+    {
+        public List<LevelUpValidationResult> results = new();
+    }
     public enum LevelUpConditionType
     {
         ChampionLevel,
@@ -32,7 +36,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         TechniqueLevel
     }
     private LevelUpDatabase levelUpStranlation;
-
+    public event Action<CheckLevelUpValidationResult> OnNotificationConditionResult;
     protected override void Awake()
     {
         base.Awake();
@@ -185,7 +189,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
             result = new LevelUpValidationResult(true, $"Đột phá thành công! cảnh giới hiện tại là {EnumTranslator.ToVietnamese(nextRealm.realmType)}");
         }
         result.conditionType = LevelUpConditionType.ChampionLevel;
-        SendMessegeToClientClientRpc(JsonConvert.SerializeObject(result),
+        SendMessegeToClientRpc(JsonConvert.SerializeObject(result),
             new ClientRpcParams
             {
                 Send = new ClientRpcSendParams { TargetClientIds = new[] { playerObj.OwnerClientId } }
@@ -245,7 +249,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         result.instanceId = skillInstanceId;
         result.itemId = skillId;
         string message = JsonConvert.SerializeObject(result);
-        SendMessegeToClientClientRpc(message,
+        SendMessegeToClientRpc(message,
         new ClientRpcParams
         {
             Send = new ClientRpcSendParams { TargetClientIds = new[] { playerObj.OwnerClientId } }
@@ -304,7 +308,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
 
         string message = JsonConvert.SerializeObject(result);
 
-        SendMessegeToClientClientRpc(message,
+        SendMessegeToClientRpc(message,
         new ClientRpcParams
         {
             Send = new ClientRpcSendParams { TargetClientIds = new[] { playerObj.OwnerClientId } }
@@ -313,7 +317,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
     #endregion
 
     [ClientRpc]
-    private void SendMessegeToClientClientRpc(string message, ClientRpcParams clientRpcParams)
+    private void SendMessegeToClientRpc(string message, ClientRpcParams clientRpcParams)
     {
         var messege = JsonConvert.DeserializeObject<LevelUpValidationResult>(message);
         Debug.Log($"Kết quả kiểm tra lên cấp: {messege.IsValid}, lời nhắn: {messege.Message} itemId: {messege.itemId}");
@@ -350,7 +354,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
                     if (nextRealm != null)
                     {
                         cham.realmType = nextRealm.realmType;
-                        cham.statsRealmData = nextRealm;
+                        cham.realmData = nextRealm;
                         InventoryCenterManager.Instance.ItemPlayerChanged(cham);
                     }
                     break;
@@ -369,15 +373,93 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         if (!IsServer)
             return false;
         Debug.Log($"linh thach: {playerResource.linhThach}, required: {condition.linhThach}");
-        var linhThachValidator = new LinhThachResource(condition.linhThach);
-        return linhThachValidator.CanUse(playerResource, null);
+        List<IResourceValidator> validators = new List<IResourceValidator>();
+        validators.Add(new KhoangThachResource(condition.khoangThach));
+        validators.Add(new LinhThachResource(condition.linhThach));
+        validators.Add(new LinhThaoResource(condition.linhThao));
+        validators.Add(new MaHachResource(condition.maHach));
+        validators.Add(new YeuDanResource(condition.yeuDan));
+        bool result = true;
+        foreach (var validator in validators)
+        {
+            if (validator.CanUse(playerResource, null) == false)
+            {
+                result = false;
+                break;
+            }
+        }
+        return result;
     }
 
     private void ConsumeResources(PlayerResource playerResource, LevelUpConditionData condition)
     {
         if (!IsServer)
             return;
-        new LinhThachResource().Consume(playerResource, condition.linhThach);
-    }
 
+        new LinhThachResource().Consume(playerResource, condition.linhThach);
+        new LinhThaoResource().Consume(playerResource, condition.linhThao);
+        new KhoangThachResource().Consume(playerResource, condition.khoangThach);
+        new MaHachResource().Consume(playerResource, condition.maHach);
+        new YeuDanResource().Consume(playerResource, condition.yeuDan);
+    }
+    public void RequestCheckConditionResult(ulong playerClientId, LevelUpConditionData conditionData)
+    {
+        string data = JsonConvert.SerializeObject(conditionData);
+        RequestCheckConditionResultSerserRpc(playerClientId, data);
+    }
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    public void RequestCheckConditionResultSerserRpc(ulong playerClientId, string data)
+    {
+        if (!IsServer)
+            return;
+        CheckLevelUpValidationResult levelupChecking = new();
+        var conditionData = JsonConvert.DeserializeObject<LevelUpConditionData>(data);
+        if (conditionData == null)
+            return;
+        if (!NetworkManager.ConnectedClients.TryGetValue(playerClientId, out var client))
+            return;
+
+        var playerObj = client.PlayerObject;
+        var profile = playerObj.GetComponent<PlayerProfile>();
+        var playerResource = profile.GetPlayerResource();
+        if (playerResource == null)
+        {
+            return;
+        }
+
+        List<IResourceValidator> validators = new List<IResourceValidator>();
+        validators.Add(new KhoangThachResource(conditionData.khoangThach));
+        validators.Add(new LinhThachResource(conditionData.linhThach));
+        validators.Add(new LinhThaoResource(conditionData.linhThao));
+        validators.Add(new MaHachResource(conditionData.maHach));
+        validators.Add(new YeuDanResource(conditionData.yeuDan));
+
+        foreach (var validator in validators)
+        {
+            if (validator.CanUse(playerResource, null) == false)
+            {
+                levelupChecking.results.Add(new LevelUpValidationResult(false,
+                $"{validator.GetResourceName()} <color=red>{validator.GetCurrentAmount(playerResource)} / {validator.GetRequiredAmount()} </color>"));
+            }
+            else
+            {
+                levelupChecking.results.Add(new LevelUpValidationResult(true,
+                $"{validator.GetResourceName()} <color=green>{validator.GetCurrentAmount(playerResource)} / {validator.GetRequiredAmount()} </color>"));
+            }
+        }
+
+        string message = JsonConvert.SerializeObject(levelupChecking);
+        SendMessegeConditionToClientRpc(message,
+        new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams { TargetClientIds = new[] { playerObj.OwnerClientId } }
+        });
+    }
+    [ClientRpc]
+    private void SendMessegeConditionToClientRpc(string message, ClientRpcParams clientRpcParams)
+    {
+        var results = JsonConvert.DeserializeObject<CheckLevelUpValidationResult>(message);
+        if (results != null)
+            OnNotificationConditionResult?.Invoke(results);
+    }
 }

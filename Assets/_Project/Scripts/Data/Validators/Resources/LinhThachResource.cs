@@ -40,4 +40,6 @@ public class LinhThachResource : IResourceValidator
                 playerResource.linhThach = 0;
         }
     }
+
+    public int GetRequiredAmount() => requiredAmount;
 }

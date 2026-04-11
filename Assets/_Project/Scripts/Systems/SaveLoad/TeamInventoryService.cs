@@ -47,7 +47,7 @@ public class TeamInventoryService : ISaveLoadRemote
                         if (heroData.isCharactor)
                         {
                             var realmData = SODataBase.GetRealmItem(itemData.realmType);
-                            heroData.statsRealmData = realmData;
+                            heroData.realmData = realmData;
                             heroData.characterId = gameData.characterId;
                             if (gameData.itemDataPoint != null)
                             {

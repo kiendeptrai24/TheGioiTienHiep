@@ -1,6 +1,6 @@
 
 using System;
-
+[Serializable]
 public class PlayerResource
 {
     public RealmType realmType;

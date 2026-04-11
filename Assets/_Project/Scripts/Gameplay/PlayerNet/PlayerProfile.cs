@@ -5,26 +5,35 @@ using Unity.Netcode;
 using UnityEngine;
 public class PlayerProfile : TGTHNetworkBehaviour
 {
+    private ResourceStorage resourceStorage;
     [SerializeField]
     private NetworkVariable<FixedString64Bytes> playerId = new(
         "",
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
-    private InventoryCenterManager inventoryCenterManager;
-    private void OnProfileReady(ProfileUser user)
-    {
-        OnLoadPlayerIdServerRpc(user.userId);
-    }
+    [SerializeField] private PlayerResource playerResource = new();
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        InventoryCenterManager inventoryCenterManager;
+        var user = ProfileManager.Instance.GetProfile();
+        if (IsOwner)
+            playerResource = user.playerResource;
+
+        resourceStorage = GetComponent<ResourceStorage>();
+        resourceStorage.OnCoinsChanged += OnCoinsChanged;
+
         inventoryCenterManager = InventoryCenterManager.Instance;
         inventoryCenterManager.OnItemPlayerChanged += OnItemPlayerChanged;
+
         OnItemPlayerChanged(inventoryCenterManager.playerCham);
-        ProfileManager.Instance.OnProfileReady += OnProfileReady;
-        string playerId = ProfileManager.Instance.GetProfile().userId;
-        OnLoadPlayerIdServerRpc(playerId);
+        OnLoadPlayerIdServerRpc(user.userId);
+    }
+
+    private void OnCoinsChanged(ulong obj)
+    {
+        playerResource.linhThach = (int)resourceStorage.Coins.Value;
     }
 
     private void OnItemPlayerChanged(ItemData data)
@@ -32,7 +41,10 @@ public class PlayerProfile : TGTHNetworkBehaviour
         if (data == null) return;
         GetComponent<StatsData>().SetUpItem(data);
     }
-
+    public PlayerResource GetPlayerResource()
+    {
+        return playerResource;
+    }
     public FixedString64Bytes GetPlayerId() => playerId.Value;
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]

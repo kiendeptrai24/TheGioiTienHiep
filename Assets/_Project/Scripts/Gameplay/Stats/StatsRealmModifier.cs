@@ -8,7 +8,7 @@ public class StatsRealmModifier : StatsModifierBase
         if (itemData == null) return;
         var heroData = itemData as HeroData;
         if (heroData == null) return;
-        var data = heroData.statsRealmData;
+        var data = heroData.realmData;
         if (data == null) return;
         base.AddStats(stats, itemData);
 
@@ -38,7 +38,7 @@ public class StatsRealmModifier : StatsModifierBase
         if (itemData == null) return;
         var heroData = itemData as HeroData;
         if (heroData == null) return;
-        var data = heroData.statsRealmData;
+        var data = heroData.realmData;
         if (data == null) return;
         base.RemoveStats(stats, itemData);
 

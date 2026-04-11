@@ -13,18 +13,24 @@ namespace TGTH.Mobile
         [SerializeField] private TextMeshProUGUI itemNameTxt;
         [SerializeField] private TextMeshProUGUI realmTxt;
         [SerializeField] private Image itemIconImge;
-
+        [SerializeField] private Button realmBtn;
         public List<UIEquipmentSlot> uIEquipmentSlots;
         public Dictionary<EquipmentType, UIItemSlotBase> equipmentSlotsDictionary = new();
 
         public event Action OnBiographyClicked;
         public event Action OnHeroStatsClicked;
         public event Action OnHeroDetailClicked;
+        public event Action OnRealmButtonClicked;
+
+
 
         protected override void Awake()
         {
             base.Awake();
+            realmBtn.onClick.AddListener(() => OnRealmButtonClicked?.Invoke());
         }
+
+
 
         public void Init()
         {

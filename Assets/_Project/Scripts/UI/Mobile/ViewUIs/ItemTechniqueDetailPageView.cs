@@ -3,9 +3,12 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using static LevelUpValidator;
 
 public class ItemTechniqueDetailPageView : IItemDetailPageView
 {
+    [SerializeField] private UIItemConditionLevelup conditionLevelupPrefab;
+    [SerializeField] private Transform contentCondition;
     [SerializeField] private Image itemIcon;
     [SerializeField] private TextMeshProUGUI techniquenameTxt;
     [SerializeField] private TextMeshProUGUI realmTxt;
@@ -22,14 +25,47 @@ public class ItemTechniqueDetailPageView : IItemDetailPageView
     [SerializeField] private TechniqueData nextItemData;
     private LevelUpValidator levelUpValidator;
     private LevelUpDatabase levelUpDatabase;
+    private ulong playerClientId;
     protected override void Awake()
     {
         base.Awake();
         levelUpValidator = LevelUpValidator.Instance;
         levelUpDatabase = LevelUpDatabase.Instance;
+        playerClientId = NetworkManager.Singleton.LocalClientId;
+
         levelUpBtn.onClick.AddListener(OnLevelUpButtonClicked);
+        levelUpValidator.OnNotificationConditionResult += OnNotificationConditionResult;
+
+        if (itemData != null)
+        {
+            var conditionData = new LevelUpConditionData();
+            conditionData.conditionType = LevelUpConditionType.TechniqueLevel;
+            conditionData.linhThach = itemData.linhThachCost;
+            conditionData.linhThao = itemData.linhThaoCost;
+            conditionData.khoangThach = itemData.khoangThachCost;
+            conditionData.yeuDan = itemData.yeuDanCost;
+            conditionData.maHach = itemData.maHachCost;
+            levelUpValidator.RequestCheckConditionResult(playerClientId, conditionData);
+        }
     }
 
+    private void OnNotificationConditionResult(LevelUpValidator.CheckLevelUpValidationResult notifications)
+    {
+        if (notifications == null) return;
+        RemoveAllNotification();
+        foreach (var noti in notifications.results)
+        {
+            var uiCondition = Instantiate(conditionLevelupPrefab, contentCondition);
+            uiCondition.Setup(noti.Message, noti.IsValid);
+        }
+    }
+    public void RemoveAllNotification()
+    {
+        for (int i = 0; i < contentCondition.childCount; i++)
+        {
+            Destroy(contentCondition.GetChild(i).gameObject);
+        }
+    }
     private void OnLevelUpButtonClicked()
     {
         if (!NetworkManager.Singleton.IsConnectedClient) return;
@@ -59,6 +95,18 @@ public class ItemTechniqueDetailPageView : IItemDetailPageView
         effectDescriptionTxt.text = itemData.specialEffect;
         if (levelUpDatabase == null)
             levelUpDatabase = LevelUpDatabase.Instance;
+        if (levelUpValidator != null)
+        {
+            var conditionData = new LevelUpConditionData();
+            conditionData.conditionType = LevelUpConditionType.TechniqueLevel;
+            conditionData.linhThach = itemData.linhThachCost;
+            conditionData.linhThao = itemData.linhThaoCost;
+            conditionData.khoangThach = itemData.khoangThachCost;
+            conditionData.yeuDan = itemData.yeuDanCost;
+            conditionData.maHach = itemData.maHachCost;
+            levelUpValidator.RequestCheckConditionResult(playerClientId, conditionData);
+        }
+
         nextItemData = levelUpDatabase.GetNextTechniqueEnhance(itemData.instanceId, itemData.enhanceLevel);
 
         if (nextItemData != null)
@@ -85,63 +133,63 @@ public class ItemTechniqueDetailPageView : IItemDetailPageView
 
         // Base Damage Stats (from ItemData)
         if (technique.physicalDamage > 0)
-            description += $"+ Physical Damage: {technique.physicalDamage}\n";
+            description += $"+ Sát thương linh thức: {technique.physicalDamage}\n";
         if (technique.magicalDamage > 0)
-            description += $"+ Magical Damage: {technique.magicalDamage}\n";
+            description += $"+ Sát thương linh vật: {technique.magicalDamage}\n";
         if (technique.spiritDamage > 0)
-            description += $"+ Spirit Damage: {technique.spiritDamage}\n";
+            description += $"+ Sát thương linh lực: {technique.spiritDamage}\n";
 
         // Base Defense Stats (from ItemData)
         if (technique.physicalDefense > 0)
-            description += $"+ Physical Defense: {technique.physicalDefense}\n";
+            description += $"+ Phòng thủ linh thức: {technique.physicalDefense}\n";
         if (technique.magicalDefense > 0)
-            description += $"+ Magical Defense: {technique.magicalDefense}\n";
+            description += $"+ Phòng thủ linh vật: {technique.magicalDefense}\n";
         if (technique.spiritDefense > 0)
-            description += $"+ Spirit Defense: {technique.spiritDefense}\n";
+            description += $"+ Phòng thủ linh lực: {technique.spiritDefense}\n";
 
         // Resource Cost
         if (technique.healthCost > 0)
-            description += $"+ Health Cost: {technique.healthCost}\n";
+            description += $"+ Chi phí Sinh lực: {technique.healthCost}\n";
         if (technique.manaCost > 0)
-            description += $"+ Mana Cost: {technique.manaCost}\n";
+            description += $"+ Chi phí Linh lực: {technique.manaCost}\n";
         if (technique.spiritCost > 0)
-            description += $"+ Spirit Cost: {technique.spiritCost}\n";
+            description += $"+ Chi phí Linh thức: {technique.spiritCost}\n";
 
         // Combat Behavior
         if (technique.attackRange > 0)
-            description += $"+ Attack Range: {technique.attackRange}\n";
+            description += $"+ Phạm vi tấn công: {technique.attackRange}\n";
         if (technique.cooldown > 0)
-            description += $"+ Cooldown: {technique.cooldown}\n";
+            description += $"+ Thời gian hồi chiêu: {technique.cooldown}\n";
         if (technique.attackSpeed > 0)
-            description += $"+ Attack Speed: {technique.attackSpeed}\n";
+            description += $"+ Tốc độ tấn công: {technique.attackSpeed}\n";
 
         // Offensive Stats Bonus
         if (technique.critDamage > 0)
-            description += $"+ Crit Damage: {technique.critDamage}\n";
+            description += $"+ Sát thương chí mạng: {technique.critDamage}\n";
         if (technique.critRate > 0)
-            description += $"+ Crit Rate: {technique.critRate}\n";
+            description += $"+ Tỷ lệ chí mạng: {technique.critRate}\n";
         if (technique.armorPenetration > 0)
-            description += $"+ Armor Penetration: {technique.armorPenetration}\n";
+            description += $"+ Xuyên phá giáp: {technique.armorPenetration}\n";
         if (technique.trueDamage > 0)
-            description += $"+ True Damage: {technique.trueDamage}\n";
+            description += $"+ Sát thương thực: {technique.trueDamage}\n";
         if (technique.lifeSteal > 0)
-            description += $"+ Life Steal: {technique.lifeSteal}\n";
+            description += $"+ Hút máu: {technique.lifeSteal}\n";
 
         // Defensive Stats Bonus
         if (technique.penetrationReduction > 0)
-            description += $"+ Penetration Reduction: {technique.penetrationReduction}\n";
+            description += $"+ Giảm xuyên phá: {technique.penetrationReduction}\n";
         if (technique.critDamageReduction > 0)
-            description += $"+ Crit Damage Reduction: {technique.critDamageReduction}\n";
+            description += $"+ Giảm sát thương chí mạng: {technique.critDamageReduction}\n";
         if (technique.trueDamageReduction > 0)
-            description += $"+ True Damage Reduction: {technique.trueDamageReduction}\n";
+            description += $"+ Giảm sát thương thực: {technique.trueDamageReduction}\n";
 
         // Resource Bonus
         if (technique.bonusHealth > 0)
-            description += $"+ Bonus Health: {technique.bonusHealth}\n";
+            description += $"+ Tăng Sinh lực: {technique.bonusHealth}\n";
         if (technique.bonusMana > 0)
-            description += $"+ Bonus Mana: {technique.bonusMana}\n";
+            description += $"+ Tăng Linh lực: {technique.bonusMana}\n";
         if (technique.bonusSpirit > 0)
-            description += $"+ Bonus Spirit: {technique.bonusSpirit}\n"; ;
+            description += $"+ Tăng Linh thức: {technique.bonusSpirit}\n"; ;
 
         // Remove trailing newline if exists
         if (description.EndsWith("\n"))

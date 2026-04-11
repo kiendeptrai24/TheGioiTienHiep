@@ -356,11 +356,11 @@ public class TechniquePreset : ItemPreset
 
         // materials
         techniqueData.powerCost = powerCost;
-        techniqueData.lthaoCost = lthaoCost;
-        techniqueData.mineralCost = mineralCost;
-        techniqueData.demonCoreCost = demonCoreCost;
-        techniqueData.devilCoreCost = devilCoreCost;
-        techniqueData.spiritStoneCost = spiritStoneCost;
+        techniqueData.linhThaoCost = lthaoCost;
+        techniqueData.khoangThachCost = mineralCost;
+        techniqueData.yeuDanCost = demonCoreCost;
+        techniqueData.maHachCost = devilCoreCost;
+        techniqueData.linhThachCost = spiritStoneCost;
         techniqueData.itemCost = itemCost;
 
         // bonus

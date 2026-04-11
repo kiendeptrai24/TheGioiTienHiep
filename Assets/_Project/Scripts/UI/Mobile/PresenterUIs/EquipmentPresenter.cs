@@ -4,5 +4,6 @@ namespace TGTH.Mobile
 {
     public class EquipmentPresenter : EquipmentBasePagePresenter, IEndDragHandler
     {
+        
     }
 }

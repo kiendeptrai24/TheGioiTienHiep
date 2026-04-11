@@ -38,4 +38,6 @@ public class YeuDanResource : IResourceValidator
                 playerResource.yeuDan = 0;
         }
     }
+
+    public int GetRequiredAmount() => requiredAmount;
 }

@@ -8,10 +8,8 @@ using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using System;
 
 [CreateAssetMenu(fileName = "NewStatsPreset", menuName = "RPG/Stats/Stats Realm Preset")]
-public class StatsRealmPreset : ScriptableObject
+public class StatsRealmPreset : ItemPreset
 {
-    public string instanceId;
-    public string itemId;
     [Header("Cultivation Realm")]
     public RealmType realmType;
     [Header("Resources")]
@@ -44,16 +42,24 @@ public class StatsRealmPreset : ScriptableObject
     public float combatPower;
     [Header("Critical Stats")]
     public float spiritRange;
+    [Header("Upgrade Materials")]
+    public float powerCost;              // Power
+    public int linhthaoCost;              // Linh thảo
+    public int khoangThachCost;            // Khoáng thạch
+    public int yeuDanCost;          // Yêu đan
+    public int mahachCost;          // Ma hạch
+    public int linhThachCost;        // Linh thạch
+    public int itemCost;               // Vật phẩm khác
 #if UNITY_EDITOR
-    private void OnValidate()
+    public override void OnValidate()
     {
+        base.OnValidate();
+
         string stageName = realmType.ToString();
         if (string.IsNullOrEmpty(stageName))
             return;
 
         string newName = $"Stats_{stageName}";
-        itemId = Guid.NewGuid().ToString();
-        instanceId = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(this));
         if (name != newName)
         {
             string path = AssetDatabase.GetAssetPath(this);
@@ -351,7 +357,10 @@ public class StatsRealmPreset : ScriptableObject
         data.realmType = realmType;
         data.instanceId = instanceId;
         data.itemId = itemId;
+        data.itemIcon = itemIcon;
+        data.itemName = itemName;
 
+        data.description = itemDescription;
         data.maxHealth = Mathf.RoundToInt(health);
         data.maxMana = Mathf.RoundToInt(mana);
         data.maxSpirit = Mathf.RoundToInt(spirit);
@@ -359,6 +368,7 @@ public class StatsRealmPreset : ScriptableObject
         data.physicalDamage = Mathf.RoundToInt(physicalDamage);
         data.magicalDamage = Mathf.RoundToInt(magicalDamage);
         data.spiritDamage = Mathf.RoundToInt(spiritDamage);
+
 
         data.physicalDefense = Mathf.RoundToInt(physicalDefense);
         data.magicalDefense = Mathf.RoundToInt(magicalDefense);
@@ -374,6 +384,15 @@ public class StatsRealmPreset : ScriptableObject
         data.attackSpeed = Mathf.RoundToInt(attackSpeed);
         data.castSpeed = Mathf.RoundToInt(castSpeed);
         data.armorPenetration = Mathf.RoundToInt(spiritPenetration);
+
+        data.powerCost = powerCost;
+        data.linhThaoCost = linhthaoCost;
+        data.khoangThachCost = khoangThachCost;
+        data.yeuDanCost = yeuDanCost;
+        data.maHachCost = mahachCost;
+        data.linhThachCost = linhThachCost;
+        data.itemCost = itemCost;
+
 
         return data;
     }

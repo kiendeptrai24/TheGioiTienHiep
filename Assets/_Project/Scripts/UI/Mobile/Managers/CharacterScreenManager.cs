@@ -11,6 +11,8 @@ public class CharacterScreenManager : ScreenManager
     [SerializeField] private GameObject m_TechniqueDetailScreen;
     [SerializeField] private GameObject m_InventoryScreen;
     [SerializeField] private GameObject m_ItemDetailScreen;
+    [SerializeField] private GameObject m_ItemRealmDetailScreen;
+
     protected override void Awake()
     {
         base.Awake();
@@ -22,9 +24,11 @@ public class CharacterScreenManager : ScreenManager
         m_Screens.Add(m_TechniqueDetailScreen.gameObject.name, m_TechniqueDetailScreen);
         m_Screens.Add(m_InventoryScreen.gameObject.name, m_InventoryScreen);
         m_Screens.Add(m_ItemDetailScreen.gameObject.name, m_ItemDetailScreen);
+        m_Screens.Add(m_ItemRealmDetailScreen.gameObject.name, m_ItemRealmDetailScreen);
         defaultScreen = m_CharacterScreen.gameObject.name;
     }
-    private void OnEnable() {
+    private void OnEnable()
+    {
         StartUI(defaultScreen);
     }
 }

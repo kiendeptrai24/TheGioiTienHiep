@@ -22,4 +22,6 @@ public interface IResourceValidator
     /// Trừ resource khi sử dụng
     /// </summary>
     void Consume(PlayerResource playerResource, int amount);
+
+    int GetRequiredAmount();
 }

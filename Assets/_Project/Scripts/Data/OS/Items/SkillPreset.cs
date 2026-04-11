@@ -469,11 +469,11 @@ public class SkillPreset : ItemPreset
 
         // materials
         skillData.powerCost = powerCost;
-        skillData.lthaoCost = lthaoCost;
-        skillData.mineralCost = mineralCost;
-        skillData.demonCoreCost = demonCoreCost;
-        skillData.devilCoreCost = devilCoreCost;
-        skillData.spiritStoneCost = spiritStoneCost;
+        skillData.linhThaoCost = lthaoCost;
+        skillData.khoangThachCost = mineralCost;
+        skillData.yeuDanCost = demonCoreCost;
+        skillData.maHachCost = devilCoreCost;
+        skillData.linhThachCost = spiritStoneCost;
         skillData.itemCost = itemCost;
 
         // bonus

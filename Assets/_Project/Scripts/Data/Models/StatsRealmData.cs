@@ -1,10 +1,14 @@
 using System;
 using Newtonsoft.Json;
+using UnityEngine;
 
 [Serializable]
 public class StatsRealmData : ItemData
 {
     //Cultivation Realm
+    [JsonIgnore]
+    public string description;
+    //Resources
     [JsonIgnore]
     public int maxHealth;
     [JsonIgnore]
@@ -42,4 +46,19 @@ public class StatsRealmData : ItemData
     //Critical Stats
     [JsonIgnore]
     public int spiritRange;
+    [Header("Upgrade Materials")]
+    [JsonIgnore]
+    public float powerCost;              // Power
+    [JsonIgnore]
+    public int linhThaoCost;              // Linh thảo
+    [JsonIgnore]
+    public int khoangThachCost;            // Khoáng thạch
+    [JsonIgnore]
+    public int yeuDanCost;          // Yêu đan
+    [JsonIgnore]
+    public int maHachCost;          // Ma hạch
+    [JsonIgnore]
+    public int linhThachCost;        // Linh thạch
+    [JsonIgnore]
+    public int itemCost;               // Vật phẩm khác
 }
