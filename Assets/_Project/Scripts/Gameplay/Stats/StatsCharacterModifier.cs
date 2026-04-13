@@ -1,20 +1,19 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
-public class StatsCultivationPathModifier : StatsModifierBase
+public class StatsCharacterModifier : StatsModifierBase
 {
     public override void AddStats(Dictionary<StatType, Stat> stats, ItemData itemData)
     {
         if (itemData == null) return;
-        var heroData = itemData as HeroData;
-        if (heroData == null) return;
-        var data = heroData.statsCultivationPathData;
+        var data = itemData as HeroData;
         if (data == null) return;
         base.AddStats(stats, itemData);
 
-        AddValue(StatType.Health, data.maxHealth);
-        AddValue(StatType.Mana, data.maxMana);
-        AddValue(StatType.Spirit, data.maxSpirit);
+        AddValue(StatType.Health, data.health);
+        AddValue(StatType.Mana, data.mana);
+        AddValue(StatType.Spirit, data.spirit);
 
         AddValue(StatType.PhysicalDamage, data.physicalDamage);
         AddValue(StatType.MagicalDamage, data.magicalDamage);
@@ -25,21 +24,26 @@ public class StatsCultivationPathModifier : StatsModifierBase
         AddValue(StatType.SpiritDefense, data.spiritDefense);
 
         AddValue(StatType.MovementSpeed, data.movementSpeed);
-        AddValue(StatType.SpiritRange, data.spiritRange);
-        AddValue(StatType.CounterPercentage, data.counterPercentage);
+        AddValue(StatType.AttackSpeed, data.attackSpeed);
+
+        AddPercent(StatType.HealthRegen, data.healthRegen);
+        AddPercent(StatType.ManaRegen, data.manaRegen);
+        AddPercent(StatType.SpiritRegen, data.spiritRegen);
+
+        
+
+
+
     }
     public override void RemoveStats(Dictionary<StatType, Stat> stats, ItemData itemData)
     {
         if (itemData == null) return;
-        var heroData = itemData as HeroData;
-        if (heroData == null) return;
-        var data = heroData.statsCultivationPathData;
+        var data = itemData as HeroData;
         if (data == null) return;
-        base.RemoveStats(stats, itemData);
 
-        RemoveValue(StatType.Health, data.maxHealth);
-        RemoveValue(StatType.Mana, data.maxMana);
-        RemoveValue(StatType.Spirit, data.maxSpirit);
+        RemoveValue(StatType.Health, data.health);
+        RemoveValue(StatType.Mana, data.mana);
+        RemoveValue(StatType.Spirit, data.spirit);
 
         RemoveValue(StatType.PhysicalDamage, data.physicalDamage);
         RemoveValue(StatType.MagicalDamage, data.magicalDamage);
@@ -50,7 +54,10 @@ public class StatsCultivationPathModifier : StatsModifierBase
         RemoveValue(StatType.SpiritDefense, data.spiritDefense);
 
         RemoveValue(StatType.MovementSpeed, data.movementSpeed);
-        RemoveValue(StatType.SpiritRange, data.spiritRange);
-        RemoveValue(StatType.CounterPercentage, data.counterPercentage);
+        RemoveValue(StatType.AttackSpeed, data.attackSpeed);
+
+        RemovePercent(StatType.HealthRegen, data.healthRegen);
+        RemovePercent(StatType.ManaRegen, data.manaRegen);
+        RemovePercent(StatType.SpiritRegen, data.spiritRegen);
     }
 }

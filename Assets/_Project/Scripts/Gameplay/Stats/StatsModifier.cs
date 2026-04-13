@@ -151,7 +151,7 @@ public class StatsModifier
         magicalDefenseStat.AddModifierPercent(heroData.magicalDefense);
         spiritDefenseStat.AddModifierPercent(heroData.spiritDefense);
 
-        movementSpeedStat.AddModifier(heroData.moveSpeed);
+        movementSpeedStat.AddModifier(heroData.movementSpeed);
         attackRangeStat.AddModifier(heroData.attackRange);
     }
     public void AddStatsTechniqueData(Dictionary<StatType, Stat> stats, List<TechniqueData> datas)
