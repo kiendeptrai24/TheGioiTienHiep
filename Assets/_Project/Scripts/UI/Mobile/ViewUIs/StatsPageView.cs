@@ -10,7 +10,7 @@ namespace TGTH.Mobile
         #region Stat
 
         [Header("=== Charactor info ===")]
-        [SerializeField] private TextMeshProUGUI cultivationStageTxt;
+        [SerializeField] private TextMeshProUGUI realmTxt;
         [SerializeField] private TextMeshProUGUI classTxt;
         [SerializeField] private TextMeshProUGUI raceTxt;
         [SerializeField] private TextMeshProUGUI moraleTxt;
@@ -22,9 +22,9 @@ namespace TGTH.Mobile
         [SerializeField] private TextMeshProUGUI potentialPointTxt;
         [SerializeField] private TextMeshProUGUI hpTxt;
         [SerializeField] private TextMeshProUGUI defenseTxt;
-        [SerializeField] private TextMeshProUGUI phicialDamagePointTxt;
-        [SerializeField] private TextMeshProUGUI magicalDamagePointTxt;
-        [SerializeField] private TextMeshProUGUI spiritDamagePointTxt;
+        [SerializeField] private TextMeshProUGUI healthPointTxt;
+        [SerializeField] private TextMeshProUGUI ManaPointTxt;
+        [SerializeField] private TextMeshProUGUI spiritPointTxt;
 
         [Header("=== Combat Index - Left ===")]
         [SerializeField] private TextMeshProUGUI physicalDamageTxt;
@@ -50,33 +50,42 @@ namespace TGTH.Mobile
         #endregion
         public void SetStatsData(Dictionary<StatType, Stat> stats)
         {
-            moveSpeedTxt.text = stats[StatType.MovementSpeed].GetValue().ToString();
-            spiritRangeTxt.text = stats[StatType.SpiritRange].GetValue().ToString();
             potentialPointTxt.text = stats[StatType.Potential].GetValue().ToString();
-            hpTxt.text = stats[StatType.Health].GetValue().ToString();
-            defenseTxt.text = stats[StatType.PhysicalDefense].GetValue().ToString();
-            phicialDamagePointTxt.text = stats[StatType.PhysicalDamage].GetValue().ToString();
-            magicalDamagePointTxt.text = stats[StatType.MagicalDamage].GetValue().ToString();
-            spiritDamagePointTxt.text = stats[StatType.SpiritDamage].GetValue().ToString();
+
+            hpTxt.text = stats[StatType.PhicialDamagePoint].GetValue().ToString();
+            defenseTxt.text = stats[StatType.PhicialDefensePoint].GetValue().ToString();
+
+            healthPointTxt.text = stats[StatType.HealthPoint].GetValue().ToString();
+            ManaPointTxt.text = stats[StatType.ManaPoint].GetValue().ToString();
+            spiritPointTxt.text = stats[StatType.SpiritPoint].GetValue().ToString();
+
+            spiritRangeTxt.text = stats[StatType.SpiritRange].GetValue().ToString();
+            moveSpeedTxt.text = stats[StatType.MovementSpeed].GetValue().ToString();
 
             physicalDamageTxt.text = stats[StatType.PhysicalDamage].GetValue().ToString();
             magicalDamageTxt.text = stats[StatType.MagicalDamage].GetValue().ToString();
             spiritDamageTxt.text = stats[StatType.SpiritDamage].GetValue().ToString();
+
             critPowerTxt.text = stats[StatType.CritPower].GetValue().ToString();
             critChanceTxt.text = stats[StatType.CritChance].GetValue().ToString();
+
             attackSpeedTxt.text = stats[StatType.AttackSpeed].GetValue().ToString();
             trueDamageTxt.text = stats[StatType.TrueDamage].GetValue().ToString();
+
             armorPenetrationTxt.text = stats[StatType.ArmorPenetration].GetValue().ToString();
             lifeStealTxt.text = stats[StatType.LifeSteal].GetValue().ToString();
 
             healthTxt.text = stats[StatType.Health].GetValue().ToString();
             manaTxt.text = stats[StatType.Mana].GetValue().ToString();
             spiritTxt.text = stats[StatType.Spirit].GetValue().ToString();
+
             healthRegenTxt.text = stats[StatType.HealthRegen].GetValue().ToString();
             manaRegenTxt.text = stats[StatType.ManaRegen].GetValue().ToString();
+
             physicalDefenseTxt.text = stats[StatType.PhysicalDefense].GetValue().ToString();
             magicalDefenseTxt.text = stats[StatType.MagicalDefense].GetValue().ToString();
             spiritDefenseTxt.text = stats[StatType.SpiritDefense].GetValue().ToString();
+
             critDamageReductionTxt.text = stats[StatType.CritDamageReduction].GetValue().ToString();
         }
         public void ShowCharactorIdentifyData(ItemData itemData)
@@ -84,7 +93,7 @@ namespace TGTH.Mobile
             HeroData heroData = itemData as HeroData;
             if (heroData == null) return;
 
-            cultivationStageTxt.text = EnumTranslator.ToVietnamese(heroData.statsCultivationPathData.realmType);
+            realmTxt.text = EnumTranslator.ToVietnamese(heroData.statsCultivationPathData.realmType);
             classTxt.text = EnumTranslator.ToVietnamese(heroData.essenceType);
             raceTxt.text = EnumTranslator.ToVietnamese(heroData.raceType);
         }

@@ -9,7 +9,7 @@ public class TopNotificationUI : Singleton<TopNotificationUI>
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private RectTransform rect;
-
+    [SerializeField] private Transform rootTransform;
     [SerializeField] private float displayTime = 2f;
     [SerializeField] private float moveDistance = 100f;
     [SerializeField] private float fadeSpeed = 2f;
@@ -22,10 +22,12 @@ public class TopNotificationUI : Singleton<TopNotificationUI>
     {
         canvasGroup.alpha = 0;
         currentCount = 0;
+        HideRoot();
     }
 
     public void ShowNotification(string message)
     {
+        ShowRoot();
         // Gộp message
         if (currentCount >= maxCount)
         {
@@ -87,5 +89,8 @@ public class TopNotificationUI : Singleton<TopNotificationUI>
         canvasGroup.alpha = 0;
         currentMessage = "";
         currentCount = 0;
+        HideRoot();
     }
+    public void ShowRoot() => rootTransform.gameObject.SetActive(true);
+    public void HideRoot() => rootTransform.gameObject.SetActive(false);
 }

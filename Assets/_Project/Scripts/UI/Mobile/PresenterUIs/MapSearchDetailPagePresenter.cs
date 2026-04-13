@@ -32,6 +32,7 @@ namespace TGTH.Mobile
             view.OnCreateNewItem += OnAddEventItem;
             view.OnXPosChanged += OnXPosChanged;
             view.OnYPosChanged += OnYPosChanged;
+            resource = ResourceManager.Instance;
             Init();
         }
         void OnEnable()
@@ -63,7 +64,6 @@ namespace TGTH.Mobile
             {
                 var itemResources = curItem.itemData as ItemResourseData;
                 var resource = pathTest.mapSpawn.WorldToGrid(itemResources.position);
-                Debug.Log(itemResources.position);
                 foreach (var item in findPathResults)
                 {
                     if (item.goal.x == resource.x && item.goal.z == resource.z)
@@ -135,7 +135,9 @@ namespace TGTH.Mobile
         private void OnRealmSliderChanged(int value)
         {
             SetRealmType(value);
+            if (resource == null) return;
             view.items = resource.GetItemsRange(playerNet.GetPos(), 100);
+            if (view.items == null) return;
             var filteredItems = view.items
                 .Where(item => item.realmType == this.cultivationStage
                     && item is ItemResourseData resData && resData.resourceType == this.resourceType)
@@ -146,7 +148,9 @@ namespace TGTH.Mobile
         }
         private void AddItemNearBy()
         {
+            if (resource == null) return;
             view.items = resource.GetItemsRange(playerNet.GetPos(), 100);
+            if (view.items == null) return;
             view.ShowAllItem(view.items);
             AddItemEvent();
         }
@@ -169,13 +173,13 @@ namespace TGTH.Mobile
 
         private void OnFocusItem(UIItemResourceType item)
         {
-            curFocusItem?.UnFocusItem();
-            curFocusItem = item;
-            curFocusItem.FocusItem();
+            if (item == curFocusItem) return;
             foreach (var itemUnfocus in view.choseItemType)
             {
                 itemUnfocus.UnFocusItem();
             }
+            curFocusItem = item;
+            curFocusItem.FocusItem();
             SetResourceType(item.resourceType);
             OnRealmSliderChanged((int)cultivationStage);
         }

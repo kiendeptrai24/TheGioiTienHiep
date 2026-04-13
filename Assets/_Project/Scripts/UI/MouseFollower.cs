@@ -15,7 +15,6 @@ public class MouseFollower : TGTHMonoBehaviour
 
     protected override void LoadComponent()
     {
-        inputManager = FindAnyObjectByType<InputManager>();
         canvas = transform.root.GetComponent<Canvas>();
         item = GetComponentInChildren<UIInventoryItem>(true);
     }
@@ -25,7 +24,7 @@ public class MouseFollower : TGTHMonoBehaviour
     }
     void Update()
     {
-        if(inputManager  == null) return;
+        if (inputManager == null) return;
         Vector2 position;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             (RectTransform)canvas.transform,
@@ -35,7 +34,7 @@ public class MouseFollower : TGTHMonoBehaviour
                 );
         transform.position = canvas.transform.TransformPoint(position);
     }
-    
+
     public void Toggle(bool val)
     {
         gameObject.SetActive(val);

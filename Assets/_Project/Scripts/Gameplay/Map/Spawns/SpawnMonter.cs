@@ -15,6 +15,7 @@ public class SpawnMonter : SingletonNetwork<SpawnMonter>, ISpawnable
     protected override void Awake()
     {
         spawnManager = GetComponent<SpawnManager>();
+        if(settings == null) return;
         settings.count = maxObject;
     }
     public override void OnNetworkSpawn()
