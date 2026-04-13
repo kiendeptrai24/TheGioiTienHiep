@@ -1,10 +1,9 @@
 public enum StatType
 {
     // --- tài nguyên ---
-    Health,
-    Mana,
-    Spirit,
-
+    Health, // linh thể
+    Mana, // linh lực
+    Spirit, // linh thức
 
     // --- sát thương ---
     PhysicalDamage, // Sát thương vật lý
@@ -72,9 +71,9 @@ public enum StatType
     CCResistance,         // Kháng hiệu ứng
 
     // --- tốc độ nhịp combat ---
-    MovementSpeed,
-    AttackSpeed,
-    CastSpeed,
+    MovementSpeed, // Tốc độ di chuyển
+    AttackSpeed, // Tốc độ đánh
+    CastSpeed, // Tốc độ thi triển kỹ năng
 
     // --- Điểm tiền năng & điểm kĩ năng ---
     Potential,      // Điểm tiềm năng 
@@ -86,22 +85,22 @@ public enum StatType
     Evasion, //Né tránh
     CounterPercentage,
     AttackRange, // tầm đánh
-    BonusHealth,
-    BonusMana,
-    BonusSpirit,
+    BonusHealth, // tăng linh thể
+    BonusMana, // tăng linh lực
+    BonusSpirit, // tăng linh thức
     
-    PhicialDamagePoint,
-    MagicalDamagePoint,
-    SpiritDamagePoint,
+    PhicialDamagePoint, // sát thương linh thể điểm
+    MagicalDamagePoint, // sát thương linh lực điểm
+    SpiritDamagePoint,  // sát thương linh thức điểm
 
-    PhicialDefensePoint,
-    MagicalDefensePoint,
-    SpiritDefensePoint,
+    PhicialDefensePoint, // phòng ngự linh thể điểm
+    MagicalDefensePoint, // phòng ngự linh lực điểm
+    SpiritDefensePoint, // phòng ngự linh thức điểm
     
-    HealthPoint,
-    ManaPoint,
-    SpiritPoint,
+    HealthPoint, // linh thể điểm
+    ManaPoint, // linh lực điểm
+    SpiritPoint, // linh thức điểm
 
-    MoveSpeedPoint,
-    SpiritRangePoint,
+    MoveSpeedPoint, // tốc độ di chuyển điểm
+    SpiritRangePoint, // tầm linh thức điểm
 }

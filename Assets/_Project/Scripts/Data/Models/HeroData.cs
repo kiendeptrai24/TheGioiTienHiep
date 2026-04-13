@@ -24,13 +24,21 @@ public class HeroData : ItemData
     [JsonIgnore]
     public float attackRange;
     [JsonIgnore]
-    public float moveSpeed;
+    public float movementSpeed;
+    [JsonIgnore]
+    public float attackSpeed;
     [JsonIgnore]
     public float health; // persent
     [JsonIgnore]
     public float mana; // persent
     [JsonIgnore]
     public float spirit; // persent
+    [JsonIgnore]
+    public float healthRegen;
+    [JsonIgnore]
+    public float manaRegen;
+    [JsonIgnore]
+    public float spiritRegen;
     [JsonIgnore]
     public int physicalDamagePoint; // value
     [JsonIgnore]
@@ -61,6 +69,7 @@ public class HeroData : ItemData
     public LevelUpConditionData levelUpConditionData = new();
     [JsonIgnore]
     public GameObject heroPrefab;
+
     public override ItemData Clone()
     {
         return (HeroData)this.MemberwiseClone();

@@ -18,9 +18,13 @@ public class HeroPreset : ItemStatsPreset
     public int level;
     public float attackRange;
     public float moveSpeed;
+    public float attackSpeed;
     public float health; // persent
     public float mana; // persent
     public float spirit; // persent
+    public float healthRegen;
+    public float manaRegen;
+    public float spiritRegen;
     public List<ItemEquipmentPreset> equitmentDatas;
     public List<SkillPreset> skillDatas;
     public List<TechniquePreset> techniqueDatas;
@@ -58,10 +62,14 @@ public class HeroPreset : ItemStatsPreset
             raceType = raceType,
             level = level,
             attackRange = attackRange,
-            moveSpeed = moveSpeed,
+            movementSpeed = moveSpeed,
+            attackSpeed = attackSpeed,
             health = health,
             mana = mana,
             spirit = spirit,
+            healthRegen = healthRegen,
+            manaRegen = manaRegen,
+            spiritRegen = spiritRegen,
             championIndex = championIndex,
             heroPrefab = heroPrefab,
             itemFilePath = itemFilePath
