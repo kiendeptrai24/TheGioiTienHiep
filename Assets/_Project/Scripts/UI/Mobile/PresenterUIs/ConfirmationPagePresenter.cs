@@ -36,6 +36,7 @@ namespace TGTH.Mobile
             if (inventoryItem == null) return;
             itemData = inventoryItem.data;
             var herodata = itemData as HeroData;
+            Debug.Log(herodata.essenceType.ToString());
             herodata.characterId = Guid.NewGuid().ToString();
 
         }

@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using ExitGames.Client.Photon.StructWrapping;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -21,10 +24,12 @@ public class ScriptableObjectLoader : Singleton<ScriptableObjectLoader>
     public ItemConvertType itemConvertType;
     public List<ItemPreset> baseItems = new();
     public List<StatsRealmPreset> baseRealmItems = new();
+    public List<StatsRacePreset> baseRaceItems = new();
     public List<ItemPreset> baseShopItems = new();
     public List<ItemPreset> testItems = new();
     private Dictionary<string, ItemPreset> items = new();
     private Dictionary<RealmType, StatsRealmPreset> realmItems = new();
+    private Dictionary<RaceType, StatsRacePreset> raceItems = new();
     protected override void Awake()
     {
         base.Awake();
@@ -40,6 +45,13 @@ public class ScriptableObjectLoader : Singleton<ScriptableObjectLoader>
                 continue;
             realmItems.Add(item.realmType, item);
         }
+        foreach (var item in baseRaceItems)
+        {
+            if (raceItems.ContainsKey(item.raceType))
+                continue;
+            raceItems.Add(item.raceType, item);
+        }
+
     }
     public ItemData GetItem(string instanceId)
     {
@@ -53,6 +65,13 @@ public class ScriptableObjectLoader : Singleton<ScriptableObjectLoader>
         if (realmItems.TryGetValue(realmType, out var realmItem))
             return realmItem.GetStats();
         Debug.Log("Realm item not found for realm type: " + realmType);
+        return null;
+    }
+    public StatsRaceData GetRaceItem(RaceType raceType)
+    {
+        if (raceItems.TryGetValue(raceType, out var raceItem))
+            return raceItem.GetStats();
+        Debug.Log("race item not found for race type: " + raceType);
         return null;
     }
 #if UNITY_EDITOR
@@ -107,6 +126,8 @@ public class ScriptableObjectLoader : Singleton<ScriptableObjectLoader>
             ItemJsonCreator.CreateItemJson(itemDataDTO);
         }
     }
+
+
 #endif
 
 }

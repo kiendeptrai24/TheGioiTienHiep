@@ -17,13 +17,21 @@ namespace TGTH.Mobile
         [SerializeField] private string nameCharacter = "";
         [SerializeField] private List<ItemPreset> allCharacter;
         private List<ItemData> itemDatas = new List<ItemData>();
+        public EssenceType curEssenceType;
         protected override void Awake()
         {
             base.Awake();
+            curEssenceType = EssenceType.Physical;
             LoadComponent();
             view.OnStartClicked += OnStartClicked;
             view.OnFieldEndEdit += OnFieldEndEdit;
+            view.OnEssenceTypeDropdownChanged += OnRaceDropdownChanged;
             Init();
+        }
+
+        private void OnRaceDropdownChanged(int obj)
+        {
+            curEssenceType = (EssenceType)1 + obj;
         }
 
         private void OnFieldEndEdit(string obj)
@@ -39,8 +47,9 @@ namespace TGTH.Mobile
             if (currentItemCharacter == null || currentItemSelect == null || nameCharacter == "") return;
             var itemData = currentItemSelect.inventoryItem.data as HeroData;
             itemData.itemName = nameCharacter;
+            itemData.essenceType = curEssenceType;
             InventoryItem inventoryItem = new InventoryItem(itemData);
-
+            
             itemOnClick.HandleItemClicked(inventoryItem);
             navigation.OnClick();
         }

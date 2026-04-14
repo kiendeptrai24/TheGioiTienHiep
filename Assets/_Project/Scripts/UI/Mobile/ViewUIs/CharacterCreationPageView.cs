@@ -16,14 +16,18 @@ namespace TGTH.Mobile
         [SerializeField] private TextMeshProUGUI descriptionReasonFailTxt;
         [SerializeField] private GameObject contentDescriptionReasonFail;
         [SerializeField] private Image itemIconImge;
+        [SerializeField] private TMP_Dropdown EssenceTypeDropdown;
         public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
         public event Action OnStartClicked;
         public event Action<string> OnFieldEndEdit;
+        public event Action<int> OnEssenceTypeDropdownChanged;
         protected override void Awake()
         {
             base.Awake();
             startBtn.onClick.AddListener(() => OnStartClicked?.Invoke());
             nameNvField.onEndEdit.AddListener((value) => OnFieldEndEdit?.Invoke(value));
+            EssenceTypeDropdown.onValueChanged.AddListener((value) => OnEssenceTypeDropdownChanged?.Invoke(value));
+
         }
         public void ShowInfo(UIItemSlotBase uiItem)
         {

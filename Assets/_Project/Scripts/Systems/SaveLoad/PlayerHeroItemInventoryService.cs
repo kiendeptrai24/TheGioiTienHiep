@@ -129,6 +129,9 @@ public class PlayerHeroItemInventoryService : ISaveLoadRemote
                     continue;
                 heroData.equipmentDatas.Add(equipmentData);
             }
+            var statRace = SODataBase.GetRaceItem(heroData.raceType);
+            if (statRace != null)
+                heroData.raceData = statRace;
             itemsData.inventoryItems[i] = heroData;
         }
         catch (System.Exception ex)

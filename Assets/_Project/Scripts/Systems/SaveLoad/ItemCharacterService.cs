@@ -152,7 +152,9 @@ public class ItemCharacterService : ISaveLoadRemote
                     continue;
                 heroData.equipmentDatas[k] = equipmentData;
             }
-
+            var statRace = SODataBase.GetRaceItem(heroData.raceType);
+            if (statRace != null)
+                heroData.raceData = statRace;
             itemsData.inventoryItems[i] = heroData;
         }
         catch (System.Exception ex)

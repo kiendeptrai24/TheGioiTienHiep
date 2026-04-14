@@ -15,7 +15,6 @@ public class HeroData : ItemData
     public StatsCultivationPathData statsCultivationPathData;
     [JsonIgnore]
     public StatsRaceData raceData;
-    [JsonIgnore]
     public RaceType raceType;
     [JsonIgnore]
     public EssenceType essenceType;

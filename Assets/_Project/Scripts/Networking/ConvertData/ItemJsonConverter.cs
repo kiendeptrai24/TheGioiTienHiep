@@ -98,7 +98,9 @@ public class ItemJsonConverter
                     continue;
                 heroData.equipmentDatas.Add(equipmentData);
             }
-
+            var statRace = SODataBase.GetRaceItem(heroData.raceType);
+            if (statRace != null)
+                heroData.raceData = statRace;
             itemsteam.inventoryItems[i] = heroData;
         }
         catch (System.Exception ex)
