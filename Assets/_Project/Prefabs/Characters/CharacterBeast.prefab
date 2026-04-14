@@ -2677,6 +2677,9 @@ GameObject:
   - component: {fileID: 2860028719030235241}
   - component: {fileID: 2875922966646219981}
   - component: {fileID: 6262961699466538744}
+  - component: {fileID: 3620629905693099304}
+  - component: {fileID: 2002104572135360971}
+  - component: {fileID: 7085458474231755661}
   m_Layer: 12
   m_Name: CharacterBeast
   m_TagString: Untagged
@@ -2713,7 +2716,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3399047271
+  GlobalObjectIdHash: 1790164223
   InScenePlacedSourceGlobalObjectIdHash: 3348537847
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2816,7 +2819,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ActorController
   ShowTopMostFoldoutHeaderGroup: 1
   currentState: 0
-  mapSearchController: {fileID: 0}
   turnSpeed: 100
   moveSpeed: 5
   Direction:
@@ -3104,6 +3106,13 @@ MonoBehaviour:
         byte0059: 0
         byte0060: 0
         byte0061: 0
+  playerResource:
+    realmType: 0
+    linhThach: 0
+    linhThao: 0
+    khoangThach: 0
+    yeuDan: 0
+    maHach: 0
 --- !u!114 &2860028719030235241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3167,154 +3176,6 @@ MonoBehaviour:
     physicalDefense: 0
     magicalDefense: 0
     spiritDefense: 0
-  hero1:
-    instanceId: 
-    itemId: 
-    itemType: 0
-    itemName: 
-    itemIcon: {fileID: 0}
-    itemIconPath: 
-    itemFilePath: 
-    itemPrice: 0
-    canStack: 0
-    itemDescription: 
-    currentstack: 0
-    realmType: 0
-    qualityType: 0
-    elementType: 0
-    physicalDamage: 0
-    magicalDamage: 0
-    spiritDamage: 0
-    physicalDefense: 0
-    magicalDefense: 0
-    spiritDefense: 0
-    isCharactor: 0
-    characterId: 
-    statsRealmData:
-      instanceId: 
-      itemId: 
-      itemType: 0
-      itemName: 
-      itemIcon: {fileID: 0}
-      itemIconPath: 
-      itemFilePath: 
-      itemPrice: 0
-      canStack: 0
-      itemDescription: 
-      currentstack: 0
-      realmType: 0
-      qualityType: 0
-      elementType: 0
-      physicalDamage: 0
-      magicalDamage: 0
-      spiritDamage: 0
-      physicalDefense: 0
-      magicalDefense: 0
-      spiritDefense: 0
-      maxHealth: 0
-      maxMana: 0
-      maxSpirit: 0
-      critRate: 0
-      critDamage: 0
-      evasion: 0
-      armorPenetration: 0
-      movementSpeed: 0
-      attackSpeed: 0
-      castSpeed: 0
-      potential: 0
-      skillPoints: 0
-      combatPower: 0
-      spiritRange: 0
-    statsCultivationPathData:
-      instanceId: 
-      itemId: 
-      itemType: 0
-      itemName: 
-      itemIcon: {fileID: 0}
-      itemIconPath: 
-      itemFilePath: 
-      itemPrice: 0
-      canStack: 0
-      itemDescription: 
-      currentstack: 0
-      realmType: 0
-      qualityType: 0
-      elementType: 0
-      physicalDamage: 0
-      magicalDamage: 0
-      spiritDamage: 0
-      physicalDefense: 0
-      magicalDefense: 0
-      spiritDefense: 0
-      essenceType: 0
-      counterEssenceType: 0
-      counterPercentage: 0
-      maxHealth: 0
-      maxMana: 0
-      maxSpirit: 0
-      movementSpeed: 0
-      spiritRange: 0
-    statsRaceData:
-      instanceId: 
-      itemId: 
-      itemType: 0
-      itemName: 
-      itemIcon: {fileID: 0}
-      itemIconPath: 
-      itemFilePath: 
-      itemPrice: 0
-      canStack: 0
-      itemDescription: 
-      currentstack: 0
-      realmType: 0
-      qualityType: 0
-      elementType: 0
-      physicalDamage: 0
-      magicalDamage: 0
-      spiritDamage: 0
-      physicalDefense: 0
-      magicalDefense: 0
-      spiritDefense: 0
-      raceType: 0
-      maxHealth: 0
-      maxMana: 0
-      maxSpirit: 0
-      spiritRange: 0
-      movementSpeed: 0
-    raceType: 0
-    essenceType: 0
-    level: 0
-    attackRange: 0
-    moveSpeed: 0
-    health: 0
-    mana: 0
-    spirit: 0
-    physicalDamagePoint: 0
-    magicalDamagePoint: 0
-    spiritDamagePoint: 0
-    physicalDefensePoint: 0
-    magicalDefensePoint: 0
-    spiritDefensePoint: 0
-    healthPoint: 0
-    manaPoint: 0
-    spiritPoint: 0
-    moveSpeedPoint: 0
-    spititRangePoint: 0
-    championIndex: {x: 0, y: 0}
-    equitmentDatas: []
-    skillDatas: []
-    techniqueDatas: []
-    levelUpConditionData:
-      level: 0
-      levelName: 
-      linhThao: 0
-      khoangThach: 0
-      yeuDan: 0
-      maHach: 0
-      linhThach: 0
-      requiredItem: 
-      requiredCharacterLevel: 0
-    heroPrefab: {fileID: 0}
   techniqueData: []
   skillDatas: []
   equiDatas: []
@@ -3395,6 +3256,7 @@ MonoBehaviour:
     physicalDefense: 0
     magicalDefense: 0
     spiritDefense: 0
+    description: 
     maxHealth: 0
     maxMana: 0
     maxSpirit: 0
@@ -3409,6 +3271,63 @@ MonoBehaviour:
     skillPoints: 0
     combatPower: 0
     spiritRange: 0
+    powerCost: 0
+    linhThaoCost: 0
+    khoangThachCost: 0
+    yeuDanCost: 0
+    maHachCost: 0
+    linhThachCost: 0
+    itemCost: 0
+--- !u!114 &3620629905693099304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 242dcf80ddf591046947ef57d25d4a48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerFogofWar
+  ShowTopMostFoldoutHeaderGroup: 1
+  lightprefab: {fileID: 7533948920996336447, guid: f01a485a67c25324d8d226641b14a7a6,
+    type: 3}
+--- !u!135 &2002104572135360971
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7085458474231755661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 858339105e3c6b846a8efd1d4f9f0d5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpiritRange
+  ShowTopMostFoldoutHeaderGroup: 1
+  collideCheckSpiritRange: {fileID: 2002104572135360971}
 --- !u!1 &7825434533555785058
 GameObject:
   m_ObjectHideFlags: 0

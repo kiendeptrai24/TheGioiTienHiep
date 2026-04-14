@@ -13,7 +13,6 @@ public class ActorController : TGTHNetworkBehaviour
     private Rigidbody rig;
     public ActorState currentState = ActorState.TopDown;
     [Header("Components")]
-    public MapSearchController mapSearchController;
     [SerializeField] private float turnSpeed = 10f;
     [SerializeField] private float moveSpeed = 5f;
 
@@ -48,7 +47,6 @@ public class ActorController : TGTHNetworkBehaviour
             characterRotation = new TopDownRotation(rig);
             moveable = new TopDownMovement(rig);
         }
-        mapSearchController.actorController = this;
 
     }
     protected override void Start()
@@ -109,6 +107,5 @@ public class ActorController : TGTHNetworkBehaviour
         base.LoadComponent();
         inputManager = FindAnyObjectByType<InputManager>();
         rig = GetComponent<Rigidbody>();
-        mapSearchController = FindAnyObjectByType<MapSearchController>();
     }
 }

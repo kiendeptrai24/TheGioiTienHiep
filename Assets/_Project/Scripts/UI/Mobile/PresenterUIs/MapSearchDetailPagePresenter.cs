@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static PathTest;
+using static PathFinding;
 
 namespace TGTH.Mobile
 {
@@ -13,7 +13,7 @@ namespace TGTH.Mobile
         [SerializeField] private ResourceManager resource;
         private ResourceType resourceType = ResourceType.LinhThach;
         private RealmType cultivationStage;
-        [SerializeField] private PathTest pathTest;
+        [SerializeField] private PathFinding pathTest;
         public NavigationFindMapResult navigationFindMapResult;
         public UIItemResourse curItem;
         private UIItemResourceType curFocusItem;
@@ -33,6 +33,7 @@ namespace TGTH.Mobile
             view.OnXPosChanged += OnXPosChanged;
             view.OnYPosChanged += OnYPosChanged;
             resource = ResourceManager.Instance;
+            pathTest = PathFinding.Instance;
             Init();
         }
         void OnEnable()

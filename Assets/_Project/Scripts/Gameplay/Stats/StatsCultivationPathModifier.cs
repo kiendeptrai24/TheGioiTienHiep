@@ -11,22 +11,37 @@ public class StatsCultivationPathModifier : StatsModifierBase
         var data = heroData.statsCultivationPathData;
         if (data == null) return;
         base.AddStats(stats, itemData);
+        int maxHealth = heroData.healthPoint == 0 ? 1 : heroData.healthPoint;
+        int maxMana = heroData.manaPoint == 0 ? 1 : heroData.manaPoint;
+        int maxSpirit = heroData.spiritPoint == 0 ? 1 : heroData.spiritPoint;
 
-        AddValue(StatType.Health, data.maxHealth);
-        AddValue(StatType.Mana, data.maxMana);
-        AddValue(StatType.Spirit, data.maxSpirit);
+        int physicalDamage = heroData.physicalDamagePoint == 0 ? 1 : heroData.physicalDamagePoint;
+        int magicalDamage = heroData.magicalDamagePoint == 0 ? 1 : heroData.magicalDamagePoint;
+        int spiritDamage = heroData.spiritDamagePoint == 0 ? 1 : heroData.spiritDamagePoint;
 
-        AddValue(StatType.PhysicalDamage, data.physicalDamage);
-        AddValue(StatType.MagicalDamage, data.magicalDamage);
-        AddValue(StatType.SpiritDamage, data.spiritDamage);
+        int physicalDefense = heroData.physicalDefensePoint == 0 ? 1 : heroData.physicalDefensePoint;
+        int magicalDefense = heroData.magicalDefensePoint == 0 ? 1 : heroData.magicalDefensePoint;
+        int spiritDefense = heroData.spiritDefensePoint == 0 ? 1 : heroData.spiritDefensePoint;
 
-        AddValue(StatType.PhysicalDefense, data.physicalDefense);
-        AddValue(StatType.MagicalDefense, data.magicalDefense);
-        AddValue(StatType.SpiritDefense, data.spiritDefense);
+        int movementSpeed = heroData.moveSpeedPoint == 0 ? 1 : heroData.moveSpeedPoint;
+        int spiritRange = heroData.spiritPoint == 0 ? 1 : heroData.spiritPoint;
 
-        AddValue(StatType.MovementSpeed, data.movementSpeed);
-        AddValue(StatType.SpiritRange, data.spiritRange);
-        AddValue(StatType.CounterPercentage, data.counterPercentage);
+
+        AddValue(StatType.Health, data.maxHealth * maxHealth);
+        AddValue(StatType.Mana, data.maxMana * maxMana);
+        AddValue(StatType.Spirit, data.maxSpirit * maxSpirit);
+
+        AddValue(StatType.PhysicalDamage, data.physicalDamage * physicalDamage);
+        AddValue(StatType.MagicalDamage, data.magicalDamage * magicalDamage);
+        AddValue(StatType.SpiritDamage, data.spiritDamage * spiritDamage);
+
+        AddValue(StatType.PhysicalDefense, data.physicalDefense * physicalDefense);
+        AddValue(StatType.MagicalDefense, data.magicalDefense * magicalDefense);
+        AddValue(StatType.SpiritDefense, data.spiritDefense * spiritDefense);
+
+        AddValue(StatType.MovementSpeed, data.movementSpeed * movementSpeed);
+        AddValue(StatType.SpiritRange, data.spiritRange * spiritRange);
+        AddValue(StatType.CounterPercentage, data.counterPercentage * data.counterPercentage);
     }
     public override void RemoveStats(Dictionary<StatType, Stat> stats, ItemData itemData)
     {
@@ -36,21 +51,35 @@ public class StatsCultivationPathModifier : StatsModifierBase
         var data = heroData.statsCultivationPathData;
         if (data == null) return;
         base.RemoveStats(stats, itemData);
+        int maxHealth = heroData.healthPoint == 0 ? 1 : heroData.healthPoint;
+        int maxMana = heroData.manaPoint == 0 ? 1 : heroData.manaPoint;
+        int maxSpirit = heroData.spiritPoint == 0 ? 1 : heroData.spiritPoint;
 
-        RemoveValue(StatType.Health, data.maxHealth);
-        RemoveValue(StatType.Mana, data.maxMana);
-        RemoveValue(StatType.Spirit, data.maxSpirit);
+        int physicalDamage = heroData.physicalDamagePoint == 0 ? 1 : heroData.physicalDamagePoint;
+        int magicalDamage = heroData.magicalDamagePoint == 0 ? 1 : heroData.magicalDamagePoint;
+        int spiritDamage = heroData.spiritDamagePoint == 0 ? 1 : heroData.spiritDamagePoint;
 
-        RemoveValue(StatType.PhysicalDamage, data.physicalDamage);
-        RemoveValue(StatType.MagicalDamage, data.magicalDamage);
-        RemoveValue(StatType.SpiritDamage, data.spiritDamage);
+        int physicalDefense = heroData.physicalDefensePoint == 0 ? 1 : heroData.physicalDefensePoint;
+        int magicalDefense = heroData.magicalDefensePoint == 0 ? 1 : heroData.magicalDefensePoint;
+        int spiritDefense = heroData.spiritDefensePoint == 0 ? 1 : heroData.spiritDefensePoint;
 
-        RemoveValue(StatType.PhysicalDefense, data.physicalDefense);
-        RemoveValue(StatType.MagicalDefense, data.magicalDefense);
-        RemoveValue(StatType.SpiritDefense, data.spiritDefense);
+        int movementSpeed = heroData.moveSpeedPoint == 0 ? 1 : heroData.moveSpeedPoint;
+        int spiritRange = heroData.spiritPoint == 0 ? 1 : heroData.spiritPoint;
 
-        RemoveValue(StatType.MovementSpeed, data.movementSpeed);
-        RemoveValue(StatType.SpiritRange, data.spiritRange);
+        RemoveValue(StatType.Health, data.maxHealth * maxHealth);
+        RemoveValue(StatType.Mana, data.maxMana * maxMana);
+        RemoveValue(StatType.Spirit, data.maxSpirit * maxSpirit);
+
+        RemoveValue(StatType.PhysicalDamage, data.physicalDamage * physicalDamage);
+        RemoveValue(StatType.MagicalDamage, data.magicalDamage * magicalDamage);
+        RemoveValue(StatType.SpiritDamage, data.spiritDamage * spiritDamage);
+
+        RemoveValue(StatType.PhysicalDefense, data.physicalDefense * physicalDefense);
+        RemoveValue(StatType.MagicalDefense, data.magicalDefense * magicalDefense);
+        RemoveValue(StatType.SpiritDefense, data.spiritDefense * spiritDefense);
+
+        RemoveValue(StatType.MovementSpeed, data.movementSpeed * movementSpeed);
+        RemoveValue(StatType.SpiritRange, data.spiritRange * spiritRange);
         RemoveValue(StatType.CounterPercentage, data.counterPercentage);
     }
 }

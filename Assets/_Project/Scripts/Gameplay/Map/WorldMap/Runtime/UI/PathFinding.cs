@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using WorldMap.Domain;
 
-public class PathTest : TGTHMonoBehaviour
+public class PathFinding : Singleton<PathFinding>
 {
     public PathFollowerRB follower;
     public MapSpawn mapSpawn;
@@ -63,6 +63,10 @@ public class PathTest : TGTHMonoBehaviour
     }
     public FindPathResult FindPathWithPossition(Vector3 pos)
     {
+        if (mapSpawn == null || follower == null)
+        {
+            return null;
+        }
         var start = mapSpawn.WorldToGrid(follower.transform.position);
         var goal = mapSpawn.WorldToGrid(pos);
 

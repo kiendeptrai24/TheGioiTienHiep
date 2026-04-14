@@ -6,7 +6,7 @@ using WorldMap.Domain;
 public class PathFollowerRB : TGTHNetworkBehaviour
 {
     public MapSpawn mapSpawn;
-    public PathTest pathTest;
+    public PathFinding pathTest;
     public ActorController actorController;
     public Rigidbody rb;
     public InputManager inputManager;
@@ -50,7 +50,7 @@ public class PathFollowerRB : TGTHNetworkBehaviour
         // top-down: bỏ y để không bị ảnh hưởng độ cao (nếu bạn muốn bám heightY thì giữ y theo target.y)
         Vector3 to = target - pos;
         to.y = 0f;
-    
+
         // tới waypoint
         if (to.magnitude <= arriveDistance)
         {
@@ -88,6 +88,6 @@ public class PathFollowerRB : TGTHNetworkBehaviour
         actorController = GetComponent<ActorController>();
         mapSpawn = FindAnyObjectByType<MapSpawn>();
         inputManager = FindAnyObjectByType<InputManager>();
-        pathTest = FindAnyObjectByType<PathTest>();
+        pathTest = PathFinding.Instance;
     }
 }

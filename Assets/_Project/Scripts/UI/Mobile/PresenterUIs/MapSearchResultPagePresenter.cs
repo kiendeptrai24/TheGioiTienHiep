@@ -3,12 +3,12 @@ namespace TGTH.Mobile
     using System;
     using System.Collections.Generic;
     using UnityEngine;
-    using static PathTest;
+    using static PathFinding;
 
     public class MapSearchResultPagePresenter : TGTHMonoBehaviour
     {
         [SerializeField] private MapSearchResultPageView view;
-        [SerializeField] private PathTest pathTest;
+        [SerializeField] private PathFinding pathTest;
         [SerializeField] private RectTransform arrowRoot;
         [SerializeField] private RectTransform arrowIcon; // hình mũi tên (con)
         [SerializeField] private float radius = 200f;
@@ -19,6 +19,7 @@ namespace TGTH.Mobile
         protected override void Awake()
         {
             base.Awake();
+            pathTest = PathFinding.Instance;
             view.OnOkClicked += OnOkClicked;
             view.OnCancelClicked += OnCancelClicked;
             view.OnNextClicked += OnNextClicked;
@@ -59,7 +60,7 @@ namespace TGTH.Mobile
                 result.start = ok.start;
                 result.goal = ok.goal;
                 result.path = ok.path;
-                
+
                 view.ShowData(result);
             }
         }

@@ -4,7 +4,7 @@ namespace TGTH.Mobile
     using TMPro;
     using UnityEngine;
     using UnityEngine.UI;
-    using static PathTest;
+    using static PathFinding;
 
     public class MapSearchResultPageView : TGTHMonoBehaviour
     {
@@ -23,7 +23,7 @@ namespace TGTH.Mobile
         protected override void Awake()
         {
             base.Awake();
-
+            
             okBtn.onClick.AddListener(() => OnOkClicked?.Invoke());
             cancelBtn.onClick.AddListener(() => OnCancelClicked?.Invoke());
             previousBtn.onClick.AddListener(() => OnPreviousClicked?.Invoke());
