@@ -30,10 +30,6 @@ public class StatsCharacterModifier : StatsModifierBase
         AddPercent(StatType.ManaRegen, data.manaRegen);
         AddPercent(StatType.SpiritRegen, data.spiritRegen);
 
-        
-
-
-
     }
     public override void RemoveStats(Dictionary<StatType, Stat> stats, ItemData itemData)
     {
