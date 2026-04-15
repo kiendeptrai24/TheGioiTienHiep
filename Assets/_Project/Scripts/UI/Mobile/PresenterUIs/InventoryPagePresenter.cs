@@ -22,6 +22,8 @@ namespace TGTH.Mobile
         protected override void Awake()
         {
             inventoryCenterManager = InventoryCenterManager.Instance;
+            inventoryUseSystem = InventoryUseSystem.Instance;
+
             view.OnRefreshClicked += ShowItem;
             view.OnSortClicked += SortInventory;
             inventoryCenterManager.OnItemDataChanged += OnItemDataChanged;
@@ -131,6 +133,11 @@ namespace TGTH.Mobile
 
                         inventoryUseSystem.UseItem(playerClientId, uiItem);
                     },
+                    onInfo: () =>
+                    {
+                        ItemClicked(uiItem);
+                        uiItem?.navigation.OnClick();
+                    },
                     onCancel: () =>
                     {
 
@@ -154,6 +161,11 @@ namespace TGTH.Mobile
                             return;
                         }
                         inventoryUseSystem.UseItem(playerClientId, uiItem);
+                    },
+                    onInfo: () =>
+                    {
+                        ItemClicked(uiItem);
+                        uiItem?.navigation.OnClick();
                     },
                     onCancel: () =>
                     {
@@ -281,7 +293,7 @@ namespace TGTH.Mobile
         {
             base.LoadComponent();
             view = GetComponent<InventoryPageView>();
-            inventoryUseSystem = GetComponent<InventoryUseSystem>();
+            inventoryUseSystem = InventoryUseSystem.Instance;
             inventoryCenterManager = InventoryCenterManager.Instance;
         }
     }

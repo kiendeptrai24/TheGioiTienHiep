@@ -25,8 +25,6 @@ public class PlayerHeroItemInventoryService : ISaveLoadRemote
                 var itemsData = new HeroDataDTO();
                 itemsData = gameDataDTO;
 
-                var iconLoader = AddressableLoader.Instance.GetLoader<IconLoader>(AddressableLoaderType.Sprite.ToString());
-                var prefabLoader = AddressableLoader.Instance.GetLoader<PrefabLoader>(AddressableLoaderType.Prefab.ToString());
                 var SODataBase = ScriptableObjectLoader.Instance;
 
                 for (int i = 0; i < itemsData.inventoryItems.Count; i++)
@@ -40,12 +38,10 @@ public class PlayerHeroItemInventoryService : ISaveLoadRemote
                     var itemData = SODataBase.GetItem(item.instanceId);
                     itemData.itemName = gameDataDTO.inventoryItems[i].itemName;
                     itemData.realmType = gameDataDTO.inventoryItems[i].realmType;
-                    var sprite = iconLoader.Get(item.itemIconPath);
-                    itemData.itemIcon = sprite;
                     var heroData = itemData as HeroData;
                     if (heroData != null)
                     {
-                        SetHeroData(itemsData, iconLoader, prefabLoader, SODataBase, i, itemData, heroData);
+                        SetHeroData(itemsData, SODataBase, i, heroData);
                         if (heroData.isCharactor)
                         {
                             var realmData = SODataBase.GetRealmItem(itemData.realmType);
@@ -83,12 +79,10 @@ public class PlayerHeroItemInventoryService : ISaveLoadRemote
         });
     }
 
-    private static void SetHeroData(HeroDataDTO itemsData, IconLoader iconLoader, PrefabLoader prefabLoader, ScriptableObjectLoader SODataBase, int i, ItemData itemData, HeroData heroData)
+    private static void SetHeroData(HeroDataDTO itemsData, ScriptableObjectLoader SODataBase, int i, HeroData heroData)
     {
         try
         {
-            var heroPrefab = prefabLoader.Get(itemData.itemFilePath);
-            heroData.heroPrefab = heroPrefab;
             heroData.skillDatas.Clear();
             heroData.techniqueDatas.Clear();
             heroData.equipmentDatas.Clear();
@@ -141,6 +135,7 @@ public class PlayerHeroItemInventoryService : ISaveLoadRemote
     }
     public void SaveGame(GameData gameData)
     {
-        service.LoadPlayerHeroData(gameData);
+        service.SavePlayerHeroData(gameData);
+
     }
 }

@@ -25,8 +25,6 @@ public class TeamInventoryService : ISaveLoadRemote
                 var itemTeam = new HeroInTeamDataDTO();
                 itemTeam = gameDataDTO;
 
-                var iconLoader = AddressableLoader.Instance.GetLoader<IconLoader>(AddressableLoaderType.Sprite.ToString());
-                var prefabLoader = AddressableLoader.Instance.GetLoader<PrefabLoader>(AddressableLoaderType.Prefab.ToString());
                 var SODataBase = ScriptableObjectLoader.Instance;
 
                 for (int i = 0; i < itemTeam.inventoryItems.Count; i++)
@@ -37,13 +35,11 @@ public class TeamInventoryService : ISaveLoadRemote
                     itemData.realmType = gameDataDTO.inventoryItems[i].realmType;
                     if (itemData == null)
                         continue;
-                    var sprite = iconLoader.Get(item.itemIconPath);
-                    itemData.itemIcon = sprite;
                     var heroData = itemData as HeroData;
                     if (heroData != null)
                     {
                         heroData.championIndex = itemTeam.championsIndex[i];
-                        SetHeroData(itemTeam, iconLoader, prefabLoader, SODataBase, i, itemData, heroData);
+                        SetHeroData(itemTeam, SODataBase, i, heroData);
                         if (heroData.isCharactor)
                         {
                             var realmData = SODataBase.GetRealmItem(itemData.realmType);
@@ -84,13 +80,10 @@ public class TeamInventoryService : ISaveLoadRemote
         });
     }
 
-    private void SetHeroData(HeroInTeamDataDTO itemsteam, IconLoader iconLoader, PrefabLoader prefabLoader, ScriptableObjectLoader SODataBase, int i, ItemData itemData, HeroData heroData)
+    private void SetHeroData(HeroInTeamDataDTO itemsteam, ScriptableObjectLoader SODataBase, int i, HeroData heroData)
     {
         try
         {
-            var heroPrefab = prefabLoader.Get(itemData.itemFilePath);
-            heroData.heroPrefab = heroPrefab;
-
             heroData.skillDatas.Clear();
             heroData.techniqueDatas.Clear();
             heroData.equipmentDatas.Clear();

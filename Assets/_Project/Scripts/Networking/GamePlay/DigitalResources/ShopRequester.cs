@@ -28,11 +28,11 @@ public class ShopRequester : SingletonNetwork<ShopRequester>
 
         if (!storage.HasEnough(cost))
         {
-            Debug.Log("Không đủ linh thạch");
+            message = "Không đủ linh thạch";
             BuyResultClientRpc(false, message, clientId);
             return;
         }
-        Debug.Log("Mua thành công");
+        message = "Mua thành công";
         storage.MinusCost(cost);
         BuyResultClientRpc(true, message, clientId);
     }

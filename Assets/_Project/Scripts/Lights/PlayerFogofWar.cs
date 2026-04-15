@@ -17,7 +17,6 @@ public class PlayerFogofWar : TGTHNetworkBehaviour
         base.OnNetworkSpawn();
         StatsData statsData = GetComponent<StatsData>();
         int spiritRange = statsData.SpiritRange;
-        Debug.Log("spiritRange: " + spiritRange);
         if (spiritRange <= 10) return;
         int persent = (10 - spiritRange) / 10 + 1;
         playerLight.intensity = 200 * persent;

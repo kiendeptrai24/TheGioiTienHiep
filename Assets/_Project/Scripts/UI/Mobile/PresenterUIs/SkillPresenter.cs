@@ -34,9 +34,9 @@ namespace TGTH.Mobile
             InitializeInventoryUI(50);
 
             inventoryCenterManager = InventoryCenterManager.Instance;
-            inventoryCenterManager.OnItemExistingSkillDataChanged += OnListItemDataChanged;
+            inventoryCenterManager.OnItemUsedDataChanged += OnListItemDataChanged;
 
-            OnListItemDataChanged(inventoryCenterManager.GetDataType(ItemType.Skill, true));
+            OnListItemDataChanged(inventoryCenterManager.GetDatasUsed());
         }
         private void OnEnable()
         {
@@ -53,11 +53,21 @@ namespace TGTH.Mobile
             isNew = false;
             inventoryCenterManager.OnItemPlayerChanged += OnPlayerChamChanged;
         }
+        private List<ItemData> ListSkillData(List<ItemData> temps)
+        {
+            List<ItemData> temp = new();
+            foreach (var item in temps)
+            {
+                if (item is SkillData)
+                    temp.Add(item);
+            }
+            return temp;
+        }
         private void OnListItemDataChanged(List<ItemData> itemDatas)
         {
             if (itemDatas == null) return;
             var temp = new List<InventoryItem>();
-            foreach (var item in itemDatas)
+            foreach (var item in ListSkillData(itemDatas))
             {
                 temp.Add(new InventoryItem(item));
             }
@@ -127,7 +137,7 @@ namespace TGTH.Mobile
                 {
                     item = item1.data.Clone();
                 }
-                var result = inventoryCenterManager.AddData(item);
+                var result = inventoryCenterManager.AddUsedData(item);
                 if (result)
                 {
                     var skillData = item1.data as SkillData;
@@ -138,7 +148,7 @@ namespace TGTH.Mobile
             }
             if (item2 != null && item2.data != null)
             {
-                var result = inventoryCenterManager.RemoveData(item2.data);
+                var result = inventoryCenterManager.RemoveUsedData(item2.data);
                 if (result)
                 {
                     var skillData = item2.data as SkillData;

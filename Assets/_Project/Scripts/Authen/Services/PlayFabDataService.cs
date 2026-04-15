@@ -35,6 +35,10 @@ public class PlayFabDataService
     {
         LoadUserData($"inventory {characterId}", callback);
     }
+    public void LoadPlayerDatasUsed(string characterId, Action<ItemDataDTO> callback)
+    {
+        LoadUserData($"inventory used {characterId}", callback);
+    }
 
     public void LoadTeamData(string characterId, Action<HeroInTeamDataDTO> callback)
     {
@@ -52,7 +56,7 @@ public class PlayFabDataService
     #endregion
 
     #region Public Save Methods
-    public void LoadPlayerHeroData(GameData gameData)
+    public void SavePlayerHeroData(GameData gameData)
     {
         try
         {
@@ -144,6 +148,40 @@ public class PlayFabDataService
             };
 
             SaveUserData($"inventory {gameData.characterId}", inventoryData);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.Log("Error " + ex.Message);
+        }
+    }
+    public void SetItemInventoryDataUsed(GameData gameData)
+    {
+        try
+        {
+            if (gameData == null)
+            {
+                Debug.LogError("SetItemInventoryData failed: gameData is null");
+                return;
+            }
+            if (gameData.itemDatasUsed == null)
+            {
+                Debug.Log("null or empty");
+                return;
+            }
+            List<ItemData> listItemData = gameData.itemDatasUsed;
+
+            if (listItemData == null)
+            {
+                Debug.LogError("null or empty");
+                return;
+            }
+
+            ItemDataDTO inventoryData = new ItemDataDTO
+            {
+                inventoryItems = listItemData
+            };
+
+            SaveUserData($"inventory used {gameData.characterId}", inventoryData);
         }
         catch (System.Exception ex)
         {
@@ -314,8 +352,9 @@ public class PlayFabDataService
             Debug.LogError($"Serialize Error at key '{key}': {ex}");
             return;
         }
-
-        clientApi.UpdateUserData(
+        try
+        {
+            clientApi.UpdateUserData(
             new UpdateUserDataRequest
             {
                 Data = new Dictionary<string, string>
@@ -331,6 +370,11 @@ public class PlayFabDataService
             {
                 Debug.LogError($"UpdateUserData Error at key '{key}': {error.GenerateErrorReport()}");
             });
+        }
+        catch (System.Exception)
+        {
+            throw;
+        }
     }
 
     private void TryDeserialize<T>(string json, Action<T> callback, string key)

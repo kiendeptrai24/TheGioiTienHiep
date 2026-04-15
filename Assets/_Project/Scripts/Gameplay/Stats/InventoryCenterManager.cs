@@ -32,6 +32,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     /// </summary>
     [SerializeField] private List<ItemData> listItemDatasExisting = new List<ItemData>();
 
+    [SerializeField] private List<ItemData> listItemDatasUsed = new List<ItemData>();
+
     /// <summary>
     /// charactor use in team
     /// </summary>
@@ -63,6 +65,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public event Action<List<ItemData>> OnItemExistingTechniqueDataChanged;
     public event Action<ItemData> OnHeroItemChanged;
     public event Action<ItemData, string> OnItemUpdated;
+    public event Action<List<ItemData>> OnItemUsedDataChanged;
     #endregion
 
     public event Action<ItemData> OnItemPlayerChanged;
@@ -76,6 +79,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     //public event Action OnDataChanged;
     public List<ItemData> GetItemShopData() => listItemShopDatas;
     public List<ItemData> GetDatasChampion() => listItemDatasChampion;
+    public List<ItemData> GetDatasUsed() => listItemDatasUsed;
 
     public void SetItemChampionData(List<ItemData> data)
     {
@@ -216,7 +220,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
             Debug.LogWarning($"Cannot update item. Item with itemId {updatedItem.itemId} not found in inventory!");
         }
     }
-    public bool UseData(ItemData item)
+    public bool EquipData(ItemData item)
     {
         if (!listItemDatasExisting.Contains(item))
             return false;
@@ -224,12 +228,48 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         ItemExistingChange(item);
         return true;
     }
-    public bool UnUseData(ItemData item)
+    public bool UnEquipData(ItemData item)
     {
         if (listItemDatasExisting.Contains(item))
             return false;
         listItemDatasExisting.Add(item);
         ItemExistingChange(item);
+        return true;
+    }
+    public bool UseData(ItemData item)
+    {
+        if (!listItemDatas.Contains(item))
+            return false;
+        if (RemoveData(item) == false)
+            return false;
+        AddUsedData(item);
+        ItemChange(item);
+        return true;
+    }
+    public bool UnUseData(ItemData item)
+    {
+        if (!listItemDatasUsed.Contains(item))
+            return false;
+        if (AddData(item) == false)
+            return false;
+        RemoveUsedData(item);
+        ItemChange(item);
+        return true;
+    }
+    public bool AddUsedData(ItemData item)
+    {
+        if (listItemDatasUsed.Contains(item))
+            return false;
+        listItemDatasUsed.Add(item);
+        OnItemUsedDataChanged?.Invoke(listItemDatasUsed);
+        return true;
+    }
+    public bool RemoveUsedData(ItemData item)
+    {
+        if (listItemDatasUsed.Contains(item) == false)
+            return false;
+        listItemDatasUsed.Remove(item);
+        OnItemUsedDataChanged?.Invoke(listItemDatasUsed);
         return true;
     }
     public void ItemExistingChange(ItemData item)
@@ -394,6 +434,10 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         {
             allItemDatas.Add(item);
         }
+        foreach (var item in _data.itemDatasUsed)
+        {
+            listItemDatasUsed.Add(item);
+        }
         foreach (var item in _data.itemDatasInTeam)
         {
             if (item is HeroData heroData)
@@ -416,6 +460,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         _data.itemDatasInTeam.Clear();
         _data.itemDatas = listItemDatasExisting;
         _data.itemDatasInTeam = listItemDatasChampion;
+        _data.itemDatasUsed = listItemDatasUsed;
+
         for (int i = 0; i < _data.itemDatasCharacter.Count; i++)
         {
             var itemcharacter = _data.itemDatasCharacter[i] as HeroData;

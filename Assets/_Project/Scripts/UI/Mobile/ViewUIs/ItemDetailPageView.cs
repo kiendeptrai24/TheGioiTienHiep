@@ -8,6 +8,7 @@ public class ItemDetailPageView : IItemDetailPageView
     [SerializeField] private TextMeshProUGUI itemNameTxt;
     [SerializeField] private TextMeshProUGUI realmTxt;
     [SerializeField] private TextMeshProUGUI qualityTypeTxt;
+    [SerializeField] private TextMeshProUGUI essenceTypeTxt;
     [SerializeField] private Image itemIconImge;
     [SerializeField] private ItemDescriptionDetail itemDescriptionDetailPrefab;
     [SerializeField] private Transform content;
@@ -33,15 +34,17 @@ public class ItemDetailPageView : IItemDetailPageView
             itemNameTxt.text = "";
             qualityTypeTxt.text = "";
             realmTxt.text = "";
+            essenceTypeTxt.text = "";
             itemIconImge.sprite = null;
             return;
         }
         itemNameTxt.text = inventoryItem.data.itemName;
         qualityTypeTxt.text = EnumTranslator.ToVietnamese(inventoryItem.data.qualityType);
-        realmTxt.text = inventoryItem.data is SkillData ? EnumTranslator.ToVietnamese(((SkillData)inventoryItem.data).realm) :
-        inventoryItem.data is TechniqueData ? EnumTranslator.ToVietnamese(((TechniqueData)inventoryItem.data).realm) :
-        inventoryItem.data is EquitmentData ? EnumTranslator.ToVietnamese(((EquitmentData)inventoryItem.data).realmType) :
-        inventoryItem.data is HeroData ? EnumTranslator.ToVietnamese(((HeroData)inventoryItem.data).realmType) : "";
+        realmTxt.text = EnumTranslator.ToVietnamese(inventoryItem.data.realmType);
+        essenceTypeTxt.text = inventoryItem.data is SkillData ? EnumTranslator.ToVietnamese(((SkillData)inventoryItem.data).raceType) :
+        inventoryItem.data is TechniqueData ? EnumTranslator.ToVietnamese(((TechniqueData)inventoryItem.data).raceType) :
+        inventoryItem.data is EquitmentData ? EnumTranslator.ToVietnamese(((EquitmentData)inventoryItem.data).raceType) :
+        inventoryItem.data is HeroData ? EnumTranslator.ToVietnamese(((HeroData)inventoryItem.data).essenceType) : "";
         itemIconImge.sprite = inventoryItem.data.itemIcon;
 
         if (inventoryItem.data is SkillData skillData) SetItemSkillData(skillData);

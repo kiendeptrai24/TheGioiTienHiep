@@ -80,13 +80,13 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
             return;
         }
         listDatas.Add(data);
-        inventoryCenterManager.UseData(data);
+        inventoryCenterManager.EquipData(data);
         inventoryCenterManager.SetItemChampionData(GetAllItems());
     }
     public void RemoveItem(ItemData data)
     {
         listDatas.Remove(data);
-        inventoryCenterManager.UnUseData(data);
+        inventoryCenterManager.UnEquipData(data);
         inventoryCenterManager.SetItemChampionData(GetAllItems());
     }
     private void HandleEmptySlotClicked(UIChoseChampionItem item)

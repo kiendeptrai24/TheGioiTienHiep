@@ -30,8 +30,8 @@ namespace TGTH.Mobile
             InitializeInventoryUI(50);
 
             inventoryCenterManager = InventoryCenterManager.Instance;
-            inventoryCenterManager.OnItemExistingTechniqueDataChanged += SetListDataChanged;
-            SetListDataChanged(inventoryCenterManager.GetDataType(ItemType.Technique, true));
+            inventoryCenterManager.OnItemUsedDataChanged += SetListDataChanged;
+            SetListDataChanged(inventoryCenterManager.GetDatasUsed());
         }
         private void OnEnable()
         {
@@ -78,13 +78,23 @@ namespace TGTH.Mobile
                 view.listOfEquitmentItems[i].Unlock();
             }
         }
+        private List<ItemData> ListTechniqueData(List<ItemData> temps)
+        {
+            List<ItemData> temp = new();
+            foreach (var item in temps)
+            {
+                if (item is TechniqueData)
+                    temp.Add(item);
+            }
+            return temp;
+        }
         private void SetListDataChanged(List<ItemData> items)
         {
             if (listItemDatas == null)
                 listItemDatas = new List<InventoryItem>();
             else
                 listItemDatas.Clear();
-            foreach (var item in items)
+            foreach (var item in ListTechniqueData(items))
             {
                 listItemDatas.Add(new InventoryItem(item));
             }
@@ -121,7 +131,7 @@ namespace TGTH.Mobile
                 {
                     item = item1.data.Clone();
                 }
-                var result = inventoryCenterManager.AddData(item);
+                var result = inventoryCenterManager.AddUsedData(item);
                 if (result)
                 {
                     var techniqueData = item1.data as TechniqueData;
@@ -131,7 +141,7 @@ namespace TGTH.Mobile
             }
             if (item2 != null && item2.data != null)
             {
-                var result = inventoryCenterManager.RemoveData(item2.data);
+                var result = inventoryCenterManager.RemoveUsedData(item2.data);
                 if (result)
                 {
                     var techniqueData = item2.data as TechniqueData;

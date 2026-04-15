@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
-public class InventoryUseSystem : TGTHNetworkBehaviour, IUsable
+public class InventoryUseSystem : SingletonNetwork<InventoryUseSystem>, IUsable
 {
     [SerializeField] private InventoryPageManager inventoryPageManager;
     [SerializeField] private TechniquePageManager techniqueManager;
@@ -60,9 +60,7 @@ public class InventoryUseSystem : TGTHNetworkBehaviour, IUsable
         TopNotificationUI.Instance.ShowNotification(message);
         if (success)
         {
-            itemUsed.Add(uiItem.inventoryItem.data);
-            inventoryPageManager.RemoveInventoryItem(uiItem.inventoryItem);
-            uiItem.ResetData();
+            InventoryCenterManager.Instance.UseData(uiItem.inventoryItem.data);
         }
     }
     private bool TryAddItemToPages(InventoryItem inventoryItem)

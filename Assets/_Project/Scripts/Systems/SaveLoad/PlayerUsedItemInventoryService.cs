@@ -2,17 +2,17 @@
 using System;
 using UnityEngine;
 
-public class PlayerItemInventoryService : ISaveLoadRemote
+public class PlayerUsedItemInventoryService : ISaveLoadRemote
 {
     private PlayFabDataService service;
-    public PlayerItemInventoryService(PlayFabDataService service)
+    public PlayerUsedItemInventoryService(PlayFabDataService service)
     {
         this.service = service;
     }
 
     public void LoadGame(GameData gameData, Action callback)
     {
-        service.LoadPlayerData(gameData.characterId, (gameDataDTO) =>
+        service.LoadPlayerDatasUsed(gameData.characterId, (gameDataDTO) =>
         {
             try
             {
@@ -35,25 +35,19 @@ public class PlayerItemInventoryService : ISaveLoadRemote
                         return;
                     }
                     var itemData = SODataBase.GetItem(item.instanceId);
-                    itemData.itemName = gameDataDTO.inventoryItems[i].itemName;
-                    itemData.realmType = gameDataDTO.inventoryItems[i].realmType;
-
-                    if (itemData is HeroData)
-                        continue;
-
                     itemsData.inventoryItems[i] = itemData;
                 }
-                gameData.itemDatas.AddRange(itemsData.inventoryItems);
+                gameData.itemDatasUsed.AddRange(itemsData.inventoryItems);
                 callback?.Invoke();
             }
             catch (System.Exception ex)
             {
-                Debug.LogError("Error occurred while loading item data." + ex.Message);
+                Debug.LogError("LoadPlayerDatasUsed Error occurred while loading item data." + ex.Message);
             }
         });
     }
     public void SaveGame(GameData gameData)
     {
-        service.SetItemInventoryData(gameData);
+        service.SetItemInventoryDataUsed(gameData);
     }
 }

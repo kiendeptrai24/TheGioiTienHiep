@@ -14,6 +14,7 @@ public class GameData
     public int skillPoint;
     public ItemDataPoint itemDataPoint;
     public List<ItemData> itemDatas;
+    public List<ItemData> itemDatasUsed;
     public List<ItemData> itemDatasInTeam;
     public List<ItemData> itemShopDatas;
     public List<ItemData> allItemsDatas;
@@ -23,6 +24,7 @@ public class GameData
     public GameData()
     {
         itemDatas = new List<ItemData>();
+        itemDatasUsed = new List<ItemData>();
         itemDatasInTeam = new List<ItemData>();
         itemShopDatas = new List<ItemData>();
         allItemsDatas = new List<ItemData>();

@@ -27,8 +27,6 @@ public class ItemJsonConverter
     public static List<ItemData> Convert(HeroInTeamDataDTO heroDTO)
     {
         var itemDatas = new List<ItemData>();
-        var iconLoader = AddressableLoader.Instance.GetLoader<IconLoader>(AddressableLoaderType.Sprite.ToString());
-        var prefabLoader = AddressableLoader.Instance.GetLoader<PrefabLoader>(AddressableLoaderType.Prefab.ToString());
         var SODataBase = ScriptableObjectLoader.Instance;
 
         for (int i = 0; i < heroDTO.inventoryItems.Count; i++)
@@ -38,13 +36,11 @@ public class ItemJsonConverter
             itemData.itemName = heroDTO.inventoryItems[i].itemName;
             if (itemData == null)
                 continue;
-            var sprite = iconLoader.Get(item.itemIconPath);
-            itemData.itemIcon = sprite;
             var heroData = itemData as HeroData;
             if (heroData != null)
             {
                 heroData.championIndex = heroDTO.championsIndex[i];
-                SetHeroData(heroDTO, iconLoader, prefabLoader, SODataBase, i, itemData, heroData);
+                SetHeroData(heroDTO, SODataBase, i, heroData);
             }
             else
                 continue;
@@ -55,15 +51,13 @@ public class ItemJsonConverter
         return itemDatas;
     }
 
-    private static void SetHeroData(HeroInTeamDataDTO itemsteam, IconLoader iconLoader, PrefabLoader prefabLoader, ScriptableObjectLoader SODataBase, int i, ItemData itemData, HeroData heroData)
+    private static void SetHeroData(HeroInTeamDataDTO itemsteam, ScriptableObjectLoader SODataBase, int i, HeroData heroData)
     {
         try
         {
-            var heroPrefab = prefabLoader.Get(itemData.itemFilePath);
             heroData.skillDatas.Clear();
             heroData.techniqueDatas.Clear();
             heroData.equipmentDatas.Clear();
-            heroData.heroPrefab = heroPrefab;
 
             var champion = itemsteam.inventoryItems[i];
 

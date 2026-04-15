@@ -25,8 +25,6 @@ public class ItemCharacterService : ISaveLoadRemote
 
                 var itemsData = gameDataDTO;
 
-                var iconLoader = AddressableLoader.Instance.GetLoader<IconLoader>(AddressableLoaderType.Sprite.ToString());
-                var prefabLoader = AddressableLoader.Instance.GetLoader<PrefabLoader>(AddressableLoaderType.Prefab.ToString());
                 var SODataBase = ScriptableObjectLoader.Instance;
 
                 if (itemsData.inventoryItems == null)
@@ -54,8 +52,6 @@ public class ItemCharacterService : ISaveLoadRemote
                         itemData.itemName = gameDataDTO.inventoryItems[i].itemName;
                     }
 
-                    var sprite = iconLoader.Get(itemLoad.itemIconPath);
-                    itemData.itemIcon = sprite;
                     var heroData = itemData as HeroData;
                     if (heroData != null)
                     {
@@ -72,7 +68,7 @@ public class ItemCharacterService : ISaveLoadRemote
                         var realmData = SODataBase.GetRealmItem(itemData.realmType);
                         heroData.realmData = realmData;
 
-                        SetHeroData(itemsData, iconLoader, prefabLoader, SODataBase, i, itemData, heroData);
+                        SetHeroData(itemsData, SODataBase, i, heroData);
                         continue;
                     }
 
@@ -93,12 +89,10 @@ public class ItemCharacterService : ISaveLoadRemote
         });
     }
 
-    private static void SetHeroData(ItemCharacterDataDTO itemsData, IconLoader iconLoader, PrefabLoader prefabLoader, ScriptableObjectLoader SODataBase, int i, ItemData itemData, HeroData heroData)
+    private static void SetHeroData(ItemCharacterDataDTO itemsData, ScriptableObjectLoader SODataBase, int i, HeroData heroData)
     {
         try
         {
-            var heroPrefab = prefabLoader.Get(itemData.itemFilePath);
-            heroData.heroPrefab = heroPrefab;
             var champion = itemsData.inventoryItems[i];
             if (champion == null)
                 return;

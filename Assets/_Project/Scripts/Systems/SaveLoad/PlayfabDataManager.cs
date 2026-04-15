@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using PlayFab;
+using PlayFab.Internal;
 using UnityEngine;
 
 public class PlayfabDataManager : Singleton<PlayfabDataManager>
@@ -87,7 +88,8 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         gameData.characterId = characterId;
         saveLoadRemotes.Add(new ProfileService(service));
         saveLoadRemotes.Add(new ShopService(service));
-        saveLoadRemotes.Add(new InventoryService(service));
+        // saveLoadRemotes.Add(new InventoryService(service));
+        saveLoadRemotes.Add(new PlayerUsedItemInventoryService(service));
         saveLoadRemotes.Add(new TeamInventoryService(service));
         saveLoadRemotes.Add(new PlayerItemInventoryService(service));
         saveLoadRemotes.Add(new PlayerHeroItemInventoryService(service));
@@ -114,6 +116,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     public void SaveGameData()
     {
+
         foreach (var item in saveLoadRemotes)
         {
             item.SaveGame(gameData);

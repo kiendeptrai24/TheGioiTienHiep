@@ -13,11 +13,13 @@ public class PlayerProfile : TGTHNetworkBehaviour
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
+    [SerializeField]
     private NetworkVariable<int> potentialPoint = new(
         0,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
+    [SerializeField]
     private NetworkVariable<int> skillPoint = new(
         0,
         NetworkVariableReadPermission.Everyone,
@@ -38,6 +40,7 @@ public class PlayerProfile : TGTHNetworkBehaviour
             potentialPoint.OnValueChanged += OnPotentialPointChanged;
             skillPoint.OnValueChanged += OnSkillPointChanged;
             inventoryCenterManager.OnItemPlayerChanged += OnItemPlayerChanged;
+            OnSkillPointChanged(0, profileUser.skillPoint);
             OnItemPlayerChanged(inventoryCenterManager.playerCham);
         }
 
@@ -69,7 +72,7 @@ public class PlayerProfile : TGTHNetworkBehaviour
         GetComponent<StatsData>().SetUpItem(data);
     }
     #endregion
-    
+
     #region Get Data
 
     public PlayerResource GetPlayerResource()
