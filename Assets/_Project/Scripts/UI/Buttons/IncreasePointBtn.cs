@@ -17,13 +17,13 @@ public class IncreasePointBtn : TGTHMonoBehaviour
     private void OnIncreasePointClicked()
     {
         var popup = PopupManager.Instance.GetPopup<IncreasePointPopup>();
-        var data = new PointSetupData(StatTypeViName.ToVietnamese(statType), "0123456789", 3, profileManager.GetProfile().point);
+        var data = new PointSetupData(StatTypeViName.ToVietnamese(statType), "0123456789", 3, profileManager.GetProfile().potentialPoint);
 
         popup?.ShowPopup(data,
         onConfirm: (StatsPointPopupData result) =>
         {
             if (result == null) return;
-            if (result.value > profileManager.GetProfile().point)
+            if (result.value > profileManager.GetProfile().potentialPoint)
             {
                 TopNotificationUI.Instance.ShowNotification("Số điểm hiện tại của bạn không đủ!");
                 return;
@@ -97,7 +97,7 @@ public class IncreasePointBtn : TGTHMonoBehaviour
                 Debug.Log("spititRange");
                 break;
         }
-        profileManager.GetProfile().point -= value;
+        profileManager.GetProfile().potentialPoint -= value;
     }
     protected override void LoadComponent()
     {

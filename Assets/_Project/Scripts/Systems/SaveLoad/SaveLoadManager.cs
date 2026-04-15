@@ -1,8 +1,5 @@
 
-
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class SaveLoadManager : Singleton<SaveLoadManager>
@@ -29,6 +26,7 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
     protected override void OnApplicationQuit()
     {
         base.OnApplicationQuit();
+        if (gameData != null) return;
         saveManager.SaveGame();
     }
     private new void OnDestroy()

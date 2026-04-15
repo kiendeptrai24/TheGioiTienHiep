@@ -42,7 +42,7 @@ public class SkillPageManager : TGTHMonoBehaviour
     }
     private void UnLockTechnique()
     {
-        presenter.UnlockItem(5);
+        presenter.UnlockItem(1);
     }
 
 }

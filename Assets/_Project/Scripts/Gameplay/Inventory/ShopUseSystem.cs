@@ -12,7 +12,7 @@ public class ShopUseSystem : TGTHMonoBehaviour, IUsable
         inventoryCenterManager = InventoryCenterManager.Instance;
         LoadComponent();
     }
-    public void UseItem(UIItemSlotBase uiItem, int quantity = 1)
+    public void UseItem(ulong playerClientId, UIItemSlotBase uiItem, int quantity = 1)
     {
         var inventoryItem = uiItem.inventoryItem;
         if (inventoryItem == null) return;

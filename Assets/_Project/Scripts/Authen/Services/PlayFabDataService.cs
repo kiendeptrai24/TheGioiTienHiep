@@ -224,7 +224,8 @@ public class PlayFabDataService
                 playerName = gameData.characterName,
                 position = posDTO,
                 rotation = rotDTO,
-                point = gameData.point,
+                potentialPoint = gameData.potentialPoint,
+                skillPoint = gameData.skillPoint,
                 itemDataPoint = itemDataPoint,
                 // ===== OFFLINE MINING SAVE =====
                 mineOfflineDataList = gameData.mineOfflineDataList ?? new MineOfflineDataList()

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Globalization;
 using System.Text;
+using Unity.Netcode;
 
 namespace TGTH.Mobile
 {
@@ -203,7 +204,8 @@ namespace TGTH.Mobile
                     {
                         if (success)
                         {
-                            shopUseSystem.UseItem(uiItem, result.quantity);
+                            var playerClientId = NetworkManager.Singleton.LocalClientId;
+                            shopUseSystem.UseItem(playerClientId, uiItem, result.quantity);
                             TopNotificationUI.Instance.ShowNotification(message);
                         }
                         else

@@ -10,7 +10,8 @@ public class GameData
     public Quaternion rotation;
     public string characterId;
     public ulong coins;
-    public int point;
+    public int potentialPoint;
+    public int skillPoint;
     public ItemDataPoint itemDataPoint;
     public List<ItemData> itemDatas;
     public List<ItemData> itemDatasInTeam;

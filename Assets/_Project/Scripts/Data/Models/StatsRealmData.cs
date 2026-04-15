@@ -60,5 +60,7 @@ public class StatsRealmData : ItemData
     [JsonIgnore]
     public int linhThachCost;        // Linh thạch
     [JsonIgnore]
-    public int itemCost;               // Vật phẩm khác
+    public int rewardPotentialPoint;
+    [JsonIgnore]
+    public int rewardSkillPoint;
 }

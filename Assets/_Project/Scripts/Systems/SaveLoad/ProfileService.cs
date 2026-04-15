@@ -18,6 +18,8 @@ public class ProfileService : ISaveLoadRemote
             {
                 if (profileDataDTO == null)
                 {
+                    gameData.potentialPoint = 5;
+                    gameData.skillPoint = 3;
                     callback?.Invoke();
                     return;
                 }
@@ -30,7 +32,8 @@ public class ProfileService : ISaveLoadRemote
 
                 gameData.position = profileDataDTO.position.ToVector3();
                 gameData.rotation = Quaternion.LookRotation(profileDataDTO.rotation.ToVector3());
-                gameData.point = profileDataDTO.point;
+                gameData.potentialPoint = profileDataDTO.potentialPoint;
+                gameData.skillPoint = profileDataDTO.skillPoint;
                 gameData.itemDataPoint = profileDataDTO.itemDataPoint;
                 if (profileDataDTO.itemDataPoint == null)
                 {

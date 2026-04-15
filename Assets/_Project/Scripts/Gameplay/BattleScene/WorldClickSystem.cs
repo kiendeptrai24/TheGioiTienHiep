@@ -6,12 +6,12 @@ using UnityEngine;
 public class WorldClickSystem : TGTHMonoBehaviour
 {
     [Header("Refs")]
+    private bool _wasPressed;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private InputManager input;
-    private bool _wasPressed;
-    public LayerMask antiPlayer;
-    public LayerMask whatIsGround;
     public PathFollowerRB pathFollowerRB;
+    public LayerMask whatIsEntity;
+    public LayerMask whatIsGround;
     private bool canClick = false;
     protected override void Awake()
     {
@@ -44,29 +44,29 @@ public class WorldClickSystem : TGTHMonoBehaviour
     private void HandleClick()
     {
         Ray ray = mainCamera.ScreenPointToRay(input.GetPointerPosition());
-        if (Physics.Raycast(ray, out RaycastHit hit1, 1000f, whatIsGround))
+        if (Physics.Raycast(ray, out RaycastHit hitEntity, 100f, whatIsEntity))
         {
-            if (hit1.point != null)
+            if (hitEntity.collider.TryGetComponent<IWorldClickable>(out var clickable))
             {
-                var findPathResult = PathFinding.Instance.FindPathWithPossition(hit1.point);
-                if (findPathResult == null) return;
-                var newPath = findPathResult.path;
-                if (pathFollowerRB != null)
-                    pathFollowerRB.SetPath(newPath);
-            }
-        }
-        if (Physics.Raycast(ray, out RaycastHit hit2, 1000f, antiPlayer))
-        {
-            if (hit2.collider.TryGetComponent<IWorldClickable>(out var clickable))
-            {
-                var playerNet = hit2.collider.GetComponent<NetworkObject>();
-                if (playerNet != null)
+                if (hitEntity.collider.TryGetComponent<NetworkObject>(out var netObj))
                 {
-                    if (playerNet.IsOwner)
+                    if (netObj.IsPlayerObject && netObj.IsOwner)
                         return;
                 }
+
                 clickable.OnClicked();
+                return;
             }
+        }
+
+        if (Physics.Raycast(ray, out RaycastHit hitGround, 100, whatIsGround))
+        {
+            var findPathResult = PathFinding.Instance.FindPathWithPossition(hitGround.point);
+            if (findPathResult == null)
+                return;
+
+            if (pathFollowerRB != null)
+                pathFollowerRB.SetPath(findPathResult.path);
         }
     }
 }

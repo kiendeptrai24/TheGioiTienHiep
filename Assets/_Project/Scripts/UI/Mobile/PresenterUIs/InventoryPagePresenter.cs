@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 namespace TGTH.Mobile
@@ -108,6 +109,10 @@ namespace TGTH.Mobile
 
         private void Navigation(UIItemSlotBase uiItem)
         {
+            var playerClientId = NetworkManager.Singleton.LocalClientId;
+            if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(playerClientId, out var client))
+                return;
+            var playerProfile = client.PlayerObject.GetComponent<PlayerProfile>();
             if (uiItem.inventoryItem.data is TechniqueData)
             {
                 var popup = PopupManager.Instance.GetPopup<UseItemPopup>();
@@ -118,11 +123,17 @@ namespace TGTH.Mobile
                     popup.ShowPopup(data,
                     onConfirm: (BasePopupData result) =>
                     {
-                        inventoryUseSystem.UseItem(uiItem);
+                        if (playerProfile.GetSkillPoint() <= 0)
+                        {
+                            TopNotificationUI.Instance.ShowNotification("Không đủ điểm kỹ năng");
+                            return;
+                        }
+
+                        inventoryUseSystem.UseItem(playerClientId, uiItem);
                     },
                     onCancel: () =>
                     {
-                        // inventoryUseSystem.UseItem()
+
                     });
                 }
                 return;
@@ -137,11 +148,16 @@ namespace TGTH.Mobile
                     popup.ShowPopup(data,
                     onConfirm: (BasePopupData result) =>
                     {
-                        inventoryUseSystem.UseItem(uiItem);
+                        if (playerProfile.GetSkillPoint() <= 0)
+                        {
+                            TopNotificationUI.Instance.ShowNotification("Không đủ điểm kỹ năng");
+                            return;
+                        }
+                        inventoryUseSystem.UseItem(playerClientId, uiItem);
                     },
                     onCancel: () =>
                     {
-                        // inventoryUseSystem.UseItem()
+
                     });
                 }
                 return;

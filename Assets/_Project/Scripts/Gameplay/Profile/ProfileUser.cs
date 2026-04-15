@@ -10,7 +10,8 @@ public class ProfileUser
     public ulong coins;
     public int level;
     public int experience;
-    public int point;
+    public int potentialPoint;
+    public int skillPoint;
     public ItemDataPoint itemDataPoint;
     public PlayerResource playerResource;
     private List<string> listFriend;

@@ -2,27 +2,67 @@
 
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
-public class InventoryUseSystem : TGTHMonoBehaviour, IUsable
+public class InventoryUseSystem : TGTHNetworkBehaviour, IUsable
 {
     [SerializeField] private InventoryPageManager inventoryPageManager;
     [SerializeField] private TechniquePageManager techniqueManager;
     [SerializeField] private SkillPageManager skillPageManager;
     public List<ItemData> itemUsed = new List<ItemData>();
-
-    public void UseItem(UIItemSlotBase uiItem, int quantity = 1)
+    private UIItemSlotBase uiItem;
+    public void UseItem(ulong playerClientId, UIItemSlotBase uiItem, int quantity = 1)
     {
         if (TryAddItemToPages(uiItem.inventoryItem))
         {
-            var inventoryItem = uiItem.inventoryItem;
-
-            itemUsed.Add(inventoryItem.data);
-            inventoryPageManager.RemoveInventoryItem(inventoryItem);
-            uiItem.ResetData();
+            this.uiItem = uiItem;
+            UseItemServerRpc(playerClientId);
         }
         else
         {
             Debug.Log("dont have use item");
+        }
+    }
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    public void UseItemServerRpc(ulong playerClientId)
+    {
+        if (!IsServer) return;
+        if (!NetworkManager.ConnectedClients.TryGetValue(playerClientId, out var client))
+            return;
+        var playerObj = client.PlayerObject;
+        if (playerObj == null) return;
+        var playerProfile = playerObj.GetComponent<PlayerProfile>();
+        if (playerProfile == null) return;
+        var skillPoint = playerProfile.GetSkillPoint();
+        if (skillPoint <= 0)
+        {
+            SendMessegeToClientRpc(false, "Không đủ điểm kỹ năng",
+            new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams { TargetClientIds = new[] { playerObj.OwnerClientId } }
+            });
+        }
+        else
+        {
+            client.PlayerObject.GetComponent<PlayerProfile>().SetSkillPoint(-1);
+            SendMessegeToClientRpc(true, "Đã sử dụng",
+            new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams { TargetClientIds = new[] { playerObj.OwnerClientId } }
+            });
+
+        }
+
+    }
+    [ClientRpc]
+    public void SendMessegeToClientRpc(bool success, string message, ClientRpcParams clientRpcParams)
+    {
+        TopNotificationUI.Instance.ShowNotification(message);
+        if (success)
+        {
+            itemUsed.Add(uiItem.inventoryItem.data);
+            inventoryPageManager.RemoveInventoryItem(uiItem.inventoryItem);
+            uiItem.ResetData();
         }
     }
     private bool TryAddItemToPages(InventoryItem inventoryItem)

@@ -50,7 +50,7 @@ namespace TGTH.Mobile
         #endregion
         public void SetStatsData(Dictionary<StatType, Stat> stats)
         {
-            potentialPointTxt.text = stats[StatType.Potential].GetValue().ToString();
+            potentialPointTxt.text = stats[StatType.PotentialPoint].GetValue().ToString();
 
             hpTxt.text = stats[StatType.PhicialDamagePoint].GetValue().ToString();
             defenseTxt.text = stats[StatType.PhicialDefensePoint].GetValue().ToString();

@@ -150,6 +150,8 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         var statsData = playerObj.GetComponent<StatsData>();
         var resource = playerObj.GetComponent<ResourceStorage>();
         var playerResource = new PlayerResource();
+        var playerProfile = playerObj.GetComponent<PlayerProfile>();
+
         playerResource.linhThach = (int)resource.Coins.Value;
 
         HeroData heroData = statsData.heroData as HeroData;
@@ -186,6 +188,9 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         else
         {
             result.itemId = "";
+            playerProfile.SetPotentialPoint(nextRealm.rewardPotentialPoint);
+            playerProfile.SetSkillPoint(nextRealm.rewardSkillPoint);
+            
             result = new LevelUpValidationResult(true, $"Đột phá thành công! cảnh giới hiện tại là {EnumTranslator.ToVietnamese(nextRealm.realmType)}");
         }
         result.conditionType = LevelUpConditionType.ChampionLevel;

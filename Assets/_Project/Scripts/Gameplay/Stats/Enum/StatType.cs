@@ -34,12 +34,12 @@ public enum StatType
     HealthRegen,     // Hồi sinh lực
     ManaRegen,       // Hồi linh lực
     SpiritRegen,     // Hồi linh thức
-    
+
     // --- hồi phục đồng minh ---
     AllyHealthRegen, // hồi phục máu cho đồng minh
     AllyManaRegen, // hồi phục năng lượng cho đồng minh
     AllySpiritRegen, // hồi phục thần thức cho đồng minh
-    
+
     // --- Miễn nhiễm ---
     DamageImmunity,   // Miễn nhiễm sát thương
     CCImmunity,       // Miễn nhiễm hiệu ứng
@@ -76,19 +76,19 @@ public enum StatType
     CastSpeed, // Tốc độ thi triển kỹ năng
 
     // --- Điểm tiền năng & điểm kĩ năng ---
-    Potential,      // Điểm tiềm năng 
+    PotentialPoint,      // Điểm tiềm năng 
     SkillPoints,    // Điểm kỹ năng
     CombatPower,    // Lực chiến
 
     SpiritRange,    // Phạm vi linh thức điểm (Spirit Range / Tầm linh thức)
-    
+
     Evasion, //Né tránh
     CounterPercentage,
     AttackRange, // tầm đánh
     BonusHealth, // tăng linh thể
     BonusMana, // tăng linh lực
     BonusSpirit, // tăng linh thức
-    
+
     PhicialDamagePoint, // sát thương linh thể điểm
     MagicalDamagePoint, // sát thương linh lực điểm
     SpiritDamagePoint,  // sát thương linh thức điểm
@@ -96,7 +96,7 @@ public enum StatType
     PhicialDefensePoint, // phòng ngự linh thể điểm
     MagicalDefensePoint, // phòng ngự linh lực điểm
     SpiritDefensePoint, // phòng ngự linh thức điểm
-    
+
     HealthPoint, // linh thể điểm
     ManaPoint, // linh lực điểm
     SpiritPoint, // linh thức điểm

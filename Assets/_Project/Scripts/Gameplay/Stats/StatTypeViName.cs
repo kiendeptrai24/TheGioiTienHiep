@@ -50,7 +50,7 @@ public static class StatTypeViName
         { StatType.MovementSpeed, "Tốc độ di chuyển" },
         { StatType.AttackSpeed, "Tốc độ đánh" },
         { StatType.CastSpeed, "Tốc độ thi triển" },
-        { StatType.Potential, "Điểm tiềm năng" },
+        { StatType.PotentialPoint, "Điểm tiềm năng" },
         { StatType.SkillPoints, "Điểm kỹ năng" },
         { StatType.CombatPower, "Lực chiến" },
         { StatType.SpiritRange, "Tầm linh thức" },

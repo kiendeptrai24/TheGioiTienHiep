@@ -10,7 +10,8 @@ public class PlayerProfileDTO
     public ulong coins;
     public Vector3DTO position;
     public Vector3DTO rotation;
-    public int point;
+    public int potentialPoint;
+    public int skillPoint;
     public ItemDataPoint itemDataPoint;
 
     // ===== OFFLINE MINING =====

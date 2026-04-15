@@ -50,7 +50,7 @@ public class StatsModifier
         stats.TryGetValue(StatType.MagicalDefense, out Stat magicalDefenseStat);
         stats.TryGetValue(StatType.SpiritDefense, out Stat spiritDefenseStat);
 
-        stats.TryGetValue(StatType.Potential, out Stat potentialStat);
+        stats.TryGetValue(StatType.PotentialPoint, out Stat potentialStat);
         stats.TryGetValue(StatType.SkillPoints, out Stat skillPointsStat);
 
         stats.TryGetValue(StatType.MovementSpeed, out Stat movementSpeedStat);

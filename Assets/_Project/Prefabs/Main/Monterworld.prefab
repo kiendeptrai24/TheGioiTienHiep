@@ -1313,10 +1313,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5674988850956882470}
-  - component: {fileID: 2141463552775888075}
   - component: {fileID: 1749358295012249173}
   - component: {fileID: 1332265592582713279}
-  - component: {fileID: 437745558192221300}
   - component: {fileID: 6879133659155713536}
   - component: {fileID: 6894223928933206975}
   - component: {fileID: 7595186681768438443}
@@ -1347,33 +1345,6 @@ Transform:
   - {fileID: 7297575365811064617}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 170.261, z: 0}
---- !u!54 &2141463552775888075
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4546658479400525563}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 64
-  m_CollisionDetection: 0
 --- !u!114 &1749358295012249173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1445,23 +1416,6 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &437745558192221300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4546658479400525563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkRigidbody
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkRigidbodyBaseExpanded: 0
-  UseRigidBodyForMotion: 0
-  AutoUpdateKinematicState: 1
-  AutoSetKinematicOnDespawn: 1
 --- !u!114 &6879133659155713536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1506,12 +1460,12 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 3
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &4653743167290161615
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -49,7 +49,10 @@ public class StatsRealmPreset : ItemPreset
     public int yeuDanCost;          // Yêu đan
     public int mahachCost;          // Ma hạch
     public int linhThachCost;        // Linh thạch
-    public int itemCost;               // Vật phẩm khác
+    public int rewardPotentialPoint;
+    public int rewardSkillPoint;
+
+
 #if UNITY_EDITOR
     public override void OnValidate()
     {
@@ -391,7 +394,8 @@ public class StatsRealmPreset : ItemPreset
         data.yeuDanCost = yeuDanCost;
         data.maHachCost = mahachCost;
         data.linhThachCost = linhThachCost;
-        data.itemCost = itemCost;
+        data.rewardPotentialPoint = rewardPotentialPoint;
+        data.rewardSkillPoint = rewardSkillPoint;
 
 
         return data;

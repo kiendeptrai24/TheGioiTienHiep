@@ -5678,15 +5678,14 @@ GameObject:
   - component: {fileID: 6332937592598727563}
   - component: {fileID: 3855082729364616063}
   - component: {fileID: 439217955596202718}
-  - component: {fileID: -6129814544419183229}
   - component: {fileID: 75129623076662156}
   - component: {fileID: 3528530155531641631}
   - component: {fileID: 2860028719030235241}
   - component: {fileID: 4963900542740255994}
   - component: {fileID: 7400790305211816189}
   - component: {fileID: 994607168590801085}
-  - component: {fileID: 465144859222594659}
   - component: {fileID: 6684745471865655265}
+  - component: {fileID: 6461800011671751440}
   m_Layer: 12
   m_Name: CharacterHuman
   m_TagString: Untagged
@@ -5997,27 +5996,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerTrigger
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!135 &-6129814544419183229
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7804178499550283321}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 2
-  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &75129623076662156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6114,13 +6092,6 @@ MonoBehaviour:
         byte0059: 0
         byte0060: 0
         byte0061: 0
-  playerResource:
-    realmType: 0
-    linhThach: 0
-    linhThao: 0
-    khoangThach: 0
-    yeuDan: 0
-    maHach: 0
 --- !u!114 &2860028719030235241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6285,7 +6256,8 @@ MonoBehaviour:
     yeuDanCost: 0
     maHachCost: 0
     linhThachCost: 0
-    itemCost: 0
+    rewardPotentialPoint: 0
+    rewardSkillPoint: 0
 --- !u!114 &994607168590801085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6301,7 +6273,21 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   lightprefab: {fileID: 7533948920996336447, guid: f01a485a67c25324d8d226641b14a7a6,
     type: 3}
---- !u!135 &465144859222594659
+--- !u!114 &6684745471865655265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 858339105e3c6b846a8efd1d4f9f0d5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpiritRange
+  ShowTopMostFoldoutHeaderGroup: 1
+  intervelTime: 1
+--- !u!135 &6461800011671751440
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6320,22 +6306,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 10
+  m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6684745471865655265
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7804178499550283321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 858339105e3c6b846a8efd1d4f9f0d5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpiritRange
-  ShowTopMostFoldoutHeaderGroup: 1
-  collideCheckSpiritRange: {fileID: 465144859222594659}
 --- !u!1 &7825434533555785058
 GameObject:
   m_ObjectHideFlags: 0

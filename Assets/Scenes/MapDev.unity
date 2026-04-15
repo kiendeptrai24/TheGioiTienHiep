@@ -39297,13 +39297,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WorldClickSystem
   mainCamera: {fileID: 1243152619}
   input: {fileID: 0}
-  antiPlayer:
+  pathFollowerRB: {fileID: 0}
+  whatIsEntity:
     serializedVersion: 2
     m_Bits: 4224
   whatIsGround:
     serializedVersion: 2
     m_Bits: 257
-  pathFollowerRB: {fileID: 0}
 --- !u!4 &441853267
 Transform:
   m_ObjectHideFlags: 0
@@ -47668,7 +47668,8 @@ MonoBehaviour:
     yeuDanCost: 0
     maHachCost: 0
     linhThachCost: 0
-    itemCost: 0
+    rewardPotentialPoint: 0
+    rewardSkillPoint: 0
   nextItemData:
     instanceId: 
     itemId: 
@@ -47711,7 +47712,8 @@ MonoBehaviour:
     yeuDanCost: 0
     maHachCost: 0
     linhThachCost: 0
-    itemCost: 0
+    rewardPotentialPoint: 0
+    rewardSkillPoint: 0
 --- !u!114 &542338153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120315,7 +120317,8 @@ MonoBehaviour:
     yeuDanCost: 0
     maHachCost: 0
     linhThachCost: 0
-    itemCost: 0
+    rewardPotentialPoint: 0
+    rewardSkillPoint: 0
 --- !u!1 &1324406905
 GameObject:
   m_ObjectHideFlags: 0
@@ -271737,11 +271740,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2874527020319966466, guid: b8b0aa52c18ec2f4ab792232c9bfd721,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4270466957040653376, guid: b8b0aa52c18ec2f4ab792232c9bfd721,
         type: 3}
       propertyPath: GlobalObjectIdHash
@@ -271801,21 +271799,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: mine
-      objectReference: {fileID: 0}
-    - target: {fileID: 7156025912132096766, guid: b8b0aa52c18ec2f4ab792232c9bfd721,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7156025912132096766, guid: b8b0aa52c18ec2f4ab792232c9bfd721,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7156025912132096766, guid: b8b0aa52c18ec2f4ab792232c9bfd721,
-        type: 3}
-      propertyPath: m_Size.z
-      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -360825,11 +360808,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Monter_World
       objectReference: {fileID: 0}
-    - target: {fileID: 4546658479400525563, guid: 03819744be33c024db9b04fb221c6a08,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5674988850956882470, guid: 03819744be33c024db9b04fb221c6a08,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -372937,7 +372915,8 @@ MonoBehaviour:
     yeuDanCost: 0
     maHachCost: 0
     linhThachCost: 0
-    itemCost: 0
+    rewardPotentialPoint: 0
+    rewardSkillPoint: 0
 --- !u!23 &4966512594610179410
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -419568,6 +419547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8525a11184a60d41a2cc0947ce8cc50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryUseSystem
+  ShowTopMostFoldoutHeaderGroup: 1
   inventoryPageManager: {fileID: 1775987466531709056}
   techniqueManager: {fileID: 1369868880359852483}
   skillPageManager: {fileID: 1067212301212126139}
