@@ -39,7 +39,7 @@ namespace TGTH.Mobile
             PlayerPrefabSelector.Instance.SetItemData(currentItemSelect.inventoryItem.data);
             PlayfabDataManager.Instance.OnCharacterLoaded(characterId);
             navigation.OnClick();
-            NetworkManager.Singleton.StartHost();
+            NetworkManager.Singleton.StartClient();
         }
 
         private void OnItemCharacterChanged(List<ItemData> list)

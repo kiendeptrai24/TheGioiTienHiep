@@ -12,7 +12,17 @@ namespace TGTH.Mobile
         {
             base.Awake();
             var clientAPI = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
-            IAuthService authService = new PlayFabAuthService(clientAPI);
+            IAuthService authService = null;
+            if (Configuration.Instance.buildType == BuildType.LOCAL_CLIENT)
+            {
+                authService = new PlayFabAuthCustomService(clientAPI);
+                authManager = new AuthManager(authService);
+            }
+            else if (Configuration.Instance.buildType == BuildType.REMOTE_CLIENT)
+            {
+                authService = new PlayFabAuthServiceRemote(clientAPI);
+                authManager = new AuthManager(authService);
+            }
             authManager = new AuthManager(authService);
             view.OnRegisterClicked += OnRegisterClicked;
         }

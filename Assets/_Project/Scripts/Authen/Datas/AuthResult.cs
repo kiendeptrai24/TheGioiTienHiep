@@ -10,4 +10,6 @@ public class AuthResult
     public string email;
     public string accessToken;
     public string message;
+    internal string ipAddress;
+    internal int port;
 }

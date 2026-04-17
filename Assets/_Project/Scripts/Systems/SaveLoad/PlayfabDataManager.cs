@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class PlayfabDataManager : Singleton<PlayfabDataManager>
 {
-    public ServerClientTest serverClientTest;
     public event Action<GameData> OnLoadGameFormPlayfab;
     public event Action<List<ItemData>> OnLoadCharacterFormPlayfab;
     public event Action<List<ItemData>> OnCharacterChanged;
@@ -26,16 +25,26 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     protected override void Awake()
     {
         base.Awake();
-        if (serverClientTest.type == ServerClientType.Server) return;
+        if (Configuration.Instance.buildType == BuildType.LOCAL_SERVER ||
+         Configuration.Instance.buildType == BuildType.REMOTE_SERVER) return;
         navigationToCharacterSelectionScreen = GetComponent<ActionNavigationSpecificScreen>();
         clientAPI = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
-        IAuthService authService = new PlayFabAuthCustomService(clientAPI);
-        authManager = new AuthManager(authService);
+        if (Configuration.Instance.buildType == BuildType.LOCAL_CLIENT)
+        {
+            IAuthService authService = new PlayFabAuthCustomService(clientAPI);
+            authManager = new AuthManager(authService);
+        }
+        else if (Configuration.Instance.buildType == BuildType.REMOTE_CLIENT)
+        {
+            IAuthService authService = new PlayFabAuthServiceRemote(clientAPI);
+            authManager = new AuthManager(authService);
+        }
     }
     protected override void Start()
     {
         base.Start();
-        if (serverClientTest.type == ServerClientType.Server) return;
+        if (Configuration.Instance.buildType == BuildType.LOCAL_SERVER ||
+         Configuration.Instance.buildType == BuildType.REMOTE_SERVER) return;
         authManager.AutoLogin(onSuccess, onError);
     }
     public void Login(LoginData loginData)
