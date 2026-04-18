@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using PlayFab;
-using PlayFab.Internal;
 using UnityEngine;
 
 public class PlayfabDataManager : Singleton<PlayfabDataManager>
@@ -22,13 +21,17 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     public AuthManager GetAuthManager() => authManager;
     public PlayFabClientInstanceAPI GetClientAPI() => clientAPI;
     public ActionNavigationSpecificScreen navigationToCharacterSelectionScreen;
+    public bool ready = false;
     protected override void Awake()
     {
         base.Awake();
+        navigationToCharacterSelectionScreen = GetComponent<ActionNavigationSpecificScreen>();
+
         if (Configuration.Instance.buildType == BuildType.LOCAL_SERVER ||
          Configuration.Instance.buildType == BuildType.REMOTE_SERVER) return;
-        navigationToCharacterSelectionScreen = GetComponent<ActionNavigationSpecificScreen>();
+
         clientAPI = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
+
         if (Configuration.Instance.buildType == BuildType.LOCAL_CLIENT)
         {
             IAuthService authService = new PlayFabAuthCustomService(clientAPI);
@@ -36,9 +39,40 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         }
         else if (Configuration.Instance.buildType == BuildType.REMOTE_CLIENT)
         {
-            IAuthService authService = new PlayFabAuthServiceRemote(clientAPI);
+            IAuthService authService = new PlayFabAuthService(clientAPI);
             authManager = new AuthManager(authService);
+            LobbyTestController.Instance.OnLobbySearchLobbiesCompleted += (success, lobby) =>
+            {
+                if (success)
+                {
+                    Debug.Log("JoinLobby success");
+                    if (LobbyTestController.Instance.HasLobby()) return;
+                    LobbyTestController.Instance.JoinLobby(clientAPI.authenticationContext, lobby.ConnectionString);
+                    ready = true;
+                    Debug.Log("JoinLobby success");
+                }
+                else
+                {
+                    Debug.Log("JoinLobby failed");
+                    if (LobbyTestController.Instance.HasLobby()) return;
+                    var playfabConnectMutiplayer = new PlayfabConnectMutiplayer(clientAPI.authenticationContext);
+                    playfabConnectMutiplayer.RequestMultiplayerServer(clientAPI, Configuration.Instance, result =>
+                    {
+                        if (result.success)
+                        {
+                            LobbyTestController.Instance.CreateLobby(clientAPI.authenticationContext, result.ipAddress, result.port);
+                            ready = true;
+                            Debug.Log("RequestMultiplayerServer success");
+                        }
+                        else
+                        {
+                            Debug.Log("RequestMultiplayerServer failed");
+                        }
+                    });
+                }
+            };
         }
+
     }
     protected override void Start()
     {
@@ -73,7 +107,14 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         {
             OnLoadCharacterFormPlayfab?.Invoke(this.gameData.itemDatasCharacter);
         });
+
+        FindRemoteServer();
         LoginSuccess?.Invoke(result);
+    }
+    private void FindRemoteServer()
+    {
+        LobbyTestController.Instance.GetLobbyServer(clientAPI.authenticationContext);
+
     }
     public void AddCharacter(ItemData itemCharacter)
     {

@@ -9,8 +9,7 @@ using PlayFab.SharedModels;
 namespace PlayFab
 {
     /// <summary>
-    /// API methods for managing the catalog. Inventory manages in-game assets for any given entity. API methods for managing
-    /// the versioned catalogs.
+    /// API methods for managing the catalog. Inventory manages in-game assets for any given entity.
     /// </summary>
     public class PlayFabEconomyInstanceAPI : IPlayFabInstanceApi
     {
@@ -53,7 +52,7 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Add inventory items. Up to 10,000 stacks of items can be added to a single inventory collection. Stack size is uncapped.
+        /// Add inventory items. Up to 3500 stacks of items can be added to a single inventory collection. Stack size is uncapped.
         /// </summary>
         public void AddInventoryItems(AddInventoryItemsRequest request, Action<AddInventoryItemsResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
         {
@@ -64,7 +63,7 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Creates a new item in the working catalog using provided metadata. Note: SAS tokens provided are valid for 1 hour.
+        /// Creates a new item in the working catalog using provided metadata.
         /// </summary>
         public void CreateDraftItem(CreateDraftItemRequest request, Action<CreateDraftItemResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
         {
@@ -134,10 +133,11 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Execute a list of Inventory Operations. A maximum list of 50 operations can be performed by a single request. There is
-        /// also a limit to 300 items that can be modified/added in a single request. For example, adding a bundle with 50 items
+        /// Execute a list of Inventory Operations. A maximum list of 10 operations can be performed by a single request. There is
+        /// also a limit to 250 items that can be modified/added in a single request. For example, adding a bundle with 50 items
         /// counts as 50 items modified. All operations must be done within a single inventory collection. This API has a reduced
-        /// RPS compared to an individual inventory operation with Player Entities limited to 60 requests in 90 seconds.
+        /// RPS compared to an individual inventory operation with Player Entities limited to 15 requests in 90 seconds and Title
+        /// Entities limited to 500 requests in 10 seconds.
         /// </summary>
         public void ExecuteInventoryOperations(ExecuteInventoryOperationsRequest request, Action<ExecuteInventoryOperationsResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
         {
@@ -145,20 +145,6 @@ namespace PlayFab
             var callSettings = apiSettings ?? PlayFabSettings.staticSettings;
             if (!context.IsEntityLoggedIn()) throw new PlayFabException(PlayFabExceptionCode.NotLoggedIn,"Must be logged in to call this method");
             PlayFabHttp.MakeApiCall("/Inventory/ExecuteInventoryOperations", request, AuthType.EntityToken, resultCallback, errorCallback, customData, extraHeaders, context, callSettings, this);
-        }
-
-        /// <summary>
-        /// Transfer a list of inventory items. A maximum list of 50 operations can be performed by a single request. When the
-        /// response code is 202, one or more operations did not complete within the timeframe of the request. You can identify the
-        /// pending operations by looking for OperationStatus = 'InProgress'. You can check on the operation status at anytime
-        /// within 1 day of the request by passing the TransactionToken to the GetInventoryOperationStatus API.
-        /// </summary>
-        public void ExecuteTransferOperations(ExecuteTransferOperationsRequest request, Action<ExecuteTransferOperationsResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
-        {
-            var context = (request == null ? null : request.AuthenticationContext) ?? authenticationContext;
-            var callSettings = apiSettings ?? PlayFabSettings.staticSettings;
-            if (!context.IsEntityLoggedIn()) throw new PlayFabException(PlayFabExceptionCode.NotLoggedIn,"Must be logged in to call this method");
-            PlayFabHttp.MakeApiCall("/Inventory/ExecuteTransferOperations", request, AuthType.EntityToken, resultCallback, errorCallback, customData, extraHeaders, context, callSettings, this);
         }
 
         /// <summary>
@@ -177,8 +163,7 @@ namespace PlayFab
         /// <summary>
         /// Retrieves an item from the working catalog. This item represents the current working state of the item. GetDraftItem
         /// does not work off a cache of the Catalog and should be used when trying to get recent item updates. However, please note
-        /// that item references data is cached and may take a few moments for changes to propagate. Note: SAS tokens provided are
-        /// valid for 1 hour.
+        /// that item references data is cached and may take a few moments for changes to propagate.
         /// </summary>
         public void GetDraftItem(GetDraftItemRequest request, Action<GetDraftItemResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
         {
@@ -190,8 +175,7 @@ namespace PlayFab
 
         /// <summary>
         /// Retrieves a paginated list of the items from the draft catalog. Up to 50 IDs can be retrieved in a single request.
-        /// GetDraftItems does not work off a cache of the Catalog and should be used when trying to get recent item updates. Note:
-        /// SAS tokens provided are valid for 1 hour.
+        /// GetDraftItems does not work off a cache of the Catalog and should be used when trying to get recent item updates.
         /// </summary>
         public void GetDraftItems(GetDraftItemsRequest request, Action<GetDraftItemsResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
         {
@@ -227,9 +211,8 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Get Inventory Collection Ids. Up to 50 Ids can be returned at once (or 250 with response compression enabled). You can
-        /// use continuation tokens to paginate through results that return greater than the limit. It can take a few seconds for
-        /// new collection Ids to show up.
+        /// Get Inventory Collection Ids. Up to 50 Ids can be returned at once. You can use continuation tokens to paginate through
+        /// results that return greater than the limit. It can take a few seconds for new collection Ids to show up.
         /// </summary>
         public void GetInventoryCollectionIds(GetInventoryCollectionIdsRequest request, Action<GetInventoryCollectionIdsResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
         {
@@ -248,18 +231,6 @@ namespace PlayFab
             var callSettings = apiSettings ?? PlayFabSettings.staticSettings;
             if (!context.IsEntityLoggedIn()) throw new PlayFabException(PlayFabExceptionCode.NotLoggedIn,"Must be logged in to call this method");
             PlayFabHttp.MakeApiCall("/Inventory/GetInventoryItems", request, AuthType.EntityToken, resultCallback, errorCallback, customData, extraHeaders, context, callSettings, this);
-        }
-
-        /// <summary>
-        /// Get the status of an inventory operation using an OperationToken. You can check on the operation status at anytime
-        /// within 1 day of the request by passing the TransactionToken to the this API.
-        /// </summary>
-        public void GetInventoryOperationStatus(GetInventoryOperationStatusRequest request, Action<GetInventoryOperationStatusResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
-        {
-            var context = (request == null ? null : request.AuthenticationContext) ?? authenticationContext;
-            var callSettings = apiSettings ?? PlayFabSettings.staticSettings;
-            if (!context.IsEntityLoggedIn()) throw new PlayFabException(PlayFabExceptionCode.NotLoggedIn,"Must be logged in to call this method");
-            PlayFabHttp.MakeApiCall("/Inventory/GetInventoryOperationStatus", request, AuthType.EntityToken, resultCallback, errorCallback, customData, extraHeaders, context, callSettings, this);
         }
 
         /// <summary>
@@ -350,9 +321,21 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Get transaction history for a player. Up to 250 Events can be returned at once. You can use continuation tokens to
+        /// Gets the access tokens.
+        /// </summary>
+        public void GetMicrosoftStoreAccessTokens(GetMicrosoftStoreAccessTokensRequest request, Action<GetMicrosoftStoreAccessTokensResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
+        {
+            var context = (request == null ? null : request.AuthenticationContext) ?? authenticationContext;
+            var callSettings = apiSettings ?? PlayFabSettings.staticSettings;
+            if (!context.IsEntityLoggedIn()) throw new PlayFabException(PlayFabExceptionCode.NotLoggedIn,"Must be logged in to call this method");
+            PlayFabHttp.MakeApiCall("/Inventory/GetMicrosoftStoreAccessTokens", request, AuthType.EntityToken, resultCallback, errorCallback, customData, extraHeaders, context, callSettings, this);
+        }
+
+        /// <summary>
+        /// Get transaction history for a player. Up to 50 Events can be returned at once. You can use continuation tokens to
         /// paginate through results that return greater than the limit. Getting transaction history has a lower RPS limit than
-        /// getting a Player's inventory with Player Entities having a limit of 30 requests in 300 seconds.
+        /// getting a Player's inventory with Player Entities having a limit of 30 requests in 300 seconds and Title Entities having
+        /// a limit of 100 requests in 10 seconds.
         /// </summary>
         public void GetTransactionHistory(GetTransactionHistoryRequest request, Action<GetTransactionHistoryResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
         {
@@ -375,7 +358,7 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Purchase an item or bundle. Up to 10,000 stacks of items can be added to a single inventory collection. Stack size is
+        /// Purchase an item or bundle. Up to 3500 stacks of items can be added to a single inventory collection. Stack size is
         /// uncapped.
         /// </summary>
         public void PurchaseInventoryItems(PurchaseInventoryItemsRequest request, Action<PurchaseInventoryItemsResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
@@ -400,17 +383,6 @@ namespace PlayFab
         /// <summary>
         /// Redeem items.
         /// </summary>
-        public void RedeemAppleAppStoreWithJwsInventoryItems(RedeemAppleAppStoreWithJwsInventoryItemsRequest request, Action<RedeemAppleAppStoreWithJwsInventoryItemsResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
-        {
-            var context = (request == null ? null : request.AuthenticationContext) ?? authenticationContext;
-            var callSettings = apiSettings ?? PlayFabSettings.staticSettings;
-            if (!context.IsEntityLoggedIn()) throw new PlayFabException(PlayFabExceptionCode.NotLoggedIn,"Must be logged in to call this method");
-            PlayFabHttp.MakeApiCall("/Inventory/RedeemAppleAppStoreWithJwsInventoryItems", request, AuthType.EntityToken, resultCallback, errorCallback, customData, extraHeaders, context, callSettings, this);
-        }
-
-        /// <summary>
-        /// Redeem items.
-        /// </summary>
         public void RedeemGooglePlayInventoryItems(RedeemGooglePlayInventoryItemsRequest request, Action<RedeemGooglePlayInventoryItemsResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
         {
             var context = (request == null ? null : request.AuthenticationContext) ?? authenticationContext;
@@ -420,7 +392,7 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Redeem items from the Microsoft Store. Supported entitlement types are Developer Manager Consumable and Durable.
+        /// Redeem items.
         /// </summary>
         public void RedeemMicrosoftStoreInventoryItems(RedeemMicrosoftStoreInventoryItemsRequest request, Action<RedeemMicrosoftStoreInventoryItemsResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
         {
@@ -558,11 +530,8 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Transfer inventory items. When transferring across collections, a 202 response indicates that the transfer did not
-        /// complete within the timeframe of the request. You can identify the pending operations by looking for OperationStatus =
-        /// 'InProgress'. You can check on the operation status at anytime within 1 day of the request by passing the
-        /// TransactionToken to the GetInventoryOperationStatus API. More information about item transfer scenarios can be found
-        /// here:
+        /// Transfer inventory items. When transferring across collections, a 202 response indicates that the transfer is in
+        /// progress and will complete soon. More information about item transfer scenarios can be found here:
         /// https://learn.microsoft.com/en-us/gaming/playfab/features/economy-v2/inventory/?tabs=inventory-game-manager#transfer-inventory-items
         /// </summary>
         public void TransferInventoryItems(TransferInventoryItemsRequest request, Action<TransferInventoryItemsResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
@@ -587,7 +556,7 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Update the metadata for an item in the working catalog. Note: SAS tokens provided are valid for 1 hour.
+        /// Update the metadata for an item in the working catalog.
         /// </summary>
         public void UpdateDraftItem(UpdateDraftItemRequest request, Action<UpdateDraftItemResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
         {

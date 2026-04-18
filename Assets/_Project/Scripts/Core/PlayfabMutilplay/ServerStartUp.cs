@@ -2,10 +2,10 @@ using System.Collections;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using PlayFab.MultiplayerAgent.Model;
 using Unity.Netcode;
 using PlayFab;
 using Unity.Netcode.Transports.UTP;
+using PlayFab.MultiplayerAgent.Model;
 
 public class ServerStartUp : Singleton<ClientStartUp>
 {

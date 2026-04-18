@@ -20,7 +20,7 @@ namespace TGTH.Mobile
             }
             else if (Configuration.Instance.buildType == BuildType.REMOTE_CLIENT)
             {
-                authService = new PlayFabAuthServiceRemote(clientAPI);
+                authService = new PlayFabAuthService(clientAPI);
                 authManager = new AuthManager(authService);
             }
             authManager = new AuthManager(authService);
