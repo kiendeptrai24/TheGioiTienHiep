@@ -1,12 +1,9 @@
-using ExitGames.Client.Photon.StructWrapping;
-using FeatureToggles;
 using Unity.Netcode;
 using UnityEngine;
 
 public class WorldClickSystem : TGTHMonoBehaviour
 {
     [Header("Refs")]
-    private bool _wasPressed;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private InputManager input;
     public PathFollowerRB pathFollowerRB;
@@ -18,6 +15,11 @@ public class WorldClickSystem : TGTHMonoBehaviour
         base.Awake();
         input = FindAnyObjectByType<InputManager>();
         PlayerNetManager.Instance.OnPlayerExiststed += OnPlayerExists;
+        input.OnPointerPositionClick += (Vector2 pos) =>
+        {
+            if (!canClick) return;
+            HandleClick(pos);
+        };
     }
     private void OnPlayerExists(NetworkObject playerNet)
     {
@@ -29,21 +31,9 @@ public class WorldClickSystem : TGTHMonoBehaviour
         base.Start();
         mainCamera = Camera.main;
     }
-    private void Update()
+    private void HandleClick(Vector2 position)
     {
-        if (!canClick) return;
-        bool pressed = input.IsPointerPressed();
-
-        if (pressed && !_wasPressed)
-        {
-            HandleClick();
-        }
-
-        _wasPressed = pressed;
-    }
-    private void HandleClick()
-    {
-        Ray ray = mainCamera.ScreenPointToRay(input.GetPointerPosition());
+        Ray ray = mainCamera.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out RaycastHit hitEntity, 100f, whatIsEntity))
         {
             if (hitEntity.collider.TryGetComponent<IWorldClickable>(out var clickable))

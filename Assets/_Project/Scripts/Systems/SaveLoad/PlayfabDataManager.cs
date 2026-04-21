@@ -36,6 +36,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         {
             IAuthService authService = new PlayFabAuthCustomService(clientAPI);
             authManager = new AuthManager(authService);
+            ready = true;
         }
         else if (Configuration.Instance.buildType == BuildType.REMOTE_CLIENT)
         {
@@ -45,15 +46,12 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             {
                 if (success)
                 {
-                    Debug.Log("JoinLobby success");
                     if (LobbyTestController.Instance.HasLobby()) return;
                     LobbyTestController.Instance.JoinLobby(clientAPI.authenticationContext, lobby.ConnectionString);
                     ready = true;
-                    Debug.Log("JoinLobby success");
                 }
                 else
                 {
-                    Debug.Log("JoinLobby failed");
                     if (LobbyTestController.Instance.HasLobby()) return;
                     var playfabConnectMutiplayer = new PlayfabConnectMutiplayer(clientAPI.authenticationContext);
                     playfabConnectMutiplayer.RequestMultiplayerServer(clientAPI, Configuration.Instance, result =>
@@ -62,7 +60,6 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
                         {
                             LobbyTestController.Instance.CreateLobby(clientAPI.authenticationContext, result.ipAddress, result.port);
                             ready = true;
-                            Debug.Log("RequestMultiplayerServer success");
                         }
                         else
                         {

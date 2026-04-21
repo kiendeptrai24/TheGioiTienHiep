@@ -28,7 +28,7 @@ public class MouseFollower : TGTHMonoBehaviour
         Vector2 position;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             (RectTransform)canvas.transform,
-            inputManager.GetUIInputDirection(),
+            inputManager.GetUIPointerPosition(),
             canvas.worldCamera,
             out position
                 );

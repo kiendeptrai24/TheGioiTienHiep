@@ -77,7 +77,7 @@ public enum StatType
 
     // --- Điểm tiền năng & điểm kĩ năng ---
     PotentialPoint,      // Điểm tiềm năng 
-    SkillPoints,    // Điểm kỹ năng
+    SkillPoint,    // Điểm kỹ năng
     CombatPower,    // Lực chiến
 
     SpiritRange,    // Phạm vi linh thức điểm (Spirit Range / Tầm linh thức)

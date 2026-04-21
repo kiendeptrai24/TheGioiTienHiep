@@ -15,7 +15,7 @@ public class PathFollowerRB : TGTHNetworkBehaviour
     public float cornerSlowDown = 0.8f; // optional
     private readonly List<GridCoord> gridPath = new();
     private int index = -1;
-    private bool hasPath;
+    [SerializeField] private bool hasPath;
 
     protected override void Awake()
     {
@@ -70,7 +70,10 @@ public class PathFollowerRB : TGTHNetworkBehaviour
     {
         gridPath.Clear();
         gridPath.AddRange(newPath);
-
+        if (gridPath.Count > 2)
+        {
+            gridPath.RemoveAt(0);
+        }
         index = 0;
         hasPath = gridPath.Count > 0;
     }

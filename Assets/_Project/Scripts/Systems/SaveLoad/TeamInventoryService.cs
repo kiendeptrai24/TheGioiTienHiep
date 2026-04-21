@@ -58,6 +58,8 @@ public class TeamInventoryService : ISaveLoadRemote
                                 heroData.spiritPoint = gameData.itemDataPoint.spiritPoint;
                                 heroData.moveSpeedPoint = gameData.itemDataPoint.moveSpeed;
                                 heroData.spititRangePoint = gameData.itemDataPoint.spititRange;
+                                heroData.potentialPoint = gameData.potentialPoint;
+                                heroData.skillPoint = gameData.skillPoint;
                             }
                         }
                         continue;

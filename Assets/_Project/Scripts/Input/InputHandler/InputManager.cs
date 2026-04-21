@@ -1,9 +1,13 @@
 
 
 using System;
+using System.Collections.Generic;
 using FeatureToggles;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
+using static UnityEngine.InputSystem.InputAction;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
+using UnityEngine.InputSystem.EnhancedTouch;
 public enum InputType
 {
     Player,
@@ -16,11 +20,31 @@ public class InputManager : MonoBehaviour
     public InputHandler inputHandler;
     public InputType inputType;
     public Action OnEnterClick;
+    private bool isPressed;
+    public event Action<Vector2> OnPointerPositionClick;
     private FeatureManager _mgr;
     public void Awake()
     {
+
         inputHandler = new InputHandler();
-        inputHandler.UI.Enter.performed += (InputAction.CallbackContext context) => { OnEnterClick?.Invoke(); };
+        inputHandler.UI.Enter.started += (CallbackContext context) => { OnEnterClick?.Invoke(); };
+
+
+        inputHandler.Player.PointerPress.started += (CallbackContext context) =>
+        {
+            if (isPressed) return;
+            isPressed = true;
+
+            Vector2 pointerPos = GetPointerPosition();
+            if (!IsPointerOverUI(pointerPos))
+            {
+                OnPointerPositionClick?.Invoke(pointerPos);
+            }
+        };
+        inputHandler.Player.PointerPress.canceled += (CallbackContext context) =>
+        {
+            isPressed = false;
+        };
         _mgr = FeatureManager.Instance;
         _mgr.OnFeatureEffectiveChanged += OnChanged;
     }
@@ -31,15 +55,19 @@ public class InputManager : MonoBehaviour
         {
             case FeatureId.WorldClick_Enabled:
                 if (unlockInput)
+                {
                     TurnOnPlayerInput();
+                }
                 else
+                {
                     TurnOffPlayerInput();
+                }
                 break;
             case FeatureId.BattleScene_Enabled:
                 if (unlockInput)
-                    TurnOnPlayerInput();
+                    TurnOnAllInput();
                 else
-                    TurnOffPlayerInput();
+                    TurnOffAllInput();
                 break;
             default:
                 break;
@@ -52,10 +80,25 @@ public class InputManager : MonoBehaviour
         if (!inputHandler.Player.enabled) return Vector2.zero;
         return inputHandler.Player.Move.ReadValue<Vector2>();
     }
-    public bool IsPointerPressed()
+    private bool IsPointerOverUI(Vector2 screenPos)
     {
-        if (!inputHandler.Player.enabled) return false;
-        return inputHandler.Player.PointerPress.IsPressed();
+        if (EventSystem.current == null) return false;
+
+        var eventData = new PointerEventData(EventSystem.current)
+        {
+            position = screenPos
+        };
+
+        var results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+        int itemIgnores = 0;
+        foreach (var item in results)
+        {
+            if (item.gameObject.name == "icon")
+                itemIgnores++;
+        }
+
+        return results.Count - itemIgnores > 0;
     }
 
     public Vector2 GetPointerPosition()
@@ -66,15 +109,44 @@ public class InputManager : MonoBehaviour
     #endregion
 
     #region UI
-    public Vector2 GetUIInputDirection()
+    public float GetInputScrollWheel()
     {
-        return inputHandler.UI.Mouse.ReadValue<Vector2>();
-    }
-    public Vector2 GetInputScrollWheel()
-    {
-        return inputHandler.UI.Scroll.ReadValue<Vector2>();
+        return GetZoomInput();
     }
 
+    public float GetZoomInput()
+    {
+        Vector2 scroll = inputHandler.UI.Scroll.ReadValue<Vector2>();
+        if (scroll.y != 0)
+            return scroll.y;
+
+        if (Touch.activeTouches.Count >= 2)
+        {
+            var t0 = Touch.activeTouches[0];
+            var t1 = Touch.activeTouches[1];
+
+            float prev = Vector2.Distance(
+                t0.screenPosition - t0.delta,
+                t1.screenPosition - t1.delta
+            );
+
+            float curr = Vector2.Distance(
+                t0.screenPosition,
+                t1.screenPosition
+            );
+            return (curr - prev) * 0.01f; // giá trị zoom thật (mượt)
+        }
+
+        return 0;
+    }
+    public Vector2 GetUIPrimavePointerPosition()
+    {
+        return inputHandler.UI.PrimaryFingerPosition.ReadValue<Vector2>();
+    }
+    public Vector2 GetUISecondaryPointerPosition()
+    {
+        return inputHandler.UI.SecondaryFingerPosition.ReadValue<Vector2>();
+    }
     public Vector2 GetUIPointerDelta()
     {
         return inputHandler.UI.PointerDelta.ReadValue<Vector2>();
@@ -124,9 +196,11 @@ public class InputManager : MonoBehaviour
     private void OnEnable()
     {
         inputHandler.Enable();
+        EnhancedTouchSupport.Enable();
     }
     private void OnDisable()
     {
         inputHandler.Disable();
+        EnhancedTouchSupport.Disable();
     }
 }

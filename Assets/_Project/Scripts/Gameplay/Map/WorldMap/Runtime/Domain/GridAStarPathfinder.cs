@@ -1,22 +1,24 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using WorldMap.Data;
 using WorldMap.Domain;
 
-
 public static class GridAStarPathfinder
 {
-    // 4 hướng (ổn định, dễ). Bạn có thể nâng lên 8 hướng sau.
-    // private static readonly (int dx, int dz)[] Neigh8 =
-    // {
-    //     (1,0), (-1,0), (0,1), (0,-1)
-    // };
     private static readonly (int dx, int dz, float cost)[] Neigh8 =
     {
         ( 1, 0, 1f), (-1, 0, 1f), (0, 1, 1f), (0,-1, 1f),
         ( 1, 1, 1.4142f), ( 1,-1, 1.4142f), (-1, 1, 1.4142f), (-1,-1, 1.4142f),
     };
+
+    // 🔥 CACHE (quan trọng)
+    private static float[] gScore;
+    private static float[] fScore;
+    private static int[] cameFrom;
+    private static bool[] closed;
+    private static bool[] inOpen;
+
+    private static MinHeap open = new MinHeap();
 
     public static bool TryFindPath(
         MapDataPreset map,
@@ -29,30 +31,29 @@ public static class GridAStarPathfinder
 
         int w = map.grid.width;
         int h = map.grid.height;
-        // kiểm tra xem có vượt biên không
+
         if (!InBounds(start.x, start.z, w, h) || !InBounds(goal.x, goal.z, w, h))
             return false;
 
-        // kiểm tra xem ô đó có đi được không
         if (map.Get(start.x, start.z).walkable == 0) return false;
         if (map.Get(goal.x, goal.z).walkable == 0) return false;
 
-        // tổng số ô
         int total = w * h;
 
-        // Arrays cho A*
-        var gScore = new float[total];
-        var fScore = new float[total];
-        var cameFrom = new int[total];
-        var closed = new bool[total];
-        var inOpen = new bool[total];
+        // 🔥 INIT / RESIZE (chỉ khi cần)
+        EnsureCapacity(total);
 
+        // 🔥 RESET (không tạo GC)
         for (int i = 0; i < total; i++)
         {
             gScore[i] = float.PositiveInfinity;
             fScore[i] = float.PositiveInfinity;
             cameFrom[i] = -1;
+            closed[i] = false;
+            inOpen[i] = false;
         }
+
+        open.Clear();
 
         int startIdx = ToIndex(start.x, start.z, w);
         int goalIdx = ToIndex(goal.x, goal.z, w);
@@ -60,7 +61,6 @@ public static class GridAStarPathfinder
         gScore[startIdx] = 0f;
         fScore[startIdx] = Heuristic(start.x, start.z, goal.x, goal.z);
 
-        var open = new MinHeap();
         open.Push(startIdx, fScore[startIdx]);
         inOpen[startIdx] = true;
 
@@ -78,7 +78,6 @@ public static class GridAStarPathfinder
 
             FromIndex(current, w, out int cx, out int cz);
 
-            // Duyệt neighbor
             for (int i = 0; i < Neigh8.Length; i++)
             {
                 int nx = cx + Neigh8[i].dx;
@@ -89,11 +88,9 @@ public static class GridAStarPathfinder
                 int dx = Neigh8[i].dx;
                 int dz = Neigh8[i].dz;
 
-                // nếu đi chéo thì bắt buộc 2 ô cạnh phải walkable để không "cắt góc xuyên tường"
+                // chống cắt góc
                 if (dx != 0 && dz != 0)
                 {
-                    // 2 ô cạnh cũng phải nằm trong bounds (thường sẽ đúng nếu nx/nz đã inbounds,
-                    // nhưng vẫn an toàn)
                     if (!InBounds(cx + dx, cz, w, h)) continue;
                     if (!InBounds(cx, cz + dz, w, h)) continue;
 
@@ -116,7 +113,6 @@ public static class GridAStarPathfinder
                     gScore[nIdx] = tentativeG;
                     fScore[nIdx] = tentativeG + Heuristic(nx, nz, goal.x, goal.z);
 
-                    // Push lại (heap đơn giản, cho phép trùng; closed[] sẽ lọc)
                     open.Push(nIdx, fScore[nIdx]);
                     inOpen[nIdx] = true;
                 }
@@ -126,9 +122,21 @@ public static class GridAStarPathfinder
         return false;
     }
 
+    // 🔥 đảm bảo capacity
+    private static void EnsureCapacity(int size)
+    {
+        if (gScore == null || gScore.Length < size)
+        {
+            gScore = new float[size];
+            fScore = new float[size];
+            cameFrom = new int[size];
+            closed = new bool[size];
+            inOpen = new bool[size];
+        }
+    }
+
     private static void ReconstructPath(int[] cameFrom, int current, int w, List<GridCoord> outPath)
     {
-        // path ngược từ goal về start
         while (current != -1)
         {
             FromIndex(current, w, out int x, out int z);
@@ -138,13 +146,13 @@ public static class GridAStarPathfinder
         outPath.Reverse();
     }
 
-    private static float Heuristic(int ax, int az, int bx, int bz)// => Mathf.Abs(ax - bx) + Mathf.Abs(az - bz);
+    private static float Heuristic(int ax, int az, int bx, int bz)
     {
         int dx = Mathf.Abs(ax - bx);
         int dz = Mathf.Abs(az - bz);
         int min = Mathf.Min(dx, dz);
         int max = Mathf.Max(dx, dz);
-        return 1.4142f * min + (max - min); // Octile for 8-direction
+        return 1.4142f * min + (max - min);
     }
 
     private static bool InBounds(int x, int z, int w, int h)
@@ -158,7 +166,7 @@ public static class GridAStarPathfinder
         x = idx - z * w;
     }
 
-    // ===== Min-Heap đơn giản =====
+    // ===== MinHeap (reuse + clear) =====
     private sealed class MinHeap
     {
         private struct Node
@@ -171,8 +179,12 @@ public static class GridAStarPathfinder
                 pri = p;
             }
         }
-        private readonly List<Node> a = new List<Node>(256);
+
+        private readonly List<Node> a = new List<Node>(1024);
+
         public int Count => a.Count;
+
+        public void Clear() => a.Clear();
 
         public void Push(int idx, float pri)
         {

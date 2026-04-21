@@ -116,7 +116,7 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
                     ""id"": ""0728a77f-54fe-41d9-816b-e481797a0b25"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""initialStateCheck"": false
                 }
             ],
@@ -244,9 +244,31 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""93a90e69-9ab5-4c14-9d15-ffe60e01d4bc"",
+                    ""path"": ""<Touchscreen>/primaryTouch/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""510381a9-42fa-4f37-b7a6-8c0c4858a263"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": ""Press,Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerPress"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eeb375d9-8008-4544-a5e9-f41f74aaed13"",
+                    ""path"": ""<Touchscreen>/primaryTouch/press"",
+                    ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""PointerPress"",
@@ -259,15 +281,6 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
             ""name"": ""UI"",
             ""id"": ""b7313fbc-7787-4d48-89f6-d7db312528d5"",
             ""actions"": [
-                {
-                    ""name"": ""Mouse"",
-                    ""type"": ""Value"",
-                    ""id"": ""4ea4a652-7a99-4771-9a6b-450f239a5b02"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
                 {
                     ""name"": ""Enter"",
                     ""type"": ""Button"",
@@ -292,7 +305,7 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
                     ""id"": ""16658d8b-007b-4e30-8483-05319ed8775c"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -312,20 +325,36 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PrimaryFingerPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""6892c10a-7018-4254-818a-d022e56059f2"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SecondaryFingerPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""aaff7a63-669c-4bd4-8955-dc8c72fe9318"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SecondaryTouchContact"",
+                    ""type"": ""Button"",
+                    ""id"": ""8c21d44e-4360-444b-b3f6-653c0fa754ec"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""82c3c989-b2fa-46a5-8b89-3f5f0deddcd8"",
-                    ""path"": ""<Mouse>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Mouse"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""f3f120f5-d728-4672-8366-f533b23ade44"",
@@ -361,6 +390,17 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""baeb89fe-0f63-4ad3-acc5-74bdedefa3ec"",
+                    ""path"": ""<Touchscreen>/primaryTouch/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerPress"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""189f4087-0107-4af5-a420-a9aed835e659"",
                     ""path"": ""<Pointer>/position"",
                     ""interactions"": """",
@@ -372,12 +412,56 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""1765f24d-93c8-48d7-80ab-780d677c3c67"",
-                    ""path"": ""<Pointer>/delta"",
+                    ""id"": ""2e052ed7-e0db-40fe-ab4a-38e08fbf9e48"",
+                    ""path"": ""<Touchscreen>/primaryTouch/delta"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""PointerDelta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3981df49-4eab-4ae3-903f-7cd295572303"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerDelta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e51dccf-16c8-46bd-87da-0e7c6262de1c"",
+                    ""path"": ""<Touchscreen>/touch0/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrimaryFingerPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""48dfbf25-47ee-4366-873d-8c0b0cd4e059"",
+                    ""path"": ""<Touchscreen>/touch1/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryFingerPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ca01d68f-0a11-44d8-aa68-3464fa23058f"",
+                    ""path"": ""<Touchscreen>/touch1/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryTouchContact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -393,12 +477,14 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
         m_Player_PointerPress = m_Player.FindAction("PointerPress", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
-        m_UI_Mouse = m_UI.FindAction("Mouse", throwIfNotFound: true);
         m_UI_Enter = m_UI.FindAction("Enter", throwIfNotFound: true);
         m_UI_Scroll = m_UI.FindAction("Scroll", throwIfNotFound: true);
         m_UI_PointerPress = m_UI.FindAction("PointerPress", throwIfNotFound: true);
         m_UI_PointerPosition = m_UI.FindAction("PointerPosition", throwIfNotFound: true);
         m_UI_PointerDelta = m_UI.FindAction("PointerDelta", throwIfNotFound: true);
+        m_UI_PrimaryFingerPosition = m_UI.FindAction("PrimaryFingerPosition", throwIfNotFound: true);
+        m_UI_SecondaryFingerPosition = m_UI.FindAction("SecondaryFingerPosition", throwIfNotFound: true);
+        m_UI_SecondaryTouchContact = m_UI.FindAction("SecondaryTouchContact", throwIfNotFound: true);
     }
 
     ~@InputHandler()
@@ -598,12 +684,14 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
     // UI
     private readonly InputActionMap m_UI;
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
-    private readonly InputAction m_UI_Mouse;
     private readonly InputAction m_UI_Enter;
     private readonly InputAction m_UI_Scroll;
     private readonly InputAction m_UI_PointerPress;
     private readonly InputAction m_UI_PointerPosition;
     private readonly InputAction m_UI_PointerDelta;
+    private readonly InputAction m_UI_PrimaryFingerPosition;
+    private readonly InputAction m_UI_SecondaryFingerPosition;
+    private readonly InputAction m_UI_SecondaryTouchContact;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -615,10 +703,6 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
         public UIActions(@InputHandler wrapper) { m_Wrapper = wrapper; }
-        /// <summary>
-        /// Provides access to the underlying input action "UI/Mouse".
-        /// </summary>
-        public InputAction @Mouse => m_Wrapper.m_UI_Mouse;
         /// <summary>
         /// Provides access to the underlying input action "UI/Enter".
         /// </summary>
@@ -639,6 +723,18 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/PointerDelta".
         /// </summary>
         public InputAction @PointerDelta => m_Wrapper.m_UI_PointerDelta;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/PrimaryFingerPosition".
+        /// </summary>
+        public InputAction @PrimaryFingerPosition => m_Wrapper.m_UI_PrimaryFingerPosition;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/SecondaryFingerPosition".
+        /// </summary>
+        public InputAction @SecondaryFingerPosition => m_Wrapper.m_UI_SecondaryFingerPosition;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/SecondaryTouchContact".
+        /// </summary>
+        public InputAction @SecondaryTouchContact => m_Wrapper.m_UI_SecondaryTouchContact;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -665,9 +761,6 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
-            @Mouse.started += instance.OnMouse;
-            @Mouse.performed += instance.OnMouse;
-            @Mouse.canceled += instance.OnMouse;
             @Enter.started += instance.OnEnter;
             @Enter.performed += instance.OnEnter;
             @Enter.canceled += instance.OnEnter;
@@ -683,6 +776,15 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
             @PointerDelta.started += instance.OnPointerDelta;
             @PointerDelta.performed += instance.OnPointerDelta;
             @PointerDelta.canceled += instance.OnPointerDelta;
+            @PrimaryFingerPosition.started += instance.OnPrimaryFingerPosition;
+            @PrimaryFingerPosition.performed += instance.OnPrimaryFingerPosition;
+            @PrimaryFingerPosition.canceled += instance.OnPrimaryFingerPosition;
+            @SecondaryFingerPosition.started += instance.OnSecondaryFingerPosition;
+            @SecondaryFingerPosition.performed += instance.OnSecondaryFingerPosition;
+            @SecondaryFingerPosition.canceled += instance.OnSecondaryFingerPosition;
+            @SecondaryTouchContact.started += instance.OnSecondaryTouchContact;
+            @SecondaryTouchContact.performed += instance.OnSecondaryTouchContact;
+            @SecondaryTouchContact.canceled += instance.OnSecondaryTouchContact;
         }
 
         /// <summary>
@@ -694,9 +796,6 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
         /// <seealso cref="UIActions" />
         private void UnregisterCallbacks(IUIActions instance)
         {
-            @Mouse.started -= instance.OnMouse;
-            @Mouse.performed -= instance.OnMouse;
-            @Mouse.canceled -= instance.OnMouse;
             @Enter.started -= instance.OnEnter;
             @Enter.performed -= instance.OnEnter;
             @Enter.canceled -= instance.OnEnter;
@@ -712,6 +811,15 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
             @PointerDelta.started -= instance.OnPointerDelta;
             @PointerDelta.performed -= instance.OnPointerDelta;
             @PointerDelta.canceled -= instance.OnPointerDelta;
+            @PrimaryFingerPosition.started -= instance.OnPrimaryFingerPosition;
+            @PrimaryFingerPosition.performed -= instance.OnPrimaryFingerPosition;
+            @PrimaryFingerPosition.canceled -= instance.OnPrimaryFingerPosition;
+            @SecondaryFingerPosition.started -= instance.OnSecondaryFingerPosition;
+            @SecondaryFingerPosition.performed -= instance.OnSecondaryFingerPosition;
+            @SecondaryFingerPosition.canceled -= instance.OnSecondaryFingerPosition;
+            @SecondaryTouchContact.started -= instance.OnSecondaryTouchContact;
+            @SecondaryTouchContact.performed -= instance.OnSecondaryTouchContact;
+            @SecondaryTouchContact.canceled -= instance.OnSecondaryTouchContact;
         }
 
         /// <summary>
@@ -782,13 +890,6 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
     public interface IUIActions
     {
         /// <summary>
-        /// Method invoked when associated input action "Mouse" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnMouse(InputAction.CallbackContext context);
-        /// <summary>
         /// Method invoked when associated input action "Enter" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -823,5 +924,26 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPointerDelta(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PrimaryFingerPosition" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPrimaryFingerPosition(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SecondaryFingerPosition" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSecondaryFingerPosition(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SecondaryTouchContact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSecondaryTouchContact(InputAction.CallbackContext context);
     }
 }

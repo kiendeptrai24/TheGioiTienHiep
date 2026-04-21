@@ -42,6 +42,7 @@ public class IncreasePointBtn : TGTHMonoBehaviour
 
             AddPoint(hero, profileManager.GetProfile().itemDataPoint, result.value, statType);
             statsManager.SetUpItem(hero);
+            InventoryCenterManager.Instance.ItemPlayerChanged(hero);
             TopNotificationUI.Instance.ShowNotification($"bạn đã cộng {result.value} điểm vào {StatTypeViName.ToVietnamese(statType)}");
         },
         onCancel: () =>
@@ -56,45 +57,34 @@ public class IncreasePointBtn : TGTHMonoBehaviour
             case StatType.HealthPoint:
                 itemDataPoint.healthPoint += value;
                 heroData.healthPoint += value;
-                Debug.Log("healthPoint");
                 break;
             case StatType.ManaPoint:
                 itemDataPoint.manaPoint += value;
                 heroData.manaPoint += value;
-                Debug.Log("manaPoint");
                 break;
             case StatType.SpiritPoint:
                 itemDataPoint.spiritPoint += value;
                 heroData.spiritPoint += value;
-                Debug.Log("spiritPoint");
                 break;
             case StatType.PhicialDamagePoint:
                 itemDataPoint.damagePoint += value;
                 heroData.physicalDamagePoint += value;
-                itemDataPoint.damagePoint += value;
                 heroData.magicalDamagePoint += value;
-                itemDataPoint.damagePoint += value;
                 heroData.spiritDamagePoint += value;
-                Debug.Log("damagePoint");
                 break;
             case StatType.PhicialDefensePoint:
                 itemDataPoint.defensePoint += value;
                 heroData.physicalDefensePoint += value;
-                itemDataPoint.defensePoint += value;
                 heroData.magicalDefensePoint += value;
-                itemDataPoint.defensePoint += value;
                 heroData.spiritDefensePoint += value;
-                Debug.Log("defensePoint");
                 break;
             case StatType.MoveSpeedPoint:
                 itemDataPoint.moveSpeed += value;
                 heroData.moveSpeedPoint += value;
-                Debug.Log("moveSpeed");
                 break;
             case StatType.SpiritRangePoint:
                 itemDataPoint.spititRange += value;
                 heroData.spititRangePoint += value;
-                Debug.Log("spititRange");
                 break;
         }
         profileManager.GetProfile().potentialPoint -= value;

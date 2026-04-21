@@ -30,6 +30,19 @@ public class StatsCharacterModifier : StatsModifierBase
         AddPercent(StatType.ManaRegen, data.manaRegen);
         AddPercent(StatType.SpiritRegen, data.spiritRegen);
 
+        AddValue(StatType.HealthPoint, data.healthPoint);
+        AddValue(StatType.ManaPoint, data.manaPoint);
+        AddValue(StatType.SpiritPoint, data.spiritPoint);
+
+        AddValue(StatType.PhicialDamagePoint, data.physicalDamagePoint);
+        AddValue(StatType.MagicalDamagePoint, data.magicalDamagePoint);
+
+        AddValue(StatType.MoveSpeedPoint, data.moveSpeedPoint);
+        AddValue(StatType.SpiritRangePoint, data.spititRangePoint);
+
+        AddValue(StatType.PotentialPoint, data.potentialPoint);
+        AddValue(StatType.SkillPoint, data.skillPoint);
+
     }
     public override void RemoveStats(Dictionary<StatType, Stat> stats, ItemData itemData)
     {
@@ -55,5 +68,18 @@ public class StatsCharacterModifier : StatsModifierBase
         RemovePercent(StatType.HealthRegen, data.healthRegen);
         RemovePercent(StatType.ManaRegen, data.manaRegen);
         RemovePercent(StatType.SpiritRegen, data.spiritRegen);
+
+        RemoveValue(StatType.HealthPoint, data.healthPoint);
+        RemoveValue(StatType.ManaPoint, data.manaPoint);
+        RemoveValue(StatType.SpiritPoint, data.spiritPoint);
+
+        RemoveValue(StatType.PhicialDamagePoint, data.physicalDamagePoint);
+        RemoveValue(StatType.MagicalDamagePoint, data.magicalDamagePoint);
+
+        RemoveValue(StatType.MoveSpeedPoint, data.moveSpeedPoint);
+        RemoveValue(StatType.SpiritRangePoint, data.spititRangePoint);
+
+        RemoveValue(StatType.PotentialPoint, data.potentialPoint);
+        RemoveValue(StatType.SkillPoint, data.skillPoint);
     }
 }

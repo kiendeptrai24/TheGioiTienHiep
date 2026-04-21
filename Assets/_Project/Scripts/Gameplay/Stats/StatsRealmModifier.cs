@@ -24,8 +24,6 @@ public class StatsRealmModifier : StatsModifierBase
         AddValue(StatType.PhysicalDefense, data.physicalDefense);
         AddValue(StatType.MagicalDefense, data.magicalDefense);
         AddValue(StatType.SpiritDefense, data.spiritDefense);
-        AddValue(StatType.PotentialPoint, data.potential);
-        AddValue(StatType.SkillPoints, data.skillPoints);
         AddValue(StatType.MovementSpeed, data.movementSpeed);
         AddValue(StatType.AttackSpeed, data.attackSpeed);
         AddValue(StatType.CastSpeed, data.castSpeed);
@@ -54,8 +52,6 @@ public class StatsRealmModifier : StatsModifierBase
         RemoveValue(StatType.PhysicalDefense, data.physicalDefense);
         RemoveValue(StatType.MagicalDefense, data.magicalDefense);
         RemoveValue(StatType.SpiritDefense, data.spiritDefense);
-        RemoveValue(StatType.PotentialPoint, data.potential);
-        RemoveValue(StatType.SkillPoints, data.skillPoints);
         RemoveValue(StatType.MovementSpeed, data.movementSpeed);
         RemoveValue(StatType.AttackSpeed, data.attackSpeed);
         RemoveValue(StatType.CastSpeed, data.castSpeed);

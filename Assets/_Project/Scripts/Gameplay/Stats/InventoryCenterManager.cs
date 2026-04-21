@@ -48,6 +48,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
             playerCham = heroPreset.GetItemData();
         }
         LoadComponent();
+        ResetData();
     }
     #region Event General
 
@@ -458,8 +459,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     {
         _data.itemDatas.Clear();
         _data.itemDatasInTeam.Clear();
-        _data.itemDatas = listItemDatasExisting;
-        _data.itemDatasInTeam = listItemDatasChampion;
+        _data.itemDatas = listItemDatasExisting.ToList();
+        _data.itemDatasInTeam = listItemDatasChampion.ToList();
         _data.itemDatasUsed = listItemDatasUsed;
 
         for (int i = 0; i < _data.itemDatasCharacter.Count; i++)
@@ -483,7 +484,6 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        ResetData();
     }
 
     private void ResetData()

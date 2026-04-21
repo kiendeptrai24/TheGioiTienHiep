@@ -102,10 +102,10 @@ public class MinimapController : TGTHMonoBehaviour
 
     private void HandleZoom()
     {
-        float scrollY = input.GetInputScrollWheel().y;
+        float scrollY = input.GetInputScrollWheel();
         if (Mathf.Abs(scrollY) > 0.001f)
         {
-            var vcam = minimapManager.cinemachineCamera; // CinemachineVirtualCamera
+            var vcam = minimapManager.cinemachineCamera;
             float curSize = vcam.Lens.OrthographicSize;
 
             float newSize = curSize - scrollY * zoomSpeed;

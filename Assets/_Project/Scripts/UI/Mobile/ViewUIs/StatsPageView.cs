@@ -20,7 +20,8 @@ namespace TGTH.Mobile
 
         [Header("=== Main attributes ===")]
         [SerializeField] private TextMeshProUGUI potentialPointTxt;
-        [SerializeField] private TextMeshProUGUI hpTxt;
+        [SerializeField] private TextMeshProUGUI skillPointTxt;
+        [SerializeField] private TextMeshProUGUI damageTxt;
         [SerializeField] private TextMeshProUGUI defenseTxt;
         [SerializeField] private TextMeshProUGUI healthPointTxt;
         [SerializeField] private TextMeshProUGUI ManaPointTxt;
@@ -51,8 +52,9 @@ namespace TGTH.Mobile
         public void SetStatsData(Dictionary<StatType, Stat> stats)
         {
             potentialPointTxt.text = stats[StatType.PotentialPoint].GetValue().ToString();
+            skillPointTxt.text = stats[StatType.SkillPoint].GetValue().ToString();
 
-            hpTxt.text = stats[StatType.PhicialDamagePoint].GetValue().ToString();
+            damageTxt.text = stats[StatType.PhicialDamagePoint].GetValue().ToString();
             defenseTxt.text = stats[StatType.PhicialDefensePoint].GetValue().ToString();
 
             healthPointTxt.text = stats[StatType.HealthPoint].GetValue().ToString();

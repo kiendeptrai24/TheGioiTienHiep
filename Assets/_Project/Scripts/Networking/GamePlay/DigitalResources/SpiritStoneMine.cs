@@ -287,7 +287,6 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         }
         miningData.currentAmount += cost;
         CurrentAmount.Value = miningData.currentAmount;
-        Debug.Log("Produce");
         _ownerStorage.PlusCost((ulong)cost);
     }
 

@@ -16,5 +16,5 @@ public enum BuildType
     LOCAL_CLIENT,
     REMOTE_CLIENT,
     LOCAL_SERVER,
-    REMOTE_SERVER
+    REMOTE_SERVER,
 }

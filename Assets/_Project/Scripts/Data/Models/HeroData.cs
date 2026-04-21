@@ -68,6 +68,10 @@ public class HeroData : ItemData
     public LevelUpConditionData levelUpConditionData = new();
     [JsonIgnore]
     public GameObject heroPrefab;
+    [JsonIgnore]
+    public int potentialPoint;
+    [JsonIgnore]
+    public int skillPoint;
 
     public override ItemData Clone()
     {
