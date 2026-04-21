@@ -11,20 +11,20 @@ public class StatsCultivationPathModifier : StatsModifierBase
         var data = heroData.statsCultivationPathData;
         if (data == null) return;
         base.AddStats(stats, itemData);
-        int maxHealth = heroData.healthPoint == 0 ? 1 : heroData.healthPoint;
-        int maxMana = heroData.manaPoint == 0 ? 1 : heroData.manaPoint;
-        int maxSpirit = heroData.spiritPoint == 0 ? 1 : heroData.spiritPoint;
+        int maxHealth = heroData.healthPoint;
+        int maxMana = heroData.manaPoint;
+        int maxSpirit = heroData.spiritPoint;
 
-        int physicalDamage = heroData.physicalDamagePoint == 0 ? 1 : heroData.physicalDamagePoint;
-        int magicalDamage = heroData.magicalDamagePoint == 0 ? 1 : heroData.magicalDamagePoint;
-        int spiritDamage = heroData.spiritDamagePoint == 0 ? 1 : heroData.spiritDamagePoint;
+        int physicalDamage = heroData.physicalDamagePoint;
+        int magicalDamage = heroData.magicalDamagePoint;
+        int spiritDamage = heroData.spiritDamagePoint;
 
-        int physicalDefense = heroData.physicalDefensePoint == 0 ? 1 : heroData.physicalDefensePoint;
-        int magicalDefense = heroData.magicalDefensePoint == 0 ? 1 : heroData.magicalDefensePoint;
-        int spiritDefense = heroData.spiritDefensePoint == 0 ? 1 : heroData.spiritDefensePoint;
+        int physicalDefense = heroData.physicalDefensePoint;
+        int magicalDefense = heroData.magicalDefensePoint;
+        int spiritDefense = heroData.spiritDefensePoint;
 
-        int movementSpeed = heroData.moveSpeedPoint == 0 ? 1 : heroData.moveSpeedPoint;
-        int spiritRange = heroData.spiritPoint == 0 ? 1 : heroData.spiritPoint;
+        int movementSpeed = heroData.moveSpeedPoint;
+        int spiritRange = heroData.spiritPoint;
 
 
         AddValue(StatType.Health, data.maxHealth * maxHealth);

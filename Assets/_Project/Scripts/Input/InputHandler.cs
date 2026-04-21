@@ -257,7 +257,7 @@ public partial class @InputHandler: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""510381a9-42fa-4f37-b7a6-8c0c4858a263"",
                     ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Press,Hold"",
+                    ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""PointerPress"",

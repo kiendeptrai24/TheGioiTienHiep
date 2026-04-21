@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using static UnityEngine.InputSystem.InputAction;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 using UnityEngine.InputSystem.EnhancedTouch;
+
 public enum InputType
 {
     Player,
@@ -23,12 +24,13 @@ public class InputManager : MonoBehaviour
     private bool isPressed;
     public event Action<Vector2> OnPointerPositionClick;
     private FeatureManager _mgr;
+    private PointerEventData pointerEventData;
+    private readonly List<RaycastResult> raycastResults = new List<RaycastResult>();
     public void Awake()
     {
-
         inputHandler = new InputHandler();
-        inputHandler.UI.Enter.started += (CallbackContext context) => { OnEnterClick?.Invoke(); };
 
+        inputHandler.UI.Enter.started += (CallbackContext context) => { OnEnterClick?.Invoke(); };
 
         inputHandler.Player.PointerPress.started += (CallbackContext context) =>
         {
@@ -36,19 +38,20 @@ public class InputManager : MonoBehaviour
             isPressed = true;
 
             Vector2 pointerPos = GetPointerPosition();
-            if (!IsPointerOverUI(pointerPos))
+            if (IsPointerOverUI(pointerPos) == false)
             {
                 OnPointerPositionClick?.Invoke(pointerPos);
             }
         };
+
         inputHandler.Player.PointerPress.canceled += (CallbackContext context) =>
         {
             isPressed = false;
         };
+
         _mgr = FeatureManager.Instance;
         _mgr.OnFeatureEffectiveChanged += OnChanged;
     }
-
     private void OnChanged(FeatureId id, bool unlockInput)
     {
         switch (id)
@@ -82,23 +85,22 @@ public class InputManager : MonoBehaviour
     }
     private bool IsPointerOverUI(Vector2 screenPos)
     {
-        if (EventSystem.current == null) return false;
+        if (EventSystem.current == null) return true;
 
-        var eventData = new PointerEventData(EventSystem.current)
-        {
-            position = screenPos
-        };
+        if (pointerEventData == null)
+            pointerEventData = new PointerEventData(EventSystem.current);
 
-        var results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventData, results);
-        int itemIgnores = 0;
-        foreach (var item in results)
+        pointerEventData.position = screenPos;
+
+        raycastResults.Clear();
+        EventSystem.current.RaycastAll(pointerEventData, raycastResults);
+        foreach (var ray in raycastResults)
         {
-            if (item.gameObject.name == "icon")
-                itemIgnores++;
+            if (ray.gameObject.CompareTag("IgnoreUI") == false)
+                return true;
         }
 
-        return results.Count - itemIgnores > 0;
+        return false;
     }
 
     public Vector2 GetPointerPosition()
