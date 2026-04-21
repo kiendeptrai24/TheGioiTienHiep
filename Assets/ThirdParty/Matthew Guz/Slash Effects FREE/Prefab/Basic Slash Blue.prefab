@@ -9801,7 +9801,6 @@ GameObject:
   - component: {fileID: 1173243701402730150}
   - component: {fileID: 7364936370289906279}
   - component: {fileID: 4752034024110402706}
-  - component: {fileID: 810929873041272388}
   - component: {fileID: 1276702846620315264}
   m_Layer: 0
   m_Name: Basic Slash Blue
@@ -14687,31 +14686,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &810929873041272388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5503505460791601945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4034693412
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!114 &1276702846620315264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14724,7 +14698,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9b2ef3dd0e818b43b51ac41f474f0e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DamageAreaBase
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &8373613166400002822
 GameObject:
   m_ObjectHideFlags: 0

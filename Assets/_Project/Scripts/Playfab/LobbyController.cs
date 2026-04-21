@@ -5,17 +5,20 @@ using PlayFab.Multiplayer;
 using Unity.Netcode;
 using UnityEngine;
 
-public class LobbyTestController : Singleton<LobbyTestController>
+public class LobbyController : Singleton<LobbyController>
 {
     private PlayFabLobbyService _lobbyService;
     private PlayFabAuthenticationContext authContext;
     private List<LobbySearchResult> lobbies = new List<LobbySearchResult>();
     public List<LobbySearchResult> GetLobbies() => lobbies;
     public event Action<bool, LobbySearchResult> OnLobbySearchLobbiesCompleted;
+    private PlayfabDataManager playfabDataManager;
+
     protected override void Awake()
     {
+        playfabDataManager = PlayfabDataManager.Instance;
+        playfabDataManager.LoginSuccess += OnLoginSuccess;
         _lobbyService = new PlayFabLobbyService();
-        // _lobbyService.Initialize();
 
         _lobbyService.OnStatusChanged += msg =>
         {
@@ -55,6 +58,13 @@ public class LobbyTestController : Singleton<LobbyTestController>
         };
 
     }
+
+    private void OnLoginSuccess(AuthResult result)
+    {
+        authContext = result.clientApi.authenticationContext;
+        _lobbyService.Initialize(result.clientApi.authenticationContext);
+    }
+
     public bool CheckLobbyCanJoin(LobbySearchResult lobby)
     {
         if (lobby == null) return false;
@@ -69,10 +79,6 @@ public class LobbyTestController : Singleton<LobbyTestController>
     public void CreateLobby(PlayFabAuthenticationContext authContext, string ip = "", ushort port = 0)
     {
         _lobbyService.CreateLobbyAndJoin(authContext, 100, ip, port);
-    }
-    public void CheckCanJoinLobby()
-    {
-        _lobbyService.CanJoinLobby(authContext);
     }
     public void JoinLobby(PlayFabAuthenticationContext authContext, string connectionString)
     {
@@ -93,14 +99,11 @@ public class LobbyTestController : Singleton<LobbyTestController>
     }
     public void GetLobbyServer(PlayFabAuthenticationContext authContext)
     {
-        this.authContext = authContext;
         _lobbyService.FindAllLobbies(authContext);
     }
     [ContextMenu("Get Lobby Server")]
     public void GetLobbyServer()
     {
-        if (authContext == null) return;
-        Debug.Log("GetLobbyServer");
         _lobbyService.FindAllLobbies(authContext);
     }
     public void ConnectNgo()

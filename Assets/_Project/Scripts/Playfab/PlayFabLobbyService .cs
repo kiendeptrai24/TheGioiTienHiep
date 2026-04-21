@@ -9,12 +9,14 @@ using UnityEngine;
 public class PlayFabLobbyService : IDisposable
 {
     private readonly Configuration _configuration;
-
+    
     public Lobby CurrentLobby { get; private set; }
     public string CurrentLobbyId => CurrentLobby?.Id;
     public string CurrentConnectionString => CurrentLobby?.ConnectionString;
     public string CurrentServerIp { get; private set; }
     public ushort CurrentServerPort { get; private set; }
+    public bool Initialized => _initialized;
+    public bool Subscribed => _subscribed;
 
     public event Action<string> OnStatusChanged;
     public event Action<Lobby> OnLobbyReady;
@@ -71,14 +73,13 @@ public class PlayFabLobbyService : IDisposable
         string ip = "",
         ushort port = 0)
     {
+        if(!_initialized) return; 
         if (authContext == null)
         {
             Fail("AuthenticationContext is null.");
             return;
         }
 
-        if (!_initialized)
-            Initialize(authContext);
 
         // Đảm bảo Multiplayer SDK có token hợp lệ
 
@@ -106,6 +107,7 @@ public class PlayFabLobbyService : IDisposable
         PlayFabAuthenticationContext authContext,
         string connectionString)
     {
+        if(!_initialized) return; 
         if (authContext == null)
         {
             Fail("AuthenticationContext is null.");
@@ -117,9 +119,6 @@ public class PlayFabLobbyService : IDisposable
             Fail("ConnectionString is empty.");
             return;
         }
-
-        if (!_initialized)
-            Initialize(authContext);
 
         PlayFabMultiplayer.SetEntityToken(authContext);
 
@@ -359,8 +358,12 @@ public class PlayFabLobbyService : IDisposable
     }
     public void FindAllLobbies(PlayFabAuthenticationContext authContext)
     {
-        if (!_initialized)
-            Initialize(authContext);
+        if(!_initialized) return;
+        if(authContext == null)
+        {
+            Fail("AuthenticationContext is null.");
+            return;
+        }
         PFEntityKey entityKey = new PFEntityKey(authContext);
         LobbySearchConfiguration config = new LobbySearchConfiguration();
         PlayFabMultiplayer.FindLobbies(entityKey, config);
@@ -375,10 +378,5 @@ public class PlayFabLobbyService : IDisposable
     {
         Debug.LogError($"[PlayFabLobbyService] {message}");
         OnStatusChanged?.Invoke(message);
-    }
-
-    public void CanJoinLobby(PlayFabAuthenticationContext authContext)
-    {
-
     }
 }

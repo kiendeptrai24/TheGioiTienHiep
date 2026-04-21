@@ -7,7 +7,7 @@ using System;
 using UnityEngine.UI;
 public class UIItemResourceType : TGTHMonoBehaviour, IPointerClickHandler
 {
-    public ResourceType resourceType;
+    public ResourceSourceType resourceSourceType;
     [SerializeField] private Image focusImage;
     #region Events
     public event Action<UIItemResourceType> OnItemClicked;

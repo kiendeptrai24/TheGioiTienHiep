@@ -16,6 +16,9 @@ public class MapScreenManager : ScreenManager
         m_Screens.Add(m_SearchMapDetailScreen.gameObject.name, m_SearchMapDetailScreen);
         defaultScreen = m_MapDetailScreen.gameObject.name;
     }
+    private void OnEnable() {
+        MinimapManger.Instance.ChangeRendertextureCameraInMap();
+    }
     
 
 }

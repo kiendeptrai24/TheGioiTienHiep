@@ -13,6 +13,7 @@ public class ItemMapWorld : TGTHNetworkBehaviour
         canvas = GetComponentInChildren<Canvas>();
         LoadComponent();
         HideIcon();
+        ResetItemData();
     }
     public override void OnNetworkSpawn()
     {

@@ -42,23 +42,23 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         {
             IAuthService authService = new PlayFabAuthService(clientAPI);
             authManager = new AuthManager(authService);
-            LobbyTestController.Instance.OnLobbySearchLobbiesCompleted += (success, lobby) =>
+            LobbyController.Instance.OnLobbySearchLobbiesCompleted += (success, lobby) =>
             {
                 if (success)
                 {
-                    if (LobbyTestController.Instance.HasLobby()) return;
-                    LobbyTestController.Instance.JoinLobby(clientAPI.authenticationContext, lobby.ConnectionString);
+                    if (LobbyController.Instance.HasLobby()) return;
+                    LobbyController.Instance.JoinLobby(clientAPI.authenticationContext, lobby.ConnectionString);
                     ready = true;
                 }
                 else
                 {
-                    if (LobbyTestController.Instance.HasLobby()) return;
+                    if (LobbyController.Instance.HasLobby()) return;
                     var playfabConnectMutiplayer = new PlayfabConnectMutiplayer(clientAPI.authenticationContext);
                     playfabConnectMutiplayer.RequestMultiplayerServer(clientAPI, Configuration.Instance, result =>
                     {
                         if (result.success)
                         {
-                            LobbyTestController.Instance.CreateLobby(clientAPI.authenticationContext, result.ipAddress, result.port);
+                            LobbyController.Instance.CreateLobby(clientAPI.authenticationContext, result.ipAddress, result.port);
                             ready = true;
                         }
                         else
@@ -110,7 +110,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     }
     private void FindRemoteServer()
     {
-        LobbyTestController.Instance.GetLobbyServer(clientAPI.authenticationContext);
+        LobbyController.Instance.GetLobbyServer(clientAPI.authenticationContext);
 
     }
     public void AddCharacter(ItemData itemCharacter)

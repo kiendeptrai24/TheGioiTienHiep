@@ -26,6 +26,7 @@ public class ResourceManager : Singleton<ResourceManager>
             var itemWorld = col.GetComponent<ItemMapWorld>();
             if (itemWorld != null)
             {
+                Debug.Log(itemWorld.gameObject.name);
                 result.Add(itemWorld.GetItemData());
             }
         }

@@ -49,6 +49,8 @@ public class PlayerNetManager : Singleton<PlayerNetManager>, ISaveable
             rotation = player.gameObject.transform.rotation;
         }
     }
+    public NetworkObject GetPlayerObj() => playerObject;
+
     public void SetPlayerProfile()
     {
         var storage = playerObject.GetComponent<ResourceStorage>();

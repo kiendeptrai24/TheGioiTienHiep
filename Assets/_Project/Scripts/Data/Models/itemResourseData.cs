@@ -6,7 +6,7 @@ using UnityEngine;
 public class ItemResourseData : ItemData
 {
     [JsonIgnore]
-    public ResourceType resourceType;
+    public ResourceSourceType resourceSourceType;
     [JsonIgnore]
     public Vector3 position;
     [JsonIgnore]

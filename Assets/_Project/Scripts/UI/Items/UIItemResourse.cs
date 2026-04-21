@@ -28,14 +28,17 @@ public class UIItemResourse : TGTHMonoBehaviour, IPointerClickHandler
     }
     public void Select()
     {
+        if (focus == null) return;
         focus.gameObject.SetActive(true);
     }
     public void UnSelect()
     {
+        if (focus == null) return;
         focus.gameObject.SetActive(false);
     }
     public void SetData(ItemData data)
     {
+        if (data == null) return;
         itemData = data;
         nameTxt.text = data.itemName;
     }

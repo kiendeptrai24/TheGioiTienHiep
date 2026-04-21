@@ -24,6 +24,8 @@ public class ServerStartUp : Singleton<ClientStartUp>
             transport = NetworkManager.Singleton.NetworkConfig.NetworkTransport as UnityTransport;
             TryStartServerWithAutoPort();
         }
+        else
+            Destroy(gameObject, 1);
     }
 
     private void TryStartServerWithAutoPort()

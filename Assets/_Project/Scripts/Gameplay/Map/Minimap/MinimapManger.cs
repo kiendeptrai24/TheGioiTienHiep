@@ -12,12 +12,16 @@ public class MinimapManger : Singleton<MinimapManger>
     private PlayerNetManager playerNetManager;
     [SerializeField] private Transform player;
     [SerializeField] private List<MinimapController> controllers = new();
+    [SerializeField] private List<RenderTexture> renderTextureCameras = new();
+    private RenderTexture curRendertexture;
     protected override void Awake()
     {
         base.Awake();
         LoadComponent();
         playerNetManager = PlayerNetManager.Instance;
         playerNetManager.OnPlayerExiststed += OnPlayerExists;
+        if (renderTextureCameras.Count < 2) return;
+        curRendertexture = renderTextureCameras[0];
     }
     public void Register(MinimapController c)
     {
@@ -35,6 +39,19 @@ public class MinimapManger : Singleton<MinimapManger>
     protected override void Start()
     {
         base.Start();
+    }
+    public void ChangeRendertextureCameraInGameUI()
+    {
+        if (renderTextureCameras.Count < 2) return;
+        if (curRendertexture == renderTextureCameras[0]) return;
+        minimapCamera.targetTexture = renderTextureCameras[0];
+
+    }
+    public void ChangeRendertextureCameraInMap()
+    {
+        if (renderTextureCameras.Count < 2) return;
+        if (curRendertexture == renderTextureCameras[1]) return;
+        minimapCamera.targetTexture = renderTextureCameras[1];
     }
     public void SetPlayer(Transform player)
     {

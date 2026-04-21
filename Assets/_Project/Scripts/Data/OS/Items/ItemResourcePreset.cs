@@ -4,7 +4,7 @@ using UnityEngine;
 public class ItemResourcePreset : ItemPreset
 {
     public RealmType cultivationStage;
-    public ResourceType resourceType;
+    public ResourceSourceType resourceSourceType;
     public int yieldPerHarvest;
     public float miningTime;
     public float currentMiningProgress;
@@ -26,7 +26,7 @@ public class ItemResourcePreset : ItemPreset
         data.canStack = canStack;
         data.qualityType = qualityType;
         data.realmType = cultivationStage;
-        data.resourceType = resourceType;
+        data.resourceSourceType = resourceSourceType;
         data.yieldPerHarvest = yieldPerHarvest;
         data.miningTime = miningTime;
         data.currentMiningProgress = currentMiningProgress;

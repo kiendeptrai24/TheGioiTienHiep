@@ -34,10 +34,10 @@ public class MinimapController : TGTHMonoBehaviour
     {
         base.Awake();
         LoadComponent();
+        MinimapManger.Instance.Register(this);
     }
     private void OnEnable()
     {
-        MinimapManger.Instance.Register(this);
         if (followPlayer == null)
         {
             SetFollowPlayer(MinimapManger.Instance.GetPlayer());

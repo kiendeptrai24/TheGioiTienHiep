@@ -18,6 +18,10 @@ public class InGameUIScreenManager : ScreenManager
     {
         base.Start();
     }
+    private void OnEnable()
+    {
+        MinimapManger.Instance.ChangeRendertextureCameraInGameUI();
+    }
     void Update()
     {
         frameCount++;
