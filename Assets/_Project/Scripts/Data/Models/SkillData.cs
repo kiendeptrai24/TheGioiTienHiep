@@ -133,8 +133,6 @@ public class SkillData : ItemData
     [JsonIgnore]
     public float castTime;               // Thời gian cast (giây)
     [JsonIgnore]
-    public GameObject networkSkillEffectPrefab;
-    [JsonIgnore]
     public LevelUpConditionData levelUpConditionData = new();
     public override ItemData Clone()
     {

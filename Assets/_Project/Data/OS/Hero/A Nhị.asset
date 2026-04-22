@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af6f0dcdb03c5884992dcd3fc3fd4e91, type: 3}
   m_Name: "A Nh\u1ECB"
   m_EditorClassIdentifier: Assembly-CSharp::HeroPreset
-  itemId: 856e38a0a3999b743985fad6c670c593
+  instanceId: 856e38a0a3999b743985fad6c670c593
+  itemId: 34cfeb4f-6532-4a95-b73c-5055df146e4b
   itemName: "A Nh\u1ECB"
   itemType: 5
   itemIcon: {fileID: -1351563598, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
+  itemIconPath: '#2 - Transparent Icons & Drop Shadow_37'
+  itemFilePath: "A Nh\u1ECB"
   itemDescription: 
   itemPrice: 100
   currentstack: 0
@@ -27,6 +30,7 @@ MonoBehaviour:
   physicalDefense: 0.01
   magicalDefense: 0.01
   spiritDefense: 0.01
+  isCharactor: 0
   statsRealmPreset: {fileID: 11400000, guid: bcfcdc88151808842ae215f90c99a0e2, type: 2}
   statsRacePreset: {fileID: 11400000, guid: cd5414dc8bb49cd4486ee9c66ebb3f8a, type: 2}
   statsCultivationPathPreset: {fileID: 11400000, guid: c94807a95fb038e4a9c384abf98e29e0,
@@ -37,20 +41,16 @@ MonoBehaviour:
   level: 1
   attackRange: 2
   moveSpeed: 7
+  attackSpeed: 0
   health: 5
   mana: 0.02
   spirit: 0
-  physicalDamagePoint: 2
-  magicalDamagePoint: 1
-  spiritDamagePoint: 0
-  physicalDefensePoint: 2
-  magicalDefensePoint: 0
-  spiritDefensePoint: 0
+  healthRegen: 0
+  manaRegen: 0
+  spiritRegen: 0
   equitmentDatas:
   - {fileID: 11400000, guid: f6bc2ba1f7e839541b174564eb50d07a, type: 2}
-  - {fileID: 11400000, guid: 6287ad043870d7e459b4ed20cc7e1b35, type: 2}
   - {fileID: 11400000, guid: f95b0b813a8ce4745af854e00ecdd92c, type: 2}
-  - {fileID: 11400000, guid: fcf3cc8807f345d499bca7cc2a876676, type: 2}
   skillDatas:
   - {fileID: 11400000, guid: 17ef9b4573ad4614abbeee455ed88c43, type: 2}
   - {fileID: 11400000, guid: 3a6d38e91011bdf448e8efc1c4d49df8, type: 2}

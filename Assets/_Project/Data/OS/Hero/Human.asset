@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af6f0dcdb03c5884992dcd3fc3fd4e91, type: 3}
   m_Name: Human
   m_EditorClassIdentifier: Assembly-CSharp::HeroPreset
-  itemId: e242250a5ce2ff645a26bf4766c9dae4
+  instanceId: e242250a5ce2ff645a26bf4766c9dae4
+  itemId: 421b22dc-4a0e-4c40-80cc-ed7505300231
   itemName: Human
   itemType: 5
   itemIcon: {fileID: -1848583977, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
@@ -47,29 +48,16 @@ MonoBehaviour:
   level: 5
   attackRange: 1
   moveSpeed: 7
+  attackSpeed: 0
   health: 5
   mana: 0.02
   spirit: 0.54
-  physicalDamagePoint: 4.78
-  magicalDamagePoint: 2.41
-  spiritDamagePoint: 0
-  physicalDefensePoint: 2
-  magicalDefensePoint: 0
-  spiritDefensePoint: 0
-  equitmentDatas:
-  - {fileID: 11400000, guid: cc03d8ec30844d84882866aaff1ac238, type: 2}
-  - {fileID: 11400000, guid: 7dca3c1fc8ed0d04ba0ad025eb625345, type: 2}
-  - {fileID: 11400000, guid: 41e88f53a3e7e83489056f30b7303d56, type: 2}
-  - {fileID: 11400000, guid: 240f19ac1dd44db4fbb17bfd6d359808, type: 2}
-  skillDatas:
-  - {fileID: 11400000, guid: 17ef9b4573ad4614abbeee455ed88c43, type: 2}
-  - {fileID: 11400000, guid: c5895f0fa6971df4bac7e5b0b67d5dd8, type: 2}
-  - {fileID: 11400000, guid: 818490649d7aea1448a567122953e94c, type: 2}
-  - {fileID: 11400000, guid: 6f50e5992dc714144aabfdcad5524027, type: 2}
-  techniqueDatas:
-  - {fileID: 11400000, guid: daac526b3d0862e4780f81c2f4dc93a9, type: 2}
-  - {fileID: 11400000, guid: 967ca2419ba9971429f2d3f826cf9c0b, type: 2}
-  - {fileID: 11400000, guid: 3ab19980313ce064a824ad4e15a621a3, type: 2}
+  healthRegen: 0
+  manaRegen: 0
+  spiritRegen: 0
+  equitmentDatas: []
+  skillDatas: []
+  techniqueDatas: []
   championIndex: {x: 0, y: 0}
   heroPrefab: {fileID: 5924473939182439293, guid: e6c28f6927e2240409b93e62ec5b5509,
     type: 3}

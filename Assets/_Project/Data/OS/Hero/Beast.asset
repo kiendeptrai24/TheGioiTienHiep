@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Beast
   m_EditorClassIdentifier: Assembly-CSharp::HeroPreset
   instanceId: 0e3ccebc96fdca34ebe149bf547493c7
-  itemId: f6df7c4f-2a3b-4d5f-9a69-67fe653e78bb
+  itemId: 99ae2477-3910-45e9-b592-0f3a7a7f39ef
   itemName: Beast
   itemType: 5
   itemIcon: {fileID: -602158353, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
@@ -48,23 +48,16 @@ MonoBehaviour:
   level: 5
   attackRange: 1
   moveSpeed: 7
+  attackSpeed: 0
   health: 5
   mana: 0.02
   spirit: 0.54
-  equitmentDatas:
-  - {fileID: 11400000, guid: cc03d8ec30844d84882866aaff1ac238, type: 2}
-  - {fileID: 11400000, guid: 7dca3c1fc8ed0d04ba0ad025eb625345, type: 2}
-  - {fileID: 11400000, guid: 41e88f53a3e7e83489056f30b7303d56, type: 2}
-  - {fileID: 11400000, guid: 240f19ac1dd44db4fbb17bfd6d359808, type: 2}
-  skillDatas:
-  - {fileID: 11400000, guid: 17ef9b4573ad4614abbeee455ed88c43, type: 2}
-  - {fileID: 11400000, guid: c5895f0fa6971df4bac7e5b0b67d5dd8, type: 2}
-  - {fileID: 11400000, guid: 818490649d7aea1448a567122953e94c, type: 2}
-  - {fileID: 11400000, guid: 6f50e5992dc714144aabfdcad5524027, type: 2}
-  techniqueDatas:
-  - {fileID: 11400000, guid: daac526b3d0862e4780f81c2f4dc93a9, type: 2}
-  - {fileID: 11400000, guid: 967ca2419ba9971429f2d3f826cf9c0b, type: 2}
-  - {fileID: 11400000, guid: 3ab19980313ce064a824ad4e15a621a3, type: 2}
+  healthRegen: 0
+  manaRegen: 0
+  spiritRegen: 0
+  equitmentDatas: []
+  skillDatas: []
+  techniqueDatas: []
   championIndex: {x: 0, y: 0}
   heroPrefab: {fileID: 5924473939182439293, guid: 27f59af4a12fe624caef3e3a61525adf,
     type: 3}

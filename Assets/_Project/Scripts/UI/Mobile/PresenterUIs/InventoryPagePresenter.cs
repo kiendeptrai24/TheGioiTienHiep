@@ -56,7 +56,6 @@ namespace TGTH.Mobile
         }
         private void OnItemDataChanged(List<ItemData> items)
         {
-            Debug.Log("OnItemDataChanged");
             if (listItemDatas == null)
                 listItemDatas = new List<InventoryItem>();
             listItemDatas.Clear();

@@ -25,8 +25,6 @@ public class SkillPreset : ItemPreset
     public RealmType realm;
     [Header("Animation")]
     public GameObject skillEffectPrefab;
-    public GameObject networkSkillEffectPrefab;
-
 
     [Header("Combat")]
     public float attackRange;
@@ -450,7 +448,6 @@ public class SkillPreset : ItemPreset
         skillData.elementType = elementType;
         skillData.realm = realm;
         skillData.skillEffectPrefab = skillEffectPrefab;
-        skillData.networkSkillEffectPrefab = networkSkillEffectPrefab;
 
         // combat
         skillData.attackRange = attackRange;
