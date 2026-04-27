@@ -15,25 +15,27 @@ public class OccluderFadable : TGTHMonoBehaviour
     float _current = 1f;
     float _target = 1f;
 
-    // URP/Lit properties
-    static readonly int BaseColorId = Shader.PropertyToID("_BaseColor"); // URP Lit
-    static readonly int ColorId = Shader.PropertyToID("_Color");     // fallback
+    static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+    static readonly int ColorId     = Shader.PropertyToID("_Color");
+    static readonly int SurfaceId   = Shader.PropertyToID("_Surface");
+    static readonly int SrcBlendId  = Shader.PropertyToID("_SrcBlend");
+    static readonly int DstBlendId  = Shader.PropertyToID("_DstBlend");
+    static readonly int ZWriteId    = Shader.PropertyToID("_ZWrite");
 
-    static readonly int SurfaceId = Shader.PropertyToID("_Surface");
-    static readonly int SrcBlendId = Shader.PropertyToID("_SrcBlend");
-    static readonly int DstBlendId = Shader.PropertyToID("_DstBlend");
-    static readonly int ZWriteId = Shader.PropertyToID("_ZWrite");
-
-    // cache để restore
     Material[][] _originalSharedMaterials;
-
-    // material instance + màu gốc
     Material[][] _instancedMaterials;
-    Color[][] _originalColors;
+    Color[][]    _originalColors;
 
-    // để destroy instance materials tránh leak
+    // Cache lại các giá trị opaque gốc để restore đúng
+    float[][]    _originalSurface;
+    int[][]      _originalSrcBlend;
+    int[][]      _originalDstBlend;
+    int[][]      _originalZWrite;
+    int[][]      _originalRenderQueue;
+
     readonly List<Material> _created = new();
-    private bool occluding = false;
+    bool _occluding = false;
+    bool _isTransparentMode = false;
 
     protected override void LoadComponent()
     {
@@ -49,7 +51,7 @@ public class OccluderFadable : TGTHMonoBehaviour
         if (renderers == null || renderers.Length == 0)
             renderers = GetComponentsInChildren<Renderer>(true);
 
-        CreateMaterialInstancesAndMakeTransparent();
+        CreateMaterialInstances();
     }
 
     void OnDestroy()
@@ -60,9 +62,14 @@ public class OccluderFadable : TGTHMonoBehaviour
 
     public void SetOccluding(bool occluding)
     {
-        if (this.occluding == occluding) return;
-        this.occluding = occluding;
-        _target = this.occluding ? fadedAlpha : 1f;
+        if (_occluding == occluding) return;
+        _occluding = occluding;
+        _target = _occluding ? fadedAlpha : 1f;
+
+        // Bắt đầu fade OUT → chuyển sang transparent mode ngay
+        if (_occluding)
+            SetTransparentMode(true);
+
         enabled = true;
     }
 
@@ -76,17 +83,28 @@ public class OccluderFadable : TGTHMonoBehaviour
             _current = _target;
             ApplyAlphaToMaterials(_current);
 
-            if (_target >= 0.999f) enabled = false;
+            // Khi restore xong về alpha=1 → trả về opaque để tránh xuyên thấu
+            if (_target >= 0.999f)
+            {
+                SetTransparentMode(false);
+                enabled = false;
+            }
         }
     }
 
-    void CreateMaterialInstancesAndMakeTransparent()
+    // ─── Tạo instance materials, cache giá trị gốc, KHÔNG đổi blend mode ───
+    void CreateMaterialInstances()
     {
         int rCount = renderers.Length;
 
         _originalSharedMaterials = new Material[rCount][];
-        _instancedMaterials = new Material[rCount][];
-        _originalColors = new Color[rCount][];
+        _instancedMaterials      = new Material[rCount][];
+        _originalColors          = new Color[rCount][];
+        _originalSurface         = new float[rCount][];
+        _originalSrcBlend        = new int[rCount][];
+        _originalDstBlend        = new int[rCount][];
+        _originalZWrite          = new int[rCount][];
+        _originalRenderQueue     = new int[rCount][];
 
         for (int i = 0; i < rCount; i++)
         {
@@ -96,52 +114,93 @@ public class OccluderFadable : TGTHMonoBehaviour
             var shared = r.sharedMaterials;
             _originalSharedMaterials[i] = shared;
 
-            var inst = new Material[shared.Length];
-            var cols = new Color[shared.Length];
+            int mCount = shared.Length;
+            var inst    = new Material[mCount];
+            var cols    = new Color[mCount];
+            var surfs   = new float[mCount];
+            var srcs    = new int[mCount];
+            var dsts    = new int[mCount];
+            var zws     = new int[mCount];
+            var queues  = new int[mCount];
 
-            for (int m = 0; m < shared.Length; m++)
+            for (int m = 0; m < mCount; m++)
             {
                 var sm = shared[m];
-                if (!sm)
-                {
-                    inst[m] = null;
-                    cols[m] = Color.white;
-                    continue;
-                }
+                if (!sm) { inst[m] = null; cols[m] = Color.white; continue; }
 
-                // tạo instance material
                 var im = new Material(sm);
                 _created.Add(im);
 
-                // cache màu gốc (ưu tiên _BaseColor, fallback _Color)
-                if (im.HasProperty(BaseColorId))
-                    cols[m] = im.GetColor(BaseColorId);
-                else if (im.HasProperty(ColorId))
-                    cols[m] = im.GetColor(ColorId);
-                else
-                    cols[m] = Color.white;
+                // Cache màu gốc
+                if (im.HasProperty(BaseColorId))      cols[m] = im.GetColor(BaseColorId);
+                else if (im.HasProperty(ColorId))     cols[m] = im.GetColor(ColorId);
+                else                                  cols[m] = Color.white;
 
-                // convert transparent nếu có _Surface (URP/Lit-like)
-                if (im.HasProperty(SurfaceId))
-                {
-                    im.SetFloat(SurfaceId, 1f); // Transparent
-                    if (im.HasProperty(SrcBlendId)) im.SetInt(SrcBlendId, (int)BlendMode.SrcAlpha);
-                    if (im.HasProperty(DstBlendId)) im.SetInt(DstBlendId, (int)BlendMode.OneMinusSrcAlpha);
-                    if (im.HasProperty(ZWriteId)) im.SetInt(ZWriteId, 0);
-
-                    im.renderQueue = (int)RenderQueue.Transparent;
-                    im.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
-                    im.DisableKeyword("_ALPHATEST_ON");
-                }
+                // Cache blend state gốc
+                surfs[m]  = im.HasProperty(SurfaceId)  ? im.GetFloat(SurfaceId)  : 0f;
+                srcs[m]   = im.HasProperty(SrcBlendId) ? im.GetInt(SrcBlendId)   : (int)BlendMode.One;
+                dsts[m]   = im.HasProperty(DstBlendId) ? im.GetInt(DstBlendId)   : (int)BlendMode.Zero;
+                zws[m]    = im.HasProperty(ZWriteId)   ? im.GetInt(ZWriteId)     : 1;
+                queues[m] = im.renderQueue;
 
                 inst[m] = im;
             }
 
-            _instancedMaterials[i] = inst;
-            _originalColors[i] = cols;
+            _instancedMaterials[i]  = inst;
+            _originalColors[i]      = cols;
+            _originalSurface[i]     = surfs;
+            _originalSrcBlend[i]    = srcs;
+            _originalDstBlend[i]    = dsts;
+            _originalZWrite[i]      = zws;
+            _originalRenderQueue[i] = queues;
 
-            // gán instance materials cho renderer
             r.materials = inst;
+        }
+    }
+
+    // ─── Chuyển đổi giữa Opaque ↔ Transparent ───
+    void SetTransparentMode(bool transparent)
+    {
+        if (_isTransparentMode == transparent) return;
+        _isTransparentMode = transparent;
+
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            var mats = _instancedMaterials[i];
+            if (mats == null) continue;
+
+            for (int m = 0; m < mats.Length; m++)
+            {
+                var mat = mats[m];
+                if (!mat) continue;
+
+                if (transparent)
+                {
+                    // → Transparent
+                    if (mat.HasProperty(SurfaceId))   mat.SetFloat(SurfaceId, 1f);
+                    if (mat.HasProperty(SrcBlendId))  mat.SetInt(SrcBlendId, (int)BlendMode.SrcAlpha);
+                    if (mat.HasProperty(DstBlendId))  mat.SetInt(DstBlendId, (int)BlendMode.OneMinusSrcAlpha);
+                    if (mat.HasProperty(ZWriteId))    mat.SetInt(ZWriteId, 0);
+                    mat.renderQueue = (int)RenderQueue.Transparent;
+                    mat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+                }
+                else
+                {
+                    // → Restore về opaque gốc
+                    if (mat.HasProperty(SurfaceId))   mat.SetFloat(SurfaceId, _originalSurface[i][m]);
+                    if (mat.HasProperty(SrcBlendId))  mat.SetInt(SrcBlendId, _originalSrcBlend[i][m]);
+                    if (mat.HasProperty(DstBlendId))  mat.SetInt(DstBlendId, _originalDstBlend[i][m]);
+                    if (mat.HasProperty(ZWriteId))    mat.SetInt(ZWriteId, _originalZWrite[i][m]);
+                    mat.renderQueue = _originalRenderQueue[i][m];
+                    mat.DisableKeyword("_SURFACE_TYPE_TRANSPARENT");
+
+                    // Reset alpha về 1 cho chắc
+                    var c = _originalColors[i][m];
+                    c.a = 1f;
+                    if (mat.HasProperty(BaseColorId))     mat.SetColor(BaseColorId, c);
+                    else if (mat.HasProperty(ColorId))    mat.SetColor(ColorId, c);
+                }
+            }
         }
     }
 
@@ -166,10 +225,8 @@ public class OccluderFadable : TGTHMonoBehaviour
                 var c = cols[m];
                 c.a = a;
 
-                if (mat.HasProperty(BaseColorId))
-                    mat.SetColor(BaseColorId, c);
-                else if (mat.HasProperty(ColorId))
-                    mat.SetColor(ColorId, c);
+                if (mat.HasProperty(BaseColorId))     mat.SetColor(BaseColorId, c);
+                else if (mat.HasProperty(ColorId))    mat.SetColor(ColorId, c);
             }
         }
     }
@@ -184,18 +241,14 @@ public class OccluderFadable : TGTHMonoBehaviour
             if (!r) continue;
 
             var shared = _originalSharedMaterials[i];
-            if (shared != null)
-                r.sharedMaterials = shared;
+            if (shared != null) r.sharedMaterials = shared;
         }
     }
 
     void DestroyCreatedMaterials()
     {
-        for (int i = 0; i < _created.Count; i++)
-        {
-            if (_created[i])
-                Destroy(_created[i]);
-        }
+        foreach (var m in _created)
+            if (m) Destroy(m);
         _created.Clear();
     }
 }

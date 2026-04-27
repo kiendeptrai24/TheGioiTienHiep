@@ -6,7 +6,6 @@ public class TopDownRotation : IRotable
     public TopDownRotation(Rigidbody rb)
     {
         this.rb = rb;
-        this.rb.angularVelocity = Vector3.zero;
     }
 
     public void Rotate(Transform character, Vector3 inputDirection, float rotationSpeed = 10f)

@@ -20,6 +20,7 @@ public class CameraSwitchManager : Singleton<CameraSwitchManager>
         {
             cameraPoints.Add(point.target.name, point);
         }
+        SwitchToBase();
         PlayerNetManager.Instance.OnPlayerExiststed += OnPlayerExiststed;
     }
 
@@ -28,7 +29,8 @@ public class CameraSwitchManager : Singleton<CameraSwitchManager>
         var playerPoint = new CameraPoint();
         playerPoint.target = playerNet.transform;
         playerPoint.rotation = cameraPlayerRotation;
-
+        if (cameraPoints.ContainsKey(cameraPlayerName))
+            cameraPoints.Remove(cameraPlayerName);
         cameraPoints.Add(cameraPlayerName, playerPoint);
     }
 
@@ -42,8 +44,6 @@ public class CameraSwitchManager : Singleton<CameraSwitchManager>
         {
             cinemachine.Follow = targetPoint.target;
             cinemachine.LookAt = targetPoint.target;
-            //follow.FollowOffset = targetPoint.rotation;
-            return;
         }
     }
     [ContextMenu("switch to battle")]
