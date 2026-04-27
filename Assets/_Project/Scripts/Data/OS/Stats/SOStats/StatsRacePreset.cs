@@ -124,21 +124,21 @@ public class StatsRacePreset : ScriptableObject
         movementSpeed = moveSpeedMul;
     }
 
-    public StatsRaceData GetStats()
+    public RaceData GetStats()
     {
-        StatsRaceData data = new StatsRaceData();
+        RaceData data = new RaceData();
         data.raceType = raceType;
-        data.maxHealth = health;
-        data.maxMana = mana;
-        data.maxSpirit = spirit;
+        data.healthPoint = health;
+        data.manaPoint = mana;
+        data.spiritPoint = spirit;
         data.physicalDamage = physicalDamage;
         data.magicalDamage = magicalDamage;
         data.spiritDamage = spiritDamage;
         data.physicalDefense = physicalDefense;
         data.magicalDefense = magicalDefense;
         data.spiritDefense = spiritDefense;
-        data.movementSpeed = movementSpeed;
-        data.spiritRange = spiritRange;
+        data.movementSpeedPoint = movementSpeed;
+        data.spiritRangePoint = spiritRange;
         return data;
     }
 

@@ -23,8 +23,8 @@ public class ItemChamDetailPageView : IItemDetailPageView
     [SerializeField] private TextMeshProUGUI nextEffectDescriptionTxt;
     [SerializeField] private TextMeshProUGUI nextDescriptionTxt;
     [SerializeField] private Button levelUpBtn;
-    [SerializeField] private StatsRealmData itemData;
-    [SerializeField] private StatsRealmData nextItemData;
+    [SerializeField] private RealmData itemData;
+    [SerializeField] private RealmData nextItemData;
     private LevelUpValidator levelUpValidator;
     private LevelUpDatabase levelUpDatabase;
     private ulong playerClientId;
@@ -93,7 +93,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
             TopNotificationUI.Instance.ShowNotification("Đã đạt cấp độ tối đa");
             return;
         }
-        if (itemData is StatsRealmData)
+        if (itemData is RealmData)
         {
             ulong PlayerNetId = NetworkManager.Singleton.LocalClientId;
 
@@ -149,7 +149,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
         }
 
     }
-    public string GetDescriptionText(StatsRealmData realData)
+    public string GetDescriptionText(RealmData realData)
     {
         string description = "";
         if (realData.maxHealth > 0)

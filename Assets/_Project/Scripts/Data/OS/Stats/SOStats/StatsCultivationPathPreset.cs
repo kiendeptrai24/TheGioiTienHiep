@@ -60,7 +60,7 @@ public class StatsCultivationPathPreset : ScriptableObject
         {
             case EssenceType.Physical:
                 ApplyRow(
-                    sinhLuc: 10f, linhLuc: 5f,  linhThuc: 5f,
+                    sinhLuc: 10f, linhLuc: 5f, linhThuc: 5f,
                     satThuongLinhThe: 1f, satThuongLinhLuc: 0f, satThuongLinhThuc: 0f,
                     phongNguLinhThe: 1f, phongNguLinhLuc: 0f, phongNguLinhThuc: 0f,
                     phamViLinhThuc: 1f, tocDoDiChuyen: 1f,
@@ -112,44 +112,44 @@ public class StatsCultivationPathPreset : ScriptableObject
     {
         // Resources
         health = sinhLuc;
-        mana   = linhLuc;
+        mana = linhLuc;
         spirit = linhThuc;
 
         // Offensive
         physicalDamage = satThuongLinhThe;
-        magicalDamage  = satThuongLinhLuc;
-        spiritDamage   = satThuongLinhThuc;
+        magicalDamage = satThuongLinhLuc;
+        spiritDamage = satThuongLinhThuc;
 
         // Defensive
         physicalDefense = phongNguLinhThe;
-        magicalDefense  = phongNguLinhLuc;
-        spiritDefense   = phongNguLinhThuc;
+        magicalDefense = phongNguLinhLuc;
+        spiritDefense = phongNguLinhThuc;
 
         // Speed / Range
         movementSpeed = tocDoDiChuyen;
-        spiritRange   = phamViLinhThuc;
+        spiritRange = phamViLinhThuc;
 
         // Counter info
         counterEssenceType = counterType;
-        counterPercentage  = counterPercent;
+        counterPercentage = counterPercent;
     }
-    public StatsCultivationPathData GetStats()
+    public EssenceData GetStats()
     {
-        StatsCultivationPathData data = new StatsCultivationPathData();
+        EssenceData data = new EssenceData();
         data.essenceType = essenceType;
         data.counterEssenceType = counterEssenceType;
         data.counterPercentage = counterPercentage;
-        data.maxHealth = Mathf.RoundToInt(health);
-        data.maxMana = Mathf.RoundToInt(mana);
-        data.maxSpirit = Mathf.RoundToInt(spirit);
+        data.healthPoint = Mathf.RoundToInt(health);
+        data.manaPoint = Mathf.RoundToInt(mana);
+        data.spiritPoint = Mathf.RoundToInt(spirit);
         data.physicalDamage = Mathf.RoundToInt(physicalDamage);
         data.magicalDamage = Mathf.RoundToInt(magicalDamage);
         data.spiritDamage = Mathf.RoundToInt(spiritDamage);
         data.physicalDefense = Mathf.RoundToInt(physicalDefense);
         data.magicalDefense = Mathf.RoundToInt(magicalDefense);
         data.spiritDefense = Mathf.RoundToInt(spiritDefense);
-        data.movementSpeed = Mathf.RoundToInt(movementSpeed);
-        data.spiritRange = Mathf.RoundToInt(spiritRange);
+        data.movementSpeedPoint = Mathf.RoundToInt(movementSpeed);
+        data.spiritRangePoint = Mathf.RoundToInt(spiritRange);
         return data;
     }
 }

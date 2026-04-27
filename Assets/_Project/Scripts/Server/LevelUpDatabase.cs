@@ -8,7 +8,7 @@ public class LevelUpDatabase : Singleton<LevelUpDatabase>
     public List<StatsRealmPreset> realmStats;
     public List<SkillPreset> skillPresets = new();
     public List<TechniquePreset> techniquePresets = new();
-    private Dictionary<RealmType, StatsRealmData> realmStatsData = new();
+    private Dictionary<RealmType, RealmData> realmStatsData = new();
     private Dictionary<SkillType, List<SkillData>> skillDatas = new();
     private Dictionary<TechniqueType, List<TechniqueData>> techniqueDatas = new();
     private Dictionary<string, ItemData> itemDataDict = new();
@@ -48,7 +48,7 @@ public class LevelUpDatabase : Singleton<LevelUpDatabase>
     }
     #region Get Next Level
 
-    public StatsRealmData GetNextRealm(RealmType realmType)
+    public RealmData GetNextRealm(RealmType realmType)
     {
         RealmType nextRealmType = realmType + 1;
         if (realmType == RealmType.PhiThang)

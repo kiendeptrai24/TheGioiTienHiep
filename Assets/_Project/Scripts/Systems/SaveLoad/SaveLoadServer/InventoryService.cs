@@ -3,21 +3,21 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryService : ISaveLoadRemote
+public class InventoryService : ILoadRemoteServer
 {
-    private PlayFabDataService service;
-    public InventoryService(PlayFabDataService service)
+    private PlayFabDataServerService service;
+    public InventoryService(PlayFabDataServerService service)
     {
         this.service = service;
     }
 
-    public void LoadGame(GameData gameData, Action callback)
+    public void LoadGame(GameDataServer gameData, Action callback)
     {
         service.LoadData((gameDataDTO) =>
         {
             try
             {
-                ItemResponseDto allItem = gameDataDTO;
+                ItemInventoryResponseDto allItem = gameDataDTO;
                 if (allItem == null)
                 {
                     Debug.Log("LoadGame: itemsShop is null");
@@ -49,7 +49,7 @@ public class InventoryService : ISaveLoadRemote
 
                     itemDatas.Add(itemData);
                 }
-                gameData.allItemsDatas = itemDatas;
+                gameData.allItems = itemDatas;
                 callback?.Invoke();
             }
             catch (System.Exception ex)

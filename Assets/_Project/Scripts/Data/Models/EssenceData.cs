@@ -3,7 +3,7 @@ using System;
 using Newtonsoft.Json;
 
 [Serializable]
-public class StatsCultivationPathData : ItemData
+public class EssenceData : ItemData
 {
     //Main cultivation type
     [JsonIgnore]
@@ -20,16 +20,29 @@ public class StatsCultivationPathData : ItemData
 
     //Resources (per point)
     [JsonIgnore]
-    public int maxHealth;
+    public int healthPoint;
     [JsonIgnore]
-    public int maxMana;
+    public int manaPoint;
     [JsonIgnore]
-    public int maxSpirit;
+    public int spiritPoint;
+    [JsonIgnore]
+    public int physicalDamagePoint;
+    [JsonIgnore]
+    public int magicalDamagePoint;
+    [JsonIgnore]
+    public int spiritDamagePoint;
+    [JsonIgnore]
+    public int physicalDefensePoint;
+    [JsonIgnore]
+    public int magicalDefensePoint;
+    [JsonIgnore]
+    public int spiritDefensePoint;
+
 
     //Speed / Range (per point)
     [JsonIgnore]
-    public int movementSpeed;
+    public int movementSpeedPoint;
     [JsonIgnore]
-    public int spiritRange;
+    public int spiritRangePoint;
 
 }

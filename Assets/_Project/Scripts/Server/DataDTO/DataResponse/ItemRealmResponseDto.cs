@@ -3,8 +3,8 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-public class ItemResponseDto
+public class ItemRealmResponseDto
 {
     [JsonProperty("data")]
-    public List<ItemDataDto> Data { get; set; }
+    public List<ItemRealmDataDto> Data { get; set; }
 }

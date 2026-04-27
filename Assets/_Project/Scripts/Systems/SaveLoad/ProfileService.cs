@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ProfileService : ISaveLoadRemote
 {
-    private PlayFabDataService service;
+    private PlayFabDataClientService service;
 
-    public ProfileService(PlayFabDataService service)
+    public ProfileService(PlayFabDataClientService service)
     {
         this.service = service;
     }

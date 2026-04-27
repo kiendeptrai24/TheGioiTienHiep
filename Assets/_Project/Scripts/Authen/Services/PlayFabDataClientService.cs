@@ -6,18 +6,18 @@ using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine;
 
-public class PlayFabDataService
+public class PlayFabDataClientService
 {
     private readonly PlayFabClientInstanceAPI clientApi;
 
-    public PlayFabDataService(PlayFabClientInstanceAPI clientApi)
+    public PlayFabDataClientService(PlayFabClientInstanceAPI clientApi)
     {
         this.clientApi = clientApi;
     }
 
     #region Public Load Methods
 
-    public void LoadData(Action<ItemResponseDto> callback)
+    public void LoadData(Action<ItemInventoryResponseDto> callback)
     {
         LoadTitleData("inventory", callback);
     }

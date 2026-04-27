@@ -354,9 +354,9 @@ public class StatsRealmPreset : ItemPreset
         castSpeed = 1f;
     }
 
-    public StatsRealmData GetStats()
+    public RealmData GetStats()
     {
-        StatsRealmData data = new StatsRealmData();
+        RealmData data = new RealmData();
         data.realmType = realmType;
         data.instanceId = instanceId;
         data.itemId = itemId;

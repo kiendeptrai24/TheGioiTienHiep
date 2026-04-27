@@ -60,14 +60,14 @@ public class ScriptableObjectLoader : Singleton<ScriptableObjectLoader>
         Debug.Log("Item not found for instanceId: " + instanceId);
         return null;
     }
-    public StatsRealmData GetRealmItem(RealmType realmType)
+    public RealmData GetRealmItem(RealmType realmType)
     {
         if (realmItems.TryGetValue(realmType, out var realmItem))
             return realmItem.GetStats();
         Debug.Log("Realm item not found for realm type: " + realmType);
         return null;
     }
-    public StatsRaceData GetRaceItem(RaceType raceType)
+    public RaceData GetRaceItem(RaceType raceType)
     {
         if (raceItems.TryGetValue(raceType, out var raceItem))
             return raceItem.GetStats();

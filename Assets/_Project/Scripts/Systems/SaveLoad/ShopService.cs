@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ShopService : ISaveLoadRemote
 {
-    private PlayFabDataService service;
-    public ShopService(PlayFabDataService service)
+    private PlayFabDataClientService service;
+    public ShopService(PlayFabDataClientService service)
     {
         this.service = service;
     }

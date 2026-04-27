@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class TeamInventoryService : ISaveLoadRemote
 {
-    private PlayFabDataService service;
-    public TeamInventoryService(PlayFabDataService service)
+    private PlayFabDataClientService service;
+    public TeamInventoryService(PlayFabDataClientService service)
     {
         this.service = service;
     }

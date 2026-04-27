@@ -14,7 +14,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     [SerializeField] private GameData gameData = new GameData();
     private List<ISaveLoadRemote> saveLoadRemotes = new List<ISaveLoadRemote>();
     private AuthManager authManager;
-    private PlayFabDataService service;
+    private PlayFabDataClientService service;
     public List<ItemData> GetCharactersData() => gameData.itemDatasCharacter;
     private ISaveLoadRemote characterService;
     private PlayFabClientInstanceAPI clientAPI;
@@ -96,7 +96,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     public void onSuccess(AuthResult result)
     {
-        service = new PlayFabDataService(result.clientApi);
+        service = new PlayFabDataClientService(result.clientApi);
 
         characterService = new ItemCharacterService(service);
 

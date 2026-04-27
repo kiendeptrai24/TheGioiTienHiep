@@ -48158,6 +48158,11 @@ MonoBehaviour:
     linhThachCost: 0
     rewardPotentialPoint: 0
     rewardSkillPoint: 0
+    rate: 0
+    increaseRate: 0
+    timeSeconds: 0
+    lthao: 0
+    item: 
   nextItemData:
     instanceId: 
     itemId: 
@@ -48203,6 +48208,11 @@ MonoBehaviour:
     linhThachCost: 0
     rewardPotentialPoint: 0
     rewardSkillPoint: 0
+    rate: 0
+    increaseRate: 0
+    timeSeconds: 0
+    lthao: 0
+    item: 
 --- !u!114 &542338153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79724,53 +79734,16 @@ MonoBehaviour:
   allItems: []
   shopItems: []
   gameDatas:
-    characterName: 
-    position: {x: 0, y: 0, z: 0}
-    rotation: {x: 0, y: 0, z: 0, w: 1}
-    characterId: 
-    coins: 0
-    potentialPoint: 0
-    skillPoint: 0
-    itemDataPoint:
-      instanceId: 
-      itemId: 
-      itemType: 0
-      itemName: 
-      itemIcon: {fileID: 0}
-      itemIconPath: 
-      itemFilePath: 
-      itemPrice: 0
-      canStack: 0
-      itemDescription: 
-      currentstack: 0
-      realmType: 0
-      qualityType: 0
-      elementType: 0
-      physicalDamage: 0
-      magicalDamage: 0
-      spiritDamage: 0
-      physicalDefense: 0
-      magicalDefense: 0
-      spiritDefense: 0
-      potentialPoints: 0
-      damagePoint: 0
-      defensePoint: 0
-      healthPoint: 0
-      manaPoint: 0
-      spiritPoint: 0
-      moveSpeed: 0
-      spititRange: 0
-    itemDatas: []
-    itemDatasUsed: []
-    itemDatasInTeam: []
-    itemShopDatas: []
-    allItemsDatas: []
-    itemDatasCharacter: []
-    mineOfflineDataList:
-      mines: []
+    allItems: []
+    raceAndEssenceItems: []
+    realmItems: []
+    shopItems: []
   equipmentDatas: []
   skillDatas: []
   techniqueDatas: []
+  realmDatas: []
+  raceDatas: []
+  essenceDatas: []
 --- !u!1 &889610874
 GameObject:
   m_ObjectHideFlags: 0
@@ -121435,11 +121408,17 @@ MonoBehaviour:
     spiritDefense: 0
     potentialPoints: 0
     raceType: 0
-    maxHealth: 0
-    maxMana: 0
-    maxSpirit: 0
-    spiritRange: 0
-    movementSpeed: 0
+    healthPoint: 0
+    manaPoint: 0
+    spiritPoint: 0
+    physicalDamagePoint: 0
+    magicalDamagePoint: 0
+    spiritDamagePoint: 0
+    physicalDefensePoint: 0
+    magicalDefensePoint: 0
+    spiritDefensePoint: 0
+    spiritRangePoint: 0
+    movementSpeedPoint: 0
   statsCultivationPathData:
     instanceId: 
     itemId: 
@@ -121465,11 +121444,17 @@ MonoBehaviour:
     essenceType: 0
     counterEssenceType: 0
     counterPercentage: 0
-    maxHealth: 0
-    maxMana: 0
-    maxSpirit: 0
-    movementSpeed: 0
-    spiritRange: 0
+    healthPoint: 0
+    manaPoint: 0
+    spiritPoint: 0
+    physicalDamagePoint: 0
+    magicalDamagePoint: 0
+    spiritDamagePoint: 0
+    physicalDefensePoint: 0
+    magicalDefensePoint: 0
+    spiritDefensePoint: 0
+    movementSpeedPoint: 0
+    spiritRangePoint: 0
   statsRealmData:
     instanceId: 
     itemId: 
@@ -121515,6 +121500,11 @@ MonoBehaviour:
     linhThachCost: 0
     rewardPotentialPoint: 0
     rewardSkillPoint: 0
+    rate: 0
+    increaseRate: 0
+    timeSeconds: 0
+    lthao: 0
+    item: 
 --- !u!1 &1324406905
 GameObject:
   m_ObjectHideFlags: 0
@@ -375775,11 +375765,17 @@ MonoBehaviour:
     spiritDefense: 0
     potentialPoints: 0
     raceType: 0
-    maxHealth: 0
-    maxMana: 0
-    maxSpirit: 0
-    spiritRange: 0
-    movementSpeed: 0
+    healthPoint: 0
+    manaPoint: 0
+    spiritPoint: 0
+    physicalDamagePoint: 0
+    magicalDamagePoint: 0
+    spiritDamagePoint: 0
+    physicalDefensePoint: 0
+    magicalDefensePoint: 0
+    spiritDefensePoint: 0
+    spiritRangePoint: 0
+    movementSpeedPoint: 0
   statsCultivationPathData:
     instanceId: 
     itemId: 
@@ -375805,11 +375801,17 @@ MonoBehaviour:
     essenceType: 0
     counterEssenceType: 0
     counterPercentage: 0
-    maxHealth: 0
-    maxMana: 0
-    maxSpirit: 0
-    movementSpeed: 0
-    spiritRange: 0
+    healthPoint: 0
+    manaPoint: 0
+    spiritPoint: 0
+    physicalDamagePoint: 0
+    magicalDamagePoint: 0
+    spiritDamagePoint: 0
+    physicalDefensePoint: 0
+    magicalDefensePoint: 0
+    spiritDefensePoint: 0
+    movementSpeedPoint: 0
+    spiritRangePoint: 0
   statsRealmData:
     instanceId: 
     itemId: 
@@ -375855,6 +375857,11 @@ MonoBehaviour:
     linhThachCost: 0
     rewardPotentialPoint: 0
     rewardSkillPoint: 0
+    rate: 0
+    increaseRate: 0
+    timeSeconds: 0
+    lthao: 0
+    item: 
 --- !u!23 &4966512594610179410
 MeshRenderer:
   m_ObjectHideFlags: 0

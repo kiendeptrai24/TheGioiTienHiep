@@ -27,9 +27,9 @@ public class StatsCultivationPathModifier : StatsModifierBase
         int spiritRange = heroData.spiritPoint;
 
 
-        AddValue(StatType.Health, data.maxHealth * maxHealth);
-        AddValue(StatType.Mana, data.maxMana * maxMana);
-        AddValue(StatType.Spirit, data.maxSpirit * maxSpirit);
+        AddValue(StatType.Health, data.healthPoint * maxHealth);
+        AddValue(StatType.Mana, data.manaPoint * maxMana);
+        AddValue(StatType.Spirit, data.spiritPoint * maxSpirit);
 
         AddValue(StatType.PhysicalDamage, data.physicalDamage * physicalDamage);
         AddValue(StatType.MagicalDamage, data.magicalDamage * magicalDamage);
@@ -39,8 +39,8 @@ public class StatsCultivationPathModifier : StatsModifierBase
         AddValue(StatType.MagicalDefense, data.magicalDefense * magicalDefense);
         AddValue(StatType.SpiritDefense, data.spiritDefense * spiritDefense);
 
-        AddValue(StatType.MovementSpeed, data.movementSpeed * movementSpeed);
-        AddValue(StatType.SpiritRange, data.spiritRange * spiritRange);
+        AddValue(StatType.MovementSpeed, data.movementSpeedPoint * movementSpeed);
+        AddValue(StatType.SpiritRange, data.spiritRangePoint * spiritRange);
         AddValue(StatType.CounterPercentage, data.counterPercentage * data.counterPercentage);
     }
     public override void RemoveStats(Dictionary<StatType, Stat> stats, ItemData itemData)
@@ -66,9 +66,9 @@ public class StatsCultivationPathModifier : StatsModifierBase
         int movementSpeed = heroData.moveSpeedPoint == 0 ? 1 : heroData.moveSpeedPoint;
         int spiritRange = heroData.spiritPoint == 0 ? 1 : heroData.spiritPoint;
 
-        RemoveValue(StatType.Health, data.maxHealth * maxHealth);
-        RemoveValue(StatType.Mana, data.maxMana * maxMana);
-        RemoveValue(StatType.Spirit, data.maxSpirit * maxSpirit);
+        RemoveValue(StatType.Health, data.healthPoint * maxHealth);
+        RemoveValue(StatType.Mana, data.manaPoint * maxMana);
+        RemoveValue(StatType.Spirit, data.spiritPoint * maxSpirit);
 
         RemoveValue(StatType.PhysicalDamage, data.physicalDamage * physicalDamage);
         RemoveValue(StatType.MagicalDamage, data.magicalDamage * magicalDamage);
@@ -78,8 +78,8 @@ public class StatsCultivationPathModifier : StatsModifierBase
         RemoveValue(StatType.MagicalDefense, data.magicalDefense * magicalDefense);
         RemoveValue(StatType.SpiritDefense, data.spiritDefense * spiritDefense);
 
-        RemoveValue(StatType.MovementSpeed, data.movementSpeed * movementSpeed);
-        RemoveValue(StatType.SpiritRange, data.spiritRange * spiritRange);
+        RemoveValue(StatType.MovementSpeed, data.movementSpeedPoint * movementSpeed);
+        RemoveValue(StatType.SpiritRange, data.spiritRangePoint * spiritRange);
         RemoveValue(StatType.CounterPercentage, data.counterPercentage);
     }
 }

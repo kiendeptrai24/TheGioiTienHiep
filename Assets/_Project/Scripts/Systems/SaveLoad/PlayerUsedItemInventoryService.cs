@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerUsedItemInventoryService : ISaveLoadRemote
 {
-    private PlayFabDataService service;
-    public PlayerUsedItemInventoryService(PlayFabDataService service)
+    private PlayFabDataClientService service;
+    public PlayerUsedItemInventoryService(PlayFabDataClientService service)
     {
         this.service = service;
     }

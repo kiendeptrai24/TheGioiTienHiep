@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 
 [Serializable]
-public class StatsRealmData : ItemData
+public class RealmData : ItemData
 {
     //Cultivation Realm
     [JsonIgnore]
@@ -63,4 +63,9 @@ public class StatsRealmData : ItemData
     public int rewardPotentialPoint;
     [JsonIgnore]
     public int rewardSkillPoint;
+    public float rate;
+    public float increaseRate;
+    public ulong timeSeconds;
+    public int lthao;
+    public string item;
 }

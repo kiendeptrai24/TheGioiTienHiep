@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class ItemCharacterService : ISaveLoadRemote
 {
-    private PlayFabDataService service;
-    public ItemCharacterService(PlayFabDataService service)
+    private PlayFabDataClientService service;
+    public ItemCharacterService(PlayFabDataClientService service)
     {
         this.service = service;
     }

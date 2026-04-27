@@ -10,11 +10,11 @@ public class HeroData : ItemData
     public bool isCharactor;
     public string characterId;
     [JsonIgnore]
-    public StatsRealmData realmData;
+    public RealmData realmData;
     [JsonIgnore]
-    public StatsCultivationPathData statsCultivationPathData;
+    public EssenceData statsCultivationPathData;
     [JsonIgnore]
-    public StatsRaceData raceData;
+    public RaceData raceData;
     public RaceType raceType;
     [JsonIgnore]
     public EssenceType essenceType;

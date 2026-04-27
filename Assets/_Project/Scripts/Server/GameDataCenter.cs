@@ -5,18 +5,24 @@ using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine;
 using Newtonsoft.Json;
+using System;
 
 public class GameDataCenter : TGTHNetworkBehaviour
 {
     [SerializeField] private List<ItemData> allItems;
     [SerializeField] private List<ItemData> shopItems;
-    [SerializeField] private GameData gameDatas;
-    private PlayFabDataService service;
+    [SerializeField] private GameDataServer gameDatas;
+    private PlayFabDataServerService service;
     private PlayFabClientInstanceAPI clientApi;
-    private List<ISaveLoadRemote> saveLoadRemotes = new List<ISaveLoadRemote>();
+    private List<ILoadRemoteServer> saveLoadRemotes = new List<ILoadRemoteServer>();
     [SerializeField] private List<EquitmentData> equipmentDatas;
     [SerializeField] private List<SkillData> skillDatas;
     [SerializeField] private List<TechniqueData> techniqueDatas;
+    [SerializeField] private List<RealmData> realmDatas;
+    [SerializeField] private List<RaceData> raceDatas;
+    [SerializeField] private List<EssenceData> essenceDatas;
+
+    public event Action<GameDataServer> OnLoadGameFormPlayfab;
 
     public override void OnNetworkSpawn()
     {
@@ -34,30 +40,56 @@ public class GameDataCenter : TGTHNetworkBehaviour
 
     private void onSuccess(LoginResult result)
     {
-        service = new PlayFabDataService(clientApi);
-        LoadData();
-    }
-    private void LoadData()
-    {
+        service = new PlayFabDataServerService(clientApi);
         saveLoadRemotes.Add(new InventoryService(service));
-        foreach (var load in saveLoadRemotes)
+        saveLoadRemotes.Add(new RealmService(service));
+        saveLoadRemotes.Add(new EssenceAndRaceService(service));
+        LoadGameData();
+    }
+    private void LoadDataTest()
+    {
+
+        foreach (var item in gameDatas.allItems)
         {
-            load.LoadGame(gameDatas, () =>
+            if (item is EquitmentData)
             {
-                foreach (var item in gameDatas.allItemsDatas)
+                equipmentDatas.Add(item as EquitmentData);
+            }
+            else if (item is SkillData)
+            {
+                skillDatas.Add(item as SkillData);
+            }
+            else if (item is TechniqueData)
+            {
+                techniqueDatas.Add(item as TechniqueData);
+            }
+        }
+        foreach (var item in gameDatas.realmItems)
+        {
+            realmDatas.Add(item as RealmData);
+        }
+        foreach (var item in gameDatas.raceAndEssenceItems)
+        {
+            if(item is RaceData)
+                raceDatas.Add(item as RaceData);
+            else if(item is EssenceData)
+                essenceDatas.Add(item as EssenceData);
+        }
+    }
+    private void LoadGameData()
+    {
+        int total = saveLoadRemotes.Count;
+        int completed = 0;
+
+        foreach (var item in saveLoadRemotes)
+        {
+            item.LoadGame(gameDatas, () =>
+            {
+                completed++;
+                if (completed == total)
                 {
-                    if(item is EquitmentData)
-                    {
-                        equipmentDatas.Add(item as EquitmentData);
-                    }
-                    else if(item is SkillData)
-                    {
-                        skillDatas.Add(item as SkillData);
-                    }
-                    else if(item is TechniqueData)
-                    {
-                        techniqueDatas.Add(item as TechniqueData);
-                    }
+                    LoadDataTest();
+                    OnLoadGameFormPlayfab?.Invoke(this.gameDatas);
                 }
             });
         }

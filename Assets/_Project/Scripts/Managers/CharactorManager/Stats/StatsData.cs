@@ -15,9 +15,9 @@ public class StatsData : TGTHMonoBehaviour
     public List<EquitmentData> equiDatas;
 
     [Header("Preset base stats")]
-    public StatsRaceData statsRaceData;
-    public StatsCultivationPathData statsCultivationPathData;
-    public StatsRealmData statsRealmData;
+    public RaceData statsRaceData;
+    public EssenceData statsCultivationPathData;
+    public RealmData statsRealmData;
     public Dictionary<StatType, Stat> stats = new Dictionary<StatType, Stat>();
 
     #region Base Stats
