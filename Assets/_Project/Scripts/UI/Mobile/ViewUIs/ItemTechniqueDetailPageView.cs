@@ -131,7 +131,7 @@ public class ItemTechniqueDetailPageView : IItemDetailPageView
             nextItemIcon.gameObject.SetActive(true);
             nextItemIcon.sprite = nextItemData.itemIcon;
             nextTechniquenameTxt.text = nextItemData.itemName;
-            nextRealmTxt.text = nextItemData.realm + "";
+            nextRealmTxt.text = nextItemData.realmType + "";
             nextEffectDescriptionTxt.text = nextItemData.specialEffect;
             nextDescriptionTxt.text = GetDescriptionText(nextItemData);
         }

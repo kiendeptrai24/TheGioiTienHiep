@@ -6,7 +6,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "NewStatsPreset", menuName = "RPG/Stats/Stats Race Preset")]
-public class StatsRacePreset : ScriptableObject 
+public class StatsRacePreset : ScriptableObject
 {
     [Header("Race type")]
     public RaceType raceType;
@@ -62,8 +62,8 @@ public class StatsRacePreset : ScriptableObject
 
             case RaceType.Beast:
                 ApplyRaceRow(
-                    healthMul: 0.50f, manaMul: 0.0f,  spiritMul: 0.0f,
-                    physDmgMul: 0.0f,  magDmgMul: 0.0f, spiritDmgMul: 0.0f,
+                    healthMul: 0.50f, manaMul: 0.0f, spiritMul: 0.0f,
+                    physDmgMul: 0.0f, magDmgMul: 0.0f, spiritDmgMul: 0.0f,
                     physDefMul: 0.50f, magDefMul: 0.50f, spiritDefMul: 0.50f,
                     spiritRangeMul: 0.0f, moveSpeedMul: 0.0f
                 );
@@ -71,7 +71,7 @@ public class StatsRacePreset : ScriptableObject
 
             case RaceType.Celestial:
                 ApplyRaceRow(
-                    healthMul: 0.0f,  manaMul: 0.0f, spiritMul: 0.50f,
+                    healthMul: 0.0f, manaMul: 0.0f, spiritMul: 0.50f,
                     physDmgMul: 0.0f, magDmgMul: 0.0f, spiritDmgMul: 0.0f,
                     physDefMul: 0.0f, magDefMul: 0.0f, spiritDefMul: 0.0f,
                     spiritRangeMul: 0.50f, moveSpeedMul: 0.0f
@@ -82,7 +82,7 @@ public class StatsRacePreset : ScriptableObject
                 ApplyRaceRow(
                     healthMul: 0.30f, manaMul: 0.10f, spiritMul: 0.10f,
                     physDmgMul: 0.50f, magDmgMul: 0.50f, spiritDmgMul: 0.50f,
-                    physDefMul: 0.0f,  magDefMul: 0.0f,  spiritDefMul: 0.0f,
+                    physDefMul: 0.0f, magDefMul: 0.0f, spiritDefMul: 0.0f,
                     spiritRangeMul: 0.0f, moveSpeedMul: 0.0f
                 );
                 break;
@@ -106,21 +106,21 @@ public class StatsRacePreset : ScriptableObject
     {
         // Resources
         health = healthMul;
-        mana   = manaMul;
+        mana = manaMul;
         spirit = spiritMul;
 
         // Offensive
         physicalDamage = physDmgMul;
-        magicalDamage  = magDmgMul;
-        spiritDamage   = spiritDmgMul;
+        magicalDamage = magDmgMul;
+        spiritDamage = spiritDmgMul;
 
         // Defensive
         physicalDefense = physDefMul;
-        magicalDefense  = magDefMul;
-        spiritDefense   = spiritDefMul;
+        magicalDefense = magDefMul;
+        spiritDefense = spiritDefMul;
 
         // Speed / Range
-        spiritRange   = spiritRangeMul;
+        spiritRange = spiritRangeMul;
         movementSpeed = moveSpeedMul;
     }
 

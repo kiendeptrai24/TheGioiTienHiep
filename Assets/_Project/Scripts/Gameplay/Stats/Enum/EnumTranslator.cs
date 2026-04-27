@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 public static class EnumTranslator
 {
-    
-private static readonly Dictionary<Enum, string> _translations = new Dictionary<Enum, string>
+
+    private static readonly Dictionary<Enum, string> _translations = new Dictionary<Enum, string>
     {
         // CultivationStage
         { RealmType.LuyenKhi_1, "Luyện Khí Kỳ - tần 1" },

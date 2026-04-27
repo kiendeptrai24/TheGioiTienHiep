@@ -25,7 +25,7 @@ public class ItemLevelDetailPageView : IItemDetailPageView
         {
             itemIcon.sprite = skill.itemIcon;
             techniquenameTxt.text = skill.itemName;
-            realmTxt.text = skill.realm + "";
+            realmTxt.text = skill.realmType + "";
             effectDescriptionTxt.text = "+ " + skill.specialEffect;
         }
     }

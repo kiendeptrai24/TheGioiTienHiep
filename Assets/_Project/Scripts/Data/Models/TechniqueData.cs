@@ -23,9 +23,6 @@ public class TechniqueData : ItemData
     public RaceType raceType;            // Tộc
     [JsonIgnore]
     public EssenceType mainEssence;      // Chủ tu
-    [JsonIgnore]
-    public RealmType realm;       // Cảnh giới
-
     // ============================
     // COMBAT BEHAVIOR
     // ============================

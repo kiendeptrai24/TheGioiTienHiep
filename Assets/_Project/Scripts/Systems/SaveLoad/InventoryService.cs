@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class InventoryService : ISaveLoadRemote
@@ -16,32 +17,39 @@ public class InventoryService : ISaveLoadRemote
         {
             try
             {
-                ItemDataDTO itemsShop = gameDataDTO;
-                if (itemsShop == null)
+                ItemResponseDto allItem = gameDataDTO;
+                if (allItem == null)
                 {
                     Debug.Log("LoadGame: itemsShop is null");
                     return;
                 }
 
                 var SODataBase = ScriptableObjectLoader.Instance;
-                for (int i = 0; i < itemsShop.inventoryItems.Count; i++)
+                List<ItemData> itemDatas = new();
+                for (int i = 0; i < allItem.Data.Count; i++)
                 {
-                    var item = itemsShop.inventoryItems[i];
-                    var itemData = SODataBase.GetItem(item.instanceId);
-                    if (itemData == null)
-                        continue;
-                    itemData.itemName = gameDataDTO.inventoryItems[i].itemName;
-                    itemData.realmType = gameDataDTO.inventoryItems[i].realmType;
+                    var itemDto = allItem.Data[i];
+                    var itemBase = SODataBase.GetItem(itemDto.itemInstanceId);
+                    ItemData itemData = null;
+                    itemData = CreateItem(itemDto);
+                    itemData.instanceId = itemDto.itemInstanceId;
+                    itemData.itemName = itemDto.itemName;
+                    itemData.itemDescription = itemDto.description;
+                    itemData.itemType = itemDto.itemType;
+                    //itemData.itemIcon = itemBase.itemIcon;
+                    itemData.realmType = itemDto.realmType;
+                    itemData.qualityType = itemDto.qualityType;
+                    itemData.physicalDamage = itemDto.physicalDamage;
+                    itemData.magicalDamage = itemDto.magicalDamage;
+                    itemData.spiritDamage = itemDto.spiritDamage;
+                    itemData.physicalDefense = itemDto.physicalDefense;
+                    itemData.magicalDefense = itemDto.magicalDefense;
+                    itemData.spiritDefense = itemDto.sppiritDefense;
+                    itemData.potentialPoints = itemDto.potentialPoints;
 
-                    if (itemData is HeroData heroData)
-                    {
-                        SetHeroData(itemsShop, SODataBase, i, heroData);
-                        continue;
-                    }
-
-                    itemsShop.inventoryItems[i] = itemData;
+                    itemDatas.Add(itemData);
                 }
-                gameData.allItemsDatas = itemsShop.inventoryItems;
+                gameData.allItemsDatas = itemDatas;
                 callback?.Invoke();
             }
             catch (System.Exception ex)
@@ -51,35 +59,39 @@ public class InventoryService : ISaveLoadRemote
         });
     }
 
-    private void SetHeroData(ItemDataDTO itemsShop, ScriptableObjectLoader SODataBase, int i, HeroData heroData)
+    private static ItemData CreateItem(ItemDataDto itemDto)
     {
-        for (int h = 0; h < heroData.skillDatas.Count; h++)
+        ItemData itemData;
+        if (itemDto.itemType == ItemType.Equipment)
         {
-            var skill = heroData.skillDatas[h];
-
-            var skillData = SODataBase.GetItem(skill.instanceId) as SkillData;
-            if (skillData == null)
-                continue;
-            heroData.skillDatas[h] = skillData;
+            var equipData = new EquitmentData();
+            equipData.raceType = itemDto.raceType;
+            if (itemDto.equipmentType.HasValue)
+                equipData.equipmentType = itemDto.equipmentType.Value;
+            itemData = equipData;
+        }
+        else if (itemDto.itemType == ItemType.Skill)
+        {
+            var skillData = new SkillData();
+            skillData.raceType = itemDto.raceType;
+            if (itemDto.skillType.HasValue)
+                skillData.skillType = itemDto.skillType.Value;
+            itemData = skillData;
+        }
+        else if (itemDto.itemType == ItemType.Technique)
+        {
+            var techniqueData = new TechniqueData();
+            techniqueData.raceType = itemDto.raceType;
+            if (itemDto.techniqueType.HasValue)
+                techniqueData.techniqueType = itemDto.techniqueType.Value;
+            itemData = techniqueData;
+        }
+        else
+        {
+            itemData = new ItemData();
         }
 
-        for (int s = 0; s < heroData.techniqueDatas.Count; s++)
-        {
-            var technique = heroData.techniqueDatas[s];
-            var techniqueData = SODataBase.GetItem(technique.instanceId) as TechniqueData;
-            if (techniqueData == null)
-                continue;
-            heroData.techniqueDatas[s] = techniqueData;
-        }
-        for (int k = 0; k < heroData.equipmentDatas.Count; k++)
-        {
-            var equipment = heroData.equipmentDatas[k];
-            var equipmentData = SODataBase.GetItem(equipment.instanceId) as EquitmentData;
-            if (equipmentData == null)
-                continue;
-            heroData.equipmentDatas[k] = equipmentData;
-        }
-        itemsShop.inventoryItems[i] = heroData;
+        return itemData;
     }
 
     public void SaveGame(GameData gameData)

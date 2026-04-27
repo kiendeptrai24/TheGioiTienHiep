@@ -446,7 +446,7 @@ public class SkillPreset : ItemPreset
         skillData.raceType = raceType;
         skillData.mainEssence = mainEssence;
         skillData.elementType = elementType;
-        skillData.realm = realm;
+        skillData.realmType = realm;
         skillData.skillEffectPrefab = skillEffectPrefab;
 
         // combat

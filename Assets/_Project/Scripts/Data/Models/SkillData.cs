@@ -23,8 +23,6 @@ public class SkillData : ItemData
     [JsonIgnore]
     public EssenceType mainEssence;      // Chủ tu
     [JsonIgnore]
-    public RealmType realm;       // Cảnh giới
-    [JsonIgnore]
     public GameObject skillEffectPrefab; // Prefab hiệu ứng kỹ năng
 
     // ============================

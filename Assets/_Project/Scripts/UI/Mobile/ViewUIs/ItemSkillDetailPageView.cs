@@ -130,7 +130,7 @@ public class ItemSkillDetailPageView : IItemDetailPageView
             nextItemIcon.gameObject.SetActive(true);
             nextItemIcon.sprite = nextItemData.itemIcon;
             nextSkillnameTxt.text = nextItemData.itemName;
-            nextRealmTxt.text = nextItemData.realm + "";
+            nextRealmTxt.text = nextItemData.realmType + "";
             nextEffectDescriptionTxt.text = nextItemData.specialEffect;
             nextDescriptionTxt.text = GetDescriptionText(nextItemData);
         }

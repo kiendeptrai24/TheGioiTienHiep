@@ -150,7 +150,7 @@ public class ItemDetailPageView : IItemDetailPageView
     {
         DisplayText("Quality Type", EnumTranslator.ToVietnamese(data.qualityType));
         DisplayStat("Enhance Level", data.enhanceLevel, false);
-        DisplayText("Realm", EnumTranslator.ToVietnamese(data.realm));
+        DisplayText("Realm", EnumTranslator.ToVietnamese(data.realmType));
         DisplayText("Element Type", EnumTranslator.ToVietnamese(data.elementType));
 
         DisplayStat("Attack Range", data.attackRange, false);
@@ -230,7 +230,7 @@ public class ItemDetailPageView : IItemDetailPageView
         DisplayText("Race Type", EnumTranslator.ToVietnamese(data.raceType));
         DisplayText("Main Essence", EnumTranslator.ToVietnamese(data.mainEssence));
         DisplayText("Element Type", EnumTranslator.ToVietnamese(data.elementType));
-        DisplayText("Realm", EnumTranslator.ToVietnamese(data.realm));
+        DisplayText("Realm", EnumTranslator.ToVietnamese(data.realmType));
 
         // Combat
         DisplayStat("Attack Range", data.attackRange, false);

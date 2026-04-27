@@ -338,7 +338,7 @@ public class TechniquePreset : ItemPreset
         techniqueData.raceType = raceType;
         techniqueData.mainEssence = mainEssence;
         techniqueData.elementType = elementType;
-        techniqueData.realm = realm;
+        techniqueData.realmType = realm;
 
         // combat
         techniqueData.attackRange = attackRange;
