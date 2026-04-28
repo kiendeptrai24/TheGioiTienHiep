@@ -17,7 +17,7 @@ public class InventoryService : ILoadRemoteServer
         {
             try
             {
-                ItemInventoryResponseDto allItem = gameDataDTO;
+                InventoryResponseDto allItem = gameDataDTO;
                 if (allItem == null)
                 {
                     Debug.Log("LoadGame: itemsShop is null");

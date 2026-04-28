@@ -18,7 +18,7 @@ public class EssenceAndRaceService : ILoadRemoteServer
         {
             try
             {
-                ItemEssenceAndRaceResponseDto realmItem = gameDataDTO;
+                EssenceAndRaceResponseDto realmItem = gameDataDTO;
                 if (realmItem == null)
                 {
                     Debug.Log("LoadGame: itemsShop is null");

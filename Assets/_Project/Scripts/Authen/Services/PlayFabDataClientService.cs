@@ -17,7 +17,7 @@ public class PlayFabDataClientService
 
     #region Public Load Methods
 
-    public void LoadData(Action<ItemInventoryResponseDto> callback)
+    public void LoadData(Action<InventoryResponseDto> callback)
     {
         LoadTitleData("inventory", callback);
     }

@@ -15,26 +15,26 @@ public class PlayFabDataServerService
 
     #region Public Load Methods
 
-    public void LoadData(Action<ItemInventoryResponseDto> callback)
+    public void LoadData(Action<InventoryResponseDto> callback)
     {
         LoadTitleData("inventory", callback);
     }
-    public void LoadRealmData(Action<ItemRealmResponseDto> callback)
+    public void LoadRealmData(Action<RealmResponseDto> callback)
     {
         LoadTitleData("realm", callback);
     }
-    public void LoadEssenceAndRaceData(Action<ItemEssenceAndRaceResponseDto> callback)
+    public void LoadEssenceAndRaceData(Action<EssenceAndRaceResponseDto> callback)
     {
         LoadTitleData("essenceAndRace", callback);
     }
-    public void LoadChampionData(Action<ItemRealmResponseDto> callback)
+    public void LoadChampionData(Action<ChampionResponseDto> callback)
     {
         LoadTitleData("champion", callback);
     }
-    
-    public void LoadShopData(Action<ItemDataDTO> callback)
+
+    public void LoadShopData(Action<ShopResponseDto> callback)
     {
-        LoadTitleData("shop", callback);
+        LoadTitleData("shoptest", callback);
     }
     #endregion
 

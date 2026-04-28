@@ -134,7 +134,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         gameData = new GameData();
         gameData.characterId = characterId;
         saveLoadRemotes.Add(new ProfileService(service));
-        saveLoadRemotes.Add(new ShopService(service));
+        saveLoadRemotes.Add(new ShopClientService(service));
         // saveLoadRemotes.Add(new InventoryService(service));
         saveLoadRemotes.Add(new PlayerUsedItemInventoryService(service));
         saveLoadRemotes.Add(new TeamInventoryService(service));

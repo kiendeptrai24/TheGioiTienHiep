@@ -2,10 +2,10 @@
 using System;
 using UnityEngine;
 
-public class ShopService : ISaveLoadRemote
+public class ShopClientService : ISaveLoadRemote
 {
     private PlayFabDataClientService service;
-    public ShopService(PlayFabDataClientService service)
+    public ShopClientService(PlayFabDataClientService service)
     {
         this.service = service;
     }

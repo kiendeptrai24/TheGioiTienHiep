@@ -18,7 +18,7 @@ public class RealmService : ILoadRemoteServer
         {
             try
             {
-                ItemRealmResponseDto realmItem = gameDataDTO;
+                RealmResponseDto realmItem = gameDataDTO;
                 if (realmItem == null)
                 {
                     Debug.Log("LoadGame: itemsShop is null");

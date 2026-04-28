@@ -21,6 +21,7 @@ public class GameDataCenter : TGTHNetworkBehaviour
     [SerializeField] private List<RealmData> realmDatas;
     [SerializeField] private List<RaceData> raceDatas;
     [SerializeField] private List<EssenceData> essenceDatas;
+    [SerializeField] private List<HeroData> heroDatas;
 
     public event Action<GameDataServer> OnLoadGameFormPlayfab;
 
@@ -44,6 +45,8 @@ public class GameDataCenter : TGTHNetworkBehaviour
         saveLoadRemotes.Add(new InventoryService(service));
         saveLoadRemotes.Add(new RealmService(service));
         saveLoadRemotes.Add(new EssenceAndRaceService(service));
+        saveLoadRemotes.Add(new ChampionService(service));
+        saveLoadRemotes.Add(new ShopService(service));
         LoadGameData();
     }
     private void LoadDataTest()
@@ -74,6 +77,10 @@ public class GameDataCenter : TGTHNetworkBehaviour
                 raceDatas.Add(item as RaceData);
             else if(item is EssenceData)
                 essenceDatas.Add(item as EssenceData);
+        }
+        foreach (var item in gameDatas.championItems)
+        {
+            heroDatas.Add(item as HeroData);
         }
     }
     private void LoadGameData()

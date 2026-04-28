@@ -72,6 +72,22 @@ public class HeroData : ItemData
     public int potentialPoint;
     [JsonIgnore]
     public int skillPoint;
+    [JsonIgnore]
+    public float healthBonus;
+    [JsonIgnore]
+    public float manaBonus;
+    [JsonIgnore]
+    public float spiritBonus;
+    [JsonIgnore]
+    public float physicalDamageBonus;
+    [JsonIgnore]
+    public float magicalDamageBonus;
+    [JsonIgnore]
+    public float spiritDamageBonus;
+    [JsonIgnore]
+    public float physicalDefenseBonus;
+    [JsonIgnore]
+    public float spiritDefenseBonus;
 
     public override ItemData Clone()
     {
