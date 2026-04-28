@@ -37,7 +37,7 @@ public class PlayerUsedItemInventoryService : ISaveLoadRemote
                     var itemData = SODataBase.GetItem(item.instanceId);
                     itemsData.inventoryItems[i] = itemData;
                 }
-                gameData.itemDatasUsed.AddRange(itemsData.inventoryItems);
+                gameData.itemUsedDatas.AddRange(itemsData.inventoryItems);
                 callback?.Invoke();
             }
             catch (System.Exception ex)

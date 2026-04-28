@@ -79,7 +79,7 @@ public class ItemCharacterService : ISaveLoadRemote
                 {
                     listItem.Add(item);
                 }
-                gameData.itemDatasCharacter = listItem;
+                gameData.itemCharacterDatas = listItem;
                 callback?.Invoke();
             }
             catch (System.Exception ex)

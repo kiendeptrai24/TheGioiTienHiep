@@ -10,11 +10,11 @@ public class SaveLoadJson : MonoBehaviour
     private GameData gameData;
     private List<ISaveable> saveManagers = new List<ISaveable>();
 
-    private FileDataHandler dataHandler;
+    private FileDataHandler<GameData> dataHandler;
     [ContextMenu("Delete save file")]
     public void DeleteSaveData()
     {
-        dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, encryptData);
+        dataHandler = new FileDataHandler<GameData>(Application.persistentDataPath, fileName, encryptData);
         dataHandler.Delete();
     }
     private void Awake()
@@ -27,7 +27,7 @@ public class SaveLoadJson : MonoBehaviour
     }
     private void Start()
     {
-        dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, encryptData);
+        dataHandler = new FileDataHandler<GameData>(Application.persistentDataPath, fileName, encryptData);
         saveManagers = FindAllSaveManagers();
         LoadGame();
     }

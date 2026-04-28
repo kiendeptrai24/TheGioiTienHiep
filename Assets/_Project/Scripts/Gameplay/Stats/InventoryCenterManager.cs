@@ -435,11 +435,11 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         // {
         //     allItemDatas.Add(item);
         // }
-        foreach (var item in _data.itemDatasUsed)
+        foreach (var item in _data.itemUsedDatas)
         {
             listItemDatasUsed.Add(item);
         }
-        foreach (var item in _data.itemDatasInTeam)
+        foreach (var item in _data.itemInTeamDatas)
         {
             if (item is HeroData heroData)
             {
@@ -448,7 +448,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
             }
             listItemDatasChampion.Add(item);
         }
-        OnListItemDatasChampionChanged?.Invoke(_data.itemDatasInTeam);
+        OnListItemDatasChampionChanged?.Invoke(_data.itemInTeamDatas);
         // load item shop
         foreach (var item in _data.itemShopDatas)
         {
@@ -458,14 +458,14 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public void SaveGame(ref GameData _data)
     {
         _data.itemDatas.Clear();
-        _data.itemDatasInTeam.Clear();
+        _data.itemInTeamDatas.Clear();
         _data.itemDatas = listItemDatasExisting.ToList();
-        _data.itemDatasInTeam = listItemDatasChampion.ToList();
-        _data.itemDatasUsed = listItemDatasUsed;
+        _data.itemInTeamDatas = listItemDatasChampion.ToList();
+        _data.itemUsedDatas = listItemDatasUsed;
 
-        for (int i = 0; i < _data.itemDatasCharacter.Count; i++)
+        for (int i = 0; i < _data.itemCharacterDatas.Count; i++)
         {
-            var itemcharacter = _data.itemDatasCharacter[i] as HeroData;
+            var itemcharacter = _data.itemCharacterDatas[i] as HeroData;
 
             if (itemcharacter is not HeroData) continue;
 
@@ -476,7 +476,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
             if (itemcharacter.characterId == cham.characterId)
             {
                 var player = playerCham as HeroData;
-                _data.itemDatasCharacter[i] = player;
+                _data.itemCharacterDatas[i] = player;
                 break;
             }
         }

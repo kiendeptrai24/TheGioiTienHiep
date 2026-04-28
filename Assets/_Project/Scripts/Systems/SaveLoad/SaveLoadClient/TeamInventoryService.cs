@@ -72,7 +72,7 @@ public class TeamInventoryService : ISaveLoadRemote
                 {
                     listItem.Add(item);
                 }
-                gameData.itemDatasInTeam = listItem;
+                gameData.itemInTeamDatas = listItem;
                 callback?.Invoke();
             }
             catch (System.Exception ex)

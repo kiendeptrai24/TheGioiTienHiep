@@ -12,7 +12,7 @@ public class RealmService : ILoadRemoteServer
         this.service = service;
     }
 
-    public void LoadGame(GameDataServer gameData, Action callback)
+    public void LoadGame(GameDataCenter gameData, Action callback)
     {
         service.LoadRealmData((gameDataDTO) =>
         {
@@ -25,7 +25,7 @@ public class RealmService : ILoadRemoteServer
                     return;
                 }
 
-                List<ItemData> itemDatas = new();
+                List<RealmData> itemDatas = new();
                 for (int i = 0; i < realmItem.Data.Count; i++)
                 {
                     var itemDto = realmItem.Data[i];
@@ -95,10 +95,5 @@ public class RealmService : ILoadRemoteServer
         }
 
         return itemData;
-    }
-
-    public void SaveGame(GameData gameData)
-    {
-
     }
 }

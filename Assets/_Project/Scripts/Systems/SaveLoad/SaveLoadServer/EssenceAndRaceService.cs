@@ -12,7 +12,7 @@ public class EssenceAndRaceService : ILoadRemoteServer
         this.service = service;
     }
 
-    public void LoadGame(GameDataServer gameData, Action callback)
+    public void LoadGame(GameDataCenter gameData, Action callback)
     {
         service.LoadEssenceAndRaceData((gameDataDTO) =>
         {
@@ -26,6 +26,8 @@ public class EssenceAndRaceService : ILoadRemoteServer
                 }
 
                 List<ItemData> itemDatas = new();
+                List<EssenceData> essenceDatas = new();
+                List<RaceData> raceDatas = new();
                 for (int i = 0; i < realmItem.Data.Count; i++)
                 {
                     var itemDto = realmItem.Data[i];
@@ -50,6 +52,7 @@ public class EssenceAndRaceService : ILoadRemoteServer
                         essenceData.spiritRangePoint = (int)DataParseUtils.ParseNumberOrPercent(itemDto.spiritRangePoint);
                         essenceData.movementSpeedPoint = (int)DataParseUtils.ParseNumberOrPercent(itemDto.movementSpeedPoint);
                         itemData = essenceData;
+                        essenceDatas.Add(essenceData);
                     }
                     else if (itemDto.type == EssenceAndRaceType.Race)
                     {
@@ -70,11 +73,13 @@ public class EssenceAndRaceService : ILoadRemoteServer
                         raceData.spiritRangePoint = DataParseUtils.ParseNumberOrPercent(itemDto.spiritRangePoint);
                         raceData.movementSpeedPoint = DataParseUtils.ParseNumberOrPercent(itemDto.movementSpeedPoint);
                         itemData = raceData;
+                        raceDatas.Add(raceData);
                     }
 
                     itemDatas.Add(itemData);
                 }
-                gameData.raceAndEssenceItems = itemDatas;
+                gameData.raceItems = raceDatas;
+                gameData.essenceItems = essenceDatas;
                 gameData.allItems.AddRange(itemDatas);
                 callback?.Invoke();
             }

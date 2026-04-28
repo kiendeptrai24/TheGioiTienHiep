@@ -18,7 +18,7 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
     {
         gameData = data;
         saveManager.LoadGame();
-        foreach (var item in gameData.itemDatasCharacter)
+        foreach (var item in gameData.itemCharacterDatas)
         {
             heroDatas.Add(item as HeroData);
         }

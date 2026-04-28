@@ -20772,8 +20772,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1
-    height: 1
+    width: 0
+    height: 0
 --- !u!222 &234888779
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -54203,8 +54203,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1
-    height: 1
+    width: 0
+    height: 0
 --- !u!222 &616122543
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -79669,7 +79669,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 889058016}
-  - component: {fileID: 889058017}
   - component: {fileID: 889058018}
   m_Layer: 0
   m_Name: GameDataCenter
@@ -79693,31 +79692,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1314233240}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &889058017
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 889058015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3997329770
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!114 &889058018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79730,23 +79704,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b1181bbd62a534aa8523282e79fcb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameDataCenter
-  ShowTopMostFoldoutHeaderGroup: 1
+  fileName: gamecache
+  encryptData: 0
   allItems: []
   shopItems: []
   gameDatas:
+    version: 1.0
     allItems: []
     equipmentItems: []
-    raceAndEssenceItems: []
+    skillItems: []
+    techniqueDatasItems: []
+    raceItems: []
+    essenceItems: []
     realmItems: []
     championItems: []
     shopItems: []
-  equipmentDatas: []
-  skillDatas: []
-  techniqueDatas: []
-  realmDatas: []
-  raceDatas: []
-  essenceDatas: []
-  heroDatas: []
 --- !u!1 &889610874
 GameObject:
   m_ObjectHideFlags: 0
@@ -84389,8 +84361,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1
-    height: 1
+    width: 0
+    height: 0
 --- !u!222 &953256692
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -148012,6 +147984,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1443055842209889793, guid: 96e1268c42fc95142bf17a6d09395539,
+        type: 3}
+      propertyPath: prefabList.Array.data[0].id
+      value: ID_CHARACTER_00003
+      objectReference: {fileID: 0}
+    - target: {fileID: 1443055842209889793, guid: 96e1268c42fc95142bf17a6d09395539,
+        type: 3}
+      propertyPath: prefabList.Array.data[1].id
+      value: ID_CHARACTER_00002
+      objectReference: {fileID: 0}
+    - target: {fileID: 1443055842209889793, guid: 96e1268c42fc95142bf17a6d09395539,
+        type: 3}
+      propertyPath: prefabList.Array.data[2].id
+      value: ID_CHARACTER_00004
+      objectReference: {fileID: 0}
+    - target: {fileID: 1443055842209889793, guid: 96e1268c42fc95142bf17a6d09395539,
+        type: 3}
+      propertyPath: prefabList.Array.data[3].id
+      value: ID_CHARACTER_00001
       objectReference: {fileID: 0}
     - target: {fileID: 2002755777261844377, guid: 96e1268c42fc95142bf17a6d09395539,
         type: 3}
@@ -514330,11 +514322,6 @@ MonoBehaviour:
   currentItemSelect: {fileID: 0}
   currentItemCharacter: {fileID: 0}
   nameCharacter: 
-  allCharacter:
-  - {fileID: 11400000, guid: e242250a5ce2ff645a26bf4766c9dae4, type: 2}
-  - {fileID: 11400000, guid: 59738734ff794c54594af7b23fb6092c, type: 2}
-  - {fileID: 11400000, guid: e7dd0edc427d01349b7e324b33c0d9b6, type: 2}
-  - {fileID: 11400000, guid: 0e3ccebc96fdca34ebe149bf547493c7, type: 2}
   curEssenceType: 0
 --- !u!114 &8817635505070762295
 MonoBehaviour:

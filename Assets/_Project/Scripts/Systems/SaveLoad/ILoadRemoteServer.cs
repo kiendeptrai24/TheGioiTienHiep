@@ -4,5 +4,5 @@ using System;
 
 public interface ILoadRemoteServer
 {
-    void LoadGame(GameDataServer gameData, Action callback);
+    void LoadGame(GameDataCenter gameData, Action callback);
 }

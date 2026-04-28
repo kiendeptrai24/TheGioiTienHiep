@@ -12,7 +12,7 @@ public class ChampionService : ILoadRemoteServer
         this.service = service;
     }
 
-    public void LoadGame(GameDataServer gameData, Action callback)
+    public void LoadGame(GameDataCenter gameData, Action callback)
     {
         service.LoadChampionData((gameDataDTO) =>
         {
@@ -25,7 +25,7 @@ public class ChampionService : ILoadRemoteServer
                     return;
                 }
 
-                List<ItemData> itemDatas = new();
+                List<HeroData> heroDatas = new();
                 for (int i = 0; i < championResponse.Data.Count; i++)
                 {
                     HeroData heroData = new HeroData();
@@ -63,10 +63,10 @@ public class ChampionService : ILoadRemoteServer
                     heroData.physicalDefenseBonus = DataParseUtils.ParseNumberOrPercent(itemDto.physicalDefenseBonus);
                     heroData.magicalDamageBonus = DataParseUtils.ParseNumberOrPercent(itemDto.magicalDefenseBonus);
                     heroData.spiritDefenseBonus = DataParseUtils.ParseNumberOrPercent(itemDto.spiritDefenseBonus);
-                    itemDatas.Add(heroData);
+                    heroDatas.Add(heroData);
                 }
-                gameData.championItems = itemDatas;
-                gameData.allItems.AddRange(itemDatas);
+                gameData.championItems = heroDatas;
+                gameData.allItems.AddRange(heroDatas);
                 callback?.Invoke();
             }
             catch (System.Exception ex)

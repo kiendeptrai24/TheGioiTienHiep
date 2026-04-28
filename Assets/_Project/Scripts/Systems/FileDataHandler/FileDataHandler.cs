@@ -1,89 +1,93 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System;
 using System.IO;
-using System.Data;
-public class FileDataHandler 
+using System.Text;
+using Newtonsoft.Json;
+using UnityEngine;
+
+public class FileDataHandler<T> where T : class
 {
-    private string dataDirPath = "";
-    private string dataFileName = "";
-    private bool encryptData  = false;
-    private string codeWord = "kiendev";
-    public FileDataHandler(string _dataDirPath, string _dataFileName, bool _encryptData)
+    private readonly string dataDirPath;
+    private readonly string dataFileName;
+    private readonly bool encryptData;
+    private readonly string codeWord = "kiendev";
+
+    public FileDataHandler(string dataDirPath, string dataFileName, bool encryptData)
     {
-        dataDirPath = _dataDirPath;
-        dataFileName = _dataFileName;
-        encryptData = _encryptData;
+        this.dataDirPath = dataDirPath;
+        this.dataFileName = dataFileName;
+        this.encryptData = encryptData;
     }
-    public void Save(GameData _data)
+
+    public void Save(T data)
     {
         string fullPath = Path.Combine(dataDirPath, dataFileName);
-        
+
         try
         {
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
-            string dataToStore = JsonUtility.ToJson(_data,true);
 
-            if(encryptData)
-                dataToStore= EncryptDecrypt(dataToStore);
+            string dataToStore = JsonConvert.SerializeObject(data, Formatting.Indented);
 
-            using(FileStream stream = new FileStream(fullPath, FileMode.Create))
-            {
-                using(StreamWriter writer = new StreamWriter(stream))
-                {
-                    writer.Write(dataToStore);
-                }
-            }
+            if (encryptData)
+                dataToStore = EncryptDecrypt(dataToStore);
 
+            File.WriteAllText(fullPath, dataToStore);
         }
         catch (Exception e)
         {
-            Debug.LogError("Error on trying to save data to file: " + fullPath + "\n" + e);
-            
+            Debug.LogError($"Error saving data to file: {fullPath}\n{e}");
         }
     }
 
-    public GameData Load()
+    public T Load()
     {
         string fullPath = Path.Combine(dataDirPath, dataFileName);
-        GameData loadData = null;
-        if(File.Exists(fullPath))
+
+        if (!File.Exists(fullPath))
+            return null;
+
+        try
         {
-            try
-            {
-                string dataToLoad = "";
-                using(FileStream stream = new FileStream(fullPath, FileMode.Open))
-                {
-                    using(StreamReader reader = new StreamReader(stream))
-                    {
-                        dataToLoad = reader.ReadToEnd();
-                    }
-                }
-                if(encryptData)
-                    dataToLoad = EncryptDecrypt(dataToLoad);
-                loadData = JsonUtility.FromJson<GameData>(dataToLoad);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Error on reading data form file" + fullPath + "\n" + e);               
-            }
+            string dataToLoad = File.ReadAllText(fullPath);
+
+            if (encryptData)
+                dataToLoad = EncryptDecrypt(dataToLoad);
+
+            return JsonConvert.DeserializeObject<T>(dataToLoad);
         }
-        return loadData;
+        catch (Exception e)
+        {
+            Debug.LogError($"Error reading data from file: {fullPath}\n{e}");
+            return null;
+        }
     }
+
+    public bool Exists()
+    {
+        string fullPath = Path.Combine(dataDirPath, dataFileName);
+        return File.Exists(fullPath);
+    }
+
     public void Delete()
     {
         string fullPath = Path.Combine(dataDirPath, dataFileName);
-        if(File.Exists(fullPath))
+
+        if (File.Exists(fullPath))
             File.Delete(fullPath);
     }
-    private string EncryptDecrypt(string _data)
+
+    private string EncryptDecrypt(string data)
     {
-        string modifiedData = "";
-        for (int i = 0; i < _data.Length; i++)
+        if (string.IsNullOrEmpty(data))
+            return data;
+
+        StringBuilder result = new StringBuilder(data.Length);
+
+        for (int i = 0; i < data.Length; i++)
         {
-            modifiedData += (char)(_data[i] ^ codeWord[i % codeWord.Length]);
+            result.Append((char)(data[i] ^ codeWord[i % codeWord.Length]));
         }
-        return modifiedData;
+
+        return result.ToString();
     }
 }

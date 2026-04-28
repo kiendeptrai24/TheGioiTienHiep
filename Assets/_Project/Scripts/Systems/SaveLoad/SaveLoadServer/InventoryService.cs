@@ -11,7 +11,7 @@ public class InventoryService : ILoadRemoteServer
         this.service = service;
     }
 
-    public void LoadGame(GameDataServer gameData, Action callback)
+    public void LoadGame(GameDataCenter gameData, Action callback)
     {
         service.LoadData((gameDataDTO) =>
         {
@@ -26,12 +26,15 @@ public class InventoryService : ILoadRemoteServer
 
                 var SODataBase = ScriptableObjectLoader.Instance;
                 List<ItemData> itemDatas = new();
+                List<EquitmentData> equipmentDatas = new();
+                List<TechniqueData> techniqueDatas = new();
+                List<SkillData> skillDatas = new();
                 for (int i = 0; i < allItem.Data.Count; i++)
                 {
                     var itemDto = allItem.Data[i];
                     var itemBase = SODataBase.GetItem(itemDto.itemInstanceId);
                     ItemData itemData = null;
-                    itemData = CreateItem(itemDto);
+                    itemData = CreateItem(itemDto, equipmentDatas, skillDatas, techniqueDatas);
                     itemData.instanceId = itemDto.itemInstanceId;
                     itemData.itemName = itemDto.itemName;
                     itemData.itemDescription = itemDto.description;
@@ -49,7 +52,9 @@ public class InventoryService : ILoadRemoteServer
 
                     itemDatas.Add(itemData);
                 }
-                gameData.equipmentItems = itemDatas;
+                gameData.equipmentItems = equipmentDatas;
+                gameData.skillItems = skillDatas;
+                gameData.techniqueDatasItems = techniqueDatas;
                 gameData.allItems.AddRange(itemDatas);
                 callback?.Invoke();
             }
@@ -60,7 +65,7 @@ public class InventoryService : ILoadRemoteServer
         });
     }
 
-    private static ItemData CreateItem(ItemDataDto itemDto)
+    private static ItemData CreateItem(ItemDataDto itemDto, List<EquitmentData> equipmentDatas, List<SkillData> skillDatas, List<TechniqueData> techniqueDatas)
     {
         ItemData itemData;
         if (itemDto.itemType == ItemType.Equipment)
@@ -70,6 +75,7 @@ public class InventoryService : ILoadRemoteServer
             if (itemDto.equipmentType.HasValue)
                 equipData.equipmentType = itemDto.equipmentType.Value;
             itemData = equipData;
+            equipmentDatas.Add(equipData);
         }
         else if (itemDto.itemType == ItemType.Skill)
         {
@@ -78,6 +84,7 @@ public class InventoryService : ILoadRemoteServer
             if (itemDto.skillType.HasValue)
                 skillData.skillType = itemDto.skillType.Value;
             itemData = skillData;
+            skillDatas.Add(skillData);
         }
         else if (itemDto.itemType == ItemType.Technique)
         {
@@ -86,6 +93,7 @@ public class InventoryService : ILoadRemoteServer
             if (itemDto.techniqueType.HasValue)
                 techniqueData.techniqueType = itemDto.techniqueType.Value;
             itemData = techniqueData;
+            techniqueDatas.Add(techniqueData);
         }
         else
         {

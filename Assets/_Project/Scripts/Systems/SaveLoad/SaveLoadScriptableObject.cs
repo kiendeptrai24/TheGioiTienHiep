@@ -29,8 +29,8 @@ public class SaveLoadScriptableObject : TGTHMonoBehaviour, ISaveManager
             var itemData = itemPreset.GetItemData();
             temp.Add(itemData);
         }
-        gameData.itemDatasCharacter = new();
-        gameData.itemDatasInTeam = new();
+        gameData.itemCharacterDatas = new();
+        gameData.itemInTeamDatas = new();
 
         gameData.allItemsDatas = temp;
         gameData.itemDatas = temp;

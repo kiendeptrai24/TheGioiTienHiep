@@ -9,19 +9,21 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     public event Action<GameData> OnLoadGameFormPlayfab;
     public event Action<List<ItemData>> OnLoadCharacterFormPlayfab;
     public event Action<List<ItemData>> OnCharacterChanged;
+    public event Action<List<ItemData>> OnGameBaseCharacterReady;
     public event Action<AuthResult> LoginSuccess;
     public event Action<AuthError> LoginError;
     [SerializeField] private GameData gameData = new GameData();
     private List<ISaveLoadRemote> saveLoadRemotes = new List<ISaveLoadRemote>();
     private AuthManager authManager;
     private PlayFabDataClientService service;
-    public List<ItemData> GetCharactersData() => gameData.itemDatasCharacter;
+    public List<ItemData> GetCharactersData() => gameData.itemCharacterDatas;
     private ISaveLoadRemote characterService;
     private PlayFabClientInstanceAPI clientAPI;
     public AuthManager GetAuthManager() => authManager;
     public PlayFabClientInstanceAPI GetClientAPI() => clientAPI;
     public ActionNavigationSpecificScreen navigationToCharacterSelectionScreen;
     public bool ready = false;
+    public GameData GetGameData() => gameData;
     protected override void Awake()
     {
         base.Awake();
@@ -99,10 +101,15 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         service = new PlayFabDataClientService(result.clientApi);
 
         characterService = new ItemCharacterService(service);
+        var gameBaseCharacterService = new GameBaseCharacterService(service);
 
         characterService.LoadGame(gameData, () =>
         {
-            OnLoadCharacterFormPlayfab?.Invoke(this.gameData.itemDatasCharacter);
+            OnLoadCharacterFormPlayfab?.Invoke(this.gameData.itemCharacterDatas);
+        });
+        gameBaseCharacterService.LoadGame(gameData, () =>
+        {
+            OnGameBaseCharacterReady?.Invoke(this.gameData.gameBaseCharacterDatas);
         });
 
         FindRemoteServer();
@@ -120,8 +127,8 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         gameData.characterName = itemCharacter.itemName;
         gameData.characterId = heroData.characterId;
         gameData.itemDatas.Add(itemCharacter);
-        gameData.itemDatasCharacter.Add(itemCharacter);
-        OnCharacterChanged?.Invoke(gameData.itemDatasCharacter);
+        gameData.itemCharacterDatas.Add(itemCharacter);
+        OnCharacterChanged?.Invoke(gameData.itemCharacterDatas);
 
         var playerInventoryService = new PlayerHeroItemInventoryService(service);
 
@@ -135,7 +142,6 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         gameData.characterId = characterId;
         saveLoadRemotes.Add(new ProfileService(service));
         saveLoadRemotes.Add(new ShopClientService(service));
-        // saveLoadRemotes.Add(new InventoryService(service));
         saveLoadRemotes.Add(new PlayerUsedItemInventoryService(service));
         saveLoadRemotes.Add(new TeamInventoryService(service));
         saveLoadRemotes.Add(new PlayerItemInventoryService(service));

@@ -12,7 +12,7 @@ public class ShopService : ILoadRemoteServer
         this.service = service;
     }
 
-    public void LoadGame(GameDataServer gameData, Action callback)
+    public void LoadGame(GameDataCenter gameData, Action callback)
     {
         service.LoadShopData((gameDataDTO) =>
         {

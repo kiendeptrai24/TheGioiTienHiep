@@ -17,9 +17,9 @@ public class PlayFabDataClientService
 
     #region Public Load Methods
 
-    public void LoadData(Action<InventoryResponseDto> callback)
+    public void LoadGameBaseCharacterData(Action<CharacterResponseDto> callback)
     {
-        LoadTitleData("inventory", callback);
+        LoadTitleData("character", callback);
     }
 
     public void LoadShopData(Action<ItemDataDTO> callback)
@@ -104,9 +104,9 @@ public class PlayFabDataClientService
 
             HeroInTeamDataDTO teamData = new HeroInTeamDataDTO();
 
-            if (gameData.itemDatasInTeam != null)
+            if (gameData.itemInTeamDatas != null)
             {
-                foreach (var item in gameData.itemDatasInTeam)
+                foreach (var item in gameData.itemInTeamDatas)
                 {
                     teamData.inventoryItems.Add(item as HeroData);
 
@@ -163,12 +163,12 @@ public class PlayFabDataClientService
                 Debug.LogError("SetItemInventoryData failed: gameData is null");
                 return;
             }
-            if (gameData.itemDatasUsed == null)
+            if (gameData.itemUsedDatas == null)
             {
                 Debug.Log("null or empty");
                 return;
             }
-            List<ItemData> listItemData = gameData.itemDatasUsed;
+            List<ItemData> listItemData = gameData.itemUsedDatas;
 
             if (listItemData == null)
             {
@@ -199,12 +199,12 @@ public class PlayFabDataClientService
             }
 
             ItemCharacterDataDTO inventoryData = new ItemCharacterDataDTO();
-            if (gameData.itemDatasCharacter != null)
+            if (gameData.itemCharacterDatas != null)
             {
                 inventoryData.inventoryItems = new List<HeroData>();
                 inventoryData.characterNames = new List<string>();
                 inventoryData.characterIds = new List<string>();
-                foreach (var item in gameData.itemDatasCharacter)
+                foreach (var item in gameData.itemCharacterDatas)
                 {
                     var itemHero = item as HeroData;
 

@@ -15,7 +15,6 @@ namespace TGTH.Mobile
         [SerializeField] private UIItemSlotBase currentItemSelect;
         [SerializeField] private UIItemSlotBase currentItemCharacter;
         [SerializeField] private string nameCharacter = "";
-        [SerializeField] private List<ItemPreset> allCharacter;
         private List<ItemData> itemDatas = new List<ItemData>();
         public EssenceType curEssenceType;
         protected override void Awake()
@@ -27,6 +26,20 @@ namespace TGTH.Mobile
             view.OnFieldEndEdit += OnFieldEndEdit;
             view.OnEssenceTypeDropdownChanged += OnRaceDropdownChanged;
             Init();
+        }
+        protected override void Start()
+        {
+            PlayfabDataManager.Instance.OnGameBaseCharacterReady += OnGameBaseCharacterReady;
+            OnGameBaseCharacterReady(PlayfabDataManager.Instance.GetGameData().gameBaseCharacterDatas);
+        }
+        private void OnGameBaseCharacterReady(List<ItemData> baseCharacterDatas)
+        {
+            if (baseCharacterDatas == null || baseCharacterDatas.Count == 0) return;
+            foreach (var item in baseCharacterDatas)
+            {
+                itemDatas.Add(item);
+            }
+            ShowItem(itemDatas);
         }
 
         private void OnRaceDropdownChanged(int obj)
@@ -49,20 +62,9 @@ namespace TGTH.Mobile
             itemData.itemName = nameCharacter;
             itemData.essenceType = curEssenceType;
             InventoryItem inventoryItem = new InventoryItem(itemData);
-            
+
             itemOnClick.HandleItemClicked(inventoryItem);
             navigation.OnClick();
-        }
-
-        protected override void Start()
-        {
-            base.Start();
-            foreach (var item in allCharacter)
-            {
-                itemDatas.Add(item.GetItemData());
-            }
-            ShowItem(itemDatas);
-
         }
         private void ShowItem(List<ItemData> listItem)
         {
