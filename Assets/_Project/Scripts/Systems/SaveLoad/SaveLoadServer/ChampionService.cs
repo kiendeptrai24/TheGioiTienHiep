@@ -66,6 +66,7 @@ public class ChampionService : ILoadRemoteServer
                     itemDatas.Add(heroData);
                 }
                 gameData.championItems = itemDatas;
+                gameData.allItems.AddRange(itemDatas);
                 callback?.Invoke();
             }
             catch (System.Exception ex)

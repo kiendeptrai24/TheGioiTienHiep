@@ -53,6 +53,7 @@ public class RealmService : ILoadRemoteServer
                     itemDatas.Add(itemData);
                 }
                 gameData.realmItems = itemDatas;
+                gameData.allItems.AddRange(itemDatas);
                 callback?.Invoke();
             }
             catch (System.Exception ex)

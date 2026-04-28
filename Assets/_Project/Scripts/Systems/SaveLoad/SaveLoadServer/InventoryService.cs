@@ -49,7 +49,8 @@ public class InventoryService : ILoadRemoteServer
 
                     itemDatas.Add(itemData);
                 }
-                gameData.allItems = itemDatas;
+                gameData.equipmentItems = itemDatas;
+                gameData.allItems.AddRange(itemDatas);
                 callback?.Invoke();
             }
             catch (System.Exception ex)

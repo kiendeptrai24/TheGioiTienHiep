@@ -75,6 +75,7 @@ public class EssenceAndRaceService : ILoadRemoteServer
                     itemDatas.Add(itemData);
                 }
                 gameData.raceAndEssenceItems = itemDatas;
+                gameData.allItems.AddRange(itemDatas);
                 callback?.Invoke();
             }
             catch (System.Exception ex)
