@@ -6,17 +6,18 @@ using UnityEngine;
 public class PlayFabAuthCustomService : AuthServiceBase
 {
     private PlayFabClientInstanceAPI clientAPI;
-    public PlayFabAuthCustomService(PlayFabClientInstanceAPI clientAPI)
+    private bool isServer = false;
+    public PlayFabAuthCustomService(PlayFabClientInstanceAPI clientAPI, bool isServer = false)
     {
         this.clientAPI = clientAPI;
+        this.isServer = isServer;
     }
     private const string CUSTOM_ID_KEY = "CUSTOM_ID";
     public override void Login(LoginData data, Action<AuthResult> onSuccess, Action<AuthError> onError)
     {
-        string playerLoginId = "testLogin1";
+        string playerLoginId = isServer ? "Server" : "testLogin1";
 
         var request = new LoginWithCustomIDRequest { CustomId = playerLoginId, CreateAccount = true };
-        
         clientAPI.LoginWithCustomID(request,
         onResSuccess =>
         {
@@ -26,6 +27,7 @@ public class PlayFabAuthCustomService : AuthServiceBase
                 userId = onResSuccess.PlayFabId,
                 email = data.email,
                 accessToken = onResSuccess.EntityToken.EntityToken,
+                sessionId = Guid.NewGuid().ToString(),
                 message = "Đăng nhập thành công"
             });
             PlayerPrefs.SetString(CUSTOM_ID_KEY, playerLoginId);

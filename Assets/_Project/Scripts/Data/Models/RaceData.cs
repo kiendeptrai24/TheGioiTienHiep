@@ -4,8 +4,6 @@ using Newtonsoft.Json;
 [Serializable]
 public class RaceData : ItemData
 {
-    //Race type
-    [JsonIgnore]
     public RaceType raceType;
 
     //Resources (multipliers or % as you like)

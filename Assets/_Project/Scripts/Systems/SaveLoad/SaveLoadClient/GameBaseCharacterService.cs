@@ -31,8 +31,8 @@ public class GameBaseCharacterService : ISaveLoadRemote
                     CharacterDataDto itemDto = item;
                     heroData.instanceId = itemDto.instanceId;
                     heroData.itemDescription = itemDto.description;
-                    heroData.raceType = itemDto.raceType;
-                    heroData.realmType = itemDto.realmType;
+                    heroData.raceId = itemDto.raceId;
+                    heroData.realmId = itemDto.realmId;
                     itemDatas.Add(heroData);
                 }
                 gameData.gameBaseCharacterDatas = itemDatas;

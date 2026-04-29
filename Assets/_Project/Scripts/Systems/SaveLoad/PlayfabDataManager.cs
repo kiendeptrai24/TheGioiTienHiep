@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using PlayFab;
+using PlayFab.ClientModels;
 using UnityEngine;
 
 public class PlayfabDataManager : Singleton<PlayfabDataManager>
@@ -18,49 +19,56 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private PlayFabDataClientService service;
     public List<ItemData> GetCharactersData() => gameData.itemCharacterDatas;
     private ISaveLoadRemote characterService;
-    private PlayFabClientInstanceAPI clientAPI;
+    private PlayFabClientInstanceAPI clientApi;
     public AuthManager GetAuthManager() => authManager;
-    public PlayFabClientInstanceAPI GetClientAPI() => clientAPI;
+    public PlayFabClientInstanceAPI GetClientAPI() => clientApi;
     public ActionNavigationSpecificScreen navigationToCharacterSelectionScreen;
     public bool ready = false;
     public GameData GetGameData() => gameData;
+    private GameDataCenterManager gameDataCenterManager;
+    private bool hasLogined = false;
+    private string sessionId;
+
     protected override void Awake()
     {
         base.Awake();
+        gameDataCenterManager = GameDataCenterManager.Instance;
+        gameDataCenterManager.OnLoadGameDataCenterSuccessed += OnDataCenterReady;
         navigationToCharacterSelectionScreen = GetComponent<ActionNavigationSpecificScreen>();
-
-        if (Configuration.Instance.buildType == BuildType.LOCAL_SERVER ||
-         Configuration.Instance.buildType == BuildType.REMOTE_SERVER) return;
-
-        clientAPI = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
-
-        if (Configuration.Instance.buildType == BuildType.LOCAL_CLIENT)
+        clientApi = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
+        if (Configuration.Instance.IsServerBuild())
         {
-            IAuthService authService = new PlayFabAuthCustomService(clientAPI);
+            IAuthService authService = new PlayFabAuthCustomService(clientApi, true);
+            authManager = new AuthManager(authService);
+            authManager.Login(new LoginData(), onSuccess, onError);
+        }
+        if (Configuration.Instance.IsClientLocalBuild())
+        {
+            IAuthService authService = new PlayFabAuthCustomService(clientApi);
             authManager = new AuthManager(authService);
             ready = true;
         }
-        else if (Configuration.Instance.buildType == BuildType.REMOTE_CLIENT)
+        else if (Configuration.Instance.IsClientRemoteBuild())
         {
-            IAuthService authService = new PlayFabAuthService(clientAPI);
+            IAuthService authService = new PlayFabAuthService(clientApi);
             authManager = new AuthManager(authService);
             LobbyController.Instance.OnLobbySearchLobbiesCompleted += (success, lobby) =>
             {
                 if (success)
                 {
                     if (LobbyController.Instance.HasLobby()) return;
-                    LobbyController.Instance.JoinLobby(clientAPI.authenticationContext, lobby.ConnectionString);
+                    LobbyController.Instance.JoinLobby(clientApi.authenticationContext, lobby.ConnectionString);
                     ready = true;
                 }
                 else
                 {
                     if (LobbyController.Instance.HasLobby()) return;
-                    var playfabConnectMutiplayer = new PlayfabConnectMutiplayer(clientAPI.authenticationContext);
-                    playfabConnectMutiplayer.RequestMultiplayerServer(clientAPI, Configuration.Instance, result =>
+                    var playfabConnectMutiplayer = new PlayfabConnectMutiplayer(clientApi.authenticationContext);
+                    playfabConnectMutiplayer.RequestMultiplayerServer(clientApi, Configuration.Instance, result =>
                     {
                         if (result.success)
                         {
-                            LobbyController.Instance.CreateLobby(clientAPI.authenticationContext, result.ipAddress, result.port);
+                            LobbyController.Instance.CreateLobby(clientApi.authenticationContext, result.ipAddress, result.port);
                             ready = true;
                         }
                         else
@@ -73,11 +81,73 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         }
 
     }
+    private void StartHeartbeat()
+    {
+        InvokeRepeating(nameof(SendHeartbeat), 5f, 10f);
+    }
+
+    private void SendHeartbeat()
+    {
+        clientApi.ExecuteCloudScript(new ExecuteCloudScriptRequest
+        {
+            FunctionName = "Heartbeat",
+            FunctionParameter = new
+            {
+                sessionId = sessionId
+            }
+        },
+        result =>
+        {
+            var data = result.FunctionResult as IDictionary<string, object>;
+
+            bool valid = Convert.ToBoolean(data["valid"]);
+
+            if (!valid)
+            {
+                OnKicked();
+            }
+        },
+        error =>
+        {
+            Debug.LogError(error.GenerateErrorReport());
+        });
+    }
+    public void CreateSession()
+    {
+        sessionId = Guid.NewGuid().ToString();
+
+        clientApi.ExecuteCloudScript(new ExecuteCloudScriptRequest
+        {
+            FunctionName = "RequestSession",
+            FunctionParameter = new
+            {
+                sessionId = sessionId
+            }
+        },
+        result =>
+        {
+            Debug.Log("Session created");
+            StartHeartbeat();
+        },
+        error =>
+        {
+            Debug.LogError(error.GenerateErrorReport());
+        });
+    }
+    private void OnKicked()
+    {
+        authManager.Logout(onSuccess, onError);
+    }
+
+    private void OnDataCenterReady(GameDataCenter center)
+    {
+        if (hasLogined == false) return;
+        LoadCharacterDataChoose();
+    }
     protected override void Start()
     {
         base.Start();
-        if (Configuration.Instance.buildType == BuildType.LOCAL_SERVER ||
-         Configuration.Instance.buildType == BuildType.REMOTE_SERVER) return;
+        if (Configuration.Instance.IsServerBuild()) return;
         authManager.AutoLogin(onSuccess, onError);
     }
     public void Login(LoginData loginData)
@@ -98,7 +168,23 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     public void onSuccess(AuthResult result)
     {
-        service = new PlayFabDataClientService(result.clientApi);
+        if (Configuration.Instance.IsClientBuild())
+        {
+            sessionId = result.sessionId;
+            CreateSession();
+        }
+
+        hasLogined = true;
+        FindRemoteServer();
+        gameDataCenterManager.onSuccess(result.clientApi);
+        LoginSuccess?.Invoke(result);
+        if (gameDataCenterManager.DataCenterReady == false) return;
+        LoadCharacterDataChoose();
+    }
+
+    private void LoadCharacterDataChoose()
+    {
+        service = new PlayFabDataClientService(clientApi);
 
         characterService = new ItemCharacterService(service);
         var gameBaseCharacterService = new GameBaseCharacterService(service);
@@ -111,14 +197,11 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         {
             OnGameBaseCharacterReady?.Invoke(this.gameData.gameBaseCharacterDatas);
         });
-
-        FindRemoteServer();
-        LoginSuccess?.Invoke(result);
     }
+
     private void FindRemoteServer()
     {
-        LobbyController.Instance.GetLobbyServer(clientAPI.authenticationContext);
-
+        LobbyController.Instance.GetLobbyServer(clientApi.authenticationContext);
     }
     public void AddCharacter(ItemData itemCharacter)
     {

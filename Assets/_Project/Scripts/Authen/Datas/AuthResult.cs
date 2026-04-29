@@ -9,6 +9,7 @@ public class AuthResult
     public string displayName;
     public string email;
     public string accessToken;
+    public string sessionId;
     public string message;
     internal string ipAddress;
     internal int port;

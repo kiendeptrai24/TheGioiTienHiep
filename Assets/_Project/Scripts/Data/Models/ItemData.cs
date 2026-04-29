@@ -22,6 +22,7 @@ public class ItemData
     [JsonIgnore]
     public int currentstack;
     public RealmType realmType;
+    public string realmId;
     [JsonIgnore]
     public QualityType qualityType;
     [JsonIgnore]

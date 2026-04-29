@@ -9,6 +9,12 @@ public class Configuration : Singleton<Configuration>
     public string ipAddress = "";
     public ushort port = 0;
     public bool playFabDebugging = false;
+    public bool IsServerBuild() => buildType == BuildType.LOCAL_SERVER || buildType == BuildType.REMOTE_SERVER;
+    public bool IsClientBuild() => buildType == BuildType.LOCAL_CLIENT || buildType == BuildType.REMOTE_CLIENT;
+    public bool IsClientLocalBuild() => buildType == BuildType.LOCAL_CLIENT;
+    public bool IsClientRemoteBuild() => buildType == BuildType.REMOTE_CLIENT;
+    public bool IsServerLocalBuild() => buildType == BuildType.LOCAL_SERVER;
+    public bool IsServerRemoteBuild() => buildType == BuildType.REMOTE_SERVER;
 }
 
 public enum BuildType

@@ -11,13 +11,14 @@ public class HeroData : ItemData
     public string characterId;
     [JsonIgnore]
     public RealmData realmData;
-    [JsonIgnore]
-    public EssenceData statsCultivationPathData;
-    [JsonIgnore]
-    public RaceData raceData;
+    public string raceId;
     public RaceType raceType;
     [JsonIgnore]
+    public RaceData raceData;
+    public string essenceId;
     public EssenceType essenceType;
+    [JsonIgnore]
+    public EssenceData essenceData;
     [JsonIgnore]
     public int level;
     [JsonIgnore]
@@ -62,8 +63,11 @@ public class HeroData : ItemData
     public int spititRangePoint;
     [JsonIgnore]
     public Vector2Int championIndex;
+    public List<string> equipmentIds = new();
     public List<EquitmentData> equipmentDatas = new();
+    public List<string> skillIds = new();
     public List<SkillData> skillDatas = new();
+    public List<string> techniqueIds = new();
     public List<TechniqueData> techniqueDatas = new();
     public LevelUpConditionData levelUpConditionData = new();
     [JsonIgnore]

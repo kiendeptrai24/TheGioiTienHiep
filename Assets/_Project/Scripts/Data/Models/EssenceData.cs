@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 public class EssenceData : ItemData
 {
     //Main cultivation type
-    [JsonIgnore]
     public EssenceType essenceType;
 
     //Counter cultivation type

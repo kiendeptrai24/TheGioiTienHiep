@@ -4,46 +4,62 @@ using System.Collections.Generic;
 using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine;
-using Newtonsoft.Json;
 using System;
 
-public class GameDataCenterManager : TGTHMonoBehaviour
+public class GameDataCenterManager : Singleton<GameDataCenterManager>
 {
+    #region File Handle
+
     [SerializeField] private string fileName;
     [SerializeField] private bool encryptData;
+    private FileDataHandler<GameDataCenter> fileDataHandler;
+    #endregion
+    #region Data
     private Dictionary<string, ItemData> allItemsById = new();
     [SerializeField] private List<ItemData> allItems;
     private Dictionary<string, ItemShop> shopItemsById = new();
     [SerializeField] private List<ItemShop> shopItems;
 
     [SerializeField] private GameDataCenter gameDatas;
-    private PlayFabDataServerService service;
-    private PlayFabClientInstanceAPI clientApi;
-    private Queue<ILoadRemoteServer> saveLoadRemotes = new();
-    FileDataHandler<GameDataCenter> fileDataHandler;
+
+    #endregion
     public event Action<GameDataCenter> OnLoadGameDataCenterSuccessed;
+    public bool DataCenterReady = false;
+
+    private PlayFabClientInstanceAPI clientApi;
     private string serverVersion = "";
-    private string localVersion = "flkdsajhfosadhgoidsanfoiaweoif";
+    private string localVersion = "";
     protected override void Awake()
     {
         if (Configuration.Instance.buildType == BuildType.LOCAL_CLIENT ||
             Configuration.Instance.buildType == BuildType.REMOTE_CLIENT)
             return;
+        LoadDataLocalCache();
+    }
+
+    private void LoadDataLocalCache()
+    {
         fileDataHandler = new FileDataHandler<GameDataCenter>(Application.persistentDataPath, fileName, encryptData);
-        Debug.Log(Application.persistentDataPath);
-        clientApi = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
-        var request = new LoginWithCustomIDRequest { CustomId = "Server", CreateAccount = true };
-        clientApi.LoginWithCustomID(request, onSuccess, onError);
+        gameDatas = fileDataHandler.Load();
+        if (gameDatas == null)
+            localVersion = null;
     }
 
-    private void onError(PlayFabError error)
+    public void onSuccess(PlayFabClientInstanceAPI client)
     {
-        Debug.Log(error.Error);
+        if (client == null) return;
+        clientApi = client;
+
+        LoadVersionRemove((sameVersion) =>
+        {
+            if (sameVersion)
+                LoadDataLocal();
+            else
+                LoadDataRemote();
+        });
     }
-
-    private void onSuccess(LoginResult result)
+    public void LoadVersionRemove(Action<bool> callback)
     {
-
         clientApi.GetTitleData(new GetTitleDataRequest
         {
             Keys = new List<string> { "game_data_version" }
@@ -51,26 +67,46 @@ public class GameDataCenterManager : TGTHMonoBehaviour
         result =>
         {
             serverVersion = result.Data["game_data_version"];
-            gameDatas = fileDataHandler.Load();
-            if (gameDatas != null)
-                localVersion = gameDatas.version;
-
-            if (serverVersion != localVersion)
+            if (string.IsNullOrEmpty(serverVersion))
             {
-                gameDatas = new();
-                RequestDataCloud();
-            }
-            else
-            {
-                LoadLocalData();
+                callback?.Invoke(false);
+                return;
             }
 
+            callback?.Invoke(serverVersion == localVersion);
         },
         error => Debug.LogError(error.GenerateErrorReport()));
+
     }
 
-    private void LoadLocalData()
+    private void LoadDataLocal()
     {
+        LoadAllData();
+        ConfigDataCenter();
+        SetupDataWithId();
+        DataCenterReady = true;
+        OnLoadGameDataCenterSuccessed?.Invoke(gameDatas);
+    }
+
+    private void LoadDataRemote()
+    {
+        var service = new PlayFabDataServerService(clientApi);
+        var loadDataRemote = new AllGameDataSerice(service);
+        loadDataRemote.LoadGame(gameDatas, () =>
+        {
+            gameDatas.version = serverVersion;
+            ConfigDataCenter();
+            SetupDataWithId();
+            fileDataHandler.Save(gameDatas);
+            DataCenterReady = true;
+            OnLoadGameDataCenterSuccessed?.Invoke(gameDatas);
+        });
+    }
+
+
+    private void LoadAllData()
+    {
+        gameDatas.allItems.Clear();
         foreach (var item in gameDatas.equipmentItems)
         {
             gameDatas.allItems.Add(item);
@@ -99,43 +135,52 @@ public class GameDataCenterManager : TGTHMonoBehaviour
         {
             gameDatas.allItems.Add(item);
         }
-
-        ConfigDataCenter();
     }
 
-    private void RequestDataCloud()
+    private void SetupDataWithId()
     {
-        service = new PlayFabDataServerService(clientApi);
-        saveLoadRemotes.Enqueue(new RealmService(service));
-        saveLoadRemotes.Enqueue(new EssenceAndRaceService(service));
-        saveLoadRemotes.Enqueue(new InventoryService(service));
-        saveLoadRemotes.Enqueue(new ChampionService(service));
-        saveLoadRemotes.Enqueue(new ShopService(service));
-        LoadGameData();
-    }
-
-    private void LoadGameData()
-    {
-        LoadNextService();
-    }
-
-    private void LoadNextService()
-    {
-        if (saveLoadRemotes.Count <= 0)
+        foreach (var item in gameDatas.championItems)
         {
-            ConfigDataCenter();
-            gameDatas.version = serverVersion;
-            fileDataHandler.Save(gameDatas);
-            return;
+            if (allItemsById.ContainsKey(item.essenceId))
+            {
+                var essenceData = allItemsById[item.essenceId] as EssenceData;
+                if (essenceData != null)
+                {
+                    item.essenceData = essenceData;
+                    item.essenceType = essenceData.essenceType;
+                }
+            }
+            if (allItemsById.ContainsKey(item.raceId))
+            {
+                var raceData = allItemsById[item.raceId] as RaceData;
+                if (item.raceData != null)
+                {
+                    item.raceData = raceData;
+                    item.raceType = raceData.raceType;
+                }
+            }
+            if (allItemsById.ContainsKey(item.realmId))
+            {
+                var realmData = allItemsById[item.realmId] as RealmData;
+                if (realmData != null)
+                {
+                    item.realmData = realmData;
+                    item.realmType = realmData.realmType;
+                }
+            }
+            foreach (var technique in item.techniqueIds)
+            {
+                if (allItemsById.ContainsKey(technique))
+                    item.techniqueDatas.Add(allItemsById[technique] as TechniqueData);
+            }
+            foreach (var skill in item.skillIds)
+            {
+                if (allItemsById.ContainsKey(skill))
+                    item.skillDatas.Add(allItemsById[skill] as SkillData);
+            }
         }
-
-        var loadService = saveLoadRemotes.Dequeue();
-
-        loadService.LoadGame(gameDatas, () =>
-        {
-            LoadNextService();
-        });
     }
+
     private void ConfigDataCenter()
     {
         allItems.Clear();
@@ -167,8 +212,8 @@ public class GameDataCenterManager : TGTHMonoBehaviour
             shopItemsById.Add(item.instanceId, item);
             shopItems.Add(item);
         }
-        OnLoadGameDataCenterSuccessed?.Invoke(gameDatas);
     }
+
     [ContextMenu("Clear Data Cache")]
     public void ClearDataLocalCache()
     {

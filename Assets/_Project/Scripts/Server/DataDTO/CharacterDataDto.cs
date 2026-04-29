@@ -5,9 +5,9 @@ public class CharacterDataDto
     public string instanceId;
     [JsonProperty("Mô tả")]
     public string description;
-    [JsonProperty("Loại tộc")]
-    public RaceType raceType;
-    [JsonProperty("Cảnh giới")]
-    public RealmType realmType;
-    
+    [JsonProperty("mã tộc")]
+    public string raceId;
+    [JsonProperty("mã cảnh giới")]
+    public string realmId;
+
 }

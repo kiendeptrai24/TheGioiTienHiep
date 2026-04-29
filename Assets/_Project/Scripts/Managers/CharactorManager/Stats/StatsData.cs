@@ -180,7 +180,7 @@ public class StatsData : TGTHMonoBehaviour
 
         statsRaceData = hero.raceData;
         statsRealmData = hero.realmData;
-        statsCultivationPathData = hero.statsCultivationPathData;
+        statsCultivationPathData = hero.essenceData;
     }
     public void SetUpItem(ItemData item)
     {

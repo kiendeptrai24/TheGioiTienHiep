@@ -14,26 +14,26 @@ public class ChampionDataDto
     [JsonProperty("phẩm")]
     public QualityType quality;
 
-    [JsonProperty("Loại chủ tu")]
-    public EssenceType essenceType;
+    [JsonProperty("mã chủ tu")]
+    public string essenceId;
 
-    [JsonProperty("Loại tộc")]
-    public RaceType raceType;
+    [JsonProperty("mã tộc")]
+    public string raceId;
 
     [JsonProperty("Hệ")]
     public ElementType elementType;
 
-    [JsonProperty("Cảnh giới")]
-    public RealmType realmType;
+    [JsonProperty("mã cảnh giới")]
+    public string realmId;
 
     [JsonProperty("Tầm đánh")]
     public int attackRange;
 
-    [JsonProperty("Công pháp")]
-    public TechniqueType techniqueType;
+    [JsonProperty("mã Công pháp")]
+    public string techniqueId;
 
-    [JsonProperty("Kĩ năng")]
-    public List<SkillType> skillsType;
+    [JsonProperty("mã kĩ năng")]
+    public List<string> skillsId;
 
     [JsonProperty("Sinh lực điểm")]
     public int healthPoint;

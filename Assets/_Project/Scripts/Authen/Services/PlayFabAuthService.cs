@@ -31,6 +31,7 @@ public class PlayFabAuthService : AuthServiceBase
                 userId = onResSuccess.PlayFabId,
                 email = data.email,
                 accessToken = onResSuccess.SessionTicket,
+                sessionId = Guid.NewGuid().ToString(),
                 message = "Đăng nhập thành công"
             });
             PlayerPrefs.SetString(EMAIL_KEY, data.email);

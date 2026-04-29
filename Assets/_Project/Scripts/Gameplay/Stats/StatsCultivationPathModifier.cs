@@ -8,7 +8,7 @@ public class StatsCultivationPathModifier : StatsModifierBase
         if (itemData == null) return;
         var heroData = itemData as HeroData;
         if (heroData == null) return;
-        var data = heroData.statsCultivationPathData;
+        var data = heroData.essenceData;
         if (data == null) return;
         base.AddStats(stats, itemData);
         int maxHealth = heroData.healthPoint;
@@ -48,7 +48,7 @@ public class StatsCultivationPathModifier : StatsModifierBase
         if (itemData == null) return;
         var heroData = itemData as HeroData;
         if (heroData == null) return;
-        var data = heroData.statsCultivationPathData;
+        var data = heroData.essenceData;
         if (data == null) return;
         base.RemoveStats(stats, itemData);
         int maxHealth = heroData.healthPoint == 0 ? 1 : heroData.healthPoint;
