@@ -16,6 +16,7 @@ public class GameDataCenter
     public List<EssenceData> essenceItems;
     public List<RealmData> realmItems;
     public List<HeroData> championItems;
+    public List<HeroData> characterDatas;
     public List<ItemShop> shopItems;
 
     public GameDataCenter()
@@ -29,6 +30,7 @@ public class GameDataCenter
         essenceItems = new List<EssenceData>();
         realmItems = new List<RealmData>();
         championItems = new List<HeroData>();
+        characterDatas = new List<HeroData>();
         shopItems = new List<ItemShop>();
     }
 }

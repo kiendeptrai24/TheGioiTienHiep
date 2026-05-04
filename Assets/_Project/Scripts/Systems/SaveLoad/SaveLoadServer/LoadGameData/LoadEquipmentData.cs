@@ -17,7 +17,6 @@ public class LoadEquipmentData : ILoadGameData
                 return;
             }
 
-            var SODataBase = ScriptableObjectLoader.Instance;
             List<ItemData> itemDatas = new();
             List<EquitmentData> equipmentDatas = new();
             List<TechniqueData> techniqueDatas = new();
@@ -25,14 +24,12 @@ public class LoadEquipmentData : ILoadGameData
             for (int i = 0; i < allItem.Count; i++)
             {
                 var itemDto = allItem[i];
-                var itemBase = SODataBase.GetItem(itemDto.itemInstanceId);
                 ItemData itemData = null;
                 itemData = CreateItem(itemDto, equipmentDatas, skillDatas, techniqueDatas);
                 itemData.instanceId = itemDto.itemInstanceId;
                 itemData.itemName = itemDto.itemName;
                 itemData.itemDescription = itemDto.description;
                 itemData.itemType = itemDto.itemType;
-                //itemData.itemIcon = itemBase.itemIcon;
                 itemData.realmType = itemDto.realmType;
                 itemData.qualityType = itemDto.qualityType;
                 itemData.physicalDamage = itemDto.physicalDamage;

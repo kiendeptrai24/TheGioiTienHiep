@@ -40,7 +40,7 @@ public class LoadRealmData : ILoadGameData
                 itemData.rewardPotentialPoint = itemDto.potentialPoints;
                 itemData.rewardSkillPoint = itemDto.skillPoints;
                 itemData.lthao = itemDto.lthao;
-                itemData.item = itemDto.item;
+                itemData.item = itemDto.item == null ? "" : itemDto.item;
                 itemData.rate = DataParseUtils.ParsePercent(itemDto.rate);
                 itemData.increaseRate = DataParseUtils.ParsePercent(itemDto.increaseRate);
                 itemData.timeSeconds = DataParseUtils.ParseTimeToSeconds(itemDto.time);

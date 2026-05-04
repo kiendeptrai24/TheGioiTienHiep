@@ -24,31 +24,40 @@ public class PlayFabDataServerService
 
     private void LoadTitleData<T>(string key, Action<T> callback)
     {
-        clientApi.GetTitleData(
-            new GetTitleDataRequest(),
-            result =>
-            {
-                if (result.Data == null)
+        try
+        {
+            clientApi.GetTitleData(
+                new GetTitleDataRequest(),
+                result =>
                 {
-                    Debug.LogWarning($"LoadTitleData<{typeof(T).Name}> failed: TitleData is null");
-                    callback?.Invoke(default);
-                    return;
-                }
+                    if (result.Data == null)
+                    {
+                        Debug.LogWarning($"LoadTitleData<{typeof(T).Name}> failed: TitleData is null");
+                        callback?.Invoke(default);
+                        return;
+                    }
 
-                if (!result.Data.TryGetValue(key, out string json) || string.IsNullOrEmpty(json))
+                    if (!result.Data.TryGetValue(key, out string json) || string.IsNullOrEmpty(json))
+                    {
+                        Debug.LogWarning($"LoadTitleData<{typeof(T).Name}> failed: key '{key}' not found");
+                        callback?.Invoke(default);
+                        return;
+                    }
+
+                    TryDeserialize(json, callback, key);
+                },
+                error =>
                 {
-                    Debug.LogWarning($"LoadTitleData<{typeof(T).Name}> failed: key '{key}' not found");
+                    Debug.LogError($"GetTitleData Error: {error.GenerateErrorReport()}");
                     callback?.Invoke(default);
-                    return;
-                }
-
-                TryDeserialize(json, callback, key);
-            },
-            error =>
-            {
-                Debug.LogError($"GetTitleData Error: {error.GenerateErrorReport()}");
-                callback?.Invoke(default);
-            });
+                });
+        }
+        catch (System.Exception)
+        {
+            
+            Debug.LogError($"LoadTitleData<{typeof(T).Name}> failed: Exception occurred while trying to load title data with key '{key}'");
+            return;
+        }
     }
 
     private void TryDeserialize<T>(string json, Action<T> callback, string key)

@@ -1,41 +1,43 @@
-
-
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class LoadCharacterData : ILoadGameData
 {
-
-    public void LoadGameData(GameDataCenter gameData, AllGameDataResponseDto allGameDataDto, Action callback)
+    public void LoadGameData(GameDataCenter gameData, AllGameDataResponseDto allGameDataDto)
     {
         try
         {
-            if (allGameDataDto == null || allGameDataDto.characterRes == null)
+            List<CharacterDataDto> characterResponse = allGameDataDto.characterRes;
+            if (characterResponse == null)
             {
-                Debug.Log("gameDataDTO is null");
-                callback?.Invoke();
+                Debug.Log("LoadGame: characterRes is null");
                 return;
             }
-            var itemTeam = allGameDataDto.characterRes;
-            List<ItemData> itemDatas = new();
-            foreach (var item in itemTeam)
+
+            if (characterResponse == null)
+            {
+                Debug.Log("gameDataDTO is null");
+                return;
+            }
+            var characters = characterResponse;
+            List<HeroData> characterDatas = new();
+            foreach (var character in characters)
             {
                 var heroData = new HeroData();
-                CharacterDataDto itemDto = item;
+                CharacterDataDto itemDto = character;
                 heroData.instanceId = itemDto.instanceId;
                 heroData.itemDescription = itemDto.description;
                 heroData.raceId = itemDto.raceId;
                 heroData.realmId = itemDto.realmId;
-                itemDatas.Add(heroData);
+                characterDatas.Add(heroData);
             }
-            gameData.gameBaseCharacterDatas = itemDatas;
-            callback?.Invoke();
+            gameData.characterDatas = characterDatas;
+            gameData.allItems.AddRange(characterDatas);
         }
-        catch (System.Exception ex)
+        catch (Exception e)
         {
-            Debug.LogError("LoadGame: Failed to load game base character data " + ex.Message);
+            Debug.LogError("LoadGame: Failed to load character data - " + e.Message);
         }
     }
-
 }

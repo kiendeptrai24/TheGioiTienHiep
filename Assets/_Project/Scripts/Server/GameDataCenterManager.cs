@@ -31,6 +31,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     private string localVersion = "";
     protected override void Awake()
     {
+        fileDataHandler = new FileDataHandler<GameDataCenter>(Application.persistentDataPath, fileName, encryptData);
         if (Configuration.Instance.buildType == BuildType.LOCAL_CLIENT ||
             Configuration.Instance.buildType == BuildType.REMOTE_CLIENT)
             return;
@@ -39,10 +40,9 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
 
     private void LoadDataLocalCache()
     {
-        fileDataHandler = new FileDataHandler<GameDataCenter>(Application.persistentDataPath, fileName, encryptData);
         gameDatas = fileDataHandler.Load();
-        if (gameDatas == null)
-            localVersion = null;
+        if (gameDatas != null)
+            localVersion = gameDatas.version;
     }
 
     public void onSuccess(PlayFabClientInstanceAPI client)
@@ -92,18 +92,26 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     {
         var service = new PlayFabDataServerService(clientApi);
         var loadDataRemote = new AllGameDataSerice(service);
-        loadDataRemote.LoadGame(gameDatas, () =>
-        {
-            gameDatas.version = serverVersion;
-            ConfigDataCenter();
-            SetupDataWithId();
-            fileDataHandler.Save(gameDatas);
-            DataCenterReady = true;
-            OnLoadGameDataCenterSuccessed?.Invoke(gameDatas);
-        });
+        gameDatas = new GameDataCenter();
+        loadDataRemote.LoadGame(gameDatas, OnLoadDataRemoteSuccessed);
     }
 
-
+    public void OnLoadDataRemoteSuccessed()
+    {
+        try
+        {
+            ConfigDataCenter();
+            SetupDataWithId();
+            DataCenterReady = true;
+            gameDatas.version = serverVersion;
+            fileDataHandler.Save(gameDatas);
+            OnLoadGameDataCenterSuccessed?.Invoke(gameDatas);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"OnLoadDataRemoteSuccessed: Failed to load data remote - {ex.Message}");
+        }
+    }
     private void LoadAllData()
     {
         gameDatas.allItems.Clear();

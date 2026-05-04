@@ -13,15 +13,15 @@ public class ItemDataDto
 
     [JsonProperty("loại")]
     public ItemType itemType;
-
-    [JsonProperty("cảnh giới")]
-    public RealmType realmType;
+    
+    [JsonProperty("tộc")]
+    public RaceType raceType;
 
     [JsonProperty("phẩm")]
     public QualityType qualityType;
 
-    [JsonProperty("tộc")]
-    public RaceType raceType;
+    [JsonProperty("cảnh giới")]
+    public RealmType realmType;
 
     [JsonProperty("sinh lực")]
     public float health;

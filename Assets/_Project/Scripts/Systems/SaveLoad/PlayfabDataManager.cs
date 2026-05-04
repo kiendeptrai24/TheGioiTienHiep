@@ -36,6 +36,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         gameDataCenterManager.OnLoadGameDataCenterSuccessed += OnDataCenterReady;
         navigationToCharacterSelectionScreen = GetComponent<ActionNavigationSpecificScreen>();
         clientApi = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
+
         if (Configuration.Instance.IsServerBuild())
         {
             IAuthService authService = new PlayFabAuthCustomService(clientApi, true);
@@ -100,8 +101,11 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         {
             var data = result.FunctionResult as IDictionary<string, object>;
 
+            if (data == null)
+            {
+                return;
+            }
             bool valid = Convert.ToBoolean(data["valid"]);
-
             if (!valid)
             {
                 OnKicked();
@@ -168,18 +172,18 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     public void onSuccess(AuthResult result)
     {
+        gameDataCenterManager.onSuccess(result.clientApi);
+
         if (Configuration.Instance.IsClientBuild())
         {
             sessionId = result.sessionId;
             CreateSession();
+            FindRemoteServer();
+            LoginSuccess?.Invoke(result);
+            hasLogined = true;
+            if (gameDataCenterManager.DataCenterReady == false) return;
+            LoadCharacterDataChoose();
         }
-
-        hasLogined = true;
-        FindRemoteServer();
-        gameDataCenterManager.onSuccess(result.clientApi);
-        LoginSuccess?.Invoke(result);
-        if (gameDataCenterManager.DataCenterReady == false) return;
-        LoadCharacterDataChoose();
     }
 
     private void LoadCharacterDataChoose()
