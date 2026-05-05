@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using ExitGames.Client.Photon.StructWrapping;
 using UnityEngine;
 
-public class TeamInventoryService : ISaveLoadRemote
+public class TeamInventoryService : ILoadRemote<GameData>, ISaveRemote<GameData>
 {
     private PlayFabDataClientService service;
     public TeamInventoryService(PlayFabDataClientService service)

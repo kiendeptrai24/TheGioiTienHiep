@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-public class PlayerHeroItemInventoryService : ISaveLoadRemote
+public class PlayerHeroItemInventoryService :  ILoadRemote<GameData>, ISaveRemote<GameData>
 {
     private PlayFabDataClientService service;
     public PlayerHeroItemInventoryService(PlayFabDataClientService service)
@@ -138,6 +138,5 @@ public class PlayerHeroItemInventoryService : ISaveLoadRemote
     public void SaveGame(GameData gameData)
     {
         service.SavePlayerHeroData(gameData);
-
     }
 }

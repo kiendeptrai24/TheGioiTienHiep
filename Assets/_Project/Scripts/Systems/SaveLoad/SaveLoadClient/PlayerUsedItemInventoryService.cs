@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-public class PlayerUsedItemInventoryService : ISaveLoadRemote
+public class PlayerUsedItemInventoryService :  ILoadRemote<GameData>, ISaveRemote<GameData>
 {
     private PlayFabDataClientService service;
     public PlayerUsedItemInventoryService(PlayFabDataClientService service)
@@ -46,6 +46,7 @@ public class PlayerUsedItemInventoryService : ISaveLoadRemote
             }
         });
     }
+
     public void SaveGame(GameData gameData)
     {
         service.SetItemInventoryDataUsed(gameData);

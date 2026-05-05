@@ -43,6 +43,16 @@ namespace TGTH.Mobile
         public void ShowData(ItemData itemData)
         {
             var heroData = itemData as HeroData;
+            if(heroData == null)
+            {
+                Debug.LogError("ShowData failed: itemData is not HeroData");
+                return;
+            }
+            if(heroData.equipmentDatas == null)
+            {
+                Debug.LogError("ShowData failed: equipmentDatas is null");
+                return;
+            }
             var equipmentDatas = heroData.equipmentDatas;
 
             for (int i = 0; i < equipmentDatas.Count; i++)

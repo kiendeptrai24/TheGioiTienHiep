@@ -1,9 +1,6 @@
 
 
-using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 namespace TGTH.Mobile
 {
     public class CharacterPagePresenter : TGTHMonoBehaviour

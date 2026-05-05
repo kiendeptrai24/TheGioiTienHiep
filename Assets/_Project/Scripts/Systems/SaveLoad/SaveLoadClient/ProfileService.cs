@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-public class ProfileService : ISaveLoadRemote
+public class ProfileService : ILoadRemote<GameData>, ISaveRemote<GameData>
 {
     private PlayFabDataClientService service;
 
@@ -62,7 +62,6 @@ public class ProfileService : ISaveLoadRemote
             }
         });
     }
-
     public void SaveGame(GameData gameData)
     {
         service.SetProfile(gameData);

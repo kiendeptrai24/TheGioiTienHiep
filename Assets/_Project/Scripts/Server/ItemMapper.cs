@@ -4,7 +4,7 @@ public static class ItemMapper
     {
         return new ItemData
         {
-            instanceId = dto.itemInstanceId,
+            instanceId = dto.instanceId,
             itemName = dto.itemName,
             itemDescription = dto.description,
             physicalDamage = dto.physicalDamage,
@@ -12,7 +12,7 @@ public static class ItemMapper
             spiritDamage = dto.spiritDamage,
             physicalDefense = dto.physicalDefense,
             magicalDefense = dto.magicalDefense,
-            spiritDefense = dto.sppiritDefense,
+            spiritDefense = dto.spiritDefense,
             potentialPoints = dto.potentialPoints,
             realmType = dto.realmType,
         };
@@ -22,7 +22,7 @@ public static class ItemMapper
     {
         return new ItemDataDto
         {
-            itemInstanceId = data.instanceId,
+            instanceId = data.instanceId,
             itemName = data.itemName,
             description = data.itemDescription,
             physicalDamage = data.physicalDamage,
@@ -30,7 +30,7 @@ public static class ItemMapper
             spiritDamage = data.spiritDamage,
             physicalDefense = data.physicalDefense,
             magicalDefense = data.magicalDefense,
-            sppiritDefense = data.spiritDefense,
+            spiritDefense = data.spiritDefense,
             potentialPoints = data.potentialPoints,
             realmType = data.realmType,
         };

@@ -3,21 +3,21 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AllGameDataSerice : ILoadRemoteServer
+public class AllGameDataSerice : ILoadRemote<GameDataCenter>
 {
     private PlayFabDataServerService service;
-    private List<ILoadGameData> loadGameDatas;
-    
+    private List<ILoadGameData<GameDataCenter, AllGameDataResponseDto>> loadGameDatas;
+
     public AllGameDataSerice(PlayFabDataServerService service)
     {
         this.service = service;
         loadGameDatas = new();
-        loadGameDatas.Add(new LoadRealmData());
-        loadGameDatas.Add(new LoadEssenceAndRaceData());
-        loadGameDatas.Add(new LoadEquipmentData());
-        loadGameDatas.Add(new LoadChampionData());
-        loadGameDatas.Add(new LoadCharacterData());
-        loadGameDatas.Add(new LoadShopData());
+        loadGameDatas.Add(new LoadRealmDataServerSide());
+        loadGameDatas.Add(new LoadEssenceAndRaceDataServerSide());
+        loadGameDatas.Add(new LoadEquipmentDataServerSide());
+        loadGameDatas.Add(new LoadChampionDataServerSide());
+        loadGameDatas.Add(new LoadCharacterDataServerSide());
+        loadGameDatas.Add(new LoadShopDataServerSide());
     }
 
     public void LoadGame(GameDataCenter gameData, Action callback)

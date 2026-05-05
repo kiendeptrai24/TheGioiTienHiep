@@ -5,6 +5,7 @@ using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class GameDataCenterManager : Singleton<GameDataCenterManager>
 {
@@ -24,7 +25,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
 
     #endregion
     public event Action<GameDataCenter> OnLoadGameDataCenterSuccessed;
-    public bool DataCenterReady = false;
+    private bool DataCenterReady = false;
 
     private PlayFabClientInstanceAPI clientApi;
     private string serverVersion = "";
@@ -43,6 +44,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
             return allItemsById[id];
         return null;
     }
+    public bool IsReady() => DataCenterReady;
     private void LoadDataLocalCache()
     {
         gameDatas = fileDataHandler.Load();
@@ -270,4 +272,6 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         FileDataHandler<GameDataCenter> fileDataHandler = new FileDataHandler<GameDataCenter>(Application.persistentDataPath, fileName, encryptData);
         fileDataHandler.Delete();
     }
+    public List<ItemData> GetAllCharacters() => gameDatas.characterDatas.ToList<ItemData>();
+    public GameDataCenter GetDataCenter() => gameDatas;
 }

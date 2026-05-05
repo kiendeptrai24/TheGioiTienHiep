@@ -12,9 +12,8 @@ public class AllGameDataResponseDto
     public List<EssenceAndRaceDataDto> essenceAndRaceRes;
     [JsonProperty("Realm")]
     public List<ItemRealmDataDto> realmRes;
-    [JsonProperty("Shop")]
-    public List<ShopDataDto> shopRes;
     [JsonProperty("Equipment")]
     public List<ItemDataDto> equipmentRes;
-
+    [JsonProperty("Shop")]
+    public List<ShopDataDto> shopRes;
 }

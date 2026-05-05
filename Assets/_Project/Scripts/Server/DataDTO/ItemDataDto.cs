@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 public class ItemDataDto
 {
     [JsonProperty("mã")]
-    public string itemInstanceId;
+    public string instanceId;
 
     [JsonProperty("tên")]
     public string itemName;
@@ -13,7 +13,7 @@ public class ItemDataDto
 
     [JsonProperty("loại")]
     public ItemType itemType;
-    
+
     [JsonProperty("tộc")]
     public RaceType raceType;
 
@@ -48,7 +48,7 @@ public class ItemDataDto
     public float magicalDefense;
 
     [JsonProperty("phòng ngự linh thức")]
-    public float sppiritDefense;
+    public float spiritDefense;
 
     [JsonProperty("điểm tiềm năng")]
     public int potentialPoints;

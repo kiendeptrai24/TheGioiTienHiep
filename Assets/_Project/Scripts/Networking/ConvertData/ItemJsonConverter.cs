@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using TMPro;
 using UnityEngine;
 
 public class ItemJsonConverter
@@ -27,12 +28,12 @@ public class ItemJsonConverter
     public static List<ItemData> Convert(HeroInTeamDataDTO heroDTO)
     {
         var itemDatas = new List<ItemData>();
-        var SODataBase = ScriptableObjectLoader.Instance;
+        var gameData = GameDataCenterManager.Instance;
 
         for (int i = 0; i < heroDTO.inventoryItems.Count; i++)
         {
             var item = heroDTO.inventoryItems[i];
-            var itemData = SODataBase.GetItem(item.instanceId);
+            var itemData = gameData.GetItemById(item.instanceId);
             itemData.itemName = heroDTO.inventoryItems[i].itemName;
             if (itemData == null)
                 continue;
@@ -40,7 +41,7 @@ public class ItemJsonConverter
             if (heroData != null)
             {
                 heroData.championIndex = heroDTO.championsIndex[i];
-                SetHeroData(heroDTO, SODataBase, i, heroData);
+                SetHeroData(heroDTO, gameData, i, heroData);
             }
             else
                 continue;
@@ -51,7 +52,7 @@ public class ItemJsonConverter
         return itemDatas;
     }
 
-    private static void SetHeroData(HeroInTeamDataDTO itemsteam, ScriptableObjectLoader SODataBase, int i, HeroData heroData)
+    private static void SetHeroData(HeroInTeamDataDTO itemsteam, GameDataCenterManager gameData, int i, HeroData heroData)
     {
         try
         {
@@ -68,7 +69,7 @@ public class ItemJsonConverter
             {
                 var skill = skillDatas[h];
 
-                var skillData = SODataBase.GetItem(skill.instanceId) as SkillData;
+                var skillData = gameData.GetItemById(skill.instanceId) as SkillData;
                 if (skillData == null)
                     continue;
                 heroData.skillDatas.Add(skillData);
@@ -78,7 +79,7 @@ public class ItemJsonConverter
             for (int s = 0; s < techniqueDatas.Count; s++)
             {
                 var technique = techniqueDatas[s];
-                var techniqueData = SODataBase.GetItem(technique.instanceId) as TechniqueData;
+                var techniqueData = gameData.GetItemById(technique.instanceId) as TechniqueData;
                 if (techniqueData == null)
                     continue;
                 heroData.techniqueDatas.Add(techniqueData);
@@ -87,14 +88,20 @@ public class ItemJsonConverter
             for (int k = 0; k < equipmentDatas.Count; k++)
             {
                 var equipment = equipmentDatas[k];
-                var equipmentData = SODataBase.GetItem(equipment.instanceId) as EquipmentData;
+                var equipmentData = gameData.GetItemById(equipment.instanceId) as EquipmentData;
                 if (equipmentData == null)
                     continue;
                 heroData.equipmentDatas.Add(equipmentData);
             }
-            var statRace = SODataBase.GetRaceItem(heroData.raceType);
-            if (statRace != null)
-                heroData.raceData = statRace;
+            var raceData = gameData.GetItemById(heroData.raceId) as RaceData;
+            if (raceData != null)
+                heroData.raceData = raceData;
+            var essenceData = gameData.GetItemById(heroData.essenceId) as EssenceData;
+            if (essenceData != null)
+                heroData.essenceData = essenceData;
+            var realmData = gameData.GetItemById(heroData.realmId) as RealmData;
+            if (realmData != null)
+                heroData.realmData = realmData;
             itemsteam.inventoryItems[i] = heroData;
         }
         catch (System.Exception ex)

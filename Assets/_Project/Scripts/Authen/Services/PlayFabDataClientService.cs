@@ -35,6 +35,10 @@ public class PlayFabDataClientService
     {
         LoadUserData($"inventory {characterId}", callback);
     }
+    public void LoadPlayerInventoryData(string characterId, Action<PlayerClientDataDto> callback)
+    {
+        LoadUserData($"inventory {characterId}", callback);
+    }
     public void LoadPlayerDatasUsed(string characterId, Action<ItemDataDTO> callback)
     {
         LoadUserData($"inventory used {characterId}", callback);
@@ -276,7 +280,17 @@ public class PlayFabDataClientService
             Debug.Log("Error " + ex.Message);
         }
     }
-
+    public void SavePlayerInventoryData(GameData gameData, PlayerClientDataDto playerClientDataDto)
+    {
+        try
+        {
+            SaveUserData($"inventory {gameData.characterId}", playerClientDataDto);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.Log("Error " + ex.Message);
+        }
+    }
     #endregion
 
     #region Private Generic Load/Save
@@ -373,7 +387,7 @@ public class PlayFabDataClientService
         }
         catch (System.Exception)
         {
-            throw;
+            Debug.Log("Error occurred while saving data.");
         }
     }
 

@@ -16,7 +16,7 @@ public class HeroPreset : ItemStatsPreset
     public EssenceType essenceType;
     public ElementType elementType;
     public int level;
-    public float attackRange;
+    public int attackRange;
     public float moveSpeed;
     public float attackSpeed;
     public float health; // persent

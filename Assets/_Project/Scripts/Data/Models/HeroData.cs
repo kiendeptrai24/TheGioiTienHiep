@@ -22,7 +22,7 @@ public class HeroData : ItemData
     [JsonIgnore]
     public int level;
     [JsonIgnore]
-    public float attackRange;
+    public int attackRange;
     [JsonIgnore]
     public float movementSpeed;
     [JsonIgnore]

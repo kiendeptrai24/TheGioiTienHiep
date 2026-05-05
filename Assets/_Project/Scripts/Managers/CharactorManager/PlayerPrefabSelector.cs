@@ -26,6 +26,7 @@ public class PlayerPrefabSelector : Singleton<PlayerPrefabSelector>
     public void SetItemData(ItemData _itemData)
     {
         itemData = _itemData;
+        Debug.Log($"PlayerPrefabSelector: SetItemData with id {itemData.instanceId}");
     }
     public ItemData GetItemData()
     {

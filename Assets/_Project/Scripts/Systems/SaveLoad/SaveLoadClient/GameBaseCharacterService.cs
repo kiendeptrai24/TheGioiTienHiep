@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameBaseCharacterService : ISaveLoadRemote
+public class GameBaseCharacterService : ILoadRemote<GameData>
 {
     private PlayFabDataClientService service;
     public GameBaseCharacterService(PlayFabDataClientService service)
@@ -43,9 +43,5 @@ public class GameBaseCharacterService : ISaveLoadRemote
                 Debug.LogError("LoadGame: Failed to load game base character data " + ex.Message);
             }
         });
-    }
-    public void SaveGame(GameData gameData)
-    {
-
     }
 }

@@ -9,5 +9,7 @@ public class CharacterDataDto
     public string raceId;
     [JsonProperty("mã cảnh giới")]
     public string realmId;
+    [JsonProperty("mã chủ tu")]
+    public string? essenceId;
 
 }

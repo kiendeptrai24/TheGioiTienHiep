@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemCharacterService : ISaveLoadRemote
+public class ItemCharacterService : ILoadRemote<GameData> , ISaveRemote<GameData>
 {
     private PlayFabDataClientService service;
     public ItemCharacterService(PlayFabDataClientService service)
@@ -55,6 +55,7 @@ public class ItemCharacterService : ISaveLoadRemote
                     var heroData = itemData as HeroData;
                     if (heroData != null)
                     {
+                        heroData.essenceId = gameDataDTO.inventoryItems[i].essenceId;
                         if (itemsData.characterNames != null && i < itemsData.characterNames.Count)
                         {
                             heroData.itemName = itemsData.characterNames[i];
@@ -161,7 +162,6 @@ public class ItemCharacterService : ISaveLoadRemote
             Debug.LogError("SetHeroData: Failed to set hero data " + ex.Message);
         }
     }
-
     public void SaveGame(GameData gameData)
     {
         service.SetItemCharacter(gameData);

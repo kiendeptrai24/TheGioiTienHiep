@@ -3,7 +3,7 @@ using System;
 using ExitGames.Client.Photon.StructWrapping;
 using UnityEngine;
 
-public class PlayerItemInventoryService : ISaveLoadRemote
+public class PlayerItemInventoryService :  ILoadRemote<GameData>, ISaveRemote<GameData>
 {
     private PlayFabDataClientService service;
     public PlayerItemInventoryService(PlayFabDataClientService service)

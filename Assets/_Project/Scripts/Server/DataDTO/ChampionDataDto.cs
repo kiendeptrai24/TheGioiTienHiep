@@ -11,6 +11,13 @@ public class ChampionDataDto
     [JsonProperty("Mô tả")]
     public string description;
 
+    [JsonProperty("Nhân vật")]
+    public bool? isCharacter;
+    [JsonProperty("vị trí X")]
+    public int? posX;
+    [JsonProperty("vị trí Y")]
+    public int? posY;
+
     [JsonProperty("phẩm")]
     public QualityType quality;
 

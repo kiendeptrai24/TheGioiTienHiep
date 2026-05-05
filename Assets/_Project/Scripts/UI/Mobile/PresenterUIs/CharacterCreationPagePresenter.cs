@@ -9,6 +9,12 @@ namespace TGTH.Mobile
 {
     public class CharacterCreationPagePresenter : IItemClickHandler
     {
+        [Serializable]
+        public struct EssneceTypeData
+        {
+            public string instanceId;
+            public EssenceType essenceType;
+        }
         [SerializeField] private CharacterCreationPageView view;
         [SerializeField] private IItemDetailPageView itemOnClick;
         [SerializeField] private ActionNavigation navigation;
@@ -17,6 +23,7 @@ namespace TGTH.Mobile
         [SerializeField] private string nameCharacter = "";
         private List<ItemData> itemDatas = new List<ItemData>();
         public EssenceType curEssenceType;
+        public List<EssneceTypeData> essenceTypes = new List<EssneceTypeData>();
         protected override void Awake()
         {
             base.Awake();
@@ -29,10 +36,20 @@ namespace TGTH.Mobile
         }
         protected override void Start()
         {
-            PlayfabDataManager.Instance.OnGameBaseCharacterReady += OnGameBaseCharacterReady;
-            OnGameBaseCharacterReady(PlayfabDataManager.Instance.GetGameData().gameBaseCharacterDatas);
+            var gameDCM = GameDataCenterManager.Instance;
+            gameDCM.OnLoadGameDataCenterSuccessed += OnGameBaseCharacterReady;
+            if (gameDCM.IsReady())
+            {
+                OnGameBaseCharacterReady(gameDCM.GetDataCenter());
+            }
         }
-        private void OnGameBaseCharacterReady(List<ItemData> baseCharacterDatas)
+
+        private void OnGameBaseCharacterReady(GameDataCenter center)
+        {
+            OnGameBaseCharacterReady(center.characterDatas);
+        }
+
+        private void OnGameBaseCharacterReady(List<HeroData> baseCharacterDatas)
         {
             if (baseCharacterDatas == null || baseCharacterDatas.Count == 0) return;
             foreach (var item in baseCharacterDatas)
@@ -61,6 +78,7 @@ namespace TGTH.Mobile
             var itemData = currentItemSelect.inventoryItem.data as HeroData;
             itemData.itemName = nameCharacter;
             itemData.essenceType = curEssenceType;
+            itemData.essenceId = essenceTypes.Find(x => x.essenceType == curEssenceType).instanceId;
             InventoryItem inventoryItem = new InventoryItem(itemData);
 
             itemOnClick.HandleItemClicked(inventoryItem);
