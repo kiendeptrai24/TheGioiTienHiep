@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using ExitGames.Client.Photon.StructWrapping;
 using UnityEngine;
 
 public class TeamInventoryService : ISaveLoadRemote
@@ -25,12 +26,12 @@ public class TeamInventoryService : ISaveLoadRemote
                 var itemTeam = new HeroInTeamDataDTO();
                 itemTeam = gameDataDTO;
 
-                var SODataBase = ScriptableObjectLoader.Instance;
+                var dataManager = GameDataCenterManager.Instance;
 
                 for (int i = 0; i < itemTeam.inventoryItems.Count; i++)
                 {
                     var item = itemTeam.inventoryItems[i];
-                    var itemData = SODataBase.GetItem(item.instanceId);
+                    var itemData = dataManager.GetItemById(item.instanceId);
                     itemData.itemName = gameDataDTO.inventoryItems[i].itemName;
                     itemData.realmType = gameDataDTO.inventoryItems[i].realmType;
                     if (itemData == null)
@@ -39,10 +40,10 @@ public class TeamInventoryService : ISaveLoadRemote
                     if (heroData != null)
                     {
                         heroData.championIndex = itemTeam.championsIndex[i];
-                        SetHeroData(itemTeam, SODataBase, i, heroData);
+                        SetHeroData(itemTeam, dataManager, i, heroData);
                         if (heroData.isCharactor)
                         {
-                            var realmData = SODataBase.GetRealmItem(itemData.realmType);
+                            var realmData = dataManager.GetItemById(itemData.realmId) as RealmData;
                             heroData.realmData = realmData;
                             heroData.characterId = gameData.characterId;
                             if (gameData.itemDataPoint != null)
@@ -82,7 +83,7 @@ public class TeamInventoryService : ISaveLoadRemote
         });
     }
 
-    private void SetHeroData(HeroInTeamDataDTO itemsteam, ScriptableObjectLoader SODataBase, int i, HeroData heroData)
+    private void SetHeroData(HeroInTeamDataDTO itemsteam, GameDataCenterManager dataManager, int i, HeroData heroData)
     {
         try
         {
@@ -103,7 +104,7 @@ public class TeamInventoryService : ISaveLoadRemote
             {
                 var skill = skillDatas[h];
 
-                var skillData = SODataBase.GetItem(skill.instanceId) as SkillData;
+                var skillData = dataManager.GetItemById(skill.instanceId) as SkillData;
                 if (skillData == null)
                     continue;
                 heroData.skillDatas.Add(skillData);
@@ -113,7 +114,7 @@ public class TeamInventoryService : ISaveLoadRemote
             for (int s = 0; s < techniqueDatas.Count; s++)
             {
                 var technique = techniqueDatas[s];
-                var techniqueData = SODataBase.GetItem(technique.instanceId) as TechniqueData;
+                var techniqueData = dataManager.GetItemById(technique.instanceId) as TechniqueData;
                 if (techniqueData == null)
                     continue;
                 heroData.techniqueDatas.Add(techniqueData);
@@ -122,12 +123,12 @@ public class TeamInventoryService : ISaveLoadRemote
             for (int k = 0; k < equipmentDatas.Count; k++)
             {
                 var equipment = equipmentDatas[k];
-                var equipmentData = SODataBase.GetItem(equipment.instanceId) as EquitmentData;
+                var equipmentData = dataManager.GetItemById(equipment.instanceId) as EquipmentData;
                 if (equipmentData == null)
                     continue;
                 heroData.equipmentDatas.Add(equipmentData);
             }
-            var statRace = SODataBase.GetRaceItem(heroData.raceType);
+            var statRace = dataManager.GetItemById(heroData.raceId) as RaceData;
             if (statRace != null)
                 heroData.raceData = statRace;
 

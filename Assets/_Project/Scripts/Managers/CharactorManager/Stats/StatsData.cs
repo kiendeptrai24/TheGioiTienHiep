@@ -12,7 +12,7 @@ public class StatsData : TGTHMonoBehaviour
     public ItemData heroData;
     public List<TechniqueData> techniqueData;
     public List<SkillData> skillDatas;
-    public List<EquitmentData> equiDatas;
+    public List<EquipmentData> equiDatas;
 
     [Header("Preset base stats")]
     public RaceData statsRaceData;

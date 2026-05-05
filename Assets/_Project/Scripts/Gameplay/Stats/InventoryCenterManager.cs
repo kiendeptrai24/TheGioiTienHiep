@@ -275,7 +275,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     }
     public void ItemExistingChange(ItemData item)
     {
-        if (item is EquitmentData)
+        if (item is EquipmentData)
         {
             isEquitmentChange = true;
         }
@@ -298,7 +298,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     }
     public void ItemChange(ItemData item)
     {
-        if (item is EquitmentData)
+        if (item is EquipmentData)
         {
             isEquitmentChange = true;
         }
@@ -411,7 +411,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         List<ItemData> temp = new();
         foreach (var item in temps)
         {
-            if (item is EquitmentData)
+            if (item is EquipmentData)
                 temp.Add(item);
         }
         return temp;

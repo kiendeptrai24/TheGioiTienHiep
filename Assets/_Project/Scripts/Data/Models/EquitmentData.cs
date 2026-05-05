@@ -5,38 +5,38 @@ using System;
 using Newtonsoft.Json;
 
 [Serializable]
-public class EquitmentData : ItemData
+public class EquipmentData : ItemData
 {
     [Header("Equipment Type")]
-    [JsonIgnore] 
+    [JsonIgnore]
     public EquipmentType equipmentType;
-    [JsonIgnore] 
+    [JsonIgnore]
     public int level;
-    [JsonIgnore] 
+    [JsonIgnore]
     public RaceType raceType;
 
     // ============================
     // 1. DAMAGE STATS
     // ============================
     [Header("Damage Stats")]
-    [JsonIgnore] 
+    [JsonIgnore]
     public float critDamage;        // Sát thương chí mạng (%)
-    [JsonIgnore] 
+    [JsonIgnore]
     public float critRate;          // Tỷ lệ chí mạng (%)
-    [JsonIgnore] 
+    [JsonIgnore]
     public float trueDamage;            // Sát thương chuẩn
-    [JsonIgnore] 
+    [JsonIgnore]
     public float armorPenetration;      // Xuyên phòng ngự / xuyên giáp
-    [JsonIgnore] 
+    [JsonIgnore]
     public float lifeSteal;             // Hút sinh lực (%)
-    [JsonIgnore] 
+    [JsonIgnore]
     public float attackSpeed;           // Tốc độ đánh 
 
     // ============================
     // 2. DEFENSE STATS
     // ============================
     [Header("Defense Stats")]
-    [JsonIgnore] 
+    [JsonIgnore]
     public float maxHealth;             // Sinh lực
     [JsonIgnore]
     public float maxMana;               // Linh lực
@@ -113,6 +113,6 @@ public class EquitmentData : ItemData
     public float effectResistance;      // Kháng hiệu ứng (%)
     public override ItemData Clone()
     {
-        return (EquitmentData)this.MemberwiseClone();
+        return (EquipmentData)this.MemberwiseClone();
     }
 }

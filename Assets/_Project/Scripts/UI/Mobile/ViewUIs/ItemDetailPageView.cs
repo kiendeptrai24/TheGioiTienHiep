@@ -43,13 +43,13 @@ public class ItemDetailPageView : IItemDetailPageView
         realmTxt.text = EnumTranslator.ToVietnamese(inventoryItem.data.realmType);
         essenceTypeTxt.text = inventoryItem.data is SkillData ? EnumTranslator.ToVietnamese(((SkillData)inventoryItem.data).raceType) :
         inventoryItem.data is TechniqueData ? EnumTranslator.ToVietnamese(((TechniqueData)inventoryItem.data).raceType) :
-        inventoryItem.data is EquitmentData ? EnumTranslator.ToVietnamese(((EquitmentData)inventoryItem.data).raceType) :
+        inventoryItem.data is EquipmentData ? EnumTranslator.ToVietnamese(((EquipmentData)inventoryItem.data).raceType) :
         inventoryItem.data is HeroData ? EnumTranslator.ToVietnamese(((HeroData)inventoryItem.data).essenceType) : "";
         itemIconImge.sprite = inventoryItem.data.itemIcon;
 
         if (inventoryItem.data is SkillData skillData) SetItemSkillData(skillData);
         else if (inventoryItem.data is TechniqueData techniqueData) SetItemTechniqueData(techniqueData);
-        else if (inventoryItem.data is EquitmentData equipmentData) SetItemEquipmentData(equipmentData);
+        else if (inventoryItem.data is EquipmentData equipmentData) SetItemEquipmentData(equipmentData);
         else if (inventoryItem.data is HeroData heroData) SetItemHeroData(heroData);
         else if (inventoryItem.data is ItemData itemData) SetItemData(itemData);
     }
@@ -91,7 +91,7 @@ public class ItemDetailPageView : IItemDetailPageView
         DisplayDefenseStats(itemData);
     }
 
-    public void SetItemEquipmentData(EquitmentData data)
+    public void SetItemEquipmentData(EquipmentData data)
     {
         DisplayText("Quality Type", EnumTranslator.ToVietnamese(data.qualityType));
         DisplayStat("Enhance Level", data.level, false);

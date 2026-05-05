@@ -13,35 +13,24 @@ public class ItemData
     public Sprite itemIcon;
     public string itemIconPath;
     public string itemFilePath;
-    [JsonIgnore]
-    public int itemPrice;
-    [JsonIgnore]
+    public ulong itemPrice;
     public bool canStack;
-    [JsonIgnore]
     public string itemDescription;
     [JsonIgnore]
     public int currentstack;
     public RealmType realmType;
     public string realmId;
-    [JsonIgnore]
     public QualityType qualityType;
-    [JsonIgnore]
     public ElementType elementType;
     //Offensive Stats
 
-    [JsonIgnore]
     public float physicalDamage;
-    [JsonIgnore]
     public float magicalDamage;
-    [JsonIgnore]
     public float spiritDamage;
 
     //Defensive Stats
-    [JsonIgnore]
     public float physicalDefense;
-    [JsonIgnore]
     public float magicalDefense;
-    [JsonIgnore]
     public float spiritDefense;
     [JsonIgnore]
     public int potentialPoints;

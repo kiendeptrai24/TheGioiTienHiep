@@ -6,14 +6,10 @@ using UnityEngine;
 public class RealmData : ItemData
 {
     //Cultivation Realm
-    [JsonIgnore]
     public string description;
     //Resources
-    [JsonIgnore]
     public int maxHealth;
-    [JsonIgnore]
     public int maxMana;
-    [JsonIgnore]
     public int maxSpirit;
 
     //Offensive Stats
@@ -29,7 +25,6 @@ public class RealmData : ItemData
     public int armorPenetration;
 
     //Speed Stats
-    [JsonIgnore]
     public int movementSpeed;
     [JsonIgnore]
     public int attackSpeed;
@@ -44,7 +39,6 @@ public class RealmData : ItemData
     [JsonIgnore]
     public int combatPower;
     //Critical Stats
-    [JsonIgnore]
     public int spiritRange;
     [Header("Upgrade Materials")]
     [JsonIgnore]
@@ -59,13 +53,15 @@ public class RealmData : ItemData
     public int maHachCost;          // Ma hạch
     [JsonIgnore]
     public int linhThachCost;        // Linh thạch
-    [JsonIgnore]
     public int rewardPotentialPoint;
-    [JsonIgnore]
     public int rewardSkillPoint;
     public float rate;
     public float increaseRate;
     public ulong timeSeconds;
     public int lthao;
     public string item;
+    override public ItemData Clone()
+    {
+        return (RealmData)this.MemberwiseClone();
+    }
 }

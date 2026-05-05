@@ -120,7 +120,7 @@ public class PlayerHeroItemInventoryService : ISaveLoadRemote
             for (int k = 0; k < equipmentDatas.Count; k++)
             {
                 var equipment = equipmentDatas[k];
-                var equipmentData = SODataBase.GetItem(equipment.instanceId) as EquitmentData;
+                var equipmentData = SODataBase.GetItem(equipment.instanceId) as EquipmentData;
                 if (equipmentData == null)
                     continue;
                 heroData.equipmentDatas.Add(equipmentData);

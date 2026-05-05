@@ -15,11 +15,11 @@ namespace TGTH.Mobile
                 var heroData = statsManager.heroData as HeroData;
                 if (item1 != null && item1.data != null)
                 {
-                    heroData.equipmentDatas.Remove(item1.data as EquitmentData);
+                    heroData.equipmentDatas.Remove(item1.data as EquipmentData);
                 }
                 if (item2 != null && item2.data != null)
                 {
-                    heroData.equipmentDatas.Add(item2.data as EquitmentData);
+                    heroData.equipmentDatas.Add(item2.data as EquipmentData);
                 }
                 return true;
             }

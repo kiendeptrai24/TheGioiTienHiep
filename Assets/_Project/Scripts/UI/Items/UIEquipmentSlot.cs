@@ -47,7 +47,7 @@ public class UIEquipmentSlot : UIItemSlotBase
     public override bool CanReceive(ItemDragContext ctx)
     {
         // chỉ nhận item equipment đúng slot
-        if (ctx.ItemOfFrom.data is EquitmentData eq)
+        if (ctx.ItemOfFrom.data is EquipmentData eq)
             return eq.equipmentType == equipmentType;
 
         return false;

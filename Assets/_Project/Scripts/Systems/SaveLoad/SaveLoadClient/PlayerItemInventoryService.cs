@@ -1,5 +1,6 @@
 
 using System;
+using ExitGames.Client.Photon.StructWrapping;
 using UnityEngine;
 
 public class PlayerItemInventoryService : ISaveLoadRemote
@@ -24,7 +25,7 @@ public class PlayerItemInventoryService : ISaveLoadRemote
                 var itemsData = new ItemDataDTO();
                 itemsData = gameDataDTO;
 
-                var SODataBase = ScriptableObjectLoader.Instance;
+                var dataManager = GameDataCenterManager.Instance;
 
                 for (int i = 0; i < itemsData.inventoryItems.Count; i++)
                 {
@@ -34,7 +35,7 @@ public class PlayerItemInventoryService : ISaveLoadRemote
                         Debug.Log("item is null");
                         return;
                     }
-                    var itemData = SODataBase.GetItem(item.instanceId);
+                    var itemData = dataManager.GetItemById(item.instanceId);
                     itemData.itemName = gameDataDTO.inventoryItems[i].itemName;
                     itemData.realmType = gameDataDTO.inventoryItems[i].realmType;
 

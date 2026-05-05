@@ -25,7 +25,7 @@ public class ItemCharacterService : ISaveLoadRemote
 
                 var itemsData = gameDataDTO;
 
-                var SODataBase = ScriptableObjectLoader.Instance;
+                var dataManager = GameDataCenterManager.Instance;
 
                 if (itemsData.inventoryItems == null)
                 {
@@ -40,7 +40,7 @@ public class ItemCharacterService : ISaveLoadRemote
                     if (itemLoad == null)
                         continue;
 
-                    var itemData = SODataBase.GetItem(itemLoad.instanceId);
+                    var itemData = dataManager.GetItemById(itemLoad.instanceId);
                     if (itemData == null)
                     {
                         Debug.LogError($"LoadGame: itemData null at index {i}, instanceId = {itemLoad.instanceId}");
@@ -65,10 +65,15 @@ public class ItemCharacterService : ISaveLoadRemote
                             heroData.characterId = itemsData.characterIds[i];
                         }
 
-                        var realmData = SODataBase.GetRealmItem(itemData.realmType);
+                        var realmData = dataManager.GetItemById(itemData.realmId) as RealmData;
+                        if (realmData == null)
+                        {
+                            Debug.LogError($"LoadGame: realmData null for hero at index {i}, realmId = {itemData.realmId}");
+                            continue;
+                        }
                         heroData.realmData = realmData;
 
-                        SetHeroData(itemsData, SODataBase, i, heroData);
+                        SetHeroData(itemsData, dataManager, i, heroData);
                         continue;
                     }
 
@@ -89,7 +94,7 @@ public class ItemCharacterService : ISaveLoadRemote
         });
     }
 
-    private static void SetHeroData(ItemCharacterDataDTO itemsData, ScriptableObjectLoader SODataBase, int i, HeroData heroData)
+    private static void SetHeroData(ItemCharacterDataDTO itemsData, GameDataCenterManager dataManager, int i, HeroData heroData)
     {
         try
         {
@@ -117,7 +122,7 @@ public class ItemCharacterService : ISaveLoadRemote
                         Debug.Log("skill is null");
                         continue;
                     }
-                    var skillData = SODataBase.GetItem(skill.instanceId) as SkillData;
+                    var skillData = dataManager.GetItemById(skill.instanceId) as SkillData;
                     if (skillData == null)
                         continue;
                     heroData.skillDatas[h] = skillData;
@@ -132,7 +137,7 @@ public class ItemCharacterService : ISaveLoadRemote
             for (int s = 0; s < techniqueDatas.Count; s++)
             {
                 var technique = techniqueDatas[s];
-                var techniqueData = SODataBase.GetItem(technique.instanceId) as TechniqueData;
+                var techniqueData = dataManager.GetItemById(technique.instanceId) as TechniqueData;
                 if (techniqueData == null)
                     continue;
                 heroData.techniqueDatas[s] = techniqueData;
@@ -141,12 +146,12 @@ public class ItemCharacterService : ISaveLoadRemote
             for (int k = 0; k < equipmentDatas.Count; k++)
             {
                 var equipment = equipmentDatas[k];
-                var equipmentData = SODataBase.GetItem(equipment.instanceId) as EquitmentData;
+                var equipmentData = dataManager.GetItemById(equipment.instanceId) as EquipmentData;
                 if (equipmentData == null)
                     continue;
                 heroData.equipmentDatas[k] = equipmentData;
             }
-            var statRace = SODataBase.GetRaceItem(heroData.raceType);
+            var statRace = dataManager.GetItemById(heroData.raceId) as RaceData;
             if (statRace != null)
                 heroData.raceData = statRace;
             itemsData.inventoryItems[i] = heroData;

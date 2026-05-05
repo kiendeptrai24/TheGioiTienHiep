@@ -64,7 +64,7 @@ public class HeroData : ItemData
     [JsonIgnore]
     public Vector2Int championIndex;
     public List<string> equipmentIds = new();
-    public List<EquitmentData> equipmentDatas = new();
+    public List<EquipmentData> equipmentDatas = new();
     public List<string> skillIds = new();
     public List<SkillData> skillDatas = new();
     public List<string> techniqueIds = new();

@@ -105,13 +105,13 @@ public class HeroPreset : ItemStatsPreset
         }
         return techniques;
     }
-    public List<EquitmentData> GetEquitmentDatas()
+    public List<EquipmentData> GetEquitmentDatas()
     {
-        List<EquitmentData> equitments = new List<EquitmentData>();
+        List<EquipmentData> equitments = new List<EquipmentData>();
         foreach (var item in equitmentDatas)
         {
             var equitment = item.GetItemData();
-            equitments.Add((EquitmentData)equitment);
+            equitments.Add((EquipmentData)equitment);
         }
         return equitments;
     }

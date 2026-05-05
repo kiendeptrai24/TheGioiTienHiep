@@ -68,7 +68,7 @@ public class ItemEquipmentPreset : ItemStatsPreset
     {
         ItemData data = base.GetItemData();
 
-        return new EquitmentData
+        return new EquipmentData
         {
             // base
             instanceId = data.instanceId,

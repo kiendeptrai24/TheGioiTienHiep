@@ -1,6 +1,3 @@
-
-
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,13 +15,13 @@ public class LoadShopData : ILoadGameData
                 return;
             }
 
-            List<ItemShop> itemDatas = new();
+            List<ItemData> itemDatas = new();
             for (int i = 0; i < shopResponse.Count; i++)
             {
-                ItemShop itemData = new ItemShop();
+                ItemData itemData = new ItemData();
                 var itemDto = shopResponse[i];
                 itemData.instanceId = itemDto.instanceId;
-                itemData.price = itemDto.price;
+                itemData.itemPrice = itemDto.price;
                 itemDatas.Add(itemData);
             }
             gameData.shopItems.AddRange(itemDatas);

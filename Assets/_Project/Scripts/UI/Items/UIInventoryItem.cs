@@ -54,9 +54,9 @@ public class UIInventoryItem : UIItemSlotBase
 
         if (ctx.ItemOfTo != null)
         {
-            if (ctx.ItemOfTo.data is EquitmentData eq)
+            if (ctx.ItemOfTo.data is EquipmentData eq)
             {
-                var eqItemFrom = ctx.ItemOfFrom.data as EquitmentData;
+                var eqItemFrom = ctx.ItemOfFrom.data as EquipmentData;
                 return eqItemFrom.equipmentType == eq.equipmentType;
             }
             else

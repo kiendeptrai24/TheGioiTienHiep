@@ -16,32 +16,22 @@ public class EssenceData : ItemData
     //, 1
     [JsonIgnore]
     public float counterPercentage;
-
-    //Resources (per point)
-    [JsonIgnore]
     public int healthPoint;
-    [JsonIgnore]
     public int manaPoint;
-    [JsonIgnore]
     public int spiritPoint;
-    [JsonIgnore]
     public int physicalDamagePoint;
-    [JsonIgnore]
     public int magicalDamagePoint;
-    [JsonIgnore]
     public int spiritDamagePoint;
-    [JsonIgnore]
     public int physicalDefensePoint;
-    [JsonIgnore]
     public int magicalDefensePoint;
-    [JsonIgnore]
     public int spiritDefensePoint;
 
 
     //Speed / Range (per point)
-    [JsonIgnore]
     public int movementSpeedPoint;
-    [JsonIgnore]
     public int spiritRangePoint;
-
+    override public ItemData Clone()
+    {
+        return (EssenceData)this.MemberwiseClone();
+    }
 }

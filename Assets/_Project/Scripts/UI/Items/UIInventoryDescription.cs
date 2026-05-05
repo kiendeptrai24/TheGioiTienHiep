@@ -45,7 +45,7 @@ public class UIInventoryDescription : MonoBehaviour
     {
         if (inventoryItem == null) return;
 
-        if (inventoryItem.data is EquitmentData)
+        if (inventoryItem.data is EquipmentData)
         {
             cancleBtn.gameObject.SetActive(true);
             acceptBtn.gameObject.SetActive(true);
@@ -60,7 +60,7 @@ public class UIInventoryDescription : MonoBehaviour
     }
     public void SetButtonDescriptionEquipment()
     {
-        if (inventoryItem == null || inventoryItem.data is not EquitmentData) return;
+        if (inventoryItem == null || inventoryItem.data is not EquipmentData) return;
 
         cancleBtn.gameObject.SetActive(true);
         acceptBtn.gameObject.SetActive(true);

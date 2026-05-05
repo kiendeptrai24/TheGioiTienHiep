@@ -17,8 +17,8 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     #region Data
     private Dictionary<string, ItemData> allItemsById = new();
     [SerializeField] private List<ItemData> allItems;
-    private Dictionary<string, ItemShop> shopItemsById = new();
-    [SerializeField] private List<ItemShop> shopItems;
+    private Dictionary<string, ItemData> shopItemsById = new();
+    [SerializeField] private List<ItemData> shopItems;
 
     [SerializeField] private GameDataCenter gameDatas;
 
@@ -37,7 +37,12 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
             return;
         LoadDataLocalCache();
     }
-
+    public ItemData GetItemById(string id)
+    {
+        if (allItemsById.ContainsKey(id))
+            return allItemsById[id];
+        return null;
+    }
     private void LoadDataLocalCache()
     {
         gameDatas = fileDataHandler.Load();
@@ -58,7 +63,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
                 LoadDataRemote();
         });
     }
-    public void LoadVersionRemove(Action<bool> callback)
+    private void LoadVersionRemove(Action<bool> callback)
     {
         clientApi.GetTitleData(new GetTitleDataRequest
         {
@@ -96,12 +101,13 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         loadDataRemote.LoadGame(gameDatas, OnLoadDataRemoteSuccessed);
     }
 
-    public void OnLoadDataRemoteSuccessed()
+    private void OnLoadDataRemoteSuccessed()
     {
         try
         {
             ConfigDataCenter();
             SetupDataWithId();
+            ResolveAllReferences();
             DataCenterReady = true;
             gameDatas.version = serverVersion;
             fileDataHandler.Save(gameDatas);
@@ -144,7 +150,43 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
             gameDatas.allItems.Add(item);
         }
     }
+    private void ResolveAllReferences()
+    {
 
+        foreach (var item in gameDatas.championItems)
+        {
+            var essenceData = GetItemById(item.essenceId).Clone() as EssenceData;
+            var raceData = GetItemById(item.raceId).Clone() as RaceData;
+            var realmData = GetItemById(item.realmId).Clone() as RealmData;
+            item.realmData = realmData;
+            item.essenceData = essenceData;
+            item.raceData = raceData;
+            foreach (var technique in item.techniqueIds)
+            {
+                var techniqueData = GetItemById(technique).Clone() as TechniqueData;
+                if (techniqueData != null)
+                    item.techniqueDatas.Add(techniqueData);
+            }
+            foreach (var skill in item.skillIds)
+            {
+                var skillData = GetItemById(skill).Clone() as SkillData;
+                if (skillData != null)
+                    item.skillDatas.Add(skillData);
+            }
+        }
+        for (int i = 0; i < gameDatas.shopItems.Count; i++)
+        {
+            var item = gameDatas.shopItems[i];
+            var itemData = GetItemById(item.instanceId).Clone();
+            if (itemData != null)
+            {
+                item.itemName = itemData.itemName;
+                item.itemDescription = itemData.itemDescription;
+                item.qualityType = itemData.qualityType;
+            }
+
+        }
+    }
     private void SetupDataWithId()
     {
         foreach (var item in gameDatas.championItems)
@@ -223,7 +265,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     }
 
     [ContextMenu("Clear Data Cache")]
-    public void ClearDataLocalCache()
+    private void ClearDataLocalCache()
     {
         FileDataHandler<GameDataCenter> fileDataHandler = new FileDataHandler<GameDataCenter>(Application.persistentDataPath, fileName, encryptData);
         fileDataHandler.Delete();

@@ -19,18 +19,18 @@ public class ShopClientService : ISaveLoadRemote
                 var itemsShop = new ItemDataDTO();
                 itemsShop = gameDataDTO;
 
-                var SODataBase = ScriptableObjectLoader.Instance;
+                var dataManager = GameDataCenterManager.Instance;
 
                 for (int i = 0; i < itemsShop.inventoryItems.Count; i++)
                 {
                     var item = itemsShop.inventoryItems[i];
-                    var itemData = SODataBase.GetItem(item.instanceId);
+                    var itemData = dataManager.GetItemById(item.instanceId);
                     if (itemData == null)
                         continue;
 
                     if (itemData is HeroData heroData)
                     {
-                        SetHeroData(itemsShop, SODataBase, i, heroData);
+                        SetHeroData(itemsShop, dataManager, i, heroData);
                         continue;
                     }
 
@@ -46,14 +46,14 @@ public class ShopClientService : ISaveLoadRemote
         });
     }
 
-    private void SetHeroData(ItemDataDTO itemsShop, ScriptableObjectLoader SODataBase, int i, HeroData heroData)
+    private void SetHeroData(ItemDataDTO itemsShop, GameDataCenterManager dataManager, int i, HeroData heroData)
     {
 
         for (int h = 0; h < heroData.skillDatas.Count; h++)
         {
             var skill = heroData.skillDatas[h];
 
-            var skillData = SODataBase.GetItem(skill.instanceId) as SkillData;
+            var skillData = dataManager.GetItemById(skill.instanceId) as SkillData;
             if (skillData == null)
                 continue;
             heroData.skillDatas[h] = skillData;
@@ -62,7 +62,7 @@ public class ShopClientService : ISaveLoadRemote
         for (int s = 0; s < heroData.techniqueDatas.Count; s++)
         {
             var technique = heroData.techniqueDatas[s];
-            var techniqueData = SODataBase.GetItem(technique.instanceId) as TechniqueData;
+            var techniqueData = dataManager.GetItemById(technique.instanceId) as TechniqueData;
             if (techniqueData == null)
                 continue;
             heroData.techniqueDatas[s] = techniqueData;

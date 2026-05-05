@@ -2,6 +2,8 @@
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using PlayFab.ClientModels;
+using PlayFab.EconomyModels;
 
 [JsonConverter(typeof(StringEnumConverter))]
 public enum EssenceAndRaceType

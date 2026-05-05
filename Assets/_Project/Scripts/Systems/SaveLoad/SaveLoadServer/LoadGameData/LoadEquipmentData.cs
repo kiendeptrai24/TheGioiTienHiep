@@ -18,7 +18,7 @@ public class LoadEquipmentData : ILoadGameData
             }
 
             List<ItemData> itemDatas = new();
-            List<EquitmentData> equipmentDatas = new();
+            List<EquipmentData> equipmentDatas = new();
             List<TechniqueData> techniqueDatas = new();
             List<SkillData> skillDatas = new();
             for (int i = 0; i < allItem.Count; i++)
@@ -52,12 +52,12 @@ public class LoadEquipmentData : ILoadGameData
             Debug.LogError("LoadGame: Failed to load inventory data " + ex.Message);
         }
     }
-    private static ItemData CreateItem(ItemDataDto itemDto, List<EquitmentData> equipmentDatas, List<SkillData> skillDatas, List<TechniqueData> techniqueDatas)
+    private static ItemData CreateItem(ItemDataDto itemDto, List<EquipmentData> equipmentDatas, List<SkillData> skillDatas, List<TechniqueData> techniqueDatas)
     {
         ItemData itemData;
         if (itemDto.itemType == ItemType.Equipment)
         {
-            var equipData = new EquitmentData();
+            var equipData = new EquipmentData();
             equipData.raceType = itemDto.raceType;
             if (itemDto.equipmentType.HasValue)
                 equipData.equipmentType = itemDto.equipmentType.Value;

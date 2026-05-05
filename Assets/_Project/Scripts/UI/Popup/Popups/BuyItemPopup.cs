@@ -17,7 +17,7 @@ public class BuyItemPopup : BasePopup<ShopSetupData, QuantityPopupData>
     protected Action onShowInfoBtn;
     private int quantity = 1;
     private int priceTotal = 0;
-    private int price = 0;
+    private ulong price = 0;
 
 
     public override void Show()
@@ -45,7 +45,7 @@ public class BuyItemPopup : BasePopup<ShopSetupData, QuantityPopupData>
     }
     private void UpdateQuantity()
     {
-        int totelPrice = quantity * price;
+        ulong totelPrice = (ulong)quantity * price;
         quantityTxt.text = quantity.ToString();
         priceTxt.text = "Tổng: " + totelPrice + "K";
     }

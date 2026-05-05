@@ -116,7 +116,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
             if (result)
             {
                 var heroData = statsManager.heroData as HeroData;
-                var equipmentData = item1.data as EquitmentData;
+                var equipmentData = item1.data as EquipmentData;
                 heroData.equipmentDatas.Remove(equipmentData);
             }
 
@@ -127,7 +127,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
             if (result)
             {
                 var heroData = statsManager.heroData as HeroData;
-                var equipmentData = item2.data as EquitmentData;
+                var equipmentData = item2.data as EquipmentData;
                 heroData.equipmentDatas.Add(equipmentData);
             }
         }
@@ -168,12 +168,12 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         var sortedList = filteredList
             .Where(inv =>
             {
-                var eq = (EquitmentData)inv.data;
+                var eq = (EquipmentData)inv.data;
                 return (eq.equipmentType == selectType)
                     && (eq.qualityType == selectedQuality);
             })
-            .OrderBy(inv => ((EquitmentData)inv.data).equipmentType)
-            .ThenByDescending(inv => ((EquitmentData)inv.data).qualityType)
+            .OrderBy(inv => ((EquipmentData)inv.data).equipmentType)
+            .ThenByDescending(inv => ((EquipmentData)inv.data).qualityType)
             .ToList();
 
         // if sortlist dont have item return empty list

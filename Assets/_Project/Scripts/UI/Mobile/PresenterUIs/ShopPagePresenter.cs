@@ -131,7 +131,7 @@ namespace TGTH.Mobile
 
             var sortedList = listItemDatas
                 .Where(item =>
-                    item.data is EquitmentData equipment &&
+                    item.data is EquipmentData equipment &&
                     equipment.equipmentType == selectedType)
                 .OrderBy(item => item.data.itemType)
                 .ThenByDescending(item => item.data.qualityType)
@@ -199,8 +199,8 @@ namespace TGTH.Mobile
                 popup.ShowPopup(data,
                 onConfirm: (QuantityPopupData result) =>
                 {
-                    int price = uiItem.inventoryItem.data.itemPrice * result.quantity;
-                    ShopRequester.Instance.RequestBuy((ulong)price, (success, message) =>
+                    ulong price = uiItem.inventoryItem.data.itemPrice * (ulong)result.quantity;
+                    ShopRequester.Instance.RequestBuy(price, (success, message) =>
                     {
                         if (success)
                         {

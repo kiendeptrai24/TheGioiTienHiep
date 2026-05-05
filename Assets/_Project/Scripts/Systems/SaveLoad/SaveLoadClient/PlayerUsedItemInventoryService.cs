@@ -24,7 +24,7 @@ public class PlayerUsedItemInventoryService : ISaveLoadRemote
                 var itemsData = new ItemDataDTO();
                 itemsData = gameDataDTO;
 
-                var SODataBase = ScriptableObjectLoader.Instance;
+                var dataManager = GameDataCenterManager.Instance;
 
                 for (int i = 0; i < itemsData.inventoryItems.Count; i++)
                 {
@@ -34,7 +34,7 @@ public class PlayerUsedItemInventoryService : ISaveLoadRemote
                         Debug.Log("item is null");
                         return;
                     }
-                    var itemData = SODataBase.GetItem(item.instanceId);
+                    var itemData = dataManager.GetItemById(item.instanceId);
                     itemsData.inventoryItems[i] = itemData;
                 }
                 gameData.itemUsedDatas.AddRange(itemsData.inventoryItems);

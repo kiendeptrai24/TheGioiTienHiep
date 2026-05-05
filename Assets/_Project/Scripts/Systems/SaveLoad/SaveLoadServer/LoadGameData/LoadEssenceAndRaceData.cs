@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class LoadEssenceAndRaceData : ILoadGameData
 {
-
     public void LoadGameData(GameDataCenter gameData, AllGameDataResponseDto allGameDataDto)
     {
         try
