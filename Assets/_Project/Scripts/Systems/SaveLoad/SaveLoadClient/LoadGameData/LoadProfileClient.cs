@@ -23,11 +23,6 @@ public class LoadProfileClient : ILoadGameData<GameData, PlayerClientDataDto>
             gameData.rotation = Quaternion.LookRotation(profile.rotation.ToVector3());
             gameData.potentialPoint = profile.potentialPoint;
             gameData.skillPoint = profile.skillPoint;
-            gameData.itemDataPoint = profile.itemDataPoint;
-            if (profile.itemDataPoint == null)
-            {
-                gameData.itemDataPoint = new ItemDataPoint();
-            }
             if (profile.position.Equals(default(Vector3DTO)))
             {
                 gameData.position = new Vector3(500, 0, 440);

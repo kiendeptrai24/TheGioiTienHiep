@@ -231,7 +231,6 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     }
     public void OnCharacterLoaded(string characterId)
     {
-        gameData = new GameData();
         gameData.characterId = characterId;
         LoadGameData();
     }

@@ -7,46 +7,40 @@ public class SaveProfileClient : ISaveGameData<GameData, PlayerClientDataDto>
     {
         try
         {
-            if (playerClientDataDto == null)
+            if (gameData == null)
             {
-                gameData.potentialPoint = 5;
-                gameData.skillPoint = 3;
+                Debug.LogError("SetProfile failed: gameData is null");
                 return;
             }
-            if (string.IsNullOrEmpty(playerClientDataDto.profileRes.playerName) == false)
-                gameData.characterName = playerClientDataDto.profileRes.playerName;
-            if (string.IsNullOrEmpty(playerClientDataDto.profileRes.characterId) == false)
-                gameData.characterId = playerClientDataDto.profileRes.characterId;
-            gameData.coins = playerClientDataDto.profileRes.coins;
+            Vector3DTO posDTO = new Vector3DTO(gameData.position);
 
+            Vector3 rot = new Vector3(gameData.rotation.eulerAngles.x, gameData.rotation.eulerAngles.x, gameData.rotation.eulerAngles.x);
 
-            gameData.position = playerClientDataDto.profileRes.position.ToVector3();
-            gameData.rotation = Quaternion.LookRotation(playerClientDataDto.profileRes.rotation.ToVector3());
-            gameData.potentialPoint = playerClientDataDto.profileRes.potentialPoint;
-            gameData.skillPoint = playerClientDataDto.profileRes.skillPoint;
-            gameData.itemDataPoint = playerClientDataDto.profileRes.itemDataPoint;
-            if (playerClientDataDto.profileRes.itemDataPoint == null)
-            {
-                gameData.itemDataPoint = new ItemDataPoint();
-            }
-            if (playerClientDataDto.profileRes.position.Equals(default(Vector3DTO)))
-            {
-                gameData.position = new Vector3(500, 0, 440);
-            }
-            if (playerClientDataDto.profileRes.rotation.Equals(default(Vector3DTO)))
-            {
-                gameData.rotation = Quaternion.identity;
-            }
+            Vector3DTO rotDTO = new Vector3DTO(rot);
 
-            // ===== LOAD OFFLINE MINING DATA =====
-            if (playerClientDataDto.profileRes.mineOfflineDataList != null && playerClientDataDto.profileRes.mineOfflineDataList.Count > 0)
+            ItemDataPoint itemDataPoint = gameData.itemDataPoint;
+
+            if (itemDataPoint == null)
             {
-                gameData.mineOfflineDataList = playerClientDataDto.profileRes.mineOfflineDataList;
+                itemDataPoint = new ItemDataPoint();
             }
+            PlayerProfileDTO profile = new PlayerProfileDTO
+            {
+                characterId = gameData.characterId,
+                coins = gameData.coins,
+                playerName = gameData.characterName,
+                position = posDTO,
+                rotation = rotDTO,
+                potentialPoint = gameData.potentialPoint,
+                skillPoint = gameData.skillPoint,
+                // ===== OFFLINE MINING SAVE =====
+                mineOfflineDataList = gameData.mineOfflineDataList ?? new MineOfflineDataList()
+            };
+            playerClientDataDto.profileRes = profile;
         }
         catch (System.Exception ex)
         {
-            Debug.LogError("LoadGame: Failed to load profile data " + ex.Message);
+            Debug.Log("Error " + ex.Message);
         }
     }
 }

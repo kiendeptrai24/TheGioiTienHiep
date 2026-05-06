@@ -12,8 +12,6 @@ public class PlayerProfileDTO
     public Vector3DTO rotation;
     public int potentialPoint;
     public int skillPoint;
-    public ItemDataPoint itemDataPoint;
-
     // ===== OFFLINE MINING =====
     public MineOfflineDataList mineOfflineDataList = new MineOfflineDataList();  // Replaces Dictionary
 

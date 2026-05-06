@@ -9,7 +9,7 @@ public class PlayerNetManager : Singleton<PlayerNetManager>, ISaveable
     [SerializeField] private NetworkObject playerObject;
     private PlayerController player;
     public event Action<NetworkObject> OnPlayerExiststed;
-    private Vector3 position = new Vector3(500, 0, 440);
+    [SerializeField] private Vector3 position = new Vector3(500, 0, 440);
     private Quaternion rotation = Quaternion.identity;
     public Vector3 GetPos() => position;
     public Quaternion GetRot() => rotation;
