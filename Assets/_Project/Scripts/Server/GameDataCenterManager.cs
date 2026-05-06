@@ -274,4 +274,5 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     }
     public List<ItemData> GetAllCharacters() => gameDatas.characterDatas.ToList<ItemData>();
     public GameDataCenter GetDataCenter() => gameDatas;
+    public List<ItemData> GetShopItems() => shopItems;
 }

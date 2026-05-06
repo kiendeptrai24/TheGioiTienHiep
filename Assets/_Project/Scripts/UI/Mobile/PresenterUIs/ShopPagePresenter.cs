@@ -20,7 +20,7 @@ namespace TGTH.Mobile
         public event Action<int> OnItemActionRequested;
         public event Action<int> OnStartDragging;
         private bool isDraging = false;
-        private InventoryCenterManager inventoryCenterManager;
+        private GameDataCenterManager gameDCM;
         private static string RemoveDiacritics(string text)
         {
             if (string.IsNullOrEmpty(text))
@@ -40,7 +40,7 @@ namespace TGTH.Mobile
         protected override void Awake()
         {
             base.Awake();
-            inventoryCenterManager = InventoryCenterManager.Instance;
+            gameDCM = GameDataCenterManager.Instance;
 
             ProfileManager.Instance.OnProfileCoinsChanged += (profile) =>
             {
@@ -54,7 +54,7 @@ namespace TGTH.Mobile
             view.OnSearchItemSubmit += SearchItemInventory;
             view.ToggleMouseFollower(false);
 
-            var itemdatas = inventoryCenterManager.GetItemShopData();
+            var itemdatas = gameDCM.GetShopItems();
 
             InitializeInventoryUI(itemdatas.Count);
             SetInventoryData(itemdatas);
@@ -200,7 +200,8 @@ namespace TGTH.Mobile
                 onConfirm: (QuantityPopupData result) =>
                 {
                     ulong price = uiItem.inventoryItem.data.itemPrice * (ulong)result.quantity;
-                    ShopRequester.Instance.RequestBuy(price, (success, message) =>
+                    var item = uiItem.inventoryItem.data;
+                    ShopRequester.Instance.RequestBuy(item.instanceId, (success, message) =>
                     {
                         if (success)
                         {
