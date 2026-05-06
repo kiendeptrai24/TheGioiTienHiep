@@ -70,7 +70,6 @@ public static class BattleEventMapper
                 dto.attackerUid = d.attackerUid;
                 break;
             case BattleEventInit b:
-                dto.ownerUid = b.ownerUid;
                 dto.cell = b.cell;
                 dto.maxHp = b.maxHp;
                 dto.curHp = b.curtHp;

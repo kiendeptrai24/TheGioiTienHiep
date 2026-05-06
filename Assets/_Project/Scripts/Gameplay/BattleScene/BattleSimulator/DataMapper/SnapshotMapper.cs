@@ -13,7 +13,7 @@ public static class SnapshotMapper
         {
             snap = new UnitSnapshot
             {
-                uid = heroData.itemId,
+                uid = heroData.instanceId,
                 team = team,
                 hpMax = hp,
                 hp = hp,

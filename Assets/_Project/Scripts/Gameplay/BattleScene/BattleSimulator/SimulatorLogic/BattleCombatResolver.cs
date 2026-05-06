@@ -60,7 +60,7 @@ public static class BattleCombatResolver
                     damage = dmg,
                     isCrit = isCrit,
                     targetHpAfter = def.hp,
-                    skillId = skill.itemId,
+                    skillId = skill.instanceId,
                     castTime = skill.castTime
                 });
             }

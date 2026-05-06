@@ -8,10 +8,16 @@ using UnityEngine;
 
 public class BattlePlayback : Singleton<BattlePlayback>
 {
+    [Serializable]
+    public class ChampionSetup
+    {
+        public string championId;
+        public ChampionController champion;
+    }
     public float timeToDeplay = 0.5f;
     public int[,] framesUnit = new int[10, 10];
     public Transform origin;
-    public List<ChampionController> objects;
+    public List<ChampionSetup> championsSetup;
     public List<BattleEvent> curEvents;
     public Vector2 offsetOrigin = new Vector2(1, 1);
     public Vector2 posOrigin = new Vector2(-5, -5);
@@ -27,13 +33,17 @@ public class BattlePlayback : Singleton<BattlePlayback>
     {
         base.Awake();
         LoadComponent();
-        foreach (var champ in objects)
+        GameDataCenterManager.Instance.OnLoadGameDataCenterSuccessed += OnDataCenterReady;
+    }
+
+    private void OnDataCenterReady(GameDataCenter center)
+    {
+        foreach (var setup in championsSetup)
         {
-            var stats = champ.GetComponent<StatsData>();
-            string id = stats.heroPreset.itemId;
-            championsObject.Add(id, champ);
+            championsObject.Add(setup.championId, setup.champion);
         }
     }
+
     public void SetBattleEvents(List<BattleEvent> events)
     {
         curEvents = events;

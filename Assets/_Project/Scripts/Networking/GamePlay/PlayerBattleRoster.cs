@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class ChampionSetUp
 {
-    public ItemPreset champion;
+    public string championId;
     public Vector2Int championIndex;
 }
 public class PlayerBattleRoster : TGTHNetworkBehaviour
@@ -23,7 +23,7 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
     {
         base.OnNetworkSpawn();
 
-        if (IsOwner)
+        if (IsOwner && player)
         {
             var itemPrefabDatabase = ItemPrefabDatabase.Instance;
             itemPrefabDatabase.OnPlayerPrefabChanged += OnPlayerPrefabChanged;
@@ -32,7 +32,7 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
         if (!IsServer) return;
         foreach (var item in championSetUps)
         {
-            var itemData = item.champion.GetItemData() as HeroData;
+            var itemData = GameDataCenterManager.Instance.GetItemById(item.championId) as HeroData;
             itemData.championIndex = item.championIndex;
             itemDatas.Add(itemData);
         }
