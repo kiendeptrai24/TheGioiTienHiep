@@ -7,7 +7,7 @@ public static class DataMapper
     public static HeroData MapChampionData(ChampionDataDto dto)
     {
         if (dto == null) return null;
-
+        bool isCharacter = dto.isCharacter.HasValue && dto.isCharacter.Value;
         HeroData heroData = new HeroData();
         heroData.instanceId = dto.instanceId;
         heroData.itemName = dto.name;
@@ -18,6 +18,7 @@ public static class DataMapper
         heroData.essenceId = dto.essenceId;
         heroData.elementType = dto.elementType;
         heroData.attackRange = dto.attackRange;
+        heroData.isCharactor = isCharacter;
 
         heroData.healthPoint = dto.healthPoint;
         heroData.manaPoint = dto.manaPoint;
@@ -42,26 +43,22 @@ public static class DataMapper
         heroData.physicalDefenseBonus = DataParseUtils.ParseNumberOrPercent(dto.physicalDefenseBonus);
         heroData.magicalDamageBonus = DataParseUtils.ParseNumberOrPercent(dto.magicalDefenseBonus);
         heroData.spiritDefenseBonus = DataParseUtils.ParseNumberOrPercent(dto.spiritDefenseBonus);
-
-        heroData.techniqueIds.Add(dto.techniqueId);
-        heroData.skillIds = dto.skillsId;
-
-        heroData.techniqueIds.Add(dto.techniqueId);
-        heroData.skillIds = dto.skillsId ?? new List<string>();
-
+        heroData.techniqueIds = dto.techniqueIds ?? new();
+        heroData.skillIds = dto.skillIds ?? new();
+        heroData.equipmentIds = dto.equipmentIds ?? new();
         return heroData;
     }
 
     public static HeroData MapCharacterData(CharacterDataDto dto)
     {
         if (dto == null) return null;
-        Debug.Log($"Mapping CharacterDataDto with instanceId: {dto.instanceId}, raceId: {dto.raceId}, realmId: {dto.realmId}");
         HeroData heroData = new HeroData();
         heroData.instanceId = dto.instanceId;
         heroData.itemDescription = dto.description;
         heroData.raceId = dto.raceId;
         heroData.realmId = dto.realmId;
-        if(!string.IsNullOrEmpty(dto.essenceId))
+        heroData.isCharactor = true;
+        if (!string.IsNullOrEmpty(dto.essenceId))
         {
             heroData.essenceId = dto.essenceId;
         }
@@ -216,7 +213,7 @@ public static class DataMapper
     public static ChampionDataDto ToDto(HeroData data)
     {
         if (data == null) return null;
-
+        bool isCharacter = data.isCharactor;
         return new ChampionDataDto
         {
             instanceId = data.instanceId,
@@ -228,7 +225,7 @@ public static class DataMapper
             essenceId = data.essenceId,
             elementType = data.elementType,
             attackRange = data.attackRange,
-
+            isCharacter = isCharacter,
             healthPoint = data.healthPoint,
             manaPoint = data.manaPoint,
             spiritPoint = data.spiritPoint,
@@ -245,8 +242,10 @@ public static class DataMapper
             manaBonus = data.manaBonus.ToString(),
             spiritBonus = data.spiritBonus.ToString(),
 
-            skillsId = data.skillIds,
-            techniqueId = data.techniqueIds.Count > 0 ? data.techniqueIds[0] : null
+            skillIds = data.skillIds ?? new(),
+            techniqueIds = data.techniqueIds ?? new(),
+            equipmentIds = data.equipmentIds ?? new()
+
         };
     }
     public static ItemDataDto ToDto(ItemData data)

@@ -21,37 +21,9 @@ public class PlayFabDataClientService
     {
         LoadTitleData("character", callback);
     }
-
-    public void LoadShopData(Action<ItemDataDTO> callback)
-    {
-        LoadTitleData("shop", callback);
-    }
-
-    public void LoadPlayerHeroData(string characterId, Action<HeroDataDTO> callback)
-    {
-        LoadUserData($"hero inventory {characterId}", callback);
-    }
-    public void LoadPlayerData(string characterId, Action<ItemDataDTO> callback)
-    {
-        LoadUserData($"inventory {characterId}", callback);
-    }
     public void LoadPlayerInventoryData(string characterId, Action<PlayerClientDataDto> callback)
     {
         LoadUserData($"inventory {characterId}", callback);
-    }
-    public void LoadPlayerDatasUsed(string characterId, Action<ItemDataDTO> callback)
-    {
-        LoadUserData($"inventory used {characterId}", callback);
-    }
-
-    public void LoadTeamData(string characterId, Action<HeroInTeamDataDTO> callback)
-    {
-        LoadUserData($"team {characterId}", callback);
-    }
-
-    public void LoadProfile(string characterId, Action<PlayerProfileDTO> callback)
-    {
-        LoadUserData($"profile {characterId}", callback);
     }
     public void LoadCharacter(Action<ItemCharacterDataDTO> callback)
     {

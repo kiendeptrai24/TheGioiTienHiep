@@ -37,10 +37,12 @@ public class ChampionDataDto
     public int attackRange;
 
     [JsonProperty("mã Công pháp")]
-    public string techniqueId;
+    public List<string> techniqueIds;
 
     [JsonProperty("mã kĩ năng")]
-    public List<string> skillsId;
+    public List<string> skillIds;
+    [JsonProperty("mã trang bị")]
+    public List<string> equipmentIds;
 
     [JsonProperty("Sinh lực điểm")]
     public int healthPoint;
