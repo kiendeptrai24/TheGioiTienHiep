@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +13,12 @@ public class ItemDetailPageView : IItemDetailPageView
     [SerializeField] private Image itemIconImge;
     [SerializeField] private ItemDescriptionDetail itemDescriptionDetailPrefab;
     [SerializeField] private Transform content;
+    private StatsData statsData;
 
-    protected override void Awake() => base.Awake();
+    protected override void Awake()
+    {
+        statsData = GetComponentInParent<StatsData>();
+    }
 
     public override void HandleItemClicked(InventoryItem inventoryItem)
     {
@@ -69,19 +74,24 @@ public class ItemDetailPageView : IItemDetailPageView
     {
         if (!string.IsNullOrEmpty(value)) CreateItemDescriptionDetail(SetColor(label, value, false));
     }
-
-    private void DisplayDamageStats(ItemData data)
+    private void DisplayBaseStat(ItemData data, bool isPercent = false)
     {
-        DisplayStat("Increase Physical Damage", data.physicalDamage);
-        DisplayStat("Increase Magical Damage", data.magicalDamage);
-        DisplayStat("Increase Spirit Damage", data.spiritDamage);
+        DisplayText("Increase Max Health", data.health.ToString(), isPercent);
+        DisplayText("Increase Max Mana", data.mana.ToString(), isPercent);
+        DisplayText("Increase Max Spirit", data.spirit.ToString(), isPercent);
+    }
+    private void DisplayDamageStats(ItemData data, bool isPercent = false)
+    {
+        DisplayStat("Increase Physical Damage", data.physicalDamage, isPercent);
+        DisplayStat("Increase Magical Damage", data.magicalDamage, isPercent);
+        DisplayStat("Increase Spirit Damage", data.spiritDamage, isPercent);
     }
 
-    private void DisplayDefenseStats(ItemData data)
+    private void DisplayDefenseStats(ItemData data, bool isPercent = false)
     {
-        DisplayStat("Increase Physical Defense", data.physicalDefense);
-        DisplayStat("Increase Magical Defense", data.magicalDefense);
-        DisplayStat("Increase Spirit Defense", data.spiritDefense);
+        DisplayStat("Increase Physical Defense", data.physicalDefense, isPercent);
+        DisplayStat("Increase Magical Defense", data.magicalDefense, isPercent);
+        DisplayStat("Increase Spirit Defense", data.spiritDefense, isPercent);
     }
 
     public void SetItemData(ItemData itemData)
@@ -97,53 +107,54 @@ public class ItemDetailPageView : IItemDetailPageView
         DisplayStat("Enhance Level", data.level, false);
         DisplayText("Realm", EnumTranslator.ToVietnamese(data.realmType));
         DisplayText("Element Type", EnumTranslator.ToVietnamese(data.elementType));
-
+        DisplayText("Increase Point", data.potentialPoints.ToString());
         // Damage
-        DisplayDamageStats(data);
-        DisplayDefenseStats(data);
-        DisplayStat("Increase Critical Damage", data.critDamage);
-        DisplayStat("Increase Critical Rate", data.critRate);
-        DisplayStat("Increase Life Steal", data.lifeSteal);
-        DisplayStat("Increase Attack Speed", data.attackSpeed);
+        DisplayBaseStat(data, true);
+        DisplayDamageStats(data, true);
+        DisplayDefenseStats(data, true);
+        // DisplayStat("Increase Critical Damage", data.critDamage);
+        // DisplayStat("Increase Critical Rate", data.critRate);
+        // DisplayStat("Increase Life Steal", data.lifeSteal);
+        // DisplayStat("Increase Attack Speed", data.attackSpeed);
 
-        // Health/Mana
-        DisplayStat("Increase Max Health", data.maxHealth);
-        DisplayStat("Increase Max Mana", data.maxMana);
-        DisplayStat("Increase Max Spirit", data.maxSpirit);
+        // // Health/Mana
+        // DisplayStat("Increase Max Health", data.maxHealth);
+        // DisplayStat("Increase Max Mana", data.maxMana);
+        // DisplayStat("Increase Max Spirit", data.maxSpirit);
 
-        // Regen
-        DisplayStat("Increase Health Regen", data.healthRegen);
-        DisplayStat("Increase Mana Regen", data.manaRegen);
-        DisplayStat("Increase Spirit Regen", data.spiritRegen);
-        DisplayStat("Increase Ally Health Regen", data.allyHealthRegen);
-        DisplayStat("Increase Ally Mana Regen", data.allyManaRegen);
-        DisplayStat("Increase Ally Spirit Regen", data.allySpiritRegen);
+        // // Regen
+        // DisplayStat("Increase Health Regen", data.healthRegen);
+        // DisplayStat("Increase Mana Regen", data.manaRegen);
+        // DisplayStat("Increase Spirit Regen", data.spiritRegen);
+        // DisplayStat("Increase Ally Health Regen", data.allyHealthRegen);
+        // DisplayStat("Increase Ally Mana Regen", data.allyManaRegen);
+        // DisplayStat("Increase Ally Spirit Regen", data.allySpiritRegen);
 
-        // Reduction
-        DisplayStat("Increase Reduce Critical Damage", data.critDamageReduction);
-        DisplayStat("Increase Reduce Armor Penetration", data.armorPenetrationReduction);
-        DisplayStat("Increase Reduce True Damage", data.trueDamageReduction);
+        // // Reduction
+        // DisplayStat("Increase Reduce Critical Damage", data.critDamageReduction);
+        // DisplayStat("Increase Reduce Armor Penetration", data.armorPenetrationReduction);
+        // DisplayStat("Increase Reduce True Damage", data.trueDamageReduction);
 
-        // Other
-        DisplayStat("Increase Reflect Damage", data.reflectDamage);
-        DisplayStat("Increase Move Speed", data.moveSpeed);
-        DisplayStat("Increase Immune Ally Damage", data.immuneAllyDamage);
-        DisplayStat("Increase Immune Ally Effects", data.immuneAllyEffects);
-        DisplayStat("Increase Immune All From Allies", data.immuneAllFromAllies);
-        DisplayStat("Increase Cleanse Ally Effects", data.cleanseAllyEffects);
-        DisplayStat("Increase Grievous Wound", data.grievousWound);
-        DisplayStat("Increase Reduce Enemy Mana", data.reduceEnemyMana);
-        DisplayStat("Increase Reduce Enemy Spirit", data.reduceEnemySpirit);
-        DisplayStat("Increase Weaken Target", data.weakenTarget);
-        DisplayStat("Increase Paralyze Chance", data.paralyzeChance);
-        DisplayStat("Increase Root Chance", data.rootChance);
-        DisplayStat("Increase Stun Chance", data.stunChance);
-        DisplayStat("Increase Silence Chance", data.silenceChance);
-        DisplayStat("Increase Immune Damage", data.immuneDamage);
-        DisplayStat("Increase Immune Effects", data.immuneEffects);
-        DisplayStat("Increase Immune All", data.immuneAll);
-        DisplayStat("Increase Reduce Effect Duration", data.reduceEffectDuration);
-        DisplayStat("Increase Effect Resistance", data.effectResistance);
+        // // Other
+        // DisplayStat("Increase Reflect Damage", data.reflectDamage);
+        // DisplayStat("Increase Move Speed", data.moveSpeed);
+        // DisplayStat("Increase Immune Ally Damage", data.immuneAllyDamage);
+        // DisplayStat("Increase Immune Ally Effects", data.immuneAllyEffects);
+        // DisplayStat("Increase Immune All From Allies", data.immuneAllFromAllies);
+        // DisplayStat("Increase Cleanse Ally Effects", data.cleanseAllyEffects);
+        // DisplayStat("Increase Grievous Wound", data.grievousWound);
+        // DisplayStat("Increase Reduce Enemy Mana", data.reduceEnemyMana);
+        // DisplayStat("Increase Reduce Enemy Spirit", data.reduceEnemySpirit);
+        // DisplayStat("Increase Weaken Target", data.weakenTarget);
+        // DisplayStat("Increase Paralyze Chance", data.paralyzeChance);
+        // DisplayStat("Increase Root Chance", data.rootChance);
+        // DisplayStat("Increase Stun Chance", data.stunChance);
+        // DisplayStat("Increase Silence Chance", data.silenceChance);
+        // DisplayStat("Increase Immune Damage", data.immuneDamage);
+        // DisplayStat("Increase Immune Effects", data.immuneEffects);
+        // DisplayStat("Increase Immune All", data.immuneAll);
+        // DisplayStat("Increase Reduce Effect Duration", data.reduceEffectDuration);
+        // DisplayStat("Increase Effect Resistance", data.effectResistance);
     }
 
     public void SetItemTechniqueData(TechniqueData data)
@@ -152,48 +163,51 @@ public class ItemDetailPageView : IItemDetailPageView
         DisplayStat("Enhance Level", data.enhanceLevel, false);
         DisplayText("Realm", EnumTranslator.ToVietnamese(data.realmType));
         DisplayText("Element Type", EnumTranslator.ToVietnamese(data.elementType));
+        DisplayText("Increase Point", data.potentialPoints.ToString());
+        DisplayBaseStat(data, true);
+        DisplayDamageStats(data, true);
+        DisplayDefenseStats(data, true);
+        // DisplayStat("Attack Range", data.attackRange, false);
+        // DisplayStat("Cooldown", data.cooldown, false);
 
-        DisplayStat("Attack Range", data.attackRange, false);
-        DisplayStat("Cooldown", data.cooldown, false);
+        // DisplayStat("Health Cost", data.healthCost);
+        // DisplayStat("Mana Cost", data.manaCost);
+        // DisplayStat("Spirit Cost", data.spiritCost);
 
-        DisplayStat("Health Cost", data.healthCost);
-        DisplayStat("Mana Cost", data.manaCost);
-        DisplayStat("Spirit Cost", data.spiritCost);
+        // DisplayStat("Required Character Level", data.requiredCharacterLevel, false);
+        // DisplayTextIfNotEmpty("Learn Condition", data.learnCondition);
 
-        DisplayStat("Required Character Level", data.requiredCharacterLevel, false);
-        DisplayTextIfNotEmpty("Learn Condition", data.learnCondition);
+        // DisplayStat("Power Cost", data.powerCost);
+        // DisplayStat("Linh Thao Cost", data.linhThaoCost);
+        // DisplayStat("Mineral Cost", data.khoangThachCost);
+        // DisplayStat("Demon Core Cost", data.yeuDanCost);
+        // DisplayStat("Devil Core Cost", data.maHachCost);
+        // DisplayStat("Spirit Stone Cost", data.linhThachCost);
+        // DisplayStat("Item Cost", data.itemCost);
 
-        DisplayStat("Power Cost", data.powerCost);
-        DisplayStat("Linh Thao Cost", data.linhThaoCost);
-        DisplayStat("Mineral Cost", data.khoangThachCost);
-        DisplayStat("Demon Core Cost", data.yeuDanCost);
-        DisplayStat("Devil Core Cost", data.maHachCost);
-        DisplayStat("Spirit Stone Cost", data.linhThachCost);
-        DisplayStat("Item Cost", data.itemCost);
+        // // Damage
+        // DisplayDamageStats(data);
+        // DisplayDefenseStats(data);
+        // DisplayStat("Increase Crit Damage", data.critDamage);
+        // DisplayStat("Increase Crit Rate", data.critRate);
+        // DisplayStat("Increase Armor Penetration", data.armorPenetration);
+        // DisplayStat("Increase True Damage", data.trueDamage);
+        // DisplayStat("Increase Life Steal", data.lifeSteal);
+        // DisplayStat("Increase Attack Speed", data.attackSpeed);
 
-        // Damage
-        DisplayDamageStats(data);
-        DisplayDefenseStats(data);
-        DisplayStat("Increase Crit Damage", data.critDamage);
-        DisplayStat("Increase Crit Rate", data.critRate);
-        DisplayStat("Increase Armor Penetration", data.armorPenetration);
-        DisplayStat("Increase True Damage", data.trueDamage);
-        DisplayStat("Increase Life Steal", data.lifeSteal);
-        DisplayStat("Increase Attack Speed", data.attackSpeed);
+        // // Defense
+        // DisplayStat("Reduce Penetration Damage", data.penetrationReduction);
+        // DisplayStat("Reduce Crit Damage", data.critDamageReduction);
+        // DisplayStat("Reduce True Damage", data.trueDamageReduction);
 
-        // Defense
-        DisplayStat("Reduce Penetration Damage", data.penetrationReduction);
-        DisplayStat("Reduce Crit Damage", data.critDamageReduction);
-        DisplayStat("Reduce True Damage", data.trueDamageReduction);
+        // // Resource
+        // DisplayStat("Bonus Health", data.bonusHealth);
+        // DisplayStat("Bonus Mana", data.bonusMana);
+        // DisplayStat("Bonus Spirit", data.bonusSpirit);
 
-        // Resource
-        DisplayStat("Bonus Health", data.bonusHealth);
-        DisplayStat("Bonus Mana", data.bonusMana);
-        DisplayStat("Bonus Spirit", data.bonusSpirit);
-
-        // Summary
-        DisplayStat("Total Quality And Level", data.totalQualityAndLevel);
-        DisplayStat("Stat Count", data.statCount);
+        // // Summary
+        // DisplayStat("Total Quality And Level", data.totalQualityAndLevel);
+        // DisplayStat("Stat Count", data.statCount);
     }
 
     public void SetItemHeroData(HeroData data)
@@ -203,21 +217,35 @@ public class ItemDetailPageView : IItemDetailPageView
         DisplayText("Element Type", EnumTranslator.ToVietnamese(data.elementType));
         DisplayText("Race Type", EnumTranslator.ToVietnamese(data.raceType));
         DisplayText("Essence Type", EnumTranslator.ToVietnamese(data.essenceType));
+        DisplayText("Increase Point", data.potentialPoints.ToString());
 
-        DisplayStat("Attack Range", data.attackRange, false);
-        DisplayStat("Bonus Health", data.health);
-        DisplayStat("Bonus Mana", data.mana);
-        DisplayStat("Bonus Spirit", data.spirit);
+        if (statsData == null) statsData = new StatsData();
+        statsData.SetUpItem(data);
 
-        DisplayStat("Increase Physical Damage Point", data.physicalDamagePoint, false);
-        DisplayStat("Increase Magical Damage Point", data.magicalDamagePoint, false);
-        DisplayStat("Increase Spirit Damage Point", data.spiritDamagePoint, false);
-        DisplayStat("Increase Physical Defense Point", data.physicalDefensePoint, false);
-        DisplayStat("Increase Magical Defense Point", data.magicalDefensePoint, false);
-        DisplayStat("Increase Spirit Defense Point", data.spiritDefensePoint, false);
+        DisplayText("Increase Max Health", statsData.Health.ToString());
+        DisplayText("Increase Max Mana", statsData.Mana.ToString());
+        DisplayText("Increase Max Spirit", statsData.Spirit.ToString());
+        DisplayText("Increase Physical Damage", statsData.PhysicalDamage.ToString());
+        DisplayText("Increase Magical Damage", statsData.MagicalDamage.ToString());
+        DisplayText("Increase Spirit Damage", statsData.SpiritDamage.ToString());
+        DisplayText("Increase Physical Defense", statsData.PhysicalDefense.ToString());
+        DisplayText("Increase Magical Defense", statsData.MagicalDefense.ToString());
+        DisplayText("Increase Spirit Defense", statsData.SpiritDefense.ToString());
 
-        DisplayDamageStats(data);
-        DisplayDefenseStats(data);
+        // DisplayStat("Attack Range", data.attackRange, false);
+        // DisplayStat("Bonus Health", data.health);
+        // DisplayStat("Bonus Mana", data.mana);
+        // DisplayStat("Bonus Spirit", data.spirit);
+
+        // DisplayStat("Increase Physical Damage Point", data.physicalDamagePoint, false);
+        // DisplayStat("Increase Magical Damage Point", data.magicalDamagePoint, false);
+        // DisplayStat("Increase Spirit Damage Point", data.spiritDamagePoint, false);
+        // DisplayStat("Increase Physical Defense Point", data.physicalDefensePoint, false);
+        // DisplayStat("Increase Magical Defense Point", data.magicalDefensePoint, false);
+        // DisplayStat("Increase Spirit Defense Point", data.spiritDefensePoint, false);
+
+        // DisplayDamageStats(data);
+        // DisplayDefenseStats(data);
     }
 
     public void SetItemSkillData(SkillData data)
@@ -231,53 +259,56 @@ public class ItemDetailPageView : IItemDetailPageView
         DisplayText("Main Essence", EnumTranslator.ToVietnamese(data.mainEssence));
         DisplayText("Element Type", EnumTranslator.ToVietnamese(data.elementType));
         DisplayText("Realm", EnumTranslator.ToVietnamese(data.realmType));
+        DisplayText("Increase Point", data.potentialPoints.ToString());
+        DisplayBaseStat(data, true);
+        DisplayDamageStats(data, true);
+        DisplayDefenseStats(data, true);
+        // // Combat
+        // DisplayStat("Attack Range", data.attackRange, false);
+        // DisplayStat("Cooldown", data.cooldown, false);
 
-        // Combat
-        DisplayStat("Attack Range", data.attackRange, false);
-        DisplayStat("Cooldown", data.cooldown, false);
+        // // Resource Cost
+        // DisplayStat("Health Cost", data.healthCost);
+        // DisplayStat("Mana Cost", data.manaCost);
+        // DisplayStat("Spirit Cost", data.spiritCost);
 
-        // Resource Cost
-        DisplayStat("Health Cost", data.healthCost);
-        DisplayStat("Mana Cost", data.manaCost);
-        DisplayStat("Spirit Cost", data.spiritCost);
+        // // Learn Conditions
+        // DisplayStat("Required Character Level", data.requiredCharacterLevel, false);
+        // DisplayTextIfNotEmpty("Learn Condition", data.learnCondition);
+        // DisplayTextIfNotEmpty("Other Note", data.otherNote);
 
-        // Learn Conditions
-        DisplayStat("Required Character Level", data.requiredCharacterLevel, false);
-        DisplayTextIfNotEmpty("Learn Condition", data.learnCondition);
-        DisplayTextIfNotEmpty("Other Note", data.otherNote);
+        // // Upgrade Materials
+        // DisplayStat("Power Cost", data.powerCost);
+        // DisplayStat("Linh Thao Cost", data.linhThaoCost);
+        // DisplayStat("Mineral Cost", data.khoangThachCost);
+        // DisplayStat("Demon Core Cost", data.yeuDanCost);
+        // DisplayStat("Devil Core Cost", data.maHachCost);
+        // DisplayStat("Spirit Stone Cost", data.linhThachCost);
+        // DisplayStat("Item Cost", data.itemCost);
 
-        // Upgrade Materials
-        DisplayStat("Power Cost", data.powerCost);
-        DisplayStat("Linh Thao Cost", data.linhThaoCost);
-        DisplayStat("Mineral Cost", data.khoangThachCost);
-        DisplayStat("Demon Core Cost", data.yeuDanCost);
-        DisplayStat("Devil Core Cost", data.maHachCost);
-        DisplayStat("Spirit Stone Cost", data.linhThachCost);
-        DisplayStat("Item Cost", data.itemCost);
+        // // Damage
+        // DisplayDamageStats(data);
+        // DisplayDefenseStats(data);
+        // DisplayStat("Increase Crit Damage", data.critDamage);
+        // DisplayStat("Increase Crit Rate", data.critRate);
+        // DisplayStat("Increase Armor Penetration", data.armorPenetration);
+        // DisplayStat("Increase True Damage", data.trueDamage);
+        // DisplayStat("Increase Life Steal", data.lifeSteal);
+        // DisplayStat("Increase Attack Speed", data.attackSpeed);
 
-        // Damage
-        DisplayDamageStats(data);
-        DisplayDefenseStats(data);
-        DisplayStat("Increase Crit Damage", data.critDamage);
-        DisplayStat("Increase Crit Rate", data.critRate);
-        DisplayStat("Increase Armor Penetration", data.armorPenetration);
-        DisplayStat("Increase True Damage", data.trueDamage);
-        DisplayStat("Increase Life Steal", data.lifeSteal);
-        DisplayStat("Increase Attack Speed", data.attackSpeed);
+        // // Defense
+        // DisplayStat("Reduce Penetration Damage", data.penetrationReduction);
+        // DisplayStat("Reduce Crit Damage", data.critDamageReduction);
+        // DisplayStat("Reduce True Damage", data.trueDamageReduction);
 
-        // Defense
-        DisplayStat("Reduce Penetration Damage", data.penetrationReduction);
-        DisplayStat("Reduce Crit Damage", data.critDamageReduction);
-        DisplayStat("Reduce True Damage", data.trueDamageReduction);
+        // // Resource
+        // DisplayStat("Bonus Health", data.bonusHealth);
+        // DisplayStat("Bonus Mana", data.bonusMana);
+        // DisplayStat("Bonus Spirit", data.bonusSpirit);
 
-        // Resource
-        DisplayStat("Bonus Health", data.bonusHealth);
-        DisplayStat("Bonus Mana", data.bonusMana);
-        DisplayStat("Bonus Spirit", data.bonusSpirit);
-
-        // Summary
-        DisplayStat("Total Quality And Level", data.totalQualityAndLevel);
-        DisplayStat("Stat Count", data.statCount);
+        // // Summary
+        // DisplayStat("Total Quality And Level", data.totalQualityAndLevel);
+        // DisplayStat("Stat Count", data.statCount);
     }
 
     private static readonly System.Collections.Generic.Dictionary<string, string> labelVi = new()
@@ -323,6 +354,7 @@ public class ItemDetailPageView : IItemDetailPageView
         {"Spirit Stone Cost", "Tiêu hao Linh Thạch"},
         {"Item Cost", "Tiêu hao vật phẩm khác"},
         {"Level", "Cấp"},
+        {"Increase Point", "Tiềm năng điểm"},
         {"Increase Physical Damage Point", "Tăng sát thương Điểm Linh Thể"},
         {"Increase Magical Damage Point", "Tăng sát thương Điểm Linh Lực"},
         {"Increase Spirit Damage Point", "Tăng sát thương Điểm Linh Thức"},

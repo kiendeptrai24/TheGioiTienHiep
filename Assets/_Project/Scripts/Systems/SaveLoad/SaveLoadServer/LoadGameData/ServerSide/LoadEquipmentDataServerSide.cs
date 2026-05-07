@@ -27,13 +27,21 @@ public class LoadEquipmentDataServerSide : ILoadGameData<GameDataCenter, AllGame
                 ItemData itemData = DataMapper.MapItemData(itemDto);
                 if (itemData != null)
                 {
-                    itemDatas.Add(itemData);
                     if (itemData is EquipmentData equip)
+                    {
                         equipmentDatas.Add(equip);
+                        itemDatas.Add(equip);
+                    }
                     else if (itemData is SkillData skill)
+                    {
                         skillDatas.Add(skill);
+                        itemDatas.Add(skill);
+                    }
                     else if (itemData is TechniqueData tech)
+                    {
                         techniqueDatas.Add(tech);
+                        itemDatas.Add(tech);
+                    }
                 }
             }
             gameData.equipmentItems = equipmentDatas;

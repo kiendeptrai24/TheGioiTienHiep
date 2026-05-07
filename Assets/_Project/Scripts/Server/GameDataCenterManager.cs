@@ -91,6 +91,8 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         LoadAllData();
         ConfigDataCenter();
         ResolveAllReferences();
+        SetupShop();
+        ConfigShopDataCenter();
         DataCenterReady = true;
         OnLoadGameDataCenterSuccessed?.Invoke(gameDatas);
     }
@@ -109,6 +111,9 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         {
             ConfigDataCenter();
             ResolveAllReferences();
+            SetupShop();
+            ConfigShopDataCenter();
+
             DataCenterReady = true;
             gameDatas.version = serverVersion;
             fileDataHandler.Save(gameDatas);
@@ -176,6 +181,22 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         }
     }
 
+    private void SetupShop()
+    {
+        var shopItem = gameDatas.shopItems.ToList();
+        gameDatas.shopItems.Clear();
+        for (int i = 0; i < shopItem.Count; i++)
+        {
+            var item = shopItem[i];
+            var itemData = GetItemById(item.instanceId).Clone();
+            if (itemData != null)
+            {
+                itemData.itemPrice = item.itemPrice;
+            }
+            gameDatas.shopItems.Add(itemData);
+        }
+    }
+
     private void ConfigDataCenter()
     {
         allItems.Clear();
@@ -195,6 +216,10 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
             allItemsById.Add(item.instanceId, item);
             allItems.Add(item);
         }
+    }
+
+    private void ConfigShopDataCenter()
+    {
         shopItems.Clear();
         shopItemsById.Clear();
         foreach (var item in gameDatas.shopItems)
