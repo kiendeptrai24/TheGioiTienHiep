@@ -210,6 +210,32 @@ public static class DataMapper
 
         return itemData;
     }
+
+    public static SpiritStoneMineData MapSpiritStoneMineData(SpiritStoneMineDataDto dto)
+    {
+        if (dto == null) return null;
+        SpiritStoneMineData mineData = new SpiritStoneMineData();
+        mineData.instanceId = dto.instanceId;
+        mineData.itemName = dto.name;
+        mineData.level = dto.level;
+        mineData.maxStorage = dto.amount;
+        mineData.yieldPerHarvest = dto.yieldPerHarvest;
+        mineData.miningTime = 1;
+        return mineData;
+
+    }
+    public static DemonBeastData MapDemonBeastData(DemonBeastDataDto dto)
+    {
+        if (dto == null) return null;
+        DemonBeastData beastData = new DemonBeastData();
+        beastData.instanceId = dto.instanceId;
+        beastData.itemName = dto.name;
+        beastData.itemDescription = dto.description;
+        beastData.level = dto.level;
+        beastData.lthach = dto.lthach;
+        return beastData;
+    }
+
     public static ChampionDataDto ToDto(HeroData data)
     {
         if (data == null) return null;

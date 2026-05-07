@@ -4,30 +4,32 @@ using WorldMap.Travel;
 
 public class ItemMapWorld : TGTHNetworkBehaviour
 {
-    [SerializeField] private ItemResourcePreset itemDataPreset;
     private Canvas canvas;
-    private ItemData itemData;
+    [SerializeField] private string instanceId;
+    private ItemResourseData itemData;
     protected override void Awake()
     {
         base.Awake();
         canvas = GetComponentInChildren<Canvas>();
         LoadComponent();
         HideIcon();
-        ResetItemData();
     }
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        ResetItemData();
     }
-    public ItemData GetItemData()
+    public ItemResourseData GetItemData()
     {
         return itemData;
     }
     public void ResetItemData()
     {
-        itemData = itemDataPreset.GetItemData();
-        var itemResources = itemData as ItemResourseData;
-        itemResources.position = transform.position;
+        itemData = GameDataCenterManager.Instance.GetItemById(instanceId) as ItemResourseData;
+        if (itemData != null)
+        {
+            itemData.position = transform.position;
+        }
     }
     public void ShowIcon() => canvas.enabled = true;
     public void HideIcon() => canvas.enabled = false;

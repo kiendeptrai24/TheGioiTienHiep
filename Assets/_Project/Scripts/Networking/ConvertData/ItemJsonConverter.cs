@@ -69,39 +69,39 @@ public class ItemJsonConverter
             {
                 var skill = skillDatas[h];
 
-                var skillData = gameData.GetItemById(skill.instanceId) as SkillData;
+                var skillData = gameData.GetItemById(skill.instanceId);
                 if (skillData == null)
                     continue;
-                heroData.skillDatas.Add(skillData);
+                heroData.skillDatas.Add(skillData.Clone() as SkillData);
             }
 
             var techniqueDatas = champion.techniqueDatas;
             for (int s = 0; s < techniqueDatas.Count; s++)
             {
                 var technique = techniqueDatas[s];
-                var techniqueData = gameData.GetItemById(technique.instanceId) as TechniqueData;
+                var techniqueData = gameData.GetItemById(technique.instanceId);
                 if (techniqueData == null)
                     continue;
-                heroData.techniqueDatas.Add(techniqueData);
+                heroData.techniqueDatas.Add(techniqueData.Clone() as TechniqueData);
             }
             var equipmentDatas = champion.equipmentDatas;
             for (int k = 0; k < equipmentDatas.Count; k++)
             {
                 var equipment = equipmentDatas[k];
-                var equipmentData = gameData.GetItemById(equipment.instanceId) as EquipmentData;
+                var equipmentData = gameData.GetItemById(equipment.instanceId);
                 if (equipmentData == null)
                     continue;
-                heroData.equipmentDatas.Add(equipmentData);
+                heroData.equipmentDatas.Add(equipmentData.Clone() as EquipmentData);
             }
             var raceData = gameData.GetItemById(heroData.raceId) as RaceData;
             if (raceData != null)
-                heroData.raceData = raceData;
+                heroData.raceData = raceData.Clone() as RaceData;
             var essenceData = gameData.GetItemById(heroData.essenceId) as EssenceData;
             if (essenceData != null)
-                heroData.essenceData = essenceData;
+                heroData.essenceData = essenceData.Clone() as EssenceData;
             var realmData = gameData.GetItemById(heroData.realmId) as RealmData;
             if (realmData != null)
-                heroData.realmData = realmData;
+                heroData.realmData = realmData.Clone() as RealmData;
             itemsteam.inventoryItems[i] = heroData;
         }
         catch (System.Exception ex)

@@ -6,7 +6,7 @@ public class MineInfoPresenter : TGTHMonoBehaviour
 {
     [SerializeField] private MineInfoPageView view;
     [SerializeField] private CloseButton backBtn;
-    [SerializeField] private ItemResourseData itemResourseData;
+    [SerializeField] private SpiritStoneMineData itemResourseData;
     private float currentProduction = 0;
     private float currentMiningProgress = 0;
     private float lastTimeClick = 0;
@@ -24,7 +24,7 @@ public class MineInfoPresenter : TGTHMonoBehaviour
         {
             return;
         }
-        itemResourseData = itemData as ItemResourseData;
+        itemResourseData = itemData as SpiritStoneMineData;
         if (itemResourseData == null)
         {
             return;

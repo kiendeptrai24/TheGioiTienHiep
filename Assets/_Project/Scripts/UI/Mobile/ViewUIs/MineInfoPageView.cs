@@ -23,7 +23,7 @@ namespace TGTH.Mobile
         }
         public void Show(ItemData itemData)
         {
-            var itemResourseData = itemData as ItemResourseData;
+            var itemResourseData = itemData as SpiritStoneMineData;
             mineIcon.sprite = itemResourseData.itemIcon;
             nameTxt.text = itemResourseData.itemName;
             productionTxt.text = itemResourseData.currentAmount.ToString() + "/" + itemResourseData.maxStorage.ToString();
@@ -31,7 +31,7 @@ namespace TGTH.Mobile
         }
         public void UpdateProduction(ItemData itemData)
         {
-            var itemResourseData = itemData as ItemResourseData;
+            var itemResourseData = itemData as SpiritStoneMineData;
             int currentSecond = Mathf.FloorToInt(itemResourseData.currentMiningProgress);
             productionTxt.text = itemResourseData.currentAmount.ToString() + "/" + itemResourseData.maxStorage.ToString();
             TimeToHavest.text = currentSecond.ToString() + "s";

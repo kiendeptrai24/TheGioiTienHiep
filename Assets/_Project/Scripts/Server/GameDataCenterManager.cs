@@ -90,7 +90,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     {
         LoadAllData();
         ConfigDataCenter();
-        SetupDataWithId();
+        ResolveAllReferences();
         DataCenterReady = true;
         OnLoadGameDataCenterSuccessed?.Invoke(gameDatas);
     }
@@ -108,7 +108,6 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         try
         {
             ConfigDataCenter();
-            SetupDataWithId();
             ResolveAllReferences();
             DataCenterReady = true;
             gameDatas.version = serverVersion;
@@ -154,7 +153,6 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     }
     private void ResolveAllReferences()
     {
-
         foreach (var item in gameDatas.championItems)
         {
             var essenceData = GetItemById(item.essenceId).Clone() as EssenceData;
@@ -174,61 +172,6 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
                 var skillData = GetItemById(skill).Clone() as SkillData;
                 if (skillData != null)
                     item.skillDatas.Add(skillData);
-            }
-        }
-        for (int i = 0; i < gameDatas.shopItems.Count; i++)
-        {
-            var item = gameDatas.shopItems[i];
-            var itemData = GetItemById(item.instanceId).Clone();
-            if (itemData != null)
-            {
-                item.itemName = itemData.itemName;
-                item.itemDescription = itemData.itemDescription;
-                item.qualityType = itemData.qualityType;
-            }
-
-        }
-    }
-    private void SetupDataWithId()
-    {
-        foreach (var item in gameDatas.championItems)
-        {
-            if (allItemsById.ContainsKey(item.essenceId))
-            {
-                var essenceData = allItemsById[item.essenceId] as EssenceData;
-                if (essenceData != null)
-                {
-                    item.essenceData = essenceData;
-                    item.essenceType = essenceData.essenceType;
-                }
-            }
-            if (allItemsById.ContainsKey(item.raceId))
-            {
-                var raceData = allItemsById[item.raceId] as RaceData;
-                if (item.raceData != null)
-                {
-                    item.raceData = raceData;
-                    item.raceType = raceData.raceType;
-                }
-            }
-            if (allItemsById.ContainsKey(item.realmId))
-            {
-                var realmData = allItemsById[item.realmId] as RealmData;
-                if (realmData != null)
-                {
-                    item.realmData = realmData;
-                    item.realmType = realmData.realmType;
-                }
-            }
-            foreach (var technique in item.techniqueIds)
-            {
-                if (allItemsById.ContainsKey(technique))
-                    item.techniqueDatas.Add(allItemsById[technique] as TechniqueData);
-            }
-            foreach (var skill in item.skillIds)
-            {
-                if (allItemsById.ContainsKey(skill))
-                    item.skillDatas.Add(allItemsById[skill] as SkillData);
             }
         }
     }

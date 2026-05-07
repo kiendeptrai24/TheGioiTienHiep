@@ -17,6 +17,8 @@ public class GameDataCenter
     public List<HeroData> championItems;
     public List<HeroData> characterDatas;
     public List<ItemData> shopItems;
+    public List<SpiritStoneMineData> spiritStoneMineItems;
+    public List<DemonBeastData> demonBeastItems;
 
     public GameDataCenter()
     {
@@ -31,5 +33,7 @@ public class GameDataCenter
         championItems = new List<HeroData>();
         characterDatas = new List<HeroData>();
         shopItems = new List<ItemData>();
+        spiritStoneMineItems = new List<SpiritStoneMineData>();
+        demonBeastItems = new List<DemonBeastData>();
     }
 }

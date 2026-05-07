@@ -36,7 +36,7 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
     [Space]
 
     [Header("Mine Config")]
-    [SerializeField] private ItemResourseData miningData;
+    [SerializeField] private SpiritStoneMineData miningData;
 
     public List<MineOwnershipSegment> history;
 
@@ -51,7 +51,7 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
     [SerializeField] private MineOwnershipSegment newSegment;
     private PlayerBattleRoster battleRoster;
     [SerializeField] private ItemMapWorld itemMapWorld;
-    public ItemData GetItemResourseData()
+    public SpiritStoneMineData GetItemResourseData()
     {
         if (miningData != null)
         {
@@ -66,7 +66,6 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         base.Awake();
         itemMapWorld = GetComponent<ItemMapWorld>();
         battleRoster = GetComponent<PlayerBattleRoster>();
-        ResetResource();
     }
     public override void OnNetworkSpawn()
     {
@@ -75,13 +74,14 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         {
             SpawnMine.Instance.AddNetObject(NetworkObject);
         }
+        ResetResource();
     }
 
     public void ResetResource()
     {
         if (itemMapWorld == null) return;
         itemMapWorld.ResetItemData();
-        miningData = itemMapWorld.GetItemData() as ItemResourseData;
+        miningData = itemMapWorld.GetItemData() as SpiritStoneMineData;
         if (!IsServer)
             return;
 
@@ -230,7 +230,7 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
 
         if (miningData == null)
         {
-            miningData = itemMapWorld.GetItemData() as ItemResourseData;
+            miningData = itemMapWorld.GetItemData() as SpiritStoneMineData;
             return;
         }
         if (miningData.currentMiningProgress >= miningData.maxStorage)
