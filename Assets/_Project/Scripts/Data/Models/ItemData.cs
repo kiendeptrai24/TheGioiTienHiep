@@ -23,7 +23,9 @@ public class ItemData
     public QualityType qualityType;
     public ElementType elementType;
     //Offensive Stats
-
+    public float health;
+    public float mana;
+    public float spirit;
     public float physicalDamage;
     public float magicalDamage;
     public float spiritDamage;

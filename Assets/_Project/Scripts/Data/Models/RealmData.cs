@@ -7,10 +7,6 @@ public class RealmData : ItemData
 {
     //Cultivation Realm
     public string description;
-    //Resources
-    public int maxHealth;
-    public int maxMana;
-    public int maxSpirit;
 
     //Offensive Stats
     [JsonIgnore]

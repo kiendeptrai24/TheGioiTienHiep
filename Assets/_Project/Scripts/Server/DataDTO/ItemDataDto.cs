@@ -24,31 +24,30 @@ public class ItemDataDto
     public RealmType realmType;
 
     [JsonProperty("sinh lực")]
-    public float health;
+    public string health;
 
     [JsonProperty("linh lực")]
-    public float mana;
-
+    public string mana;
     [JsonProperty("linh thức")]
-    public int spirit;
+    public string spirit;
 
     [JsonProperty("sát thương sing lực")]
-    public float physicalDamage;
+    public string physicalDamage;
 
     [JsonProperty("sát thương linh lực")]
-    public float magicalDamage;
+    public string magicalDamage;
 
     [JsonProperty("sát thương linh thức")]
-    public float spiritDamage;
+    public string spiritDamage;
 
     [JsonProperty("phòng ngự sing lực")]
-    public float physicalDefense;
+    public string physicalDefense;
 
     [JsonProperty("phòng ngự linh lực")]
-    public float magicalDefense;
+    public string magicalDefense;
 
     [JsonProperty("phòng ngự linh thức")]
-    public float spiritDefense;
+    public string spiritDefense;
 
     [JsonProperty("điểm tiềm năng")]
     public int potentialPoints;

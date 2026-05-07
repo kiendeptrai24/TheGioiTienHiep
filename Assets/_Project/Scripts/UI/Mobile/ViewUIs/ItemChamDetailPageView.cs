@@ -152,12 +152,12 @@ public class ItemChamDetailPageView : IItemDetailPageView
     public string GetDescriptionText(RealmData realData)
     {
         string description = "";
-        if (realData.maxHealth > 0)
-            description += $"+ Sinh lực: {realData.maxHealth}\n";
-        if (realData.maxMana > 0)
-            description += $"+ Linh lực: {realData.maxMana}\n";
-        if (realData.maxSpirit > 0)
-            description += $"+ Linh thức: {realData.maxSpirit}\n";
+        if (realData.health > 0)
+            description += $"+ Sinh lực: {realData.health}\n";
+        if (realData.mana > 0)
+            description += $"+ Linh lực: {realData.mana}\n";
+        if (realData.spirit > 0)
+            description += $"+ Linh thức: {realData.spirit}\n";
 
         // Base Damage Stats (from ItemData)
         if (realData.physicalDamage > 0)

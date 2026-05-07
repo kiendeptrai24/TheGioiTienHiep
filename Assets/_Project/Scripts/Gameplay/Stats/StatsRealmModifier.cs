@@ -12,9 +12,9 @@ public class StatsRealmModifier : StatsModifierBase
         if (data == null) return;
         base.AddStats(stats, itemData);
 
-        AddValue(StatType.Health, data.maxHealth);
-        AddValue(StatType.Mana, data.maxMana);
-        AddValue(StatType.Spirit, data.maxSpirit);
+        AddValue(StatType.Health, data.health);
+        AddValue(StatType.Mana, data.mana);
+        AddValue(StatType.Spirit, data.spirit);
         AddValue(StatType.CritChance, data.critRate);
         AddValue(StatType.CritPower, data.critDamage);
         AddValue(StatType.ArmorPenetration, data.armorPenetration);
@@ -40,9 +40,9 @@ public class StatsRealmModifier : StatsModifierBase
         if (data == null) return;
         base.RemoveStats(stats, itemData);
 
-        RemoveValue(StatType.Health, data.maxHealth);
-        RemoveValue(StatType.Mana, data.maxMana);
-        RemoveValue(StatType.Spirit, data.maxSpirit);
+        RemoveValue(StatType.Health, data.health);
+        RemoveValue(StatType.Mana, data.mana);
+        RemoveValue(StatType.Spirit, data.spirit);
         RemoveValue(StatType.CritChance, data.critRate);
         RemoveValue(StatType.CritPower, data.critDamage);
         RemoveValue(StatType.ArmorPenetration, data.armorPenetration);

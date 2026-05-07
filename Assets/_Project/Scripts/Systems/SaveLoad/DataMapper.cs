@@ -105,14 +105,16 @@ public static class DataMapper
         itemData.itemType = dto.itemType;
         itemData.qualityType = dto.qualityType;
         itemData.realmType = dto.realmType;
+        itemData.health = DataParseUtils.ParseNumberOrPercent(dto.health);
+        itemData.mana = DataParseUtils.ParseNumberOrPercent(dto.mana);
+        itemData.spirit = DataParseUtils.ParseNumberOrPercent(dto.spirit);
+        itemData.physicalDamage = DataParseUtils.ParseNumberOrPercent(dto.physicalDamage);
+        itemData.magicalDamage = DataParseUtils.ParseNumberOrPercent(dto.magicalDamage);
+        itemData.spiritDamage = DataParseUtils.ParseNumberOrPercent(dto.spiritDamage);
 
-        itemData.physicalDamage = dto.physicalDamage;
-        itemData.magicalDamage = dto.magicalDamage;
-        itemData.spiritDamage = dto.spiritDamage;
-
-        itemData.physicalDefense = dto.physicalDefense;
-        itemData.magicalDefense = dto.magicalDefense;
-        itemData.spiritDefense = dto.spiritDefense; // Note: typo in DTO, assuming it's spiritDefense
+        itemData.physicalDefense = DataParseUtils.ParseNumberOrPercent(dto.physicalDefense);
+        itemData.magicalDefense = DataParseUtils.ParseNumberOrPercent(dto.magicalDefense);
+        itemData.spiritDefense = DataParseUtils.ParseNumberOrPercent(dto.spiritDefense);
 
         itemData.potentialPoints = dto.potentialPoints;
 
@@ -178,9 +180,9 @@ public static class DataMapper
         realmData.instanceId = dto.instanceId;
         realmData.realmId = dto.instanceId;
         realmData.realmType = dto.realmType;
-        realmData.maxHealth = dto.health;
-        realmData.maxMana = dto.mana;
-        realmData.maxSpirit = dto.spirit;
+        realmData.health = dto.health;
+        realmData.mana = dto.mana;
+        realmData.spirit = dto.spirit;
         realmData.physicalDamage = dto.physicalDamage;
         realmData.magicalDamage = dto.magicalDamage;
         realmData.spiritDamage = dto.spiritDamage;
@@ -287,13 +289,13 @@ public static class DataMapper
             qualityType = data.qualityType,
             realmType = data.realmType,
 
-            physicalDamage = data.physicalDamage,
-            magicalDamage = data.magicalDamage,
-            spiritDamage = data.spiritDamage,
+            physicalDamage = data.physicalDamage + "",
+            magicalDamage = data.magicalDamage + "",
+            spiritDamage = data.spiritDamage + "",
 
-            physicalDefense = data.physicalDefense,
-            magicalDefense = data.magicalDefense,
-            spiritDefense = data.spiritDefense,
+            physicalDefense = data.physicalDefense + "",
+            magicalDefense = data.magicalDefense + "",
+            spiritDefense = data.spiritDefense + "",
 
             potentialPoints = data.potentialPoints
         };

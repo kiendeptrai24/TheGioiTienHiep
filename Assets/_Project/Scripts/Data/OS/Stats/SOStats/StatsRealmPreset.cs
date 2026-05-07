@@ -364,9 +364,9 @@ public class StatsRealmPreset : ItemPreset
         data.itemName = itemName;
 
         data.description = itemDescription;
-        data.maxHealth = Mathf.RoundToInt(health);
-        data.maxMana = Mathf.RoundToInt(mana);
-        data.maxSpirit = Mathf.RoundToInt(spirit);
+        data.health = Mathf.RoundToInt(health);
+        data.mana = Mathf.RoundToInt(mana);
+        data.spirit = Mathf.RoundToInt(spirit);
 
         data.physicalDamage = Mathf.RoundToInt(physicalDamage);
         data.magicalDamage = Mathf.RoundToInt(magicalDamage);

@@ -28,12 +28,6 @@ public class HeroData : ItemData
     [JsonIgnore]
     public float attackSpeed;
     [JsonIgnore]
-    public float health; // persent
-    [JsonIgnore]
-    public float mana; // persent
-    [JsonIgnore]
-    public float spirit; // persent
-    [JsonIgnore]
     public float healthRegen;
     [JsonIgnore]
     public float manaRegen;
