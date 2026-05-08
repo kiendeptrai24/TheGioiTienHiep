@@ -155,6 +155,14 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         {
             gameDatas.allItems.Add(item);
         }
+        foreach (var item in gameDatas.spiritStoneMineItems)
+        {
+            gameDatas.allItems.Add(item);
+        }
+        foreach (var item in gameDatas.demonBeastItems)
+        {
+            gameDatas.allItems.Add(item);
+        }
     }
     private void ResolveAllReferences()
     {
