@@ -142,7 +142,6 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         if (!IsServer)
             return;
         LevelUpValidationResult result = new();
-        Debug.Log($"Received level up request from client {playerClientId}");
         if (!NetworkManager.ConnectedClients.TryGetValue(playerClientId, out var client))
             return;
         var playerObj = client.PlayerObject;
@@ -157,20 +156,9 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         HeroData heroData = statsData.heroData as HeroData;
         LevelUpConditionData conditionData = new();
 
-        if (heroData == null)
-            result = new LevelUpValidationResult(false, "Hero data không hợp lệ");
-
-        if (heroData.levelUpConditionData == null)
-            result = new LevelUpValidationResult(false, "Điều kiện lên cấp không hợp lệ");
-
         var realmType = heroData.realmType;
         if (realmType == RealmType.PhiThang)
             result = new LevelUpValidationResult(false, "Đã đạt cấp độ tối đa, không thể lên cấp tiếp");
-
-        if (playerResource == null)
-            result = new LevelUpValidationResult(false, "Player resource không hợp lệ");
-        if (CheckResources(playerResource, heroData.levelUpConditionData) == false)
-            result = new LevelUpValidationResult(false, "Không đủ nguyên liệu lên cấp");
 
         var nextRealm = levelUpStranlation.GetNextRealm(realmType);
         if (nextRealm == null)
@@ -179,10 +167,24 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         conditionData.conditionType = LevelUpConditionType.ChampionLevel;
         conditionData.linhThach = nextRealm.linhThachCost;
 
+        if (heroData == null)
+            result = new LevelUpValidationResult(false, "không hợp lệ");
+
+        if (playerResource == null)
+            result = new LevelUpValidationResult(false, "không hợp lệ");
+
+        if (CheckResources(playerResource, conditionData) == false)
+        {
+            result = new LevelUpValidationResult(false, "Không đủ nguyên liệu lên cấp");
+            SendMessegeToClientRpc(JsonConvert.SerializeObject(result),
+           new ClientRpcParams
+           {
+               Send = new ClientRpcSendParams { TargetClientIds = new[] { playerObj.OwnerClientId } }
+           });
+        }
+
         float success = GetPercentSuccess(nextRealm.realmType);
         float roll = nextRealm.rate;
-        if (CheckResources(playerResource, conditionData) == false)
-            result = new LevelUpValidationResult(false, "Không đủ nguyên liệu lên cấp");
 
         if (roll > success)
         {
@@ -420,7 +422,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         CheckLevelUpValidationResult levelupChecking = new();
         var conditionData = new LevelUpConditionData();
         var itemData = levelUpStranlation.GetItemDict(instanceId);
-        if(itemData == null)
+        if (itemData == null)
         {
             Debug.LogError($"Item data with instanceId {instanceId} not found");
             return;
@@ -431,7 +433,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         var playerObj = client.PlayerObject;
         var profile = playerObj.GetComponent<PlayerProfile>();
         var playerResource = profile.GetPlayerResource();
-        if(itemData is RealmData realm)
+        if (itemData is RealmData realm)
         {
             conditionData.linhThach = realm.linhThachCost;
         }
