@@ -61,8 +61,8 @@ namespace TGTH.Mobile
             ManaPointTxt.text = stats[StatType.ManaPoint].GetValue().ToString();
             spiritPointTxt.text = stats[StatType.SpiritPoint].GetValue().ToString();
 
-            spiritRangeTxt.text = stats[StatType.SpiritRange].GetValue().ToString();
-            moveSpeedTxt.text = stats[StatType.MovementSpeed].GetValue().ToString();
+            spiritRangeTxt.text = stats[StatType.SpiritRangePoint].GetValue().ToString();
+            moveSpeedTxt.text = stats[StatType.MoveSpeedPoint].GetValue().ToString();
 
             physicalDamageTxt.text = stats[StatType.PhysicalDamage].GetValue().ToString();
             magicalDamageTxt.text = stats[StatType.MagicalDamage].GetValue().ToString();
