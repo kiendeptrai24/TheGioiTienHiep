@@ -1,3 +1,5 @@
+using System;
+using NUnit.Framework.Constraints;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -22,6 +24,7 @@ public class MonsterClickable : EntityClickable
             ulong networkOwner = playerNet.OwnerClientId;
             if (win)
             {
+                RewardsAndPunishments(heroId, enemyId);
                 NotifyResultClientRpc(
                 $"Bạn đã thắng",
                 new ClientRpcParams
@@ -35,7 +38,7 @@ public class MonsterClickable : EntityClickable
             }
             else
             {
-                if (playerNet)
+                if (playerNet != null)
                 {
                     playerNet.transform.position = new Vector3(500, 0, 440);
                     playerNet.transform.rotation = Quaternion.identity;
@@ -53,6 +56,23 @@ public class MonsterClickable : EntityClickable
             }
         });
     }
+    private void RewardsAndPunishments(ulong heroId, ulong enemyId)
+    {
+        if (!IsServer) return;
+
+        var heroObject = NetworkManager.SpawnManager.SpawnedObjects[heroId];
+        var enemyObject = NetworkManager.SpawnManager.SpawnedObjects[enemyId];
+
+        if (heroObject == null || enemyObject == null) return;
+        var heroResource = heroObject.GetComponent<ResourceStorage>();
+        var enemyMapWorld = enemyObject.GetComponent<ItemMapWorld>();
+        if (heroResource == null || enemyMapWorld == null) return;
+        var itemData = enemyMapWorld.GetItemData() as DemonBeastData;
+        if (itemData == null) return;
+        ulong reward = itemData.lthach;
+        heroResource.PlusCost(reward);
+    }
+
     [ClientRpc]
     private void NotifyResultClientRpc(string message, ClientRpcParams clientRpcParams = default)
     {
