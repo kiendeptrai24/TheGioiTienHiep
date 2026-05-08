@@ -226,8 +226,9 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         gameData.itemCharacterDatas.Add(itemCharacter);
         OnCharacterChanged?.Invoke(gameData.itemCharacterDatas);
 
+        gameData.potentialPoint = heroData.realmData.rewardPotentialPoint;
+        gameData.skillPoint = heroData.realmData.rewardSkillPoint;
         characterService.SaveGame(gameData);
-        SaveGameData();
     }
     public void OnCharacterLoaded(string characterId)
     {

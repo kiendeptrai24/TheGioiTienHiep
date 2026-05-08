@@ -39,10 +39,6 @@ public class StatsCharacterModifier : StatsModifierBase
 
         AddValue(StatType.MoveSpeedPoint, data.moveSpeedPoint);
         AddValue(StatType.SpiritRangePoint, data.spititRangePoint);
-
-        AddValue(StatType.PotentialPoint, data.potentialPoint);
-        AddValue(StatType.SkillPoint, data.skillPoint);
-
     }
     public override void RemoveStats(Dictionary<StatType, Stat> stats, ItemData itemData)
     {

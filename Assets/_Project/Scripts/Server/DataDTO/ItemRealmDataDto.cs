@@ -44,7 +44,7 @@ public class ItemRealmDataDto
     [JsonProperty("Tiềm năng điểm")]
     public int potentialPoints;
 
-    [JsonProperty("kỹ năng điểm")]
+    [JsonProperty("Kĩ năng điểm")]
     public int skillPoints;
 
     [JsonProperty("Linh thạch")]

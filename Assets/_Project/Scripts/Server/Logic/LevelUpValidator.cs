@@ -369,13 +369,6 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
                     break;
             }
         }
-
-
-    }
-    [ContextMenu("Test Validate Hero Level Up")]
-    public void Request()
-    {
-        RequestRealmLevelUp(NetworkManager.Singleton.LocalClientId);
     }
     private bool CheckResources(PlayerResource playerResource, LevelUpConditionData condition)
     {

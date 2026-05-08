@@ -24,6 +24,7 @@ public class SaveProfileClient : ISaveGameData<GameData, PlayerClientDataDto>
             {
                 itemDataPoint = new ItemDataPoint();
             }
+            Debug.Log(gameData.potentialPoint + " " + gameData.skillPoint);
             PlayerProfileDTO profile = new PlayerProfileDTO
             {
                 characterId = gameData.characterId,

@@ -11,6 +11,7 @@ namespace TGTH.Mobile
         protected override void Awake()
         {
             base.Awake();
+            profileManager = ProfileManager.Instance;
             view.OnUserIdChanged += OnUserIdChanged;
             view.OnUserNameChanged += OnUserNameChanged;
             profileManager.OnProfileChanged += OnProfileChanged;

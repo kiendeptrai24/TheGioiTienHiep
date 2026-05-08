@@ -430,11 +430,6 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
             listItemDatas.Add(item);
             listItemDatasExisting.Add(item);
         }
-        // load all item and all character item
-        // foreach (var item in _data.allItemsDatas)
-        // {
-        //     allItemDatas.Add(item);
-        // }
         foreach (var item in _data.itemUsedDatas)
         {
             listItemDatasUsed.Add(item);

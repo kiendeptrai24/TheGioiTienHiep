@@ -4,12 +4,11 @@ using UnityEngine;
 
 namespace TGTH.Mobile
 {
-
     public class StatsPageView : MonoBehaviour
     {
         #region Stat
 
-        [Header("=== Charactor info ===")]
+        [Header("=== Character info ===")]
         [SerializeField] private TextMeshProUGUI realmTxt;
         [SerializeField] private TextMeshProUGUI classTxt;
         [SerializeField] private TextMeshProUGUI raceTxt;
@@ -51,8 +50,8 @@ namespace TGTH.Mobile
         #endregion
         public void SetStatsData(Dictionary<StatType, Stat> stats)
         {
-            potentialPointTxt.text = stats[StatType.PotentialPoint].GetValue().ToString();
-            skillPointTxt.text = stats[StatType.SkillPoint].GetValue().ToString();
+            potentialPointTxt.text = ProfileManager.Instance.GetProfile().potentialPoint.ToString();
+            skillPointTxt.text = ProfileManager.Instance.GetProfile().skillPoint.ToString();
 
             damageTxt.text = stats[StatType.PhicialDamagePoint].GetValue().ToString();
             defenseTxt.text = stats[StatType.PhicialDefensePoint].GetValue().ToString();
@@ -90,7 +89,7 @@ namespace TGTH.Mobile
 
             critDamageReductionTxt.text = stats[StatType.CritDamageReduction].GetValue().ToString();
         }
-        public void ShowCharactorIdentifyData(ItemData itemData)
+        public void ShowCharacterIdentifyData(ItemData itemData)
         {
             HeroData heroData = itemData as HeroData;
             if (heroData == null) return;

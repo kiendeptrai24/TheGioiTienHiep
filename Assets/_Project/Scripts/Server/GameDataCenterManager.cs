@@ -187,8 +187,12 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
                     item.skillDatas.Add(skillData);
             }
         }
+        foreach (var item in gameDatas.characterDatas)
+        {
+            item.realmData = GetItemById(item.realmId).Clone() as RealmData;
+            item.realmType = item.realmData.realmType;
+        }
     }
-
     private void SetupShop()
     {
         var shopItem = gameDatas.shopItems.ToList();
