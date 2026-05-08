@@ -51,7 +51,7 @@ public class MineInfoPresenter : TGTHMonoBehaviour
         var playerChose = PlayerChoseObject.Instance;
         if (playerChose.GetCurrentEntity() == null) return;
         var mine = playerChose.GetCurrentEntity().GetComponent<SpiritStoneMine>();
-        if (mine == null || !mine.PlayerIsOwner(profileManager.GetProfile().userId)) return;
+        if (mine == null || mine.PlayerIsOwner(profileManager.GetProfile().userId)) return;
 
         if (lastTimeClick + interval < Time.time)
         {

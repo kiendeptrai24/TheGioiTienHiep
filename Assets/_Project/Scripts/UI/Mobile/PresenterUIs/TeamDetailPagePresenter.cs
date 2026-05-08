@@ -176,6 +176,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
 
         view.ToggleMouseFollower(true);
         view.SetFollowerData(item.data.itemIcon, item.data.currentstack);
+        view.ShowItemSelected(uiItem.inventoryItem.data);
     }
     private void ItemClicked(UIItemSlotBase uiItem)
     {
