@@ -41,14 +41,7 @@ public class ItemSkillDetailPageView : IItemDetailPageView
         inventoryCenterManager.OnItemUpdated += OnItemUpdated;
         if (itemData != null)
         {
-            var conditionData = new LevelUpConditionData();
-            conditionData.conditionType = LevelUpConditionType.SkillLevel;
-            conditionData.linhThach = itemData.linhThachCost;
-            conditionData.linhThao = itemData.linhThaoCost;
-            conditionData.khoangThach = itemData.khoangThachCost;
-            conditionData.yeuDan = itemData.yeuDanCost;
-            conditionData.maHach = itemData.maHachCost;
-            levelUpValidator.RequestCheckConditionResult(playerClientId, conditionData);
+            levelUpValidator.RequestCheckConditionResult(playerClientId, itemData.instanceId);
         }
     }
 
@@ -114,14 +107,7 @@ public class ItemSkillDetailPageView : IItemDetailPageView
             levelUpDatabase = LevelUpDatabase.Instance;
         if (levelUpValidator != null)
         {
-            var conditionData = new LevelUpConditionData();
-            conditionData.conditionType = LevelUpConditionType.SkillLevel;
-            conditionData.linhThach = itemData.linhThachCost;
-            conditionData.linhThao = itemData.linhThaoCost;
-            conditionData.khoangThach = itemData.khoangThachCost;
-            conditionData.yeuDan = itemData.yeuDanCost;
-            conditionData.maHach = itemData.maHachCost;
-            levelUpValidator.RequestCheckConditionResult(playerClientId, conditionData);
+            levelUpValidator.RequestCheckConditionResult(playerClientId, itemData.instanceId);
         }
         nextItemData = levelUpDatabase.GetNextSkillEnhance(itemData.instanceId, itemData.enhanceLevel);
 

@@ -25,7 +25,7 @@ public class LoadRealmDataServerSide : ILoadGameData<GameDataCenter, AllGameData
                     Debug.LogWarning($"LoadGame: Failed to map realm data for instanceId {realmItems[i].instanceId}");
                     continue;
                 }
-                gameData.realmItems.Add(realmData);
+                gameData.realmDatas.Add(realmData);
                 gameData.allItems.Add(realmData);
             }
         }

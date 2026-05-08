@@ -131,11 +131,11 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         {
             gameDatas.allItems.Add(item);
         }
-        foreach (var item in gameDatas.skillItems)
+        foreach (var item in gameDatas.skillDatas)
         {
             gameDatas.allItems.Add(item);
         }
-        foreach (var item in gameDatas.techniqueDatasItems)
+        foreach (var item in gameDatas.techniqueDatas)
         {
             gameDatas.allItems.Add(item);
         }
@@ -151,7 +151,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         {
             gameDatas.allItems.Add(item);
         }
-        foreach (var item in gameDatas.realmItems)
+        foreach (var item in gameDatas.realmDatas)
         {
             gameDatas.allItems.Add(item);
         }

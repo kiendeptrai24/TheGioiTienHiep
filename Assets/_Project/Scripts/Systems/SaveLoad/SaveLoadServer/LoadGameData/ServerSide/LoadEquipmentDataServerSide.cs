@@ -45,8 +45,8 @@ public class LoadEquipmentDataServerSide : ILoadGameData<GameDataCenter, AllGame
                 }
             }
             gameData.equipmentItems = equipmentDatas;
-            gameData.skillItems = skillDatas;
-            gameData.techniqueDatasItems = techniqueDatas;
+            gameData.skillDatas = skillDatas;
+            gameData.techniqueDatas = techniqueDatas;
             gameData.allItems.AddRange(itemDatas);
         }
         catch (System.Exception ex)

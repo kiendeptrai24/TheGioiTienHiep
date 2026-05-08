@@ -39,22 +39,16 @@ public class RealmData : ItemData
     [Header("Upgrade Materials")]
     [JsonIgnore]
     public float powerCost;              // Power
-    [JsonIgnore]
     public int linhThaoCost;              // Linh thảo
-    [JsonIgnore]
     public int khoangThachCost;            // Khoáng thạch
-    [JsonIgnore]
     public int yeuDanCost;          // Yêu đan
-    [JsonIgnore]
     public int maHachCost;          // Ma hạch
-    [JsonIgnore]
     public int linhThachCost;        // Linh thạch
     public int rewardPotentialPoint;
     public int rewardSkillPoint;
     public float rate;
     public float increaseRate;
     public ulong timeSeconds;
-    public int lthao;
     public string item;
     override public ItemData Clone()
     {

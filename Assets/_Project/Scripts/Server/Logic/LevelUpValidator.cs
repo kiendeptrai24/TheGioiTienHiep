@@ -121,7 +121,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
     #region Client Request To Server
     public void RequestRealmLevelUp(ulong playerNetId)
     {
-        ValidateHeroLevelUpServerRpc(playerNetId);
+        ValidateRealmLevelUpServerRpc(playerNetId);
         Debug.Log($"Received level up request from client {playerNetId}");
     }
     public void RequestSkillEnhance(string skillInstanceId, string skillId, ulong playerNetId)
@@ -137,7 +137,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
     #region Server Logic
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    public void ValidateHeroLevelUpServerRpc(ulong playerClientId)
+    public void ValidateRealmLevelUpServerRpc(ulong playerClientId)
     {
         if (!IsServer)
             return;
@@ -155,6 +155,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         playerResource.linhThach = (int)resource.Coins.Value;
 
         HeroData heroData = statsData.heroData as HeroData;
+        LevelUpConditionData conditionData = new();
 
         if (heroData == null)
             result = new LevelUpValidationResult(false, "Hero data không hợp lệ");
@@ -174,10 +175,13 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         var nextRealm = levelUpStranlation.GetNextRealm(realmType);
         if (nextRealm == null)
             result = new LevelUpValidationResult(false, "Không tìm thấy realm tiếp theo");
-        Debug.Log($"Next realm for {realmType} is: {(nextRealm != null ? nextRealm.realmType.ToString() : "null")}");
+
+        conditionData.conditionType = LevelUpConditionType.ChampionLevel;
+        conditionData.linhThach = nextRealm.linhThachCost;
+
         float success = GetPercentSuccess(nextRealm.realmType);
-        float roll = UnityEngine.Random.Range(1f, 100f);
-        if (CheckResources(playerResource, heroData.levelUpConditionData) == false)
+        float roll = nextRealm.rate;
+        if (CheckResources(playerResource, conditionData) == false)
             result = new LevelUpValidationResult(false, "Không đủ nguyên liệu lên cấp");
 
         if (roll > success)
@@ -190,7 +194,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
             result.itemId = "";
             playerProfile.SetPotentialPoint(nextRealm.rewardPotentialPoint);
             playerProfile.SetSkillPoint(nextRealm.rewardSkillPoint);
-            
+
             result = new LevelUpValidationResult(true, $"Đột phá thành công! cảnh giới hiện tại là {EnumTranslator.ToVietnamese(nextRealm.realmType)}");
         }
         result.conditionType = LevelUpConditionType.ChampionLevel;
@@ -377,8 +381,12 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
     {
         if (!IsServer)
             return false;
-        Debug.Log($"linh thach: {playerResource.linhThach}, required: {condition.linhThach}");
         List<IResourceValidator> validators = new List<IResourceValidator>();
+        if (condition == null)
+        {
+            Debug.LogError("LevelUpConditionData is null");
+            return false;
+        }
         validators.Add(new KhoangThachResource(condition.khoangThach));
         validators.Add(new LinhThachResource(condition.linhThach));
         validators.Add(new LinhThaoResource(condition.linhThao));
@@ -407,37 +415,46 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         new MaHachResource().Consume(playerResource, condition.maHach);
         new YeuDanResource().Consume(playerResource, condition.yeuDan);
     }
-    public void RequestCheckConditionResult(ulong playerClientId, LevelUpConditionData conditionData)
+    public void RequestCheckConditionResult(ulong playerClientId, string instanceId)
     {
-        string data = JsonConvert.SerializeObject(conditionData);
-        RequestCheckConditionResultSerserRpc(playerClientId, data);
+        RequestCheckConditionResultSerserRpc(playerClientId, instanceId);
     }
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    public void RequestCheckConditionResultSerserRpc(ulong playerClientId, string data)
+    public void RequestCheckConditionResultSerserRpc(ulong playerClientId, string instanceId)
     {
         if (!IsServer)
             return;
         CheckLevelUpValidationResult levelupChecking = new();
-        var conditionData = JsonConvert.DeserializeObject<LevelUpConditionData>(data);
-        if (conditionData == null)
+        var conditionData = new LevelUpConditionData();
+        var itemData = levelUpStranlation.GetItemDict(instanceId);
+        if(itemData == null)
+        {
+            Debug.LogError($"Item data with instanceId {instanceId} not found");
             return;
+        }
         if (!NetworkManager.ConnectedClients.TryGetValue(playerClientId, out var client))
             return;
 
         var playerObj = client.PlayerObject;
         var profile = playerObj.GetComponent<PlayerProfile>();
         var playerResource = profile.GetPlayerResource();
-        if (playerResource == null)
+        if(itemData is RealmData realm)
         {
-            return;
+            conditionData.linhThach = realm.linhThachCost;
         }
 
         List<IResourceValidator> validators = new List<IResourceValidator>();
-        validators.Add(new KhoangThachResource(conditionData.khoangThach));
-        validators.Add(new LinhThachResource(conditionData.linhThach));
-        validators.Add(new LinhThaoResource(conditionData.linhThao));
-        validators.Add(new MaHachResource(conditionData.maHach));
-        validators.Add(new YeuDanResource(conditionData.yeuDan));
+
+        if (conditionData.linhThach > 0)
+            validators.Add(new LinhThachResource(conditionData.linhThach));
+        if (conditionData.khoangThach > 0)
+            validators.Add(new KhoangThachResource(conditionData.khoangThach));
+        if (conditionData.linhThao > 0)
+            validators.Add(new LinhThaoResource(conditionData.linhThao));
+        if (conditionData.maHach > 0)
+            validators.Add(new MaHachResource(conditionData.maHach));
+        if (conditionData.yeuDan > 0)
+            validators.Add(new YeuDanResource(conditionData.yeuDan));
 
         foreach (var validator in validators)
         {

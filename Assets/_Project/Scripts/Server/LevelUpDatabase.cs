@@ -1,13 +1,11 @@
 
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelUpDatabase : Singleton<LevelUpDatabase>
 {
-    public List<StatsRealmPreset> realmStats;
-    public List<SkillPreset> skillPresets = new();
-    public List<TechniquePreset> techniquePresets = new();
     private Dictionary<RealmType, RealmData> realmStatsData = new();
     private Dictionary<SkillType, List<SkillData>> skillDatas = new();
     private Dictionary<TechniqueType, List<TechniqueData>> techniqueDatas = new();
@@ -15,27 +13,41 @@ public class LevelUpDatabase : Singleton<LevelUpDatabase>
     protected override void Awake()
     {
         base.Awake();
-        foreach (var preset in realmStats)
+        GameDataCenterManager.Instance.OnLoadGameDataCenterSuccessed += OnGameDataReady;
+    }
+
+    private void OnGameDataReady(GameDataCenter center)
+    {
+        var realmDatas = center.realmDatas;
+        var skillDatas = center.skillDatas;
+        var techniqueDatas = center.techniqueDatas;
+        foreach (var realm in realmDatas)
         {
-            realmStatsData[preset.realmType] = preset.GetStats();
-            if (itemDataDict.ContainsKey(preset.GetStats().instanceId) == false)
-                itemDataDict[preset.GetStats().instanceId] = preset.GetStats();
+            if (itemDataDict.ContainsKey(realm.instanceId) == false)
+            {
+                realmStatsData[realm.realmType] = realm;
+                itemDataDict[realm.instanceId] = realm;
+            }
         }
-        foreach (var preset in skillPresets)
+        foreach (var skill in skillDatas)
         {
-            if (skillDatas.ContainsKey(preset.skillType) == false)
-                skillDatas[preset.skillType] = new List<SkillData>();
-            skillDatas[preset.skillType].Add(preset.GetItemData() as SkillData);
-            if (itemDataDict.ContainsKey(preset.GetItemData().instanceId) == false)
-                itemDataDict[preset.GetItemData().instanceId] = preset.GetItemData();
+            if (itemDataDict.ContainsKey(skill.instanceId) == false)
+            {
+                if (this.skillDatas.ContainsKey(skill.skillType) == false)
+                    this.skillDatas[skill.skillType] = new List<SkillData>();
+                this.skillDatas[skill.skillType].Add(skill);
+                itemDataDict[skill.instanceId] = skill;
+            }
         }
-        foreach (var preset in techniquePresets)
+        foreach (var technique in techniqueDatas)
         {
-            if (techniqueDatas.ContainsKey(preset.techniqueType) == false)
-                techniqueDatas[preset.techniqueType] = new List<TechniqueData>();
-            techniqueDatas[preset.techniqueType].Add(preset.GetItemData() as TechniqueData);
-            if (itemDataDict.ContainsKey(preset.GetItemData().instanceId) == false)
-                itemDataDict[preset.GetItemData().instanceId] = preset.GetItemData();
+            if (itemDataDict.ContainsKey(technique.instanceId) == false)
+            {
+                if (this.techniqueDatas.ContainsKey(technique.techniqueType) == false)
+                    this.techniqueDatas[technique.techniqueType] = new List<TechniqueData>();
+                this.techniqueDatas[technique.techniqueType].Add(technique);
+                itemDataDict[technique.instanceId] = technique;
+            }
         }
     }
 

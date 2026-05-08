@@ -41,14 +41,7 @@ public class ItemTechniqueDetailPageView : IItemDetailPageView
 
         if (itemData != null)
         {
-            var conditionData = new LevelUpConditionData();
-            conditionData.conditionType = LevelUpConditionType.TechniqueLevel;
-            conditionData.linhThach = itemData.linhThachCost;
-            conditionData.linhThao = itemData.linhThaoCost;
-            conditionData.khoangThach = itemData.khoangThachCost;
-            conditionData.yeuDan = itemData.yeuDanCost;
-            conditionData.maHach = itemData.maHachCost;
-            levelUpValidator.RequestCheckConditionResult(playerClientId, conditionData);
+            levelUpValidator.RequestCheckConditionResult(playerClientId, itemData.instanceId);
         }
     }
 
@@ -121,7 +114,7 @@ public class ItemTechniqueDetailPageView : IItemDetailPageView
             conditionData.khoangThach = itemData.khoangThachCost;
             conditionData.yeuDan = itemData.yeuDanCost;
             conditionData.maHach = itemData.maHachCost;
-            levelUpValidator.RequestCheckConditionResult(playerClientId, conditionData);
+            levelUpValidator.RequestCheckConditionResult(playerClientId, itemData.instanceId);
         }
 
         nextItemData = levelUpDatabase.GetNextTechniqueEnhance(itemData.instanceId, itemData.enhanceLevel);

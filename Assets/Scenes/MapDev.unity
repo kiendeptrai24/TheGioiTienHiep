@@ -48182,7 +48182,6 @@ MonoBehaviour:
     rate: 0
     increaseRate: 0
     timeSeconds: 0
-    lthao: 0
     item: 
   nextItemData:
     instanceId: 
@@ -48233,7 +48232,6 @@ MonoBehaviour:
     rate: 0
     increaseRate: 0
     timeSeconds: 0
-    lthao: 0
     item: 
 --- !u!114 &542338153
 MonoBehaviour:
@@ -79809,11 +79807,11 @@ MonoBehaviour:
     version: 1.0
     allItems: []
     equipmentItems: []
-    skillItems: []
-    techniqueDatasItems: []
+    skillDatas: []
+    techniqueDatas: []
     raceItems: []
     essenceItems: []
-    realmItems: []
+    realmDatas: []
     championItems: []
     characterDatas: []
     shopItems: []
@@ -121013,34 +121011,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a0cf0c4e4f530f4da62c76e8711f6e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelUpDatabase
-  realmStats:
-  - {fileID: 11400000, guid: b2dc702bedf95354ea05000da3952088, type: 2}
-  - {fileID: 11400000, guid: b7e2b040198201941887a9994f37269e, type: 2}
-  - {fileID: 11400000, guid: bcfcdc88151808842ae215f90c99a0e2, type: 2}
-  - {fileID: 11400000, guid: 596ffeefa6d97554b978da87ee2e9e21, type: 2}
-  - {fileID: 11400000, guid: e363c6353932e9342af52eff32394cbc, type: 2}
-  - {fileID: 11400000, guid: f512a7c276eb13f44b1d762218365a03, type: 2}
-  - {fileID: 11400000, guid: 9ef5b8b98f2851c4bb9cdd901ae6adbf, type: 2}
-  - {fileID: 11400000, guid: 60072d8e36a732e4da4a7b670d783278, type: 2}
-  - {fileID: 11400000, guid: d924e4f4eff837e41bac0cba6390ec21, type: 2}
-  - {fileID: 11400000, guid: bb42d92a79b5ae646a9e74232b201d48, type: 2}
-  - {fileID: 11400000, guid: 4d79ae95b468fb94c9c4de39d4c2f4b2, type: 2}
-  - {fileID: 11400000, guid: 5dc9e497e0fa17b4380ffa3d5b86075a, type: 2}
-  - {fileID: 11400000, guid: e6f92e705bb1e444b9c0a6327ebb5117, type: 2}
-  skillPresets:
-  - {fileID: 11400000, guid: 17ef9b4573ad4614abbeee455ed88c43, type: 2}
-  - {fileID: 11400000, guid: 6f50e5992dc714144aabfdcad5524027, type: 2}
-  - {fileID: 11400000, guid: 9442308326f19fc4da4fefc59d4a81a3, type: 2}
-  - {fileID: 11400000, guid: 3a6d38e91011bdf448e8efc1c4d49df8, type: 2}
-  - {fileID: 11400000, guid: d914b8c274cfad94a93637c0d93b6506, type: 2}
-  - {fileID: 11400000, guid: 42ec2110328ba6a438669f99c3fa3213, type: 2}
-  - {fileID: 11400000, guid: f8c476a72bff44d48a30a6eb7c1374b2, type: 2}
-  - {fileID: 11400000, guid: 17d8535bbf8ee2244863df8801a5bb4e, type: 2}
-  techniquePresets:
-  - {fileID: 11400000, guid: 967ca2419ba9971429f2d3f826cf9c0b, type: 2}
-  - {fileID: 11400000, guid: daac526b3d0862e4780f81c2f4dc93a9, type: 2}
-  - {fileID: 11400000, guid: 3ab19980313ce064a824ad4e15a621a3, type: 2}
-  - {fileID: 11400000, guid: 0883b5bf14c481a4090d4583c2e25aa7, type: 2}
 --- !u!1 &1317211362
 GameObject:
   m_ObjectHideFlags: 0
@@ -121690,7 +121660,6 @@ MonoBehaviour:
     rate: 0
     increaseRate: 0
     timeSeconds: 0
-    lthao: 0
     item: 
 --- !u!1 &1324406905
 GameObject:
@@ -376334,7 +376303,6 @@ MonoBehaviour:
     rate: 0
     increaseRate: 0
     timeSeconds: 0
-    lthao: 0
     item: 
 --- !u!23 &4966512594610179410
 MeshRenderer:

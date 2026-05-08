@@ -9,11 +9,11 @@ public class GameDataCenter
     [JsonIgnore]
     public List<ItemData> allItems;
     public List<EquipmentData> equipmentItems;
-    public List<SkillData> skillItems;
-    public List<TechniqueData> techniqueDatasItems;
+    public List<SkillData> skillDatas;
+    public List<TechniqueData> techniqueDatas;
     public List<RaceData> raceItems;
     public List<EssenceData> essenceItems;
-    public List<RealmData> realmItems;
+    public List<RealmData> realmDatas;
     public List<HeroData> championItems;
     public List<HeroData> characterDatas;
     public List<ItemData> shopItems;
@@ -25,11 +25,11 @@ public class GameDataCenter
         version = "1.0";
         allItems = new List<ItemData>();
         equipmentItems = new List<EquipmentData>();
-        skillItems = new List<SkillData>();
-        techniqueDatasItems = new List<TechniqueData>();
+        skillDatas = new List<SkillData>();
+        techniqueDatas = new List<TechniqueData>();
         raceItems = new List<RaceData>();
         essenceItems = new List<EssenceData>();
-        realmItems = new List<RealmData>();
+        realmDatas = new List<RealmData>();
         championItems = new List<HeroData>();
         characterDatas = new List<HeroData>();
         shopItems = new List<ItemData>();

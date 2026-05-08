@@ -193,7 +193,7 @@ public static class DataMapper
         realmData.movementSpeed = dto.movementSpeed;
         realmData.rewardPotentialPoint = dto.potentialPoints;
         realmData.rewardSkillPoint = dto.skillPoints;
-        realmData.lthao = dto.lthao;
+        realmData.linhThachCost = dto.lThach;
         realmData.item = dto.item == null ? "" : dto.item;
         realmData.rate = DataParseUtils.ParsePercent(dto.rate);
         realmData.increaseRate = DataParseUtils.ParsePercent(dto.increaseRate);

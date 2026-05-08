@@ -44,15 +44,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
 
         if (itemData != null)
         {
-            var conditionData = new LevelUpConditionData();
-            conditionData.conditionType = LevelUpConditionType.ChampionLevel;
-            conditionData.linhThach = itemData.linhThachCost;
-            conditionData.linhThao = itemData.linhThaoCost;
-            conditionData.khoangThach = itemData.khoangThachCost;
-            conditionData.yeuDan = itemData.yeuDanCost;
-            conditionData.maHach = itemData.maHachCost;
-
-            levelUpValidator.RequestCheckConditionResult(playerClientId, conditionData);
+            levelUpValidator.RequestCheckConditionResult(playerClientId, itemData.instanceId);
         }
     }
 
@@ -118,14 +110,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
         }
         if (levelUpValidator != null)
         {
-            var conditionData = new LevelUpConditionData();
-            conditionData.conditionType = LevelUpConditionType.ChampionLevel;
-            conditionData.linhThach = itemData.linhThachCost;
-            conditionData.linhThao = itemData.linhThaoCost;
-            conditionData.khoangThach = itemData.khoangThachCost;
-            conditionData.yeuDan = itemData.yeuDanCost;
-            conditionData.maHach = itemData.maHachCost;
-            levelUpValidator.RequestCheckConditionResult(playerClientId, conditionData);
+            levelUpValidator.RequestCheckConditionResult(playerClientId, itemData.instanceId);
         }
 
         nextItemData = levelUpDatabase.GetNextRealm(itemData.realmType);
