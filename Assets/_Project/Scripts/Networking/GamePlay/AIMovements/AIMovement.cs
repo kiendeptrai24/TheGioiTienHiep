@@ -20,8 +20,7 @@ public class AIMovement : TGTHNetworkBehaviour
         LoadComponent();
         if (statsData != null)
         {
-            statsData.SetupDataPreset();
-            agent.stoppingDistance = statsData.AttackSpeed;
+            agent.stoppingDistance = statsData.AttackRange;
             agent.speed = statsData.MovementSpeed;
         }
     }

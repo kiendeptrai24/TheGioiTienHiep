@@ -121503,7 +121503,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f37fcc50bcd34fd42a17a7f9d9e5482d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatsData
-  heroPreset: {fileID: 0}
   heroData:
     instanceId: 
     itemId: 
@@ -137866,9 +137865,6 @@ MonoBehaviour:
   - championId: ID_CHAMPION_00005
     champion: {fileID: 5554956302197850083, guid: 0ccb7b5d29cc21a41ab6c369c30b1b90,
       type: 3}
-  - championId: ID_CHAMPION_ENEMY_00001
-    champion: {fileID: 8497757887471785836, guid: ef92c774ce8c86941a3fc2d7fb88ea81,
-      type: 3}
   - championId: ID_CHARACTER_00001
     champion: {fileID: 6767569796250873745, guid: e6c28f6927e2240409b93e62ec5b5509,
       type: 3}
@@ -137880,6 +137876,12 @@ MonoBehaviour:
       type: 3}
   - championId: ID_CHARACTER_00004
     champion: {fileID: 6767569796250873745, guid: fbeef77b6bf276d42883394c5492d273,
+      type: 3}
+  - championId: ID_CHAMPION_ENEMY_00001
+    champion: {fileID: 8497757887471785836, guid: ef92c774ce8c86941a3fc2d7fb88ea81,
+      type: 3}
+  - championId: ID_CHAMPION_ENEMY_00002
+    champion: {fileID: 8497757887471785836, guid: ef92c774ce8c86941a3fc2d7fb88ea81,
       type: 3}
   curEvents: []
   offsetOrigin: {x: 1, y: 1}
@@ -195733,11 +195735,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CharacterBeast
-      objectReference: {fileID: 0}
-    - target: {fileID: 7804178499550283321, guid: 49455877ced09b647ae84c55e935ba3d,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -328886,6 +328883,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4730594019410676841}
   - component: {fileID: 4965996233285494645}
+  - component: {fileID: 4965996233285494646}
   m_Layer: 0
   m_Name: StatsManager
   m_TagString: Untagged
@@ -376146,7 +376144,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f37fcc50bcd34fd42a17a7f9d9e5482d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatsManager
-  heroPreset: {fileID: 0}
   heroData:
     instanceId: 
     itemId: 
@@ -376304,6 +376301,18 @@ MonoBehaviour:
     increaseRate: 0
     timeSeconds: 0
     item: 
+--- !u!114 &4965996233285494646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3669961890136247746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bba1d9b1b4457d41978e2ad153e7ed2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatManager
 --- !u!23 &4966512594610179410
 MeshRenderer:
   m_ObjectHideFlags: 0

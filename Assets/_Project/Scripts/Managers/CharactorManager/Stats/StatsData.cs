@@ -7,8 +7,6 @@ using UnityEngine;
 public class StatsData : TGTHMonoBehaviour
 {
     public event Action OnValueChanged;
-    public HeroPreset heroPreset;
-
     public ItemData heroData;
     public List<TechniqueData> techniqueData;
     public List<SkillData> skillDatas;
@@ -186,11 +184,6 @@ public class StatsData : TGTHMonoBehaviour
     {
         this.heroData = item;
         Setup();
-    }
-    public void SetupDataPreset()
-    {
-        if (heroPreset == null) return;
-        SetUpItem(heroPreset.GetItemData());
     }
     #endregion
 

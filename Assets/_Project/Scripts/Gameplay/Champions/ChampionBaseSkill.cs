@@ -25,7 +25,7 @@ public class ChampionBaseSkill : TGTHMonoBehaviour
 
     public void SetupSkills()
     {
-        var data = m_StatsData.heroPreset.GetSkillDatas();
+        var data = (m_StatsData.heroData as HeroData).skillDatas;
         m_SkillsData = data;
         foreach (var skillData in m_SkillsData)
         {

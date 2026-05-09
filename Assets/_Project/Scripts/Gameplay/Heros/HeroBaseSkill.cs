@@ -33,9 +33,9 @@ public class HeroBaseSkill : TGTHMonoBehaviour
 
         if (statsData != null)
         {
-            var data = statsData.heroPreset.GetItemData();
+            var data = statsData.heroData;
             var heroData = data as HeroData;
-            m_SkillsData.AddRange(heroData.skillDatas);
+            m_SkillsData = heroData.skillDatas;
             SetupSkills();
         }
         Debug.Log($"HeroBaseSkill Awake: Loaded {m_SkillsData.Count} skills for hero {gameObject.name}");

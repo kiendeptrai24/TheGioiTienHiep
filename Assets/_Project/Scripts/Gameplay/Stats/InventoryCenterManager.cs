@@ -10,7 +10,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public bool getDataPreset;
     [SerializeField] private HeroPreset heroPreset;
     public ItemData playerCham;
-    public HeroData Cham;
+    public HeroData championData;
 
     /// <summary>
     /// all item
@@ -90,7 +90,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public void ItemPlayerChanged(ItemData item)
     {
         playerCham = item;
-        Cham = playerCham as HeroData;
+        championData = playerCham as HeroData;
         OnItemPlayerChanged?.Invoke(item);
         OnItemUpdated?.Invoke(item, item.instanceId);
     }

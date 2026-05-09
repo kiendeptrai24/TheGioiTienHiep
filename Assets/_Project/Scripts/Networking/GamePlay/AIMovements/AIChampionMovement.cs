@@ -19,7 +19,6 @@ public class AIChampionMovement : TGTHMonoBehaviour
         LoadComponent();
         if (statsData != null)
         {
-            statsData.SetupDataPreset();
             agent.stoppingDistance = 0.5f;
             agent.speed = statsData.MovementSpeed;
         }

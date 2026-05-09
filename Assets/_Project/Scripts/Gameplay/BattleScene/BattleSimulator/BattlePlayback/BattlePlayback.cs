@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ExitGames.Client.Photon.StructWrapping;
 using Unity.Mathematics;
 using Unity.Profiling;
 using UnityEngine;
@@ -95,6 +96,9 @@ public class BattlePlayback : Singleton<BattlePlayback>
 
             var cham = Instantiate(champion, pos, rot);
             var chamAnim = cham.GetComponent<ChampionAnimationPlayback>();
+            var statData = cham.GetComponent<StatsData>();
+            var championData = GameDataCenterManager.Instance.GetItemById(eventInit.ownerUid);
+            statData.SetUpItem(championData);
             chamAnim.GetComponent<ChampionController>().SetTeamId((int)eventInit.team);
             if (eventInit.team == TeamId.Heroes)
                 champions.Add(eventInit.ownerUid, chamAnim);

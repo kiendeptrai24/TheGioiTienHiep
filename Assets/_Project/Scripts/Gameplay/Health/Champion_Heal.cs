@@ -19,11 +19,6 @@ public class Champion_Heal : TGTHMonoBehaviour, HealthController
         stats = GetComponent<StatsData>();
         stats.OnStatReady += OnStatReady;
     }
-    override protected void Start()
-    {
-        base.Start();
-        stats.SetupDataPreset();
-    }
     public void DecreaseHealth(float damage, ulong attackerId)
     {
         if (ShouldDie())
