@@ -25,60 +25,83 @@ public class PlayerProfile : TGTHNetworkBehaviour
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
+    public event Action OnProfileChanged;
+    [SerializeField]
     private ProfileUser profileUser;
+    private PlayerResource playerResource;
+    protected override void Awake()
+    {
+        base.Awake();
+        resourceStorage = GetComponent<ResourceStorage>();
+        resourceStorage.OnSpiritStoneChanged += OnSpiritStoneChanged;
+    }
+    void OnDisable()
+    {
+        resourceStorage.OnSpiritStoneChanged -= OnSpiritStoneChanged;
+    }
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         var user = ProfileManager.Instance.GetProfile();
+        playerResource = new PlayerResource();
+
         if (IsOwner)
         {
-            var inventoryCenterManager = InventoryCenterManager.Instance;
+            // callback networkvariable
             profileUser = user;
-
-            resourceStorage = GetComponent<ResourceStorage>();
-            resourceStorage.OnCoinsChanged += OnCoinsChanged;
             potentialPoint.OnValueChanged += OnPotentialPointChanged;
             skillPoint.OnValueChanged += OnSkillPointChanged;
-            inventoryCenterManager.OnItemPlayerChanged += OnItemPlayerChanged;
             OnSkillPointChanged(0, profileUser.skillPoint);
-            OnItemPlayerChanged(inventoryCenterManager.playerCham);
-        }
 
-        OnLoadPlayerIdServerRpc(user.userId, user.potentialPoint, user.skillPoint);
+
+            // load coins to resourcestorage
+            LoadCoinsServerRpc(profileUser.coins);
+        }
+        LoadPlayerIdServerRpc(user.userId, user.potentialPoint, user.skillPoint);
     }
     #region Event CallBack
+
+    #region Callback Network Variable
 
     private void OnSkillPointChanged(int previousValue, int newValue)
     {
         if (profileUser == null) return;
         profileUser.skillPoint = newValue;
+        OnProfileChanged?.Invoke();
     }
 
     private void OnPotentialPointChanged(int previousValue, int newValue)
     {
         if (profileUser == null) return;
         profileUser.potentialPoint = newValue;
+        OnProfileChanged?.Invoke();
     }
+    #endregion
 
-    private void OnCoinsChanged(ulong obj)
+    #region Callback Resoure Storage
+
+    private void OnSpiritStoneChanged(ulong obj)
     {
+        playerResource.linhThach = (int)resourceStorage.SpiritStone.Value;
+
+        if (!IsServer) return;
+
         if (profileUser == null) return;
-        profileUser.playerResource.linhThach = (int)resourceStorage.Coins.Value;
+        profileUser.coins = resourceStorage.SpiritStone.Value;
+        profileUser.playerResource.linhThach = (int)resourceStorage.SpiritStone.Value;
+        OnProfileChanged?.Invoke();
     }
+    #endregion
 
-    private void OnItemPlayerChanged(ItemData data)
-    {
-        if (data == null) return;
-        GetComponent<StatsData>().SetUpItem(data);
-    }
     #endregion
 
     #region Get Data
 
     public PlayerResource GetPlayerResource()
     {
-        if (profileUser == null) return null;
-        return profileUser.playerResource;
+        if (playerResource == null)
+            playerResource = new PlayerResource();
+        return playerResource;
     }
     public FixedString64Bytes GetPlayerId() => playerId.Value;
     public int GetPotentialPoint() => potentialPoint.Value;
@@ -100,13 +123,21 @@ public class PlayerProfile : TGTHNetworkBehaviour
         skillPoint.Value += value;
     }
     #endregion
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    private void OnLoadPlayerIdServerRpc(string playerId, int potentialPoint = 0, int skillPoint = 0)
+
+    #region Server Rpc
+
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+    private void LoadCoinsServerRpc(ulong coins)
     {
-        if (!IsServer) return;
+        resourceStorage.SetSpiritStone(coins);
+    }
+
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    private void LoadPlayerIdServerRpc(string playerId, int potentialPoint = 0, int skillPoint = 0)
+    {
         this.playerId.Value = new FixedString64Bytes(playerId);
         this.potentialPoint.Value = potentialPoint;
         this.skillPoint.Value = skillPoint;
     }
-
+    #endregion
 }

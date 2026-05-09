@@ -42,7 +42,7 @@ namespace TGTH.Mobile
             base.Awake();
             gameDCM = GameDataCenterManager.Instance;
 
-            ProfileManager.Instance.OnProfileCoinsChanged += (profile) =>
+            ProfileManager.Instance.OnProfileChanged += (profile) =>
             {
                 view.priceText.text = profile.coins.ToString();
             };

@@ -17,11 +17,8 @@ public class LinhThachResource : IResourceValidator
         if (playerResource == null)
             return false;
 
-        // Kiểm tra số lượng linh thạch
         bool hasEnoughResource = playerResource.linhThach >= requiredAmount;
 
-        // Kiểm tra itemData nếu có yêu cầu
-        // bool itemDataValid = itemData == null || itemData.itemId != null;
         Debug.Log($"Linh thạch hiện tại: {playerResource.linhThach}, yêu cầu: {requiredAmount}, đủ điều kiện: {hasEnoughResource}");
         return hasEnoughResource;
     }

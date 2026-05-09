@@ -30,6 +30,8 @@ public class ItemChamDetailPageView : IItemDetailPageView
     private ulong playerClientId;
     private InventoryCenterManager inventoryCenterManager;
     private HeroData heroData;
+    private ulong PlayerNetId;
+
     protected override void Awake()
     {
         base.Awake();
@@ -40,12 +42,23 @@ public class ItemChamDetailPageView : IItemDetailPageView
 
         levelUpBtn.onClick.AddListener(OnLevelUpButtonClicked);
         levelUpValidator.OnNotificationConditionResult += OnNotificationConditionResult;
+        levelUpValidator.OnRealmUplevelResult += OnRealmUplevelResult;
+
         inventoryCenterManager.OnItemUpdated += OnItemUpdated;
 
         if (itemData != null)
         {
-            levelUpValidator.RequestCheckConditionResult(playerClientId, itemData.instanceId);
+            OnRealmUplevelResult(true);
         }
+    }
+
+    private void OnRealmUplevelResult(bool success)
+    {
+        if (!success) return;
+        if (itemData == null) return;
+        if (levelUpValidator == null) return;
+
+        levelUpValidator.RequestCheckConditionResult(PlayerNetId, itemData.instanceId);
     }
 
     private void OnItemUpdated(ItemData data, string instanceIdOld)
@@ -87,7 +100,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
         }
         if (itemData is RealmData)
         {
-            ulong PlayerNetId = NetworkManager.Singleton.LocalClientId;
+            PlayerNetId = NetworkManager.Singleton.LocalClientId;
 
             levelUpValidator.RequestRealmLevelUp(PlayerNetId);
         }

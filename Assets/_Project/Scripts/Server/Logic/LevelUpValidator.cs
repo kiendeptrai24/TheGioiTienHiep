@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ExitGames.Client.Photon.StructWrapping;
 using Newtonsoft.Json;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -37,6 +38,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
     }
     private LevelUpDatabase levelUpStranlation;
     public event Action<CheckLevelUpValidationResult> OnNotificationConditionResult;
+    public event Action<bool> OnRealmUplevelResult;
     protected override void Awake()
     {
         base.Awake();
@@ -147,11 +149,10 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         var playerObj = client.PlayerObject;
 
         var statsData = playerObj.GetComponent<StatsData>();
-        var resource = playerObj.GetComponent<ResourceStorage>();
-        var playerResource = new PlayerResource();
         var playerProfile = playerObj.GetComponent<PlayerProfile>();
+        var resource = playerObj.GetComponent<ResourceStorage>();
+        var playerResource = playerProfile.GetPlayerResource();
 
-        playerResource.linhThach = (int)resource.Coins.Value;
 
         HeroData heroData = statsData.heroData as HeroData;
         LevelUpConditionData conditionData = new();
@@ -177,14 +178,17 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         {
             result = new LevelUpValidationResult(false, "Không đủ nguyên liệu lên cấp");
             SendMessegeToClientRpc(JsonConvert.SerializeObject(result),
-           new ClientRpcParams
-           {
-               Send = new ClientRpcSendParams { TargetClientIds = new[] { playerObj.OwnerClientId } }
-           });
+                new ClientRpcParams
+                {
+                    Send = new ClientRpcSendParams { TargetClientIds = new[] { playerObj.OwnerClientId } }
+                });
+            return;
         }
 
         float success = GetPercentSuccess(nextRealm.realmType);
         float roll = nextRealm.rate;
+        ConsumeResources(playerResource, conditionData);
+        resource.SetPlayerResource(playerResource);
 
         if (roll > success)
         {
@@ -206,6 +210,8 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
                 Send = new ClientRpcSendParams { TargetClientIds = new[] { playerObj.OwnerClientId } }
             });
     }
+    #region Next version
+
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void ValidateSkillEnhanceServerRpc(string skillInstanceId, string skillId, ulong playerClientId)
     {
@@ -217,7 +223,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         var playerObj = client.PlayerObject;
         var resource = playerObj.GetComponent<ResourceStorage>();
         var playerResource = new PlayerResource();
-        playerResource.linhThach = (int)resource.Coins.Value;
+        playerResource.linhThach = (int)resource.SpiritStone.Value;
 
         var skillData = levelUpStranlation.GetItemDict(skillInstanceId) as SkillData;
 
@@ -247,6 +253,8 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
                 result = new LevelUpValidationResult(true,
                     $"Có thể cường hóa kỹ năng từ cấp {skillData.enhanceLevel} lên {skillData.enhanceLevel + 1}");
                 ConsumeResources(playerResource, skillData.levelUpConditionData);
+                resource.SetPlayerResource(playerResource);
+                ConsumeResources(playerResource, skillData.levelUpConditionData);
             }
             else
             {
@@ -268,6 +276,8 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
     }
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    #endregion
+
     public void ValidateTechniqueEnhanceServerRpc(string techniqueInstanceId, string techniqueId, ulong playerClientId)
     {
         if (!IsServer)
@@ -281,7 +291,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         var playerObj = client.PlayerObject;
         var resource = playerObj.GetComponent<ResourceStorage>();
         var playerResource = new PlayerResource();
-        playerResource.linhThach = (int)resource.Coins.Value;
+        playerResource.linhThach = (int)resource.SpiritStone.Value;
 
         if (techniqueData == null)
             result = new LevelUpValidationResult(false, "Technique data không hợp lệ");
@@ -304,7 +314,9 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
             {
                 result = new LevelUpValidationResult(true,
                     $"Cường hóa Công Pháp thành công Công pháp hiện tại là {nextTechnique.itemName}");
+                Debug.Log(playerResource.linhThach);
                 ConsumeResources(playerResource, techniqueData.levelUpConditionData);
+                resource.SetPlayerResource(playerResource);
                 result.itemId = techniqueId;
                 result.instanceId = techniqueInstanceId;
                 result.Level = techniqueData.enhanceLevel;
@@ -364,9 +376,11 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
                     var nextRealm = levelUpStranlation.GetNextRealm(cham.realmType);
                     if (nextRealm != null)
                     {
+                        cham.realmId = nextRealm.realmId;
                         cham.realmType = nextRealm.realmType;
                         cham.realmData = nextRealm;
                         InventoryCenterManager.Instance.ItemPlayerChanged(cham);
+                        OnRealmUplevelResult?.Invoke(true);
                     }
                     break;
             }
@@ -421,21 +435,19 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
             return;
         CheckLevelUpValidationResult levelupChecking = new();
         var conditionData = new LevelUpConditionData();
-        var itemData = levelUpStranlation.GetItemDict(instanceId);
-        if (itemData == null)
-        {
-            Debug.LogError($"Item data with instanceId {instanceId} not found");
-            return;
-        }
+
         if (!NetworkManager.ConnectedClients.TryGetValue(playerClientId, out var client))
             return;
 
         var playerObj = client.PlayerObject;
         var profile = playerObj.GetComponent<PlayerProfile>();
         var playerResource = profile.GetPlayerResource();
-        if (itemData is RealmData realm)
+        var statsData = playerObj.GetComponent<StatsData>();
+        var nextRealm = levelUpStranlation.GetNextRealm(statsData.heroData.realmType);
+
+        if (nextRealm != null)
         {
-            conditionData.linhThach = realm.linhThachCost;
+            conditionData.linhThach = nextRealm.linhThachCost;
         }
 
         List<IResourceValidator> validators = new List<IResourceValidator>();

@@ -4,54 +4,58 @@ using UnityEngine;
 
 public class ResourceStorage : TGTHNetworkBehaviour
 {
-    public NetworkVariable<ulong> Coins = new(
+    public NetworkVariable<ulong> SpiritStone = new(
         0,
-        NetworkVariableReadPermission.Everyone,
+        NetworkVariableReadPermission.Owner,
         NetworkVariableWritePermission.Server
     );
-    public event Action<ulong> OnCoinsChanged;
+    public event Action<ulong> OnSpiritStoneChanged;
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        Coins.OnValueChanged += HandleCoinsChanged;
-        if (!IsOwner) return;
-        ulong coins = ProfileManager.Instance.GetProfile().coins;
-        OnLoadCoinsServerRpc(coins);
+        SpiritStone.OnValueChanged += HandleCoinsChanged;
     }
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-    private void OnLoadCoinsServerRpc(ulong coins)
+    private void OnDisable()
+    {
+        SpiritStone.OnValueChanged -= HandleCoinsChanged;
+    }
+    public void SetSpiritStone(ulong coins)
     {
         if (!IsServer) return;
-        Coins.Value = coins;
+        SpiritStone.Value = coins;
     }
     private void HandleCoinsChanged(ulong oldValue, ulong newValue)
     {
-        OnCoinsChanged?.Invoke(newValue);
+        OnSpiritStoneChanged?.Invoke(newValue);
     }
 
     public bool HasEnough(ulong amount)
     {
         if (!IsServer) return false;
-        return Coins.Value >= amount;
+        return SpiritStone.Value >= amount;
     }
 
     // ===== SERVER ONLY =====
     public void PlusCost(ulong amount)
     {
         if (!IsServer) return;
-        Coins.Value += amount;
+        SpiritStone.Value += amount;
     }
 
     public void MinusCost(ulong amount)
     {
         if (!IsServer) return;
-        Coins.Value -= amount;
+        SpiritStone.Value -= amount;
     }
-
+    public void SetPlayerResource(PlayerResource playerResource)
+    {
+        if (!IsServer) return;
+        SetSpiritStone((ulong)playerResource.linhThach);
+    }
     // ===== OFFLINE COINS =====
     public void AddOfflineCoins(ulong amount)
     {
         if (!IsServer) return;
-        Coins.Value += amount;
+        SpiritStone.Value += amount;
     }
 }

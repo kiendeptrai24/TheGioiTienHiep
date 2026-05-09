@@ -46,7 +46,7 @@ public class PlayerClickable : EntityClickable
 
         if (heroResource == null || enemyResource == null) return;
 
-        ulong enemyCoins = enemyResource.Coins.Value;
+        ulong enemyCoins = enemyResource.SpiritStone.Value;
 
         if (enemyCoins < 100) return;
 

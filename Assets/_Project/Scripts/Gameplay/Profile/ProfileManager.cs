@@ -1,51 +1,44 @@
 
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class ProfileManager : Singleton<ProfileManager>, ISaveable
 {
     [SerializeField] private ProfileUser profileUser;
     public List<ulong> resourceIds = new List<ulong>();
-    public event Action<ProfileUser> OnProfileCoinsChanged;
     public event Action<ProfileUser> OnProfileChanged;
     public event Action<ProfileUser> OnProfileReady;
+    private PlayerNetManager playerNM;
     protected override void Awake()
     {
         base.Awake();
+
+        playerNM = PlayerNetManager.Instance;
+        playerNM.OnPlayerExiststed += OnPlayerExiststed;
+
         string userId = "";
         profileUser = new ProfileUser(userId, "người chơi");
+
+        NotiProfileChanged();
     }
-    public void BindResource(ResourceStorage storage)
+    private void OnPlayerExiststed(NetworkObject playerNet)
     {
-        storage.OnCoinsChanged += OnCoinsChanged;
-        var relinker = storage.GetComponent<PlayerMineRelinker>();
+        var relinker = playerNet.GetComponent<PlayerMineRelinker>();
+        var playerProfile = playerNet.GetComponent<PlayerProfile>();
+        playerProfile.OnProfileChanged += NotiProfileChanged;
         relinker.OnResourceIdsChanged += OnResourceIdsChanged;
     }
+    private void OnResourceIdsChanged(List<ulong> list) => resourceIds = list;
+    private void NotiProfileChanged() => OnProfileChanged?.Invoke(profileUser);
 
-    private void OnResourceIdsChanged(List<ulong> list)
-    {
-        resourceIds = list;
-    }
+    public ProfileUser GetProfile() => profileUser;
 
-    private void OnCoinsChanged(ulong newAmount)
-    {
-        profileUser.coins = newAmount;
-        OnProfileCoinsChanged?.Invoke(profileUser);
-    }
-    protected override void Start()
-    {
-        base.Start();
-        OnProfileChanged?.Invoke(profileUser);
-    }
-    public ProfileUser GetProfile()
-    {
-        return profileUser;
-    }
     public void SetProfileUser(string userName)
     {
         profileUser.userName = userName;
-        OnProfileChanged?.Invoke(profileUser);
+        NotiProfileChanged();
     }
     public void AddFriend(string friend)
     {
@@ -55,6 +48,7 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
     {
         profileUser.RemoveFriend(friend);
     }
+    #region SaveLoadData
 
     public void LoadData(GameData _data)
     {
@@ -81,4 +75,5 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
             _data.mineOfflineDataList.AddOrUpdate(resourceId, 0, 0, "");
         }
     }
+    #endregion
 }

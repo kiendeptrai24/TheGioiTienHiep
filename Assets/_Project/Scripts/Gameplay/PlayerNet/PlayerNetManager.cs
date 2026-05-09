@@ -33,7 +33,6 @@ public class PlayerNetManager : Singleton<PlayerNetManager>, ISaveable
     {
         playerObject = _playerObject;
         player = playerObject.GetComponent<PlayerController>();
-        SetPlayerProfile();
         var itemData = InventoryCenterManager.Instance.listItemDatasChampion;
         ItemPrefabDatabase.Instance.OnListItemDatasChampionChanged(itemData);
         OnPlayerExiststed?.Invoke(playerObject);
@@ -50,12 +49,6 @@ public class PlayerNetManager : Singleton<PlayerNetManager>, ISaveable
         }
     }
     public NetworkObject GetPlayerObj() => playerObject;
-
-    public void SetPlayerProfile()
-    {
-        var storage = playerObject.GetComponent<ResourceStorage>();
-        ProfileManager.Instance.BindResource(storage);
-    }
     protected override void LoadComponent()
     {
         base.LoadComponent();

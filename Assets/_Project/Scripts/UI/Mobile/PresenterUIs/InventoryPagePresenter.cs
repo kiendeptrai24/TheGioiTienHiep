@@ -27,7 +27,7 @@ namespace TGTH.Mobile
             view.OnRefreshClicked += ShowItem;
             view.OnSortClicked += SortInventory;
             inventoryCenterManager.OnItemDataChanged += OnItemDataChanged;
-            ProfileManager.Instance.OnProfileCoinsChanged += (profile) =>
+            ProfileManager.Instance.OnProfileChanged += (profile) =>
             {
                 view.priceText.text = profile.coins.ToString();
             };
