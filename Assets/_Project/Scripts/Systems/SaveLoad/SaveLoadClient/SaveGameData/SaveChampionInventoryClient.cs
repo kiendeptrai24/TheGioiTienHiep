@@ -19,7 +19,10 @@ public class SaveChampionInventoryClient : ISaveGameData<GameData, PlayerClientD
             {
                 if (item is not HeroData)
                     continue;
-                championDataDto.Add(DataMapper.ToDto(item as HeroData));
+                var heroData = DataMapper.ToDto(item as HeroData);
+                if (heroData == null)
+                    continue;
+                championDataDto.Add(heroData);
             }
             playerClientDataDto.championInInventoryRes.AddRange(championDataDto);
         }

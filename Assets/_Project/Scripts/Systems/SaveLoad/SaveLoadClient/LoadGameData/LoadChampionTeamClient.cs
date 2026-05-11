@@ -28,7 +28,6 @@ public class LoadChampionTeamClient : ILoadGameData<GameData, PlayerClientDataDt
                         int posY = championDto.posY.Value;
                         heroData.championIndex = new Vector2Int(posX, posY);
                     }
-                    LoadEquipment(heroData);
                     gameData.itemInTeamDatas.Add(heroData);
                 }
             }
@@ -49,23 +48,27 @@ public class LoadChampionTeamClient : ILoadGameData<GameData, PlayerClientDataDt
             var essenceDataBase = dataManager.GetItemById(championDto.essenceId) as EssenceData;
             if (realmDataBase != null)
             {
+                heroData.realmId = realmDataBase.instanceId;
                 heroData.realmData = realmDataBase;
                 heroData.realmType = realmDataBase.realmType;
             }
             if (raceDataBase != null)
             {
+                heroData.raceId = raceDataBase.instanceId;
                 heroData.raceData = raceDataBase;
                 heroData.raceType = raceDataBase.raceType;
             }
             if (essenceDataBase != null)
             {
+                heroData.essenceId = essenceDataBase.instanceId;
                 heroData.essenceData = essenceDataBase;
                 heroData.essenceType = essenceDataBase.essenceType;
             }
         }
+        LoadEquipment(heroData, championDto);
     }
 
-    private void LoadEquipment(HeroData heroData)
+    private void LoadEquipment(HeroData heroData, ChampionDataDto championDto)
     {
         if (heroData == null || heroData.equipmentIds == null)
         {
@@ -73,27 +76,30 @@ public class LoadChampionTeamClient : ILoadGameData<GameData, PlayerClientDataDt
             return;
         }
         var dataManager = GameDataCenterManager.Instance;
-        foreach (var equipmentId in heroData.equipmentIds)
+        foreach (var equipmentId in championDto.equipmentIds)
         {
             var equipmentData = dataManager.GetItemById(equipmentId) as EquipmentData;
             if (equipmentData != null)
             {
+                heroData.equipmentIds.Add(equipmentId);
                 heroData.equipmentDatas.Add(equipmentData);
             }
         }
-        foreach (var techniqueId in heroData.techniqueIds)
+        foreach (var techniqueId in championDto.techniqueIds)
         {
             var techniqueData = dataManager.GetItemById(techniqueId) as TechniqueData;
             if (techniqueData != null)
             {
+                heroData.techniqueIds.Add(techniqueId);
                 heroData.techniqueDatas.Add(techniqueData);
             }
         }
-        foreach (var skillId in heroData.skillIds)
+        foreach (var skillId in championDto.skillIds)
         {
             var skillData = dataManager.GetItemById(skillId) as SkillData;
             if (skillData != null)
             {
+                heroData.skillIds.Add(skillId);
                 heroData.skillDatas.Add(skillData);
             }
         }

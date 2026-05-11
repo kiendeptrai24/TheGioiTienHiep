@@ -285,7 +285,6 @@ public static class DataMapper
             skillIds = data.skillIds ?? new(),
             techniqueIds = data.techniqueIds ?? new(),
             equipmentIds = data.equipmentIds ?? new()
-
         };
     }
     public static ItemDataDto ToDto(ItemData data)
