@@ -17,16 +17,19 @@ public class AIChampionMovement : TGTHMonoBehaviour
     {
         base.Awake();
         LoadComponent();
-        if (statsData != null)
-        {
-            agent.stoppingDistance = 0.5f;
-            agent.speed = statsData.MovementSpeed;
-        }
     }
     protected override void Start()
     {
+        if (statsData != null)
+        {
+            agent.stoppingDistance = 0.5f;
+        }
         base.Start();
         agent.angularSpeed = turnSpeed;
+    }
+    public void Setspeed(int speed)
+    {
+        agent.speed = speed + 10;
     }
     private void Update()
     {

@@ -5,6 +5,7 @@ using System.Linq;
 using ExitGames.Client.Photon.StructWrapping;
 using Unity.Mathematics;
 using Unity.Profiling;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BattlePlayback : Singleton<BattlePlayback>
@@ -15,10 +16,17 @@ public class BattlePlayback : Singleton<BattlePlayback>
         public string championId;
         public ChampionController champion;
     }
+    [Serializable]
+    public class SkillSetup
+    {
+        public string skillId;
+        public GameObject skillPrefab;
+    }
     public float timeToDeplay = 0.5f;
     public int[,] framesUnit = new int[10, 10];
     public Transform origin;
     public List<ChampionSetup> championsSetup;
+    public List<SkillSetup> skillsSetup;
     public List<BattleEvent> curEvents;
     public Vector2 offsetOrigin = new Vector2(1, 1);
     public Vector2 posOrigin = new Vector2(-5, -5);
@@ -28,20 +36,20 @@ public class BattlePlayback : Singleton<BattlePlayback>
     private Dictionary<string, ChampionAnimationPlayback> champions = new();
     private Dictionary<string, ChampionAnimationPlayback> championsEnemies = new();
     private Dictionary<string, ChampionController> championsObject = new();
+    private Dictionary<string, SkillSetup> skillsObject = new();
     public event Action OnEndBattle;
     public event Action OnResultGame;
     protected override void Awake()
     {
         base.Awake();
         LoadComponent();
-        GameDataCenterManager.Instance.OnLoadGameDataCenterSuccessed += OnDataCenterReady;
-    }
-
-    private void OnDataCenterReady(GameDataCenter center)
-    {
         foreach (var setup in championsSetup)
         {
             championsObject.Add(setup.championId, setup.champion);
+        }
+        foreach (var setup in skillsSetup)
+        {
+            skillsObject.Add(setup.skillId, setup);
         }
     }
 
@@ -97,7 +105,27 @@ public class BattlePlayback : Singleton<BattlePlayback>
             var cham = Instantiate(champion, pos, rot);
             var chamAnim = cham.GetComponent<ChampionAnimationPlayback>();
             var statData = cham.GetComponent<StatsData>();
+            var aiMovement = cham.GetComponent<AIChampionMovement>();
+            aiMovement.Setspeed(eventInit.moveSpeed);
             var championData = GameDataCenterManager.Instance.GetItemById(eventInit.ownerUid);
+            HeroData heroData = championData as HeroData;
+            if (heroData != null && heroData.isCharactor)
+            {
+                heroData.skillDatas.Clear();
+                foreach (var skillId in eventInit.skillIds)
+                {
+                    var skillData = GameDataCenterManager.Instance.GetItemById(skillId);
+                    if (skillData is SkillData skill)
+                    {
+                        heroData.skillDatas.Add(skill);
+                    }
+                }
+            }
+
+            foreach (var skillData in heroData.skillDatas)
+            {
+                skillData.skillEffectPrefab = skillsObject[skillData.instanceId].skillPrefab;
+            }
             statData.SetUpItem(championData);
             chamAnim.GetComponent<ChampionController>().SetTeamId((int)eventInit.team);
             if (eventInit.team == TeamId.Heroes)

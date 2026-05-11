@@ -38,15 +38,22 @@ public static class BattleSimulator
         float t = 0f;
         for (int i = 0; i < s.units.Count; i++)
         {
+            List<string> skillIds = new();
+            foreach (var skill in s.skillsByUnit[i])
+            {
+                skillIds.Add(skill.instanceId);
+            }
             events.Add(new BattleEventInit
             {
                 time = t,
                 ownerUid = s.units[i].uid,
+                skillIds = skillIds,
                 team = s.units[i].team,
                 cell = s.cell[i],
                 type = BattleEventType.Init,
                 maxHp = s.units[i].hpMax,
-                curtHp = s.units[i].hp
+                curtHp = s.units[i].hp,
+                moveSpeed = s.units[i].moveSpeed
             });
         }
         events.Add(new BattleEvent { time = t, type = BattleEventType.Start, });
@@ -91,7 +98,7 @@ public static class BattleSimulator
 
             }
         }
-        
+
         return End(TeamId.Enemies, timeLimit, events, recordEvents);
     }
 
@@ -102,9 +109,10 @@ public static class BattleSimulator
 
         int myRange = s.atkRange[a];
         bool moved = false;
-
+        float moveSpeed = 1 / s.units[a].moveSpeed;
         Vector2Int from = s.cell[a];
         Vector2Int step = from;
+
         int cellTomove = 1;
         if (dist > myRange)
         {
@@ -113,7 +121,7 @@ public static class BattleSimulator
             if (step != from && board.TryMove(a, from, step, s.units))
             {
                 cellTomove = board.Dist(from, step);
-                sched.ApplyCell(s, a, step, t, board.moveInterval * cellTomove);
+                sched.ApplyCell(s, a, step, t, board.moveInterval * cellTomove * moveSpeed);
                 moved = true;
                 if (recordEvents)
                     events.Add(new BattleEventMove
@@ -127,11 +135,11 @@ public static class BattleSimulator
                         from = from,
                         to = step
                     });
-                s.units[a].nextActionTime = t + board.moveInterval * cellTomove + 1;
+                s.units[a].nextActionTime = t + board.moveInterval * cellTomove * moveSpeed + 1;
             }
         }
 
-        sched.ScheduleNextMove(a, t, board.moveInterval * cellTomove);
+        sched.ScheduleNextMove(a, t, board.moveInterval * cellTomove * moveSpeed);
         return moved;
     }
 

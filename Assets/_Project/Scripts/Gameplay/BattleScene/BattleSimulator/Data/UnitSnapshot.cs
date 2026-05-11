@@ -39,6 +39,7 @@ public class UnitSnapshot
     public float reflect;      // defender.ReflectDamage * totalDmg
 
     public int attackSpeed;    // dùng để tính interval
+    public int moveSpeed;      // dùng để tính interval
     public float attackRange;
 
     public float animationDuration;

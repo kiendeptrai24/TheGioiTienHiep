@@ -61,12 +61,11 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         {
             width = 5,
             height = 9,
-            moveInterval = .3f,
+            moveInterval = 1f,
             allowDiagonal = true
         };
 
         BattleBoardGrid boardGrid = new BattleBoardGrid(board.moveInterval, board.allowDiagonal);
-
         // HERO
         foreach (var itemData in heroRoster.itemDatas)
         {

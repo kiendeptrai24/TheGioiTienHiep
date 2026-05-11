@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class BattleEventMapper
@@ -18,13 +19,17 @@ public static class BattleEventMapper
             isCrit = false,
             targetHpAfter = 0,
 
-            skillId = "",
+            skillId0 = "",
+            skillId1 = "",
+            skillId2 = "",
+            skillId3 = "",
+            skillId4 = "",
 
             fromX = 0,
             fromY = 0,
             toX = 0,
             toY = 0,
-            castTime = 0f 
+            castTime = 0f
         };
         if (ev.ownerUid == null)
         {
@@ -50,8 +55,7 @@ public static class BattleEventMapper
                 dto.isCrit = s.isCrit;
                 dto.targetHpAfter = s.targetHpAfter;
                 dto.castTime = s.castTime;
-
-                dto.skillId = s.skillId;
+                dto.skillId0 = s.skillId;
                 break;
 
             case BattleEventAttack a:
@@ -72,14 +76,36 @@ public static class BattleEventMapper
             case BattleEventInit b:
                 dto.cell = b.cell;
                 dto.maxHp = b.maxHp;
+                dto.moveSpeed = b.moveSpeed;
                 dto.curHp = b.curtHp;
+                for (int i = 0; i < b.skillIds.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        dto.skillId0 = b.skillIds[i];
+                    }
+                    else if (i == 1)
+                    {
+                        dto.skillId1 = b.skillIds[i];
+                    }
+                    else if (i == 2)
+                    {
+                        dto.skillId2 = b.skillIds[i];
+                    }
+                    else if (i == 3)
+                    {
+                        dto.skillId3 = b.skillIds[i];
+                    }
+                    else if (i == 4)
+                    {
+                        dto.skillId4 = b.skillIds[i];
+                    }
+                }
                 break;
             default:
                 // nothing extra
                 break;
         }
-
-
         return dto;
     }
 
@@ -114,7 +140,7 @@ public static class BattleEventMapper
                     damage = dto.damage,
                     isCrit = dto.isCrit,
                     targetHpAfter = dto.targetHpAfter,
-                    skillId = dto.skillId,
+                    skillId = dto.skillId0,
                 };
 
             case BattleEventType.Attack:
@@ -147,6 +173,17 @@ public static class BattleEventMapper
                     attackerUid = dto.attackerUid,
                 };
             case BattleEventType.Init:
+                List<string> skillIds = new();
+                if (string.IsNullOrEmpty(dto.skillId0) == false)
+                    skillIds.Add(dto.skillId0);
+                if (string.IsNullOrEmpty(dto.skillId1) == false)
+                    skillIds.Add(dto.skillId1);
+                if (string.IsNullOrEmpty(dto.skillId2) == false)
+                    skillIds.Add(dto.skillId2);
+                if (string.IsNullOrEmpty(dto.skillId3) == false)
+                    skillIds.Add(dto.skillId3);
+                if (string.IsNullOrEmpty(dto.skillId4) == false)
+                    skillIds.Add(dto.skillId4);
                 return new BattleEventInit
                 {
                     time = dto.t,
@@ -155,7 +192,8 @@ public static class BattleEventMapper
                     cell = dto.cell,
                     type = dto.type,
                     maxHp = dto.maxHp,
-                    curtHp = dto.curHp
+                    curtHp = dto.curHp,
+                    skillIds = skillIds
                 };
             default:
                 return new BattleEvent

@@ -4,7 +4,6 @@ using UnityEngine;
 [Serializable]
 public sealed class SkillController
 {
-
     private readonly ISkillCaster _owner;
     private readonly ITimeProvider _time;
     public ITimeProvider Time => _time;

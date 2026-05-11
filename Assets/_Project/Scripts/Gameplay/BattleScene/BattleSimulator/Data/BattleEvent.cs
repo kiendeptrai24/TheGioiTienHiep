@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -52,4 +53,6 @@ public class BattleEventInit : BattleEvent
     public Vector2Int cell;
     public int maxHp;
     public int curtHp;
+    public int moveSpeed;
+    public List<string> skillIds = new();
 }
