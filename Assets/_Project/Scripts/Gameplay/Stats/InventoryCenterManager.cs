@@ -449,6 +449,16 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         {
             listItemShopDatas.Add(item);
         }
+        if (championData != null)
+        {
+            championData.healthPoint = _data.itemDataPoint.healthPoint;
+            championData.manaPoint = _data.itemDataPoint.manaPoint;
+            championData.spiritPoint = _data.itemDataPoint.spiritPoint;
+            championData.moveSpeedPoint = _data.itemDataPoint.moveSpeedPoint;
+            championData.spititRangePoint = _data.itemDataPoint.spititRangePoint;
+            championData.physicalDamagePoint = _data.itemDataPoint.damagePoint;
+            championData.physicalDefensePoint = _data.itemDataPoint.defensePoint;
+        }
     }
     public void SaveGame(ref GameData _data)
     {

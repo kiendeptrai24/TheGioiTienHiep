@@ -10,8 +10,8 @@ public class ItemDataPoint : ItemData
     public int healthPoint;
     public int manaPoint;
     public int spiritPoint;
-    public int moveSpeed;
-    public int spititRange;
+    public int moveSpeedPoint;
+    public int spititRangePoint;
     public override ItemData Clone()
     {
         return (ItemDataPoint)this.MemberwiseClone();

@@ -32,7 +32,6 @@ public class GameData
         itemCharacterDatas = new List<ItemData>();
         gameBaseCharacterDatas = new List<ItemData>();
         mineOfflineDataList = new MineOfflineDataList();
-        itemDataPoint = new ItemDataPoint();
         position = new Vector3(0, 0, 0);
         rotation = Quaternion.identity;
     }

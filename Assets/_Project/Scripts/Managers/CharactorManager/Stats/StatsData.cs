@@ -104,7 +104,7 @@ public class StatsData : TGTHMonoBehaviour
         statsModifiers = new();
         statsModifiers.Add(new StatsCharacterModifier());
         statsModifiers.Add(new StatsRealmModifier());
-        statsModifiers.Add(new StatsCultivationPathModifier());
+        statsModifiers.Add(new StatsEssenceModifier());
         statsModifiers.Add(new StatsRaceModifier());
         // statsModifiers.Add(new StatsEquipmentModifier());
         // statsModifiers.Add(new StatsTechniqueModifier());

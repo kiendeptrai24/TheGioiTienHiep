@@ -17,7 +17,8 @@ public class PlayerInventoryService : ILoadRemote<GameData>, ISaveRemote<GameDat
             new LoadItemUsedClient(),
             new LoadChampionInventoryClient(),
             new LoadChampionTeamClient(),
-            new LoadProfileClient()
+            new LoadProfileClient(),
+            new LoadItemDataPointClient()
         };
         saveGameDatas = new List<ISaveGameData<GameData, PlayerClientDataDto>>()
         {
@@ -25,7 +26,8 @@ public class PlayerInventoryService : ILoadRemote<GameData>, ISaveRemote<GameDat
             new SaveItemUsedClient(),
             new SaveChampionInventoryClient(),
             new SaveChampionTeamClient(),
-            new SaveProfileClient()
+            new SaveProfileClient(),
+            new SaveItemDataPointClient()
         };
     }
 

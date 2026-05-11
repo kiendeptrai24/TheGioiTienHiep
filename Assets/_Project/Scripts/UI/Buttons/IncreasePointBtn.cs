@@ -1,15 +1,20 @@
+using ExitGames.Client.Photon.StructWrapping;
+using TGTH.Mobile;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class IncreasePointBtn : TGTHMonoBehaviour
 {
     private Button increasePointBtn;
-    private StatsData statsManager;
+    private StatsData statsData;
+    private StatManager statsManager;
     [SerializeField] private StatType statType;
     private ProfileManager profileManager;
     protected override void Awake()
     {
-        LoadComponent();
+        increasePointBtn = GetComponent<Button>();
+        statsManager = StatManager.Instance;
+        statsData = statsManager.GetComponent<StatsData>();
         increasePointBtn.onClick.AddListener(OnIncreasePointClicked);
         profileManager = ProfileManager.Instance;
     }
@@ -29,11 +34,11 @@ public class IncreasePointBtn : TGTHMonoBehaviour
                 return;
             }
 
-            var stat = statsManager.GetStat(statType);
+            var stat = statsData.GetStat(statType);
 
             if (stat == null) return;
             stat.AddModifier(result.value);
-            var hero = statsManager.heroData as HeroData;
+            var hero = statsData.heroData as HeroData;
             if (hero == null)
             {
                 Debug.Log("hero is null");
@@ -41,7 +46,7 @@ public class IncreasePointBtn : TGTHMonoBehaviour
             }
 
             AddPoint(hero, profileManager.GetProfile().itemDataPoint, result.value, statType);
-            statsManager.SetUpItem(hero);
+            statsData.SetUpItem(hero);
             InventoryCenterManager.Instance.ItemPlayerChanged(hero);
             TopNotificationUI.Instance.ShowNotification($"bạn đã cộng {result.value} điểm vào {StatTypeViName.ToVietnamese(statType)}");
         },
@@ -79,11 +84,11 @@ public class IncreasePointBtn : TGTHMonoBehaviour
                 heroData.spiritDefensePoint += value;
                 break;
             case StatType.MoveSpeedPoint:
-                itemDataPoint.moveSpeed += value;
+                itemDataPoint.moveSpeedPoint += value;
                 heroData.moveSpeedPoint += value;
                 break;
             case StatType.SpiritRangePoint:
-                itemDataPoint.spititRange += value;
+                itemDataPoint.spititRangePoint += value;
                 heroData.spititRangePoint += value;
                 break;
         }
@@ -92,7 +97,5 @@ public class IncreasePointBtn : TGTHMonoBehaviour
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        statsManager = FindAnyObjectByType<StatsData>();
-        increasePointBtn = GetComponent<Button>();
     }
 }

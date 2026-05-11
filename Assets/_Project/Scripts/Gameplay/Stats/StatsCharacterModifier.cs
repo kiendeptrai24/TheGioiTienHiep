@@ -35,7 +35,7 @@ public class StatsCharacterModifier : StatsModifierBase
         AddValue(StatType.SpiritPoint, data.spiritPoint);
 
         AddValue(StatType.PhicialDamagePoint, data.physicalDamagePoint);
-        AddValue(StatType.MagicalDamagePoint, data.magicalDamagePoint);
+        AddValue(StatType.PhicialDefensePoint, data.physicalDefensePoint);
 
         AddValue(StatType.MoveSpeedPoint, data.moveSpeedPoint);
         AddValue(StatType.SpiritRangePoint, data.spititRangePoint);
@@ -70,7 +70,7 @@ public class StatsCharacterModifier : StatsModifierBase
         RemoveValue(StatType.SpiritPoint, data.spiritPoint);
 
         RemoveValue(StatType.PhicialDamagePoint, data.physicalDamagePoint);
-        RemoveValue(StatType.MagicalDamagePoint, data.magicalDamagePoint);
+        RemoveValue(StatType.PhicialDefensePoint, data.physicalDefensePoint);
 
         RemoveValue(StatType.MoveSpeedPoint, data.moveSpeedPoint);
         RemoveValue(StatType.SpiritRangePoint, data.spititRangePoint);

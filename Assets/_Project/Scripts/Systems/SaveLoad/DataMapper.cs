@@ -237,7 +237,19 @@ public static class DataMapper
         beastData.lthach = dto.lthach;
         return beastData;
     }
-
+    public static ItemDataPoint MapItemDataPoint(ItemDataPointDto dto)
+    {
+        if (dto == null) return null;
+        ItemDataPoint itemDataPoint = new ItemDataPoint();
+        itemDataPoint.damagePoint = dto.damagePoint;
+        itemDataPoint.defensePoint = dto.defensePoint;
+        itemDataPoint.healthPoint = dto.healthPoint;
+        itemDataPoint.manaPoint = dto.manaPoint;
+        itemDataPoint.spiritPoint = dto.spiritPoint;
+        itemDataPoint.moveSpeedPoint = dto.moveSpeedPoint;
+        itemDataPoint.spititRangePoint = dto.spititRangePoint;
+        return itemDataPoint;
+    }
     public static ChampionDataDto ToDto(HeroData data)
     {
         if (data == null) return null;
@@ -320,5 +332,19 @@ public static class DataMapper
         }
 
         return dto;
+    }
+    public static ItemDataPointDto ToDto(ItemDataPoint data)
+    {
+        if (data == null) return null;
+        return new ItemDataPointDto
+        {
+            damagePoint = data.damagePoint,
+            defensePoint = data.defensePoint,
+            healthPoint = data.healthPoint,
+            manaPoint = data.manaPoint,
+            spiritPoint = data.spiritPoint,
+            moveSpeedPoint = data.moveSpeedPoint,
+            spititRangePoint = data.spititRangePoint
+        };
     }
 }
