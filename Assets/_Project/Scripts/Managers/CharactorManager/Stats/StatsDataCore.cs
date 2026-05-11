@@ -1,26 +1,20 @@
-
-
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StatsData : TGTHMonoBehaviour
+public class StatsDataCore
 {
-    public event Action OnValueChanged;
-    public event Action<StatsData> OnStatReady;
-    private StatsDataCore stats;
-
     public ItemData heroData;
-    public List<TechniqueData> techniqueData;
-    public List<SkillData> skillDatas;
-    public List<EquipmentData> equiDatas;
 
-    [Header("Preset base stats")]
-    public RaceData statsRaceData;
-    public EssenceData statsCultivationPathData;
-    public RealmData statsRealmData;
+    private Dictionary<StatType, Stat> Stats = new();
 
+    private List<IStatsModifier> statsModifiers;
 
+    public StatsDataCore(ItemData heroData)
+    {
+        this.heroData = heroData;
+    }
+    
     #region Base Stats
     public int Health => GetStatValue(StatType.Health);
     public int Mana => GetStatValue(StatType.Mana);
@@ -60,46 +54,55 @@ public class StatsData : TGTHMonoBehaviour
 
     public float DamageImmunity => GetStatValue(StatType.DamageImmunity);
     #endregion
+    public Dictionary<StatType, Stat> GetStats() => Stats;
+
+    public int GetStatValue(StatType type)
+    {
+        if (Stats.TryGetValue(type, out Stat stat))
+        {
+            return Mathf.RoundToInt(stat.GetValue());
+        }
+
+        return 0;
+    }
+    public Stat GetStat(StatType type) => Stats[type];
+
+    public void SetStatsModifier(List<IStatsModifier> statsModifiers = null)
+    {
+        if (statsModifiers == null)
+        {
+            statsModifiers = new();
+        }
+        else
+        {
+            this.statsModifiers = statsModifiers;
+        }
+    }
 
     public void ResetStats()
     {
-        stats.ResetStats();
-        StatChange();
+        Stats.Clear();
+
+        foreach (StatType type in Enum.GetValues(typeof(StatType)))
+        {
+            Stats.Add(type, new Stat(type, 0));
+        }
     }
 
-    #region Stats Emplementation
-    public Dictionary<StatType, Stat> GetStats() => stats.GetStats();
-    public int GetStatValue(StatType type) => stats.GetStatValue(type);
-    public Stat GetStatType(StatType type) => stats.GetStat(type);
-    #endregion
-
-    #region Setup Item Data
     private void Setup()
     {
-        stats.SetUp(heroData);
-        StatChange();
-        OnStatReady?.Invoke(this);
-    }
+        ResetStats();
 
-    public void SetUpItem(ItemData item)
-    {
-        this.heroData = item;
-        if (stats == null)
+        foreach (var modifier in statsModifiers)
         {
-            stats = new StatsDataCore(item);
-            List<IStatsModifier> statsModifiers = new();
-            statsModifiers.Add(new StatsCharacterModifier());
-            statsModifiers.Add(new StatsRealmModifier());
-            statsModifiers.Add(new StatsEssenceModifier());
-            statsModifiers.Add(new StatsRaceModifier());
-            stats.SetStatsModifier(statsModifiers);
+            modifier.AddStats(Stats, heroData);
         }
-        Setup();
-    }
-    #endregion
 
-    public void StatChange()
+    }
+    public void SetUp(ItemData heroData)
     {
-        OnValueChanged?.Invoke();
+        this.heroData = heroData;
+        if (statsModifiers == null) SetStatsModifier();
+        Setup();
     }
 }

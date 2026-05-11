@@ -3,7 +3,7 @@ using UnityEngine;
 
 public static class SnapshotMapper
 {
-    public static UnitInput FromStats(StatsData s, TeamId team)
+    public static UnitInput FromStats(StatsDataCore s, TeamId team)
     {
         int hp = s.Health;
 

@@ -10,12 +10,21 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
 {
     public List<BattleEvent> battleEvents = new();
     public BattleHistoryController battleHistoryController;
-    private StatsData statsData;
+    private StatsDataCore stats;
     protected override void Awake()
     {
         base.Awake();
         LoadComponent();
-        statsData = GetComponent<StatsData>();
+        stats = new StatsDataCore(null);
+        List<IStatsModifier> statsModifiers = new();
+        statsModifiers.Add(new StatsCharacterModifier());
+        statsModifiers.Add(new StatsRealmModifier());
+        statsModifiers.Add(new StatsEssenceModifier());
+        statsModifiers.Add(new StatsRaceModifier());
+        statsModifiers.Add(new StatsEquipmentModifier());
+        statsModifiers.Add(new StatsTechniqueModifier());
+        statsModifiers.Add(new StatsSkillModifier());
+        stats.SetStatsModifier(statsModifiers);
     }
     protected override void LoadComponent()
     {
@@ -62,9 +71,9 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         foreach (var itemData in heroRoster.itemDatas)
         {
             if (itemData == null) continue;
-            statsData.SetUpItem(itemData);
-            var snap = SnapshotMapper.FromStats(statsData, TeamId.Heroes);
-            Vector2Int pos = (statsData.heroData as HeroData).championIndex;
+            stats.SetUp(itemData);
+            var snap = SnapshotMapper.FromStats(stats, TeamId.Heroes);
+            Vector2Int pos = (stats.heroData as HeroData).championIndex;
             pos = boardGrid.ClampToValidCell(pos);
 
             snap.placement.cell = pos;
@@ -76,11 +85,11 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         foreach (var itemData in enemyRoster.itemDatas)
         {
             if (itemData == null) continue;
-            statsData.SetUpItem(itemData);
+            stats.SetUp(itemData);
 
-            var snap = SnapshotMapper.FromStats(statsData, TeamId.Enemies);
+            var snap = SnapshotMapper.FromStats(stats, TeamId.Enemies);
 
-            Vector2Int pos = (statsData.heroData as HeroData).championIndex;
+            Vector2Int pos = (stats.heroData as HeroData).championIndex;
 
             pos.x = board.width - 1 - pos.x;
             pos.y = board.height - 1 - pos.y;

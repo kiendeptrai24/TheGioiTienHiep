@@ -34,7 +34,7 @@ public class IncreasePointBtn : TGTHMonoBehaviour
                 return;
             }
 
-            var stat = statsData.GetStat(statType);
+            var stat = statsData.GetStatType(statType);
 
             if (stat == null) return;
             stat.AddModifier(result.value);
