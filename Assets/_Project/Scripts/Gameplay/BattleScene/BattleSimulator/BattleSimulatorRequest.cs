@@ -113,7 +113,6 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
 
         result?.Invoke(res.winner == TeamId.Heroes);
 
-        Debug.Log("RequestBattleSimulator");
         // RewardsAndPunishments(res.winner, playerObj, enemyObj);
         SendReplayToClientClientRpc(heroRoster.name, enemyRoster.name,
             res.winner.ToString(), res.duration, dto,

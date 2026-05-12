@@ -9,7 +9,10 @@ public static class SnapshotMapper
 
         var heroData = s.heroData as HeroData;
         List<SkillData> skills = heroData != null ? heroData.skillDatas : new List<SkillData>();
-        Debug.Log("Speed:" + Mathf.Max(1, s.MovementSpeed) + heroData.itemName);
+        foreach (var skill in skills)
+        {
+            skill.cooldown = 3;
+        }
         return new UnitInput
         {
             snap = new UnitSnapshot

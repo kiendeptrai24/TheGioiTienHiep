@@ -135,11 +135,11 @@ public static class BattleSimulator
                         from = from,
                         to = step
                     });
-                s.units[a].nextActionTime = t + board.moveInterval * cellTomove * moveSpeed + 1;
+                s.units[a].nextActionTime = t + board.moveInterval * cellTomove * moveSpeed + 0.5f;
             }
         }
 
-        sched.ScheduleNextMove(a, t, board.moveInterval * cellTomove * moveSpeed);
+        sched.ScheduleNextMove(a, t, board.moveInterval * cellTomove * moveSpeed + 0.5f);
         return moved;
     }
 

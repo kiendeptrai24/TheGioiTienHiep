@@ -84,7 +84,7 @@ public static class BattleCombatResolver
         List<BattleEvent> events,
         bool recordEvents)
     {
-        if (s.units[attackerIndex].startActionTime < t && s.units[attackerIndex].nextActionTime > t)
+        if (s.units[attackerIndex].startActionTime < t && s.units[attackerIndex].nextActionTime >= t)
         {
             sched.ScheduleNextBasic(s, attackerIndex, t);
             return false;
