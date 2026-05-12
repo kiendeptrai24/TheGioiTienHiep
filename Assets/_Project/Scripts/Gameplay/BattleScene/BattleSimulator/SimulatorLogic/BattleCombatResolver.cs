@@ -20,8 +20,10 @@ public static class BattleCombatResolver
         {
             return false;
         }
+        var atker = s.units[attackerIndex];
+
         // if skill is ready but out of range, try to move first
-        if (s.units[attackerIndex].startActionTime < t && s.units[attackerIndex].nextActionTime > t)
+        if (IsAnimationFinished(atker, t) == false)
         {
             sched.ScheduleNextBasic(s, attackerIndex, t);
             return false;
@@ -33,15 +35,12 @@ public static class BattleCombatResolver
 
         int dmg; bool isCrit; float ls; float rf;
         (dmg, isCrit, ls, rf) = DamageFormula.CalcWithSkill(in atk, in def, skill, ref rng);
-
-        sched.PutSkillOnCooldown(attackerIndex, skillIndex, t, skill.cooldown + skill.animationDuration);
-        s.units[attackerIndex].nextActionTime = t + skill.animationDuration + 1;
-        s.units[attackerIndex].startActionTime = t;
+        sched.PutSkillOnCooldown(attackerIndex, skillIndex, t, skill.cooldown + atk.animationDuration);
+        atk.nextActionTime = t + atk.animationDuration;
+        atk.startActionTime = t;
+        atk.animationEndTime = t + atk.animationDuration;
 
         ApplyDamageAndReturn(ref atk, ref def, dmg, ls, rf);
-
-        s.units[attackerIndex] = atk;
-        s.units[targetIndex] = def;
 
         if (recordEvents)
         {
@@ -84,7 +83,9 @@ public static class BattleCombatResolver
         List<BattleEvent> events,
         bool recordEvents)
     {
-        if (s.units[attackerIndex].startActionTime < t && s.units[attackerIndex].nextActionTime >= t)
+        var atker = s.units[attackerIndex];
+
+        if (IsAnimationFinished(atker, t) == false)
         {
             sched.ScheduleNextBasic(s, attackerIndex, t);
             return false;
@@ -110,8 +111,9 @@ public static class BattleCombatResolver
 
         ApplyDamageAndReturn(ref atk, ref def, dmg, ls, rf);
 
-        s.units[attackerIndex] = atk;
-        s.units[targetIndex] = def;
+        atk.startActionTime = t;
+        atk.nextActionTime = t + atk.animationDuration;
+        atk.animationEndTime = t + atk.animationDuration;
 
         if (recordEvents)
         {
@@ -131,8 +133,6 @@ public static class BattleCombatResolver
             });
         }
         sched.ScheduleNextBasic(s, attackerIndex, t);
-        s.units[attackerIndex].startActionTime = t;
-        s.units[attackerIndex].nextActionTime = t + atk.animationDuration + 1;
         return true;
     }
 
@@ -167,5 +167,9 @@ public static class BattleCombatResolver
             }
         }
         return -1;
+    }
+    static bool IsAnimationFinished(in UnitSnapshot atk, float t)
+    {
+        return t > atk.animationEndTime;
     }
 }
