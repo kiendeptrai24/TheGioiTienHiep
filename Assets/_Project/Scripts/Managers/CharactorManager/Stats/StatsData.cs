@@ -66,7 +66,6 @@ public class StatsData : TGTHMonoBehaviour
         stats.ResetStats();
         StatChange();
     }
-
     #region Stats Emplementation
     public Dictionary<StatType, Stat> GetStats() => stats.GetStats();
     public int GetStatValue(StatType type) => stats.GetStatValue(type);

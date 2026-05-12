@@ -74,6 +74,16 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
         {
             _data.mineOfflineDataList.AddOrUpdate(resourceId, 0, 0, "");
         }
+        for (int i = 0; i < _data.itemCharacterDatas.Count; i++)
+        {
+            var heroData = _data.itemCharacterDatas[i] as HeroData;
+            if (heroData != null && heroData.characterId == profileUser.userId)
+            {
+                heroData.itemName = profileUser.userName;
+                _data.characterName = profileUser.userName;
+                break;
+            }
+        }
     }
     #endregion
 }

@@ -8,6 +8,8 @@ public static class DataMapper
     {
         if (dto == null) return null;
         bool isCharacter = dto.isCharacter.HasValue && dto.isCharacter.Value;
+        string characterId = dto.isCharacter.HasValue ? dto.characterId : "";
+
         HeroData heroData = new HeroData();
         heroData.instanceId = dto.instanceId;
         heroData.itemName = dto.name;
@@ -19,6 +21,7 @@ public static class DataMapper
         heroData.elementType = dto.elementType;
         heroData.attackRange = dto.attackRange;
         heroData.isCharactor = isCharacter;
+        heroData.characterId = characterId;
 
         heroData.healthPoint = dto.healthPoint;
         heroData.manaPoint = dto.manaPoint;
@@ -267,6 +270,7 @@ public static class DataMapper
             elementType = data.elementType,
             attackRange = data.attackRange,
             isCharacter = isCharacter,
+            characterId = isCharacter ? data.characterId : "",
             healthPoint = data.healthPoint,
             manaPoint = data.manaPoint,
             spiritPoint = data.spiritPoint,

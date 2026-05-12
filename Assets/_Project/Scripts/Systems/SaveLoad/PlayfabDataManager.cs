@@ -203,6 +203,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         characterService.LoadGame(gameData, () =>
         {
             OnLoadCharacterFormPlayfab?.Invoke(this.gameData.itemCharacterDatas);
+            saveRemotes.Add(characterService);
         });
     }
 

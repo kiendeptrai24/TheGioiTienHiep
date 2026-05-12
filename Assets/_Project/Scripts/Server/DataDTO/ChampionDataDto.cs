@@ -13,6 +13,8 @@ public class ChampionDataDto
 
     [JsonProperty("Nhân vật")]
     public bool? isCharacter;
+    [JsonProperty("mã nhân vật")]
+    public string characterId;
     [JsonProperty("vị trí X")]
     public int? posX;
     [JsonProperty("vị trí Y")]

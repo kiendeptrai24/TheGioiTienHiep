@@ -42,6 +42,7 @@ public class LoadChampionInventoryClient : ILoadGameData<GameData, PlayerClientD
         if (championDto.isCharacter.HasValue && championDto.isCharacter.Value)
         {
             heroData.itemName = championDto.name;
+            heroData.characterId = championDto.characterId;
             var realmDataBase = dataManager.GetItemById(championDto.realmId) as RealmData;
             var raceDataBase = dataManager.GetItemById(championDto.raceId) as RaceData;
             var essenceDataBase = dataManager.GetItemById(championDto.essenceId) as EssenceData;

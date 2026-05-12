@@ -6,9 +6,9 @@ using UnityEngine;
 public class GameData
 {
     public string characterName;
+    public string characterId;
     public Vector3 position;
     public Quaternion rotation;
-    public string characterId;
     public ulong coins;
     public int potentialPoint;
     public int skillPoint;
