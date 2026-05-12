@@ -73,6 +73,6 @@ public class UISkillItem : UIItemSlotLockable
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        navigation = GetComponent<NavigationSkillDetail>();
+        navigation = GetComponent<ActionNavigation>();
     }
 }

@@ -13,7 +13,7 @@ namespace TGTH.Mobile
     public class SkillPresenter : TGTHMonoBehaviour
     {
         [SerializeField] private SkillPageView view;
-        [SerializeField] private ItemSkillDetailPageView itemSkillDetailPageView;
+        [SerializeField] private IItemDetailPageView itemDetailPageView;
         private List<InventoryItem> listItemDatas;
         private UIItemSlotBase currentItemSelect;
         private int currentlyDraggedItemIndex = -1;
@@ -105,6 +105,7 @@ namespace TGTH.Mobile
                 if (i >= count)
                     break;
                 view.listOfEquitmentItems[i].Unlock();
+                view.listOfEquitmentItems[i].OnItemClicked += HandleItemClicked;
             }
         }
         private void InitializeInventoryUI(int amount)
@@ -142,6 +143,7 @@ namespace TGTH.Mobile
                 {
                     var skillData = item1.data as SkillData;
                     heroData.skillDatas.Remove(skillData);
+                    heroData.skillIds.Remove(skillData.instanceId);
                     inventoryCenterManager.ItemPlayerChanged(heroData);
                 }
 
@@ -153,6 +155,7 @@ namespace TGTH.Mobile
                 {
                     var skillData = item2.data as SkillData;
                     heroData.skillDatas.Add(skillData);
+                    heroData.skillIds.Add(skillData.instanceId);
                     inventoryCenterManager.ItemPlayerChanged(heroData);
                 }
             }
@@ -191,7 +194,7 @@ namespace TGTH.Mobile
 
             currentItemSelect = uiItem;
             ResetDrag();
-            itemSkillDetailPageView.HandleItemClicked(uiItem.inventoryItem);
+            itemDetailPageView.HandleItemClicked(uiItem.inventoryItem);
         }
 
         private void HandleItemRightClick(UIItemSlotBase uiItem)

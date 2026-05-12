@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 8510110855920447328}
   - component: {fileID: 8171953604825075545}
   - component: {fileID: 4129220612840200370}
-  - component: {fileID: 3396675953419799803}
+  - component: {fileID: -5153269449012906194}
   m_Layer: 5
   m_Name: InventoryitemTechnique
   m_TagString: Untagged
@@ -167,29 +167,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af4af2478be8ee342a99205d0465d092, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIInventoryItem
-  navigation: {fileID: 3396675953419799803}
+  navigation: {fileID: -5153269449012906194}
+  resetDataOnAwake: 1
   uiInventoryType: 0
   itemImage: {fileID: 3012324827349579536}
   borderImage: {fileID: 6690757912716257938}
   inventoryItem:
     data:
+      instanceId: 
       itemId: 
       itemType: 0
       itemName: 
       itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
+      itemPrice: 0
+      canStack: 0
       itemDescription: 
       currentstack: 0
-      cultivationStage: 0
+      realmType: 0
+      realmId: 
       qualityType: 0
+      elementType: 0
+      health: 0
+      mana: 0
+      spirit: 0
       physicalDamage: 0
       magicalDamage: 0
       spiritDamage: 0
       physicalDefense: 0
       magicalDefense: 0
       spiritDefense: 0
+      potentialPoints: 0
     stackSize: 0
   quantityTxt: {fileID: 3835697348800897838}
---- !u!114 &3396675953419799803
+--- !u!114 &-5153269449012906194
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -198,9 +210,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6790043316534669726}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58b606b96dc009b44928d006f4fd6698, type: 3}
+  m_Script: {fileID: 11500000, guid: f6ab71e211f6b0849bd39695bdc3d68a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NavigationTechniqueDetail
+  m_EditorClassIdentifier: Assembly-CSharp::NavigationItemDetail
   m_ScreenManager: {fileID: 0}
   m_ScreenName: 
 --- !u!1 &7250254712008043886

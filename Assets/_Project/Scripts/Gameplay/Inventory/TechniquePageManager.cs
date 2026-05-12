@@ -16,7 +16,8 @@ public class TechniquePageManager : TGTHMonoBehaviour
         isAwake = true;
         UnLockTechnique();
     }
-    protected override void Start() {
+    protected override void Start()
+    {
     }
     public void SetInventoryData(List<InventoryItem> items)
     {
@@ -32,7 +33,7 @@ public class TechniquePageManager : TGTHMonoBehaviour
     {
         if (data is TechniqueData)
         {
-            if(isAwake)
+            if (isAwake)
             {
                 listItemDatas.Add(new InventoryItem(data));
             }
@@ -46,7 +47,36 @@ public class TechniquePageManager : TGTHMonoBehaviour
     }
     private void UnLockTechnique()
     {
-        presenter.UnlockItem(1);
+        presenter.UnlockItem(GetItemUnlock());
+    }
+    public int GetItemUnlock()
+    {
+        int itemUnlockCount = 1;
+        var cham = InventoryCenterManager.Instance.playerCham;
+        if (cham == null) return itemUnlockCount;
+        RealmType realmType = cham.realmType;
+
+        switch (realmType)
+        {
+            case RealmType.LuyenKhi_1:
+            case RealmType.LuyenKhi_2:
+            case RealmType.LuyenKhi_3:
+            case RealmType.LuyenKhi_4:
+            case RealmType.LuyenKhi_5:
+            case RealmType.LuyenKhi_6:
+            case RealmType.LuyenKhi_7:
+            case RealmType.LuyenKhi_8:
+            case RealmType.LuyenKhi_9:
+                itemUnlockCount = 1;
+                break;
+            case RealmType.TrucCo_SK:
+            case RealmType.TrucCo_TK:
+            case RealmType.TrucCo_HK:
+            case RealmType.TrucCo_DVM:
+                itemUnlockCount = 2;
+                break;
+        }
+        return itemUnlockCount;
     }
     protected override void LoadComponent()
     {

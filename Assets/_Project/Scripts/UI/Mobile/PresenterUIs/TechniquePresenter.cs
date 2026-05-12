@@ -2,15 +2,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
 namespace TGTH.Mobile
 {
     public class TechniquePresenter : TGTHMonoBehaviour
     {
         [SerializeField] private TechniquePageView view;
-        [SerializeField] private ItemTechniqueDetailPageView itemTechniqueDetailPageView;
+        [SerializeField] private IItemDetailPageView itemDetailPageView;
         private InventoryCenterManager inventoryCenterManager;
         private List<InventoryItem> listItemDatas = new List<InventoryItem>();
         private UIItemSlotBase currentItemSelect;
@@ -76,6 +76,7 @@ namespace TGTH.Mobile
                 if (i >= count)
                     break;
                 view.listOfEquitmentItems[i].Unlock();
+                view.listOfEquitmentItems[i].OnItemClicked += HandleItemClicked;
             }
         }
         private List<ItemData> ListTechniqueData(List<ItemData> temps)
@@ -136,6 +137,7 @@ namespace TGTH.Mobile
                 {
                     var techniqueData = item1.data as TechniqueData;
                     heroData.techniqueDatas.Remove(techniqueData);
+                    heroData.techniqueIds.Remove(techniqueData.instanceId);
                     inventoryCenterManager.ItemPlayerChanged(heroData);
                 }
             }
@@ -146,6 +148,7 @@ namespace TGTH.Mobile
                 {
                     var techniqueData = item2.data as TechniqueData;
                     heroData.techniqueDatas.Add(techniqueData);
+                    heroData.techniqueIds.Add(techniqueData.instanceId);
                     inventoryCenterManager.ItemPlayerChanged(heroData);
                 }
             }
@@ -180,7 +183,7 @@ namespace TGTH.Mobile
 
             currentItemSelect = uiItem;
             ResetDrag();
-            itemTechniqueDetailPageView.HandleItemClicked(uiItem.inventoryItem);
+            itemDetailPageView.HandleItemClicked(uiItem.inventoryItem);
         }
 
         private void HandleItemRightClick(UIItemSlotBase uiItem)

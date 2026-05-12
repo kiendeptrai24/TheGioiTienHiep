@@ -69,11 +69,6 @@ public class ItemDetailPageView : IItemDetailPageView
     {
         CreateItemDescriptionDetail(SetColor(label, value, isPercent));
     }
-
-    private void DisplayTextIfNotEmpty(string label, string value)
-    {
-        if (!string.IsNullOrEmpty(value)) CreateItemDescriptionDetail(SetColor(label, value, false));
-    }
     private void DisplayBaseStat(ItemData data, bool isPercent = false)
     {
         DisplayText("Increase Max Health", data.health.ToString(), isPercent);

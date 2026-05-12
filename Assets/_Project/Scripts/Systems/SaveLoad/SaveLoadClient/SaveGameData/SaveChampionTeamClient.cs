@@ -17,7 +17,6 @@ public class SaveChampionTeamClient : ISaveGameData<GameData, PlayerClientDataDt
             List<ChampionDataDto> championDataDto = new List<ChampionDataDto>();
             foreach (var item in gameData.itemInTeamDatas)
             {
-                Debug.Log($"SaveChampionTeamClient: Processing item with id {item.instanceId}");
                 var heroData = item as HeroData;
                 if (heroData == null)
                 {
