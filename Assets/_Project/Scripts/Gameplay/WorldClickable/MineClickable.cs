@@ -42,7 +42,7 @@ public class MineClickable : EntityClickable
                 {
                     SetOwner(ownerId, ownerObj);
                     NotifyResultClientRpc(
-                    $"Bạn đã thắng!",
+                    $"{TextColorUtil.Color("chiếm mỏ thành công", Color.green)} đang khai thác {TextColorUtil.Color("Mỏ linh thạch", Color.green)}!",
                     new ClientRpcParams
                     {
                         Send = new ClientRpcSendParams
@@ -54,7 +54,7 @@ public class MineClickable : EntityClickable
                 else
                 {
                     NotifyResultClientRpc(
-                    $"Bạn đã thua và sẽ được đưa tông môn!",
+                    $"{TextColorUtil.Color("Chiếm mỏ thất bại", Color.red)} sẽ được chuyển về {TextColorUtil.Color("TÔNG MÔN", Color.yellow)}!",
                     new ClientRpcParams
                     {
                         Send = new ClientRpcSendParams

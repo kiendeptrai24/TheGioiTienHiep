@@ -192,16 +192,15 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
 
         if (roll > success)
         {
-            Debug.Log($"Level up failed! Rolled {roll} needed under {success}");
-            result = new LevelUpValidationResult(false, $"Đột phá thất bại!");
+            result = new LevelUpValidationResult(false, $"{TextColorUtil.Color("Đột phá thất bại!", Color.red)}");
         }
         else
         {
             result.itemId = "";
             playerProfile.SetPotentialPoint(nextRealm.rewardPotentialPoint);
             playerProfile.SetSkillPoint(nextRealm.rewardSkillPoint);
-
-            result = new LevelUpValidationResult(true, $"Đột phá thành công! cảnh giới hiện tại là {EnumTranslator.ToVietnamese(nextRealm.realmType)}");
+            string realmTxt = TextColorUtil.Color(EnumTranslator.ToVietnamese(nextRealm.realmType), Color.green);
+            result = new LevelUpValidationResult(true, $"{TextColorUtil.Color("Đột phá thành công!", Color.green)} cảnh giới hiện tại là {realmTxt}");
         }
         result.conditionType = LevelUpConditionType.ChampionLevel;
         SendMessegeToClientRpc(JsonConvert.SerializeObject(result),
@@ -343,7 +342,6 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
     private void SendMessegeToClientRpc(string message, ClientRpcParams clientRpcParams)
     {
         var messege = JsonConvert.DeserializeObject<LevelUpValidationResult>(message);
-        Debug.Log($"Kết quả kiểm tra lên cấp: {messege.IsValid}, lời nhắn: {messege.Message} itemId: {messege.itemId}");
         TopNotificationUI.Instance.ShowNotification(messege.Message);
         var cham = InventoryCenterManager.Instance.playerCham as HeroData;
         if (messege.IsValid)

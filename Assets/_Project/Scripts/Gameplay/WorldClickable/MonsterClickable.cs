@@ -25,15 +25,7 @@ public class MonsterClickable : EntityClickable
             if (win)
             {
                 RewardsAndPunishments(heroId, enemyId);
-                NotifyResultClientRpc(
-                $"Bạn đã thắng",
-                new ClientRpcParams
-                {
-                    Send = new ClientRpcSendParams
-                    {
-                        TargetClientIds = new[] { networkOwner }
-                    }
-                });
+
                 SpawnMonter.Instance.RemoveNetObject(NetworkObject);
             }
             else
@@ -45,7 +37,7 @@ public class MonsterClickable : EntityClickable
                 }
 
                 NotifyResultClientRpc(
-                $"Bạn đã thua và sẽ được đưa tông môn",
+                $"{TextColorUtil.Color("Bạn đã thua", Color.red)} sẽ được chuyển về {TextColorUtil.Color("TÔNG MÔN", Color.yellow)}!",
                 new ClientRpcParams
                 {
                     Send = new ClientRpcSendParams
@@ -71,6 +63,15 @@ public class MonsterClickable : EntityClickable
         if (itemData == null) return;
         ulong reward = itemData.lthach;
         heroResource.PlusCost(reward);
+        NotifyResultClientRpc(
+        $"{TextColorUtil.Color("Chiến thắng", Color.green)} Nhận được {TextColorUtil.Color(reward.ToString(), Color.green)} Linh Thạch",
+        new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new[] { heroObject.OwnerClientId }
+            }
+        });
     }
 
     [ClientRpc]

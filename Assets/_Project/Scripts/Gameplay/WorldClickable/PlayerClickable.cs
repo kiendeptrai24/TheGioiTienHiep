@@ -59,7 +59,8 @@ public class PlayerClickable : EntityClickable
         var enemyClientId = enemyObject.OwnerClientId;
 
         NotifyResultClientRpc(
-            $"Bạn đã thắng! nhận dược {reward} Linh Thạch! 70% tổng số Linh Thạch nhận từ đối thủ",
+            $"{TextColorUtil.Color("Bạn đã thắng", Color.red)} nhận dược" +
+            $"{TextColorUtil.Color(reward.ToString(), Color.green)} Linh Thạch! 70% tổng số Linh Thạch nhận từ đối thủ",
             new ClientRpcParams
             {
                 Send = new ClientRpcSendParams
@@ -69,7 +70,9 @@ public class PlayerClickable : EntityClickable
             });
 
         NotifyResultClientRpc(
-            $"Bạn đã thua! bị trừ {reward} Linh Thạch! 70% tổng số Linh Thạch bị trừ",
+            $"{TextColorUtil.Color("Bạn đã thua", Color.red)} bị trừ " +
+            $"{TextColorUtil.Color(reward.ToString(), Color.red)} Linh Thạch! 70% tổng số Linh Thạch bị trừ\n" +
+            $"Sẽ được chuyển về {TextColorUtil.Color("TÔNG MÔN", Color.yellow)}!",
             new ClientRpcParams
             {
                 Send = new ClientRpcSendParams

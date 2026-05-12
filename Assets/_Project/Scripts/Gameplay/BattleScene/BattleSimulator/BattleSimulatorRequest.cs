@@ -127,11 +127,15 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         Debug.Log($"Đội chiến thắng là: {winner} với thời gian {duration} giây");
         if (winner == "Heroes")
         {
-            TopNotificationUI.Instance.ShowNotification($"Bạn đã thắng! với thời gian {duration} giây");
+            TopNotificationUI.Instance.
+                ShowNotification(
+                    $"{TextColorUtil.Color("Bạn đã thắng", Color.green)}! với thời gian {TextColorUtil.Color(duration.ToString(), Color.yellow)} giây");
         }
         else
         {
-            TopNotificationUI.Instance.ShowNotification($"Bạn đã thua! với thời gian {duration} giây");
+            TopNotificationUI.Instance.
+                ShowNotification(
+                    $"{TextColorUtil.Color("Bạn đã thua", Color.red)}! với thời gian {TextColorUtil.Color(duration.ToString(), Color.yellow)} giây");
         }
         string text = "";
         // convert to Data
