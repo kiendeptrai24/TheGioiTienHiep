@@ -31,7 +31,6 @@ public class SkillData : ItemData
     [Header("Combat")]
     [JsonIgnore]
     public float attackRange;            // Tầm đánh
-    [JsonIgnore]
     public float cooldown;               // Cooldown (giây)
     [JsonIgnore]
     [TextArea] public string specialEffect; // Hiệu ứng / mô tả

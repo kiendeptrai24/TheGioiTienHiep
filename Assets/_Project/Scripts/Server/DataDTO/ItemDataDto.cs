@@ -60,4 +60,6 @@ public class ItemDataDto
 
     [JsonProperty("loại kĩ năng")]
     public SkillType? skillType;
+    [JsonProperty("thời gian hồi chiêu")]
+    public float cooldown;
 }
