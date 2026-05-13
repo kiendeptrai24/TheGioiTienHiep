@@ -21,11 +21,8 @@ public class HeroData : ItemData
     public EssenceData essenceData;
     [JsonIgnore]
     public int level;
-    [JsonIgnore]
     public int attackRange;
-    [JsonIgnore]
     public float movementSpeed;
-    [JsonIgnore]
     public float attackSpeed;
     [JsonIgnore]
     public float healthRegen;

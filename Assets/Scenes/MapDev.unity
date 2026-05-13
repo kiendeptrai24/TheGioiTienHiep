@@ -141742,10 +141742,10 @@ MonoBehaviour:
   - championId: ID_CHARACTER_00004
     champion: {fileID: 6767569796250873745, guid: fbeef77b6bf276d42883394c5492d273,
       type: 3}
-  - championId: ID_CHAMPION_ENEMY_00001
+  - championId: ID_CHAMPION_YEUTHU_00001
     champion: {fileID: 8497757887471785836, guid: ef92c774ce8c86941a3fc2d7fb88ea81,
       type: 3}
-  - championId: ID_CHAMPION_ENEMY_00002
+  - championId: ID_CHAMPION_YEUTHU_00002
     champion: {fileID: 8497757887471785836, guid: ef92c774ce8c86941a3fc2d7fb88ea81,
       type: 3}
   skillsSetup:
@@ -364511,6 +364511,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Monter_World
+      objectReference: {fileID: 0}
+    - target: {fileID: 4653743167290161615, guid: 03819744be33c024db9b04fb221c6a08,
+        type: 3}
+      propertyPath: championSetUps.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4653743167290161615, guid: 03819744be33c024db9b04fb221c6a08,
+        type: 3}
+      propertyPath: championSetUps.Array.data[2].championId
+      value: ID_CHAMPION_YEUTHU_00001
+      objectReference: {fileID: 0}
+    - target: {fileID: 4653743167290161615, guid: 03819744be33c024db9b04fb221c6a08,
+        type: 3}
+      propertyPath: championSetUps.Array.data[2].championIndex.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4653743167290161615, guid: 03819744be33c024db9b04fb221c6a08,
+        type: 3}
+      propertyPath: championSetUps.Array.data[2].championIndex.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5674988850956882470, guid: 03819744be33c024db9b04fb221c6a08,
         type: 3}
