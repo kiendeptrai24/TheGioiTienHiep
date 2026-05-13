@@ -21,6 +21,7 @@ namespace TGTH.Mobile
         public MouseFollower mouseFollower;
         public List<UIItemSlotBase> listOfUIItemsAlreadyOwned = new List<UIItemSlotBase>();
         public List<UIItemSlotBase> listOfUIItemsNotYetOwned = new List<UIItemSlotBase>();
+        public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
         public event Action OnSortClicked;
         public event Action OnRefreshClicked;
 
@@ -69,12 +70,14 @@ namespace TGTH.Mobile
                 if (contentHeroExists == null) break;
                 UIInventoryItem uiItem = Instantiate(itemPrefab, contentHeroExists);
                 listOfUIItemsAlreadyOwned.Add(uiItem);
+                listOfUIItems.Add(uiItem);
             }
             for (int i = 0; i < amount; i++)
             {
                 if (contentHeroNotYetOwned == null) break; ;
                 UIInventoryItem uiItem = Instantiate(itemPrefab, contentHeroNotYetOwned);
                 listOfUIItemsNotYetOwned.Add(uiItem);
+                listOfUIItems.Add(uiItem);
             }
 
         }

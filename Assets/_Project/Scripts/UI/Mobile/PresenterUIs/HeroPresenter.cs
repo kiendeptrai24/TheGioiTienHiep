@@ -11,7 +11,7 @@ namespace TGTH.Mobile
         [SerializeField] private IItemDetailPageView itemDetailPageView;
         private InventoryCenterManager inventoryCenterManager;
         private List<InventoryItem> listItemDatas;
-        private List<ItemData> rootListDatas;
+        [SerializeField] private List<HeroData> rootListDatas;
         private UIItemSlotBase currentItemSelect;
         private int currentlyDraggedItemIndex = -1;
         public event Action<int> OnItemActionRequested;
@@ -31,22 +31,29 @@ namespace TGTH.Mobile
         private void LoadItem()
         {
             inventoryCenterManager = InventoryCenterManager.Instance;
-            inventoryCenterManager.OnItemChampionDataChanged += SetItemData;
-            inventoryCenterManager.OnItemChampionDataChanged += SetItemDataDontHave;
+            inventoryCenterManager.OnItemChampionDataChanged += RefreshInventory;
 
-            rootListDatas = inventoryCenterManager.GetAllDataType(ItemType.Champion);
+            rootListDatas = GameDataCenterManager.Instance.GetChampionDatas();
             SetItemData(inventoryCenterManager.GetDataType(ItemType.Champion));
             SetItemDataDontHave(inventoryCenterManager.GetDataType(ItemType.Champion));
+        }
+
+        private void RefreshInventory(List<ItemData> list)
+        {
+            SetItemDataDontHave(list);
+            SetItemData(list);
         }
 
         private void SetItemDataDontHave(List<ItemData> list)
         {
             var temp = new List<InventoryItem>();
-            foreach (var item in list)
+
+            foreach (var item in rootListDatas)
             {
                 if (item is HeroData)
                 {
-                    if (!rootListDatas.Contains(item))
+                    if (item.isCharactor) continue;
+                    if (!list.Contains(item))
                         temp.Add(new InventoryItem(item));
                 }
             }
@@ -124,7 +131,7 @@ namespace TGTH.Mobile
 
         private void ItemClicked(UIItemSlotBase uiItem)
         {
-            int index = view.listOfUIItemsAlreadyOwned.IndexOf(uiItem);
+            int index = view.listOfUIItems.IndexOf(uiItem);
             if (index < 0) return;
 
             view.DeselectItem(currentItemSelect);

@@ -54,7 +54,7 @@ namespace TGTH.Mobile
             view.OnSearchItemSubmit += SearchItemInventory;
             view.ToggleMouseFollower(false);
 
-            var itemdatas = gameDCM.GetShopItems();
+            var itemdatas = gameDCM.GetShopDatas();
 
             InitializeInventoryUI(itemdatas.Count);
             SetInventoryData(itemdatas);
