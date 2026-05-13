@@ -62,4 +62,8 @@ public class ItemDataDto
     public SkillType? skillType;
     [JsonProperty("thời gian hồi chiêu")]
     public float cooldown;
+    [JsonProperty("thời gian tung chiêu")]
+    public float animationDuration;
+    [JsonProperty("thời gian chiêu thức")]
+    public float castTime;
 }

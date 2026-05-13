@@ -125,9 +125,7 @@ public class SkillData : ItemData
     [JsonIgnore]
     public int statCount;                // Số chỉ số kích hoạt
     [Header("Animation")]
-    [JsonIgnore]
     public float animationDuration;       // Thời gian animation (giây)
-    [JsonIgnore]
     public float castTime;               // Thời gian cast (giây)
     [JsonIgnore]
     public LevelUpConditionData levelUpConditionData = new();

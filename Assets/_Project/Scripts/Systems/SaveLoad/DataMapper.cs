@@ -88,6 +88,8 @@ public static class DataMapper
             if (dto.skillType.HasValue)
                 skillData.skillType = dto.skillType.Value;
             skillData.cooldown = dto.cooldown;
+            skillData.animationDuration = dto.animationDuration;
+            skillData.castTime = dto.castTime;
             itemData = skillData;
         }
         else if (dto.itemType == ItemType.Technique)
@@ -327,6 +329,8 @@ public static class DataMapper
             case SkillData s:
                 dto.raceType = s.raceType;
                 dto.cooldown = s.cooldown;
+                dto.animationDuration = s.animationDuration;
+                dto.castTime = s.castTime;
                 dto.skillType = s.skillType;
                 break;
 
