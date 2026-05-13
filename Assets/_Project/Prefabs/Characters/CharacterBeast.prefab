@@ -2935,7 +2935,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3524313630
+  GlobalObjectIdHash: 3348537847
   InScenePlacedSourceGlobalObjectIdHash: 3348537847
   DeferredDespawnTick: 0
   Ownership: 1
@@ -3041,6 +3041,8 @@ MonoBehaviour:
   turnSpeed: 100
   moveSpeed: 5
   Direction:
+    m_InternalValue: {x: 0, y: 0}
+  OldDirection:
     m_InternalValue: {x: 0, y: 0}
 --- !u!114 &2997244800495556665
 MonoBehaviour:
@@ -3348,8 +3350,8 @@ MonoBehaviour:
       healthPoint: 0
       manaPoint: 0
       spiritPoint: 0
-      moveSpeed: 0
-      spititRange: 0
+      moveSpeedPoint: 0
+      spititRangePoint: 0
     playerResource:
       realmType: 0
       linhThach: 0
@@ -3383,6 +3385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b17a4ef0f6d849e4d8be4f843ff64dfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCharacterUI
+  ShowTopMostFoldoutHeaderGroup: 1
   healthTxt: {fileID: 3073210355375494543}
   nameTxt: {fileID: 4123526802332474534}
   levelTxt: {fileID: 5661183711646731984}

@@ -4,6 +4,7 @@ using UnityEngine;
 public class OneHitBulletPlayback : BulletPlayBackBase
 {
     [SerializeField] protected float moveSpeed;
+    public override float MoveSpeed => moveSpeed;
 
     private void FixedUpdate()
     {

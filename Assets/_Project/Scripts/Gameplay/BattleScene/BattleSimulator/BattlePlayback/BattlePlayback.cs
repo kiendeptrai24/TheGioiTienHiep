@@ -138,7 +138,43 @@ public class BattlePlayback : Singleton<BattlePlayback>
     {
         yield return new WaitForSeconds(.1f);
 
+        bool heroesAlive = champions.Values.Any(c => c != null && IsChampionAlive(c));
+        bool enemiesAlive = championsEnemies.Values.Any(c => c != null && IsChampionAlive(c));
+
+        if (!heroesAlive || !enemiesAlive)
+        {
+            OnResultGame?.Invoke();
+        }
+    }
+
+    private IEnumerator MonitorUntilCompletion()
+    {
+        float timeElapsed = 0f;
+        float maxWaitTime = 5f;
+
+        while (timeElapsed < maxWaitTime)
+        {
+            yield return new WaitForSeconds(0.1f);
+            timeElapsed += 0.1f;
+
+            bool heroesAlive = champions.Values.Any(c => c != null && IsChampionAlive(c));
+            bool enemiesAlive = championsEnemies.Values.Any(c => c != null && IsChampionAlive(c));
+
+            if (!heroesAlive || !enemiesAlive)
+            {
+                OnResultGame?.Invoke();
+                yield break;
+            }
+        }
+
         OnResultGame?.Invoke();
+    }
+
+    private bool IsChampionAlive(ChampionAnimationPlayback champion)
+    {
+        if (champion == null || champion.gameObject == null) return false;
+        var health = champion.GetComponent<HealthController>();
+        return health != null;
     }
     public void StopBattle()
     {
@@ -200,7 +236,8 @@ public class BattlePlayback : Singleton<BattlePlayback>
                 PlayDeath(e);
                 break;
             case BattleEventType.End:
-                StartCoroutine(CheckChampion());
+                playBattle = false;
+                StartCoroutine(MonitorUntilCompletion());
                 break;
             default:
                 break;
@@ -211,7 +248,12 @@ public class BattlePlayback : Singleton<BattlePlayback>
         var bea = e as BattleEventAttack;
         if (bea == null)
             yield break;
-        yield return new WaitForSeconds(bea.castTime);
+
+        var atkCham = GetAnimationCham(bea.attackerUid, bea.team);
+        var defCham = GetAnimationCham(bea.targetUid, bea.targetTeam);
+        float delay = GetHealthDecreaseDelay(bea, atkCham, defCham);
+        if (delay > 0f)
+            yield return new WaitForSeconds(delay);
 
         var chamAnim = GetAnimationCham(bea.targetUid, bea.targetTeam);
         if (chamAnim == null)
@@ -224,6 +266,42 @@ public class BattlePlayback : Singleton<BattlePlayback>
         int damage = bea.damage;
         health.DecreaseHealth(damage, 0);
     }
+
+    private float GetHealthDecreaseDelay(BattleEventAttack bea, ChampionAnimationPlayback atkCham, ChampionAnimationPlayback defCham)
+    {
+        float delay = Mathf.Max(0f, bea.castTime);
+        if (atkCham == null || defCham == null)
+            return delay;
+
+        var attackerController = atkCham.GetComponent<ChampionController>();
+        if (attackerController == null || attackerController.isMeleeChampion)
+            return delay;
+
+        float travel = GetProjectileTravelTime(attackerController, defCham);
+        return delay + travel;
+    }
+
+    private float GetProjectileTravelTime(ChampionController attacker, ChampionAnimationPlayback defCham)
+    {
+        if (attacker.attackPrefab == null || defCham == null)
+            return 0f;
+
+        float speed = GetAttackPrefabMoveSpeed(attacker.attackPrefab);
+        if (speed <= 0f)
+            return 0f;
+
+        float distance = Vector3.Distance(attacker.transform.position, defCham.transform.position);
+        return distance / speed;
+    }
+
+    private float GetAttackPrefabMoveSpeed(GameObject attackPrefab)
+    {
+        if (attackPrefab.TryGetComponent<OneHitBulletPlayback>(out var playbackBullet))
+            return playbackBullet.MoveSpeed;
+        if (attackPrefab.TryGetComponent<BulletPlayBackBase>(out var playbackBase))
+            return playbackBase.MoveSpeed;
+        return 0f;
+    }
     public void PlayAnimationSkill(BattleEvent e)
     {
         var skill = e as BattleEventSkill;
@@ -233,7 +311,6 @@ public class BattlePlayback : Singleton<BattlePlayback>
         var defCham = GetAnimationCham(skill.targetUid, skill.targetTeam);
         if (atkCham == null || defCham == null)
             return;
-        atkCham.PlayAnimationAttack();
         atkCham.GetComponent<TargetFinderBase>().SetTarget(defCham.transform);
         atkCham.PlayAnimationSkill(skill.skillId);
         StartCoroutine(DecreaseHealthBattle(skill));

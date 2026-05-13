@@ -7,6 +7,7 @@ public abstract class BulletPlayBackBase : TGTHMonoBehaviour
     protected ISkillCaster caster;
     protected StatsData statsData;
     protected Transform targetToChase;
+    public virtual float MoveSpeed => 0f;
     public void SetUpTarGet(ISkillCaster caster, Transform target, StatsData statsData)
     {
         this.caster = caster;
