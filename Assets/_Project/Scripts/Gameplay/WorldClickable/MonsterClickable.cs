@@ -16,7 +16,6 @@ public class MonsterClickable : EntityClickable
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     private void EntityAcceptServerRpc(ulong heroId, ulong enemyId)
     {
-        if (!IsServer) return;
         BattleSimulatorRequest.Instance.RequestBattleSimulator(heroId, enemyId, (win) =>
         {
             var playerNet = NetworkManager.SpawnManager.SpawnedObjects[heroId];
@@ -32,8 +31,14 @@ public class MonsterClickable : EntityClickable
             {
                 if (playerNet != null)
                 {
-                    playerNet.transform.position = new Vector3(500, 0, 440);
-                    playerNet.transform.rotation = Quaternion.identity;
+                    var actorC = playerNet.GetComponent<ActorController>();
+                    if (actorC != null)
+                    {
+                        Vector3 pos = new Vector3(500, 0, 440);
+                        Vector3 scale = playerNet.transform.localScale;
+                        Quaternion rot = Quaternion.identity;
+                        actorC.TelePort(pos, rot, scale);
+                    }
                 }
 
                 NotifyResultClientRpc(

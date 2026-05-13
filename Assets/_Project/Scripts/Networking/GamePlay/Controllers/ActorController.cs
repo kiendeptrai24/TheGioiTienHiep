@@ -1,5 +1,6 @@
 using System;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using WorldMap.UI;
 public enum ActorState
@@ -21,7 +22,13 @@ public class ActorController : TGTHNetworkBehaviour
     public IMoveable moveable;
     private bool _autoMove;
     private Vector2 _autoDir;
+    private NetworkTransform nt;
     public NetworkVariable<Vector2> Direction = new(
+        Vector2.zero,
+        NetworkVariableReadPermission.Owner,
+        NetworkVariableWritePermission.Server
+    );
+    public NetworkVariable<Vector2> OldDirection = new(
         Vector2.zero,
         NetworkVariableReadPermission.Owner,
         NetworkVariableWritePermission.Server
@@ -47,13 +54,8 @@ public class ActorController : TGTHNetworkBehaviour
             characterRotation = new TopDownRotation(rig);
             moveable = new TopDownMovement(rig);
         }
+    }
 
-    }
-    protected override void Start()
-    {
-        base.Start();
-    }
-    
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -64,26 +66,31 @@ public class ActorController : TGTHNetworkBehaviour
     {
         moveable.Move(transform, newValue, moveSpeed);
     }
-
+    public void TelePort(Vector3 pos, Quaternion rot, Vector3 scale)
+    {
+        if (!IsServer) return;
+        nt.Teleport(pos, rot, scale);
+    }
     private void FixedUpdate()
     {
         if (!IsOwner) return;
         if (currentState == ActorState.TopDown)
             TopDownControl();
     }
-    
+
     private void TopDownControl()
     {
         Vector2 inputDirection = _autoMove ? _autoDir : inputManager.GetInputDirection();
-
+        if (inputDirection.sqrMagnitude < 0.0001f && OldDirection.Value.sqrMagnitude < 0.0001f)
+            return;
         MoveServerRpc(inputDirection);
     }
-    
+
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
     public void MoveServerRpc(Vector2 dir)
     {
         if (!IsServer) return;
-
+        OldDirection.Value = Direction.Value;
         Direction.Value = dir;
         if (dir.sqrMagnitude < 0.0001f)
         {
@@ -101,11 +108,13 @@ public class ActorController : TGTHNetworkBehaviour
     {
         moveable.Move(transform, Vector2.zero, 0);
     }
-    
+
     protected override void LoadComponent()
     {
         base.LoadComponent();
         inputManager = FindAnyObjectByType<InputManager>();
         rig = GetComponent<Rigidbody>();
+        nt = GetComponent<NetworkTransform>();
+
     }
 }
