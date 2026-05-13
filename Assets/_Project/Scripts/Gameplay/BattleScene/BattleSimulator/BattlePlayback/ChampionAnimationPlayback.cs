@@ -26,7 +26,6 @@ public class ChampionAnimationPlayback : TGTHMonoBehaviour, IChampionAnimation
     {
         if (champion == null)
             m_machine = champion.GetStateMachine();
-
         if (champion.isMeleeChampion)
             m_machine.ChangeState<AttackState_Champion>();
         else

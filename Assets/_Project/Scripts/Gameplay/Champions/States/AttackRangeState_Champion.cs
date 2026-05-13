@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class AttackRangeState_Champion : ChampionState, ISkillTrigger, IAnimationTrigger
 {
+    private Animator animator;
     public AttackRangeState_Champion(ChampionController champion, IStateMachine stateMachine, string anim) : base(champion, stateMachine, anim)
     {
+        this.animator = champion.anim;
     }
 
     public void ActiveSkill()

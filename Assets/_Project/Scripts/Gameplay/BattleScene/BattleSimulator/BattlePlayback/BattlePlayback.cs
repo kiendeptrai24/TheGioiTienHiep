@@ -265,6 +265,7 @@ public class BattlePlayback : Singleton<BattlePlayback>
 
         int damage = bea.damage;
         health.DecreaseHealth(damage, 0);
+        DamagePopupSpawner.Instance.Spawn(damage, chamAnim.transform, bea.isCrit);
     }
 
     private float GetHealthDecreaseDelay(BattleEventAttack bea, ChampionAnimationPlayback atkCham, ChampionAnimationPlayback defCham)
