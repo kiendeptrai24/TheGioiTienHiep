@@ -21,11 +21,11 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private List<ILoadRemote<GameData>> loadRemotes = new();
     private List<ISaveRemote<GameData>> saveRemotes = new();
 
-    private AuthManager authManager;
+    private AuthFacade authFacade;
     private PlayFabDataClientService service;
     private ItemCharacterService characterService;
     private PlayFabClientInstanceAPI clientApi;
-    public AuthManager GetAuthManager() => authManager;
+    public AuthFacade GetAuthManager() => authFacade;
     public PlayFabClientInstanceAPI GetClientAPI() => clientApi;
     private GameDataCenterManager gameDataCenterManager;
     private bool hasLogined = false;
@@ -47,19 +47,19 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         if (Configuration.Instance.IsServerBuild())
         {
             IAuthService authService = new PlayFabAuthCustomService(clientApi, true);
-            authManager = new AuthManager(authService);
-            authManager.Login(new LoginData(), onSuccess, onError);
+            authFacade = new AuthFacade(authService);
+            authFacade.Login(new LoginData(), onSuccess, onError);
         }
         if (Configuration.Instance.IsClientLocalBuild())
         {
             IAuthService authService = new PlayFabAuthCustomService(clientApi);
-            authManager = new AuthManager(authService);
+            authFacade = new AuthFacade(authService);
             ready = true;
         }
         else if (Configuration.Instance.IsClientRemoteBuild())
         {
             IAuthService authService = new PlayFabAuthService(clientApi);
-            authManager = new AuthManager(authService);
+            authFacade = new AuthFacade(authService);
             LobbyController.Instance.OnLobbySearchLobbiesCompleted += (success, lobby) =>
             {
                 if (success)
@@ -146,7 +146,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     }
     private void OnKicked()
     {
-        authManager.Logout(onSuccess, onError);
+        authFacade.Logout(onSuccess, onError);
     }
     private void OnDataCenterReady(GameDataCenter center)
     {
@@ -157,15 +157,15 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     {
         base.Start();
         if (Configuration.Instance.IsServerBuild()) return;
-        authManager.AutoLogin(onSuccess, onError);
+        authFacade.AutoLogin(onSuccess, onError);
     }
     public void Login(LoginData loginData)
     {
-        authManager.Login(loginData, onSuccess, onError);
+        authFacade.Login(loginData, onSuccess, onError);
     }
     public void Logout()
     {
-        authManager.Logout((result) =>
+        authFacade.Logout((result) =>
         {
             navigationToCharacterSelectionScreen.OnClick();
         }, default);

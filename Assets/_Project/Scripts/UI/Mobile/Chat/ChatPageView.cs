@@ -157,41 +157,4 @@ public class ChatPageView : TGTHMonoBehaviour
         var messageString = $"<b><color=#ce4627ff>Chò truyện: </color></b>{name}";
         nameFriendText.text = messageString;
     }
-    private static string HelpText = "\n    -- HELP --\n" +
-                                    "To subscribe to channel(s):\n" +
-                                    "\t<color=#E07B00>\\subscribe</color> <color=green><list of channelnames></color>\n" +
-                                    "\tor\n" +
-                                    "\t<color=#E07B00>\\s</color> <color=green><list of channelnames></color>\n" +
-                                    "\n" +
-                                    "To leave channel(s):\n" +
-                                    "\t<color=#E07B00>\\unsubscribe</color> <color=green><list of channelnames></color>\n" +
-                                    "\tor\n" +
-                                    "\t<color=#E07B00>\\u</color> <color=green><list of channelnames></color>\n" +
-                                    "\n" +
-                                    "To switch the active channel\n" +
-                                    "\t<color=#E07B00>\\join</color> <color=green><channelname></color>\n" +
-                                    "\tor\n" +
-                                    "\t<color=#E07B00>\\j</color> <color=green><channelname></color>\n" +
-                                    "\n" +
-                                    "To send a private message:\n" +
-                                    "\t\\<color=#E07B00>msg</color> <color=green><username></color> <color=green><message></color>\n" +
-                                    "\n" +
-                                    "To add friend(s):\n" +
-                                    "\t\\<color=#E07B00>friend</color> <color=green><username></color> [<color=green><username></color>]\n" +
-                                    "\n" +
-                                    "To remove friend(s):\n" +
-                                    "\t\\<color=#E07B00>unfriend</color> <color=green><username></color> [<color=green><username></color>]\n" +
-                                    "\n" +
-                                    "To change status:\n" +
-                                    "\t\\<color=#E07B00>state</color> <color=green><stateIndex></color> <color=green><message></color>\n" +
-                                    "<color=green>0</color> = Offline " +
-                                    "<color=green>1</color> = Invisible " +
-                                    "<color=green>2</color> = Online " +
-                                    "<color=green>3</color> = Away \n" +
-                                    "<color=green>4</color> = Do not disturb " +
-                                    "<color=green>5</color> = Looking For Group " +
-                                    "<color=green>6</color> = Playing" +
-                                    "\n\n" +
-                                    "To clear the current chat tab (private chats get closed):\n" +
-                                    "\t<color=#E07B00>\\clear</color>";
 }

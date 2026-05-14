@@ -5,13 +5,13 @@ namespace TGTH.Mobile
     public class ForgotPasswordPresenter : TGTHMonoBehaviour
     {
         [SerializeField] private ForgotPageView view;
-        private AuthManager authManager;
+        private AuthFacade authFacade;
         private PlayfabDataManager playfabDataManager;
         protected override void Awake()
         {
             base.Awake();
             playfabDataManager = PlayfabDataManager.Instance;
-            authManager = playfabDataManager.GetAuthManager();
+            authFacade = playfabDataManager.GetAuthManager();
             view.OnStartClicked += OnStartClicked;
         }
         private void OnEnable()
@@ -20,7 +20,7 @@ namespace TGTH.Mobile
         }
         private void OnStartClicked(ForgotPasswordData data)
         {
-            authManager.ForgotPassword(data, onSuccess, onError);
+            authFacade.ForgotPassword(data, onSuccess, onError);
         }
 
         private void onSuccess(string obj)

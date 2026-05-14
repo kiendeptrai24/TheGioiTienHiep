@@ -1,10 +1,10 @@
 using System;
 
-public class AuthManager
+public class AuthFacade
 {
     private readonly IAuthService authService;
 
-    public AuthManager(IAuthService authService)
+    public AuthFacade(IAuthService authService)
     {
         this.authService = authService;
     }

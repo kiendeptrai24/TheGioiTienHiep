@@ -76,7 +76,7 @@ public class ChatPagePresenter : TGTHMonoBehaviour
         }
         //
         string messageString =
-            $"<b><color=#ce4627ff>{nameUser}: </color></b>{text}";
+            $"{TextColorUtil.Color(nameUser + ":", Color.chartreuse)} {TextColorUtil.Color(text, Color.white)}";
 
         view.ShowTextWithFriend(messageString);
     }

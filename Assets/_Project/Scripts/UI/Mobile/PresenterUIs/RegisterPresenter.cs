@@ -6,7 +6,7 @@ namespace TGTH.Mobile
     public class RegisterPresenter : TGTHMonoBehaviour
     {
         [SerializeField] private RegisterPageView view;
-        private AuthManager authManager;
+        private AuthFacade authFacade;
         [SerializeField] private ActionNavigation navigation;
         protected override void Awake()
         {
@@ -16,14 +16,14 @@ namespace TGTH.Mobile
             if (Configuration.Instance.buildType == BuildType.LOCAL_CLIENT)
             {
                 authService = new PlayFabAuthCustomService(clientAPI);
-                authManager = new AuthManager(authService);
+                authFacade = new AuthFacade(authService);
             }
             else if (Configuration.Instance.buildType == BuildType.REMOTE_CLIENT)
             {
                 authService = new PlayFabAuthService(clientAPI);
-                authManager = new AuthManager(authService);
+                authFacade = new AuthFacade(authService);
             }
-            authManager = new AuthManager(authService);
+            authFacade = new AuthFacade(authService);
             view.OnRegisterClicked += OnRegisterClicked;
         }
         private void OnEnable()
@@ -32,7 +32,7 @@ namespace TGTH.Mobile
         }
         private void OnRegisterClicked(RegisterData data)
         {
-            authManager.Register(data, onSuccess, onError);
+            authFacade.Register(data, onSuccess, onError);
         }
 
         private void onError(AuthError error)
