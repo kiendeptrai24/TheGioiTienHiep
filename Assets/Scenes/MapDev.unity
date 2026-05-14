@@ -40859,13 +40859,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WorldClickSystem
   mainCamera: {fileID: 1243152619}
   input: {fileID: 0}
+  clickEffectPrefab: {fileID: 7125342968594914219, guid: b72ed69f8b26650449a45e09dca1a12a,
+    type: 3}
   pathFollowerRB: {fileID: 0}
   whatIsEntity:
     serializedVersion: 2
     m_Bits: 4224
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 257
+    m_Bits: 256
 --- !u!4 &441853267
 Transform:
   m_ObjectHideFlags: 0
@@ -302472,7 +302474,7 @@ GameObject:
   - component: {fileID: 4619228110485021994}
   - component: {fileID: 5803744343230767757}
   - component: {fileID: 3928791471962601379}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Plane (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

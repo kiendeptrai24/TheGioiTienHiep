@@ -6,6 +6,7 @@ public class WorldClickSystem : TGTHMonoBehaviour
     [Header("Refs")]
     [SerializeField] private Camera mainCamera;
     [SerializeField] private InputManager input;
+    [SerializeField] private GameObject clickEffectPrefab;
     public PathFollowerRB pathFollowerRB;
     public LayerMask whatIsEntity;
     public LayerMask whatIsGround;
@@ -55,8 +56,17 @@ public class WorldClickSystem : TGTHMonoBehaviour
             if (findPathResult == null)
                 return;
 
-            if (pathFollowerRB != null)
+            if (pathFollowerRB != null && findPathResult.ok)
+            {
+                ShowClickEffect(hitGround.point);
                 pathFollowerRB.SetPath(findPathResult.path);
+            }
         }
+    }
+    private void ShowClickEffect(Vector3 pos)
+    {
+        GameObject fx = ObjectPool.Instance.GetObject(clickEffectPrefab, pos, Quaternion.identity);
+
+        ObjectPool.Instance.ReturnObject(fx, .5f);
     }
 }
