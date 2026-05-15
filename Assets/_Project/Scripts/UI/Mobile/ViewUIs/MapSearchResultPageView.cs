@@ -23,7 +23,7 @@ namespace TGTH.Mobile
         protected override void Awake()
         {
             base.Awake();
-            
+
             okBtn.onClick.AddListener(() => OnOkClicked?.Invoke());
             cancelBtn.onClick.AddListener(() => OnCancelClicked?.Invoke());
             previousBtn.onClick.AddListener(() => OnPreviousClicked?.Invoke());

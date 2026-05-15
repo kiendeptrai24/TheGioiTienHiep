@@ -21,7 +21,6 @@ public class PathFollowerRB : TGTHNetworkBehaviour
     {
         base.Awake();
         LoadComponent();
-        pathTest.follower = this;
     }
     protected override void Start()
     {

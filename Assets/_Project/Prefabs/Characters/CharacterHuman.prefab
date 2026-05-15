@@ -3681,7 +3681,6 @@ GameObject:
   - component: {fileID: 2417333655836378672}
   - component: {fileID: 5961338288685753757}
   - component: {fileID: 3100323945643275413}
-  - component: {fileID: 7901223169405952457}
   - component: {fileID: 2303058893719603686}
   - component: {fileID: 6332937592598727563}
   - component: {fileID: 3855082729364616063}
@@ -3695,6 +3694,7 @@ GameObject:
   - component: {fileID: 6684745471865655265}
   - component: {fileID: 6461800011671751440}
   - component: {fileID: 5890339853255851662}
+  - component: {fileID: -1377695170422594978}
   m_Layer: 12
   m_Name: CharacterHuman
   m_TagString: Untagged
@@ -3838,6 +3838,8 @@ MonoBehaviour:
   moveSpeed: 5
   Direction:
     m_InternalValue: {x: 0, y: 0}
+  OldDirection:
+    m_InternalValue: {x: 0, y: 0}
 --- !u!114 &2997244800495556665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3919,28 +3921,6 @@ MonoBehaviour:
   UseRigidBodyForMotion: 0
   AutoUpdateKinematicState: 1
   AutoSetKinematicOnDespawn: 1
---- !u!114 &7901223169405952457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7804178499550283321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc16bdcf857dc81478c1a8e12ac5a9f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PathFollowerRB
-  ShowTopMostFoldoutHeaderGroup: 1
-  mapSpawn: {fileID: 0}
-  pathTest: {fileID: 0}
-  actorController: {fileID: 432532413510505737}
-  rb: {fileID: 2417333655836378672}
-  inputManager: {fileID: 0}
-  arriveDistance: 0.15
-  lookAheadSteps: 4
-  cornerSlowDown: 0.8
-  hasPath: 0
 --- !u!114 &2303058893719603686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4144,8 +4124,8 @@ MonoBehaviour:
       healthPoint: 0
       manaPoint: 0
       spiritPoint: 0
-      moveSpeed: 0
-      spititRange: 0
+      moveSpeedPoint: 0
+      spititRangePoint: 0
     playerResource:
       realmType: 0
       linhThach: 0
@@ -4179,6 +4159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b17a4ef0f6d849e4d8be4f843ff64dfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCharacterUI
+  ShowTopMostFoldoutHeaderGroup: 1
   healthTxt: {fileID: 4896164884110017036}
   nameTxt: {fileID: 8597433091317515683}
   levelTxt: {fileID: 8828253300856403890}
@@ -4414,6 +4395,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChampionSetup
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &-1377695170422594978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9911f1eb208da124494df2f65139861d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavMeshPathFollower
+  ShowTopMostFoldoutHeaderGroup: 1
+  rb: {fileID: 2417333655836378672}
+  actorController: {fileID: 432532413510505737}
+  inputManager: {fileID: 0}
+  arriveDistance: 0.2
+  hasPath: 0
+  currentCornerIndex: 0
 --- !u!1 &7925927596451025887
 GameObject:
   m_ObjectHideFlags: 0

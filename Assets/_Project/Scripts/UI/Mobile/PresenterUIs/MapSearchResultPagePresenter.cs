@@ -52,8 +52,7 @@ namespace TGTH.Mobile
 
             if (result == null) return;
 
-            Vector3 resultPos = pathTest.mapSpawn.GridToWorld(result.goal);
-            var ok = pathTest.FindPathWithPossition(resultPos);
+            var ok = pathTest.FindPathWithPossition(result.goal);
             if (ok.ok)
             {
                 result.distance = ok.distance;
@@ -78,8 +77,7 @@ namespace TGTH.Mobile
             result = findPathResults[currentIndex];
             if (result == null) return;
 
-            Vector3 resultPos = pathTest.mapSpawn.GridToWorld(result.goal);
-            pathTest.FindPathWithPossition(resultPos);
+            pathTest.FindPathWithPossition(result.goal);
             view.ShowData(result);
         }
 
@@ -92,7 +90,7 @@ namespace TGTH.Mobile
         {
             if (result == null) return;
 
-            Vector3 to = pathTest.mapSpawn.GridToWorld(result.goal);
+            Vector3 to = result.goal;
             Vector3 dir = to - target.position;
 
             Vector2 d = new Vector2(dir.x, dir.z);

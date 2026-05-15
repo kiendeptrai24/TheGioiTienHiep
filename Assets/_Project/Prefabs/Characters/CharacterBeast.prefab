@@ -2885,7 +2885,6 @@ GameObject:
   - component: {fileID: 2417333655836378672}
   - component: {fileID: 5961338288685753757}
   - component: {fileID: 3100323945643275413}
-  - component: {fileID: 7901223169405952457}
   - component: {fileID: 2303058893719603686}
   - component: {fileID: 6332937592598727563}
   - component: {fileID: 3855082729364616063}
@@ -2899,6 +2898,7 @@ GameObject:
   - component: {fileID: 7085458474231755661}
   - component: {fileID: 1787905801803083493}
   - component: {fileID: 1070417750012986542}
+  - component: {fileID: 8577986828584488616}
   m_Layer: 12
   m_Name: CharacterBeast
   m_TagString: Untagged
@@ -3125,28 +3125,6 @@ MonoBehaviour:
   UseRigidBodyForMotion: 0
   AutoUpdateKinematicState: 1
   AutoSetKinematicOnDespawn: 1
---- !u!114 &7901223169405952457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7804178499550283321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc16bdcf857dc81478c1a8e12ac5a9f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PathFollowerRB
-  ShowTopMostFoldoutHeaderGroup: 1
-  mapSpawn: {fileID: 0}
-  pathTest: {fileID: 0}
-  actorController: {fileID: 432532413510505737}
-  rb: {fileID: 2417333655836378672}
-  inputManager: {fileID: 0}
-  arriveDistance: 0.15
-  lookAheadSteps: 4
-  cornerSlowDown: 0.8
-  hasPath: 0
 --- !u!114 &2303058893719603686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3621,6 +3599,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChampionSetup
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &8577986828584488616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9911f1eb208da124494df2f65139861d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavMeshPathFollower
+  ShowTopMostFoldoutHeaderGroup: 1
+  rb: {fileID: 2417333655836378672}
+  actorController: {fileID: 432532413510505737}
+  inputManager: {fileID: 0}
+  arriveDistance: 0.2
+  hasPath: 0
+  currentCornerIndex: 0
 --- !u!1 &7825434533555785058
 GameObject:
   m_ObjectHideFlags: 0

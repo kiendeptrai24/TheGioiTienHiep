@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ public class WorldClickSystem : TGTHMonoBehaviour
     [SerializeField] private Camera mainCamera;
     [SerializeField] private InputManager input;
     [SerializeField] private GameObject clickEffectPrefab;
-    public PathFollowerRB pathFollowerRB;
+    public NavMeshPathFollower pathFollowerRB;
     public LayerMask whatIsEntity;
     public LayerMask whatIsGround;
     private bool canClick = false;
@@ -24,7 +25,7 @@ public class WorldClickSystem : TGTHMonoBehaviour
     }
     private void OnPlayerExists(NetworkObject playerNet)
     {
-        this.pathFollowerRB = playerNet.GetComponent<PathFollowerRB>();
+        this.pathFollowerRB = playerNet.GetComponent<NavMeshPathFollower>();
         canClick = true;
     }
     protected override void Start()
@@ -52,14 +53,13 @@ public class WorldClickSystem : TGTHMonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hitGround, 100, whatIsGround))
         {
-            var findPathResult = PathFinding.Instance.FindPathWithPossition(hitGround.point);
-            if (findPathResult == null)
-                return;
-
-            if (pathFollowerRB != null && findPathResult.ok)
+            var pos = pathFollowerRB.transform.position;
+            if (NavMeshPathUtility.TryGetCorners(pos, hitGround.point, out List<Vector3> orners))
             {
+                pathFollowerRB.SetPath(orners);
+                pathFollowerRB.Move();
                 ShowClickEffect(hitGround.point);
-                pathFollowerRB.SetPath(findPathResult.path);
+                PathVisualizer.Instance.Draw(orners);
             }
         }
     }
