@@ -49,7 +49,15 @@ public class UIInventoryItemShop : UIItemSlotBase
         base.SetData(sprite, quantity);
         quantityTxt.text = quantity > 1 ? quantity.ToString() : string.Empty;
         nameTxt.text = inventoryItem.data.itemName;
-        priceTxt.text = inventoryItem.data.itemPrice.ToString()+"K";
+        if (inventoryItem.data.itemPrice >= 1000)
+        {
+            priceTxt.text = inventoryItem.data.itemPrice / 1000 + "K";
+        }
+        else
+        {
+            priceTxt.text = inventoryItem.data.itemPrice.ToString();
+        }
+
     }
     public override bool CanReceive(ItemDragContext ctx)
     {

@@ -526,7 +526,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &991609831540351683
 CanvasRenderer:
@@ -643,21 +643,31 @@ MonoBehaviour:
   borderImage: {fileID: 4725480414362710936}
   inventoryItem:
     data:
+      instanceId: 
       itemId: 
       itemType: 0
       itemName: 
       itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
       itemPrice: 0
+      canStack: 0
       itemDescription: 
       currentstack: 0
-      cultivationStage: 0
+      realmType: 0
+      realmId: 
       qualityType: 0
+      elementType: 0
+      health: 0
+      mana: 0
+      spirit: 0
       physicalDamage: 0
       magicalDamage: 0
       spiritDamage: 0
       physicalDefense: 0
       magicalDefense: 0
       spiritDefense: 0
+      potentialPoints: 0
     stackSize: 0
   quantityTxt: {fileID: 893547461056404278}
   nameTxt: {fileID: 8359697808246263552}

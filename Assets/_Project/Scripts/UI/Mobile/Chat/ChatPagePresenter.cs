@@ -3,6 +3,7 @@ using Photon.Chat;
 using Photon.Chat.TGTHChat;
 using TGTH.Mobile;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class ChatPagePresenter : TGTHMonoBehaviour
 {
@@ -25,6 +26,13 @@ public class ChatPagePresenter : TGTHMonoBehaviour
     [SerializeField] private FriendPagePresenter friendPagePresenter;
     private ChatClient chatClient;
     private string nameFriend;
+    private int curChatCount = 0;
+    private int maxChatCount = 2;
+    private int curPrivateChatCount = 0;
+    private int maxPrivateChatCount = 10;
+    private int timeToResetChat = 30;
+    private float timer = 0;
+
     protected override void Awake()
     {
         base.Awake();
@@ -32,10 +40,23 @@ public class ChatPagePresenter : TGTHMonoBehaviour
         {
             if (view.chatPrivate)
             {
+                if (curPrivateChatCount >= maxPrivateChatCount)
+                {
+                    TopNotificationUI.Instance.ShowNotification($"Vui lòng đợi {TextColorUtil.Color("30s", Color.yellow)} sau để chat lại");
+                    return;
+                }
+                curPrivateChatCount++;
+
                 OnSendPrivateChat(text);
             }
             else
             {
+                if (curChatCount >= maxChatCount)
+                {
+                    TopNotificationUI.Instance.ShowNotification($"Vui lòng đợi {TextColorUtil.Color("30s", Color.yellow)} sau để chat lại");
+                    return;
+                }
+                curChatCount++;
                 OnSendGlobalChat(text);
             }
         };
@@ -58,6 +79,15 @@ public class ChatPagePresenter : TGTHMonoBehaviour
     {
         base.Start();
         chatClient = chatManager.chatClient;
+    }
+    private void Update()
+    {
+        if (Time.time > timer + timeToResetChat)
+        {
+            timer = Time.time;
+            curChatCount = 0;
+            curPrivateChatCount = 0;
+        }
     }
     private void OnPrivateMessage(string senders, object messages, string channelName)
     {
