@@ -68,12 +68,18 @@ public class ChatPageView : TGTHMonoBehaviour
         {
             if (showZoomOut == false)
             {
+                if (EmptyText(chatInputZoomOutField.text))
+                    return;
+
                 OnSubmitChat?.Invoke(chatInputField.text);
                 chatInputField.text = "";
                 chatInputField.ActivateInputField();
             }
             else
             {
+                if (EmptyText(chatInputZoomOutField.text))
+                    return;
+
                 OnSubmitChat?.Invoke(chatInputZoomOutField.text);
                 chatInputZoomOutField.text = "";
                 chatInputZoomOutField.ActivateInputField();
@@ -85,6 +91,9 @@ public class ChatPageView : TGTHMonoBehaviour
     {
         submitSmallChatButton.onClick.AddListener(() =>
         {
+            if (EmptyText(chatInputZoomOutField.text))
+                return;
+
             OnSubmitChat?.Invoke(chatInputField.text);
             chatInputField.text = "";
             chatInputField.ActivateInputField();
@@ -92,12 +101,15 @@ public class ChatPageView : TGTHMonoBehaviour
 
         submitLargeChatButton.onClick.AddListener(() =>
         {
+            if (EmptyText(chatInputZoomOutField.text))
+                return;
+
             OnSubmitChat?.Invoke(chatInputZoomOutField.text);
             chatInputZoomOutField.text = "";
             chatInputZoomOutField.ActivateInputField();
         });
     }
-
+    private bool EmptyText(string text) => string.IsNullOrWhiteSpace(text);
     private void CallbackButtonNavigation()
     {
         zoomInButton.m_OnClick += () =>
