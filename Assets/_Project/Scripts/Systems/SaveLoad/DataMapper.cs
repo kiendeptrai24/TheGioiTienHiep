@@ -224,6 +224,7 @@ public static class DataMapper
         if (dto == null) return null;
         SpiritStoneMineData mineData = new SpiritStoneMineData();
         mineData.instanceId = dto.instanceId;
+        mineData.resourceSourceType = dto.resourceSourceType;
         mineData.itemName = dto.name;
         mineData.level = dto.level;
         mineData.maxStorage = dto.amount;
@@ -237,6 +238,7 @@ public static class DataMapper
         if (dto == null) return null;
         DemonBeastData beastData = new DemonBeastData();
         beastData.instanceId = dto.instanceId;
+        beastData.resourceSourceType = dto.resourceSourceType;
         beastData.itemName = dto.name;
         beastData.itemDescription = dto.description;
         beastData.level = dto.level;

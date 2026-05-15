@@ -6,6 +6,8 @@ public class SpiritStoneMineDataDto
 {
     [JsonProperty("Mã")]
     public string instanceId;
+    [JsonProperty("Loại")]
+    public ResourceSourceType resourceSourceType;
     [JsonProperty("Tên")]
     public string name;
     [JsonProperty("Cấp")]

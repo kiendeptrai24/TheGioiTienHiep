@@ -1,14 +1,14 @@
+using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using WorldMap.Domain;
 
 public class PathFinding : Singleton<PathFinding>
 {
     public NavMeshPathFollower follower;
-    public MapSpawn mapSpawn;
     public Transform B;
     private PathVisualizer pathVisualizer;
-
 
     public class FindPathResult
     {
@@ -24,19 +24,27 @@ public class PathFinding : Singleton<PathFinding>
     protected override void Start()
     {
         base.Start();
+        PlayerNetManager.Instance.OnPlayerExiststed += OnPlayerExiststed;
+
         pathVisualizer = PathVisualizer.Instance;
     }
+
+    private void OnPlayerExiststed(NetworkObject playerNet)
+    {
+        follower = playerNet.GetComponent<NavMeshPathFollower>();
+    }
+
     [ContextMenu("Find Path A->B")]
     public void Find()
     {
-        if (mapSpawn == null || follower == null || B == null)
+        if (follower == null || B == null)
         {
             Debug.Log("Missing references");
             return;
         }
+        this.corners.Clear();
         var start = follower.transform.position;
         var goal = B.position;
-
         if (NavMeshPathUtility.TryGetCorners(start, goal, out List<Vector3> corners))
         {
             if (follower != null && corners != null)
@@ -48,24 +56,36 @@ public class PathFinding : Singleton<PathFinding>
     }
     public FindPathResult FindPathWithPossition(Vector3 pos)
     {
-        if (mapSpawn == null || follower == null)
+        if (follower == null)
         {
             return null;
         }
         var start = follower.transform.position;
         var goal = pos;
+        this.corners.Clear();
         FindPathResult result = new FindPathResult();
         result.ok = false;
-        if (NavMeshPathUtility.TryGetCorners(start, goal, out List<Vector3> corners))
-        {
-            result.ok = true;
-            result.path = corners;
-            result.start = start;
-            result.goal = goal;
-            result.distance = path.Count;
-            return result;
-            
-        }
+        if (NavMeshPathUtility.TryGetNearestReachablePoint(goal, 3, out Vector3 pointNearest))
+            if (NavMeshPathUtility.TryGetCorners(start, pointNearest, out List<Vector3> corners))
+            {
+                float totalDistance = 0f;
+
+                for (int i = 0; i < corners.Count - 1; i++)
+                {
+                    totalDistance += Vector3.Distance(
+                        corners[i],
+                        corners[i + 1]
+                    );
+                }
+                this.corners = corners;
+                result.ok = true;
+                result.path = corners;
+                result.start = start;
+                result.goal = goal;
+                result.distance = Mathf.RoundToInt(totalDistance);
+                return result;
+
+            }
 
         return result;
     }
@@ -74,6 +94,7 @@ public class PathFinding : Singleton<PathFinding>
         if (follower != null)
         {
             follower.SetPath(corners);
+            follower.Move();
         }
     }
     public static void SimplifyInPlace(List<GridCoord> path)

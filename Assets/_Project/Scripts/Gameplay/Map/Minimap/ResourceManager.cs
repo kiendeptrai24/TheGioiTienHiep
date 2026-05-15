@@ -23,7 +23,7 @@ public class ResourceManager : Singleton<ResourceManager>
 
         foreach (var col in colliders)
         {
-            var itemWorld = col.GetComponent<ItemMapWorld>();
+            var itemWorld = col.gameObject.transform.root.GetComponent<ItemMapWorld>();
             if (itemWorld != null)
             {
                 result.Add(itemWorld.GetItemData());

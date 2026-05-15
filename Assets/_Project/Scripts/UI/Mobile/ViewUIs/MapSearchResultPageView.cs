@@ -42,7 +42,7 @@ namespace TGTH.Mobile
             if (result == null) return;
             modelIcon.sprite = result.itemData.itemIcon;
             modelNameTxt.text = result.itemData.itemName;
-            posResultTxt.text = result.goal.x.ToString() + ":" + result.goal.z.ToString();
+            posResultTxt.text = Mathf.RoundToInt(result.goal.x).ToString() + ":" + Mathf.RoundToInt(result.goal.z).ToString();
             distanceResultTxt.text = result.distance.ToString() + " ô";
 
         }

@@ -4,7 +4,7 @@ public class ItemMapWorld : TGTHNetworkBehaviour
 {
     private Canvas canvas;
     [SerializeField] private string instanceId;
-    private ItemResourseData itemData;
+    [SerializeField] private ItemResourseData itemData;
     protected override void Awake()
     {
         base.Awake();

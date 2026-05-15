@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using WorldMap.Domain;
 using static PathFinding;
 
 namespace TGTH.Mobile
@@ -77,7 +77,9 @@ namespace TGTH.Mobile
             if (curItem != null && curItem.itemData != null)
             {
                 var itemResources = curItem.itemData as ItemResourseData;
-                var resource = pathFinding.mapSpawn.WorldToGrid(itemResources.position);
+                int xPos = Mathf.RoundToInt(itemResources.position.x);
+                int yPos = Mathf.RoundToInt(itemResources.position.z);
+                var resource = new GridCoord(xPos, yPos);
                 foreach (var item in findPathResults)
                 {
                     if (item.goal.x == resource.x && item.goal.z == resource.z)
@@ -91,7 +93,7 @@ namespace TGTH.Mobile
                     }
                 }
                 var result = pathFinding.FindPathWithPossition(itemResources.position);
-
+                if (result == null) return;
                 if (result.ok)
                 {
                     result.itemData = itemResources;

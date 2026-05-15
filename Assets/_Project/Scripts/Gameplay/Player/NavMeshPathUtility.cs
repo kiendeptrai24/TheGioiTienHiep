@@ -76,4 +76,23 @@ public static class NavMeshPathUtility
 
         return corners.Count > 0;
     }
+    public static bool TryGetNearestReachablePoint(
+    Vector3 center,
+    float radius,
+    out Vector3 result)
+    {
+        result = Vector3.zero;
+
+        if (NavMesh.SamplePosition(
+            center,
+            out NavMeshHit hit,
+            radius,
+            NavMesh.AllAreas))
+        {
+            result = hit.position;
+            return true;
+        }
+
+        return false;
+    }
 }
