@@ -3,13 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
-[Serializable]
-public class MineOwnershipSegment
-{
-    public FixedString64Bytes OwnerId;
-    public float StartTime;
-    public float EndTime;
-}
+
 public class SpiritStoneMine : TGTHNetworkBehaviour
 {
     private NetworkVariable<float> CurrentMiningProgress = new(
