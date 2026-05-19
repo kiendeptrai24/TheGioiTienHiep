@@ -154,7 +154,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         var playerResource = playerProfile.GetPlayerResource();
 
 
-        HeroData heroData = statsData.heroData as HeroData;
+        HeroData heroData = statsData.chamionData as HeroData;
         LevelUpConditionData conditionData = new();
 
         var realmType = heroData.realmType;
@@ -441,7 +441,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         var profile = playerObj.GetComponent<PlayerProfile>();
         var playerResource = profile.GetPlayerResource();
         var statsData = playerObj.GetComponent<StatsData>();
-        var nextRealm = levelUpStranlation.GetNextRealm(statsData.heroData.realmType);
+        var nextRealm = levelUpStranlation.GetNextRealm(statsData.chamionData.realmType);
 
         if (nextRealm != null)
         {

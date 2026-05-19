@@ -62,9 +62,9 @@ public class MonsterClickable : EntityClickable
 
         if (heroObject == null || enemyObject == null) return;
         var heroResource = heroObject.GetComponent<ResourceStorage>();
-        var enemyMapWorld = enemyObject.GetComponent<ItemMapWorld>();
+        var enemyMapWorld = enemyObject.GetComponent<ResourceNode>();
         if (heroResource == null || enemyMapWorld == null) return;
-        var itemData = enemyMapWorld.GetItemData() as DemonBeastData;
+        var itemData = enemyMapWorld.GetData() as DemonBeastData;
         if (itemData == null) return;
         ulong reward = itemData.lthach;
         heroResource.PlusCost(reward);

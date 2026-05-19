@@ -20,7 +20,7 @@ namespace TGTH.Mobile
         public void UpdateDataItem()
         {
             view.SetStatsData(statsManager.GetStats());
-            view.ShowCharacterIdentifyData(statsManager.heroData);
+            view.ShowCharacterIdentifyData(statsManager.chamionData);
         }
     }
 }

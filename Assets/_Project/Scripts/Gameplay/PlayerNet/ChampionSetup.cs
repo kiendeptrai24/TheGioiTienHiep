@@ -13,8 +13,6 @@ public class ChampionSetup : TGTHNetworkBehaviour
     {
         base.OnNetworkSpawn();
         if (!IsOwner) return;
-        statManager = StatManager.Instance;
-        inventoryCM = InventoryCenterManager.Instance;
         statsData = GetComponent<StatsData>();
         championData = inventoryCM.championData;
         statsData.SetUpItem(championData);

@@ -8,9 +8,10 @@ public class StatsData : TGTHMonoBehaviour
 {
     public event Action OnValueChanged;
     public event Action<StatsData> OnStatReady;
+    public bool IsReady => stats != null && chamionData != null;
     private StatsDataCore stats;
 
-    public ItemData heroData;
+    public ItemData chamionData;
     public List<TechniqueData> techniqueData;
     public List<SkillData> skillDatas;
     public List<EquipmentData> equiDatas;
@@ -75,14 +76,14 @@ public class StatsData : TGTHMonoBehaviour
     #region Setup Item Data
     private void Setup()
     {
-        stats.SetUp(heroData);
+        stats.SetUp(chamionData);
         StatChange();
         OnStatReady?.Invoke(this);
     }
 
     public void SetUpItem(ItemData item)
     {
-        this.heroData = item;
+        this.chamionData = item;
         if (stats == null)
         {
             stats = new StatsDataCore(item);

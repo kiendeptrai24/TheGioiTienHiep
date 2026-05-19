@@ -108,13 +108,12 @@ public class PlayerMineRelinker : TGTHNetworkBehaviour
     private MineRelinkData ProcessMineRelink(SpiritStoneMine mine, NetworkObject playerObject, string playerId)
     {
         var data = new MineRelinkData();
+        // data.mineId = mine.NetworkObjectId;
 
-        data.mineId = mine.NetworkObjectId;
-
-        data.pendingCoins = mine.GetPendingOfflineCoins(playerId);
-        data.relinked = true;
-        data.stolenByPlayerId = null;
-        mine.AddOfflineCoinsToOwner(playerObject.NetworkObjectId, playerId);
+        // data.pendingCoins = mine.GetPendingOfflineCoins(playerId);
+        // data.relinked = true;
+        // data.stolenByPlayerId = null;
+        // mine.AddOfflineCoinsToOwner(playerObject.NetworkObjectId, playerId);
         return data;
     }
 }

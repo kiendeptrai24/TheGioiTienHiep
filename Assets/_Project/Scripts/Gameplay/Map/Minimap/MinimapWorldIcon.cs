@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MinimapWorldIcon : TGTHMonoBehaviour
 {
-    private ItemMapWorld item;
+    private ResourceNode item;
     protected override void Awake()
     {
         base.Awake();
@@ -11,6 +11,6 @@ public class MinimapWorldIcon : TGTHMonoBehaviour
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        item = GetComponentInParent<ItemMapWorld>();
+        item = GetComponentInParent<ResourceNode>();
     }
 }

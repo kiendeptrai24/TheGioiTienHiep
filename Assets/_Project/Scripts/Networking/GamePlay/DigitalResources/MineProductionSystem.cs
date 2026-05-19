@@ -56,7 +56,7 @@ public class MineProductionSystem
 
         data.currentAmount += amount;
 
-        networkState.CurrentAmount.Value =
+        networkState.currentAmount =
             data.currentAmount;
 
         storage.PlusCost((ulong)amount);

@@ -4,13 +4,12 @@ public class MineOfflineRewardSystem
 {
     private readonly SpiritStoneMineData data;
 
-    public MineOfflineRewardSystem(
-        SpiritStoneMineData data)
+    public MineOfflineRewardSystem(SpiritStoneMineData data)
     {
         this.data = data;
     }
 
-    public ulong Calculate(
+    public ulong GetReward(
         float start,
         float end)
     {
@@ -25,4 +24,8 @@ public class MineOfflineRewardSystem
             duration
         );
     }
+    public void GetReward(ulong NetId, string playerId, float start, float end)
+    {
+    }
+    
 }

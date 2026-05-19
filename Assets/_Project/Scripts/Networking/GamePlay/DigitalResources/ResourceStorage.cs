@@ -1,9 +1,9 @@
 using System;
 using Unity.Netcode;
-using UnityEngine;
 
 public class ResourceStorage : TGTHNetworkBehaviour
 {
+
     public NetworkVariable<ulong> SpiritStone = new(
         0,
         NetworkVariableReadPermission.Owner,
@@ -19,7 +19,7 @@ public class ResourceStorage : TGTHNetworkBehaviour
     {
         SpiritStone.OnValueChanged -= HandleCoinsChanged;
     }
-    public void SetSpiritStone(ulong coins)
+    public void InitSpiritStone(ulong coins)
     {
         if (!IsServer) return;
         SpiritStone.Value = coins;
@@ -50,7 +50,7 @@ public class ResourceStorage : TGTHNetworkBehaviour
     public void SetPlayerResource(PlayerResource playerResource)
     {
         if (!IsServer) return;
-        SetSpiritStone((ulong)playerResource.linhThach);
+        InitSpiritStone((ulong)playerResource.linhThach);
     }
     // ===== OFFLINE COINS =====
     public void AddOfflineCoins(ulong amount)

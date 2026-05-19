@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class MineClickable : EntityClickable
 {
-    private SpiritStoneMine mine;
+    private SpiritStoneMine mines;
     private string mineId;
-
     private PlayerBattleRoster battleRoster;
     public override void OnNetworkSpawn()
     {
-        mine = GetComponent<SpiritStoneMine>();
+        mines = GetComponent<SpiritStoneMine>();
         entityWorldType = EntityWorldType.Mine;
         battleRoster = GetComponent<PlayerBattleRoster>();
         mineId = Guid.NewGuid().ToString();
@@ -20,7 +19,30 @@ public class MineClickable : EntityClickable
     {
         UnlinkServerRpc(NetworkObjectId, network.NetworkObjectId);
     }
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    private void UnlinkServerRpc(ulong mineId, ulong ownerId)
+    {
+        if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(mineId, out var mineObj))
+            return;
+        if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(ownerId, out var playerNet))
+            return;
 
+        var mineComponent = mineObj.GetComponent<SpiritStoneMine>();
+        if (mineComponent == null) return;
+
+        if (battleRoster != null)
+            battleRoster.itemDatas = null;
+        mineComponent.UnSetOwner(ownerId);
+        NotifyResultClientRpc(
+        $"Bạn đã bị mất liên kết với mỏ!",
+        new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new[] { playerNet.OwnerClientId }
+            }
+        });
+    }
     public override void OnEntityClickedAccept(NetworkObject network)
     {
         EntityAcceptServerRpc(network.NetworkObjectId, NetworkObjectId);
@@ -31,8 +53,8 @@ public class MineClickable : EntityClickable
     {
         if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(ownerId, out var ownerObj))
             return;
-        if (mine == null) return;
-        if (mine.HasOwner())
+        if (mines == null) return;
+        if (mines.ownership.HasOwner())
         {
             var playerNet = NetworkManager.SpawnManager.SpawnedObjects[ownerId];
             if (playerNet == null) return;
@@ -40,7 +62,7 @@ public class MineClickable : EntityClickable
             {
                 if (win)
                 {
-                    SetOwner(ownerId, ownerObj);
+                    SetOwner(ownerId);
                     NotifyResultClientRpc(
                     $"{TextColorUtil.Color("chiếm mỏ thành công", Color.green)} đang khai thác {TextColorUtil.Color("Mỏ linh thạch", Color.green)}!",
                     new ClientRpcParams
@@ -67,56 +89,22 @@ public class MineClickable : EntityClickable
         }
         else
         {
-            SetOwner(ownerId, ownerObj);
+            SetOwner(ownerId);
         }
 
     }
-
-    private void SetOwner(ulong ownerId, NetworkObject ownerObj)
+    private void SetOwner(ulong ownerId)
     {
         if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(ownerId, out var playerNet))
             return;
-        mine.SetOwner(ownerId,
-        () =>
-        {
-            if (battleRoster == null) return;
-            battleRoster.itemDatas = ownerObj.GetComponent<PlayerBattleRoster>().itemDatas;
-            NotifyResultClientRpc(
-            $"Bạn đã chiếm được mở và bắt đầu khai thác!",
-            new ClientRpcParams
-            {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = new[] { playerNet.OwnerClientId }
-                }
-            });
-        },
-        (reason) =>
-        {
-            NotifyResultClientRpc(
-            $"Không thể chiếm được mở! lí do: {reason}",
-            new ClientRpcParams
-            {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = new[] { playerNet.OwnerClientId }
-                }
-            });
-        });
-    }
 
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    public void UnlinkServerRpc(ulong mineId, ulong ownerId)
-    {
-        if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(mineId, out var mineObj))
-            return;
-        if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(ownerId, out var playerNet))
-            return;
-        var mineComponent = mineObj.GetComponent<SpiritStoneMine>();
-        if (mineComponent == null) return;
-        Debug.Log("Unlink");
+        mines.SetOwner(ownerId);
+
+        if (battleRoster == null) return;
+        battleRoster.itemDatas = playerNet.GetComponent<PlayerBattleRoster>().itemDatas;
+
         NotifyResultClientRpc(
-        $"Bạn đã bị mất liên kết với mỏ!",
+        $"Bạn đã chiếm được mở và bắt đầu khai thác!",
         new ClientRpcParams
         {
             Send = new ClientRpcSendParams
@@ -124,14 +112,8 @@ public class MineClickable : EntityClickable
                 TargetClientIds = new[] { playerNet.OwnerClientId }
             }
         });
-        mineComponent.UnLink(ownerId);
     }
 
-
-    public string GetMineId()
-    {
-        return mineId;
-    }
     [ClientRpc]
     private void NotifyResultClientRpc(string message, ClientRpcParams clientRpcParams = default)
     {

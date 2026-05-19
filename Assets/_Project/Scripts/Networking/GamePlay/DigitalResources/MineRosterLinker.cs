@@ -34,7 +34,6 @@ public class MineRosterLinker : IRosterLinker
                 OnChampionPlayerChanged;
         }
     }
-
     private void OnChampionPlayerChanged(
         List<ItemData> list)
     {

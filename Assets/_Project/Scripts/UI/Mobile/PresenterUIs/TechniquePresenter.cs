@@ -44,7 +44,7 @@ namespace TGTH.Mobile
         protected override void Start()
         {
             base.Start();
-            OnPlayerChamChanged(stats.heroData);
+            OnPlayerChamChanged(stats.chamionData);
             isNew = false;
             inventoryCenterManager.OnItemPlayerChanged += OnPlayerChamChanged;
         }

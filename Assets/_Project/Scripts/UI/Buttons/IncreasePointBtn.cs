@@ -38,7 +38,7 @@ public class IncreasePointBtn : TGTHMonoBehaviour
 
             if (stat == null) return;
             stat.AddModifier(result.value);
-            var hero = statsData.heroData as HeroData;
+            var hero = statsData.chamionData as HeroData;
             if (hero == null)
             {
                 Debug.Log("hero is null");

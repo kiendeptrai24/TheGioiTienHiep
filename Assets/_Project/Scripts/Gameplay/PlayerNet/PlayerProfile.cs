@@ -129,7 +129,7 @@ public class PlayerProfile : TGTHNetworkBehaviour
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
     private void LoadCoinsServerRpc(ulong coins)
     {
-        resourceStorage.SetSpiritStone(coins);
+        resourceStorage.InitSpiritStone(coins);
     }
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]

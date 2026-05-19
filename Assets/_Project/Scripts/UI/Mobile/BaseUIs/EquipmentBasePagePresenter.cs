@@ -37,8 +37,8 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         inventoryCenterManager.OnItemEquitmentDataChanged += SetItemData;
         SetItemData(inventoryCenterManager.GetDataType(ItemType.Equipment, true));
         isShowEquipment = true;
-        view.ShowEquipmentItems(statsManager.heroData);
-        view.ShowItem(statsManager.heroData);
+        view.ShowEquipmentItems(statsManager.chamionData);
+        view.ShowItem(statsManager.chamionData);
         isShowEquipment = false;
     }
 
@@ -56,7 +56,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
     private void ShowItemEquipment()
     {
         isShowEquipment = true;
-        view.ShowEquipmentItems(statsManager.heroData);
+        view.ShowEquipmentItems(statsManager.chamionData);
         isShowEquipment = false;
     }
 
@@ -115,7 +115,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
             var result = inventoryCenterManager.AddData(item);
             if (result)
             {
-                var heroData = statsManager.heroData as HeroData;
+                var heroData = statsManager.chamionData as HeroData;
                 var equipmentData = item1.data as EquipmentData;
                 heroData.equipmentDatas.Remove(equipmentData);
             }
@@ -126,7 +126,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
             var result = inventoryCenterManager.RemoveData(item2.data);
             if (result)
             {
-                var heroData = statsManager.heroData as HeroData;
+                var heroData = statsManager.chamionData as HeroData;
                 var equipmentData = item2.data as EquipmentData;
                 heroData.equipmentDatas.Add(equipmentData);
             }

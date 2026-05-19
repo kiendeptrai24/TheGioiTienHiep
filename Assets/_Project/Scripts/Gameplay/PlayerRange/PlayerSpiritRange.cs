@@ -8,7 +8,7 @@ public class PlayerSpiritRange : TGTHNetworkBehaviour
     private StatsData statsData;
     private float lastTime;
 
-    private readonly HashSet<ItemMapWorld> currentItemsInRange = new();
+    private readonly HashSet<ResourceNode> currentItemsInRange = new();
 
     protected override void Awake()
     {
@@ -35,11 +35,11 @@ public class PlayerSpiritRange : TGTHNetworkBehaviour
         if (statsData == null) return;
         Collider[] colliders = Physics.OverlapSphere(transform.position, statsData.SpiritRange);
 
-        HashSet<ItemMapWorld> newItemsInRange = new();
+        HashSet<ResourceNode> newItemsInRange = new();
 
         foreach (var collider in colliders)
         {
-            if (collider.TryGetComponent<ItemMapWorld>(out var itemMapWorld))
+            if (collider.TryGetComponent<ResourceNode>(out var itemMapWorld))
             {
                 newItemsInRange.Add(itemMapWorld);
 

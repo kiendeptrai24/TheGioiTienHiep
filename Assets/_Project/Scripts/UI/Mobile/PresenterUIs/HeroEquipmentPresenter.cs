@@ -12,7 +12,7 @@ namespace TGTH.Mobile
         {
             if (base.HandleEquippedChanged(item1, item2))
             {
-                var heroData = statsManager.heroData as HeroData;
+                var heroData = statsManager.chamionData as HeroData;
                 if (item1 != null && item1.data != null)
                 {
                     heroData.equipmentDatas.Remove(item1.data as EquipmentData);

@@ -39,7 +39,7 @@ namespace TGTH.Mobile
             for (int i = 0; i < list.Count; i++)
             {
                 var item = list[i];
-                if (item.itemId == statsManager.heroData.itemId)
+                if (item.itemId == statsManager.chamionData.itemId)
                 {
                     ShowData(new InventoryItem(item));
                     break;
@@ -49,7 +49,7 @@ namespace TGTH.Mobile
             {
                 uiItem.ResetData();
             }
-            var heroData = statsManager.heroData as HeroData;
+            var heroData = statsManager.chamionData as HeroData;
             foreach (var item in heroData.equipmentDatas)
             {
                 view.equipmentSlotsDictionary[item.equipmentType].SetItem(new InventoryItem(item));

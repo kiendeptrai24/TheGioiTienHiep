@@ -33,7 +33,7 @@ public class HeroBaseSkill : TGTHMonoBehaviour
 
         if (statsData != null)
         {
-            var data = statsData.heroData;
+            var data = statsData.chamionData;
             var heroData = data as HeroData;
             m_SkillsData = heroData.skillDatas;
             SetupSkills();

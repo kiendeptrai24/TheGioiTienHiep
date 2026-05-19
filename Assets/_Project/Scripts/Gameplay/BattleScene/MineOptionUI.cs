@@ -77,7 +77,7 @@ public class MineOptionUI : TGTHMonoBehaviour, IEntityOptionUI
     {
         var entity = choseObject.GetCurrentEntity();
         var resourse = entity.GetComponent<SpiritStoneMine>();
-        mineInfoPresenter.Show(resourse.GetItemResourseData());
+        mineInfoPresenter.Show(resourse.GetDataResource());
     }
 
     private void StopMine()
@@ -129,12 +129,12 @@ public class MineOptionUI : TGTHMonoBehaviour, IEntityOptionUI
         if (choseObject == null) return;
         var mineClick = choseObject.GetCurrentEntity();
         if (mineClick == null) return;
-        var resourse = mineClick.GetComponent<SpiritStoneMine>();
-        if (resourse == null) return;
+        var mine = mineClick.GetComponent<SpiritStoneMine>();
+        if (mine == null) return;
 
-        if (resourse.HasOwner())
+        if (mine.HasOwner())
         {
-            if (resourse.PlayerIsOwner(playerProfile.GetPlayerId()))
+            if (mine.PlayerIsOwner(playerProfile.GetPlayerId()))
                 ShowUIOwner();
             else
                 ShowUIOther();
