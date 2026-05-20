@@ -5,12 +5,9 @@ using Unity.Netcode;
 
 public class MineOwnershipSystem : IOwnerShip
 {
-    public NetworkObject Owner { get; private set; }
+    private MineNetworkState networkState;
 
-    private readonly MineNetworkState networkState;
-
-    public MineOwnershipSystem(
-        MineNetworkState networkState)
+    public MineOwnershipSystem(MineNetworkState networkState)
     {
         this.networkState = networkState;
     }
@@ -22,7 +19,7 @@ public class MineOwnershipSystem : IOwnerShip
 
     public bool IsOnline()
     {
-        return Owner != null && HasOwner();
+        return networkState.Owner != null && HasOwner();
     }
 
     public bool IsOwner(string id)
@@ -35,13 +32,13 @@ public class MineOwnershipSystem : IOwnerShip
         string playerId,
         double now)
     {
-        Owner = owner;
+        networkState.Owner = owner;
         networkState.playerId = playerId;
     }
 
     public void ClearOwner()
     {
-        Owner = null;
+        networkState.Owner = null;
         networkState.playerId = "";
     }
 }

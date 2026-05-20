@@ -101895,6 +101895,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1068309871}
+  - component: {fileID: 1068309872}
+  - component: {fileID: 1068309873}
   m_Layer: 0
   m_Name: SegmentMineManager
   m_TagString: Untagged
@@ -101917,6 +101919,44 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1068309872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068309870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 3077725481
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &1068309873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068309870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94c0402e7aa45ee4780f96b08f9eedf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SegmentResourceManager
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &1068379880
 GameObject:
   m_ObjectHideFlags: 0
@@ -157530,151 +157570,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2510, y: 2392.889, z: 249.3}
   m_Center: {x: -0.00012207031, y: 1201.6854, z: 0}
---- !u!1 &1604182398 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6005652078421769025, guid: b8b0aa52c18ec2f4ab792232c9bfd721,
-    type: 3}
-  m_PrefabInstance: {fileID: 2168158603907592266}
-  m_PrefabAsset: {fileID: 0}
---- !u!208 &1604182408
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1604182398}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
---- !u!114 &1604182418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1604182398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d96ad7a3a6e34541a7bb4b9637ef7a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpiritStoneMines
-  ShowTopMostFoldoutHeaderGroup: 1
-  CurrentMiningProgress:
-    m_InternalValue: 0
-  CurrentAmount:
-    m_InternalValue: 0
-  PlayerId:
-    m_InternalValue:
-      utf8LengthInBytes: 0
-      bytes:
-        offset0000:
-          byte0000: 0
-          byte0001: 0
-          byte0002: 0
-          byte0003: 0
-          byte0004: 0
-          byte0005: 0
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        offset0016:
-          byte0000: 0
-          byte0001: 0
-          byte0002: 0
-          byte0003: 0
-          byte0004: 0
-          byte0005: 0
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        offset0032:
-          byte0000: 0
-          byte0001: 0
-          byte0002: 0
-          byte0003: 0
-          byte0004: 0
-          byte0005: 0
-          byte0006: 0
-          byte0007: 0
-          byte0008: 0
-          byte0009: 0
-          byte0010: 0
-          byte0011: 0
-          byte0012: 0
-          byte0013: 0
-          byte0014: 0
-          byte0015: 0
-        byte0048: 0
-        byte0049: 0
-        byte0050: 0
-        byte0051: 0
-        byte0052: 0
-        byte0053: 0
-        byte0054: 0
-        byte0055: 0
-        byte0056: 0
-        byte0057: 0
-        byte0058: 0
-        byte0059: 0
-        byte0060: 0
-        byte0061: 0
-  OwnerNetworkId:
-    m_InternalValue: 0
-  miningData:
-    instanceId: 
-    itemId: 
-    itemType: 0
-    itemName: 
-    itemIcon: {fileID: 0}
-    itemIconPath: 
-    itemFilePath: 
-    itemPrice: 0
-    canStack: 0
-    itemDescription: 
-    currentstack: 0
-    realmType: 0
-    realmId: 
-    qualityType: 0
-    elementType: 0
-    health: 0
-    mana: 0
-    spirit: 0
-    physicalDamage: 0
-    magicalDamage: 0
-    spiritDamage: 0
-    physicalDefense: 0
-    magicalDefense: 0
-    spiritDefense: 0
-    potentialPoints: 0
-    resourceId: 
-    resourceSourceType: 0
-    position: {x: 0, y: 0, z: 0}
-    yieldPerHarvest: 0
-    miningTime: 0
-    currentMiningProgress: 0
-    maxStorage: 0
-    currentAmount: 0
-    level: 0
 --- !u!1 &1604409914
 GameObject:
   m_ObjectHideFlags: 0
@@ -286356,15 +286251,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6005652078421769025, guid: b8b0aa52c18ec2f4ab792232c9bfd721,
-        type: 3}
-      insertIndex: 7
-      addedObject: {fileID: 1604182418}
-    - targetCorrespondingSourceObject: {fileID: 6005652078421769025, guid: b8b0aa52c18ec2f4ab792232c9bfd721,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1604182408}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8b0aa52c18ec2f4ab792232c9bfd721, type: 3}
 --- !u!224 &2169759173495587250
 RectTransform:

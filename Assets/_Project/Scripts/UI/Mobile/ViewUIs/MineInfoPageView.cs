@@ -27,7 +27,7 @@ namespace TGTH.Mobile
             mineIcon.sprite = itemResourseData.itemIcon;
             nameTxt.text = itemResourseData.itemName;
             productionTxt.text = itemResourseData.currentAmount.ToString() + "/" + itemResourseData.maxStorage.ToString();
-            TimeToHavest.text = itemResourseData.currentMiningProgress.ToString();
+            TimeToHavest.text = itemResourseData.currentMiningProgress.ToString() + "s";
         }
         public void UpdateProduction(ItemData itemData)
         {

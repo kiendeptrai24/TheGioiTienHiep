@@ -37,12 +37,11 @@ public class MineInfoPresenter : TGTHMonoBehaviour
     {
         if (itemResourseData == null)
             return;
-        int currentSecond = Mathf.FloorToInt(itemResourseData.currentMiningProgress);
 
-        if (currentProduction != itemResourseData.currentAmount || currentMiningProgress != currentSecond)
+        if (currentProduction != itemResourseData.currentAmount || currentMiningProgress != itemResourseData.currentMiningProgress)
         {
             currentProduction = itemResourseData.currentAmount;
-            currentMiningProgress = currentSecond;
+            currentMiningProgress = itemResourseData.currentMiningProgress;
             view.UpdateProduction(itemResourseData);
         }
     }

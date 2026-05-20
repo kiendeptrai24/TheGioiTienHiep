@@ -2,16 +2,20 @@ using UnityEngine;
 
 public class MineProductionSystem
 {
-    private readonly SpiritStoneMineData data;
     private readonly MineNetworkState networkState;
 
     private double lastProduceTime;
+    private int yieldPerHarvest;
+    private float miningTime;
+    private int maxStorage;
 
     public MineProductionSystem(
         SpiritStoneMineData data,
         MineNetworkState networkState)
     {
-        this.data = data;
+        yieldPerHarvest = data.yieldPerHarvest;
+        miningTime = data.miningTime;
+        maxStorage = data.maxStorage;
         this.networkState = networkState;
     }
 
@@ -20,16 +24,16 @@ public class MineProductionSystem
         lastProduceTime = now;
     }
 
-    public void Tick(
+    public bool Tick(
         double now,
         ResourceStorage storage)
     {
         if (storage == null)
-            return;
+            return false;
 
         if (now - lastProduceTime <
-            data.miningTime)
-            return;
+            miningTime)
+            return false;
 
         int ticks = Mathf.FloorToInt(
             (float)(now - lastProduceTime));
@@ -37,6 +41,7 @@ public class MineProductionSystem
         lastProduceTime += ticks;
 
         Produce(ticks, storage);
+        return true;
     }
 
     private void Produce(
@@ -44,20 +49,18 @@ public class MineProductionSystem
         ResourceStorage storage)
     {
         int amount =
-            data.yieldPerHarvest * times;
+            yieldPerHarvest * times;
 
-        if (data.currentAmount + amount >
-            data.maxStorage)
+        if (networkState.currentAmount + amount >
+            maxStorage)
         {
             amount =
-                data.maxStorage -
-                data.currentAmount;
+                maxStorage -
+                networkState.currentAmount;
         }
 
-        data.currentAmount += amount;
-
-        networkState.currentAmount =
-            data.currentAmount;
+        networkState.currentAmount += amount;
+        networkState.currentMiningProgress += times;
 
         storage.PlusCost((ulong)amount);
     }

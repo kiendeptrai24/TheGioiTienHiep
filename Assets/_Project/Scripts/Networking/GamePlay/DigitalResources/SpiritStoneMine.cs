@@ -6,31 +6,35 @@ using UnityEngine;
 public class SpiritStoneMine : TGTHNetworkBehaviour
 {
     #region Networkvariable
-    public NetworkVariable<float> CurrentMiningProgress = new(
+    [SerializeField]
+    private NetworkVariable<float> CurrentMiningProgress = new(
         0,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
 
-    public NetworkVariable<int> CurrentAmount = new(
+    [SerializeField]
+    private NetworkVariable<int> CurrentAmount = new(
         0,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
 
-    public NetworkVariable<FixedString64Bytes> PlayerId = new(
+    [SerializeField]
+    private NetworkVariable<FixedString64Bytes> PlayerId = new(
         "",
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
-    public NetworkVariable<ulong> OwnerNetworkId = new(
+    [SerializeField]
+    private NetworkVariable<ulong> OwnerNetworkId = new(
         0,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
     #endregion
 
-    public MineNetworkState networkState;
+    [SerializeField] private MineNetworkState networkState;
     public IOwnerShip ownership;
     public MineProductionSystem production;
     public IRosterLinker rosterLinker;
@@ -40,18 +44,43 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
     private ResourceStorage ownerStorage;
     private ResourceNode itemMapWorld;
     private SegmentResourceManager segmentMineManager;
-    protected override void Awake()
+
+    public override void OnNetworkSpawn()
     {
-        base.Awake();
+        segmentMineManager = SegmentResourceManager.Instance;
+        itemMapWorld = GetComponent<ResourceNode>();
+        AddEvent();
+        base.OnNetworkSpawn();
+        if (itemMapWorld.IsDataReady())
+        {
+            SetupMine();
+        }
+        itemMapWorld.OnDataReady += (itemData) =>
+        {
+            SetupMine();
+        };
+    }
+    public override void OnNetworkPreDespawn()
+    {
+        base.OnNetworkPreDespawn();
+        RemoveEvent();
+        itemMapWorld.OnDataReady -= (itemData) =>
+        {
+            SetupMine();
+        };
+    }
+    private void AddEvent()
+    {
+        if (IsServer) return;
         CurrentMiningProgress.OnValueChanged += (oldValue, newValue) =>
         {
             if (miningData == null) return;
-            miningData.currentMiningProgress = CurrentMiningProgress.Value;
+            miningData.currentMiningProgress = newValue;
         };
         CurrentAmount.OnValueChanged += (oldValue, newValue) =>
         {
             if (miningData == null) return;
-            miningData.currentAmount = CurrentAmount.Value;
+            miningData.currentAmount = newValue;
         };
         PlayerId.OnValueChanged += (oldValue, newValue) =>
         {
@@ -59,12 +88,28 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
             networkState.playerId = PlayerId.Value.ToString();
         };
     }
-
-    public override void OnNetworkSpawn()
+    private void RemoveEvent()
     {
-        segmentMineManager = SegmentResourceManager.Instance;
-        itemMapWorld = GetComponent<ResourceNode>();
-        base.OnNetworkSpawn();
+        if (IsServer) return;
+        CurrentMiningProgress.OnValueChanged -= (oldValue, newValue) =>
+        {
+            if (miningData == null) return;
+            miningData.currentMiningProgress = newValue;
+        };
+        CurrentAmount.OnValueChanged -= (oldValue, newValue) =>
+        {
+            if (miningData == null) return;
+            miningData.currentAmount = newValue;
+        };
+        PlayerId.OnValueChanged -= (oldValue, newValue) =>
+        {
+            if (miningData == null) return;
+            networkState.playerId = PlayerId.Value.ToString();
+        };
+    }
+
+    private void SetupMine()
+    {
         miningData = itemMapWorld.GetData() as SpiritStoneMineData;
         networkState = new MineNetworkState();
         int yieldPerSecond = Mathf.RoundToInt(miningData.yieldPerHarvest / miningData.miningTime);
@@ -75,19 +120,15 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
             yieldPerSecond);
 
         ownership =
-            new MineOwnershipSystem(
-                networkState);
+            new MineOwnershipSystem(networkState);
 
         production =
-            new MineProductionSystem(
-                miningData,
-                networkState);
+            new MineProductionSystem(miningData, networkState);
 
         rosterLinker =
             new MineRosterLinker(GetComponent<PlayerBattleRoster>());
-
-
     }
+
     private void Update()
     {
         if (!IsServer)
@@ -98,10 +139,17 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
 
         if (ownership.IsOnline())
         {
-            production.Tick(
+            var success = production.Tick(
                 TimeUtils.GetServerTime(),
                 ownerStorage
             );
+            if (success)
+            {
+                CurrentAmount.Value = networkState.currentAmount;
+                CurrentMiningProgress.Value = networkState.currentMiningProgress;
+                miningData.currentAmount = networkState.currentAmount;
+                miningData.currentMiningProgress = networkState.currentMiningProgress;
+            }
         }
     }
     public void SetOwner(ulong netId)
@@ -112,9 +160,16 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         var owner = NetworkManager.SpawnManager.SpawnedObjects[netId];
         float now = (float)NetworkManager.ServerTime.Time;
         FixedString64Bytes playerId = owner.GetComponent<PlayerProfile>().GetPlayerId();
-
-        ownership.SetOwner(owner, playerId.ToString(), now);
         int yieldPerSecond = Mathf.RoundToInt(miningData.yieldPerHarvest / miningData.miningTime);
+
+        OwnerNetworkId.Value = netId;
+        PlayerId.Value = playerId;
+        CurrentAmount.Value = miningData.currentAmount;
+        CurrentMiningProgress.Value = miningData.currentMiningProgress;
+
+        production.ResetTime(now);
+        ownerStorage = owner.GetComponent<ResourceStorage>();
+        ownership.SetOwner(owner, playerId.ToString(), now);
         segmentMineManager.ChangeMineOwner(miningData.resourceId, playerId.ToString(), yieldPerSecond);
     }
     public void UnSetOwner(ulong netId)
@@ -128,6 +183,10 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
 
         var playerId = playerProfile.GetPlayerId();
         if (ownership.IsOwner(playerId.ToString()) == false) return;
+
+        PlayerId.Value = "";
+        OwnerNetworkId.Value = 0;
+        ownerStorage = null;
 
         ownership.ClearOwner();
     }

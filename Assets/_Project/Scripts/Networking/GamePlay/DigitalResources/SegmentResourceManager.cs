@@ -6,11 +6,12 @@ using UnityEngine;
 
 public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>
 {
+    // mine runtime
     private readonly Dictionary<string, MineRuntimeData> _mineRuntime = new();
-    private readonly Dictionary<string, List<MineOwnershipSession>> _mineSessions = new();
-
+    // link between player and mine in runtime
     private readonly Dictionary<string, HashSet<string>> _playerMines = new();
-
+    // persistent sessions
+    private readonly Dictionary<string, List<MineOwnershipSession>> _mineSessions = new();
     // ───────── REGISTER ─────────
 
     public void RegisterMine(string persistentId, ulong networkObjectId, int stonePerSecond)
@@ -35,14 +36,7 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>
 
         long now = TimeUtils.DateTimeOffset();
 
-        // Xóa mine khỏi index của owner cũ
-        if (sessions.FindLast(s => s.EndTime == 0) is { } prev)
-            RemoveFromPlayerIndex(prev.PlayerId, persistentId);
-
-        CloseActiveSession(sessions, now);
-
-        // Xóa session đã đóng lâu (giữ lại tối đa N session gần nhất nếu cần log)
-        TrimOldSessions(sessions);
+        ClearOldOwner(persistentId, sessions, now);
 
         sessions.Add(new MineOwnershipSession
         {
@@ -59,9 +53,20 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>
             _playerMines[newPlayerId] = set = new HashSet<string>();
         set.Add(persistentId);
     }
+    // clear old owner
+    private void ClearOldOwner(string persistentId, List<MineOwnershipSession> sessions, long now)
+    {
+        // Xóa mine khỏi index của owner cũ
+        if (sessions.FindLast(s => s.EndTime == 0) is { } prev)
+            RemoveFromPlayerIndex(prev.PlayerId, persistentId);
+
+        CloseActiveSession(sessions, now);
+
+        // Xóa session đã đóng lâu (giữ lại tối đa N session gần nhất nếu cần log)
+        TrimOldSessions(sessions);
+    }
 
     // ───────── DISCONNECT ─────────
-
     public void OnPlayerDisconnect(string playerId)
     {
         if (!IsServer) return;
@@ -85,7 +90,6 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>
     }
 
     // ───────── RECONNECT ─────────
-
     public void OnPlayerReconnect(string playerId, ulong networkObjectId)
     {
         if (!IsServer) return;

@@ -15,6 +15,10 @@ public class ResourceNode : TGTHNetworkBehaviour, IDataMapWorld
         base.Awake();
         canvas = GetComponentInChildren<Canvas>();
         HideIcon();
+    }
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
         InitializeItemData();
     }
     private void InitializeItemData()

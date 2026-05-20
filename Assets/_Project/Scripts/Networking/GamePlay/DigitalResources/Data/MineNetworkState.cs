@@ -1,9 +1,10 @@
-using Unity.Collections;
+using System;
 using Unity.Netcode;
-
+[Serializable]
 public class MineNetworkState
 {
-    public float currentMiningProgress;
-    public int currentAmount;
+    public NetworkObject Owner;
     public string playerId;
+    public int currentAmount;
+    public float currentMiningProgress;
 }
