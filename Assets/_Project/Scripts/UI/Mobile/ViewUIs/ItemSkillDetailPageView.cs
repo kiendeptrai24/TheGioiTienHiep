@@ -66,7 +66,7 @@ public class ItemSkillDetailPageView : IItemDetailPageView
         foreach (var noti in notifications.results)
         {
             var uiCondition = Instantiate(conditionLevelupPrefab, contentCondition);
-            uiCondition.Setup(noti.Message, noti.IsValid);
+            uiCondition.Setup(noti.message, noti.result);
         }
     }
     public void RemoveAllNotification()
@@ -89,7 +89,6 @@ public class ItemSkillDetailPageView : IItemDetailPageView
         if (itemData is SkillData skillData)
         {
             ulong PlayerNetId = NetworkManager.Singleton.LocalClientId;
-            levelUpValidator.RequestSkillEnhance(skillData.instanceId, skillData.itemId, PlayerNetId);
         }
     }
     public override void HandleItemClicked(InventoryItem inventoryItem)

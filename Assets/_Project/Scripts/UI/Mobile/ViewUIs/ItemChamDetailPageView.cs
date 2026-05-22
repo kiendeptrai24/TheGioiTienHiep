@@ -37,12 +37,12 @@ public class ItemChamDetailPageView : IItemDetailPageView
         base.Awake();
         levelUpValidator = LevelUpValidator.Instance;
         levelUpDatabase = LevelUpDatabase.Instance;
+        SegmentRealmManager.Instance.OnRealmUplevelResult += OnRealmUplevelResult;
         inventoryCenterManager = InventoryCenterManager.Instance;
         playerClientId = NetworkManager.Singleton.LocalClientId;
 
         levelUpBtn.onClick.AddListener(OnLevelUpButtonClicked);
         levelUpValidator.OnNotificationConditionResult += OnNotificationConditionResult;
-        levelUpValidator.OnRealmUplevelResult += OnRealmUplevelResult;
 
         inventoryCenterManager.OnItemUpdated += OnItemUpdated;
 
@@ -78,7 +78,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
         foreach (var noti in notifications.results)
         {
             var uiCondition = Instantiate(conditionLevelupPrefab, contentCondition);
-            uiCondition.Setup(noti.Message, noti.IsValid);
+            uiCondition.Setup(noti.message, noti.result);
         }
     }
     public void RemoveAllNotification()

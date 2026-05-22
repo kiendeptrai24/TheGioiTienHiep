@@ -1,13 +1,13 @@
 using Unity.Netcode;
+using UnityEngine;
 
 public class NetworkConnectionEvents : TGTHNetworkBehaviour
 {
     private StatsData statsData;
-    private SegmentResourceManager segmentMineManager;
-
+    private ClientManager clientManager;
     private string characterId;
+    private bool isConnected;
 
-    private bool hasConnected;
 
     // =========================
     // UNITY
@@ -20,16 +20,12 @@ public class NetworkConnectionEvents : TGTHNetworkBehaviour
         LoadComponent();
 
         statsData.OnStatReady += OnStatReady;
+        clientManager = ClientManager.Instance;
     }
 
     protected new void OnDestroy()
     {
         statsData.OnStatReady -= OnStatReady;
-
-        if (IsOwner)
-        {
-            UnregisterNetworkEvents();
-        }
     }
 
     // =========================
@@ -43,38 +39,12 @@ public class NetworkConnectionEvents : TGTHNetworkBehaviour
         if (!IsOwner)
             return;
 
-        RegisterNetworkEvents();
-
         TryNotifyPlayerConnected();
-    }
-
-    public override void OnNetworkDespawn()
-    {
-        base.OnNetworkDespawn();
-
-        if (!IsOwner)
-            return;
-
-        NotifyPlayerDisconnected();
     }
 
     // =========================
     // EVENTS
     // =========================
-
-    private void RegisterNetworkEvents()
-    {
-        NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
-    }
-
-    private void UnregisterNetworkEvents()
-    {
-        if (NetworkManager.Singleton == null)
-            return;
-
-        NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
-    }
-
     private void OnStatReady(StatsData data)
     {
         var heroData = data.chamionData as HeroData;
@@ -87,34 +57,19 @@ public class NetworkConnectionEvents : TGTHNetworkBehaviour
         TryNotifyPlayerConnected();
     }
 
-    private void OnClientDisconnect(ulong clientId)
-    {
-        if (clientId != OwnerClientId)
-            return;
-
-        NotifyPlayerDisconnected();
-    }
-
     // =========================
     // CONNECT / DISCONNECT
     // =========================
 
     private void TryNotifyPlayerConnected()
     {
-        if (!IsOwner)
+        if (IsSpawned == false) return;
+        if (!IsOwner && isConnected)
             return;
         if (string.IsNullOrEmpty(characterId))
             return;
-
-        OnPlayerConnectedServerRpc(characterId);
-    }
-
-    private void NotifyPlayerDisconnected()
-    {
-        if (string.IsNullOrEmpty(characterId))
-            return;
-
-        OnPlayerDisconnectedServerRpc(characterId);
+        isConnected = true;
+        OnPlayerConnectedServerRpc(characterId, NetworkManager.LocalClientId);
     }
 
     // =========================
@@ -122,15 +77,9 @@ public class NetworkConnectionEvents : TGTHNetworkBehaviour
     // =========================
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-    private void OnPlayerConnectedServerRpc(string characterId)
+    private void OnPlayerConnectedServerRpc(string characterId, ulong LocalClientId)
     {
-        segmentMineManager.OnPlayerReconnect(characterId, NetworkObjectId);
-    }
-
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-    private void OnPlayerDisconnectedServerRpc(string characterId)
-    {
-        segmentMineManager.OnPlayerDisconnect(characterId);
+        clientManager.OnClientConnected(characterId, LocalClientId);
     }
 
     // =========================
@@ -140,9 +89,6 @@ public class NetworkConnectionEvents : TGTHNetworkBehaviour
     protected override void LoadComponent()
     {
         base.LoadComponent();
-
         statsData = GetComponent<StatsData>();
-
-        segmentMineManager = SegmentResourceManager.Instance;
     }
 }

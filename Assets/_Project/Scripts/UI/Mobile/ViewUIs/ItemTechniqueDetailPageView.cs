@@ -59,14 +59,14 @@ public class ItemTechniqueDetailPageView : IItemDetailPageView
         }
     }
 
-    private void OnNotificationConditionResult(LevelUpValidator.CheckLevelUpValidationResult notifications)
+    private void OnNotificationConditionResult(CheckLevelUpValidationResult notifications)
     {
         if (notifications == null) return;
         RemoveAllNotification();
         foreach (var noti in notifications.results)
         {
             var uiCondition = Instantiate(conditionLevelupPrefab, contentCondition);
-            uiCondition.Setup(noti.Message, noti.IsValid);
+            uiCondition.Setup(noti.message, noti.result);
         }
     }
     public void RemoveAllNotification()
@@ -89,7 +89,6 @@ public class ItemTechniqueDetailPageView : IItemDetailPageView
         if (itemData is TechniqueData techniqueData)
         {
             ulong PlayerNetId = NetworkManager.Singleton.LocalClientId;
-            levelUpValidator.RequestTechniqueEnhance(techniqueData.instanceId, techniqueData.itemId, PlayerNetId);
         }
     }
 

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>
+public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, ISegmentSystem
 {
     // mine runtime
     private readonly Dictionary<string, MineRuntimeData> _mineRuntime = new();
@@ -65,70 +65,6 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>
         // Xóa session đã đóng lâu (giữ lại tối đa N session gần nhất nếu cần log)
         TrimOldSessions(sessions);
     }
-
-    // ───────── DISCONNECT ─────────
-    public void OnPlayerDisconnect(string playerId)
-    {
-        if (!IsServer) return;
-        if (!_playerMines.TryGetValue(playerId, out var mineIds)) return;
-
-        long now = TimeUtils.DateTimeOffset();
-
-        foreach (var mineId in mineIds)
-        {
-            if (!_mineSessions.TryGetValue(mineId, out var sessions)) continue;
-
-            foreach (var session in sessions)
-            {
-                if (session.PlayerId == playerId && session.EndTime == 0)
-                {
-                    session.OfflineTime = now;
-                    break; // mỗi mine chỉ có 1 active session
-                }
-            }
-        }
-    }
-
-    // ───────── RECONNECT ─────────
-    public void OnPlayerReconnect(string playerId, ulong networkObjectId)
-    {
-        if (!IsServer) return;
-        if (!TryGetResourceStorage(networkObjectId, out var resourceStorage)) return;
-        if (!_playerMines.TryGetValue(playerId, out var mineIds)) return;
-
-        ulong totalReward = 0;
-        long now = TimeUtils.DateTimeOffset();
-
-        foreach (var mineId in mineIds)
-        {
-            if (!_mineSessions.TryGetValue(mineId, out var sessions)) continue;
-
-            foreach (var session in sessions)
-            {
-                if (session.PlayerId != playerId) continue;
-                if (session.OfflineTime == 0) continue;
-
-                long sessionEnd = session.EndTime == 0 ? now : session.EndTime;
-                if (sessionEnd <= session.OfflineTime) continue;
-
-                long rewardStart = Math.Max(session.StartTime, session.OfflineTime);
-                long duration = sessionEnd - rewardStart;
-                if (duration <= 0) continue;
-
-                totalReward += (ulong)(duration * (long)session.YieldPerSecond);
-                session.OfflineTime = 0;
-
-                Debug.Log($"Mine: {mineId} | Duration: {duration}s | Reward: {totalReward}");
-                break; // 1 active session per mine
-            }
-        }
-
-        if (totalReward > 0)
-            resourceStorage.PlusCost(totalReward);
-
-        RestoreOwnedMines(playerId, networkObjectId);
-    }
-
     // ───────── MINE DEAD ─────────
 
     public void OnMineDead(string persistentId)
@@ -181,7 +117,7 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>
             if (s.EndTime == 0) { s.EndTime = now; break; }
     }
 
-    private void RestoreOwnedMines(string playerId, ulong networkObjectId)
+    private void RestoreOwnedMines(string playerId, ulong LocalClientId)
     {
         if (!_playerMines.TryGetValue(playerId, out var mineIds)) return;
 
@@ -194,18 +130,20 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>
             var active = sessions.FindLast(s => s.EndTime == 0);
             if (active?.PlayerId != playerId) continue;
 
-            RestoreMineForPlayer(networkObjectId, runtime.NetworkObjectId);
+            RestoreMineForPlayer(LocalClientId, runtime.NetworkObjectId);
         }
     }
 
-    private void RestoreMineForPlayer(ulong playerNetworkObjectId, ulong mineNetworkObjectId)
+    private void RestoreMineForPlayer(ulong localClientId, ulong mineNetworkObjectId)
     {
+        // 1. Chỉ Server mới có quyền cấu hình lại thế giới và đổi chủ vật thể
         if (!IsServer) return;
         if (!NetworkManager.SpawnManager.SpawnedObjects
             .TryGetValue(mineNetworkObjectId, out var mineObject)) return;
-
+        if (TryGetNetworkOhjectId(localClientId, out var networkObjectId) == false)
+            return;
         var mine = mineObject.GetComponent<SpiritStoneMine>();
-        mine?.SetOwner(playerNetworkObjectId);
+        mine?.SetOwner(networkObjectId);
     }
 
     private bool TryGetResourceStorage(ulong networkObjectId, out ResourceStorage storage)
@@ -216,5 +154,82 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>
 
         storage = netObj.GetComponent<ResourceStorage>();
         return storage != null;
+    }
+    public bool TryGetNetworkOhjectId(ulong clientId, out ulong networkObjectId)
+    {
+        networkObjectId = 0;
+        if (NetworkManager.ConnectedClients.TryGetValue(clientId, out var networkClient))
+        {
+            networkObjectId = networkClient.PlayerObject.NetworkObjectId;
+            return true;
+        }
+        return false;
+    }
+
+    public void ConnectSegment(ClientData data)
+    {
+        if (!IsServer) return;
+        string playerId = data.playerId;
+        ulong localClientId = data.clientId;
+
+        if (TryGetNetworkOhjectId(localClientId, out var networkObjectId))
+            return;
+        if (!TryGetResourceStorage(networkObjectId, out var resourceStorage)) return;
+        if (!_playerMines.TryGetValue(playerId, out var mineIds)) return;
+
+        ulong totalReward = 0;
+        long now = TimeUtils.DateTimeOffset();
+
+        foreach (var mineId in mineIds)
+        {
+            if (!_mineSessions.TryGetValue(mineId, out var sessions)) continue;
+
+            foreach (var session in sessions)
+            {
+                if (session.PlayerId != playerId) continue;
+                if (session.OfflineTime == 0) continue;
+
+                long sessionEnd = session.EndTime == 0 ? now : session.EndTime;
+                if (sessionEnd <= session.OfflineTime) continue;
+
+                long rewardStart = Math.Max(session.StartTime, session.OfflineTime);
+                long duration = sessionEnd - rewardStart;
+                if (duration <= 0) continue;
+
+                totalReward += (ulong)(duration * (long)session.YieldPerSecond);
+                session.OfflineTime = 0;
+
+                Debug.Log($"Mine: {mineId} | Duration: {duration}s | Reward: {totalReward}");
+                break;
+            }
+        }
+
+        if (totalReward > 0)
+            resourceStorage.PlusCost(totalReward);
+
+        RestoreOwnedMines(playerId, localClientId);
+    }
+
+    public void DisconnectSegment(ClientData data)
+    {
+        if (!IsServer) return;
+        string playerId = data.playerId;
+        if (!_playerMines.TryGetValue(playerId, out var mineIds)) return;
+
+        long now = TimeUtils.DateTimeOffset();
+
+        foreach (var mineId in mineIds)
+        {
+            if (!_mineSessions.TryGetValue(mineId, out var sessions)) continue;
+
+            foreach (var session in sessions)
+            {
+                if (session.PlayerId == playerId && session.EndTime == 0)
+                {
+                    session.OfflineTime = now;
+                    break; // mỗi mine chỉ có 1 active session
+                }
+            }
+        }
     }
 }

@@ -38,7 +38,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     /// charactor use in team
     /// </summary>
     public List<ItemData> listItemDatasChampion = new List<ItemData>();
-
+    public event Action OnLoadDataSuccessed;
     public int maxChampion = 4;
     override protected void Awake()
     {
@@ -459,6 +459,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
             championData.physicalDamagePoint = _data.itemDataPoint.damagePoint;
             championData.physicalDefensePoint = _data.itemDataPoint.defensePoint;
         }
+        OnLoadDataSuccessed?.Invoke();
     }
     public void SaveGame(ref GameData _data)
     {

@@ -3695,6 +3695,7 @@ GameObject:
   - component: {fileID: 6461800011671751440}
   - component: {fileID: 5890339853255851662}
   - component: {fileID: -1377695170422594978}
+  - component: {fileID: 1371157288809451575}
   m_Layer: 12
   m_Name: CharacterHuman
   m_TagString: Untagged
@@ -4175,7 +4176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f37fcc50bcd34fd42a17a7f9d9e5482d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatsData
-  heroData:
+  chamionData:
     instanceId: 
     itemId: 
     itemType: 0
@@ -4414,6 +4415,19 @@ MonoBehaviour:
   arriveDistance: 0.2
   hasPath: 0
   currentCornerIndex: 0
+--- !u!114 &1371157288809451575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73b06ab1830d00f41b41fd1ce9d30c58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NetworkConnectionEvents
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &7925927596451025887
 GameObject:
   m_ObjectHideFlags: 0

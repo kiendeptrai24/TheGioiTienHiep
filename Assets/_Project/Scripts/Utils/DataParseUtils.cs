@@ -23,7 +23,7 @@ public static class DataParseUtils
         return float.Parse(value, CultureInfo.InvariantCulture) / 100f;
     }
 
-    public static ulong ParseTimeToSeconds(string time)
+    public static long ParseTimeToSeconds(string time)
     {
         if (string.IsNullOrWhiteSpace(time)) return 0;
 
@@ -33,7 +33,7 @@ public static class DataParseUtils
 
         if (string.IsNullOrEmpty(numberText)) return 0;
 
-        ulong value = ulong.Parse(numberText);
+        long value = long.Parse(numberText);
 
         if (time.EndsWith("s")) return value;
         if (time.EndsWith("m")) return value * 60;
