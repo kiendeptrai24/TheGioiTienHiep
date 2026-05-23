@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -27,32 +29,43 @@ public static class TimeUtils
     // ==================== CÁC HÀM CONVERT THỜI GIAN THÊM VÀO ====================
 
     /// <summary>
-    /// Truyền vào mốc Unix EndTime, tự động tính toán với thời gian thực hiện tại 
-    /// và trả về chuỗi định dạng: "X ngày, Y giờ, Z phút, W giây"
+    /// Truyền vào mốc Unix EndTime (giây), tự động tính toán với thời gian thực hiện tại 
+    /// và trả về chuỗi định dạng rút gọn (ẩn các thành phần bằng 0).
     /// </summary>
     public static string FormatRemainingTime(long endTime)
     {
-        long now = DateTimeOffset();
+        // Sửa lại cú pháp lấy Unix Timestamp (giây) hiện tại chuẩn C#
+        long now = System.DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         long remainingSeconds = endTime - now;
 
         if (remainingSeconds <= 0)
         {
-            return "0 ngày, 0 giờ, 0 phút, 0 giây";
+            return "0 giây"; // Hoặc "Đã hoàn thành" tùy bạn muốn
         }
 
         return FormatDuration(remainingSeconds);
     }
 
     /// <summary>
-    /// Đổi một số giây bất kỳ (double hoặc long) ra chuỗi hiển thị Ngày/Giờ/Phút/Giây gọn gàng
+    /// Đổi một số giây bất kỳ ra chuỗi Ngày/Giờ/Phút/Giây, tự động ẩn đơn vị nếu bằng 0
     /// </summary>
     public static string FormatDuration(double seconds)
     {
-        if (seconds <= 0) return "0 ngày, 0 giờ, 0 phút, 0 giây";
+        if (seconds <= 0) return "0 giây";
 
-        System.TimeSpan time = System.TimeSpan.FromSeconds(seconds);
-        
-        // Trả về chuỗi đẹp mắt, bạn có thể tự sửa chữ "ngày, giờ..." theo ý muốn
-        return $"{time.Days} ngày, {time.Hours} giờ, {time.Minutes} phút, {time.Seconds} giây";
+        TimeSpan time = TimeSpan.FromSeconds(seconds);
+        List<string> parts = new List<string>();
+
+        // Kiểm tra từng thành phần, cái nào lớn hơn 0 thì mới thêm vào danh sách
+        if (time.Days > 0) parts.Add($"{time.Days} ngày");
+        if (time.Hours > 0) parts.Add($"{time.Hours} giờ");
+        if (time.Minutes > 0) parts.Add($"{time.Minutes} phút");
+        if (time.Seconds > 0) parts.Add($"{time.Seconds} giây");
+
+        // Nếu tất cả đều bằng 0 (ví dụ: 0.4 giây làm tròn xuống), trả về "0 giây"
+        if (parts.Count == 0) return "0 giây";
+
+        // Nối các phần tử lại với nhau bằng dấu phẩy và khoảng trắng ", "
+        return string.Join(", ", parts);
     }
 }

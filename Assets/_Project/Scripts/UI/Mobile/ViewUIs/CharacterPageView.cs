@@ -14,6 +14,7 @@ namespace TGTH.Mobile
         [SerializeField] private TextMeshProUGUI realmTxt;
         [SerializeField] private Image itemIconImge;
         [SerializeField] private Button realmBtn;
+        [SerializeField] private TextMeshProUGUI realmBtnTxt;
         public List<UIEquipmentSlot> uIEquipmentSlots;
         public Dictionary<EquipmentType, UIItemSlotBase> equipmentSlotsDictionary = new();
 
@@ -30,8 +31,10 @@ namespace TGTH.Mobile
             realmBtn.onClick.AddListener(() => OnRealmButtonClicked?.Invoke());
         }
 
-
-
+        public void SetRealmBtnName(string name)
+        {
+            realmBtnTxt.text = name;
+        }
         public void Init()
         {
             foreach (var item in uIEquipmentSlots)
@@ -45,12 +48,12 @@ namespace TGTH.Mobile
             var heroData = itemData as HeroData;
             if(heroData == null)
             {
-                Debug.LogError("ShowData failed: itemData is not HeroData");
+                Debug.LogWarning("ShowData failed: itemData is not HeroData");
                 return;
             }
             if(heroData.equipmentDatas == null)
             {
-                Debug.LogError("ShowData failed: equipmentDatas is null");
+                Debug.LogWarning("ShowData failed: equipmentDatas is null");
                 return;
             }
             var equipmentDatas = heroData.equipmentDatas;

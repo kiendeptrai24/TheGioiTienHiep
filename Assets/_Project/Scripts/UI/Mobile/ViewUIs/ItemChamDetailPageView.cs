@@ -31,13 +31,14 @@ public class ItemChamDetailPageView : IItemDetailPageView
     private InventoryCenterManager inventoryCenterManager;
     private HeroData heroData;
     private ulong PlayerNetId;
-
+    private bool isUpdating = false;
     protected override void Awake()
     {
         base.Awake();
         levelUpValidator = LevelUpValidator.Instance;
         levelUpDatabase = LevelUpDatabase.Instance;
         SegmentRealmManager.Instance.OnRealmUplevelResult += OnRealmUplevelResult;
+        SegmentRealmManager.Instance.OnRealmUpgrade += OnRealmUpgrade;
         inventoryCenterManager = InventoryCenterManager.Instance;
         playerClientId = NetworkManager.Singleton.LocalClientId;
 
@@ -52,12 +53,18 @@ public class ItemChamDetailPageView : IItemDetailPageView
         }
     }
 
+    private void OnRealmUpgrade(UpgradeState state)
+    {
+        isUpdating = true;
+    }
+
     private void OnRealmUplevelResult(bool success)
     {
         if (!success) return;
         if (itemData == null) return;
         if (levelUpValidator == null) return;
 
+        isUpdating = false;
         levelUpValidator.RequestCheckConditionResult(PlayerNetId, itemData.instanceId);
     }
 
@@ -90,6 +97,11 @@ public class ItemChamDetailPageView : IItemDetailPageView
     }
     private void OnLevelUpButtonClicked()
     {
+        if (isUpdating)
+        {
+            TopNotificationUI.Instance.ShowNotification("Đang trong quá trình đột phá");
+            return;
+        }
         if (!NetworkManager.Singleton.IsConnectedClient) return;
         if (levelUpValidator == null) return;
         if (itemData == null) return;

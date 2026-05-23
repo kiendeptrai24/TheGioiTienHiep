@@ -52085,6 +52085,7 @@ GameObject:
   - component: {fileID: 542338154}
   - component: {fileID: 542338153}
   - component: {fileID: 542338152}
+  - component: {fileID: 542338157}
   m_Layer: 5
   m_Name: CharactorRealm
   m_TagString: Untagged
@@ -52303,6 +52304,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &542338157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542338151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d4b26dd8b085a54d95ee020b68d4279, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavigationButtonBack
+  m_ScreenManager: {fileID: 9112596172071854381}
+  m_ScreenName: 
 --- !u!1 &542433992
 GameObject:
   m_ObjectHideFlags: 0
@@ -361814,7 +361829,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -263}
+  m_AnchoredPosition: {x: 960.00006, y: -262.66666}
   m_SizeDelta: {x: 1920.0001, y: 3150.6665}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &4305286881854377365
@@ -397014,7 +397029,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 44.75
+  m_fontSize: 50
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -486815,10 +486830,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2882198053603956323}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e75aebd5dfb4b6245b95e8b3770a9715, type: 3}
+  m_Script: {fileID: 11500000, guid: 5475c82c2536607418fc2b26d4c5cf11, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NavigationButton
-  screenManager: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::ActionNavigationByName
+  m_ScreenManager: {fileID: 7973703448540619650}
   m_ScreenName: CharactorRealm
 --- !u!114 &7919209561914624953
 MonoBehaviour:
@@ -490426,6 +490441,7 @@ MonoBehaviour:
   realmTxt: {fileID: 5182337273221529752}
   itemIconImge: {fileID: 1117155816}
   realmBtn: {fileID: 3061836200705110381}
+  realmBtnTxt: {fileID: 6753554828606563356}
   uIEquipmentSlots:
   - {fileID: 706444033}
   - {fileID: 796611537}
@@ -490451,6 +490467,15 @@ MonoBehaviour:
   view: {fileID: 8013527578980659460}
   itemDetailPageView: {fileID: 3623059624464908074}
   realmDetailPageView: {fileID: 542338152}
+  isUpgrading: 0
+  navigation: {fileID: 7918512747183547976}
+  upgradeState:
+    playerId: 
+    upgradeId: 
+    startTime: 0
+    endTime: 0
+    isCompleted: 0
+    result: 0
 --- !u!1 &8013604104689287747
 GameObject:
   m_ObjectHideFlags: 0

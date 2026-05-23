@@ -8,9 +8,11 @@ using UnityEngine;
 public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegmentSystem
 {
     public event Action<bool> OnRealmUplevelResult;
+    public event Action<UpgradeState> OnRealmUpgrade;
 
     private readonly Dictionary<string, UpgradeState> _realmSegment = new();
     private readonly SortedSet<UpgradeState> _sortedQueue = new();
+    private UpgradeState curUpdatestate;
     public void AddRealmSegment(LevelUpValidationResult upgradeState)
     {
         if (!IsServer) return;
@@ -23,6 +25,7 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
         realmDataSegment.isCompleted = false;
         _realmSegment.Add(realmDataSegment.playerId, realmDataSegment);
         _sortedQueue.Add(realmDataSegment);
+        ApplyLevel(realmDataSegment.playerId);
     }
     public void Update()
     {
@@ -82,7 +85,7 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
                     string realm = result.result ? $"cảnh giới hiện tại là {realmTxt}" : "";
                     result.message = $"{TextColorUtil.Color(res, Color.green)} {realm}";
                     var json = JsonConvert.SerializeObject(result);
-                    NotifiToClientRpc(json, RpcTargetUtils.Single(clientData.playerObject.OwnerClientId));
+                    NotifiResultToClientRpc(json, RpcTargetUtils.Single(clientData.playerObject.OwnerClientId));
                 }
                 RemoveRealmSegment(playerId);
             }
@@ -90,7 +93,7 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
             {
                 result.message = "Đang đợi kết thúc";
                 var json = JsonConvert.SerializeObject(result);
-                NotifiToClientRpc(json, RpcTargetUtils.Single(clientData.playerObject.OwnerClientId));
+                NotifiResultToClientRpc(json, RpcTargetUtils.Single(clientData.playerObject.OwnerClientId));
             }
         }
     }
@@ -100,7 +103,7 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
         if (!IsServer) return;
     }
     [ClientRpc]
-    private void NotifiToClientRpc(string message, ClientRpcParams clientRpcParams)
+    private void NotifiResultToClientRpc(string message, ClientRpcParams clientRpcParams)
     {
         var messege = JsonConvert.DeserializeObject<LevelUpValidationResult>(message);
         TopNotificationUI.Instance.ShowNotification(messege.message);
@@ -115,7 +118,21 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
         }
         else
         {
-            // time is updated here
+            UpgradeState upgradeState = new();
+            upgradeState.playerId = messege.playerId;
+            upgradeState.upgradeId = messege.instanceId;
+            upgradeState.startTime = messege.startTime;
+            upgradeState.endTime = messege.endTime;
+            upgradeState.result = messege.result;
+            curUpdatestate = upgradeState;
+            OnRealmUpgrade?.Invoke(curUpdatestate);
+        }
+    }
+    public void RefreshUpgradeState()
+    {
+        if (curUpdatestate != null)
+        {
+            OnRealmUpgrade?.Invoke(curUpdatestate);
         }
     }
 }
