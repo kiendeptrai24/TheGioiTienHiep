@@ -32,6 +32,8 @@ public class ItemChamDetailPageView : IItemDetailPageView
     private HeroData heroData;
     private ulong PlayerNetId;
     private bool isUpdating = false;
+    public bool canLevelup = false;
+
     protected override void Awake()
     {
         base.Awake();
@@ -82,10 +84,15 @@ public class ItemChamDetailPageView : IItemDetailPageView
     {
         if (notifications == null) return;
         RemoveAllNotification();
+        canLevelup = true;
         foreach (var noti in notifications.results)
         {
             var uiCondition = Instantiate(conditionLevelupPrefab, contentCondition);
             uiCondition.Setup(noti.message, noti.result);
+            if (noti.result == false)
+            {
+                canLevelup = false;
+            }
         }
     }
     public void RemoveAllNotification()
@@ -97,6 +104,11 @@ public class ItemChamDetailPageView : IItemDetailPageView
     }
     private void OnLevelUpButtonClicked()
     {
+        if (canLevelup == false)
+        {
+            TopNotificationUI.Instance.ShowNotification("Không đủ điều kiện để đột phá");
+            return;
+        }
         if (isUpdating)
         {
             TopNotificationUI.Instance.ShowNotification("Đang trong quá trình đột phá");

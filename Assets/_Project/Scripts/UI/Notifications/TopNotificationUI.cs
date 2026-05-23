@@ -16,6 +16,7 @@ public class TopNotificationUI : Singleton<TopNotificationUI>
     [SerializeField] private float maxCount = 3;
     [SerializeField] private float currentCount = 3;
     private Coroutine currentRoutine;
+    private string now = "";
     private string currentMessage = "";
 
     protected override void Awake()
@@ -27,19 +28,26 @@ public class TopNotificationUI : Singleton<TopNotificationUI>
 
     public void ShowNotification(string message)
     {
+        if (string.IsNullOrEmpty(message)) return;
         ShowRoot();
         // Gộp message
         if (currentCount >= maxCount)
         {
-            currentMessage = "";
+            // currentMessage = "";
             currentCount = 0;
         }
-        if (!string.IsNullOrEmpty(currentMessage))
-            currentMessage += "\n" + message;
-        else
-            currentMessage = message;
+        string now = TimeUtils.GetCurrentDateTime(true, true, false);
 
-        text.text = currentMessage;
+        bool isNew = this.now.Equals(now) == false;
+        string mes = isNew ? "\n" + TextColorUtil.Color(now, Color.green) : "";
+        currentMessage += mes;
+        if (isNew)
+        {
+            this.now = now;
+        }
+        currentMessage += "\n" + message;
+
+        text.text = "\n" + currentMessage + "\n";
         currentCount++;
         if (currentRoutine != null)
             StopCoroutine(currentRoutine);
@@ -69,7 +77,7 @@ public class TopNotificationUI : Singleton<TopNotificationUI>
         Vector2 startPos = rect.anchoredPosition;
         Vector2 endPos = startPos + Vector2.up * moveDistance;
 
-        while (time < 1f)
+        while (time < 2f)
         {
             // ⏸️ nếu giữ → pause animation luôn
             if (uiItemNoti.IsHolding())
@@ -87,7 +95,7 @@ public class TopNotificationUI : Singleton<TopNotificationUI>
         }
 
         canvasGroup.alpha = 0;
-        currentMessage = "";
+        // currentMessage = "";
         currentCount = 0;
         HideRoot();
     }

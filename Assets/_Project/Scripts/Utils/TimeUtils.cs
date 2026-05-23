@@ -29,9 +29,22 @@ public static class TimeUtils
     // ==================== CÁC HÀM CONVERT THỜI GIAN THÊM VÀO ====================
 
     /// <summary>
-    /// Truyền vào mốc Unix EndTime (giây), tự động tính toán với thời gian thực hiện tại 
-    /// và trả về chuỗi định dạng rút gọn (ẩn các thành phần bằng 0).
+    /// Lấy ngày giờ hiện tại với format tùy chỉnh.
+    /// Mặc định: dd/MM/yyyy HH:mm:ss
     /// </summary>
+    public static string GetCurrentDateTime(bool includeHours = true, bool includeMinutes = true, bool includeSeconds = true)
+    {
+        string format = "dd/MM/yyyy";
+        
+        if (includeHours)
+            format += " HH";
+        if (includeMinutes)
+            format += ":mm";
+        if (includeSeconds)
+            format += ":ss";
+            
+        return System.DateTime.Now.ToString(format);
+    }
     public static string FormatRemainingTime(long endTime)
     {
         // Sửa lại cú pháp lấy Unix Timestamp (giây) hiện tại chuẩn C#
