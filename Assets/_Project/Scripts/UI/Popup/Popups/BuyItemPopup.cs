@@ -45,9 +45,12 @@ public class BuyItemPopup : BasePopup<ShopSetupData, QuantityPopupData>
     }
     private void UpdateQuantity()
     {
-        ulong totelPrice = (ulong)quantity * price;
+        ulong totalPrice = (ulong)quantity * price;
         quantityTxt.text = quantity.ToString();
-        priceTxt.text = "Tổng: " + totelPrice + "K";
+
+        ulong priceInK = totalPrice / 1000;
+
+        priceTxt.text = "Tổng: " + ((priceInK > 0) ? priceInK + "K" : totalPrice + "");
     }
     private void OnShowInfoClicked()
     {
