@@ -16,7 +16,6 @@ public class ItemData
     public ulong itemPrice;
     public bool canStack;
     public string itemDescription;
-    [JsonIgnore]
     public int currentstack;
     public RealmType realmType;
     public string realmId;

@@ -20,8 +20,10 @@ public class LoadEquipmentInventoryClient : ILoadGameData<GameData, PlayerClient
                 var itemData = dataManager.GetItemById(itemDto.instanceId);
                 if (itemData != null)
                 {
+                    itemData.currentstack = itemDto.currentStack;
                     gameData.itemDatas.Add(itemData);
                 }
+
             }
         }
         catch (Exception ex)

@@ -3696,6 +3696,7 @@ GameObject:
   - component: {fileID: 5890339853255851662}
   - component: {fileID: -1377695170422594978}
   - component: {fileID: 1371157288809451575}
+  - component: {fileID: 6401372808620458959}
   m_Layer: 12
   m_Name: CharacterHuman
   m_TagString: Untagged
@@ -4134,6 +4135,7 @@ MonoBehaviour:
       khoangThach: 0
       yeuDan: 0
       maHach: 0
+      requiredItem: 
 --- !u!114 &2860028719030235241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4327,12 +4329,13 @@ MonoBehaviour:
     yeuDanCost: 0
     maHachCost: 0
     linhThachCost: 0
+    trucCoDanCost: 0
+    itemsCost: 
     rewardPotentialPoint: 0
     rewardSkillPoint: 0
     rate: 0
     increaseRate: 0
     timeSeconds: 0
-    item: 
 --- !u!114 &994607168590801085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4427,6 +4430,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73b06ab1830d00f41b41fd1ce9d30c58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NetworkConnectionEvents
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &6401372808620458959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8ad856798dec7e41bf473939edc8f9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
   ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &7925927596451025887
 GameObject:

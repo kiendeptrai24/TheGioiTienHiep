@@ -10,6 +10,12 @@ public class ResourceStorage : TGTHNetworkBehaviour
         NetworkVariableWritePermission.Server
     );
     public event Action<ulong> OnSpiritStoneChanged;
+    private PlayerInventory inventory;
+    protected override void Awake()
+    {
+        base.Awake();
+        inventory = GetComponent<PlayerInventory>();
+    }
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -51,6 +57,7 @@ public class ResourceStorage : TGTHNetworkBehaviour
     {
         if (!IsServer) return;
         InitSpiritStone((ulong)playerResource.linhThach);
+        inventory.SetItems(playerResource.itemAmounts);
     }
     // ===== OFFLINE COINS =====
     public void AddOfflineCoins(ulong amount)

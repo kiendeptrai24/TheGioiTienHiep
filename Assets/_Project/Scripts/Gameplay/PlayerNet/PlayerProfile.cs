@@ -25,6 +25,7 @@ public class PlayerProfile : TGTHNetworkBehaviour
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
+    private PlayerInventory inventory;
     public event Action OnProfileChanged;
     [SerializeField]
     private ProfileUser profileUser;
@@ -33,6 +34,7 @@ public class PlayerProfile : TGTHNetworkBehaviour
     {
         base.Awake();
         resourceStorage = GetComponent<ResourceStorage>();
+        inventory = GetComponent<PlayerInventory>();
         resourceStorage.OnSpiritStoneChanged += OnSpiritStoneChanged;
     }
     void OnDisable()
@@ -101,6 +103,7 @@ public class PlayerProfile : TGTHNetworkBehaviour
     {
         if (playerResource == null)
             playerResource = new PlayerResource();
+        playerResource.itemAmounts = inventory.GetItemRequirments();
         return playerResource;
     }
     public FixedString64Bytes GetPlayerId() => playerId.Value;

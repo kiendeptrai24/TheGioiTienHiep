@@ -24,5 +24,7 @@ public enum ItemType
     Champion,
 
     [EnumMember(Value = "điều kiện")]
-    Condition
+    Condition,
+    [EnumMember(Value = "thuốc")]
+    Pill
 }

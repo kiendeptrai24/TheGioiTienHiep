@@ -75,6 +75,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public List<ItemData> GetItemShopData() => listItemShopDatas;
     public List<ItemData> GetDatasChampion() => listItemDatasChampion;
     public List<ItemData> GetDatasUsed() => listItemDatasUsed;
+    public List<ItemData> GetDatas() => listItemDatas;
+
 
     public void SetItemChampionData(List<ItemData> data)
     {
@@ -151,33 +153,76 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     }
     public bool AddData(ItemData item, int quantity = 1)
     {
-        listItemDatas.Add(item);
-        listItemDatasExisting.Add(item);
-        if (quantity > 1)
+        if (item == null) return false;
+        if (item.canStack)
         {
-            for (int i = 0; i < quantity - 1; i++)
+
+            var existingItem = listItemDatas.FirstOrDefault(i => i.instanceId == item.instanceId);
+            if (existingItem != null)
             {
-                var newItem = item.Clone();
-                newItem.itemId = Guid.NewGuid().ToString();
-                listItemDatas.Add(newItem);
-                listItemDatasExisting.Add(newItem);
+                existingItem.currentstack += quantity;
+                ItemChange(existingItem);
+                return true;
             }
+            item.currentstack = quantity;
+            listItemDatas.Add(item);
+            listItemDatasExisting.Add(item);
+            ItemChange(item);
+            ItemExistingChange(item);
+            return true;
         }
+        else
+        {
+            if (quantity > 1)
+            {
+                for (int i = 0; i < quantity - 1; i++)
+                {
+                    var newItem = item.Clone();
+                    newItem.itemId = Guid.NewGuid().ToString();
+                    listItemDatas.Add(newItem);
+                    listItemDatasExisting.Add(newItem);
+                }
+            }
 
-        // Notify đúng object
-        ItemChange(item);
-        ItemExistingChange(item);
+            // Notify đúng object
+            ItemChange(item);
+            ItemExistingChange(item);
 
-        return true;
+            return true;
+        }
     }
-    public bool RemoveData(ItemData item)
+    public bool SetItem(string InstanceId, int currentAmount = 0)
+    {
+        var item = listItemDatas.FirstOrDefault(i => i.instanceId == InstanceId);
+        if (item != null)
+        {
+            if (item.canStack == false) return false;
+            item.currentstack = currentAmount;
+            if (item.currentstack <= 0)
+            {
+                listItemDatas.Remove(item);
+                listItemDatasExisting.Remove(item);
+            }
+            ItemChange(item);
+            ItemExistingChange(item);
+            return true;
+        }
+        return false;
+    }
+    public bool RemoveData(ItemData item, int quantity = 1)
     {
         if (!listItemDatas.Contains(item))
             return false;
-
-        listItemDatas.Remove(item);
-        listItemDatasExisting.Remove(item);
-
+        var existingItem = listItemDatas.FirstOrDefault(i => i.instanceId == item.instanceId);
+        if (existingItem != null)
+        {
+            if (existingItem.currentstack <= quantity)
+            {
+                listItemDatas.Remove(item);
+                listItemDatasExisting.Remove(item);
+            }
+            existingItem.currentstack += quantity;
+        }
         ItemChange(item);
         ItemExistingChange(item);
         return true;

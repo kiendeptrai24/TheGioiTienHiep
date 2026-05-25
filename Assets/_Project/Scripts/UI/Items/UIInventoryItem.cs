@@ -31,7 +31,7 @@ public class UIInventoryItem : UIItemSlotBase
 
         SetData(
             inventoryItem.data.itemIcon,
-            inventoryItem.stackSize
+            inventoryItem.data.currentstack
         );
     }
     public override void ResetData()

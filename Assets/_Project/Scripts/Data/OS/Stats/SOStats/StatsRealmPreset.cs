@@ -395,6 +395,7 @@ public class StatsRealmPreset : ItemPreset
         data.maHachCost = mahachCost;
         data.linhThachCost = linhThachCost;
         data.rewardPotentialPoint = rewardPotentialPoint;
+        data.rewardPotentialPoint = rewardPotentialPoint;
         data.rewardSkillPoint = rewardSkillPoint;
 
 

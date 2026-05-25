@@ -10,9 +10,15 @@ public class PillDataDto
     public string itemName;
     [JsonProperty("Mô Tả")]
     public string itemDescription;
+    [JsonProperty("Cộng Dồn")]
+    public bool canStack;
+    [JsonProperty("Số Lượng")]
+    public int currentStack;
     [JsonProperty("Cảnh Giới")]
     public RealmType realmType;
     [JsonProperty("Loại")]
+    public ItemType itemType;
+    [JsonProperty("Loại Thuốc")]
     public PillType pillType;
     [JsonProperty("Phẩm")]
     public QuanlityType quanlity;

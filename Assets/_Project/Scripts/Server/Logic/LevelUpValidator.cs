@@ -39,7 +39,6 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
 
 
         HeroData heroData = statsData.chamionData as HeroData;
-        LevelUpConditionData conditionData = new();
 
         var realmType = heroData.realmType;
         if (realmType == RealmType.PhiThang)
@@ -49,8 +48,11 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         if (nextRealm == null)
             result = new LevelUpValidationResult(false, "Không tìm thấy realm tiếp theo");
 
+        LevelUpConditionData conditionData = new(nextRealm.itemsCost);
         conditionData.conditionType = LevelUpConditionType.ChampionLevel;
         conditionData.linhThach = nextRealm.linhThachCost;
+        conditionData.requiredItem = nextRealm.itemsCost;
+
 
         if (heroData == null)
             result = new LevelUpValidationResult(false, "không hợp lệ");
@@ -96,7 +98,6 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         if (!IsServer)
             return;
         CheckLevelUpValidationResult levelupChecking = new();
-        var conditionData = new LevelUpConditionData();
 
         if (!NetworkManager.ConnectedClients.TryGetValue(playerClientId, out var client))
             return;
@@ -107,6 +108,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         var statsData = playerObj.GetComponent<StatsData>();
         var nextRealm = levelUpStranlation.GetNextRealm(statsData.chamionData.realmType);
 
+        var conditionData = new LevelUpConditionData(nextRealm.itemsCost);
         if (nextRealm != null)
         {
             conditionData.linhThach = nextRealm.linhThachCost;
@@ -124,6 +126,8 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
             validators.Add(new MaHachResource(conditionData.maHach));
         if (conditionData.yeuDan > 0)
             validators.Add(new YeuDanResource(conditionData.yeuDan));
+        if (string.IsNullOrEmpty(conditionData.requiredItem) == false)
+            validators.Add(new TrucCoDanReource(conditionData.requiredItem));
 
         foreach (var validator in validators)
         {
@@ -180,6 +184,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         new KhoangThachResource().Consume(playerResource, condition.khoangThach);
         new MaHachResource().Consume(playerResource, condition.maHach);
         new YeuDanResource().Consume(playerResource, condition.yeuDan);
+        new TrucCoDanReource().Consume(playerResource, condition.GetTrucCoDan());
     }
     public void RequestCheckConditionResult(ulong playerClientId, string instanceId)
     {

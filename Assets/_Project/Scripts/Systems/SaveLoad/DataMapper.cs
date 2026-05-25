@@ -100,6 +100,13 @@ public static class DataMapper
                 techniqueData.techniqueType = dto.techniqueType.Value;
             itemData = techniqueData;
         }
+        else if (dto.itemType == ItemType.Pill)
+        {
+            var pillData = new PillData();
+            pillData.pillType = dto.pillType;
+            pillData.rate = DataParseUtils.ParsePercent(dto.rate);
+            itemData = pillData;
+        }
         else
         {
             itemData = new ItemData();
@@ -109,6 +116,8 @@ public static class DataMapper
         itemData.itemName = dto.itemName;
         itemData.itemDescription = dto.description;
         itemData.itemType = dto.itemType;
+        itemData.canStack = dto.canStack;
+        itemData.currentstack = dto.currentStack;
         itemData.qualityType = dto.qualityType;
         itemData.realmType = dto.realmType;
         itemData.health = DataParseUtils.ParseNumberOrPercent(dto.health);
@@ -131,12 +140,15 @@ public static class DataMapper
         var item = new PillData();
         item.instanceId = dto.instanceId;
         item.itemName = dto.itemName;
+        item.itemType = dto.itemType;
         item.itemDescription = dto.itemDescription;
         item.itemType = ItemType.Material;
         item.qualityType = dto.quanlity;
+        item.canStack = dto.canStack;
         item.realmType = dto.realmType;
         item.elementType = dto.elementType;
         item.pillType = dto.pillType;
+
         item.health = DataParseUtils.ParseNumberOrPercent(dto.health);
         item.mana = DataParseUtils.ParseNumberOrPercent(dto.mana);
         item.spirit = DataParseUtils.ParseNumberOrPercent(dto.spirit);
@@ -217,7 +229,7 @@ public static class DataMapper
         realmData.rewardPotentialPoint = dto.potentialPoints;
         realmData.rewardSkillPoint = dto.skillPoints;
         realmData.linhThachCost = dto.lThach;
-        realmData.item = dto.item == null ? "" : dto.item;
+        realmData.itemsCost = dto.item == null ? "" : dto.item;
         realmData.rate = DataParseUtils.ParsePercent(dto.rate);
         realmData.increaseRate = DataParseUtils.ParsePercent(dto.increaseRate);
         realmData.timeSeconds = DataParseUtils.ParseTimeToSeconds(dto.time);
@@ -323,6 +335,8 @@ public static class DataMapper
             itemName = data.itemName,
             description = data.itemDescription,
             itemType = data.itemType,
+            canStack = data.canStack,
+            currentStack = data.currentstack,
             qualityType = data.qualityType,
             realmType = data.realmType,
 
@@ -356,6 +370,13 @@ public static class DataMapper
             case TechniqueData t:
                 dto.raceType = t.raceType;
                 dto.techniqueType = t.techniqueType;
+                break;
+            case PillData p:
+                dto.health = p.health + "";
+                dto.mana = p.mana + "";
+                dto.spirit = p.spirit + "";
+                dto.rate = p.rate + "%";
+                dto.pillType = p.pillType;
                 break;
         }
 

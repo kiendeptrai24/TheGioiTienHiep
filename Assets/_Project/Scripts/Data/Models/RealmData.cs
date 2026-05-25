@@ -44,12 +44,13 @@ public class RealmData : ItemData
     public int yeuDanCost;          // Yêu đan
     public int maHachCost;          // Ma hạch
     public int linhThachCost;        // Linh thạch
+    public int trucCoDanCost;        // Yêu đan
+    public string itemsCost;
     public int rewardPotentialPoint;
     public int rewardSkillPoint;
     public float rate;
     public float increaseRate;
     public long timeSeconds;
-    public string item;
     override public ItemData Clone()
     {
         return (RealmData)this.MemberwiseClone();

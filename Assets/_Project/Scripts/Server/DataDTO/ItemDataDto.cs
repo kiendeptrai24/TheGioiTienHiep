@@ -13,6 +13,10 @@ public class ItemDataDto
 
     [JsonProperty("loại")]
     public ItemType itemType;
+    [JsonProperty("cộng dồn")]
+    public bool canStack;
+    [JsonProperty("số lượng")]
+    public int currentStack;
 
     [JsonProperty("tộc")]
     public RaceType raceType;
@@ -66,4 +70,9 @@ public class ItemDataDto
     public float animationDuration;
     [JsonProperty("thời gian chiêu thức")]
     public float castTime;
+    [JsonProperty("tỉ lệ")]
+    public string rate;
+    [JsonProperty("loại thuốc")]
+    public PillType pillType;
+    internal ElementType elementType;
 }
