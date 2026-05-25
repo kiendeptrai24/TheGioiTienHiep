@@ -19,7 +19,7 @@ public abstract class ItemPreset : ScriptableObject
     public ulong itemPrice = 100;
     public int currentstack;
     public bool canStack = false;
-    public QualityType qualityType;
+    public QuanlityType qualityType;
 
     public virtual void OnValidate()
     {

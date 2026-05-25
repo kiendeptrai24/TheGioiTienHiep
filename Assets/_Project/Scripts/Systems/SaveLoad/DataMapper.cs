@@ -126,7 +126,24 @@ public static class DataMapper
 
         return itemData;
     }
+    public static PillData MapPillData(PillDataDto dto)
+    {
+        var item = new PillData();
+        item.instanceId = dto.instanceId;
+        item.itemName = dto.itemName;
+        item.itemDescription = dto.itemDescription;
+        item.itemType = ItemType.Material;
+        item.qualityType = dto.quanlity;
+        item.realmType = dto.realmType;
+        item.elementType = dto.elementType;
+        item.pillType = dto.pillType;
+        item.health = DataParseUtils.ParseNumberOrPercent(dto.health);
+        item.mana = DataParseUtils.ParseNumberOrPercent(dto.mana);
+        item.spirit = DataParseUtils.ParseNumberOrPercent(dto.spirit);
+        item.rate = DataParseUtils.ParseNumberOrPercent(dto.rate);
 
+        return item;
+    }
     public static EssenceData MapEssenceData(EssenceAndRaceDataDto dto)
     {
         if (dto == null || dto.type != EssenceAndRaceType.Essence) return null;

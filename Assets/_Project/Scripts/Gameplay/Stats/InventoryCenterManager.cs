@@ -7,8 +7,6 @@ using System.Linq;
 
 public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveable
 {
-    public bool getDataPreset;
-    [SerializeField] private HeroPreset heroPreset;
     public ItemData playerCham;
     public HeroData championData;
 
@@ -43,10 +41,6 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     override protected void Awake()
     {
         base.Awake();
-        if (getDataPreset)
-        {
-            playerCham = heroPreset.GetItemData();
-        }
         LoadComponent();
         ResetData();
     }

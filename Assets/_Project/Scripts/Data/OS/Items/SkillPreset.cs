@@ -150,7 +150,7 @@ public class SkillPreset : ItemPreset
     private void ApplyCommonMetaDefaults()
     {
         // theo bảng bạn: đa số là Phàm/Chung/Chung/Chung
-        if (qualityType == default) qualityType = QualityType.Mortal;
+        if (qualityType == default) qualityType = QuanlityType.Mortal;
         if (raceType == default) raceType = RaceType.General;
         if (mainEssence == default) mainEssence = EssenceType.General;
         if (elementType == default) elementType = ElementType.Neutral;

@@ -94,11 +94,11 @@ public static class EnumTranslator
         { ItemType.Other, "Khác" },
 
         // QualityType
-        { QualityType.Mortal, "Phàm" },
-        { QualityType.Yellow, "Hoàng" },
-        { QualityType.Mystic, "Huyền" },
-        { QualityType.Earth, "Địa" },
-        { QualityType.Heaven, "Thiên" },
+        { QuanlityType.Mortal, "Phàm" },
+        { QuanlityType.Yellow, "Hoàng" },
+        { QuanlityType.Mystic, "Huyền" },
+        { QuanlityType.Earth, "Địa" },
+        { QuanlityType.Heaven, "Thiên" },
 
         // TechniqueType
         { TechniqueType.PhamNhanLuyenLinhQuyet, "Phàm Nhân Luyện Linh Quyết" },
@@ -206,11 +206,17 @@ public static class EnumTranslator
         { ItemType.Other, "Khác" },
 
         // QualityType
-        { QualityType.Mortal, "Phàm" },
-        { QualityType.Yellow, "Hoàng" },
-        { QualityType.Mystic, "Huyền" },
-        { QualityType.Earth, "Địa" },
-        { QualityType.Heaven, "Thiên" },
+        { QuanlityType.Mortal, "Phàm" },
+        { QuanlityType.Yellow, "Hoàng" },
+        { QuanlityType.Mystic, "Huyền" },
+        { QuanlityType.Earth, "Địa" },
+        { QuanlityType.Heaven, "Thiên" },
+
+        { PillType.Breakthrough, "Đột phá" },
+        { PillType.Cultivation, "Tu luyện" },
+        { PillType.Recovery, "Hồi phục" },
+        { PillType.Buff, "Tăng cường" },
+        { PillType.Special, "Đặc biệt" },
 
         // TechniqueType
         { TechniqueType.PhamNhanLuyenLinhQuyet, "PN" },

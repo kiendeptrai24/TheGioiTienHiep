@@ -90,9 +90,9 @@ public class ItemWeaponPreset : ItemEquipmentPreset
     {
         public readonly string name;
         public readonly int level;
-        public readonly QualityType quality;
+        public readonly QuanlityType quality;
 
-        public EquipmentAutoKey(string name, int level, QualityType quality)
+        public EquipmentAutoKey(string name, int level, QuanlityType quality)
         {
             this.name = NormalizeName(name);
             this.level = level;
@@ -137,43 +137,43 @@ public class ItemWeaponPreset : ItemEquipmentPreset
         // =========================
         // KIẾM
         // =========================
-        _table[new EquipmentAutoKey("Kiếm gỗ", 1, QualityType.Mortal)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Kiếm gỗ", 1, QuanlityType.Mortal)] = new EquipmentAutoRow
         {
             critDmgPct = 20
         };
 
-        _table[new EquipmentAutoKey("Kiếm đồng", 2, QualityType.Mortal)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Kiếm đồng", 2, QuanlityType.Mortal)] = new EquipmentAutoRow
         {
             critDmgPct = 30
         };
-        _table[new EquipmentAutoKey("Kiếm đồng", 2, QualityType.Yellow)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Kiếm đồng", 2, QuanlityType.Yellow)] = new EquipmentAutoRow
         {
             critDmgPct = 40
         };
-        _table[new EquipmentAutoKey("Kiếm đồng", 2, QualityType.Mystic)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Kiếm đồng", 2, QuanlityType.Mystic)] = new EquipmentAutoRow
         {
             critDmgPct = 70
         };
 
-        _table[new EquipmentAutoKey("Kiếm bạch ngân", 3, QualityType.Mortal)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Kiếm bạch ngân", 3, QuanlityType.Mortal)] = new EquipmentAutoRow
         {
             critDmgPct = 60
         };
-        _table[new EquipmentAutoKey("Kiếm bạch ngân", 3, QualityType.Yellow)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Kiếm bạch ngân", 3, QuanlityType.Yellow)] = new EquipmentAutoRow
         {
             critDmgPct = 70
         };
-        _table[new EquipmentAutoKey("Kiếm bạch ngân", 3, QualityType.Mystic)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Kiếm bạch ngân", 3, QuanlityType.Mystic)] = new EquipmentAutoRow
         {
             critDmgPct = 85,
             atkSpeedPct = 7.5f
         };
-        _table[new EquipmentAutoKey("Kiếm bạch ngân", 3, QualityType.Earth)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Kiếm bạch ngân", 3, QuanlityType.Earth)] = new EquipmentAutoRow
         {
             critDmgPct = 127.5f,
             atkSpeedPct = 11.25f
         };
-        _table[new EquipmentAutoKey("Kiếm bạch ngân", 3, QualityType.Heaven)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Kiếm bạch ngân", 3, QuanlityType.Heaven)] = new EquipmentAutoRow
         {
             magPct = 25,
             critDmgPct = 175,
@@ -183,43 +183,43 @@ public class ItemWeaponPreset : ItemEquipmentPreset
         // =========================
         // ĐAO
         // =========================
-        _table[new EquipmentAutoKey("Đao gỗ", 1, QualityType.Mortal)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Đao gỗ", 1, QuanlityType.Mortal)] = new EquipmentAutoRow
         {
             magPct = 20
         };
 
-        _table[new EquipmentAutoKey("Đao đồng", 2, QualityType.Mortal)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Đao đồng", 2, QuanlityType.Mortal)] = new EquipmentAutoRow
         {
             magPct = 30
         };
-        _table[new EquipmentAutoKey("Đao đồng", 2, QualityType.Yellow)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Đao đồng", 2, QuanlityType.Yellow)] = new EquipmentAutoRow
         {
             magPct = 40
         };
-        _table[new EquipmentAutoKey("Đao đồng", 2, QualityType.Mystic)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Đao đồng", 2, QuanlityType.Mystic)] = new EquipmentAutoRow
         {
             magPct = 70
         };
 
-        _table[new EquipmentAutoKey("Đao bạch ngân", 3, QualityType.Mortal)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Đao bạch ngân", 3, QuanlityType.Mortal)] = new EquipmentAutoRow
         {
             magPct = 60
         };
-        _table[new EquipmentAutoKey("Đao bạch ngân", 3, QualityType.Yellow)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Đao bạch ngân", 3, QuanlityType.Yellow)] = new EquipmentAutoRow
         {
             magPct = 70
         };
-        _table[new EquipmentAutoKey("Đao bạch ngân", 3, QualityType.Mystic)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Đao bạch ngân", 3, QuanlityType.Mystic)] = new EquipmentAutoRow
         {
             magPct = 75,
             critRatePct = 5
         };
-        _table[new EquipmentAutoKey("Đao bạch ngân", 3, QualityType.Earth)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Đao bạch ngân", 3, QuanlityType.Earth)] = new EquipmentAutoRow
         {
             magPct = 112.5f,
             critRatePct = 7.5f
         };
-        _table[new EquipmentAutoKey("Đao bạch ngân", 3, QualityType.Heaven)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Đao bạch ngân", 3, QuanlityType.Heaven)] = new EquipmentAutoRow
         {
             magPct = 100,
             critDmgPct = 75,
@@ -229,43 +229,43 @@ public class ItemWeaponPreset : ItemEquipmentPreset
         // =========================
         // THƯƠNG
         // =========================
-        _table[new EquipmentAutoKey("Thương gỗ", 1, QualityType.Mortal)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Thương gỗ", 1, QuanlityType.Mortal)] = new EquipmentAutoRow
         {
             armorPenPct = 4
         };
 
-        _table[new EquipmentAutoKey("Thương đồng", 2, QualityType.Mortal)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Thương đồng", 2, QuanlityType.Mortal)] = new EquipmentAutoRow
         {
             armorPenPct = 6
         };
-        _table[new EquipmentAutoKey("Thương đồng", 2, QualityType.Yellow)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Thương đồng", 2, QuanlityType.Yellow)] = new EquipmentAutoRow
         {
             armorPenPct = 8
         };
-        _table[new EquipmentAutoKey("Thương đồng", 2, QualityType.Mystic)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Thương đồng", 2, QuanlityType.Mystic)] = new EquipmentAutoRow
         {
             armorPenPct = 14
         };
 
-        _table[new EquipmentAutoKey("Thương bạch ngân", 3, QualityType.Mortal)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Thương bạch ngân", 3, QuanlityType.Mortal)] = new EquipmentAutoRow
         {
             armorPenPct = 12
         };
-        _table[new EquipmentAutoKey("Thương bạch ngân", 3, QualityType.Yellow)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Thương bạch ngân", 3, QuanlityType.Yellow)] = new EquipmentAutoRow
         {
             armorPenPct = 14
         };
-        _table[new EquipmentAutoKey("Thương bạch ngân", 3, QualityType.Mystic)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Thương bạch ngân", 3, QuanlityType.Mystic)] = new EquipmentAutoRow
         {
             physPct = 10,
             armorPenPct = 18
         };
-        _table[new EquipmentAutoKey("Thương bạch ngân", 3, QualityType.Earth)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Thương bạch ngân", 3, QuanlityType.Earth)] = new EquipmentAutoRow
         {
             physPct = 15,
             armorPenPct = 27
         };
-        _table[new EquipmentAutoKey("Thương bạch ngân", 3, QualityType.Heaven)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Thương bạch ngân", 3, QuanlityType.Heaven)] = new EquipmentAutoRow
         {
             physPct = 25,
             armorPenPct = 35,
@@ -275,43 +275,43 @@ public class ItemWeaponPreset : ItemEquipmentPreset
         // =========================
         // CUNG
         // =========================
-        _table[new EquipmentAutoKey("Cung gỗ", 1, QualityType.Mortal)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Cung gỗ", 1, QuanlityType.Mortal)] = new EquipmentAutoRow
         {
             atkSpeedPct = 10
         };
 
-        _table[new EquipmentAutoKey("Cung đồng", 2, QualityType.Mortal)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Cung đồng", 2, QuanlityType.Mortal)] = new EquipmentAutoRow
         {
             atkSpeedPct = 15
         };
-        _table[new EquipmentAutoKey("Cung đồng", 2, QualityType.Yellow)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Cung đồng", 2, QuanlityType.Yellow)] = new EquipmentAutoRow
         {
             atkSpeedPct = 20
         };
-        _table[new EquipmentAutoKey("Cung đồng", 2, QualityType.Mystic)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Cung đồng", 2, QuanlityType.Mystic)] = new EquipmentAutoRow
         {
             atkSpeedPct = 35
         };
 
-        _table[new EquipmentAutoKey("Cung bạch ngân", 3, QualityType.Mortal)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Cung bạch ngân", 3, QuanlityType.Mortal)] = new EquipmentAutoRow
         {
             atkSpeedPct = 30
         };
-        _table[new EquipmentAutoKey("Cung bạch ngân", 3, QualityType.Yellow)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Cung bạch ngân", 3, QuanlityType.Yellow)] = new EquipmentAutoRow
         {
             atkSpeedPct = 35
         };
-        _table[new EquipmentAutoKey("Cung bạch ngân", 3, QualityType.Mystic)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Cung bạch ngân", 3, QuanlityType.Mystic)] = new EquipmentAutoRow
         {
             magPct = 10,
             atkSpeedPct = 45
         };
-        _table[new EquipmentAutoKey("Cung bạch ngân", 3, QualityType.Earth)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Cung bạch ngân", 3, QuanlityType.Earth)] = new EquipmentAutoRow
         {
             magPct = 15,
             atkSpeedPct = 67.5f
         };
-        _table[new EquipmentAutoKey("Cung bạch ngân", 3, QualityType.Heaven)] = new EquipmentAutoRow
+        _table[new EquipmentAutoKey("Cung bạch ngân", 3, QuanlityType.Heaven)] = new EquipmentAutoRow
         {
             magPct = 25,
             critRatePct = 10,
@@ -319,7 +319,7 @@ public class ItemWeaponPreset : ItemEquipmentPreset
         };
     }
 
-    private bool TryApplyFromTable(string equipmentName, int level, QualityType quality)
+    private bool TryApplyFromTable(string equipmentName, int level, QuanlityType quality)
     {
         EnsureTable();
 

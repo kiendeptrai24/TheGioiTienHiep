@@ -4,7 +4,7 @@ using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 
 [JsonConverter(typeof(StringEnumConverter))]
-public enum QualityType
+public enum QuanlityType
 {
     [EnumMember(Value = "phàm")]
     Mortal = 0,   // Phàm

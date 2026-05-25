@@ -19,7 +19,7 @@ public class ItemBootsPreset : ItemEquipmentPreset
         // default meta
         if (raceType == default) raceType = RaceType.General;
         if (elementType == default) elementType = ElementType.Neutral;
-        if (qualityType == default) qualityType = QualityType.Mortal;
+        if (qualityType == default) qualityType = QuanlityType.Mortal;
 
         itemName = $"{GetBootsName(bootsType)} C{level}";
 
@@ -60,7 +60,7 @@ public class ItemBootsPreset : ItemEquipmentPreset
     private void ApplyGiayVai()
     {
         level = 1;
-        qualityType = QualityType.Mortal;
+        qualityType = QuanlityType.Mortal;
         moveSpeed = 0.04f;
     }
 
@@ -71,9 +71,9 @@ public class ItemBootsPreset : ItemEquipmentPreset
 
         moveSpeed = qualityType switch
         {
-            QualityType.Mortal => 0.06f,
-            QualityType.Yellow => 0.08f,
-            QualityType.Mystic => 0.14f,
+            QuanlityType.Mortal => 0.06f,
+            QuanlityType.Yellow => 0.08f,
+            QuanlityType.Mystic => 0.14f,
             _ => 0f
         };
     }
@@ -89,25 +89,25 @@ public class ItemBootsPreset : ItemEquipmentPreset
 
         switch (qualityType)
         {
-            case QualityType.Mortal:
+            case QuanlityType.Mortal:
                 moveSpeed = 0.12f;
                 break;
 
-            case QualityType.Yellow:
+            case QuanlityType.Yellow:
                 moveSpeed = 0.14f;
                 break;
 
-            case QualityType.Mystic:
+            case QuanlityType.Mystic:
                 physicalDefense = 0.20f;
                 moveSpeed = 0.16f;
                 break;
 
-            case QualityType.Earth:
+            case QuanlityType.Earth:
                 physicalDefense = 0.30f;
                 moveSpeed = 0.24f;
                 break;
 
-            case QualityType.Heaven:
+            case QuanlityType.Heaven:
                 // hàng Thiên của bạn có: attackSpeed 50% + bonusHealth 50% + moveSpeed 30% + bonusMana 50%
                 attackSpeed = 0.50f;
                 physicalDefense = 0.50f;

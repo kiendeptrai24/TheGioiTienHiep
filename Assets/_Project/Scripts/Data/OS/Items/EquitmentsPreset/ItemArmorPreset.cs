@@ -21,7 +21,7 @@ public class ItemArmorPreset : ItemEquipmentPreset
         // default meta theo sheet
         if (raceType == default) raceType = RaceType.General;
         if (elementType == default) elementType = ElementType.Neutral;
-        if (qualityType == default) qualityType = QualityType.Mortal;
+        if (qualityType == default) qualityType = QuanlityType.Mortal;
 
         // set itemName theo armorType + Cấp + Phẩm
         itemName = $"{GetArmorName(armorType)} C{level}";
@@ -68,7 +68,7 @@ public class ItemArmorPreset : ItemEquipmentPreset
     private void ApplyGiaoVai()
     {
         level = Mathf.Max(level, 1);
-        qualityType = QualityType.Mortal;
+        qualityType = QuanlityType.Mortal;
 
         if (level == 1)
             physicalDefense = .2f;
@@ -81,9 +81,9 @@ public class ItemArmorPreset : ItemEquipmentPreset
 
         physicalDefense = qualityType switch
         {
-            QualityType.Mortal => .30f,
-            QualityType.Yellow => .40f,
-            QualityType.Mystic => .70f,
+            QuanlityType.Mortal => .30f,
+            QuanlityType.Yellow => .40f,
+            QuanlityType.Mystic => .70f,
             _ => 0f
         };
     }
@@ -99,25 +99,25 @@ public class ItemArmorPreset : ItemEquipmentPreset
 
         switch (qualityType)
         {
-            case QualityType.Mortal:
+            case QuanlityType.Mortal:
                 physicalDefense = .60f;
                 break;
 
-            case QualityType.Yellow:
+            case QuanlityType.Yellow:
                 physicalDefense = .70f;
                 break;
 
-            case QualityType.Mystic:
+            case QuanlityType.Mystic:
                 physicalDefense = .80f;
                 attackSpeed = .20f;
                 break;
 
-            case QualityType.Earth:
+            case QuanlityType.Earth:
                 physicalDefense = 1.20f;
                 attackSpeed = .30f;
                 break;
 
-            case QualityType.Heaven:
+            case QuanlityType.Heaven:
                 physicalDefense = 1.50f;
                 maxHealth = .50f;
                 maxMana = .50f;

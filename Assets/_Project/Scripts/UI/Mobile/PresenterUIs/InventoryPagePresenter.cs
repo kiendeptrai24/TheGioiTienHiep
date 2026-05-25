@@ -83,7 +83,7 @@ namespace TGTH.Mobile
             int quality = view.qualityTypeDrop.value;
             // Lấy enum từ dropdown value
             ItemType selectedType = (ItemType)type;
-            QualityType selectedQuality = (QualityType)quality;
+            QuanlityType selectedQuality = (QuanlityType)quality;
             // Lọc và sắp xếp danh sách
             var sortedList = listItemDatas
                 .Where(item => (item.data.itemType == selectedType) && (item.data.qualityType == selectedQuality))

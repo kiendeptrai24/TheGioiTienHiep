@@ -18,7 +18,7 @@ public class ItemDataDto
     public RaceType raceType;
 
     [JsonProperty("phẩm")]
-    public QualityType qualityType;
+    public QuanlityType qualityType;
 
     [JsonProperty("cảnh giới")]
     public RealmType realmType;

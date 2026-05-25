@@ -25,7 +25,6 @@ public class LoadShopDataServerSide : ILoadGameData<GameDataCenter, AllGameDataR
                     continue;
                 }
                 gameData.shopItems.Add(shopData);
-                gameData.allItems.Add(shopData);
             }
         }
         catch (System.Exception ex)

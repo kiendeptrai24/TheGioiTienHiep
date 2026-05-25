@@ -21,7 +21,7 @@ public class ChampionDataDto
     public int? posY;
 
     [JsonProperty("phẩm")]
-    public QualityType quality;
+    public QuanlityType quality;
 
     [JsonProperty("mã chủ tu")]
     public string essenceId;

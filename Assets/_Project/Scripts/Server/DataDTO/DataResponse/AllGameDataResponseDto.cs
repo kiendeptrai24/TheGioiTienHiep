@@ -14,6 +14,8 @@ public class AllGameDataResponseDto
     public List<ItemRealmDataDto> realmRes;
     [JsonProperty("Equipment")]
     public List<ItemDataDto> equipmentRes;
+    [JsonProperty("Pill")]
+    public List<PillDataDto> pillRes;
     [JsonProperty("Shop")]
     public List<ShopDataDto> shopRes;
     [JsonProperty("SpiritStoneMine")]

@@ -20,6 +20,7 @@ public class AllGameDataSerice : ILoadRemote<GameDataCenter>
         loadGameDatas.Add(new LoadShopDataServerSide());
         loadGameDatas.Add(new LoadSpiritStoneMineDataServerSide());
         loadGameDatas.Add(new LoadDemonBeastDataServerSide());
+        loadGameDatas.Add(new LoadPillDataServerSide());
     }
 
     public void LoadGame(GameDataCenter gameData, Action callback)

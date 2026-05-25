@@ -20,7 +20,7 @@ public class ItemData
     public int currentstack;
     public RealmType realmType;
     public string realmId;
-    public QualityType qualityType;
+    public QuanlityType qualityType;
     public ElementType elementType;
     //Offensive Stats
     public float health;

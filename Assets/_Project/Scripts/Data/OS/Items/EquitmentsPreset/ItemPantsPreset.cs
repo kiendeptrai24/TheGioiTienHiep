@@ -19,7 +19,7 @@ public class ItemPantsPreset : ItemEquipmentPreset
         // meta mặc định
         if (raceType == default) raceType = RaceType.General;
         if (elementType == default) elementType = ElementType.Neutral;
-        if (qualityType == default) qualityType = QualityType.Mortal;
+        if (qualityType == default) qualityType = QuanlityType.Mortal;
 
         itemName = $"{GetPantsName(pantsType)} C{level}";
 
@@ -60,7 +60,7 @@ public class ItemPantsPreset : ItemEquipmentPreset
     private void ApplyQuanVai()
     {
         level = 1;
-        qualityType = QualityType.Mortal;
+        qualityType = QuanlityType.Mortal;
         physicalDefense = 0.20f;
     }
 
@@ -72,9 +72,9 @@ public class ItemPantsPreset : ItemEquipmentPreset
 
         physicalDefense = qualityType switch
         {
-            QualityType.Mortal => 0.30f,
-            QualityType.Yellow => 0.40f,
-            QualityType.Mystic => 0.70f,
+            QuanlityType.Mortal => 0.30f,
+            QuanlityType.Yellow => 0.40f,
+            QuanlityType.Mystic => 0.70f,
             _ => 0f
         };
     }
@@ -91,25 +91,25 @@ public class ItemPantsPreset : ItemEquipmentPreset
 
         switch (qualityType)
         {
-            case QualityType.Mortal:
+            case QuanlityType.Mortal:
                 physicalDefense = 0.60f;
                 break;
 
-            case QualityType.Yellow:
+            case QuanlityType.Yellow:
                 physicalDefense = 0.70f;
                 break;
 
-            case QualityType.Mystic:
+            case QuanlityType.Mystic:
                 physicalDefense = 0.80f;
                 reduceCritDamage = 0.02f;
                 break;
 
-            case QualityType.Earth:
+            case QuanlityType.Earth:
                 physicalDefense = 1.20f;
                 reduceCritDamage = 0.03f;
                 break;
 
-            case QualityType.Heaven:
+            case QuanlityType.Heaven:
                 physicalDefense = 1.50f;
                 reduceCritDamage = 0.05f;
                 reduceArmorPen = 0.05f;

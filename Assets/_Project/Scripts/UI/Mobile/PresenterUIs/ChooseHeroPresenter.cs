@@ -85,7 +85,7 @@ namespace TGTH.Mobile
             int quality = view.qualityTypeDrop.value;
             // Lấy enum từ dropdown value
             RaceType selectedRace = (RaceType)type;
-            QualityType selectedQuality = (QualityType)quality;
+            QuanlityType selectedQuality = (QuanlityType)quality;
             // Lọc và sắp xếp danh sách
             if (listItemDatas == null || listItemDatas.Count == 0) return;
             var sortedList = listItemDatas

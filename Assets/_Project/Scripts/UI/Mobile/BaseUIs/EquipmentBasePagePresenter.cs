@@ -151,7 +151,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
 
         //convert to EquipmentType and QualityType
         EquipmentType selectType = (EquipmentType)type;
-        QualityType selectedQuality = (QualityType)quality;
+        QuanlityType selectedQuality = (QuanlityType)quality;
 
         // get equipment item 
         var equip = GetListItemEquipment();

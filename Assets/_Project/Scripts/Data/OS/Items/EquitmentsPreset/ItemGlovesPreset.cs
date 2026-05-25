@@ -20,7 +20,7 @@ public class ItemGlovesPreset : ItemEquipmentPreset
         // default meta
         if (raceType == default) raceType = RaceType.General;
         if (elementType == default) elementType = ElementType.Neutral;
-        if (qualityType == default) qualityType = QualityType.Mortal;
+        if (qualityType == default) qualityType = QuanlityType.Mortal;
 
         itemName = $"{GetGlovesName(glovesType)} C{level}";
 
@@ -61,7 +61,7 @@ public class ItemGlovesPreset : ItemEquipmentPreset
     private void ApplyBaoTayVai()
     {
         level = 1;
-        qualityType = QualityType.Mortal;
+        qualityType = QuanlityType.Mortal;
         physicalDamage = 0.20f;
     }
 
@@ -72,9 +72,9 @@ public class ItemGlovesPreset : ItemEquipmentPreset
 
         physicalDamage = qualityType switch
         {
-            QualityType.Mortal => 0.30f,
-            QualityType.Yellow => 0.40f,
-            QualityType.Mystic => 0.70f,
+            QuanlityType.Mortal => 0.30f,
+            QuanlityType.Yellow => 0.40f,
+            QuanlityType.Mystic => 0.70f,
             _ => 0f
         };
     }
@@ -90,25 +90,25 @@ public class ItemGlovesPreset : ItemEquipmentPreset
 
         switch (qualityType)
         {
-            case QualityType.Mortal:
+            case QuanlityType.Mortal:
                 physicalDamage = 0.60f;
                 break;
 
-            case QualityType.Yellow:
+            case QuanlityType.Yellow:
                 physicalDamage = 0.70f;
                 break;
 
-            case QualityType.Mystic:
+            case QuanlityType.Mystic:
                 physicalDamage = 0.80f;
                 criticalRate = 0.04f;
                 break;
 
-            case QualityType.Earth:
+            case QuanlityType.Earth:
                 physicalDamage = 1.20f;
                 criticalRate = 0.06f;
                 break;
 
-            case QualityType.Heaven:
+            case QuanlityType.Heaven:
                 physicalDamage = 1.50f;
                 criticalDamage = 0.50f;
                 criticalRate = 0.10f;

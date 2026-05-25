@@ -6,9 +6,9 @@ public class ShopDataPopup
     public Sprite itemIcon;
     public string type;
     public RealmType realm;
-    public QualityType quanlity;
+    public QuanlityType quanlity;
     public ulong price;
-    public ShopDataPopup(string title, Sprite itemIcon, string type, RealmType realm, QualityType quanlity, ulong price)
+    public ShopDataPopup(string title, Sprite itemIcon, string type, RealmType realm, QuanlityType quanlity, ulong price)
     {
         this.title = title;
         this.itemIcon = itemIcon;

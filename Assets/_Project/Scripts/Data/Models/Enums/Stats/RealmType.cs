@@ -35,7 +35,7 @@ public enum RealmType
     TrucCo_TK,
     [EnumMember(Value = "trúc cơ hậu kỳ")]
     TrucCo_HK,
-    [EnumMember(Value = "trúc cơ đại viện mãn")]
+    [EnumMember(Value = "trúc cơ đại viên mãn")]
     TrucCo_DVM,
     [EnumMember(Value = "kết đan sơ kỳ")]
     // Kết Đan
