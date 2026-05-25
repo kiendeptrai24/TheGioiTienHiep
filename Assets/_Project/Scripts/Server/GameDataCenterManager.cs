@@ -44,6 +44,13 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
             return allItemsById[id];
         return null;
     }
+    public ItemData GetShopItemById(string id)
+    {
+        if (shopItemsById.ContainsKey(id))
+            return shopItemsById[id];
+        return null;
+    }
+
     public bool IsReady() => DataCenterReady;
     private void LoadDataLocalCache()
     {

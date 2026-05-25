@@ -181,13 +181,19 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
                     newItem.itemId = Guid.NewGuid().ToString();
                     listItemDatas.Add(newItem);
                     listItemDatasExisting.Add(newItem);
+                    ItemChange(newItem);
+                    ItemExistingChange(newItem);
                 }
             }
-
-            // Notify đúng object
-            ItemChange(item);
-            ItemExistingChange(item);
-
+            else
+            {
+                var newItem = item.Clone();
+                newItem.itemId = Guid.NewGuid().ToString();
+                listItemDatas.Add(item);
+                listItemDatasExisting.Add(item);
+                ItemChange(newItem);
+                ItemExistingChange(newItem);
+            }
             return true;
         }
     }

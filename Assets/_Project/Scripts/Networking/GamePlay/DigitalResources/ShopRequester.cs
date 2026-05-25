@@ -24,7 +24,7 @@ public class ShopRequester : SingletonNetwork<ShopRequester>
             BuyResultClientRpc(false, message, clientId);
             return;
         }
-        var itemData = GameDataCenterManager.Instance.GetItemById(instanceId);
+        var itemData = GameDataCenterManager.Instance.GetShopItemById(instanceId);
         if (itemData == null)
         {
             message = "Sản phẩm không tồn tại";

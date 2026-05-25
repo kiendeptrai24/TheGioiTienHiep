@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemCharacterService : ILoadRemote<GameData> , ISaveRemote<GameData>
+public class ItemCharacterService : ILoadRemote<GameData>, ISaveRemote<GameData>
 {
     private PlayFabDataClientService service;
     public ItemCharacterService(PlayFabDataClientService service)
@@ -104,6 +104,7 @@ public class ItemCharacterService : ILoadRemote<GameData> , ISaveRemote<GameData
                 return;
             try
             {
+                var skillDatasTemps = new List<SkillData>();
                 if (champion == null)
                 {
                     Debug.Log("champion is null");
@@ -127,30 +128,50 @@ public class ItemCharacterService : ILoadRemote<GameData> , ISaveRemote<GameData
                     if (skillData == null)
                         continue;
                     heroData.skillDatas[h] = skillData;
+                    skillDatasTemps.Add(skillData);
                 }
+                heroData.skillDatas = skillDatasTemps;
             }
             catch (System.Exception)
             {
                 Debug.LogError("SetHeroData: Failed to set skill data ");
             }
+            try
+            {
 
-            var techniqueDatas = champion.techniqueDatas;
-            for (int s = 0; s < techniqueDatas.Count; s++)
-            {
-                var technique = techniqueDatas[s];
-                var techniqueData = dataManager.GetItemById(technique.instanceId) as TechniqueData;
-                if (techniqueData == null)
-                    continue;
-                heroData.techniqueDatas[s] = techniqueData;
+                var techniqueDatas = champion.techniqueDatas;
+                var techniqueDatasTemps = new List<TechniqueData>();
+                for (int s = 0; s < techniqueDatas.Count; s++)
+                {
+                    var technique = techniqueDatas[s];
+                    var techniqueData = dataManager.GetItemById(technique.instanceId) as TechniqueData;
+                    if (techniqueData == null)
+                        continue;
+                    techniqueDatasTemps.Add(techniqueData);
+                }
+                heroData.techniqueDatas = techniqueDatasTemps;
             }
-            var equipmentDatas = champion.equipmentDatas;
-            for (int k = 0; k < equipmentDatas.Count; k++)
+            catch
             {
-                var equipment = equipmentDatas[k];
-                var equipmentData = dataManager.GetItemById(equipment.instanceId) as EquipmentData;
-                if (equipmentData == null)
-                    continue;
-                heroData.equipmentDatas[k] = equipmentData;
+                Debug.LogError("SetHeroData: Failed to set technique data ");
+            }
+            try
+            {
+                var equipmentDatas = champion.equipmentDatas;
+                var equipmentDatasTemps = new List<EquipmentData>();
+                for (int k = 0; k < equipmentDatas.Count; k++)
+                {
+                    var equipment = equipmentDatas[k];
+                    var equipmentData = dataManager.GetItemById(equipment.instanceId) as EquipmentData;
+                    if (equipmentData == null)
+                        continue;
+                    equipmentDatasTemps.Add(equipmentData);
+                }
+                heroData.equipmentDatas = equipmentDatasTemps;
+            }
+            catch
+            {
+                Debug.LogError("SetHeroData: Failed to set equipment data ");
             }
             var statRace = dataManager.GetItemById(heroData.raceId) as RaceData;
             if (statRace != null)

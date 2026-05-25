@@ -48,11 +48,16 @@ public class ItemChamDetailPageView : IItemDetailPageView
         levelUpValidator.OnNotificationConditionResult += OnNotificationConditionResult;
 
         inventoryCenterManager.OnItemUpdated += OnItemUpdated;
-
+        inventoryCenterManager.OnItemDataChanged += OnItemDataChanged;
         if (itemData != null)
         {
             OnRealmUplevelResult(true);
         }
+    }
+
+    private void OnItemDataChanged(List<ItemData> list)
+    {
+        levelUpValidator.RequestCheckConditionResult(PlayerNetId, itemData.instanceId);
     }
 
     private void OnRealmUpgrade(UpgradeState state)
