@@ -46,7 +46,7 @@ public static class SnapshotMapper
                 attackSpeed = Mathf.Max(1, s.AttackSpeed),
                 attackRange = Mathf.Max(1, heroData.attackRange),
                 moveSpeed = Mathf.Max(1, s.MovementSpeed),
-                animationDuration = 1.3f,
+                animationDuration = 1f,
                 castTime = .5f,
             },
             skills = skills
