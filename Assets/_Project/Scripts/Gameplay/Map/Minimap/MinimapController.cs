@@ -28,6 +28,7 @@ public class MinimapController : TGTHMonoBehaviour
 
     private bool _prevPressed;
     private bool _panCaptured;
+    [SerializeField] private bool isFollowPlayer = false;
     protected override void Awake()
     {
         base.Awake();
@@ -55,7 +56,7 @@ public class MinimapController : TGTHMonoBehaviour
     }
     private void Update()
     {
-        if (followPlayer != null)
+        if (followPlayer != null && isFollowPlayer)
         {
             target.position = ClampToBoxCollider(followPlayer.position);
         }
@@ -126,10 +127,7 @@ public class MinimapController : TGTHMonoBehaviour
 
         Vector3 desired = target.position + move;
 
-        // ✅ Clamp target trong BoxCollider
-
         desired = ClampToBoxCollider(desired);
-
         target.position = desired;
     }
 
