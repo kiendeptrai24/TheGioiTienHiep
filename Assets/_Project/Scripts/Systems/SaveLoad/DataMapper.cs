@@ -14,6 +14,7 @@ public static class DataMapper
         heroData.instanceId = dto.instanceId;
         heroData.itemName = dto.name;
         heroData.itemDescription = dto.description;
+        heroData.itemIconPath = dto.iconPath;
         heroData.qualityType = dto.quality;
         heroData.raceId = dto.raceId;
         heroData.realmId = dto.realmId;
@@ -58,6 +59,7 @@ public static class DataMapper
         HeroData heroData = new HeroData();
         heroData.instanceId = dto.instanceId;
         heroData.itemDescription = dto.description;
+        heroData.itemIconPath = dto.iconPath;
         heroData.raceId = dto.raceId;
         heroData.realmId = dto.realmId;
         heroData.isCharactor = true;
@@ -115,6 +117,7 @@ public static class DataMapper
         itemData.instanceId = dto.instanceId;
         itemData.itemName = dto.itemName;
         itemData.itemDescription = dto.description;
+        itemData.itemIconPath = dto.iconPath;
         itemData.itemType = dto.itemType;
         itemData.canStack = dto.canStack;
         itemData.currentstack = dto.currentStack;
@@ -140,6 +143,7 @@ public static class DataMapper
         var item = new PillData();
         item.instanceId = dto.instanceId;
         item.itemName = dto.itemName;
+        item.itemIconPath = dto.iconPath;
         item.itemType = dto.itemType;
         item.itemDescription = dto.itemDescription;
         item.itemType = ItemType.Material;
@@ -164,6 +168,7 @@ public static class DataMapper
         essenceData.instanceId = dto.instanceId;
         essenceData.itemName = dto.instanceId; // As per original code
         essenceData.itemDescription = dto.instanceId; // As per original code
+        essenceData.itemIconPath = dto.instanceId; // As per original code
 
         if (dto.essenceType.HasValue)
             essenceData.essenceType = dto.essenceType.Value;
@@ -190,6 +195,7 @@ public static class DataMapper
         RaceData raceData = new RaceData();
         raceData.instanceId = dto.instanceId;
         raceData.itemName = dto.instanceId; // As per original code
+        raceData.itemIconPath = dto.iconPath;
 
         if (dto.raceType.HasValue)
             raceData.raceType = dto.raceType.Value;
@@ -253,6 +259,7 @@ public static class DataMapper
         if (dto == null) return null;
         SpiritStoneMineData mineData = new SpiritStoneMineData();
         mineData.instanceId = dto.instanceId;
+        mineData.itemIconPath = dto.iconPath;
         mineData.resourceSourceType = dto.resourceSourceType;
         mineData.itemName = dto.name;
         mineData.level = dto.level;
@@ -267,6 +274,7 @@ public static class DataMapper
         if (dto == null) return null;
         DemonBeastData beastData = new DemonBeastData();
         beastData.instanceId = dto.instanceId;
+        beastData.itemIconPath = dto.iconPath;
         beastData.resourceSourceType = dto.resourceSourceType;
         beastData.itemName = dto.name;
         beastData.itemDescription = dto.description;
@@ -295,6 +303,7 @@ public static class DataMapper
         {
             instanceId = data.instanceId,
             name = data.itemName,
+            iconPath = data.itemIconPath,
             description = data.itemDescription,
             quality = data.qualityType,
             raceId = data.raceId,
@@ -334,6 +343,7 @@ public static class DataMapper
             instanceId = data.instanceId,
             itemName = data.itemName,
             description = data.itemDescription,
+            iconPath = data.itemIconPath,
             itemType = data.itemType,
             canStack = data.canStack,
             currentStack = data.currentstack,

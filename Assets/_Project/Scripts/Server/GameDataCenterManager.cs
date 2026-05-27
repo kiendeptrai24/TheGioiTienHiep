@@ -10,7 +10,6 @@ using System.Linq;
 public class GameDataCenterManager : Singleton<GameDataCenterManager>
 {
     #region File Handle
-
     [SerializeField] private string fileName;
     [SerializeField] private bool encryptData;
     private FileDataHandler<GameDataCenter> fileDataHandler;
@@ -96,6 +95,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     private void LoadDataLocal()
     {
         LoadAllData();
+        LoadSprite();
         ConfigDataCenter();
         ResolveAllReferences();
         SetupShop();
@@ -117,6 +117,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         try
         {
             ConfigDataCenter();
+            LoadSprite();
             ResolveAllReferences();
             SetupShop();
             ConfigShopDataCenter();
@@ -131,6 +132,15 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
             Debug.LogError($"OnLoadDataRemoteSuccessed: Failed to load data remote - {ex.Message}");
         }
     }
+    private void LoadSprite()
+    {
+        foreach (var item in gameDatas.allItems)
+        {
+            if (item == null) continue;
+            item.itemIcon = Resources.Load<Sprite>(item.itemIconPath);
+        }
+    }
+
     private void LoadAllData()
     {
         gameDatas.allItems.Clear();

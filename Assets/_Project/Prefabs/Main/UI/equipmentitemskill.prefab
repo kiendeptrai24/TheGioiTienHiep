@@ -181,29 +181,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UISkillItem
   navigation: {fileID: 2677956373733081488}
+  resetDataOnAwake: 1
   uiInventoryType: 0
   itemImage: {fileID: 7762118193066490083}
   borderImage: {fileID: 829925536141023628}
   inventoryItem:
     data:
+      instanceId: 
       itemId: 
       itemType: 0
       itemName: 
       itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
+      itemPrice: 0
+      canStack: 0
       itemDescription: 
       currentstack: 0
-      cultivationStage: 0
+      realmType: 0
+      realmId: 
       qualityType: 0
+      elementType: 0
+      health: 0
+      mana: 0
+      spirit: 0
       physicalDamage: 0
       magicalDamage: 0
       spiritDamage: 0
       physicalDefense: 0
       magicalDefense: 0
       spiritDefense: 0
+      potentialPoints: 0
     stackSize: 0
-  equipmentType: 0
   skillIndex: 0
   emptySlot: {fileID: 2730589989896579963}
+  lockIcon: {fileID: 0}
 --- !u!1 &3745806237627651041
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,7 +282,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1550959131, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 033cab039316b6a4e828a07637e65818, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

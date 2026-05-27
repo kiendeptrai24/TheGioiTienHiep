@@ -10,6 +10,8 @@ public class PillDataDto
     public string itemName;
     [JsonProperty("Mô Tả")]
     public string itemDescription;
+    [JsonProperty("Hình")]
+    public string iconPath;
     [JsonProperty("Cộng Dồn")]
     public bool canStack;
     [JsonProperty("Số Lượng")]

@@ -8,6 +8,8 @@ public class DemonBeastDataDto
     public string instanceId;
     [JsonProperty("Tên")]
     public string name;
+    [JsonProperty("Hình")]
+    public string iconPath;
     [JsonProperty("Loại")]
     public ResourceSourceType resourceSourceType;
     [JsonProperty("Mô Tả")]

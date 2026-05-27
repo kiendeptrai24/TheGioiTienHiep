@@ -5,6 +5,8 @@ public class CharacterDataDto
     public string instanceId;
     [JsonProperty("Mô tả")]
     public string description;
+    [JsonProperty("Hình")]
+    public string iconPath;
     [JsonProperty("mã tộc")]
     public string raceId;
     [JsonProperty("mã cảnh giới")]

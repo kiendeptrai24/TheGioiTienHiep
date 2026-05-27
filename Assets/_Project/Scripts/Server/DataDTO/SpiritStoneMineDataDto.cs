@@ -10,6 +10,8 @@ public class SpiritStoneMineDataDto
     public ResourceSourceType resourceSourceType;
     [JsonProperty("Tên")]
     public string name;
+    [JsonProperty("Hình")]
+    public string iconPath;
     [JsonProperty("Cấp")]
     public int level;
     [JsonProperty("Trữ Lượng")]

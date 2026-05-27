@@ -7,6 +7,8 @@ public class EssenceAndRaceDataDto
 
     [JsonProperty("Loại")]
     public EssenceAndRaceType type;
+    [JsonProperty("Hình")]
+    public string iconPath;
 
     [JsonProperty("Sinh lực điểm")]
     public string healthPoint;

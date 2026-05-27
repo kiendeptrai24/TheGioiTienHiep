@@ -6,7 +6,6 @@ using UnityEngine;
 [System.Serializable]
 public class HeroData : ItemData
 {
-    [JsonIgnore]
     public bool isCharactor;
     public string characterId;
     [JsonIgnore]

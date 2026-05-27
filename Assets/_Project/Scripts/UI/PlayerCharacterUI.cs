@@ -1,6 +1,7 @@
 
 
 using System;
+using DuloGames.UI;
 using TMPro;
 using Unity.Collections;
 using Unity.Netcode;
@@ -8,6 +9,7 @@ using UnityEngine;
 
 public class PlayerCharacterUI : TGTHNetworkBehaviour
 {
+    [SerializeField] private UIProgressBar uIProgressBar;
     [SerializeField] private TextMeshProUGUI healthTxt;
     [SerializeField] private TextMeshProUGUI nameTxt;
     [SerializeField] private TextMeshProUGUI levelTxt;
@@ -25,7 +27,10 @@ public class PlayerCharacterUI : TGTHNetworkBehaviour
     {
         SetName(user.userName);
     }
-
+    private void SetProcessBar(float max, float cur)
+    {
+        uIProgressBar.fillAmount = cur / max;
+    }
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -60,6 +65,7 @@ public class PlayerCharacterUI : TGTHNetworkBehaviour
         levelTxt.text = EnumTranslator.ToVietnameseAcronym(data.realmType);
         nameTxt.text = data.itemName;
         healthTxt.text = stats.Health.ToString();
+        SetProcessBar(stats.Health, stats.Health);
     }
 
 }

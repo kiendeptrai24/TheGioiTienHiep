@@ -10,6 +10,8 @@ public class ItemDataDto
 
     [JsonProperty("mô tả")]
     public string description;
+    [JsonProperty("Hình")]
+    public string iconPath;
 
     [JsonProperty("loại")]
     public ItemType itemType;
