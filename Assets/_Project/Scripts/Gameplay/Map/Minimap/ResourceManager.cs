@@ -6,6 +6,7 @@ using WorldMap.Travel;
 
 public class ResourceManager : Singleton<ResourceManager>
 {
+    [SerializeField] private LayerMask ignoreLayerMask;
     protected override void Awake()
     {
         base.Awake();
@@ -19,7 +20,7 @@ public class ResourceManager : Singleton<ResourceManager>
     {
         var result = new List<ItemData>();
 
-        Collider[] colliders = Physics.OverlapSphere(position, range);
+        Collider[] colliders = Physics.OverlapSphere(position, range, ~ignoreLayerMask);
 
         foreach (var col in colliders)
         {
