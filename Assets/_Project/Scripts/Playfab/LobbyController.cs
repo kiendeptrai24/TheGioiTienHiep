@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using PlayFab;
 using PlayFab.Multiplayer;
-using Unity.Netcode;
 using UnityEngine;
+#if UNITY_STANDALONE_WIN || UNITY_SERVER
 
 public class LobbyController : Singleton<LobbyController>
 {
@@ -116,3 +116,4 @@ public class LobbyController : Singleton<LobbyController>
         _lobbyService?.Dispose();
     }
 }
+#endif

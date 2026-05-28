@@ -3,12 +3,10 @@
 using System;
 using System.Collections.Generic;
 using PlayFab;
-using PlayFab.ClientModels;
-using PlayFab.Multiplayer;
 using PlayFab.MultiplayerModels;
-using Unity.Netcode;
-using Unity.Netcode.Transports.UTP;
 using UnityEngine;
+#if UNITY_STANDALONE_WIN || UNITY_SERVER
+
 public class PlayfabConnectMutiplayerData
 {
     public string ipAddress;
@@ -55,3 +53,4 @@ public class PlayfabConnectMutiplayer
         Debug.Log(error.GenerateErrorReport());
     }
 }
+#endif

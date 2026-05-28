@@ -58,6 +58,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         }
         else if (Configuration.Instance.IsClientRemoteBuild())
         {
+#if UNITY_STANDALONE_WIN || UNITY_SERVER
             IAuthService authService = new PlayFabAuthService(clientApi);
             authFacade = new AuthFacade(authService);
             LobbyController.Instance.OnLobbySearchLobbiesCompleted += (success, lobby) =>
@@ -86,6 +87,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
                     });
                 }
             };
+#endif
         }
     }
 
@@ -209,7 +211,9 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     private void FindRemoteServer()
     {
+#if UNITY_STANDALONE_WIN || UNITY_SERVER
         LobbyController.Instance.GetLobbyServer(clientApi.authenticationContext);
+#endif
     }
     public void AddCharacter(ItemData itemCharacter)
     {

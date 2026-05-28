@@ -5,6 +5,7 @@ using PlayFab.Multiplayer;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
+#if UNITY_STANDALONE_WIN || UNITY_SERVER
 
 public class PlayFabLobbyService : IDisposable
 {
@@ -380,3 +381,4 @@ public class PlayFabLobbyService : IDisposable
         OnStatusChanged?.Invoke(message);
     }
 }
+#endif

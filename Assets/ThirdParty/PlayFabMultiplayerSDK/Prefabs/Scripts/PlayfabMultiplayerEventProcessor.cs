@@ -1,7 +1,6 @@
+#if UNITY_STANDALONE_WIN || UNITY_SERVER
 namespace PlayFab.Multiplayer
 {
-    using System.Collections;
-    using System.Collections.Generic;
     using UnityEngine;
 
     public class PlayfabMultiplayerEventProcessor : MonoBehaviour
@@ -35,3 +34,4 @@ namespace PlayFab.Multiplayer
         }
     }
 }
+#endif
