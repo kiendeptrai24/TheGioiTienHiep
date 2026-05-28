@@ -115,7 +115,7 @@ public class InputManager : MonoBehaviour
     {
         return GetZoomInput();
     }
-
+    public bool IsZoom() => Mathf.Abs(GetZoomInput()) > 0.001f;
     public float GetZoomInput()
     {
         Vector2 scroll = inputHandler.UI.Scroll.ReadValue<Vector2>();

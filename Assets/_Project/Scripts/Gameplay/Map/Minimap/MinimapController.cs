@@ -28,6 +28,7 @@ public class MinimapController : TGTHMonoBehaviour
 
     private bool _prevPressed;
     private bool _panCaptured;
+    private bool isZooming;
     [SerializeField] private bool isFollowPlayer = false;
     protected override void Awake()
     {
@@ -81,7 +82,7 @@ public class MinimapController : TGTHMonoBehaviour
         if (over)
             HandleZoom();
 
-        if (pressed && _panCaptured)
+        if (pressed && _panCaptured && input.IsZoom() == false)
             HandlePan();
 
         _prevPressed = pressed;

@@ -2,8 +2,12 @@ using UnityEngine;
 using System;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using System.Collections.Generic;
+using System.Collections;
+
 #if UNITY_STANDALONE_WIN || UNITY_SERVER
 using PlayFab.MultiplayerAgent.Model;
+using PlayFab;
 #endif
 
 public class ServerStartUp : TGTHMonoBehaviour
