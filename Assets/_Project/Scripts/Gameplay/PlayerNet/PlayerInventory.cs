@@ -24,7 +24,8 @@ public class PlayerInventory : TGTHNetworkBehaviour
 
     private void OnItemDataChanged(List<ItemData> list)
     {
-        var jsonData = JsonConvert.SerializeObject(list);
+        var items = list.FindAll(x => x is PillData);
+        var jsonData = JsonConvert.SerializeObject(items);
         UpdateInventoryToServerRpc(jsonData);
     }
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -35,7 +36,8 @@ public class PlayerInventory : TGTHNetworkBehaviour
     }
     private void OnDestroy()
     {
-        InventoryCenterManager.Instance.OnItemDataChanged -= OnItemDataChanged;
+        if (InventoryCenterManager.Instance != null)
+            InventoryCenterManager.Instance.OnItemDataChanged -= OnItemDataChanged;
     }
     public List<ItemData> GetAllItems() => items;
     public List<ItemAmount> GetItemRequirments()

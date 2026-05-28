@@ -1,4 +1,5 @@
 
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,7 +21,7 @@ public class ActionAccountButton : TGTHMonoBehaviour
     {
         var itemData = InventoryCenterManager.Instance.playerCham;
         var popup = PopupManager.Instance.GetPopup<AccountPopup>();
-
+        Debug.Log(itemData.itemName);
         var currentProfile = profileManager.GetProfile();
         var data = new AccountDataPopup(itemData, currentProfile.userName, currentProfile.userId);
         popup.ShowPopup(data,
@@ -32,6 +33,7 @@ public class ActionAccountButton : TGTHMonoBehaviour
             }
             , () =>
             {
+                playfabDataManager.ChangeAccount();
                 Debug.Log("Go to account management screen");
             });
     }

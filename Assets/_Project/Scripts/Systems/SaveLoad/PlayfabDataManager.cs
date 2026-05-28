@@ -1,9 +1,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using FeatureToggles;
 using PlayFab;
 using PlayFab.ClientModels;
+using Unity.Netcode;
 using UnityEngine;
 
 public class PlayfabDataManager : Singleton<PlayfabDataManager>
@@ -148,7 +149,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     }
     private void OnKicked()
     {
-        authFacade.Logout(onSuccess, onError);
+        authFacade.Logout(null, onError);
     }
     private void OnDataCenterReady(GameDataCenter center)
     {
@@ -169,8 +170,19 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     {
         authFacade.Logout((result) =>
         {
-            navigationToCharacterSelectionScreen.OnClick();
+            ScreenManagerHub.Instance.ResetAll();
+            SaveLoadManager.Instance.SaveGame();
+            NetworkManager.Singleton.Shutdown();
+            FeatureManager.Instance.Reset();
         }, default);
+    }
+    public void ChangeAccount()
+    {
+        NetworkManager.Singleton.Shutdown();
+        ScreenManagerHub.Instance.ResetAll();
+        var createAccountScene = ScreenManagerHub.Instance.Get("CreateAccount");
+        createAccountScene.NavigateTo("Panel (CreateNv)");
+        FeatureManager.Instance.Reset();
     }
     private void onError(AuthError error)
     {
@@ -224,6 +236,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             Debug.LogError("AddCharacter failed: itemCharacter is not HeroData");
             return;
         }
+        gameData.Clear();
         heroData.isCharactor = true;
         gameData.characterName = itemCharacter.itemName;
         gameData.characterId = heroData.characterId;
@@ -234,10 +247,13 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         gameData.potentialPoint = heroData.realmData.rewardPotentialPoint;
         gameData.skillPoint = heroData.realmData.rewardSkillPoint;
         characterService.SaveGame(gameData);
+        SaveGameData();
     }
     public void OnCharacterLoaded(string characterId)
     {
+        gameData.Clear();
         gameData.characterId = characterId;
+        Debug.Log("OnCharacterLoaded: " + characterId);
         LoadGameData();
     }
     private void LoadGameData()

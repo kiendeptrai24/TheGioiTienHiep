@@ -44,6 +44,7 @@ public abstract class BasePopup<TData, TResult> : TGTHMonoBehaviour, IPopup
     public virtual void Hide()
     {
         gameObject.SetActive(false);
+        PopupManager.Instance.HidePopup(this);
     }
 
     public void ShowPopup(TData data, Action<TResult> onConfirm = null, Action onCancel = null)

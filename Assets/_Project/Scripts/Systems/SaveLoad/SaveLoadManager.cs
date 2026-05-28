@@ -26,9 +26,9 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
     protected override void OnApplicationQuit()
     {
         base.OnApplicationQuit();
-        Save();
+        SaveGame();
     }
-    private void Save()
+    public void SaveGame()
     {
         if (gameData == null) return;
         saveManager.SaveGame();
@@ -36,7 +36,7 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
 
     private void OnApplicationPause(bool pause)
     {
-        if (pause) Save();
+        if (pause) SaveGame();
     }
     private new void OnDestroy()
     {

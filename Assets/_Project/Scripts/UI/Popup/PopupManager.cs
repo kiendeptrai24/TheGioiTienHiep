@@ -10,15 +10,15 @@ public class PopupManager : Singleton<PopupManager>
     private readonly Dictionary<Type, IPopup> _popups = new();
     private readonly List<IPopup> _popupStack = new();
 
-    private FeatureManager _mgr;
-    private const string BLOCK_SRC = "Popup"; // lý do chặn
+    // private FeatureManager _mgr;
+    // private const string BLOCK_SRC = "Popup"; // lý do chặn
 
     protected override void Awake()
     {
         base.Awake(); // (bạn đang gọi base.Start() là sai vòng đời, nên để Awake)
         DontDestroyOnLoad(gameObject);
 
-        _mgr = FeatureManager.Instance;   // lấy instance ở đây an toàn hơn
+        // _mgr = FeatureManager.Instance;   // lấy instance ở đây an toàn hơn
         RegisterAllPopups();
     }
 
@@ -47,19 +47,21 @@ public class PopupManager : Singleton<PopupManager>
 
     public void ShowPopup<T>(IPopup popup) where T : class, IPopup
     {
-        if (popup == null) return;
-
+        if (popup == null)
+        {
+            Debug.Log("popup is null");
+            return;
+        }
         // Nếu popup đã ở trong stack rồi thì khỏi add lại (tránh double)
         if (_popupStack.Contains(popup)) return;
-
-        bool wasEmpty = _popupStack.Count == 0;
 
         popup.Show();
         _popupStack.Add(popup);
 
+
         // chỉ add blocker khi stack từ 0 -> 1
-        if (wasEmpty)
-            _mgr.AddBlocker(FeatureId.WorldClick_Enabled, BLOCK_SRC);
+        // if (wasEmpty)
+        //     _mgr.AddBlocker(FeatureId.WorldClick_Enabled, BLOCK_SRC);
 
         if (popup is MonoBehaviour mb)
             mb.transform.SetAsLastSibling();
@@ -73,8 +75,8 @@ public class PopupManager : Singleton<PopupManager>
         popup.Hide();
 
         // chỉ remove blocker khi stack về 0
-        if (_popupStack.Count == 0)
-            _mgr.RemoveBlocker(FeatureId.WorldClick_Enabled, BLOCK_SRC);
+        // if (_popupStack.Count == 0)
+        //     _mgr.RemoveBlocker(FeatureId.WorldClick_Enabled, BLOCK_SRC);
     }
 
     public void HideAllPopups()
@@ -83,7 +85,7 @@ public class PopupManager : Singleton<PopupManager>
             popup.Hide();
 
         _popupStack.Clear();
-        _mgr.RemoveBlocker(FeatureId.WorldClick_Enabled, BLOCK_SRC);
+        // _mgr.RemoveBlocker(FeatureId.WorldClick_Enabled, BLOCK_SRC);
     }
 
     private void OnEnable() => SceneManager.activeSceneChanged += OnSceneLoaded;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 namespace FeatureToggles
 {
@@ -41,6 +42,8 @@ namespace FeatureToggles
 
         private void InitAllFeatures()
         {
+            _states.Clear();
+
             foreach (FeatureId id in Enum.GetValues(typeof(FeatureId)))
             {
                 if (!_states.ContainsKey(id))
@@ -137,9 +140,9 @@ namespace FeatureToggles
             var st = _states[id];
             bool newEffective = st.desired && st.blockers.Count == 0;
 
+
             if (st.effective == newEffective) return;
             st.effective = newEffective;
-
             if (fireEvents)
             {
                 OnFeatureEffectiveChanged?.Invoke(id, newEffective);
@@ -155,6 +158,10 @@ namespace FeatureToggles
                 return false;
             }
             return config.TryGet(id, out def);
+        }
+        public void Reset()
+        {
+            InitAllFeatures();
         }
     }
 }

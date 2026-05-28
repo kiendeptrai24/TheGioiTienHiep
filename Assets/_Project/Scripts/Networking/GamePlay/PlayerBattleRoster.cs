@@ -23,12 +23,12 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
     {
         base.OnNetworkSpawn();
 
-        if (IsOwner && player)
-        {
-            var itemPrefabDatabase = ItemPrefabDatabase.Instance;
-            itemPrefabDatabase.OnPlayerPrefabChanged += OnPlayerPrefabChanged;
-            OnPlayerPrefabChanged(itemPrefabDatabase.ListIteDataChampion());
-        }
+        // if (IsOwner && player)
+        // {
+        //     var itemPrefabDatabase = ItemPrefabDatabase.Instance;
+        //     itemPrefabDatabase.OnPlayerPrefabChanged += OnPlayerPrefabChanged;
+        //     OnPlayerPrefabChanged(itemPrefabDatabase.ListIteDataChampion());
+        // }
         if (!IsServer) return;
         foreach (var item in championSetUps)
         {
@@ -39,6 +39,7 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
     }
     private void OnPlayerPrefabChanged(List<ItemData> list)
     {
+        if (!IsSpawned) return;
         itemDatas = list;
         string json = ItemJsonConverter.ToJson(list);
         SendToServerOnPlayerPrefabChangedServerRpc(json);

@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Unity.Netcode;
 using System;
 public class SceneLoadManager : Singleton<SceneLoadManager>
 {
@@ -10,37 +9,8 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     protected override void Awake()
     {
         DontDestroyOnLoad(this);
-        NetworkManager.Singleton.NetworkConfig.EnableSceneManagement = false;
     }
     #region Network Scene
-
-    public void SubscribeOnNetworkEvents()
-    {
-        //On host prepared scene to load
-        NetworkManager.Singleton.SceneManager.OnSynchronize += (clientId) =>
-        {
-            //Works on client side only
-            if (NetworkManager.Singleton.LocalClientId == clientId)
-                SceneManager.LoadScene("LoadingScene");
-
-        };
-
-        //On host loading scene
-        NetworkManager.Singleton.SceneManager.OnLoad += (clientId, sceneName, mode, sceneLoadOperation) =>
-        {
-            StartCoroutine(ProcessNetworkSceneLoading(sceneLoadOperation));
-        };
-    }
-
-    public void LoadNetworkScene(string sceneName)
-    {
-        //Switch to loading scene first
-        SceneManager.LoadScene("LoadingScene");
-
-        SubscribeOnNetworkEvents();
-        NetworkManager.Singleton.SceneManager.SetClientSynchronizationMode(LoadSceneMode.Additive);
-        NetworkManager.Singleton.SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
-    }
 
     private IEnumerator ProcessNetworkSceneLoading(AsyncOperation asyncOperation)
     {
@@ -55,7 +25,10 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     {
         StartCoroutine(ProcessRegularSceneLoading(sceneName, useLoadScreen));
     }
-
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
     public void UnLoadScene(string sceneName)
     {
         Scene scene = SceneManager.GetSceneByName(sceneName);

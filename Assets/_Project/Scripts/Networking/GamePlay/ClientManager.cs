@@ -46,7 +46,15 @@ public class ClientManager : SingletonNetwork<ClientManager>
             clientId = clientId,
             playerObject = NetworkManager.ConnectedClients[clientId].PlayerObject
         };
-
+        if (connectedClientsMap.ContainsKey(playerId))
+        {
+            connectedClientsMap.Remove(playerId);
+        }
+        if (connects.ContainsKey(clientId))
+        {
+            connects.Remove(clientId);
+        }
+        //
         connectedClientsMap.Add(playerId, newData);
         connects.Add(clientId, playerId);
         Debug.Log($"[ClientManager] Client {clientId} đã kết nối thành công.");
@@ -56,8 +64,9 @@ public class ClientManager : SingletonNetwork<ClientManager>
 
     public void OnClientDisconnected(ulong clientId)
     {
+        Debug.Log($"[ClientManager] Client {clientId} đã ngắt kết nối.");
         if (!IsServer) return;
-        if(!connects.TryGetValue(clientId, out string playerId)) return;
+        if (!connects.TryGetValue(clientId, out string playerId)) return;
         if (!connectedClientsMap.ContainsKey(playerId)) return;
 
         connectedClientsMap.Remove(playerId);

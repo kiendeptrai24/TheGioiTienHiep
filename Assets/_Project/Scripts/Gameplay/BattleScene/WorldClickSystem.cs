@@ -51,6 +51,7 @@ public class WorldClickSystem : TGTHMonoBehaviour
             }
         }
 
+        if (pathFollowerRB == null) return;
         if (Physics.Raycast(ray, out RaycastHit hitGround, 100, whatIsGround))
         {
             var pos = pathFollowerRB.transform.position;

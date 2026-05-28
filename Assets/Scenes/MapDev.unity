@@ -159241,6 +159241,21 @@ PrefabInstance:
       propertyPath: Cham.movementSpeed
       value: -0.03
       objectReference: {fileID: 0}
+    - target: {fileID: 2401401108975868382, guid: 96e1268c42fc95142bf17a6d09395539,
+        type: 3}
+      propertyPath: m_ScreenName
+      value: rootui
+      objectReference: {fileID: 0}
+    - target: {fileID: 2401401108975868382, guid: 96e1268c42fc95142bf17a6d09395539,
+        type: 3}
+      propertyPath: m_ScreenManager
+      value: 
+      objectReference: {fileID: 9112596172071854381}
+    - target: {fileID: 2401401108975868382, guid: 96e1268c42fc95142bf17a6d09395539,
+        type: 3}
+      propertyPath: m_ScreenSpecific
+      value: 
+      objectReference: {fileID: 7486515738254134610}
     - target: {fileID: 2433947626630504814, guid: 96e1268c42fc95142bf17a6d09395539,
         type: 3}
       propertyPath: GlobalObjectIdHash
@@ -174869,7 +174884,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9475ac11109441b4d8ff42791df0f45f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LobbyTestController
-  playfabDataManager: {fileID: 0}
 --- !u!4 &1771018289
 Transform:
   m_ObjectHideFlags: 0
@@ -322107,6 +322121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7486515738254134609}
   - component: {fileID: 7486515738254134610}
+  - component: {fileID: 7486515738254134611}
   m_Layer: 5
   m_Name: CreateAccount
   m_TagString: Untagged
@@ -470780,6 +470795,18 @@ MonoBehaviour:
   m_CreateNV1Screen: {fileID: 1801271245663081167}
   m_CreateNV2Screen: {fileID: 8817146830519936459}
   m_CreateNV3Screen: {fileID: 2605108791651674738}
+--- !u!114 &7486515738254134611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3187943199715156955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffb02c9ac889b347aca39881ebdfc15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ActiveGameObjectStateNotifier
 --- !u!224 &7486590523299671313
 RectTransform:
   m_ObjectHideFlags: 0
@@ -500299,6 +500326,7 @@ GameObject:
   - component: {fileID: 6701885412894632131}
   - component: {fileID: 5056205586551394437}
   - component: {fileID: 1745232134671256545}
+  - component: {fileID: 8275067494063685348}
   m_Layer: 5
   m_Name: IngameUI
   m_TagString: Untagged
@@ -500306,6 +500334,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!114 &8275067494063685348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8275067494063685347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffb02c9ac889b347aca39881ebdfc15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ActiveGameObjectStateNotifier
 --- !u!114 &8275416635354573090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -529733,6 +529773,7 @@ GameObject:
   - component: {fileID: 9112596172071854380}
   - component: {fileID: 9112596172071854381}
   - component: {fileID: 9112596172071854382}
+  - component: {fileID: 9112596172071854383}
   m_Layer: 5
   m_Name: '***** CanvasUIMain *****'
   m_TagString: Untagged
@@ -529807,6 +529848,18 @@ MonoBehaviour:
   popupPrefab: {fileID: 5992251805477368611, guid: d0b0f27fd79bc954b8e92314687a3e4f,
     type: 3}
   uiCanvas: {fileID: 7445379370004631891}
+--- !u!114 &9112596172071854383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9112596172071854378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13b57c3bc80a3874f8b0dd568cc92034, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScreenManagerHub
 --- !u!222 &9112930123357842210
 CanvasRenderer:
   m_ObjectHideFlags: 0

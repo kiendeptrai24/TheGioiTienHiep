@@ -21,6 +21,7 @@ public abstract class ScreenManager : TGTHMonoBehaviour
     protected override void Start()
     {
         StartUI(defaultScreen);
+        ScreenManagerHub.Instance.Register(gameObject.name, this);
     }
     protected void StartUI(string defaultScreen)
     {
@@ -30,6 +31,11 @@ public abstract class ScreenManager : TGTHMonoBehaviour
         NavigateTo(defaultScreen);
     }
 
+    protected void OnDestroy()
+    {
+        if (ScreenManagerHub.Instance != null)
+            ScreenManagerHub.Instance.Unregister(gameObject.name);
+    }
 
     public virtual void NavigateTo(string screenName, object data = null)
     {
@@ -138,7 +144,25 @@ public abstract class ScreenManager : TGTHMonoBehaviour
         foreach (var ui in m_Screens)
             Hide(ui.Value);
     }
-    
+    public void ResetNavigation() => Reset();
+    private void Reset()
+    {
+        m_NavigationStack.Clear();
+
+        foreach (var screens in m_ScreensList.Values)
+        {
+            foreach (var screen in screens)
+            {
+                screen.SetActive(false);
+            }
+        }
+
+        HideAll();
+
+        m_CurrentScreen = null;
+
+        NavigateTo(defaultScreen);
+    }
     private void Show(GameObject gameObject) => gameObject.SetActive(true);
     private void Hide(GameObject gameObject) => gameObject.SetActive(false);
 }

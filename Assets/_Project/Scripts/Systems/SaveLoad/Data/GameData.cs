@@ -35,4 +35,20 @@ public class GameData
         position = new Vector3(0, 0, 0);
         rotation = Quaternion.identity;
     }
+    public void Clear()
+    {
+        characterName = "";
+        characterId = "";
+        coins = 0;
+        potentialPoint = 0;
+        skillPoint = 0;
+        itemDatas.Clear();
+        itemUsedDatas.Clear();
+        itemInTeamDatas.Clear();
+        itemShopDatas.Clear();
+        allItemsDatas.Clear();
+        gameBaseCharacterDatas.Clear();
+        mineOfflineDataList.Clear();
+    }
+
 }
