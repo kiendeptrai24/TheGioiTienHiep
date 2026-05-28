@@ -94,12 +94,14 @@ namespace PlayFab.Multiplayer
             var payload = new Dictionary<string, object>();
             SetCommonTelemetryProperties(payload);
             payload["ClientInstanceId"] = gameSessionID;
+#if UNITY_STANDALONE_WIN || UNITY_SERVER
             payload["MultiplayerVersion"] = Version.MultiplayerNativeVersion;
             payload["MultiplayerUnityVersion"] = Version.MultiplayerUnityVersion;
+#endif
             payload["UnityVersion"] = Application.unityVersion;
 
             eventInfo.Payload = payload;
-            if(entityKey.Id == null)
+            if (entityKey.Id == null)
             {
                 eventsPending.Enqueue(eventInfo);
                 // we need to call this only once, during initialization, once logged in and entity has been retrieved, we will no longer call this.
@@ -142,7 +144,7 @@ namespace PlayFab.Multiplayer
                 // Once login is done, the count should always be 0.
                 while (eventsPending.Count > 0)
                 {
-                    if(entityKey.Id == null)
+                    if (entityKey.Id == null)
                     {
                         return;
                     }
@@ -153,7 +155,7 @@ namespace PlayFab.Multiplayer
 
                 long currentTime = GetCurrentTimeInMilliseconds();
 
-                if(currentTime > lastErrorTimeInMillisecond + (retryCount * 1000))
+                if (currentTime > lastErrorTimeInMillisecond + (retryCount * 1000))
                 {
                     if (eventsRequests.Count > 0)
                     {
@@ -194,7 +196,7 @@ namespace PlayFab.Multiplayer
         {
             Debug.LogWarning("Failed to send session data. Error: " + response.GenerateErrorReport());
             // if we get APIClientRequestRateLimitExceeded then backoff and retry
-            if(response.Error == PlayFabErrorCode.APIClientRequestRateLimitExceeded)
+            if (response.Error == PlayFabErrorCode.APIClientRequestRateLimitExceeded)
             {
                 lastErrorTimeInMillisecond = GetCurrentTimeInMilliseconds();
                 retryCount++;

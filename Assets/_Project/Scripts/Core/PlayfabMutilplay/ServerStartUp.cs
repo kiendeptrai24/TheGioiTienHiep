@@ -1,23 +1,25 @@
-using System.Collections;
 using UnityEngine;
 using System;
-using System.Collections.Generic;
 using Unity.Netcode;
-using PlayFab;
 using Unity.Netcode.Transports.UTP;
+#if UNITY_STANDALONE_WIN || UNITY_SERVER
 using PlayFab.MultiplayerAgent.Model;
+#endif
 
-public class ServerStartUp : Singleton<ClientStartUp>
+public class ServerStartUp : TGTHMonoBehaviour
 {
     public Configuration configuration;
-
+#if UNITY_STANDALONE_WIN || UNITY_SERVER
     private List<ConnectedPlayer> _connectedPlayers;
+#endif
     private UnityTransport transport;
     protected override void Start()
     {
         if (configuration.buildType == BuildType.REMOTE_SERVER)
         {
+#if UNITY_STANDALONE_WIN || UNITY_SERVER
             StartRemoteServer();
+#endif
         }
         else if (configuration.buildType == BuildType.LOCAL_SERVER)
         {
@@ -39,6 +41,9 @@ public class ServerStartUp : Singleton<ClientStartUp>
         {
             transport.ConnectionData.Port = (ushort)port;
 
+#if UNITY_WEBGL
+            transport.UseWebSockets = true;
+#endif
             try
             {
                 bool ok = NetworkManager.Singleton.StartServer();
@@ -71,6 +76,7 @@ public class ServerStartUp : Singleton<ClientStartUp>
             NetworkManager.Singleton.StartServer();
         }
     }
+#if UNITY_STANDALONE_WIN || UNITY_SERVER
 
     private void StartRemoteServer()
     {
@@ -88,7 +94,7 @@ public class ServerStartUp : Singleton<ClientStartUp>
         NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
 
         StartCoroutine(ReadyForPlayers());
-        StartCoroutine(ShutdownServerInXTime());
+        // StartCoroutine(ShutdownServerInXTime());
     }
 
     IEnumerator ShutdownServerInXTime()
@@ -206,4 +212,5 @@ public class ServerStartUp : Singleton<ClientStartUp>
             ServerNotification.Instance.MaintenanceClientRpc(unixTime);
         }
     }
+#endif
 }

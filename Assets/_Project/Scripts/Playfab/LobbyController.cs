@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using PlayFab;
-using PlayFab.Multiplayer;
 using UnityEngine;
 #if UNITY_STANDALONE_WIN || UNITY_SERVER
+using PlayFab.Multiplayer;
 
 public class LobbyController : Singleton<LobbyController>
 {
