@@ -274076,6 +274076,7 @@ GameObject:
   - component: {fileID: 687267394619212289}
   - component: {fileID: 8555541292161817412}
   - component: {fileID: 8555541292161817413}
+  - component: {fileID: 8555541292161817414}
   m_Layer: 5
   m_Name: Panel (CreateNv)
   m_TagString: Untagged
@@ -322121,7 +322122,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7486515738254134609}
   - component: {fileID: 7486515738254134610}
-  - component: {fileID: 7486515738254134611}
   m_Layer: 5
   m_Name: CreateAccount
   m_TagString: Untagged
@@ -470795,18 +470795,6 @@ MonoBehaviour:
   m_CreateNV1Screen: {fileID: 1801271245663081167}
   m_CreateNV2Screen: {fileID: 8817146830519936459}
   m_CreateNV3Screen: {fileID: 2605108791651674738}
---- !u!114 &7486515738254134611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3187943199715156955}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ffb02c9ac889b347aca39881ebdfc15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ActiveGameObjectStateNotifier
 --- !u!224 &7486590523299671313
 RectTransform:
   m_ObjectHideFlags: 0
@@ -500326,7 +500314,6 @@ GameObject:
   - component: {fileID: 6701885412894632131}
   - component: {fileID: 5056205586551394437}
   - component: {fileID: 1745232134671256545}
-  - component: {fileID: 8275067494063685348}
   m_Layer: 5
   m_Name: IngameUI
   m_TagString: Untagged
@@ -500334,18 +500321,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &8275067494063685348
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8275067494063685347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ffb02c9ac889b347aca39881ebdfc15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ActiveGameObjectStateNotifier
 --- !u!114 &8275416635354573090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510340,6 +510315,18 @@ MonoBehaviour:
   - {fileID: 773761404}
   - {fileID: 183669137}
   - {fileID: 312608363}
+--- !u!114 &8555541292161817414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801271245663081167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffb02c9ac889b347aca39881ebdfc15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ActiveGameObjectStateNotifier
 --- !u!222 &8556617264431778689
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -529818,6 +529805,7 @@ MonoBehaviour:
   - {fileID: 139199923}
   - {fileID: 4931040610147918819}
   - {fileID: 7879700319957147715}
+  - {fileID: 8555541292161817414}
 --- !u!114 &9112596172071854381
 MonoBehaviour:
   m_ObjectHideFlags: 0

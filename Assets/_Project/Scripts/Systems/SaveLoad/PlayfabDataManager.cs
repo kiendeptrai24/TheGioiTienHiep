@@ -181,8 +181,8 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         NetworkManager.Singleton.Shutdown();
         ScreenManagerHub.Instance.ResetAll();
         var createAccountScene = ScreenManagerHub.Instance.Get("CreateAccount");
-        createAccountScene.NavigateTo("Panel (CreateNv)");
         FeatureManager.Instance.Reset();
+        createAccountScene.NavigateTo("Panel (CreateNv)");
     }
     private void onError(AuthError error)
     {
