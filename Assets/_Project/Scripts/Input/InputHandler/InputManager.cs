@@ -61,24 +61,20 @@ public class InputManager : MonoBehaviour
                 if (unlockInput)
                 {
                     TurnOnPlayerInput();
-                    Debug.Log("Player input unlocked");
                 }
                 else
                 {
                     TurnOffPlayerInput();
-                    Debug.Log("Player input locked");
                 }
                 break;
             case FeatureId.BattleScene_Enabled:
                 if (unlockInput)
                 {
                     TurnOnAllInput();
-                    Debug.Log("All input unlocked");
                 }
                 else
                 {
                     TurnOffAllInput();
-                    Debug.Log("All input locked");
                 }
                 break;
             default:

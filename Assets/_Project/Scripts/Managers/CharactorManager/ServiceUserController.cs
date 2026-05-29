@@ -1,5 +1,4 @@
 using System.Collections;
-using NUnit.Framework;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,12 +6,13 @@ public class ServiceUserController : TGTHNetworkBehaviour
 {
     [SerializeField] private PlayerPrefabSelector prefabSelector;
     private PlayerNetManager playerNetManager;
-
+    private bool isSpawned;
     public override void OnNetworkSpawn()
     {
         prefabSelector = PlayerPrefabSelector.Instance;
         if (!IsOwner) return;
         playerNetManager = PlayerNetManager.Instance;
+        isSpawned = false;
         playerNetManager.OnDataLoaded += OnDataLoaded;
         if (playerNetManager.IsDataLoaded)
             OnDataLoaded();
@@ -20,12 +20,17 @@ public class ServiceUserController : TGTHNetworkBehaviour
 
     private void OnDataLoaded()
     {
-        if (IsOwner)
+        if (IsOwner && !isSpawned)
         {
+            isSpawned = true;
             StartCoroutine(RequestSpawnPlayer());
         }
     }
-
+    override public void OnNetworkDespawn()
+    {
+        if (!IsOwner) return;
+        playerNetManager.OnDataLoaded -= OnDataLoaded;
+    }
     private IEnumerator RequestSpawnPlayer()
     {
         yield return new WaitUntil(() => playerNetManager.IsDataLoaded);

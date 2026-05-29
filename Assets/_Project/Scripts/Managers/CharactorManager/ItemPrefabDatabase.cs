@@ -12,7 +12,7 @@ public class ItemPrefabDatabase : Singleton<ItemPrefabDatabase>
         inventoryCenterManager = InventoryCenterManager.Instance;
         inventoryCenterManager.OnListItemDatasChampionChanged += OnListItemDatasChampionChanged;
     }
-    public List<ItemData> ListIteDataChampion() => inventoryCenterManager.listItemDatasChampion;
+    public List<ItemData> ListIteDataChampion() => inventoryCenterManager.listItemDatasChampionInTeam;
     public void OnListItemDatasChampionChanged(List<ItemData> list)
     {
         OnPlayerPrefabChanged?.Invoke(list);

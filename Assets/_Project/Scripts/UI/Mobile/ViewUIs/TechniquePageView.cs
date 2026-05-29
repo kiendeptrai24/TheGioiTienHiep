@@ -103,5 +103,13 @@ namespace TGTH.Mobile
                 itemIndex++;
             }
         }
+
+        public void Reset()
+        {
+            foreach (var item in listOfUIItems)
+                item.ResetData();
+            foreach (var item in listOfEquitmentItems)
+                item.ResetData();
+        }
     }
 }

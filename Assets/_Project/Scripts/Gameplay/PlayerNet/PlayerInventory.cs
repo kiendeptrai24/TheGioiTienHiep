@@ -34,10 +34,15 @@ public class PlayerInventory : TGTHNetworkBehaviour
         var pasteData = JsonConvert.DeserializeObject<List<ItemData>>(data);
         items = pasteData;
     }
-    private void OnDestroy()
+    public override void OnNetworkDespawn()
     {
+        base.OnNetworkDespawn();
+        if (!IsOwner) return;
         if (InventoryCenterManager.Instance != null)
+        {
             InventoryCenterManager.Instance.OnItemDataChanged -= OnItemDataChanged;
+            InventoryCenterManager.Instance.OnLoadDataSuccessed -= OnLoadDataSuccessed;
+        }
     }
     public List<ItemData> GetAllItems() => items;
     public List<ItemAmount> GetItemRequirments()

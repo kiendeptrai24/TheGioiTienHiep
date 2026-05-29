@@ -14,21 +14,19 @@ public class GameData
     public int skillPoint;
     public ItemDataPoint itemDataPoint;
     public List<ItemData> itemDatas;
-    public List<ItemData> itemUsedDatas;
-    public List<ItemData> itemInTeamDatas;
-    public List<ItemData> itemShopDatas;
-    public List<ItemData> allItemsDatas;
-    public List<ItemData> itemCharacterDatas;
-    public List<ItemData> gameBaseCharacterDatas;
+    public List<ItemData> itemUsedDatas; // champion 
+    public List<ItemData> itemChampionInTeamDatas; // champion in team
+    public List<ItemData> itemShopDatas; // item shop
+    public List<ItemData> itemCharacterDatas; // item character you have
+    public List<ItemData> gameBaseCharacterDatas; // item character base
     public MineOfflineDataList mineOfflineDataList;
 
     public GameData()
     {
         itemDatas = new List<ItemData>();
         itemUsedDatas = new List<ItemData>();
-        itemInTeamDatas = new List<ItemData>();
+        itemChampionInTeamDatas = new List<ItemData>();
         itemShopDatas = new List<ItemData>();
-        allItemsDatas = new List<ItemData>();
         itemCharacterDatas = new List<ItemData>();
         gameBaseCharacterDatas = new List<ItemData>();
         mineOfflineDataList = new MineOfflineDataList();
@@ -44,9 +42,8 @@ public class GameData
         skillPoint = 0;
         itemDatas.Clear();
         itemUsedDatas.Clear();
-        itemInTeamDatas.Clear();
+        itemChampionInTeamDatas.Clear();
         itemShopDatas.Clear();
-        allItemsDatas.Clear();
         gameBaseCharacterDatas.Clear();
         mineOfflineDataList.Clear();
     }

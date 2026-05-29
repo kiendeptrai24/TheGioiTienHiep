@@ -170,14 +170,15 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     {
         authFacade.Logout((result) =>
         {
-            ScreenManagerHub.Instance.ResetAll();
             SaveLoadManager.Instance.SaveGame();
+            ScreenManagerHub.Instance.ResetAll();
             NetworkManager.Singleton.Shutdown();
             FeatureManager.Instance.Reset();
         }, default);
     }
     public void ChangeAccount()
     {
+        SaveLoadManager.Instance.SaveGame();
         NetworkManager.Singleton.Shutdown();
         ScreenManagerHub.Instance.ResetAll();
         var createAccountScene = ScreenManagerHub.Instance.Get("CreateAccount");
@@ -207,6 +208,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     private void LoadCharacterDataChoose()
     {
+        loadRemotes.Clear();
         service = new PlayFabDataClientService(clientApi);
         loadRemotes.Add(new PlayerInventoryService(service));
         saveRemotes.Add(new PlayerInventoryService(service));
@@ -219,6 +221,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             OnLoadCharacterFormPlayfab?.Invoke(this.gameData.itemCharacterDatas);
             saveRemotes.Add(characterService);
         });
+        loadRemotes.Add(gameBaseCharacterService);
     }
 
     private void FindRemoteServer()

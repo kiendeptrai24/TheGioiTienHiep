@@ -28,7 +28,7 @@ public class LoadChampionTeamClient : ILoadGameData<GameData, PlayerClientDataDt
                         int posY = championDto.posY.Value;
                         heroData.championIndex = new Vector2Int(posX, posY);
                     }
-                    gameData.itemInTeamDatas.Add(heroData);
+                    gameData.itemChampionInTeamDatas.Add(heroData);
                 }
             }
         }

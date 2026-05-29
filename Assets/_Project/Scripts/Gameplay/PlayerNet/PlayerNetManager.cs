@@ -33,7 +33,7 @@ public class PlayerNetManager : Singleton<PlayerNetManager>, ISaveable
     {
         playerObject = _playerObject;
         player = playerObject.GetComponent<PlayerController>();
-        var itemData = InventoryCenterManager.Instance.listItemDatasChampion;
+        var itemData = InventoryCenterManager.Instance.listItemDatasChampionInTeam;
         ItemPrefabDatabase.Instance.OnListItemDatasChampionChanged(itemData);
         OnPlayerExiststed?.Invoke(playerObject);
 

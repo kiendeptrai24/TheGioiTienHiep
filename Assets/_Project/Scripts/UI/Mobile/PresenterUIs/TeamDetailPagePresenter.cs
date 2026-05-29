@@ -26,13 +26,23 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
     {
         base.Awake();
         inventoryCenterManager = InventoryCenterManager.Instance;
+        inventoryCenterManager.OnLoadDataSuccessed += () =>
+        {
+            var data = inventoryCenterManager.GetDatasChampionInTeam();
+            view.ResetItem();
+            foreach (var item in data)
+            {
+                var index = (item as HeroData).championIndex;
+                ShowItem(item, index);
+            }
+        };
         InitializeInventoryUI();
     }
     protected override void Start()
     {
         base.Start();
 
-        SetInit(inventoryCenterManager.GetDatasChampion());
+        SetInit(inventoryCenterManager.GetDatasChampionInTeam());
     }
     public void SetInit(List<ItemData> itemDatas)
     {
@@ -110,6 +120,16 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
             return false;
         }
 
+        ShowItem(itemData, index);
+        int x = (int)index.x;
+        int y = (int)index.y;
+        (itemData as HeroData).championIndex = new Vector2Int(x, y);
+        AddItem(itemData);
+        return true;
+    }
+
+    private void ShowItem(ItemData itemData, Vector2 index)
+    {
         for (int i = 0; i < view.listOfUIItems.Count; i++)
         {
             if (view.listOfUIItems[i].HasItem())
@@ -126,14 +146,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
             view.listOfUIItems[i].SetItem(new InventoryItem(itemData));
             break;
         }
-        int x = (int)index.x;
-        int y = (int)index.y;
-        (itemData as HeroData).championIndex = new Vector2Int(x, y);
-        AddItem(itemData);
-        return true;
     }
-
-
 
     public void SwapItem(ItemData itemData, Vector2 index)
     {

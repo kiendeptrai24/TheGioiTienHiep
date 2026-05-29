@@ -30,9 +30,8 @@ public class SaveLoadScriptableObject : TGTHMonoBehaviour, ISaveManager
             temp.Add(itemData);
         }
         gameData.itemCharacterDatas = new();
-        gameData.itemInTeamDatas = new();
+        gameData.itemChampionInTeamDatas = new();
 
-        gameData.allItemsDatas = temp;
         gameData.itemDatas = temp;
         gameData.itemShopDatas = temp;
         OnDataReadyToLoad?.Invoke(gameData);

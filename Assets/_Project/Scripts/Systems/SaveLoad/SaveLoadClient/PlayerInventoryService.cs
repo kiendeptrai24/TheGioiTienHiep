@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class PlayerInventoryService : ILoadRemote<GameData>, ISaveRemote<GameData>
 {
@@ -53,7 +54,7 @@ public class PlayerInventoryService : ILoadRemote<GameData>, ISaveRemote<GameDat
             }
             catch (System.Exception ex)
             {
-                Console.WriteLine("LoadPlayerDatas Error occurred while loading player inventory data." + ex.Message);
+                Debug.LogError("LoadPlayerDatas Error occurred while loading player inventory data." + ex.Message);
             }
         });
     }

@@ -15,7 +15,7 @@ public class SaveChampionTeamClient : ISaveGameData<GameData, PlayerClientDataDt
                 return;
             }
             List<ChampionDataDto> championDataDto = new List<ChampionDataDto>();
-            foreach (var item in gameData.itemInTeamDatas)
+            foreach (var item in gameData.itemChampionInTeamDatas)
             {
                 var heroData = item as HeroData;
                 if (heroData == null)

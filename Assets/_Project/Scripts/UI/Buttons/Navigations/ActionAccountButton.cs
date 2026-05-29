@@ -21,7 +21,6 @@ public class ActionAccountButton : TGTHMonoBehaviour
     {
         var itemData = InventoryCenterManager.Instance.playerCham;
         var popup = PopupManager.Instance.GetPopup<AccountPopup>();
-        Debug.Log(itemData.itemName);
         var currentProfile = profileManager.GetProfile();
         var data = new AccountDataPopup(itemData, currentProfile.userName, currentProfile.userId);
         popup.ShowPopup(data,
@@ -29,12 +28,10 @@ public class ActionAccountButton : TGTHMonoBehaviour
             () =>
             {
                 playfabDataManager.Logout();
-                Debug.Log("Logout");
             }
             , () =>
             {
                 playfabDataManager.ChangeAccount();
-                Debug.Log("Go to account management screen");
             });
     }
 

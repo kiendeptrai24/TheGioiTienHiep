@@ -124,7 +124,17 @@ namespace TGTH.Mobile
         {
             listOfUIItems[index].SetData(sprite, qty);
         }
-
+        public void Reset()
+        {
+            foreach (var uiItem in listOfUIItemsInInventory)
+            {
+                uiItem.ResetData();
+            }
+            foreach (var uiItem in listOfEquitmentItems)
+            {
+                uiItem.ResetData();
+            }
+        }
         public void Show()
         {
             gameObject.SetActive(true);

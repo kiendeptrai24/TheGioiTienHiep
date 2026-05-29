@@ -9,7 +9,12 @@ public class UpgradeSystemManager : Singleton<UpgradeSystemManager>
         base.Awake();
         InventoryCenterManager.Instance.OnLoadDataSuccessed += OnLoadDataSuccessed;
     }
+    protected void OnDestroy()
+    {
+        if (InventoryCenterManager.Instance != null)
+            InventoryCenterManager.Instance.OnLoadDataSuccessed -= OnLoadDataSuccessed;
 
+    }
     private void OnLoadDataSuccessed()
     {
         var inventoryCM = InventoryCenterManager.Instance;
@@ -18,6 +23,10 @@ public class UpgradeSystemManager : Singleton<UpgradeSystemManager>
         var heroData = InventoryCenterManager.Instance.playerCham as HeroData;
         if (heroData == null)
             return;
+        if (upgrades.ContainsKey(RealmUpgradeId))
+        {
+            upgrades.Remove(RealmUpgradeId);
+        }
         upgrades.Add(RealmUpgradeId, new RealmUpgrade(heroData, inventoryCM));
     }
 

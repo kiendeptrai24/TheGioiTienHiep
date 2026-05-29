@@ -37,7 +37,7 @@ public class TeamDetailPageView : TGTHMonoBehaviour
             for (int col = 0; col < colsThisRow && index < listOfUIItems.Count; col++)
             {
                 var item = listOfUIItems[index] as UIChoseChampionItem;
-                item.championIndex = new Vector2Int(col, rows - 1 - row); // (x=col, y=row)
+                item.championIndex = new Vector2Int(col, rows - 1 - row);
                 index++;
             }
         }
@@ -45,12 +45,19 @@ public class TeamDetailPageView : TGTHMonoBehaviour
     public void SetFollowerData(Sprite sprite, int quantity)
     {
         mouseFollower.SetData(sprite, quantity);
+        ResetShowData();
     }
     public void ToggleMouseFollower(bool enable)
     {
         mouseFollower.Toggle(enable);
     }
-
+    public void ResetItem()
+    {
+        foreach (var item in listOfUIItems)
+        {
+            item.ResetData();
+        }
+    }
     public void DeselectItem(UIItemSlotBase uiItem)
     {
         if (uiItem)
@@ -74,6 +81,13 @@ public class TeamDetailPageView : TGTHMonoBehaviour
         qualityTypeTxt.text = EnumTranslator.ToVietnamese(champion.qualityType);
         itemIconImge.sprite = champion.itemIcon;
         championIndexTxt.text = $"Vị trí Hiện tại: {champion.championIndex.x},{champion.championIndex.y}";
-
+    }
+    private void ResetShowData()
+    {
+        itemNameTxt.text = "";
+        realmTxt.text = "";
+        qualityTypeTxt.text = "";
+        itemIconImge.sprite = null;
+        championIndexTxt.text = "";
     }
 }

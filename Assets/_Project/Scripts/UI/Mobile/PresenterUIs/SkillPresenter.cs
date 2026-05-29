@@ -35,7 +35,11 @@ namespace TGTH.Mobile
 
             inventoryCenterManager = InventoryCenterManager.Instance;
             inventoryCenterManager.OnItemUsedDataChanged += OnListItemDataChanged;
-
+            inventoryCenterManager.OnLoadDataSuccessed += () =>
+            {
+                view.Reset();
+                OnListItemDataChanged(inventoryCenterManager.GetDatasUsed());
+            };
             OnListItemDataChanged(inventoryCenterManager.GetDatasUsed());
         }
         private void OnEnable()

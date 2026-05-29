@@ -21,8 +21,15 @@ public class SaveLoadPlayfab : TGTHMonoBehaviour, ISaveManager
 
     private void OnItemPlayerLoad(GameData gameData)
     {
-        this.gameData = gameData;
-        OnDataReadyToLoad?.Invoke(this.gameData);
+        try
+        {
+            this.gameData = gameData;
+            OnDataReadyToLoad?.Invoke(this.gameData);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Error: " + ex);
+        }
     }
 
     public void NewGame()
