@@ -10,6 +10,7 @@ public class WorldClickSystem : TGTHMonoBehaviour
     [SerializeField] private GameObject clickEffectPrefab;
     public NavMeshPathFollower pathFollowerRB;
     public LayerMask whatIsEntity;
+    public LayerMask whatIsPlayerB;
     public LayerMask whatIsGround;
     private bool canClick = false;
     protected override void Awake()
@@ -36,7 +37,15 @@ public class WorldClickSystem : TGTHMonoBehaviour
     private void HandleClick(Vector2 position)
     {
         Ray ray = mainCamera.ScreenPointToRay(position);
-        if (Physics.Raycast(ray, out RaycastHit hitEntity, 100f, whatIsEntity))
+        if (Physics.Raycast(ray, out RaycastHit hitEntity1, 100f, whatIsEntity))
+        {
+            if (hitEntity1.collider.TryGetComponent<IWorldClickable>(out var clickable))
+            {
+                clickable.OnClicked();
+                return;
+            }
+        }
+        if (Physics.Raycast(ray, out RaycastHit hitEntity, 100f, whatIsPlayerB))
         {
             if (hitEntity.collider.TryGetComponent<IWorldClickable>(out var clickable))
             {
@@ -50,7 +59,6 @@ public class WorldClickSystem : TGTHMonoBehaviour
                 return;
             }
         }
-
         if (pathFollowerRB == null) return;
         if (Physics.Raycast(ray, out RaycastHit hitGround, 100, whatIsGround))
         {

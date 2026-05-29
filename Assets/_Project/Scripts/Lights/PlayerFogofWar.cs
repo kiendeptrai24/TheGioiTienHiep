@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerFogofWar : TGTHNetworkBehaviour
@@ -9,8 +10,19 @@ public class PlayerFogofWar : TGTHNetworkBehaviour
     {
         base.Awake();
         statsData = GetComponent<StatsData>();
-
+        statsData.OnStatReady += SetSpiritRange;
     }
+
+    private void SetSpiritRange(StatsData data)
+    {
+        int spiritRange = statsData.SpiritRange;
+        if (spiritRange <= 10) return;
+        int persent = (10 - spiritRange) / 10 + 1;
+        playerLight.intensity = 200 * persent;
+        playerLight.range = 20 * persent;
+        playerLight.transform.localPosition = new Vector3(0, 10 * persent, 0);
+    }
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -19,13 +31,8 @@ public class PlayerFogofWar : TGTHNetworkBehaviour
         playerLight = Instantiate(lightprefab).GetComponent<Light>();
         playerLight.transform.SetParent(transform);
         playerLight.transform.localPosition = new Vector3(0, 10, 0);
-        
-        // int spiritRange = statsData.SpiritRange;
-        // if (spiritRange <= 10) return;
-        // int persent = (10 - spiritRange) / 10 + 1;
-        // playerLight.intensity = 200 * persent;
-        // playerLight.range = 20 * persent;
-        // playerLight.transform.localPosition = new Vector3(0, 10 * persent, 0);
+        if (statsData != null && statsData.IsReady)
+            SetSpiritRange(statsData);
 
     }
     protected override void Start()
