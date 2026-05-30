@@ -34,6 +34,8 @@ public class PlayerInventoryService : ILoadRemote<GameData>, ISaveRemote<GameDat
 
     public void LoadGame(GameData gameData, Action callback)
     {
+        if (string.IsNullOrEmpty(gameData.characterId))
+            return;
         service.LoadPlayerInventoryData(gameData.characterId, (gameDataDTO) =>
         {
             try

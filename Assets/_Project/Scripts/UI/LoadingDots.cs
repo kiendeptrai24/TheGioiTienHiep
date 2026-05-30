@@ -8,7 +8,7 @@ public class LoadingDots : MonoBehaviour
     public TextMeshProUGUI loadingText;
 
     [Header("Settings")]
-    public string baseText = "Loading";
+    public string baseText = "LOADING";
     public int maxDots = 3;
     public float interval = 0.2f;
 
@@ -39,7 +39,7 @@ public class LoadingDots : MonoBehaviour
             loopCoroutine = null;
         }
         if (loadingText != null)
-            loadingText.text = baseText; 
+            loadingText.text = baseText;
     }
 
     IEnumerator LoadingLoop()
@@ -47,7 +47,7 @@ public class LoadingDots : MonoBehaviour
         int dots = 0;
         while (true)
         {
-            dots = (dots + 1) % (maxDots + 1); 
+            dots = (dots + 1) % (maxDots + 1);
             loadingText.text = baseText + (dots == 0 ? "" : " " + new string('.', dots));
             yield return new WaitForSeconds(interval);
         }

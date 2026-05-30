@@ -28,20 +28,15 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
         inventoryCenterManager = InventoryCenterManager.Instance;
         inventoryCenterManager.OnLoadDataSuccessed += () =>
         {
-            var data = inventoryCenterManager.GetDatasChampionInTeam();
-            view.ResetItem();
-            foreach (var item in data)
-            {
-                var index = (item as HeroData).championIndex;
-                ShowItem(item, index);
-            }
+            listDatas.Clear();
+            view.Reset();
+            SetInit(inventoryCenterManager.GetDatasChampionInTeam());
         };
         InitializeInventoryUI();
     }
     protected override void Start()
     {
         base.Start();
-
         SetInit(inventoryCenterManager.GetDatasChampionInTeam());
     }
     public void SetInit(List<ItemData> itemDatas)

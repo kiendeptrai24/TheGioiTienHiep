@@ -13,6 +13,11 @@ public class PlayerProfile : TGTHNetworkBehaviour
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
+    private NetworkVariable<FixedString64Bytes> playerName = new(
+        "",
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Owner
+    );
     [SerializeField]
     private NetworkVariable<int> potentialPoint = new(
         0,
@@ -30,6 +35,9 @@ public class PlayerProfile : TGTHNetworkBehaviour
     [SerializeField]
     private ProfileUser profileUser;
     private PlayerResource playerResource;
+
+    public Action<string> OnPlayerNameChange;
+
     protected override void Awake()
     {
         base.Awake();
@@ -44,6 +52,8 @@ public class PlayerProfile : TGTHNetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        playerName.OnValueChanged += OnPlayerNameChanged;
+        var playerProfile = GetComponent<PlayerProfile>();
         var user = ProfileManager.Instance.GetProfile();
         playerResource = new PlayerResource();
 
@@ -51,15 +61,25 @@ public class PlayerProfile : TGTHNetworkBehaviour
         {
             // callback networkvariable
             profileUser = user;
+            playerProfile.OnProfileChanged += OnPlayerProfileChanged;
             potentialPoint.OnValueChanged += OnPotentialPointChanged;
             skillPoint.OnValueChanged += OnSkillPointChanged;
             OnSkillPointChanged(0, profileUser.skillPoint);
-
 
             // load coins to resourcestorage
             LoadCoinsServerRpc(profileUser.coins);
         }
         LoadPlayerIdServerRpc(user.userId, user.potentialPoint, user.skillPoint);
+    }
+
+    private void OnPlayerNameChanged(FixedString64Bytes previousValue, FixedString64Bytes newValue)
+    {
+        OnPlayerNameChange?.Invoke(newValue.ToString());
+    }
+
+    private void OnPlayerProfileChanged()
+    {
+        playerName.Value = profileUser.userName;
     }
     #region Event CallBack
 

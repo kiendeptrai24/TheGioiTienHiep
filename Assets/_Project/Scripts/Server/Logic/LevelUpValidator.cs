@@ -104,6 +104,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
 
         var playerObj = client.PlayerObject;
         var profile = playerObj.GetComponent<PlayerProfile>();
+        if (profile == null) return;
         var playerResource = profile.GetPlayerResource();
         var statsData = playerObj.GetComponent<StatsData>();
         var nextRealm = levelUpStranlation.GetNextRealm(statsData.chamionData.realmType);

@@ -51,11 +51,12 @@ public class TeamDetailPageView : TGTHMonoBehaviour
     {
         mouseFollower.Toggle(enable);
     }
-    public void ResetItem()
+    public void Reset()
     {
         foreach (var item in listOfUIItems)
         {
             item.ResetData();
+            item.Deselect();
         }
     }
     public void DeselectItem(UIItemSlotBase uiItem)

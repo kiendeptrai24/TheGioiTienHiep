@@ -22,7 +22,16 @@ public class PlayerCharacterUI : TGTHNetworkBehaviour
     protected override void Awake()
     {
         base.Awake();
+        PlayerProfile profile = GetComponent<PlayerProfile>();
+        profile.OnPlayerNameChange += OnPlayerNameChanged;
+
     }
+
+    private void OnPlayerNameChanged(string value)
+    {
+        nameTxt.text = value;
+    }
+
     private void OnProfileChanged(ProfileUser user)
     {
         SetName(user.userName);
