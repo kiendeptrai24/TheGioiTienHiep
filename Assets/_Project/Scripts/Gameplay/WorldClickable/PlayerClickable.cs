@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -47,10 +48,15 @@ public class PlayerClickable : EntityClickable
         if (heroResource == null || enemyResource == null) return;
 
         ulong enemyCoins = enemyResource.SpiritStone.Value;
+        ulong heroCoins = heroResource.SpiritStone.Value;
 
-        if (enemyCoins < 100) return;
+        // reward tính ở đâu đó
+        ulong reward = (ulong)(heroCoins * 0.7f);
 
-        ulong reward = (ulong)(enemyCoins * 0.7f);
+        // tối đa chỉ được lấy 70% tiền của B
+        ulong maxReward = (ulong)(enemyCoins * 0.7f);
+
+        reward = Math.Min(reward, maxReward);
 
         heroResource.PlusCost(reward);
         enemyResource.MinusCost(reward);
