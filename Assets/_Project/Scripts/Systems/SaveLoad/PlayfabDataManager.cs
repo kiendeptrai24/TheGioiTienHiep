@@ -149,7 +149,10 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     }
     private void OnKicked()
     {
-        authFacade.Logout(null, onError);
+        authFacade.Logout((result) =>
+        {
+
+        }, onError);
     }
     private void OnDataCenterReady(GameDataCenter center)
     {
@@ -257,9 +260,14 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         gameData.Clear();
         gameData.characterId = characterId;
         Debug.Log("OnCharacterLoaded: " + characterId);
-        LoadGameData();
+        SceneLoadManager.Instance.LoadSceneLoading();
+        LoadGameData(() =>
+        {
+            NetworkManager.Singleton.StartHost();
+            SceneLoadManager.Instance.UnLoadScene("LoadingScene");
+        });
     }
-    private void LoadGameData()
+    private void LoadGameData(Action callback)
     {
         int total = loadRemotes.Count;
         int completed = 0;
@@ -271,6 +279,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
                 completed++;
                 if (completed == total)
                 {
+                    callback?.Invoke();
                     OnLoadGameFormPlayfab?.Invoke(this.gameData);
                 }
             });

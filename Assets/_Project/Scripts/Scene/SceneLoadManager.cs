@@ -10,20 +10,15 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     {
         DontDestroyOnLoad(this);
     }
-    #region Network Scene
-
-    private IEnumerator ProcessNetworkSceneLoading(AsyncOperation asyncOperation)
-    {
-        yield return asyncOperation;
-        SceneManager.UnloadSceneAsync("LoadingScene");
-    }
-    #endregion
-
     #region Scene
 
     public void LoadRegularScene(string sceneName, bool useLoadScreen = true)
     {
         StartCoroutine(ProcessRegularSceneLoading(sceneName, useLoadScreen));
+    }
+    public void LoadSceneLoading()
+    {
+        SceneManager.LoadScene("LoadingScene", LoadSceneMode.Additive);
     }
     public void LoadScene(string sceneName)
     {

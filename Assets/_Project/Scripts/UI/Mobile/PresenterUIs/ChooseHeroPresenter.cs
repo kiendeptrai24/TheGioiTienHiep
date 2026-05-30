@@ -30,11 +30,19 @@ namespace TGTH.Mobile
             ShowAllItems();
             LoadDataCenter();
         }
+
+        private void OnLoadDataSuccessed()
+        {
+            view.Reset();
+            SetItemData(inventoryCenterManager.GetDataType(ItemType.Champion, true));
+        }
+
         private void LoadDataCenter()
         {
             inventoryCenterManager = InventoryCenterManager.Instance;
             inventoryCenterManager.OnItemExistingChampionDataChanged += SetItemData;
             SetItemData(inventoryCenterManager.GetDataType(ItemType.Champion, true));
+            inventoryCenterManager.OnLoadDataSuccessed += OnLoadDataSuccessed;
         }
 
         private void SetItemData(List<ItemData> list)

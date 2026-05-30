@@ -97,7 +97,10 @@ namespace TGTH.Mobile
         {
             listOfUIItemsAlreadyOwned[index].SetData(sprite, qty);
         }
-
+        public void Reset()
+        {
+            ClearAllSlots();
+        }
         public void Show()
         {
             gameObject.SetActive(true);
