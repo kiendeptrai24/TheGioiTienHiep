@@ -6,7 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class HeroData : ItemData
 {
-    public bool isCharactor;
+    public bool isCharacter;
     public string characterId;
     [JsonIgnore]
     public RealmData realmData;

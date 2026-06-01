@@ -118,6 +118,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
                 var heroData = statsManager.chamionData as HeroData;
                 var equipmentData = item1.data as EquipmentData;
                 heroData.equipmentDatas.Remove(equipmentData);
+                heroData.equipmentIds.Remove(equipmentData.instanceId);
             }
 
         }
@@ -129,12 +130,14 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
                 var heroData = statsManager.chamionData as HeroData;
                 var equipmentData = item2.data as EquipmentData;
                 heroData.equipmentDatas.Add(equipmentData);
+                heroData.equipmentIds.Add(equipmentData.instanceId);
             }
         }
         if (item1 != null && item1.data != null)
         {
             item1.data = item;
         }
+        inventoryCenterManager.NotifyItemPlayerChanged();
         return true;
     }
 

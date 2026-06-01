@@ -12,9 +12,7 @@ public class StatsData : TGTHMonoBehaviour
     private StatsDataCore stats;
 
     public ItemData chamionData;
-    public List<TechniqueData> techniqueData;
-    public List<SkillData> skillDatas;
-    public List<EquipmentData> equiDatas;
+    public HeroData ChampionData;
 
     [Header("Preset base stats")]
     public RaceData statsRaceData;
@@ -84,6 +82,7 @@ public class StatsData : TGTHMonoBehaviour
     public void SetUpItem(ItemData item)
     {
         this.chamionData = item;
+        ChampionData = item as HeroData;
         if (stats == null)
         {
             stats = new StatsDataCore(item);

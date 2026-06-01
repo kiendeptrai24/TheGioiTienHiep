@@ -17,7 +17,7 @@ public class LoadEquipmentInventoryClient : ILoadGameData<GameData, PlayerClient
             var dataManager = GameDataCenterManager.Instance;
             foreach (var itemDto in playerClientDataDto.equipmentRes)
             {
-                var itemData = dataManager.GetItemById(itemDto.instanceId);
+                var itemData = dataManager.GetItemById(itemDto.instanceId).Clone();
                 if (itemData != null)
                 {
                     itemData.currentstack = itemDto.currentStack;

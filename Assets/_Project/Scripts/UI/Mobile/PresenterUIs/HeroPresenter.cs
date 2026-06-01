@@ -17,6 +17,7 @@ namespace TGTH.Mobile
         public event Action<int> OnItemActionRequested;
         public event Action<int> OnStartDragging;
         private bool isDraging = false;
+        [SerializeField] private StatsData statsManager;
 
         protected override void Awake()
         {
@@ -34,14 +35,26 @@ namespace TGTH.Mobile
             inventoryCenterManager.OnItemChampionDataChanged += RefreshInventory;
 
             rootListDatas = GameDataCenterManager.Instance.GetChampionDatas();
+
+            var heroDataList = inventoryCenterManager.GetDataType(ItemType.Champion).ToList();
+            heroDataList.AddRange(inventoryCenterManager.GetDatasChampionInTeam());
+
             SetItemData(inventoryCenterManager.GetDataType(ItemType.Champion));
-            SetItemDataDontHave(inventoryCenterManager.GetDataType(ItemType.Champion));
+            SetItemDataDontHave(heroDataList);
+            inventoryCenterManager.OnItemDataChanged += OnItemDataChanged;
+        }
+
+        private void OnItemDataChanged(List<ItemData> list)
+        {
+            var heroDataList = inventoryCenterManager.GetDataType(ItemType.Champion).ToList();
+            heroDataList.AddRange(inventoryCenterManager.GetDatasChampionInTeam());
+            RefreshInventory(heroDataList);
         }
 
         private void RefreshInventory(List<ItemData> list)
         {
             SetItemDataDontHave(list);
-            SetItemData(list);
+            SetItemData(inventoryCenterManager.GetDataType(ItemType.Champion, true));
         }
 
         private void SetItemDataDontHave(List<ItemData> list)
@@ -52,7 +65,7 @@ namespace TGTH.Mobile
             {
                 if (item is HeroData)
                 {
-                    if (item.isCharactor) continue;
+                    if (item.isCharacter) continue;
                     if (!list.Contains(item))
                         temp.Add(new InventoryItem(item));
                 }
@@ -139,6 +152,7 @@ namespace TGTH.Mobile
 
             currentItemSelect = uiItem;
             ResetDrag();
+            statsManager.SetUpItem(uiItem.inventoryItem.data);
             itemDetailPageView.HandleItemClicked(uiItem.inventoryItem);
         }
         private void HandleItemRightClick(UIItemSlotBase uiItem)

@@ -127,7 +127,6 @@ public class ItemCharacterService : ILoadRemote<GameData>, ISaveRemote<GameData>
                     var skillData = dataManager.GetItemById(skill.instanceId) as SkillData;
                     if (skillData == null)
                         continue;
-                    heroData.skillDatas[h] = skillData;
                     skillDatasTemps.Add(skillData);
                 }
                 heroData.skillDatas = skillDatasTemps;

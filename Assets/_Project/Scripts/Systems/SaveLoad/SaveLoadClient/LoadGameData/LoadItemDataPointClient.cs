@@ -13,7 +13,7 @@ public class LoadItemDataPointClient : ILoadGameData<GameData, PlayerClientDataD
                 return;
             }
             var itemDataPointDto = playerClientDataDto.itemDataPointRes;
-            var itemDataPoint = DataMapper.MapItemDataPoint(itemDataPointDto);
+            var itemDataPoint = DataMapper.MapItemDataPoint(itemDataPointDto).Clone() as ItemDataPoint;
             if (itemDataPoint == null) return;
             gameData.itemDataPoint = itemDataPoint;
         }

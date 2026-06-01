@@ -4,10 +4,10 @@ public class SpawnTree : MonoBehaviour
 {
     [SerializeField] private SpawnSettings settings;
     [SerializeField] private GameObject prefab;
-    [SerializeField] private SpawnManager spawnManager;
+    [SerializeField] private SpawnService spawnManager;
     private void Awake()
     {
-        spawnManager = GetComponent<SpawnManager>();
+        spawnManager = GetComponent<SpawnService>();
     }
     private void Start()
     {

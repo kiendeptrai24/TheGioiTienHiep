@@ -46,16 +46,21 @@ namespace TGTH.Mobile
         public void ShowData(ItemData itemData)
         {
             var heroData = itemData as HeroData;
-            if(heroData == null)
+            if (heroData == null)
             {
                 Debug.LogWarning("ShowData failed: itemData is not HeroData");
                 return;
             }
-            if(heroData.equipmentDatas == null)
-            {
-                Debug.LogWarning("ShowData failed: equipmentDatas is null");
+            ShowEquipmentItems(heroData);
+            itemNameTxt.text = heroData.itemName;
+            realmTxt.text = EnumTranslator.ToVietnamese(heroData.realmType);
+            itemIconImge.sprite = heroData.itemIcon;
+        }
+        private void ShowEquipmentItems(HeroData heroData)
+        {
+            if (heroData == null || heroData.equipmentDatas == null)
                 return;
-            }
+            RefreshEquipmentItems();
             var equipmentDatas = heroData.equipmentDatas;
 
             for (int i = 0; i < equipmentDatas.Count; i++)
@@ -63,9 +68,14 @@ namespace TGTH.Mobile
                 var item = equipmentSlotsDictionary[equipmentDatas[i].equipmentType];
                 item.SetItem(new InventoryItem(equipmentDatas[i]));
             }
-            itemNameTxt.text = heroData.itemName;
-            realmTxt.text = EnumTranslator.ToVietnamese(heroData.realmType);
-            itemIconImge.sprite = heroData.itemIcon;
         }
+        public void RefreshEquipmentItems()
+        {
+            foreach (var slot in equipmentSlotsDictionary.Values)
+            {
+                slot.ResetData();
+            }
+        }
+
     }
 }

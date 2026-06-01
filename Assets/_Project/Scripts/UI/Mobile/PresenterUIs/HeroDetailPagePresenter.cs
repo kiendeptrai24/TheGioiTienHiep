@@ -13,6 +13,7 @@ namespace TGTH.Mobile
         [SerializeField] private StatsData statsManager;
         private InventoryCenterManager inventoryCenterManager;
         private bool setup = false;
+        [SerializeField] private StatsData statManager;
         protected override void Awake()
         {
             inventoryCenterManager = InventoryCenterManager.Instance;
@@ -33,7 +34,13 @@ namespace TGTH.Mobile
             view.OnHeroStatsClicked += ShowHeroInfo;
             view.OnHeroDetailClicked += ShowHeroDetail;
         }
-
+        private void OnEnable()
+        {
+            if (statsManager.chamionData != null)
+            {
+                ShowData(new InventoryItem(statsManager.chamionData));
+            }
+        }
         private void SetItemData(List<ItemData> list)
         {
             for (int i = 0; i < list.Count; i++)

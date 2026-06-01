@@ -109,22 +109,22 @@ public sealed class BattleBoardGrid
 
         if (allowDiagonal)
         {
-            TryCandidate(from + new Vector2Int( 1, 0), toTarget, units, ref best, ref bestScore);
+            TryCandidate(from + new Vector2Int(1, 0), toTarget, units, ref best, ref bestScore);
             TryCandidate(from + new Vector2Int(-1, 0), toTarget, units, ref best, ref bestScore);
-            TryCandidate(from + new Vector2Int( 0, 1), toTarget, units, ref best, ref bestScore);
-            TryCandidate(from + new Vector2Int( 0,-1), toTarget, units, ref best, ref bestScore);
+            TryCandidate(from + new Vector2Int(0, 1), toTarget, units, ref best, ref bestScore);
+            TryCandidate(from + new Vector2Int(0, -1), toTarget, units, ref best, ref bestScore);
 
-            TryCandidate(from + new Vector2Int( 1, 1), toTarget, units, ref best, ref bestScore);
-            TryCandidate(from + new Vector2Int( 1,-1), toTarget, units, ref best, ref bestScore);
+            TryCandidate(from + new Vector2Int(1, 1), toTarget, units, ref best, ref bestScore);
+            TryCandidate(from + new Vector2Int(1, -1), toTarget, units, ref best, ref bestScore);
             TryCandidate(from + new Vector2Int(-1, 1), toTarget, units, ref best, ref bestScore);
-            TryCandidate(from + new Vector2Int(-1,-1), toTarget, units, ref best, ref bestScore);
+            TryCandidate(from + new Vector2Int(-1, -1), toTarget, units, ref best, ref bestScore);
         }
         else
         {
-            TryCandidate(from + new Vector2Int( 1, 0), toTarget, units, ref best, ref bestScore);
+            TryCandidate(from + new Vector2Int(1, 0), toTarget, units, ref best, ref bestScore);
             TryCandidate(from + new Vector2Int(-1, 0), toTarget, units, ref best, ref bestScore);
-            TryCandidate(from + new Vector2Int( 0, 1), toTarget, units, ref best, ref bestScore);
-            TryCandidate(from + new Vector2Int( 0,-1), toTarget, units, ref best, ref bestScore);
+            TryCandidate(from + new Vector2Int(0, 1), toTarget, units, ref best, ref bestScore);
+            TryCandidate(from + new Vector2Int(0, -1), toTarget, units, ref best, ref bestScore);
         }
 
         return best;

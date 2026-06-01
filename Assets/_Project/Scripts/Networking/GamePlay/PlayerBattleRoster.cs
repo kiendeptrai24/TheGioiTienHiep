@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Unity.Netcode;
 using UnityEngine;
 [Serializable]
@@ -32,6 +33,7 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
         if (!IsServer) return;
         foreach (var item in championSetUps)
         {
+            itemDatas.Clear();
             var itemData = GameDataCenterManager.Instance.GetItemById(item.championId) as HeroData;
             itemData.championIndex = item.championIndex;
             itemDatas.Add(itemData);
@@ -41,21 +43,28 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
     {
         if (!IsSpawned) return;
         itemDatas = list;
-        string json = ItemJsonConverter.ToJson(list);
+        var datasDto = new List<ChampionDataNetDto>();
+        foreach (var item in itemDatas)
+        {
+            datasDto.Add(RuntimeNetDataMapper.ToNetDto(item as HeroData));
+        }
+        string json = JsonConvert.SerializeObject(datasDto);
         SendToServerOnPlayerPrefabChangedServerRpc(json);
     }
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     private void SendToServerOnPlayerPrefabChangedServerRpc(string itemDataDTO)
     {
         if (!IsServer) return;
-        var itemDatas = ItemJsonConverter.FromJson(itemDataDTO);
+        var datasDto = JsonConvert.DeserializeObject<List<ChampionDataNetDto>>(itemDataDTO);
+        var itemDatas = new List<ItemData>();
+        foreach (var dto in datasDto)
+        {
+            itemDatas.Add(RuntimeNetDataMapper.ToHeroData(dto, GameDataCenterManager.Instance));
+        }
         this.itemDatas = itemDatas;
         OnChampionPlayerChanged?.Invoke(itemDatas);
     }
-    /// <summary>
-    /// Client gọi hàm này trên object roster của người chơi mà mình muốn lấy team.
-    /// Ví dụ muốn lấy team đối thủ thì gọi opponentRoster.GetPlayerTeam();
-    /// </summary>
+
     public void GetPlayerTeam(Action result = default)
     {
         this.result = result;
@@ -68,16 +77,19 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
         GetPlayerTeamServerRpc();
     }
 
-    /// <summary>
-    /// Client request server lấy team của object roster này.
-    /// </summary>
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void GetPlayerTeamServerRpc(RpcParams rpcParams = default)
     {
         if (!IsServer) return;
 
         ulong requesterClientId = rpcParams.Receive.SenderClientId;
-        string json = ItemJsonConverter.ToJson(itemDatas);
+
+        var datasDto = new List<ChampionDataNetDto>();
+        foreach (var item in itemDatas)
+        {
+            datasDto.Add(RuntimeNetDataMapper.ToNetDto(item as HeroData));
+        }
+        string json = JsonConvert.SerializeObject(datasDto);
         ReturnPlayerTeamClientRpc(requesterClientId, json);
     }
 
@@ -90,7 +102,12 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
         if (NetworkManager.Singleton.LocalClientId != requesterClientId)
             return;
 
-        var list = ItemJsonConverter.FromJson(itemDataDTO);
+        var datasDto = JsonConvert.DeserializeObject<List<ChampionDataNetDto>>(itemDataDTO);
+        var list = new List<ItemData>();
+        foreach (var dto in datasDto)
+        {
+            list.Add(RuntimeNetDataMapper.ToHeroData(dto, GameDataCenterManager.Instance));
+        }
         OnPlayerTeamReceived(requesterClientId, list);
         Debug.Log($"Received team of player {OwnerClientId}, count = {list?.Count ?? 0}");
     }

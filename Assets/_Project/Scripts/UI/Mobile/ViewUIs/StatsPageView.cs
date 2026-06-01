@@ -20,8 +20,8 @@ namespace TGTH.Mobile
         [Header("=== Main attributes ===")]
         [SerializeField] private TextMeshProUGUI potentialPointTxt;
         [SerializeField] private TextMeshProUGUI skillPointTxt;
-        [SerializeField] private TextMeshProUGUI damageTxt;
-        [SerializeField] private TextMeshProUGUI defenseTxt;
+        [SerializeField] private TextMeshProUGUI damagePointTxt;
+        [SerializeField] private TextMeshProUGUI defensePointTxt;
         [SerializeField] private TextMeshProUGUI healthPointTxt;
         [SerializeField] private TextMeshProUGUI ManaPointTxt;
         [SerializeField] private TextMeshProUGUI spiritPointTxt;
@@ -50,11 +50,16 @@ namespace TGTH.Mobile
         #endregion
         public void SetStatsData(Dictionary<StatType, Stat> stats)
         {
-            potentialPointTxt.text = ProfileManager.Instance.GetProfile().potentialPoint.ToString();
-            skillPointTxt.text = ProfileManager.Instance.GetProfile().skillPoint.ToString();
-
-            damageTxt.text = stats[StatType.PhicialDamagePoint].GetValue().ToString();
-            defenseTxt.text = stats[StatType.PhicialDefensePoint].GetValue().ToString();
+            if (potentialPointTxt != null)
+            {
+                potentialPointTxt.text = ProfileManager.Instance.GetProfile().potentialPoint.ToString();
+            }
+            if (skillPointTxt != null)
+            {
+                skillPointTxt.text = ProfileManager.Instance.GetProfile().skillPoint.ToString();
+            }
+            damagePointTxt.text = stats[StatType.PhicialDamagePoint].GetValue().ToString();
+            defensePointTxt.text = stats[StatType.PhicialDefensePoint].GetValue().ToString();
 
             healthPointTxt.text = stats[StatType.HealthPoint].GetValue().ToString();
             ManaPointTxt.text = stats[StatType.ManaPoint].GetValue().ToString();

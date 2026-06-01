@@ -24,6 +24,7 @@ namespace TGTH.Mobile
         public event Action OnBiographyClicked;
         public event Action OnHeroStatsClicked;
         public event Action OnHeroDetailClicked;
+        
 
         protected override void Awake()
         {

@@ -90,6 +90,10 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         OnItemPlayerChanged?.Invoke(item);
         OnItemUpdated?.Invoke(item, item.instanceId);
     }
+    public void NotifyItemPlayerChanged()
+    {
+        OnItemPlayerChanged?.Invoke(playerCham);
+    }
     public void CheckDataChange()
     {
         if (isItemChange)
@@ -470,7 +474,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         {
             if (item is HeroData heroData)
             {
-                if (heroData.isCharactor)
+                if (heroData.isCharacter)
                     ItemPlayerChanged(item);
             }
             listItemDatas.Add(item);
@@ -484,7 +488,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         {
             if (item is HeroData heroData)
             {
-                if (heroData.isCharactor)
+                if (heroData.isCharacter)
                     ItemPlayerChanged(item);
             }
             listItemDatasChampionInTeam.Add(item);

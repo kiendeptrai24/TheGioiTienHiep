@@ -21,7 +21,7 @@ public static class DataMapper
         heroData.essenceId = dto.essenceId;
         heroData.elementType = dto.elementType;
         heroData.attackRange = dto.attackRange;
-        heroData.isCharactor = isCharacter;
+        heroData.isCharacter = isCharacter;
         heroData.characterId = characterId;
 
         heroData.healthPoint = dto.healthPoint;
@@ -62,7 +62,7 @@ public static class DataMapper
         heroData.itemIconPath = dto.iconPath;
         heroData.raceId = dto.raceId;
         heroData.realmId = dto.realmId;
-        heroData.isCharactor = true;
+        heroData.isCharacter = true;
         if (!string.IsNullOrEmpty(dto.essenceId))
         {
             heroData.essenceId = dto.essenceId;
@@ -298,7 +298,7 @@ public static class DataMapper
     public static ChampionDataDto ToDto(HeroData data)
     {
         if (data == null) return null;
-        bool isCharacter = data.isCharactor;
+        bool isCharacter = data.isCharacter;
         return new ChampionDataDto
         {
             instanceId = data.instanceId,

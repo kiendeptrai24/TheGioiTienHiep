@@ -17,7 +17,7 @@ public class LoadChampionTeamClient : ILoadGameData<GameData, PlayerClientDataDt
             var dataManager = GameDataCenterManager.Instance;
             foreach (var championDto in playerClientDataDto.championInTeamRes)
             {
-                var heroData = dataManager.GetItemById(championDto.instanceId) as HeroData;
+                var heroData = dataManager.GetItemById(championDto.instanceId).Clone() as HeroData;
                 if (heroData != null)
                 {
                     IsCharacter(dataManager, championDto, heroData);

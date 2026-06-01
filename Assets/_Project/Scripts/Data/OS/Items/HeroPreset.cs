@@ -58,7 +58,7 @@ public class HeroPreset : ItemStatsPreset
             realmType = data.realmType,
             qualityType = data.qualityType,
 
-            isCharactor = isCharactor,
+            isCharacter = isCharactor,
             raceType = raceType,
             level = level,
             attackRange = attackRange,

@@ -36,10 +36,10 @@ public class ClientManager : SingletonNetwork<ClientManager>
     }
     public void OnClientConnected(string playerId, ulong clientId)
     {
+        Debug.Log($"[ClientManager] Client {clientId} đã kết nối thành công.");
         if (!IsServer) return;
         if (connectedClientsMap.ContainsKey(playerId)) return;
 
-        // Tạo dữ liệu mặc định cho client mới kết nối
         ClientData newData = new ClientData
         {
             playerId = playerId,
@@ -54,10 +54,8 @@ public class ClientManager : SingletonNetwork<ClientManager>
         {
             connects.Remove(clientId);
         }
-        //
         connectedClientsMap.Add(playerId, newData);
         connects.Add(clientId, playerId);
-        Debug.Log($"[ClientManager] Client {clientId} đã kết nối thành công.");
         OnClientDataConnected?.Invoke(newData);
         OnClientListChanged?.Invoke();
     }
@@ -71,7 +69,6 @@ public class ClientManager : SingletonNetwork<ClientManager>
 
         connectedClientsMap.Remove(playerId);
         connects.Remove(clientId);
-        Debug.Log($"[ClientManager] Client {clientId} đã ngắt kết nối.");
     }
 
     #region PUBLIC API

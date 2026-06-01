@@ -91,6 +91,7 @@ public class NetworkObjectPool : NetworkBehaviour
     /// <returns></returns>
     public NetworkObject GetNetworkObject(GameObject prefab, Vector3 position, Quaternion rotation, bool autoSpawn = true)
     {
+        if (!IsServer) return null;
         NetworkObject networkObject = null;
         try
         {
@@ -119,6 +120,7 @@ public class NetworkObjectPool : NetworkBehaviour
     /// </summary>
     public void ReturnNetworkObject(NetworkObject networkObject, float duration = 0.001f)
     {
+        if (!IsServer) return;
         StartCoroutine(ReturnToPool(networkObject, duration));
     }
     private IEnumerator ReturnToPool(NetworkObject networkObject, float duration)
@@ -126,18 +128,36 @@ public class NetworkObjectPool : NetworkBehaviour
         yield return new WaitForSeconds(duration);
         try
         {
-            if (releasedObjects.Contains(networkObject))
+            if (networkObject == null)
+                yield break;
+
+            if (!releasedObjects.Contains(networkObject))
+                yield break;
+
+            releasedObjects.Remove(networkObject);
+
+            var pooledInstance = networkObject.GetComponent<PooledInstance>();
+            if (pooledInstance == null)
+                yield break;
+
+            var prefab = pooledInstance.OriginPrefab;
+
+            if (!m_PooledObjects.ContainsKey(prefab))
+                yield break;
+
+            if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening)
             {
-                var pooledInstance = networkObject.GetComponent<PooledInstance>();
-                if (pooledInstance != null)
-                {
-                    var prefab = pooledInstance.OriginPrefab;
-                    networkObject.TrySetParent(transform);
-                    networkObject.Despawn();
-                    m_PooledObjects[prefab].Release(networkObject);
-                }
-                releasedObjects.Remove(networkObject);
+                networkObject.gameObject.SetActive(false);
+                yield break;
             }
+
+            if (networkObject.IsSpawned)
+            {
+                networkObject.TrySetParent(transform);
+                networkObject.Despawn(false);
+            }
+
+            m_PooledObjects[prefab].Release(networkObject);
         }
         catch (Exception ex)
         {

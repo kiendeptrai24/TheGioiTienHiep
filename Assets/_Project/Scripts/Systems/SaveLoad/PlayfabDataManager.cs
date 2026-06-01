@@ -243,7 +243,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             return;
         }
         gameData.Clear();
-        heroData.isCharactor = true;
+        heroData.isCharacter = true;
         gameData.characterName = itemCharacter.itemName;
         gameData.characterId = heroData.characterId;
         gameData.itemDatas.Add(itemCharacter);

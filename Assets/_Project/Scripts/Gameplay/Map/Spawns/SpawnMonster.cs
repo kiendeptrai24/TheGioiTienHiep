@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class SpawnMine : SingletonNetwork<SpawnMine>, INetObjectRegistry
+public class SpawnMonster : SingletonNetwork<SpawnMonster>, INetObjectRegistry
 {
     [SerializeField] private SpawnSettings settings;
     [SerializeField] private int maxObject = 50;
@@ -12,9 +12,7 @@ public class SpawnMine : SingletonNetwork<SpawnMine>, INetObjectRegistry
     private ISpawnPattern pattern;
     [SerializeField] private GameObject prefab;
     [SerializeField] private SpawnService spawnManager;
-    [SerializeField] public List<NetworkObject> mineNetObjects = new();
-
-
+    [SerializeField] public List<NetworkObject> monsterNetObjects = new();
     protected override void Awake()
     {
         spawnManager = GetComponent<SpawnService>();
@@ -32,6 +30,16 @@ public class SpawnMine : SingletonNetwork<SpawnMine>, INetObjectRegistry
         base.OnNetworkDespawn();
         //RemoveAll();
     }
+    private void RemoveAll()
+    {
+        if (!IsServer || IsSpawned == false) return;
+        foreach (var netobj in monsterNetObjects)
+        {
+            NetworkObjectPool.Singleton.ReturnNetworkObject(netobj);
+        }
+        monsterNetObjects.Clear();
+    }
+
     private void WaitToSpawn()
     {
         area = new RectSpawnArea(new Vector3(100, 0, 100), new Vector2(200, 200));
@@ -39,20 +47,10 @@ public class SpawnMine : SingletonNetwork<SpawnMine>, INetObjectRegistry
 
         spawnManager.SpawnNetwork(prefab, area, pattern, settings);
     }
-    
-    private void RemoveAll()
-    {
-        if (!IsServer || IsSpawned == false) return;
-        foreach (var netobj in mineNetObjects)
-        {
-            NetworkObjectPool.Singleton.ReturnNetworkObject(netobj);
-        }
-        mineNetObjects.Clear();
-    }
     private void SpawnOne()
     {
         if (!IsServer) return;
-        if (mineNetObjects.Count >= maxObject) return;
+        if (monsterNetObjects.Count >= maxObject) return;
 
         settings.count = 1;
         spawnManager.SpawnNetwork(prefab, area, pattern, settings);
@@ -61,23 +59,24 @@ public class SpawnMine : SingletonNetwork<SpawnMine>, INetObjectRegistry
     {
         if (!IsServer) return;
         if (entityObject == null) return;
-        if (!mineNetObjects.Contains(entityObject)) return;
+        if (!monsterNetObjects.Contains(entityObject)) return;
 
-        mineNetObjects.Remove(entityObject);
+        monsterNetObjects.Remove(entityObject);
         NetworkObjectPool.Singleton.ReturnNetworkObject(entityObject);
 
         SpawnRespawnTimerManager.Instance.AddRespawnTask(60, () =>
         {
             SpawnOne();
         });
+
     }
 
     public void AddNetObject(NetworkObject entityObject)
     {
         if (!IsServer) return;
         if (entityObject == null) return;
-        if (mineNetObjects.Contains(entityObject)) return;
+        if (monsterNetObjects.Contains(entityObject)) return;
 
-        mineNetObjects.Add(entityObject);
+        monsterNetObjects.Add(entityObject);
     }
 }

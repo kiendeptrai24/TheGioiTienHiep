@@ -3,9 +3,10 @@
 
 using UnityEngine;
 
-public class StatManager : Singleton<StatManager> 
+public class StatManager : Singleton<StatManager>
 {
     private StatsData statsData;
+    [SerializeField] private HeroData championData;
     protected override void Awake()
     {
         base.Awake();
@@ -14,5 +15,9 @@ public class StatManager : Singleton<StatManager>
     public void SetStat(ItemData item)
     {
         statsData.SetUpItem(item);
+        if (item is HeroData heroData)
+        {
+            championData = heroData;
+        }
     }
 }

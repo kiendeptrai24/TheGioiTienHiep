@@ -17,7 +17,7 @@ public class LoadItemUsedClient : ILoadGameData<GameData, PlayerClientDataDto>
             var dataManager = GameDataCenterManager.Instance;
             foreach (var itemDto in playerClientDataDto.itemUsedRes)
             {
-                var itemData = dataManager.GetItemById(itemDto.instanceId);
+                var itemData = dataManager.GetItemById(itemDto.instanceId).Clone();
                 if (itemData != null)
                 {
                     gameData.itemUsedDatas.Add(itemData);

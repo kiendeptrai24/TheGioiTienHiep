@@ -47,10 +47,11 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
+        SpawnMine.Instance.AddNetObject(NetworkObject);
         segmentMineManager = SegmentResourceManager.Instance;
         itemMapWorld = GetComponent<ResourceNode>();
         AddEvent();
-        base.OnNetworkSpawn();
         if (itemMapWorld.IsDataReady())
         {
             SetupMine();
@@ -81,6 +82,8 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         {
             if (miningData == null) return;
             miningData.currentAmount = newValue;
+            if (newValue <= 0)
+                SpawnMine.Instance.RemoveNetObject(NetworkObject);
         };
         PlayerId.OnValueChanged += (oldValue, newValue) =>
         {

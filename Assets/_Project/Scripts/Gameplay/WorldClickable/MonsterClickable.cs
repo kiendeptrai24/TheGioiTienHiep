@@ -24,8 +24,7 @@ public class MonsterClickable : EntityClickable
             if (win)
             {
                 RewardsAndPunishments(heroId, enemyId);
-
-                SpawnMonter.Instance.RemoveNetObject(NetworkObject);
+                SpawnMonster.Instance.RemoveNetObject(NetworkObject);
             }
             else
             {

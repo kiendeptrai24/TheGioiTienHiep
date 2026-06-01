@@ -1,6 +1,4 @@
 
-using NUnit.Framework;
-
 public class MonsterWorldController : EntityWorldController
 {
     protected override void Awake()
@@ -13,15 +11,11 @@ public class MonsterWorldController : EntityWorldController
     {
         base.Start();
     }
-    private void Update()
-    {
-
-    }
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         if (!IsServer) return;
 
-        SpawnMonter.Instance.AddNetObject(NetworkObject);
+        SpawnMonster.Instance.AddNetObject(NetworkObject);
     }
 }
