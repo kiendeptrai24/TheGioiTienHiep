@@ -17,7 +17,7 @@ public class LoadChampionInventoryClient : ILoadGameData<GameData, PlayerClientD
             foreach (var championDto in playerClientDataDto.championInInventoryRes)
             {
 
-                var heroDataBase = dataManager.GetItemById(championDto.instanceId).Clone() as HeroData;
+                var heroDataBase = dataManager.GetItemById(championDto.instanceId)as HeroData;
                 if (heroDataBase != null)
                 {
                     IsCharacter(dataManager, championDto, heroDataBase);

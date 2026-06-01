@@ -13,12 +13,10 @@ public static class RuntimeNetDataMapper
         };
     }
 
-    public static ItemData ToItemData(BaseDataNetDto dto)
+    public static ItemData ToItemData(BaseDataNetDto dto, GameDataCenterManager dataManager)
     {
         if (dto == null) return null;
-
-        ItemData item = new ItemData();
-        item.instanceId = dto.instanceId;
+        ItemData item = dataManager.GetItemById(dto.instanceId);
         return item;
     }
 
@@ -107,6 +105,8 @@ public static class RuntimeNetDataMapper
             hero.techniqueIds = dto.techniqueIds != null
                 ? new List<string>(dto.techniqueIds)
                 : new List<string>();
+            hero.skillDatas = new List<SkillData>();
+            hero.techniqueDatas = new List<TechniqueData>();
             foreach (var skillId in hero.skillIds)
             {
                 var skillData = dataManager.GetItemById(skillId).Clone() as SkillData;
@@ -127,6 +127,7 @@ public static class RuntimeNetDataMapper
         hero.equipmentIds = dto.equipmentIds != null
             ? new List<string>(dto.equipmentIds)
             : new List<string>();
+        hero.equipmentDatas = new List<EquipmentData>();
         foreach (var equipmentId in hero.equipmentIds)
         {
             var equipmentData = dataManager.GetItemById(equipmentId).Clone() as EquipmentData;

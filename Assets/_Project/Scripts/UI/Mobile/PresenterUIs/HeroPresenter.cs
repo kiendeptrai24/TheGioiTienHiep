@@ -28,7 +28,13 @@ namespace TGTH.Mobile
             InitializeInventoryUI(50);
             LoadItem();
         }
+        private void OnEnable()
+        {
+            var heroDataList = inventoryCenterManager.GetDataType(ItemType.Champion).ToList();
+            heroDataList.AddRange(inventoryCenterManager.GetDatasChampionInTeam());
 
+            RefreshInventory(heroDataList);
+        }
         private void LoadItem()
         {
             inventoryCenterManager = InventoryCenterManager.Instance;
@@ -66,7 +72,8 @@ namespace TGTH.Mobile
                 if (item is HeroData)
                 {
                     if (item.isCharacter) continue;
-                    if (!list.Contains(item))
+                    var findItem = list.FirstOrDefault(x => x.instanceId == item.instanceId);
+                    if (findItem == null)
                         temp.Add(new InventoryItem(item));
                 }
             }

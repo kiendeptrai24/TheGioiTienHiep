@@ -20,7 +20,6 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
     private UIItemSlotBase currentItemSelect;
     private int currentlyDraggedItemIndex = -1;
     private bool isDraging;
-    public int maxChampion = 4;
 
     protected override void Awake()
     {
@@ -44,7 +43,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
         int index = 0;
         foreach (var item in itemDatas)
         {
-            if (index >= maxChampion)
+            if (index >= inventoryCenterManager.MaxChampion())
                 break;
             AddItem(item, (item as HeroData).championIndex);
             index++;
@@ -79,7 +78,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
 
     public void AddItem(ItemData data)
     {
-        if (listDatas.Count >= maxChampion)
+        if (listDatas.Count >= inventoryCenterManager.MaxChampion())
         {
             Debug.Log("Max Champion");
             return;
@@ -101,7 +100,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
     }
     public bool CheckTeamIsFull()
     {
-        return listDatas.Count >= maxChampion;
+        return listDatas.Count >= inventoryCenterManager.MaxChampion();
     }
     private void HandleEndDrag(UIItemSlotBase uiItem)
     {
@@ -110,7 +109,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
     }
     public bool AddItem(ItemData itemData, Vector2 index)
     {
-        if (listDatas.Count >= maxChampion)
+        if (listDatas.Count >= inventoryCenterManager.MaxChampion())
         {
             return false;
         }

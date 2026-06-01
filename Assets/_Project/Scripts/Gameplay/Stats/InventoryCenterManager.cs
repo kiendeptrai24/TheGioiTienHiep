@@ -37,7 +37,33 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     /// </summary>
     public List<ItemData> listItemDatasChampionInTeam = new List<ItemData>();
     public event Action OnLoadDataSuccessed;
-    public int maxChampion = 4;
+    public int MaxChampion()
+    {
+        if (playerCham == null) return 0;
+        var cham = playerCham as HeroData;
+        switch (cham.realmId)
+        {
+            case "ID_CANHGIOI_00001":
+            case "ID_CANHGIOI_00002":
+            case "ID_CANHGIOI_00003":
+            case "ID_CANHGIOI_00004":
+                return 1;
+            case "ID_CANHGIOI_00005":
+            case "ID_CANHGIOI_00006":
+            case "ID_CANHGIOI_00007":
+            case "ID_CANHGIOI_00008":
+            case "ID_CANHGIOI_00009":
+                return 2;
+            case "ID_CANHGIOI_00010":
+            case "ID_CANHGIOI_00011":
+            case "ID_CANHGIOI_00012":
+                return 3;
+            case "ID_CANHGIOI_00013":
+                return 4;
+            default:
+                return 0;
+        }
+    }
     override protected void Awake()
     {
         base.Awake();

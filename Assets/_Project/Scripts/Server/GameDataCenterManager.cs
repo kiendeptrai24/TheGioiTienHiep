@@ -40,13 +40,13 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     public ItemData GetItemById(string id)
     {
         if (allItemsById.ContainsKey(id))
-            return allItemsById[id];
+            return allItemsById[id].Clone();
         return null;
     }
     public ItemData GetShopItemById(string id)
     {
         if (shopItemsById.ContainsKey(id))
-            return shopItemsById[id];
+            return shopItemsById[id].Clone();
         return null;
     }
 
@@ -245,7 +245,6 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
                 Debug.LogWarning($"Duplicate item id: {item.instanceId}");
                 continue;
             }
-
             allItemsById.Add(item.instanceId, item);
             allItems.Add(item);
         }

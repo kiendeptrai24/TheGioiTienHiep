@@ -17,7 +17,7 @@ public class LoadChampionTeamClient : ILoadGameData<GameData, PlayerClientDataDt
             var dataManager = GameDataCenterManager.Instance;
             foreach (var championDto in playerClientDataDto.championInTeamRes)
             {
-                var heroData = dataManager.GetItemById(championDto.instanceId).Clone() as HeroData;
+                var heroData = dataManager.GetItemById(championDto.instanceId) as HeroData;
                 if (heroData != null)
                 {
                     IsCharacter(dataManager, championDto, heroData);
@@ -77,6 +77,33 @@ public class LoadChampionTeamClient : ILoadGameData<GameData, PlayerClientDataDt
             return;
         }
         var dataManager = GameDataCenterManager.Instance;
+        if (championDto.isCharacter.HasValue && championDto.isCharacter.Value)
+        {
+            heroData.skillIds.Clear();
+            heroData.skillDatas.Clear();
+            heroData.techniqueIds.Clear();
+            heroData.techniqueDatas.Clear();
+            foreach (var skillId in championDto.skillIds)
+            {
+                var skillData = dataManager.GetItemById(skillId) as SkillData;
+                if (skillData != null)
+                {
+                    heroData.skillIds.Add(skillId);
+                    heroData.skillDatas.Add(skillData);
+                }
+            }
+            foreach (var techniqueId in championDto.techniqueIds)
+            {
+                var techniqueData = dataManager.GetItemById(techniqueId) as TechniqueData;
+                if (techniqueData != null)
+                {
+                    heroData.techniqueIds.Add(techniqueId);
+                    heroData.techniqueDatas.Add(techniqueData);
+                }
+            }
+        }
+        heroData.equipmentIds.Clear();
+        heroData.equipmentDatas.Clear();
         foreach (var equipmentId in championDto.equipmentIds)
         {
             var equipmentData = dataManager.GetItemById(equipmentId) as EquipmentData;
@@ -84,24 +111,6 @@ public class LoadChampionTeamClient : ILoadGameData<GameData, PlayerClientDataDt
             {
                 heroData.equipmentIds.Add(equipmentId);
                 heroData.equipmentDatas.Add(equipmentData);
-            }
-        }
-        foreach (var techniqueId in championDto.techniqueIds)
-        {
-            var techniqueData = dataManager.GetItemById(techniqueId) as TechniqueData;
-            if (techniqueData != null)
-            {
-                heroData.techniqueIds.Add(techniqueId);
-                heroData.techniqueDatas.Add(techniqueData);
-            }
-        }
-        foreach (var skillId in championDto.skillIds)
-        {
-            var skillData = dataManager.GetItemById(skillId) as SkillData;
-            if (skillData != null)
-            {
-                heroData.skillIds.Add(skillId);
-                heroData.skillDatas.Add(skillData);
             }
         }
     }

@@ -113,15 +113,10 @@ namespace TGTH.Mobile
                 isDraging = false;
                 return;
             }
-            if (teamDetailPagePresenter.CheckTeamIsFull())
-            {
-                ShowPopup(uiItem);
-                return;
-            }
             var popup = PopupManager.Instance.GetPopup<UseItemPopup>();
             BaseSetupData data = new BaseSetupData(
                 $"Bạn có muốn đặt tướng \n" +
-                $"<color=green>{uiItem.inventoryItem.data.itemName}</color> vào ô {(currentItem as UIChoseChampionItem).championIndex.ToString()}\n"
+                $"<color=green>{uiItem.inventoryItem.data.itemName}</color> vào ô {(currentItem as UIChoseChampionItem).championIndex}\n"
                 + "không?");
 
             if (popup != null)
@@ -129,6 +124,11 @@ namespace TGTH.Mobile
                 popup.ShowPopup(data,
                 onConfirm: (BasePopupData result) =>
                 {
+                    if (CheckChampionHasInTeam(uiItem.inventoryItem.data.instanceId))
+                    {
+                        TopNotificationUI.Instance.ShowNotification("Tướng đã có trong đội hình");
+                        return;
+                    }
                     var item = currentItem as UIChoseChampionItem;
                     if (currentItem.HasItem())
                     {
@@ -136,6 +136,11 @@ namespace TGTH.Mobile
                     }
                     else
                     {
+                        if (teamDetailPagePresenter.CheckTeamIsFull())
+                        {
+                            TopNotificationUI.Instance.ShowNotification("Đội hình đã đầy, không thể thêm tướng.");
+                            return;
+                        }
                         teamDetailPagePresenter.AddItem(uiItem.inventoryItem.data, item.championIndex);
                     }
                 },
@@ -149,6 +154,15 @@ namespace TGTH.Mobile
                     Navigation(uiItem);
                 });
             }
+        }
+        public bool CheckChampionHasInTeam(string championId)
+        {
+            foreach (var data in inventoryCenterManager.GetDatasChampionInTeam())
+            {
+                if (data != null && data.instanceId == championId)
+                    return true;
+            }
+            return false;
         }
         private void ShowPopup(UIItemSlotBase uiItem)
         {
