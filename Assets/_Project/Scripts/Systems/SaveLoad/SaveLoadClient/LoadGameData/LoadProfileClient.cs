@@ -19,6 +19,7 @@ public class LoadProfileClient : ILoadGameData<GameData, PlayerClientDataDto>
             if (string.IsNullOrEmpty(profile.characterId) == false)
                 gameData.characterId = profile.characterId;
             gameData.coins = profile.coins;
+            gameData.createdAt = profile.createdAt;
             gameData.position = profile.position.ToVector3();
             gameData.rotation = Quaternion.LookRotation(profile.rotation.ToVector3());
             gameData.potentialPoint = profile.potentialPoint;

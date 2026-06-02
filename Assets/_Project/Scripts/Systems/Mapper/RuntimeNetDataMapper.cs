@@ -47,7 +47,7 @@ public static class RuntimeNetDataMapper
             spiritPoint = hero.spiritPoint,
 
             moveSpeedPoint = hero.moveSpeedPoint,
-            spititRangePoint = hero.spititRangePoint,
+            spititRangePoint = hero.spiritRangePoint,
 
             championIndex = hero.championIndex,
 
@@ -94,7 +94,7 @@ public static class RuntimeNetDataMapper
         hero.spiritPoint = dto.spiritPoint;
 
         hero.moveSpeedPoint = dto.moveSpeedPoint;
-        hero.spititRangePoint = dto.spititRangePoint;
+        hero.spiritRangePoint = dto.spititRangePoint;
 
         if (hero.isCharacter)
         {

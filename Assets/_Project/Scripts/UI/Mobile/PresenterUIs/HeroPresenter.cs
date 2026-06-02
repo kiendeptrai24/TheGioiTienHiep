@@ -92,10 +92,10 @@ namespace TGTH.Mobile
                 uiItem.OnItemEndDrag += HandleEndDrag;
                 uiItem.OnRightMouseBtnClick += HandleItemRightClick;
             }
-            foreach (var uiItem in view.listOfUIItemsNotYetOwned)
-            {
-                uiItem.OnItemClicked += HandleItemClicked;
-            }
+            // foreach (var uiItem in view.listOfUIItemsNotYetOwned)
+            // {
+            //     uiItem.OnItemClicked += HandleItemClicked;
+            // }
 
         }
 

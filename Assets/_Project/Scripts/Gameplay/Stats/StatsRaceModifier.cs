@@ -10,17 +10,17 @@ public class StatsRaceModifier : StatsModifierBase
         var heroData = itemData as HeroData;
         if (race == null) return;
         base.AddStats(stats, itemData);
-        AddPercent(StatType.Health, race.healthPoint);
-        AddPercent(StatType.Mana, race.manaPoint);
-        AddPercent(StatType.Spirit, race.spiritPoint);
-        AddPercent(StatType.PhysicalDamage, race.physicalDamage);
-        AddPercent(StatType.MagicalDamage, race.magicalDamage);
-        AddPercent(StatType.SpiritDamage, race.spiritDamage);
-        AddPercent(StatType.PhysicalDefense, race.physicalDefense);
-        AddPercent(StatType.MagicalDefense, race.magicalDefense);
-        AddPercent(StatType.SpiritDefense, race.spiritDefense);
-        AddPercent(StatType.MovementSpeed, race.movementSpeedPoint);
-        AddPercent(StatType.SpiritRange, race.spiritRangePoint);
+        AddValue(StatType.Health, race.healthPoint * heroData.healthPoint);
+        AddValue(StatType.Mana, race.manaPoint * heroData.manaPoint);
+        AddValue(StatType.Spirit, race.spiritPoint * heroData.spiritPoint);
+        AddValue(StatType.PhysicalDamage, race.physicalDamage * heroData.physicalDamagePoint);
+        AddValue(StatType.MagicalDamage, race.magicalDamage * heroData.magicalDamagePoint);
+        AddValue(StatType.SpiritDamage, race.spiritDamage * heroData.spiritDamagePoint);
+        AddValue(StatType.PhysicalDefense, race.physicalDefense * heroData.physicalDefensePoint);
+        AddValue(StatType.MagicalDefense, race.magicalDefense * heroData.magicalDefensePoint);
+        AddValue(StatType.SpiritDefense, race.spiritDefense * heroData.spiritDefensePoint);
+        AddValue(StatType.MovementSpeed, race.movementSpeedPoint * heroData.moveSpeedPoint);
+        AddValue(StatType.SpiritRange, race.spiritRangePoint * heroData.spiritRangePoint);
     }
     public override void RemoveStats(Dictionary<StatType, Stat> stats, ItemData itemData)
     {
@@ -31,16 +31,16 @@ public class StatsRaceModifier : StatsModifierBase
         if (heroData == null) return;
         base.RemoveStats(stats, itemData);
 
-        RemovePercent(StatType.Health, race.healthPoint);
-        RemovePercent(StatType.Mana, race.manaPoint);
-        RemovePercent(StatType.Spirit, race.spiritPoint);
-        RemovePercent(StatType.PhysicalDamage, race.physicalDamage);
-        RemovePercent(StatType.MagicalDamage, race.magicalDamage);
-        RemovePercent(StatType.SpiritDamage, race.spiritDamage);
-        RemovePercent(StatType.PhysicalDefense, race.physicalDefense);
-        RemovePercent(StatType.MagicalDefense, race.magicalDefense);
-        RemovePercent(StatType.SpiritDefense, race.spiritDefense);
-        RemovePercent(StatType.MovementSpeed, race.movementSpeedPoint);
-        RemovePercent(StatType.SpiritRange, race.spiritRangePoint);
+        RemoveValue(StatType.Health, race.healthPoint * heroData.healthPoint);
+        RemoveValue(StatType.Mana, race.manaPoint * heroData.manaPoint);
+        RemoveValue(StatType.Spirit, race.spiritPoint * heroData.spiritPoint);
+        RemoveValue(StatType.PhysicalDamage, race.physicalDamage * heroData.physicalDamagePoint);
+        RemoveValue(StatType.MagicalDamage, race.magicalDamage * heroData.magicalDamagePoint);
+        RemoveValue(StatType.SpiritDamage, race.spiritDamage * heroData.spiritDamagePoint);
+        RemoveValue(StatType.PhysicalDefense, race.physicalDefense * heroData.physicalDefensePoint);
+        RemoveValue(StatType.MagicalDefense, race.magicalDefense * heroData.magicalDefensePoint);
+        RemoveValue(StatType.SpiritDefense, race.spiritDefense * heroData.spiritDefensePoint);
+        RemoveValue(StatType.MovementSpeed, race.movementSpeedPoint * heroData.moveSpeedPoint);
+        RemoveValue(StatType.SpiritRange, race.spiritRangePoint * heroData.spiritRangePoint);
     }
 }

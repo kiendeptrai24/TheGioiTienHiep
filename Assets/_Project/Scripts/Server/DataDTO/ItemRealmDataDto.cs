@@ -4,6 +4,12 @@ public class ItemRealmDataDto
 {
     [JsonProperty("Mã")]
     public string instanceId;
+    [JsonProperty("Tên")]
+    public string itemName;
+    [JsonProperty("Mô tả")]
+    public string itemDescription;
+    [JsonProperty("Hình")]
+    public string iconPath;
 
     [JsonProperty("Cảnh giới")]
     public RealmType realmType;

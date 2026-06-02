@@ -7,6 +7,7 @@ public class GameData
 {
     public string characterName;
     public string characterId;
+    public string createdAt;
     public Vector3 position;
     public Quaternion rotation;
     public ulong coins;

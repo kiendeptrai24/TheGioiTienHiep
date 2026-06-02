@@ -23,8 +23,8 @@ public enum EquipmentType
     Pants,             // Quần
     [EnumMember(Value = "nhẫn")]
     Ring,              // Nhẫn
-    [EnumMember(Value = "thắt lưng")]
-    Belt,              // Thắt Lưng
+    [EnumMember(Value = "đai lưng")]
+    Belt,              // Đai Lưng
     [EnumMember(Value = "bao tay")]
     Gloves,            // Bao Tay
     [EnumMember(Value = "giày")]

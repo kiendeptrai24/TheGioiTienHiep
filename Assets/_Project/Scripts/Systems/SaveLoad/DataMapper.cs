@@ -15,6 +15,7 @@ public static class DataMapper
         heroData.itemName = dto.name;
         heroData.itemDescription = dto.description;
         heroData.itemIconPath = dto.iconPath;
+        heroData.itemType = dto.itemType;
         heroData.qualityType = dto.quality;
         heroData.raceId = dto.raceId;
         heroData.realmId = dto.realmId;
@@ -146,7 +147,7 @@ public static class DataMapper
         item.itemIconPath = dto.iconPath;
         item.itemType = dto.itemType;
         item.itemDescription = dto.itemDescription;
-        item.itemType = ItemType.Material;
+        item.itemType = dto.itemType;
         item.qualityType = dto.quanlity;
         item.canStack = dto.canStack;
         item.realmType = dto.realmType;
@@ -220,6 +221,9 @@ public static class DataMapper
         RealmData realmData = new RealmData();
         realmData.instanceId = dto.instanceId;
         realmData.realmId = dto.instanceId;
+        realmData.itemName = dto.itemName;
+        realmData.itemDescription = dto.itemDescription;
+        realmData.itemIconPath = dto.iconPath;
         realmData.realmType = dto.realmType;
         realmData.health = dto.health;
         realmData.mana = dto.mana;
@@ -305,6 +309,7 @@ public static class DataMapper
             name = data.itemName,
             iconPath = data.itemIconPath,
             description = data.itemDescription,
+            itemType = data.itemType,
             quality = data.qualityType,
             raceId = data.raceId,
             realmId = data.realmId,

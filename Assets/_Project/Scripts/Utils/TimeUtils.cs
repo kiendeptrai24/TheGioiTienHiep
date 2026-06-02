@@ -81,4 +81,12 @@ public static class TimeUtils
         // Nối các phần tử lại với nhau bằng dấu phẩy và khoảng trắng ", "
         return string.Join(", ", parts);
     }
+    public static string GetCurrentTimeString(
+    long offsetSeconds = 0,
+    string format = "dd/MM/yyyy HH:mm:ss")
+    {
+        return System.DateTime.UtcNow
+            .AddSeconds(offsetSeconds)
+            .ToString(format);
+    }
 }

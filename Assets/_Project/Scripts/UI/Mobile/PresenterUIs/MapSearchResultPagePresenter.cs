@@ -85,6 +85,7 @@ namespace TGTH.Mobile
         private void OnOkClicked()
         {
             pathTest.StartFollowPath();
+            PathVisualizer.Instance.Draw(result.path);
         }
         private void Update()
         {

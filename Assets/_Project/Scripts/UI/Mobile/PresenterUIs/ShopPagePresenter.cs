@@ -49,7 +49,7 @@ namespace TGTH.Mobile
             view.priceText.text = ProfileManager.Instance.GetProfile().coins.ToString();
             view.OnRefreshClicked += ShowItem;
             view.OnEquipmentTypeChanged += SortInventoryEquipmentType;
-            view.OnTechniqueAndSkillTypeChanged += SortInventoryTechniqueAndSkillType;
+            view.OnTechniqueAndSkillTypeChanged += SortInventoryType;
             view.OnOtherTypeChanged += SortInventoryOtherType;
             view.OnSearchItemSubmit += SearchItemInventory;
             view.ToggleMouseFollower(false);
@@ -139,29 +139,30 @@ namespace TGTH.Mobile
 
             view.ShowAllItems(sortedList);
         }
-        public void SortInventoryTechniqueAndSkillType(int value)
+        public void SortInventoryType(int value)
         {
             if (listItemDatas == null || listItemDatas.Count == 0) return;
-            int typeIndex = value;
+            ItemType typeIndex = (ItemType)value;
             List<InventoryItem> sortedList;
-            if (typeIndex == 0)
-            {
-                sortedList = listItemDatas
-                   .Where(item =>
-                       item.data is TechniqueData technique)
-                   .OrderBy(item => item.data.itemType)
-                   .ThenByDescending(item => item.data.qualityType)
-                   .ToList();
-            }
-            else
+            if (typeIndex == ItemType.Material)
             {
                 sortedList = listItemDatas
                     .Where(item =>
-                        item.data is SkillData skill)
+                        item.data.itemType != ItemType.Champion)
                     .OrderBy(item => item.data.itemType)
                     .ThenByDescending(item => item.data.qualityType)
                     .ToList();
             }
+            else
+            {
+                sortedList = listItemDatas
+                .Where(item =>
+                    item.data.itemType == typeIndex)
+                .OrderBy(item => item.data.itemType)
+                .ThenByDescending(item => item.data.qualityType)
+                .ToList();
+            }
+
 
             view.ShowAllItems(sortedList);
         }
@@ -187,7 +188,7 @@ namespace TGTH.Mobile
             ShopDataPopup shopData = new ShopDataPopup();
             shopData.title = uiItem.inventoryItem.data.itemName;
             shopData.itemIcon = uiItem.inventoryItem.data.itemIcon;
-            shopData.type = uiItem.inventoryItem.data.itemType.ToString();
+            shopData.type = uiItem.inventoryItem.data.itemType;
             shopData.realm = uiItem.inventoryItem.data.realmType;
             shopData.quanlity = uiItem.inventoryItem.data.qualityType;
             shopData.price = uiItem.inventoryItem.data.itemPrice;

@@ -10,6 +10,7 @@ public class AccountPopup : BasePopup<AccountDataPopup, BasePopupData>
     [SerializeField] private TextMeshProUGUI usernameTxt;
     [SerializeField] private TextMeshProUGUI userIdTxt;
     [SerializeField] private TextMeshProUGUI realmTxt;
+    [SerializeField] private TextMeshProUGUI createdAtTxt;
     [SerializeField] private Button changeAccountBtn;
     [SerializeField] private Button logoutBtn;
     [SerializeField] private Button closeBtn;
@@ -77,5 +78,6 @@ public class AccountPopup : BasePopup<AccountDataPopup, BasePopupData>
         realmTxt.text = EnumTranslator.ToVietnamese(data.currentProfile.realmType);
         usernameTxt.text = data.username;
         userIdTxt.text = data.userId;
+        createdAtTxt.text = "Ngày gia nhập: " + data.createdAt;
     }
 }

@@ -89,7 +89,7 @@ public class IncreasePointBtn : TGTHMonoBehaviour
                 break;
             case StatType.SpiritRangePoint:
                 itemDataPoint.spititRangePoint += value;
-                heroData.spititRangePoint += value;
+                heroData.spiritRangePoint += value;
                 break;
         }
         profileManager.GetProfile().potentialPoint -= value;

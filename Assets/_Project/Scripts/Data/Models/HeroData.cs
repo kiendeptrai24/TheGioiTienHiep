@@ -50,7 +50,7 @@ public class HeroData : ItemData
     [JsonIgnore]
     public int moveSpeedPoint;
     [JsonIgnore]
-    public int spititRangePoint;
+    public int spiritRangePoint;
     [JsonIgnore]
     public Vector2Int championIndex;
     public List<string> equipmentIds = new();

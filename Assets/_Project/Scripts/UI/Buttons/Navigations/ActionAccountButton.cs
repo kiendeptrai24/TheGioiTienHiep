@@ -22,7 +22,7 @@ public class ActionAccountButton : TGTHMonoBehaviour
         var itemData = InventoryCenterManager.Instance.playerCham;
         var popup = PopupManager.Instance.GetPopup<AccountPopup>();
         var currentProfile = profileManager.GetProfile();
-        var data = new AccountDataPopup(itemData, currentProfile.userName, currentProfile.userId);
+        var data = new AccountDataPopup(itemData, currentProfile.userName, currentProfile.userId, currentProfile.createdAt);
         popup.ShowPopup(data,
             null, null,
             () =>

@@ -5,9 +5,6 @@ using UnityEngine;
 [Serializable]
 public class RealmData : ItemData
 {
-    //Cultivation Realm
-    public string description;
-
     //Offensive Stats
     [JsonIgnore]
     public int critRate;

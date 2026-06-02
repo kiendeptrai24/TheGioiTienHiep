@@ -59,7 +59,7 @@ public class StatsData : TGTHMonoBehaviour
 
     public float DamageImmunity => GetStatValue(StatType.DamageImmunity);
     #endregion
-
+    public float piritRange;
     public void ResetStats()
     {
         stats.ResetStats();
@@ -96,7 +96,11 @@ public class StatsData : TGTHMonoBehaviour
         Setup();
     }
     #endregion
-
+    [ContextMenu("Test Stat Change")]
+    public void Load()
+    {
+        piritRange = GetStatValue(StatType.SpiritRange);
+    }
     public void StatChange()
     {
         OnValueChanged?.Invoke();

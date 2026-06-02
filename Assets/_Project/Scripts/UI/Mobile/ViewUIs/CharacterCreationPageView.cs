@@ -33,7 +33,7 @@ namespace TGTH.Mobile
         {
             if (uiItem == null) return;
             if (uiItem.inventoryItem == null) return;
-            descriptionTxt.text = uiItem.inventoryItem.data.itemDescription;
+            descriptionTxt.text = uiItem.inventoryItem.data.itemDescription.Replace(". ", ".\n");
             itemIconImge.sprite = uiItem.inventoryItem.data.itemIcon;
         }
         public void ShowReasonFail(string reason)

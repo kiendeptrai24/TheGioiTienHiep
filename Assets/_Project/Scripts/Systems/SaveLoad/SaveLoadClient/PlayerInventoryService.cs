@@ -14,20 +14,20 @@ public class PlayerInventoryService : ILoadRemote<GameData>, ISaveRemote<GameDat
         this.service = service;
         loadGameDatas = new List<ILoadGameData<GameData, PlayerClientDataDto>>()
         {
+            new LoadProfileClient(),
             new LoadEquipmentInventoryClient(),
             new LoadItemUsedClient(),
             new LoadChampionInventoryClient(),
             new LoadChampionTeamClient(),
-            new LoadProfileClient(),
             new LoadItemDataPointClient()
         };
         saveGameDatas = new List<ISaveGameData<GameData, PlayerClientDataDto>>()
         {
+            new SaveProfileClient(),
             new SaveEquipmentInventoryClient(),
             new SaveItemUsedClient(),
             new SaveChampionInventoryClient(),
             new SaveChampionTeamClient(),
-            new SaveProfileClient(),
             new SaveItemDataPointClient()
         };
     }
@@ -52,6 +52,7 @@ public class PlayerInventoryService : ILoadRemote<GameData>, ISaveRemote<GameDat
                 {
                     loadGameData.LoadGameData(gameData, playerClientDataDto);
                 }
+                
                 callback?.Invoke();
             }
             catch (System.Exception ex)

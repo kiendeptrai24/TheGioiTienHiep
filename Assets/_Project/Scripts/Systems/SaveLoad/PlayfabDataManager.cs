@@ -244,6 +244,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         }
         gameData.Clear();
         heroData.isCharacter = true;
+        gameData.createdAt = TimeUtils.GetCurrentTimeString();
         gameData.characterName = itemCharacter.itemName;
         gameData.characterId = heroData.characterId;
         gameData.itemDatas.Add(itemCharacter);

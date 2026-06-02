@@ -12,6 +12,8 @@ public class ChampionDataDto
     public string description;
     [JsonProperty("Hình")]
     public string iconPath;
+    [JsonProperty("loại vật phẩm")]
+    public ItemType itemType;
 
     [JsonProperty("Nhân vật")]
     public bool? isCharacter;

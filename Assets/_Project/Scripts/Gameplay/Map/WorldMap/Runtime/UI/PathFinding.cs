@@ -20,7 +20,7 @@ public class PathFinding : Singleton<PathFinding>
         public int distance;
     }
     private readonly List<GridCoord> path = new List<GridCoord>(512);
-    List<Vector3> corners = new List<Vector3>();
+    public List<Vector3> corners = new List<Vector3>();
     protected override void Start()
     {
         base.Start();

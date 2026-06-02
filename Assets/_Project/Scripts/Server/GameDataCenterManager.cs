@@ -134,10 +134,17 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     }
     private void LoadSprite()
     {
-        foreach (var item in gameDatas.allItems)
+        try
         {
-            if (item == null) continue;
-            item.itemIcon = Resources.Load<Sprite>(item.itemIconPath);
+            foreach (var item in gameDatas.allItems)
+            {
+                if (item == null) continue;
+                item.itemIcon = Resources.Load<Sprite>(item.itemIconPath);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"LoadSprite: Failed to load sprites - {ex.Message}");
         }
     }
 
@@ -187,82 +194,111 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     }
     private void ResolveAllReferences()
     {
-        foreach (var item in gameDatas.championItems)
+        try
         {
-            var essenceData = GetItemById(item.essenceId).Clone() as EssenceData;
-            var raceData = GetItemById(item.raceId).Clone() as RaceData;
-            var realmData = GetItemById(item.realmId).Clone() as RealmData;
-            item.realmData = realmData;
-            item.essenceData = essenceData;
-            item.raceData = raceData;
-            foreach (var technique in item.techniqueIds)
+            foreach (var item in gameDatas.championItems)
             {
-                var techniqueData = GetItemById(technique).Clone() as TechniqueData;
-                if (techniqueData != null)
-                    item.techniqueDatas.Add(techniqueData);
+                var essenceData = GetItemById(item.essenceId) as EssenceData;
+                var raceData = GetItemById(item.raceId) as RaceData;
+                var realmData = GetItemById(item.realmId) as RealmData;
+                item.realmData = realmData;
+                item.essenceData = essenceData;
+                item.raceData = raceData;
+                foreach (var technique in item.techniqueIds)
+                {
+                    var techniqueData = GetItemById(technique) as TechniqueData;
+                    if (techniqueData != null)
+                        item.techniqueDatas.Add(techniqueData);
+                }
+                foreach (var skill in item.skillIds)
+                {
+                    var skillData = GetItemById(skill) as SkillData;
+                    if (skillData != null)
+                        item.skillDatas.Add(skillData);
+                }
             }
-            foreach (var skill in item.skillIds)
+            foreach (var item in gameDatas.characterDatas)
             {
-                var skillData = GetItemById(skill).Clone() as SkillData;
-                if (skillData != null)
-                    item.skillDatas.Add(skillData);
+                item.realmData = GetItemById(item.realmId) as RealmData;
+                item.realmType = item.realmData.realmType;
             }
         }
-        foreach (var item in gameDatas.characterDatas)
+        catch (Exception ex)
         {
-            item.realmData = GetItemById(item.realmId).Clone() as RealmData;
-            item.realmType = item.realmData.realmType;
+            Debug.LogError($"ResolveAllReferences: Failed to resolve references - {ex.Message}");
         }
     }
     private void SetupShop()
     {
-        var shopItem = gameDatas.shopItems.ToList();
-        gameDatas.shopItems.Clear();
-        for (int i = 0; i < shopItem.Count; i++)
+        try
         {
-            var item = shopItem[i];
-            var itemData = GetItemById(item.instanceId).Clone();
-            if (itemData != null)
+            var shopItem = gameDatas.shopItems.ToList();
+            gameDatas.shopItems.Clear();
+            for (int i = 0; i < shopItem.Count; i++)
             {
-                itemData.itemPrice = item.itemPrice;
+                var item = shopItem[i];
+                var itemData = GetItemById(item.instanceId);
+                if (itemData != null)
+                {
+                    itemData.itemPrice = item.itemPrice;
+                }
+                gameDatas.shopItems.Add(itemData);
             }
-            gameDatas.shopItems.Add(itemData);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"SetupShop: Failed to setup shop - {ex.Message}");
         }
     }
 
     private void ConfigDataCenter()
     {
-        allItems.Clear();
-        allItemsById.Clear();
-
-        foreach (var item in gameDatas.allItems)
+        try
         {
-            if (item == null || string.IsNullOrEmpty(item.instanceId))
-                continue;
+            allItems.Clear();
+            allItemsById.Clear();
 
-            if (allItemsById.ContainsKey(item.instanceId))
+            foreach (var item in gameDatas.allItems)
             {
-                Debug.LogWarning($"Duplicate item id: {item.instanceId}");
-                continue;
+                if (item == null || string.IsNullOrEmpty(item.instanceId))
+                    continue;
+
+                if (allItemsById.ContainsKey(item.instanceId))
+                {
+                    Debug.LogWarning($"Duplicate item id: {item.instanceId}");
+                    continue;
+                }
+                allItemsById.Add(item.instanceId, item);
+                allItems.Add(item);
             }
-            allItemsById.Add(item.instanceId, item);
-            allItems.Add(item);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"ConfigDataCenter: Failed to load data - {ex.Message}");
         }
     }
 
     private void ConfigShopDataCenter()
     {
-        shopItems.Clear();
-        shopItemsById.Clear();
-        foreach (var item in gameDatas.shopItems)
+        try
         {
-            if (shopItemsById.ContainsKey(item.instanceId))
+            shopItems.Clear();
+            shopItemsById.Clear();
+            foreach (var item in gameDatas.shopItems)
             {
-                Debug.LogWarning($"Duplicate item id: {item.instanceId}");
-                continue;
+                if (shopItemsById.ContainsKey(item.instanceId))
+                {
+                    Debug.LogWarning($"Duplicate item id: {item.instanceId}");
+                    continue;
+                }
+                shopItemsById.Add(item.instanceId, item);
+                shopItems.Add(item);
             }
-            shopItemsById.Add(item.instanceId, item);
-            shopItems.Add(item);
+
+        }
+        catch (System.Exception)
+        {
+            Debug.LogError($"ConfigShopDataCenter: Failed to config shop data center");
         }
     }
 

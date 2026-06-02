@@ -115,6 +115,13 @@ public static class EnumTranslator
         { SkillType.LinhTien, "Linh Tiễn" },
         { SkillType.VanLinhTien, "Vận Lịnh Tiễn" },
         { SkillType.VuTien, "Vũ Tiễn" },
+
+        // Pill type
+        { PillType.Breakthrough, "Đột phá" },
+        { PillType.Cultivation, "Tu luyện" },
+        { PillType.Recovery, "Hồi phục" },
+        { PillType.Buff, "Tăng cường" },
+        { PillType.Special, "Đặc biệt" },
     };
     private static readonly Dictionary<Enum, string> _translationsAcronym = new Dictionary<Enum, string>
     {
@@ -196,7 +203,7 @@ public static class EnumTranslator
         { EquipmentType.Belt, "Thắt Lưng" },
         { EquipmentType.Gloves, "Bao Tay" },
         { EquipmentType.Boots, "Giày" },
-        { EquipmentType.Pet, "Thú cưng" },
+        { EquipmentType.Pet, "TC" },
 
         // ItemType
         { ItemType.Material, "Nguyên liệu" },
@@ -212,11 +219,11 @@ public static class EnumTranslator
         { QuanlityType.Earth, "Địa" },
         { QuanlityType.Heaven, "Thiên" },
 
-        { PillType.Breakthrough, "Đột phá" },
-        { PillType.Cultivation, "Tu luyện" },
-        { PillType.Recovery, "Hồi phục" },
-        { PillType.Buff, "Tăng cường" },
-        { PillType.Special, "Đặc biệt" },
+        { PillType.Breakthrough, "ĐP" },
+        { PillType.Cultivation, "TL" },
+        { PillType.Recovery, "HP" },
+        { PillType.Buff, "TC" },
+        { PillType.Special, "ĐB" },
 
         // TechniqueType
         { TechniqueType.PhamNhanLuyenLinhQuyet, "PN" },

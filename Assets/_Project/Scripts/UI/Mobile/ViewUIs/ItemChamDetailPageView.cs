@@ -144,8 +144,8 @@ public class ItemChamDetailPageView : IItemDetailPageView
         itemIcon.sprite = itemData.itemIcon;
         techniquenameTxt.text = itemData.itemName;
         realmTxt.text = EnumTranslator.ToVietnamese(itemData.realmType);
+        effectDescriptionTxt.text = itemData.itemDescription.Replace(". ", ".\n");
         descriptionTxt.text = GetDescriptionText(itemData);
-        effectDescriptionTxt.text = itemData.description;
         if (levelUpDatabase == null)
         {
             levelUpDatabase = LevelUpDatabase.Instance;
@@ -163,7 +163,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
             nextItemIcon.sprite = nextItemData.itemIcon;
             nextTechniquenameTxt.text = nextItemData.itemName;
             nextRealmTxt.text = EnumTranslator.ToVietnamese(nextItemData.realmType);
-            nextEffectDescriptionTxt.text = nextItemData.description;
+            nextEffectDescriptionTxt.text = nextItemData.itemDescription.Replace(". ", ".\n");
             nextDescriptionTxt.text = GetDescriptionText(nextItemData);
         }
         else

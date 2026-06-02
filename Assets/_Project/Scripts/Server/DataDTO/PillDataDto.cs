@@ -18,7 +18,7 @@ public class PillDataDto
     public int currentStack;
     [JsonProperty("Cảnh Giới")]
     public RealmType realmType;
-    [JsonProperty("Loại")]
+    [JsonProperty("loại vật phẩm")]
     public ItemType itemType;
     [JsonProperty("Loại Thuốc")]
     public PillType pillType;

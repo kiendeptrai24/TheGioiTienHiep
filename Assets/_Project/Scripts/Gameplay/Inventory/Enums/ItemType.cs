@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 [JsonConverter(typeof(StringEnumConverter))]
 public enum ItemType
 {
-    [EnumMember(Value = "thường")]
+    [EnumMember(Value = "vật phẩm")]
     Material = 0,
 
     [EnumMember(Value = "trang bị")]
@@ -17,14 +17,11 @@ public enum ItemType
     [EnumMember(Value = "kĩ năng")]
     Skill,
 
-    [EnumMember(Value = "khác")]
-    Other,
-
     [EnumMember(Value = "tướng")]
     Champion,
 
-    [EnumMember(Value = "điều kiện")]
-    Condition,
     [EnumMember(Value = "thuốc")]
-    Pill
+    Pill,
+    [EnumMember(Value = "khác")]
+    Other,
 }

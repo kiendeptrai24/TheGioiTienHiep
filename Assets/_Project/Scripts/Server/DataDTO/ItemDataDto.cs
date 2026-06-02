@@ -13,7 +13,7 @@ public class ItemDataDto
     [JsonProperty("Hình")]
     public string iconPath;
 
-    [JsonProperty("loại")]
+    [JsonProperty("loại vật phẩm")]
     public ItemType itemType;
     [JsonProperty("cộng dồn")]
     public bool canStack;

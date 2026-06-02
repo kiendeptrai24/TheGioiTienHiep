@@ -93,7 +93,7 @@ public class BuyItemPopup : BasePopup<ShopSetupData, QuantityPopupData>
         string description = "";
         titleTxt.text = data.data.title + "\n";
         itemIconImge.sprite = data.data.itemIcon;
-        description += "Loại: " + data.data.type + "\n";
+        description += "Loại: " + EnumTranslator.ToVietnamese(data.data.type) + "\n";
         description += "Cảnh giới: " + EnumTranslator.ToVietnamese(data.data.realm) + "\n";
         description += "Phẩm: " + EnumTranslator.ToVietnamese(data.data.quanlity) + "\n";
         priceTxt.text = "Tổng: " + data.data.price + "K";

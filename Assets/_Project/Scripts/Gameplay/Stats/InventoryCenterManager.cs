@@ -532,7 +532,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
             championData.manaPoint = _data.itemDataPoint.manaPoint;
             championData.spiritPoint = _data.itemDataPoint.spiritPoint;
             championData.moveSpeedPoint = _data.itemDataPoint.moveSpeedPoint;
-            championData.spititRangePoint = _data.itemDataPoint.spititRangePoint;
+            championData.spiritRangePoint = _data.itemDataPoint.spititRangePoint;
             championData.physicalDamagePoint = _data.itemDataPoint.damagePoint;
             championData.physicalDefensePoint = _data.itemDataPoint.defensePoint;
         }

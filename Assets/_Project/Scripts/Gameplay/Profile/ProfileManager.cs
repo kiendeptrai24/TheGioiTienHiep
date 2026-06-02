@@ -19,7 +19,7 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
         playerNM.OnPlayerExiststed += OnPlayerExiststed;
 
         string userId = "";
-        profileUser = new ProfileUser(userId, "người chơi");
+        profileUser = new ProfileUser(userId, "người chơi", "");
 
         NotiProfileChanged();
     }
@@ -55,6 +55,7 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
         profileUser.userName = _data.characterName;
         profileUser.coins = _data.coins;
         profileUser.userId = _data.characterId;
+        profileUser.createdAt = _data.createdAt;
         profileUser.potentialPoint = _data.potentialPoint;
         profileUser.skillPoint = _data.skillPoint;
         profileUser.itemDataPoint = _data.itemDataPoint;
@@ -81,6 +82,7 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
             {
                 heroData.itemName = profileUser.userName;
                 _data.characterName = profileUser.userName;
+                _data.createdAt = profileUser.createdAt;
                 break;
             }
         }
