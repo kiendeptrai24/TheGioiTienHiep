@@ -10,8 +10,8 @@ public class PlayFabDataServerService
 
     public PlayFabDataServerService()
     {
-        PlayFabSettings.staticSettings.TitleId = "B7AF4";
-        PlayFabSettings.staticSettings.DeveloperSecretKey = "KAUNR9RMDSAGJ5693H1NJ8SFJ5JFSFSSW5PEP4MXBA9RHXDD9F";
+        PlayFabSettings.staticSettings.TitleId = PlayFabConfigLoader.GetTitleId();
+        PlayFabSettings.staticSettings.DeveloperSecretKey = PlayFabConfigLoader.GetDeveloperSecretKey();
         this.serverApi = new PlayFabServerInstanceAPI(PlayFabSettings.staticSettings);
     }
 

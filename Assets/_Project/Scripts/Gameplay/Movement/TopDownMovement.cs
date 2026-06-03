@@ -8,7 +8,7 @@ public class TopDownMovement : IMoveable
     }
     public Rigidbody rb;
     private Vector2 inputDirection = Vector2.zero;
-    public void Move(Transform transform, Vector2 direction, float speed)
+    public void Move(Vector2 direction, float speed)
     {
         Vector3 v = new Vector3(direction.x, 0f, direction.y);
         inputDirection = direction;
@@ -18,14 +18,9 @@ public class TopDownMovement : IMoveable
         rb.linearVelocity = new Vector3(v.x * speed, current.y, v.z * speed);
     }
 
-    public void Jump()
-    {
-
-    }
-
     public bool IsMoving()
     {
-        return inputDirection.magnitude > .1f;
+        return inputDirection.magnitude > .001f;
     }
 }
 

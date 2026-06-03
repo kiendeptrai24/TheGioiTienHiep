@@ -28,6 +28,7 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
         var relinker = playerNet.GetComponent<PlayerMineRelinker>();
         var playerProfile = playerNet.GetComponent<PlayerProfile>();
         playerProfile.OnProfileChanged += NotiProfileChanged;
+        
         relinker.OnResourceIdsChanged += OnResourceIdsChanged;
     }
     private void OnResourceIdsChanged(List<ulong> list) => resourceIds = list;

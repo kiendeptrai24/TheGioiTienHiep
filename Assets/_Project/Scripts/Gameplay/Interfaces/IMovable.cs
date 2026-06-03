@@ -2,7 +2,6 @@ using UnityEngine;
 
 public interface IMoveable
 {
-    void Move(Transform transform,Vector2 direction,float speed);
-    void Jump();
+    void Move(Vector2 direction,float speed);
     bool IsMoving();
 }

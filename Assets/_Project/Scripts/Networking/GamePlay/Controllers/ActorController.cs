@@ -68,11 +68,12 @@ public class ActorController : TGTHNetworkBehaviour
 
     private void HandleDirectionChanged(Vector2 previousValue, Vector2 newValue)
     {
-        moveable.Move(transform, newValue, moveSpeed);
+        moveable.Move(newValue, moveSpeed);
     }
     public void TelePort(Vector3 pos, Quaternion rot, Vector3 scale)
     {
         if (!IsServer) return;
+        StopServerRpc();
         nt.Teleport(pos, rot, scale);
     }
     private void FixedUpdate()
@@ -91,9 +92,10 @@ public class ActorController : TGTHNetworkBehaviour
                 return;
             RequestMoveServerRpc(inputDirection);
         }
-        else
+        else if (IsServer)
         {
             if (_autoMove == false) return;
+
             inputDirection = _autoDir;
             if (inputDirection.sqrMagnitude < 0.0001f && OldDirection.Value.sqrMagnitude < 0.0001f)
                 return;
@@ -106,26 +108,26 @@ public class ActorController : TGTHNetworkBehaviour
     {
         Move(dir);
     }
-    public void Move(Vector2 dir)
+    private void Move(Vector2 dir)
     {
         if (!IsServer) return;
         OldDirection.Value = Direction.Value;
         Direction.Value = dir;
-        if (dir.sqrMagnitude < 0.1f && _autoMove == false)
+        if (dir.sqrMagnitude < 0.1f)
         {
-            moveable.Move(transform, Vector2.zero, 0);
+            moveable.Move(Vector2.zero, 0);
             return;
         }
 
         Vector2 inputDirection = dir;
-        moveable.Move(transform, inputDirection, moveSpeed);
-        characterRotation.Rotate(transform, new Vector3(inputDirection.x, 0, inputDirection.y), turnSpeed);
+        moveable.Move(inputDirection, moveSpeed);
+        characterRotation.Rotate(new Vector3(inputDirection.x, 0, inputDirection.y), turnSpeed);
     }
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Server)]
     public void StopServerRpc()
     {
-        moveable.Move(transform, Vector2.zero, 0);
+        moveable.Move(Vector2.zero, 0);
     }
 
     protected override void LoadComponent()
@@ -134,6 +136,5 @@ public class ActorController : TGTHNetworkBehaviour
         inputManager = FindAnyObjectByType<InputManager>();
         rig = GetComponent<Rigidbody>();
         nt = GetComponent<NetworkTransform>();
-
     }
 }

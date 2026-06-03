@@ -6,7 +6,7 @@ public class ResourceStorage : TGTHNetworkBehaviour
 
     public NetworkVariable<ulong> SpiritStone = new(
         0,
-        NetworkVariableReadPermission.Owner,
+        NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
     public event Action<ulong> OnSpiritStoneChanged;
@@ -21,7 +21,7 @@ public class ResourceStorage : TGTHNetworkBehaviour
         base.OnNetworkSpawn();
         SpiritStone.OnValueChanged += HandleCoinsChanged;
     }
-    private void OnDisable()
+    private void OnDestroy()
     {
         SpiritStone.OnValueChanged -= HandleCoinsChanged;
     }
