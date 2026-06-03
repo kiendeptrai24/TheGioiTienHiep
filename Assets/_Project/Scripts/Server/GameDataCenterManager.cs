@@ -29,13 +29,15 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     private PlayFabClientInstanceAPI clientApi;
     private string serverVersion = "";
     private string localVersion = "";
+    PlayFabDataServerService service;
     protected override void Awake()
     {
         fileDataHandler = new FileDataHandler<GameDataCenter>(Application.persistentDataPath, fileName, encryptData);
         if (Configuration.Instance.buildType == BuildType.LOCAL_CLIENT ||
             Configuration.Instance.buildType == BuildType.REMOTE_CLIENT)
             return;
-        LoadDataLocalCache();
+        service = new PlayFabDataServerService();
+        LoadData();
     }
     public ItemData GetItemById(string id)
     {
@@ -51,44 +53,73 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     }
 
     public bool IsReady() => DataCenterReady;
-    private void LoadDataLocalCache()
+    private void LoadData()
     {
         gameDatas = fileDataHandler.Load();
         if (gameDatas != null)
+        {
             localVersion = gameDatas.version;
+        }
+        else
+        {
+            onSuccess();
+        }
     }
 
-    public void onSuccess(PlayFabClientInstanceAPI client)
+    public void onSuccess(PlayFabClientInstanceAPI clientApi = null)
     {
-        if (client == null) return;
-        clientApi = client;
+        if (clientApi != null)
+            this.clientApi = clientApi;
 
         LoadVersionRemove((sameVersion) =>
         {
             if (sameVersion)
                 LoadDataLocal();
             else
-                LoadDataRemote();
+                LoadDataRemote(clientApi);
         });
     }
     private void LoadVersionRemove(Action<bool> callback)
     {
-        clientApi.GetTitleData(new GetTitleDataRequest
+        if (Configuration.Instance.IsClientLocalBuild())
         {
-            Keys = new List<string> { "game_data_version" }
-        },
-        result =>
-        {
-            serverVersion = result.Data["game_data_version"];
-            if (string.IsNullOrEmpty(serverVersion))
+            clientApi.GetTitleData(new GetTitleDataRequest
             {
-                callback?.Invoke(false);
-                return;
-            }
+                Keys = new List<string> { "game_data_version" }
+            },
+            result =>
+            {
+                serverVersion = result.Data["game_data_version"];
+                if (string.IsNullOrEmpty(serverVersion))
+                {
+                    callback?.Invoke(false);
+                    return;
+                }
 
-            callback?.Invoke(serverVersion == localVersion);
-        },
-        error => Debug.LogError(error.GenerateErrorReport()));
+                callback?.Invoke(serverVersion == localVersion);
+            },
+            error => Debug.LogError(error.GenerateErrorReport()));
+        }
+        else
+        {
+            PlayFabServerAPI.GetTitleData(new PlayFab.ServerModels.GetTitleDataRequest
+            {
+                Keys = new List<string> { "game_data_version" }
+            },
+            result =>
+            {
+                serverVersion = result.Data["game_data_version"];
+                if (string.IsNullOrEmpty(serverVersion))
+                {
+                    callback?.Invoke(false);
+                    return;
+                }
+
+                callback?.Invoke(serverVersion == localVersion);
+            },
+            error => Debug.LogError(error.GenerateErrorReport()));
+        }
+
 
     }
 
@@ -102,14 +133,28 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         ConfigShopDataCenter();
         DataCenterReady = true;
         OnLoadGameDataCenterSuccessed?.Invoke(gameDatas);
+        if (Configuration.Instance.IsServerBuild())
+        {
+            ServerStartUp.Instance.StartServer();
+        }
     }
 
-    private void LoadDataRemote()
+    private void LoadDataRemote(PlayFabClientInstanceAPI clientApi)
     {
-        var service = new PlayFabDataServerService(clientApi);
-        var loadDataRemote = new AllGameDataSerice(service);
-        gameDatas = new GameDataCenter();
-        loadDataRemote.LoadGame(gameDatas, OnLoadDataRemoteSuccessed);
+        if (Configuration.Instance.IsClientBuild())
+        {
+            var service = new PlayFabClientGetDataServerService(clientApi);
+            var loadDataRemote = new AllGameDataSerice(service);
+            gameDatas = new GameDataCenter();
+            loadDataRemote.LoadGame(gameDatas, OnLoadDataRemoteSuccessed);
+        }
+        else
+        {
+
+            var loadDataRemote = new AllGameDataSerice(this.service);
+            gameDatas = new GameDataCenter();
+            loadDataRemote.LoadGame(gameDatas, OnLoadDataRemoteSuccessed);
+        }
     }
 
     private void OnLoadDataRemoteSuccessed()
@@ -126,6 +171,10 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
             gameDatas.version = serverVersion;
             fileDataHandler.Save(gameDatas);
             OnLoadGameDataCenterSuccessed?.Invoke(gameDatas);
+            if (Configuration.Instance.IsServerBuild())
+            {
+                ServerStartUp.Instance.StartServer();
+            }
         }
         catch (System.Exception ex)
         {
@@ -172,6 +221,10 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
             gameDatas.allItems.Add(item);
         }
         foreach (var item in gameDatas.championItems)
+        {
+            gameDatas.allItems.Add(item);
+        }
+        foreach (var item in gameDatas.characterDatas)
         {
             gameDatas.allItems.Add(item);
         }

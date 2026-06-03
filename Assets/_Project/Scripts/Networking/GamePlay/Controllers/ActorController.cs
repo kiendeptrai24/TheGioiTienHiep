@@ -22,6 +22,8 @@ public class ActorController : TGTHNetworkBehaviour
     public IMoveable moveable;
     private bool _autoMove;
     private Vector2 _autoDir;
+    Vector2 inputDirection = Vector2.zero;
+
     private NetworkTransform nt;
     public NetworkVariable<Vector2> Direction = new(
         Vector2.zero,
@@ -41,8 +43,10 @@ public class ActorController : TGTHNetworkBehaviour
 
     public void ClearAutoMove()
     {
+        if (!IsServer) return;
         _autoMove = false;
         _autoDir = Vector2.zero;
+        Debug.Log("ClearAutoMove");
         StopServerRpc();
     }
     protected override void Awake()
@@ -73,26 +77,41 @@ public class ActorController : TGTHNetworkBehaviour
     }
     private void FixedUpdate()
     {
-        if (!IsOwner) return;
         if (currentState == ActorState.TopDown)
             TopDownControl();
     }
 
     private void TopDownControl()
     {
-        Vector2 inputDirection = _autoMove ? _autoDir : inputManager.GetInputDirection();
-        if (inputDirection.sqrMagnitude < 0.0001f && OldDirection.Value.sqrMagnitude < 0.0001f)
-            return;
-        MoveServerRpc(inputDirection);
-    }
 
+        if (IsOwner)
+        {
+            inputDirection = inputManager.GetInputDirection();
+            if (inputDirection.sqrMagnitude < 0.0001f && OldDirection.Value.sqrMagnitude < 0.0001f)
+                return;
+            RequestMoveServerRpc(inputDirection);
+        }
+        else
+        {
+            if (_autoMove == false) return;
+            inputDirection = _autoDir;
+            if (inputDirection.sqrMagnitude < 0.0001f && OldDirection.Value.sqrMagnitude < 0.0001f)
+                return;
+            Move(inputDirection);
+        }
+
+    }
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-    public void MoveServerRpc(Vector2 dir)
+    public void RequestMoveServerRpc(Vector2 dir)
+    {
+        Move(dir);
+    }
+    public void Move(Vector2 dir)
     {
         if (!IsServer) return;
         OldDirection.Value = Direction.Value;
         Direction.Value = dir;
-        if (dir.sqrMagnitude < 0.0001f)
+        if (dir.sqrMagnitude < 0.1f && _autoMove == false)
         {
             moveable.Move(transform, Vector2.zero, 0);
             return;
@@ -103,7 +122,7 @@ public class ActorController : TGTHNetworkBehaviour
         characterRotation.Rotate(transform, new Vector3(inputDirection.x, 0, inputDirection.y), turnSpeed);
     }
 
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Server)]
     public void StopServerRpc()
     {
         moveable.Move(transform, Vector2.zero, 0);

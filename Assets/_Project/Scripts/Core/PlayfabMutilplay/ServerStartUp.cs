@@ -1,39 +1,32 @@
+#if UNITY_STANDALONE_WIN || UNITY_SERVER
 using UnityEngine;
 using System;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using System.Collections.Generic;
 using System.Collections;
-
-#if UNITY_STANDALONE_WIN || UNITY_SERVER
 using PlayFab.MultiplayerAgent.Model;
 using PlayFab;
-#endif
 
-public class ServerStartUp : TGTHMonoBehaviour
+public class ServerStartUp : Singleton<ServerStartUp>
 {
     public Configuration configuration;
-#if UNITY_STANDALONE_WIN || UNITY_SERVER
     private List<ConnectedPlayer> _connectedPlayers;
-#endif
     private UnityTransport transport;
     protected override void Start()
     {
         if (configuration.buildType == BuildType.REMOTE_SERVER)
         {
-#if UNITY_STANDALONE_WIN || UNITY_SERVER
             StartRemoteServer();
-#endif
         }
         else if (configuration.buildType == BuildType.LOCAL_SERVER)
         {
-            transport = NetworkManager.Singleton.NetworkConfig.NetworkTransport as UnityTransport;
-            TryStartServerWithAutoPort();
+            //TryStartServerWithAutoPort();
         }
         else
             Destroy(gameObject, 1);
     }
-
+    public void StartServer() => NetworkManager.Singleton.StartServer();
     private void TryStartServerWithAutoPort()
     {
         if (transport == null)
@@ -44,10 +37,6 @@ public class ServerStartUp : TGTHMonoBehaviour
         for (int i = 0; i < maxAttempts; i++)
         {
             transport.ConnectionData.Port = (ushort)port;
-
-#if UNITY_WEBGL
-            transport.UseWebSockets = true;
-#endif
             try
             {
                 bool ok = NetworkManager.Singleton.StartServer();
@@ -80,7 +69,6 @@ public class ServerStartUp : TGTHMonoBehaviour
             NetworkManager.Singleton.StartServer();
         }
     }
-#if UNITY_STANDALONE_WIN || UNITY_SERVER
 
     private void StartRemoteServer()
     {
@@ -216,5 +204,5 @@ public class ServerStartUp : TGTHMonoBehaviour
             ServerNotification.Instance.MaintenanceClientRpc(unixTime);
         }
     }
-#endif
 }
+#endif

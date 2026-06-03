@@ -17,7 +17,11 @@ public class PlayerCharacterUI : TGTHNetworkBehaviour
     private InventoryCenterManager inventoryCenterManager;
     private ProfileManager profileManager;
     private NetworkVariable<FixedString64Bytes> PlayerName =
-    new NetworkVariable<FixedString64Bytes>();
+    new NetworkVariable<FixedString64Bytes>(
+        default,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Owner
+    );
 
     protected override void Awake()
     {
@@ -62,7 +66,7 @@ public class PlayerCharacterUI : TGTHNetworkBehaviour
 
     public void SetName(string name)
     {
-        if (IsSpawned)
+        if (IsSpawned && IsOwner)
         {
             PlayerName.Value = name;
         }

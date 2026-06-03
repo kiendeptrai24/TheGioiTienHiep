@@ -96,34 +96,33 @@ public static class RuntimeNetDataMapper
         hero.moveSpeedPoint = dto.moveSpeedPoint;
         hero.spiritRangePoint = dto.spititRangePoint;
 
-        if (hero.isCharacter)
-        {
-            hero.skillIds = dto.skillIds != null
-                ? new List<string>(dto.skillIds)
-                : new List<string>();
+        hero.skillIds = dto.skillIds != null
+            ? new List<string>(dto.skillIds)
+            : new List<string>();
+        hero.skillDatas = new List<SkillData>();
 
-            hero.techniqueIds = dto.techniqueIds != null
-                ? new List<string>(dto.techniqueIds)
-                : new List<string>();
-            hero.skillDatas = new List<SkillData>();
-            hero.techniqueDatas = new List<TechniqueData>();
-            foreach (var skillId in hero.skillIds)
+        foreach (var skillId in hero.skillIds)
+        {
+            var skillData = dataManager.GetItemById(skillId).Clone() as SkillData;
+            if (skillData != null)
             {
-                var skillData = dataManager.GetItemById(skillId).Clone() as SkillData;
-                if (skillData != null)
-                {
-                    hero.skillDatas.Add(skillData);
-                }
-            }
-            foreach (var techniqueId in hero.techniqueIds)
-            {
-                var techniqueData = dataManager.GetItemById(techniqueId).Clone() as TechniqueData;
-                if (techniqueData != null)
-                {
-                    hero.techniqueDatas.Add(techniqueData);
-                }
+                hero.skillDatas.Add(skillData);
             }
         }
+
+        hero.techniqueIds = dto.techniqueIds != null
+            ? new List<string>(dto.techniqueIds)
+            : new List<string>();
+        hero.techniqueDatas = new List<TechniqueData>();
+        foreach (var techniqueId in hero.techniqueIds)
+        {
+            var techniqueData = dataManager.GetItemById(techniqueId).Clone() as TechniqueData;
+            if (techniqueData != null)
+            {
+                hero.techniqueDatas.Add(techniqueData);
+            }
+        }
+
         hero.equipmentIds = dto.equipmentIds != null
             ? new List<string>(dto.equipmentIds)
             : new List<string>();

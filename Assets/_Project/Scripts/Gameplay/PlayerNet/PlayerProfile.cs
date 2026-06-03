@@ -106,7 +106,7 @@ public class PlayerProfile : TGTHNetworkBehaviour
     {
         playerResource.linhThach = (int)resourceStorage.SpiritStone.Value;
 
-        if (!IsServer) return;
+        if (!IsOwner) return;
 
         if (profileUser == null) return;
         profileUser.coins = resourceStorage.SpiritStone.Value;

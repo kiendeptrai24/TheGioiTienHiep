@@ -65,8 +65,7 @@ public class WorldClickSystem : TGTHMonoBehaviour
             var pos = pathFollowerRB.transform.position;
             if (NavMeshPathUtility.TryGetCorners(pos, hitGround.point, out List<Vector3> orners))
             {
-                pathFollowerRB.SetPath(orners);
-                pathFollowerRB.Move();
+                pathFollowerRB.RequesMove(orners);
                 ShowClickEffect(hitGround.point);
                 PathVisualizer.Instance.Draw(orners);
             }

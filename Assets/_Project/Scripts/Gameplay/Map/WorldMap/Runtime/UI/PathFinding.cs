@@ -93,8 +93,7 @@ public class PathFinding : Singleton<PathFinding>
     {
         if (follower != null)
         {
-            follower.SetPath(corners);
-            follower.Move();
+            follower.RequesMove(corners);
         }
     }
     public static void SimplifyInPlace(List<GridCoord> path)

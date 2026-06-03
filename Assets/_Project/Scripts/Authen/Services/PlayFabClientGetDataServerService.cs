@@ -1,18 +1,16 @@
 using System;
 using Newtonsoft.Json;
 using PlayFab;
-using PlayFab.ServerModels;
+using PlayFab.ClientModels;
 using UnityEngine;
 
-public class PlayFabDataServerService
+public class PlayFabClientGetDataServerService
 {
-    private readonly PlayFabServerInstanceAPI serverApi;
+    private readonly PlayFabClientInstanceAPI ClientApi;
 
-    public PlayFabDataServerService()
+    public PlayFabClientGetDataServerService(PlayFabClientInstanceAPI clientApi)
     {
-        PlayFabSettings.staticSettings.TitleId = "B7AF4";
-        PlayFabSettings.staticSettings.DeveloperSecretKey = "KAUNR9RMDSAGJ5693H1NJ8SFJ5JFSFSSW5PEP4MXBA9RHXDD9F";
-        this.serverApi = new PlayFabServerInstanceAPI(PlayFabSettings.staticSettings);
+        this.ClientApi = clientApi;
     }
 
     #region Public Load Methods
@@ -28,7 +26,7 @@ public class PlayFabDataServerService
     {
         try
         {
-            serverApi.GetTitleData(
+            ClientApi.GetTitleData(
                 new GetTitleDataRequest(),
                 result =>
                 {
