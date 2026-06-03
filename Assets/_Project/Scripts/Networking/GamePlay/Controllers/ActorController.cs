@@ -128,6 +128,7 @@ public class ActorController : TGTHNetworkBehaviour
     public void StopServerRpc()
     {
         moveable.Move(Vector2.zero, 0);
+        HandleDirectionChanged(Vector2.zero, Vector2.zero);
     }
 
     protected override void LoadComponent()
