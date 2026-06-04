@@ -2687,6 +2687,7 @@ GameObject:
   - component: {fileID: 8577986828584488616}
   - component: {fileID: -7729955218183709653}
   - component: {fileID: 6104340091819196650}
+  - component: {fileID: 6937620314690135178}
   m_Layer: 12
   m_Name: CharacterBeast
   m_TagString: Untagged
@@ -2707,9 +2708,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3887231376198934139}
   - {fileID: 8911766590105575944}
   - {fileID: 3194784314356852120}
-  - {fileID: 3887231376198934139}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &902700492962400439
@@ -3082,6 +3083,7 @@ MonoBehaviour:
     userId: 
     userName: 
     createdAt: 
+    currentHealth: 0
     coins: 0
     level: 0
     experience: 0
@@ -3224,6 +3226,7 @@ MonoBehaviour:
     spiritDefense: 0
     potentialPoints: 0
     isCharacter: 0
+    healthPersent: 0
     characterId: 
     realmData:
       instanceId: 
@@ -3642,6 +3645,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
   ShowTopMostFoldoutHeaderGroup: 1
   items: []
+--- !u!114 &6937620314690135178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8546c4e31692c04f99dff1dc6986684, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  ShowTopMostFoldoutHeaderGroup: 1
+  MaxHealth:
+    m_InternalValue: 0
+  CurrentHealth:
+    m_InternalValue: 1
 --- !u!1 &7810243676748849088
 GameObject:
   m_ObjectHideFlags: 0

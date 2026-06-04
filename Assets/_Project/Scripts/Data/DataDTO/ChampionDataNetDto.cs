@@ -6,6 +6,7 @@ using UnityEngine;
 public class ChampionDataNetDto : BaseDataNetDto
 {
     public bool isCharacter;
+    public float healthPersent;
     public string raceId;
     public string essenceId;
     public string realmId;

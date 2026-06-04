@@ -55,6 +55,10 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         var heroRoster = playerObj.GetComponent<PlayerBattleRoster>();
         var enemyRoster = enemyObj.GetComponent<PlayerBattleRoster>();
 
+        float heroHealthPersent = GetHealthPercent(heroRoster.itemDatas);
+        float enemyHealthPersent = GetHealthPercent(enemyRoster.itemDatas);
+
+
         List<UnitInput> enemySnaps = new();
         List<UnitInput> heroSnaps = new();
         Board board = new Board
@@ -71,7 +75,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         {
             if (itemData == null) continue;
             stats.SetUp(itemData);
-            var snap = SnapshotMapper.FromStats(stats, TeamId.Heroes);
+            var snap = SnapshotMapper.FromStats(stats, TeamId.Heroes, heroHealthPersent);
             Vector2Int pos = (stats.heroData as HeroData).championIndex;
             pos = boardGrid.ClampToValidCell(pos);
 
@@ -86,7 +90,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             if (itemData == null) continue;
             stats.SetUp(itemData);
 
-            var snap = SnapshotMapper.FromStats(stats, TeamId.Enemies);
+            var snap = SnapshotMapper.FromStats(stats, TeamId.Enemies, enemyHealthPersent);
 
             Vector2Int pos = (stats.heroData as HeroData).championIndex;
 
@@ -110,7 +114,32 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             var ev = res.events[i];
             dto[i] = BattleEventMapper.ToDTO(ev);
         }
-
+        var playerHealth = playerNet.gameObject.GetComponent<PlayerHealth>();
+        var enemyHealth = enemyNO.gameObject.GetComponent<PlayerHealth>();
+        if (res.winner == TeamId.Heroes)
+        {
+            if (playerNet.IsPlayerObject)
+            {
+                if (playerHealth != null)
+                {
+                    ApplyCharacterHealthRatioFromBattle(heroRoster.itemDatas, res.events, playerHealth);
+                }
+            }
+            if (enemyNO.IsPlayerObject)
+                enemyHealth.ResetHealth();
+        }
+        else
+        {
+            if (enemyNO.IsPlayerObject)
+            {
+                if (enemyHealth != null)
+                {
+                    ApplyCharacterHealthRatioFromBattle(enemyRoster.itemDatas, res.events, enemyHealth);
+                }
+            }
+            if (playerNet.IsPlayerObject)
+                playerHealth.ResetHealth();
+        }
         result?.Invoke(res.winner == TeamId.Heroes);
 
         // RewardsAndPunishments(res.winner, playerObj, enemyObj);
@@ -121,6 +150,97 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
                 Send = new ClientRpcSendParams { TargetClientIds = new[] { playerNet.OwnerClientId } }
             });
     }
+
+    private float GetHealthPercent(List<ItemData> itemDatas)
+    {
+        float persent = 1f;
+        foreach (var itemData in itemDatas)
+        {
+            if (itemData is HeroData heroData && heroData.isCharacter)
+            {
+                if (heroData.healthPersent > 0)
+                    persent = heroData.healthPersent;
+            }
+        }
+        return persent;
+    }
+
+    private void ApplyCharacterHealthRatioFromBattle(List<ItemData> itemDatas, List<BattleEvent> events, PlayerHealth playerHealth)
+    {
+        if (itemDatas == null || events == null || playerHealth == null) return;
+
+        // Find character UID and HeroData
+        string characterUid = null;
+        HeroData playerCharacter = null;
+        foreach (var itemData in itemDatas)
+        {
+            if (itemData is HeroData heroData && heroData.isCharacter)
+            {
+                characterUid = heroData.instanceId;
+                playerCharacter = heroData;
+                break;
+            }
+        }
+
+        if (characterUid == null || playerCharacter == null) return;
+
+        // Find character's max HP from BattleEventInit
+        int characterMaxHp = -1;
+        int characterInitialHp = -1;
+
+        foreach (var ev in events)
+        {
+            if (ev is BattleEventInit initEv && initEv.ownerUid == characterUid)
+            {
+                characterMaxHp = initEv.maxHp;
+                characterInitialHp = initEv.curtHp;
+                break;
+            }
+        }
+
+        if (characterMaxHp <= 0) return;
+
+        // Find final HP from attack/skill events
+        int finalHp = characterInitialHp;
+        foreach (var ev in events)
+        {
+            if (ev is BattleEventDealth deathEv && deathEv.targetUid == characterUid)
+            {
+                finalHp = 0;
+                break;
+            }
+
+            if (ev is BattleEventAttack atkEv && atkEv.targetUid == characterUid)
+            {
+                finalHp = atkEv.targetHpAfter;
+            }
+            else if (ev is BattleEventSkill skillEv && skillEv.targetUid == characterUid)
+            {
+                finalHp = skillEv.targetHpAfter;
+            }
+        }
+
+        // Calculate health ratio from battle result
+        float healthRatio = Mathf.Clamp01((float)finalHp / characterMaxHp);
+
+        // Get player's character current max health (after all stat modifiers)
+        stats.SetUp(playerCharacter);
+        int playerMaxHp = stats.Health;
+
+        if (playerMaxHp <= 0) return;
+
+        // Apply ratio to player's character
+        int newCurrentHealth = Mathf.RoundToInt(playerMaxHp * healthRatio);
+        if (playerHealth.GetCurHealth() <= newCurrentHealth)
+        {
+            playerHealth.ResetHealth();
+        }
+        else
+        {
+            playerHealth.SetCurrentHealth(newCurrentHealth);
+        }
+    }
+
     [ClientRpc]
     private void SendReplayToClientClientRpc(string namePlayer, string nameEnemy, string winner, float duration, BattleEventDTO[] events, ClientRpcParams rpcParams = default)
     {

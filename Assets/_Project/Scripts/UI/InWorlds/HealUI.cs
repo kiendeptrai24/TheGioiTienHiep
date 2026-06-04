@@ -18,10 +18,9 @@ public class HealUI : TGTHMonoBehaviour
         Transform healUI = Instantiate(healUIPrefab, parent);
         m_healSlider = healUI.GetComponent<Slider>();
         m_controller.OnHealthChanged += OnHealthChanged;
-
     }
 
-    private void OnHealthChanged(float curheal, float maxheal)
+    public void OnHealthChanged(float maxheal, float curheal)
     {
         float percent = maxheal > 0 ? curheal / maxheal : 0;
         m_healSlider.value = percent;

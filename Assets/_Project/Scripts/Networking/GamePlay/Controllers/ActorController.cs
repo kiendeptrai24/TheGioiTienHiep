@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -23,7 +24,7 @@ public class ActorController : TGTHNetworkBehaviour
     private bool _autoMove;
     private Vector2 _autoDir;
     Vector2 inputDirection = Vector2.zero;
-
+    private bool lockMove = false;
     private NetworkTransform nt;
     public NetworkVariable<Vector2> Direction = new(
         Vector2.zero,
@@ -73,18 +74,29 @@ public class ActorController : TGTHNetworkBehaviour
     public void TelePort(Vector3 pos, Quaternion rot, Vector3 scale)
     {
         if (!IsServer) return;
-        StopServerRpc();
+        StartCoroutine(TeleportRoutine(pos, rot, scale));
+    }
+    private IEnumerator TeleportRoutine(Vector3 pos, Quaternion rot, Vector3 scale)
+    {
+        lockMove = true;
+
+        // dừng Rigidbody trước
+        rig.linearVelocity = Vector3.zero;
+        rig.angularVelocity = Vector3.zero;
+        yield return new WaitForFixedUpdate();
+        // yield return new WaitUntil(() => rig.linearVelocity.sqrMagnitude < 0.0001f);
+
         nt.Teleport(pos, rot, scale);
+
+        lockMove = false;
     }
     private void FixedUpdate()
     {
         if (currentState == ActorState.TopDown)
             TopDownControl();
     }
-
     private void TopDownControl()
     {
-
         if (IsOwner)
         {
             inputDirection = inputManager.GetInputDirection();
@@ -111,6 +123,7 @@ public class ActorController : TGTHNetworkBehaviour
     private void Move(Vector2 dir)
     {
         if (!IsServer) return;
+        if (lockMove) return;
         OldDirection.Value = Direction.Value;
         Direction.Value = dir;
         if (dir.sqrMagnitude < 0.1f)

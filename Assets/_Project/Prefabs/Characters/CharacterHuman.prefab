@@ -3328,6 +3328,7 @@ GameObject:
   - component: {fileID: -1377695170422594978}
   - component: {fileID: 1371157288809451575}
   - component: {fileID: 6401372808620458959}
+  - component: {fileID: -8215490819218276427}
   m_Layer: 12
   m_Name: CharacterHuman
   m_TagString: Untagged
@@ -3348,9 +3349,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8811531586249529531}
   - {fileID: 4414435277721914465}
   - {fileID: 8279183739729998315}
-  - {fileID: 8811531586249529531}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &902700492962400439
@@ -3365,7 +3366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1712619535
+  GlobalObjectIdHash: 1361219789
   InScenePlacedSourceGlobalObjectIdHash: 1361219789
   DeferredDespawnTick: 0
   Ownership: 1
@@ -3722,6 +3723,8 @@ MonoBehaviour:
   profileUser:
     userId: 
     userName: 
+    createdAt: 
+    currentHealth: 0
     coins: 0
     level: 0
     experience: 0
@@ -3864,6 +3867,7 @@ MonoBehaviour:
     spiritDefense: 0
     potentialPoints: 0
     isCharacter: 0
+    healthPersent: 0
     characterId: 
     realmData:
       instanceId: 
@@ -4282,6 +4286,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
   ShowTopMostFoldoutHeaderGroup: 1
   items: []
+--- !u!114 &-8215490819218276427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8546c4e31692c04f99dff1dc6986684, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  ShowTopMostFoldoutHeaderGroup: 1
+  MaxHealth:
+    m_InternalValue: 0
+  CurrentHealth:
+    m_InternalValue: 1
 --- !u!1 &7864471520336945061
 GameObject:
   m_ObjectHideFlags: 0

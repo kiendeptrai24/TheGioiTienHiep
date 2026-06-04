@@ -28,6 +28,7 @@ public class SaveProfileClient : ISaveGameData<GameData, PlayerClientDataDto>
             {
                 characterId = gameData.characterId,
                 coins = gameData.coins,
+                currentHealth = gameData.currentHealth,
                 playerName = gameData.characterName,
                 createdAt = gameData.createdAt,
                 position = posDTO,

@@ -210,6 +210,8 @@ public static class EnumTranslator
         { ItemType.Equipment, "Trang bị" },
         { ItemType.Technique, "Công pháp" },
         { ItemType.Skill, "Kỹ năng" },
+        { ItemType.Champion, "Tướng" },
+        { ItemType.Pill, "Đan dược" },
         { ItemType.Other, "Khác" },
 
         // QualityType

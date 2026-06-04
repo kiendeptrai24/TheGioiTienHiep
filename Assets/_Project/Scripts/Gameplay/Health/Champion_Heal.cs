@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Champion_Heal : TGTHMonoBehaviour, HealthController
 {
-    private StatsData stats;
     public int maxHealth;
     public int currentHealth;
     public int damageMultiplier = 1;
@@ -16,16 +15,29 @@ public class Champion_Heal : TGTHMonoBehaviour, HealthController
     protected override void Awake()
     {
         base.Awake();
-        stats = GetComponent<StatsData>();
-        stats.OnStatReady += OnStatReady;
+    }
+    protected override void Start()
+    {
+        base.Start();
+    }
+    public void Setup(int maxHealth, int currentHealth)
+    {
+        isDead = false;
+        this.maxHealth = maxHealth;
+        this.currentHealth = currentHealth;
+        NotifyHealthChange();
     }
     public void DecreaseHealth(float damage, ulong attackerId)
     {
         if (ShouldDie())
             return;
         currentHealth = Mathf.RoundToInt(Mathf.Max(0, currentHealth - (damage * damageMultiplier)));
-        OnHealthChanged?.Invoke(currentHealth, maxHealth);
+        NotifyHealthChange();
         ShouldDie();
+    }
+    private void NotifyHealthChange()
+    {
+        OnHealthChanged?.Invoke(maxHealth, currentHealth);
     }
 
     public float GetCurHealth()
@@ -44,16 +56,8 @@ public class Champion_Heal : TGTHMonoBehaviour, HealthController
             return;
         int previous = currentHealth;
         int current = currentHealth++;
-        OnHealthChanged?.Invoke(current, maxHealth);
+        NotifyHealthChange();
     }
-    public void OnStatReady(StatsData _stats)
-    {
-        maxHealth = Mathf.RoundToInt(stats.Health);
-        currentHealth = maxHealth;
-        isDead = false;
-        OnHealthChanged?.Invoke(currentHealth, maxHealth);
-    }
-
     public bool ShouldDie()
     {
         if (currentHealth <= 0)
@@ -67,5 +71,10 @@ public class Champion_Heal : TGTHMonoBehaviour, HealthController
             return true;
         }
         return false;
+    }
+
+    public void OnStatReady(StatsData _stats)
+    {
+
     }
 }

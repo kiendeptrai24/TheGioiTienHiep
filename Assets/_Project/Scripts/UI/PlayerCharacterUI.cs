@@ -22,13 +22,18 @@ public class PlayerCharacterUI : TGTHNetworkBehaviour
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Owner
     );
-
     protected override void Awake()
     {
         base.Awake();
         PlayerProfile profile = GetComponent<PlayerProfile>();
         profile.OnPlayerNameChange += OnPlayerNameChanged;
+        PlayerHealth playerHealth = GetComponent<PlayerHealth>();
+        playerHealth.OnHealthChanged += OnHealthChanged;
+    }
 
+    private void OnHealthChanged(int maxHealth, int currentHealth)
+    {
+        SetProcessBar(maxHealth, currentHealth);
     }
 
     private void OnPlayerNameChanged(string value)
@@ -43,6 +48,7 @@ public class PlayerCharacterUI : TGTHNetworkBehaviour
     private void SetProcessBar(float max, float cur)
     {
         uIProgressBar.fillAmount = cur / max;
+        healthTxt.text = cur.ToString();
     }
     public override void OnNetworkSpawn()
     {
@@ -77,8 +83,8 @@ public class PlayerCharacterUI : TGTHNetworkBehaviour
         stats.SetUpItem(data);
         levelTxt.text = EnumTranslator.ToVietnameseAcronym(data.realmType);
         nameTxt.text = data.itemName;
-        healthTxt.text = stats.Health.ToString();
-        SetProcessBar(stats.Health, stats.Health);
+        healthTxt.text = data.health.ToString();
+        SetProcessBar(data.health, data.health);
     }
 
 }

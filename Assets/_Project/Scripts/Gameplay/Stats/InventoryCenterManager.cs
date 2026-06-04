@@ -90,7 +90,6 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     #endregion
 
     public event Action<ItemData> OnItemPlayerChanged;
-    public event Action<List<ItemData>> OnItemCharacterChanged;
 
     private bool isItemChange = false;
     private bool isEquitmentChange = false;
@@ -107,7 +106,12 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public void SetItemChampionData(List<ItemData> data)
     {
         listItemDatasChampionInTeam = data;
-        OnListItemDatasChampionChanged?.Invoke(data);
+        NotifyListItemDatasChampionChanged();
+    }
+    public void NotifyListItemDatasChampionChanged()
+    {
+        OnListItemDatasChampionChanged?.Invoke(listItemDatasChampionInTeam);
+        
     }
     public void ItemPlayerChanged(ItemData item)
     {

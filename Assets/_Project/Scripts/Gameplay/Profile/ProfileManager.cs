@@ -27,10 +27,19 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
     {
         var relinker = playerNet.GetComponent<PlayerMineRelinker>();
         var playerProfile = playerNet.GetComponent<PlayerProfile>();
+        var playerHealth = playerNet.GetComponent<PlayerHealth>();
+
         playerProfile.OnProfileChanged += NotiProfileChanged;
-        
         relinker.OnResourceIdsChanged += OnResourceIdsChanged;
+        playerHealth.OnHealthChanged += OnHealthChanged;
     }
+
+    private void OnHealthChanged(int maxHealth, int currentHealth)
+    {
+        profileUser.currentHealth = currentHealth;
+        NotiProfileChanged();
+    }
+
     private void OnResourceIdsChanged(List<ulong> list) => resourceIds = list;
     private void NotiProfileChanged() => OnProfileChanged?.Invoke(profileUser);
 
@@ -57,6 +66,7 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
         profileUser.coins = _data.coins;
         profileUser.userId = _data.characterId;
         profileUser.createdAt = _data.createdAt;
+        profileUser.currentHealth = _data.currentHealth;
         profileUser.potentialPoint = _data.potentialPoint;
         profileUser.skillPoint = _data.skillPoint;
         profileUser.itemDataPoint = _data.itemDataPoint;
@@ -68,6 +78,7 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
     {
         _data.mineOfflineDataList.Clear();
         _data.coins = profileUser.coins;
+        _data.currentHealth = profileUser.currentHealth;
         _data.characterName = profileUser.userName;
         _data.potentialPoint = profileUser.potentialPoint;
         _data.skillPoint = profileUser.skillPoint;

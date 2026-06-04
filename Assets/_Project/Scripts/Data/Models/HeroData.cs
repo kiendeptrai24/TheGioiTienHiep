@@ -7,6 +7,7 @@ using UnityEngine;
 public class HeroData : ItemData
 {
     public bool isCharacter;
+    public float healthPersent;
     public string characterId;
     [JsonIgnore]
     public RealmData realmData;

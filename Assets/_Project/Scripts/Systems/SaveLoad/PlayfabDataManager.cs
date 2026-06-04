@@ -264,7 +264,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         SceneLoadManager.Instance.LoadSceneLoading();
         LoadGameData(() =>
         {
-            NetworkManager.Singleton.StartClient();
+            NetworkManager.Singleton.StartHost();
             SceneLoadManager.Instance.UnLoadScene("LoadingScene");
         });
     }

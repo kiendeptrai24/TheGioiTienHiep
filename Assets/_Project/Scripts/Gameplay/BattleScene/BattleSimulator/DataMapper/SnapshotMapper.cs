@@ -3,9 +3,10 @@ using UnityEngine;
 
 public static class SnapshotMapper
 {
-    public static UnitInput FromStats(StatsDataCore s, TeamId team)
+    public static UnitInput FromStats(StatsDataCore s, TeamId team, float persent = 1f)
     {
-        int hp = s.Health;
+        int hpMax = s.Health;
+        int hp = Mathf.RoundToInt(hpMax * persent);
 
         var heroData = s.heroData as HeroData;
         List<SkillData> skills = heroData != null ? heroData.skillDatas : new List<SkillData>();
@@ -15,7 +16,7 @@ public static class SnapshotMapper
             {
                 uid = heroData.instanceId,
                 team = team,
-                hpMax = hp,
+                hpMax = hpMax,
                 hp = hp,
                 manaMax = s.Mana,
                 mana = s.Mana,

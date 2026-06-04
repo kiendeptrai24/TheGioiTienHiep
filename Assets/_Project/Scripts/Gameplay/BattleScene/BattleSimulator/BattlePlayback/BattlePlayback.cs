@@ -106,6 +106,8 @@ public class BattlePlayback : Singleton<BattlePlayback>
             var chamAnim = cham.GetComponent<ChampionAnimationPlayback>();
             var statData = cham.GetComponent<StatsData>();
             var aiMovement = cham.GetComponent<AIChampionMovement>();
+            var chamHeal = cham.GetComponent<Champion_Heal>();
+
             aiMovement.Setspeed(eventInit.moveSpeed);
             var championData = GameDataCenterManager.Instance.GetItemById(eventInit.ownerUid);
             HeroData heroData = championData as HeroData;
@@ -127,6 +129,7 @@ public class BattlePlayback : Singleton<BattlePlayback>
                 skillData.skillEffectPrefab = skillsObject[skillData.instanceId].skillPrefab;
             }
             statData.SetUpItem(championData);
+            chamHeal.Setup(eventInit.maxHp, eventInit.curtHp);
             chamAnim.GetComponent<ChampionController>().SetTeamId((int)eventInit.team);
             if (eventInit.team == TeamId.Heroes)
                 champions.Add(eventInit.ownerUid, chamAnim);

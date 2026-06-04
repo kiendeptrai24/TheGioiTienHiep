@@ -8,6 +8,7 @@ public class ProfileUser
     public string userId;
     public string userName;
     public string createdAt;
+    public int currentHealth;
     public ulong coins;
     public int level;
     public int experience;

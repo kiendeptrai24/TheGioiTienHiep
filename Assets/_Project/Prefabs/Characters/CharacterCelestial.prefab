@@ -3158,6 +3158,7 @@ GameObject:
   - component: {fileID: 8713735284015828556}
   - component: {fileID: -3666458900960021305}
   - component: {fileID: 6925326242308054096}
+  - component: {fileID: 8323472676564368125}
   m_Layer: 12
   m_Name: CharacterCelestial
   m_TagString: Untagged
@@ -3195,7 +3196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4105467389
+  GlobalObjectIdHash: 2346034102
   InScenePlacedSourceGlobalObjectIdHash: 2346034102
   DeferredDespawnTick: 0
   Ownership: 1
@@ -3552,6 +3553,8 @@ MonoBehaviour:
   profileUser:
     userId: 
     userName: 
+    createdAt: 
+    currentHealth: 0
     coins: 0
     level: 0
     experience: 0
@@ -4112,6 +4115,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
   ShowTopMostFoldoutHeaderGroup: 1
   items: []
+--- !u!114 &8323472676564368125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804178499550283321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8546c4e31692c04f99dff1dc6986684, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  ShowTopMostFoldoutHeaderGroup: 1
+  MaxHealth:
+    m_InternalValue: 0
+  CurrentHealth:
+    m_InternalValue: 1
 --- !u!1 &7819465943574322660
 GameObject:
   m_ObjectHideFlags: 0

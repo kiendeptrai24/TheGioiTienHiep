@@ -10,6 +10,8 @@ public class GameData
     public string createdAt;
     public Vector3 position;
     public Quaternion rotation;
+    public int currentHealth;
+    public int maxHealth;
     public ulong coins;
     public int potentialPoint;
     public int skillPoint;
@@ -41,6 +43,8 @@ public class GameData
         coins = 0;
         potentialPoint = 0;
         skillPoint = 0;
+        currentHealth = 0;
+        maxHealth = 0;
         itemDatas.Clear();
         itemUsedDatas.Clear();
         itemChampionInTeamDatas.Clear();
