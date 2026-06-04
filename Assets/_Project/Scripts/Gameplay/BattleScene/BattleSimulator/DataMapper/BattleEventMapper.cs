@@ -56,6 +56,9 @@ public static class BattleEventMapper
                 dto.targetHpAfter = s.targetHpAfter;
                 dto.castTime = s.castTime;
                 dto.skillId0 = s.skillId;
+                dto.costHealth = s.healthCost;
+                dto.costMana = s.manaCost;
+                dto.costSpirit = s.spiritCost;
                 break;
 
             case BattleEventAttack a:
@@ -76,8 +79,12 @@ public static class BattleEventMapper
             case BattleEventInit b:
                 dto.cell = b.cell;
                 dto.maxHp = b.maxHp;
-                dto.moveSpeed = b.moveSpeed;
                 dto.curHp = b.curtHp;
+                dto.maxMana = b.maxMana;
+                dto.curMana = b.curMana;
+                dto.maxSpirit = b.maxSpirit;
+                dto.curSpirit = b.curSpirit;
+                dto.moveSpeed = b.moveSpeed;
                 for (int i = 0; i < b.skillIds.Count; i++)
                 {
                     if (i == 0)
@@ -101,6 +108,23 @@ public static class BattleEventMapper
                         dto.skillId4 = b.skillIds[i];
                     }
                 }
+                break;
+            case BattleEventEnd e:
+                dto.heroIsPlayerObject = e.heroIsPlayerObject;
+                dto.enemyIsPlayerObject = e.enemyIsPlayerObject;
+                dto.maxHealthPlayer1 = e.maxHealthHero;
+                dto.maxManaPlayer1 = e.maxManaHero;
+                dto.maxSpiritPlayer1 = e.maxSpiritHero;
+                dto.curHealthPlayer1 = e.curHealthHero;
+                dto.curManaPlayer1 = e.curManaHero;
+                dto.curSpiritPlayer1 = e.curSpiritHero;
+
+                dto.maxHealthPlayer2 = e.maxHealthEnemy;
+                dto.maxManaPlayer2 = e.maxManaEnemy;
+                dto.maxSpiritPlayer2 = e.maxSpiritEnemy;
+                dto.curHealthPlayer2 = e.curHealthEnemy;
+                dto.curManaPlayer2 = e.curManaEnemy;
+                dto.curSpiritPlayer2 = e.curSpiritEnemy;
                 break;
             default:
                 // nothing extra
@@ -141,6 +165,9 @@ public static class BattleEventMapper
                     isCrit = dto.isCrit,
                     targetHpAfter = dto.targetHpAfter,
                     skillId = dto.skillId0,
+                    healthCost = dto.costHealth,
+                    manaCost = dto.costMana,
+                    spiritCost = dto.costSpirit
                 };
 
             case BattleEventType.Attack:
@@ -193,16 +220,47 @@ public static class BattleEventMapper
                     type = dto.type,
                     maxHp = dto.maxHp,
                     curtHp = dto.curHp,
+                    maxMana = dto.maxMana,
+                    curMana = dto.curMana,
+                    maxSpirit = dto.maxSpirit,
+                    curSpirit = dto.curSpirit,
+                    moveSpeed = dto.moveSpeed,
                     skillIds = skillIds
                 };
-            default:
+            case BattleEventType.Start:
                 return new BattleEvent
                 {
                     time = dto.t,
                     type = dto.type,
                     team = dto.team,
-                    ownerUid = dto.ownerUid,
+                    ownerUid = dto.ownerUid
                 };
+            case BattleEventType.End:
+                return new BattleEventEnd
+                {
+                    time = dto.t,
+                    type = dto.type,
+                    team = dto.team,
+                    ownerUid = dto.ownerUid,
+                    heroIsPlayerObject = dto.heroIsPlayerObject,
+                    enemyIsPlayerObject = dto.enemyIsPlayerObject,
+
+                    maxHealthHero = dto.maxHealthPlayer1,
+                    maxManaHero = dto.maxManaPlayer1,
+                    maxSpiritHero = dto.maxSpiritPlayer1,
+                    curHealthHero = dto.curHealthPlayer1,
+                    curManaHero = dto.curManaPlayer1,
+                    curSpiritHero = dto.curSpiritPlayer1,
+
+                    maxHealthEnemy = dto.maxHealthPlayer2,
+                    maxManaEnemy = dto.maxManaPlayer2,
+                    maxSpiritEnemy = dto.maxSpiritPlayer2,
+                    curHealthEnemy = dto.curHealthPlayer2,
+                    curManaEnemy = dto.curManaPlayer2,
+                    curSpiritEnemy = dto.curSpiritPlayer2,
+                };
+            default:
+                return null;
         }
     }
 }

@@ -39,12 +39,9 @@ public class SkillData : ItemData
     // RESOURCE COST
     // ============================
     [Header("Resource Cost")]
-    [JsonIgnore]
-    public float healthCost;             // Tiêu hao sinh lực
-    [JsonIgnore]
-    public float manaCost;               // Tiêu hao linh lực
-    [JsonIgnore]
-    public float spiritCost;             // Tiêu hao linh thức
+    public int healthCost;             // Tiêu hao sinh lực
+    public int manaCost;               // Tiêu hao linh lực
+    public int spiritCost;             // Tiêu hao linh thức
 
     // ============================
     // LEARN CONDITIONS

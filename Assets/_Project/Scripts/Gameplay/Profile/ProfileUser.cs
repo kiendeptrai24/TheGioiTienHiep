@@ -9,6 +9,8 @@ public class ProfileUser
     public string userName;
     public string createdAt;
     public int currentHealth;
+    public int currentMana;
+    public int currentSpirit;
     public ulong coins;
     public int level;
     public int experience;
@@ -17,6 +19,7 @@ public class ProfileUser
     public ItemDataPoint itemDataPoint;
     public PlayerResource playerResource;
     private List<string> listFriend;
+
     public ProfileUser(string userId, string userName, string createdAt)
     {
         this.userId = userId;

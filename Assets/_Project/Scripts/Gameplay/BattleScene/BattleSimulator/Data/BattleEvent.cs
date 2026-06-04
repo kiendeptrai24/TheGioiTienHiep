@@ -35,6 +35,9 @@ public class BattleEventAttack : BattleEvent
 [Serializable]
 public class BattleEventSkill : BattleEventAttack
 {
+    public int healthCost;
+    public int manaCost;
+    public int spiritCost;
     public string skillId;
 }
 
@@ -53,6 +56,30 @@ public class BattleEventInit : BattleEvent
     public Vector2Int cell;
     public int maxHp;
     public int curtHp;
+    public int maxMana;
+    public int curMana;
+    public int maxSpirit;
+    public int curSpirit;
     public int moveSpeed;
     public List<string> skillIds = new();
+}
+
+[Serializable]
+public class BattleEventEnd : BattleEvent
+{
+    public bool heroIsPlayerObject;
+    public int maxHealthHero;
+    public int maxManaHero;
+    public int maxSpiritHero;
+    public int maxSpiritEnemy;
+    public int curHealthHero;
+    public int curManaHero;
+
+    public bool enemyIsPlayerObject;
+    public int maxHealthEnemy;
+    public int maxManaEnemy;
+    public int curSpiritHero;
+    public int curHealthEnemy;
+    public int curManaEnemy;
+    public int curSpiritEnemy;
 }

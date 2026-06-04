@@ -17,7 +17,7 @@ public class LoadChampionInventoryClient : ILoadGameData<GameData, PlayerClientD
             foreach (var championDto in playerClientDataDto.championInInventoryRes)
             {
 
-                var heroDataBase = dataManager.GetItemById(championDto.instanceId)as HeroData;
+                var heroDataBase = dataManager.GetItemById(championDto.instanceId) as HeroData;
                 if (heroDataBase != null)
                 {
                     IsCharacter(dataManager, championDto, heroDataBase);
@@ -76,7 +76,7 @@ public class LoadChampionInventoryClient : ILoadGameData<GameData, PlayerClientD
             return;
         }
         var dataManager = GameDataCenterManager.Instance;
-        if(championDto.isCharacter.HasValue && championDto.isCharacter.Value)
+        if (championDto.isCharacter.HasValue && championDto.isCharacter.Value)
         {
             foreach (var techniqueId in championDto.techniqueIds)
             {

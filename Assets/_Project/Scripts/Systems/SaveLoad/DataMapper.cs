@@ -28,6 +28,8 @@ public static class DataMapper
         heroData.healthPoint = dto.healthPoint;
         heroData.manaPoint = dto.manaPoint;
         heroData.spiritPoint = dto.spiritPoint;
+        heroData.healthPersent = dto.healthPersent;
+        heroData.manaPersent = dto.manaPersent;
 
         heroData.physicalDamagePoint = dto.physicalDamagePoint;
         heroData.magicalDamagePoint = dto.magicalDamagePoint;
@@ -321,6 +323,8 @@ public static class DataMapper
             healthPoint = data.healthPoint,
             manaPoint = data.manaPoint,
             spiritPoint = data.spiritPoint,
+            healthPersent = data.healthPersent,
+            manaPersent = data.manaPersent,
 
             physicalDamagePoint = data.physicalDamagePoint,
             magicalDamagePoint = data.magicalDamagePoint,

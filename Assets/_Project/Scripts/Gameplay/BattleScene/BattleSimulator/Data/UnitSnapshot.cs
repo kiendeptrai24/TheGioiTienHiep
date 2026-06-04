@@ -6,6 +6,7 @@ public enum TeamId : byte { Heroes = 0, Enemies = 1 }
 [Serializable]
 public class UnitSnapshot
 {
+    public bool isChacater;
     public float startActionTime; // dùng để sắp xếp action giữa các tick, vd: unit nào có startActionTime nhỏ hơn sẽ hành động trước
     public float animationEndTime; 
     public float nextActionTime; // dùng để sắp xếp action trong 1 tick, vd: move trước rồi attack sau
@@ -15,6 +16,8 @@ public class UnitSnapshot
     public int hp;
     public int manaMax;
     public int mana;
+    public int spiritMax;
+    public int spirit;
 
     public int physicalDmg;
     public int magicalDmg;

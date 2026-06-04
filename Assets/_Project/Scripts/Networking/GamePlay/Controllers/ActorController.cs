@@ -3,7 +3,6 @@ using System.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
-using WorldMap.UI;
 public enum ActorState
 {
     TopDown,

@@ -455,9 +455,6 @@ public class SkillPreset : ItemPreset
         skillData.specialEffect = specialEffect;
 
         // costs
-        skillData.healthCost = healthCost;
-        skillData.manaCost = manaCost;
-        skillData.spiritCost = spiritCost;
 
         // learn
         skillData.requiredCharacterLevel = requiredCharacterLevel;

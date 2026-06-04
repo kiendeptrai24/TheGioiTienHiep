@@ -60,6 +60,9 @@ public static class BattleCombatResolver
                     isCrit = isCrit,
                     targetHpAfter = def.hp,
                     skillId = skill.instanceId,
+                    healthCost = 0,
+                    manaCost = skill.manaCost,
+                    spiritCost = 0,
                     castTime = skill.castTime
                 });
             }

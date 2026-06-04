@@ -9,8 +9,12 @@ using UnityEngine;
 
 public class PlayerCharacterUI : TGTHNetworkBehaviour
 {
-    [SerializeField] private UIProgressBar uIProgressBar;
+    [SerializeField] private UIProgressBar uIHealthBar;
+    [SerializeField] private UIProgressBar uIManaBar;
+    [SerializeField] private UIProgressBar uIPiritBar;
     [SerializeField] private TextMeshProUGUI healthTxt;
+    [SerializeField] private TextMeshProUGUI manaTxt;
+    [SerializeField] private TextMeshProUGUI spiritTxt;
     [SerializeField] private TextMeshProUGUI nameTxt;
     [SerializeField] private TextMeshProUGUI levelTxt;
     private StatsData stats;
@@ -27,13 +31,41 @@ public class PlayerCharacterUI : TGTHNetworkBehaviour
         base.Awake();
         PlayerProfile profile = GetComponent<PlayerProfile>();
         profile.OnPlayerNameChange += OnPlayerNameChanged;
-        PlayerHealth playerHealth = GetComponent<PlayerHealth>();
-        playerHealth.OnHealthChanged += OnHealthChanged;
+        PlayerVitals playerVitals = GetComponent<PlayerVitals>();
+        playerVitals.OnVitalChanged += OnVitalChanged;
     }
 
-    private void OnHealthChanged(int maxHealth, int currentHealth)
+    private void OnVitalChanged(VitalType type, int maxValue, int curValue)
     {
-        SetProcessBar(maxHealth, currentHealth);
+        switch (type)
+        {
+            case VitalType.Health:
+                SetHealthBar(maxValue, curValue);
+                break;
+            case VitalType.Mana:
+                SetManaBar(maxValue, curValue);
+                break;
+            case VitalType.Spirit:
+                SetSpiritBar(maxValue, curValue);
+                break;
+        }
+    }
+
+    private void SetSpiritBar(int maxValue, int curValue)
+    {
+        uIPiritBar.fillAmount = (float)curValue / (float)maxValue;
+        spiritTxt.text = curValue.ToString();
+    }
+
+    private void SetManaBar(int maxValue, int curValue)
+    {
+        uIManaBar.fillAmount = (float)curValue / (float)maxValue;
+        manaTxt.text = curValue.ToString();
+    }
+    private void SetHealthBar(float maxValue, float curValue)
+    {
+        uIHealthBar.fillAmount = (float)curValue / (float)maxValue;
+        healthTxt.text = curValue.ToString();
     }
 
     private void OnPlayerNameChanged(string value)
@@ -44,11 +76,6 @@ public class PlayerCharacterUI : TGTHNetworkBehaviour
     private void OnProfileChanged(ProfileUser user)
     {
         SetName(user.userName);
-    }
-    private void SetProcessBar(float max, float cur)
-    {
-        uIProgressBar.fillAmount = cur / max;
-        healthTxt.text = cur.ToString();
     }
     public override void OnNetworkSpawn()
     {
@@ -84,7 +111,7 @@ public class PlayerCharacterUI : TGTHNetworkBehaviour
         levelTxt.text = EnumTranslator.ToVietnameseAcronym(data.realmType);
         nameTxt.text = data.itemName;
         healthTxt.text = data.health.ToString();
-        SetProcessBar(data.health, data.health);
+        SetHealthBar(data.health, data.health);
     }
 
 }

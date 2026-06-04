@@ -7,33 +7,39 @@ using UnityEngine.UI;
 
 public class HealUI : TGTHMonoBehaviour
 {
-    [SerializeField] private Slider m_healSlider;
-    [SerializeField] private Transform healUIPrefab;
+    [SerializeField] private ViralUI viralPrefabUI;
+    private ViralUI viralUI;
     [SerializeField] private Transform parent;
-    private HealthController m_controller;
+    private Champion_Heal championViral;
     protected override void Awake()
     {
         base.Awake();
         LoadComponent();
-        Transform healUI = Instantiate(healUIPrefab, parent);
-        m_healSlider = healUI.GetComponent<Slider>();
-        m_controller.OnHealthChanged += OnHealthChanged;
+        viralUI = Instantiate(viralPrefabUI, parent);
+        championViral.OnHealthChanged += OnHealthChanged;
+        championViral.OnManaChanged += OnManaChanged;
+        championViral.OnSpiritChanged += OnSpiritChanged;
+    }
+
+    private void OnManaChanged(float maxheal, float curheal)
+    {
+        viralUI.OnVitalChanged(VitalType.Mana, (int)maxheal, (int)curheal);
+    }
+
+    private void OnSpiritChanged(float maxheal, float curheal)
+    {
+        viralUI.OnVitalChanged(VitalType.Spirit, (int)maxheal, (int)curheal);
     }
 
     public void OnHealthChanged(float maxheal, float curheal)
     {
-        float percent = maxheal > 0 ? curheal / maxheal : 0;
-        m_healSlider.value = percent;
+        viralUI.OnVitalChanged(VitalType.Health, (int)maxheal, (int)curheal);
     }
 
-    protected override void Start()
-    {
-        base.Start();
-    }
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        m_controller = GetComponent<HealthController>();
+        championViral = GetComponent<Champion_Heal>();
     }
 
 

@@ -58,6 +58,11 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         float heroHealthPersent = GetHealthPercent(heroRoster.itemDatas);
         float enemyHealthPersent = GetHealthPercent(enemyRoster.itemDatas);
 
+        float heroManaPersent = GetManaPercent(heroRoster.itemDatas);
+        float enemyManaPersent = GetManaPercent(enemyRoster.itemDatas);
+
+        float heroSpiritPersent = GetSpiritPercent(heroRoster.itemDatas);
+        float enemySpiritPersent = GetSpiritPercent(enemyRoster.itemDatas);
 
         List<UnitInput> enemySnaps = new();
         List<UnitInput> heroSnaps = new();
@@ -75,7 +80,8 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         {
             if (itemData == null) continue;
             stats.SetUp(itemData);
-            var snap = SnapshotMapper.FromStats(stats, TeamId.Heroes, heroHealthPersent);
+            var snap = SnapshotMapper.FromStats(stats, TeamId.Heroes, heroHealthPersent, heroManaPersent, heroHealthPersent);
+
             Vector2Int pos = (stats.heroData as HeroData).championIndex;
             pos = boardGrid.ClampToValidCell(pos);
 
@@ -90,7 +96,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             if (itemData == null) continue;
             stats.SetUp(itemData);
 
-            var snap = SnapshotMapper.FromStats(stats, TeamId.Enemies, enemyHealthPersent);
+            var snap = SnapshotMapper.FromStats(stats, TeamId.Enemies, enemyHealthPersent, enemyManaPersent, enemyHealthPersent);
 
             Vector2Int pos = (stats.heroData as HeroData).championIndex;
 
@@ -114,19 +120,19 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             var ev = res.events[i];
             dto[i] = BattleEventMapper.ToDTO(ev);
         }
-        var playerHealth = playerNet.gameObject.GetComponent<PlayerHealth>();
-        var enemyHealth = enemyNO.gameObject.GetComponent<PlayerHealth>();
+        var playerHealth = playerNet.gameObject.GetComponent<PlayerVitals>();
+        var enemyHealth = enemyNO.gameObject.GetComponent<PlayerVitals>();
         if (res.winner == TeamId.Heroes)
         {
             if (playerNet.IsPlayerObject)
             {
                 if (playerHealth != null)
                 {
-                    ApplyCharacterHealthRatioFromBattle(heroRoster.itemDatas, res.events, playerHealth);
+                    ApplyCharacterViralRatioFromBattle(res.events, playerHealth, res.winner);
                 }
             }
             if (enemyNO.IsPlayerObject)
-                enemyHealth.ResetHealth();
+                enemyHealth.ResetViral();
         }
         else
         {
@@ -134,11 +140,11 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             {
                 if (enemyHealth != null)
                 {
-                    ApplyCharacterHealthRatioFromBattle(enemyRoster.itemDatas, res.events, enemyHealth);
+                    ApplyCharacterViralRatioFromBattle(res.events, enemyHealth, res.winner);
                 }
             }
             if (playerNet.IsPlayerObject)
-                playerHealth.ResetHealth();
+                playerHealth.ResetViral();
         }
         result?.Invoke(res.winner == TeamId.Heroes);
 
@@ -150,6 +156,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
                 Send = new ClientRpcSendParams { TargetClientIds = new[] { playerNet.OwnerClientId } }
             });
     }
+    #region Get Persent
 
     private float GetHealthPercent(List<ItemData> itemDatas)
     {
@@ -164,80 +171,53 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         }
         return persent;
     }
-
-    private void ApplyCharacterHealthRatioFromBattle(List<ItemData> itemDatas, List<BattleEvent> events, PlayerHealth playerHealth)
+    private float GetManaPercent(List<ItemData> itemDatas)
     {
-        if (itemDatas == null || events == null || playerHealth == null) return;
-
-        // Find character UID and HeroData
-        string characterUid = null;
-        HeroData playerCharacter = null;
+        float persent = 1f;
         foreach (var itemData in itemDatas)
         {
             if (itemData is HeroData heroData && heroData.isCharacter)
             {
-                characterUid = heroData.instanceId;
-                playerCharacter = heroData;
-                break;
+                if (heroData.manaPersent > 0)
+                    persent = heroData.manaPersent;
             }
         }
-
-        if (characterUid == null || playerCharacter == null) return;
-
-        // Find character's max HP from BattleEventInit
-        int characterMaxHp = -1;
-        int characterInitialHp = -1;
-
-        foreach (var ev in events)
+        return persent;
+    }
+    private float GetSpiritPercent(List<ItemData> itemDatas)
+    {
+        float persent = 1f;
+        foreach (var itemData in itemDatas)
         {
-            if (ev is BattleEventInit initEv && initEv.ownerUid == characterUid)
+            if (itemData is HeroData heroData && heroData.isCharacter)
             {
-                characterMaxHp = initEv.maxHp;
-                characterInitialHp = initEv.curtHp;
-                break;
+                if (heroData.spiritPersent > 0)
+                    persent = heroData.spiritPersent;
             }
         }
+        return persent;
+    }
 
-        if (characterMaxHp <= 0) return;
+    #endregion
 
-        // Find final HP from attack/skill events
-        int finalHp = characterInitialHp;
-        foreach (var ev in events)
+    private void ApplyCharacterViralRatioFromBattle(List<BattleEvent> events, PlayerVitals playerVital, TeamId winner)
+    {
+        var battleEvent = events.Find(x => x.type == BattleEventType.End);
+        if (battleEvent == null || battleEvent is BattleEventEnd == false) return;
+        var battleEventEnd = (BattleEventEnd)battleEvent;
+        if (winner == TeamId.Heroes)
         {
-            if (ev is BattleEventDealth deathEv && deathEv.targetUid == characterUid)
-            {
-                finalHp = 0;
-                break;
-            }
-
-            if (ev is BattleEventAttack atkEv && atkEv.targetUid == characterUid)
-            {
-                finalHp = atkEv.targetHpAfter;
-            }
-            else if (ev is BattleEventSkill skillEv && skillEv.targetUid == characterUid)
-            {
-                finalHp = skillEv.targetHpAfter;
-            }
-        }
-
-        // Calculate health ratio from battle result
-        float healthRatio = Mathf.Clamp01((float)finalHp / characterMaxHp);
-
-        // Get player's character current max health (after all stat modifiers)
-        stats.SetUp(playerCharacter);
-        int playerMaxHp = stats.Health;
-
-        if (playerMaxHp <= 0) return;
-
-        // Apply ratio to player's character
-        int newCurrentHealth = Mathf.RoundToInt(playerMaxHp * healthRatio);
-        if (playerHealth.GetCurHealth() <= newCurrentHealth)
-        {
-            playerHealth.ResetHealth();
+            var healthPersent = (float)battleEventEnd.curHealthHero / battleEventEnd.maxHealthHero;
+            var manaPersent = (float)battleEventEnd.curManaHero / battleEventEnd.maxManaHero;
+            var spiritPersent = (float)battleEventEnd.curSpiritHero / battleEventEnd.maxSpiritHero;
+            playerVital.SetViral(healthPersent, manaPersent, spiritPersent);
         }
         else
         {
-            playerHealth.SetCurrentHealth(newCurrentHealth);
+            var healthPersent = battleEventEnd.curHealthEnemy / battleEventEnd.maxHealthEnemy;
+            var manaPersent = battleEventEnd.curManaEnemy / battleEventEnd.maxManaEnemy;
+            var spiritPersent = battleEventEnd.curSpiritEnemy / battleEventEnd.maxSpiritEnemy;
+            playerVital.SetViral(healthPersent, manaPersent, spiritPersent);
         }
     }
 

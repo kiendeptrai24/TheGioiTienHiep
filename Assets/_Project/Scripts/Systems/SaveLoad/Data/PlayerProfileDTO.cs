@@ -9,6 +9,8 @@ public class PlayerProfileDTO
     public string characterId;
     public ulong coins;
     public int currentHealth;
+    public int currentMana;
+    public int currentSpirit;
     public string createdAt;
     public Vector3DTO position;
     public Vector3DTO rotation;

@@ -3,12 +3,17 @@ using UnityEngine;
 
 public static class SnapshotMapper
 {
-    public static UnitInput FromStats(StatsDataCore s, TeamId team, float persent = 1f)
+    public static UnitInput FromStats(StatsDataCore s, TeamId team, float healthPersent = 1f, float manaPersent = 1f, float spiritPersent = 1f)
     {
         int hpMax = s.Health;
-        int hp = Mathf.RoundToInt(hpMax * persent);
+        int hp = Mathf.RoundToInt(hpMax * healthPersent);
+        int manaMax = s.Mana;
+        int mana = Mathf.RoundToInt(manaMax * manaPersent);
+        int spiritMax = s.Spirit;
+        int spirit = Mathf.RoundToInt(spiritMax * spiritPersent);
 
         var heroData = s.heroData as HeroData;
+        bool isCharacter = heroData != null && heroData.isCharacter;
         List<SkillData> skills = heroData != null ? heroData.skillDatas : new List<SkillData>();
         return new UnitInput
         {
@@ -18,8 +23,11 @@ public static class SnapshotMapper
                 team = team,
                 hpMax = hpMax,
                 hp = hp,
-                manaMax = s.Mana,
-                mana = s.Mana,
+                manaMax = manaMax,
+                mana = mana,
+                spiritMax = spiritMax,
+                spirit = spirit,
+                isChacater = isCharacter,
 
                 physicalDmg = s.PhysicalDamage,
                 magicalDmg = s.MagicalDamage,

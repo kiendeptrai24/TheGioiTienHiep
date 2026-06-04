@@ -56,6 +56,12 @@ public class ChampionDataDto
     [JsonProperty("Linh lực điểm")]
     public int manaPoint;
 
+    [JsonProperty("Tỉ lệ hiện tại HP")]
+    public float healthPersent;
+
+    [JsonProperty("Tỉ lệ hiện tại Mana")]
+    public float manaPersent;
+
     [JsonProperty("Linh thức điểm")]
     public int spiritPoint;
 

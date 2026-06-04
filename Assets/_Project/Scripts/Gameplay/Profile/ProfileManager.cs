@@ -27,17 +27,30 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
     {
         var relinker = playerNet.GetComponent<PlayerMineRelinker>();
         var playerProfile = playerNet.GetComponent<PlayerProfile>();
-        var playerHealth = playerNet.GetComponent<PlayerHealth>();
+        var playerVitals = playerNet.GetComponent<PlayerVitals>();
 
         playerProfile.OnProfileChanged += NotiProfileChanged;
         relinker.OnResourceIdsChanged += OnResourceIdsChanged;
-        playerHealth.OnHealthChanged += OnHealthChanged;
+        playerVitals.OnVitalChanged += OnVitalChanged;
     }
 
-    private void OnHealthChanged(int maxHealth, int currentHealth)
+    private void OnVitalChanged(VitalType type, int maxValue, int curValue)
     {
-        profileUser.currentHealth = currentHealth;
-        NotiProfileChanged();
+        switch (type)
+        {
+            case VitalType.Health:
+                profileUser.currentHealth = curValue;
+                NotiProfileChanged();
+                break;
+            case VitalType.Mana:
+                profileUser.currentMana = curValue;
+                NotiProfileChanged();
+                break;
+            case VitalType.Spirit:
+                profileUser.currentSpirit = curValue;
+                NotiProfileChanged();
+                break;
+        }
     }
 
     private void OnResourceIdsChanged(List<ulong> list) => resourceIds = list;
@@ -67,6 +80,8 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
         profileUser.userId = _data.characterId;
         profileUser.createdAt = _data.createdAt;
         profileUser.currentHealth = _data.currentHealth;
+        profileUser.currentMana = _data.currentMana;
+        profileUser.currentSpirit = _data.currentSpirit;
         profileUser.potentialPoint = _data.potentialPoint;
         profileUser.skillPoint = _data.skillPoint;
         profileUser.itemDataPoint = _data.itemDataPoint;
@@ -79,6 +94,8 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
         _data.mineOfflineDataList.Clear();
         _data.coins = profileUser.coins;
         _data.currentHealth = profileUser.currentHealth;
+        _data.currentMana = profileUser.currentMana;
+        _data.currentSpirit = profileUser.currentSpirit;
         _data.characterName = profileUser.userName;
         _data.potentialPoint = profileUser.potentialPoint;
         _data.skillPoint = profileUser.skillPoint;

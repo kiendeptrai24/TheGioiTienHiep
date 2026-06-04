@@ -30,6 +30,7 @@ public static class RuntimeNetDataMapper
             instanceId = hero.instanceId,
 
             isCharacter = hero.isCharacter,
+            manaPersent = hero.manaPersent,
             raceId = hero.raceId,
             essenceId = hero.essenceId,
             realmId = hero.realmId,
@@ -76,6 +77,7 @@ public static class RuntimeNetDataMapper
         HeroData hero = dataManager.GetItemById(dto.instanceId) as HeroData;
         hero.championIndex = dto.championIndex;
         hero.healthPersent = dto.healthPersent;
+        hero.manaPersent = dto.manaPersent;
         hero.isCharacter = dto.isCharacter;
         hero.raceId = dto.raceId;
         hero.raceData = dataManager.GetItemById(dto.raceId) as RaceData;

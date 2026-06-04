@@ -53,6 +53,10 @@ public static class BattleSimulator
                 type = BattleEventType.Init,
                 maxHp = s.units[i].hpMax,
                 curtHp = s.units[i].hp,
+                maxMana = s.units[i].manaMax,
+                curMana = s.units[i].mana,
+                maxSpirit = s.units[i].spiritMax,
+                curSpirit = s.units[i].spirit,
                 moveSpeed = s.units[i].moveSpeed
             });
         }
@@ -64,10 +68,10 @@ public static class BattleSimulator
             if (++iter > MaxIterations)
             {
                 Debug.Log("Max iterations reached");
-                return End(DecideWinnerByHp(s.units), t, events, recordEvents);
+                return End(s, DecideWinnerByHp(s.units), t, events, recordEvents);
             }
-            if (!HasAlive(s.units, TeamId.Heroes)) return End(TeamId.Enemies, t, events, recordEvents);
-            if (!HasAlive(s.units, TeamId.Enemies)) return End(TeamId.Heroes, t, events, recordEvents);
+            if (!HasAlive(s.units, TeamId.Heroes)) return End(s, TeamId.Enemies, t, events, recordEvents);
+            if (!HasAlive(s.units, TeamId.Enemies)) return End(s, TeamId.Heroes, t, events, recordEvents);
             int a = sched.PickNextActor(s, out float bestT);
             if (a < 0 || bestT == float.MaxValue) break;
             t = bestT;
@@ -99,7 +103,7 @@ public static class BattleSimulator
             }
         }
 
-        return End(TeamId.Enemies, timeLimit, events, recordEvents);
+        return End(s, TeamId.Enemies, timeLimit, events, recordEvents);
     }
 
     static bool TryMove(BattleSimState s, BattleScheduler sched, BattleBoardGrid board,
@@ -193,10 +197,45 @@ public static class BattleSimulator
         return false;
     }
 
-    static Result End(TeamId winner, float t, List<BattleEvent> events, bool recordEvents)
+    static Result End(BattleSimState s, TeamId winner, float t, List<BattleEvent> events, bool recordEvents)
     {
         if (recordEvents)
-            events.Add(new BattleEvent { time = t, type = BattleEventType.End });
+        {
+            BattleEventEnd endEvent = new BattleEventEnd();
+            endEvent.ownerUid = "";
+            endEvent.time = t;
+            endEvent.type = BattleEventType.End;
+            for (int i = 0; i < s.units.Count; i++)
+            {
+                if (s.units[i].team == TeamId.Heroes)
+                {
+                    if (s.units[i].isChacater)
+                    {
+                        endEvent.heroIsPlayerObject = true;
+                        endEvent.maxHealthHero = s.units[i].hpMax;
+                        endEvent.maxManaHero = s.units[i].manaMax;
+                        endEvent.maxSpiritHero = s.units[i].spiritMax;
+                        endEvent.curHealthHero = s.units[i].hp;
+                        endEvent.curManaHero = s.units[i].mana;
+                        endEvent.curSpiritHero = s.units[i].spirit;
+                    }
+                }
+                else if (s.units[i].team == TeamId.Enemies)
+                {
+                    if (s.units[i].isChacater)
+                    {
+                        endEvent.enemyIsPlayerObject = true;
+                        endEvent.maxHealthEnemy = s.units[i].hpMax;
+                        endEvent.maxManaEnemy = s.units[i].manaMax;
+                        endEvent.maxSpiritEnemy = s.units[i].spiritMax;
+                        endEvent.curHealthEnemy = s.units[i].hp;
+                        endEvent.curManaEnemy = s.units[i].mana;
+                        endEvent.curSpiritEnemy = s.units[i].spirit;
+                    }
+                }
+            }
+            events.Add(endEvent);
+        }
 
         return new Result { winner = winner, duration = t, events = recordEvents ? events : null };
     }

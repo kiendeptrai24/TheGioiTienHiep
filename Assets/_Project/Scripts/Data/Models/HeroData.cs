@@ -8,6 +8,8 @@ public class HeroData : ItemData
 {
     public bool isCharacter;
     public float healthPersent;
+    public float manaPersent;
+    public float spiritPersent;
     public string characterId;
     [JsonIgnore]
     public RealmData realmData;
@@ -31,17 +33,17 @@ public class HeroData : ItemData
     [JsonIgnore]
     public float spiritRegen;
     [JsonIgnore]
-    public int physicalDamagePoint; // value
+    public int physicalDamagePoint;
     [JsonIgnore]
-    public int magicalDamagePoint; // value
+    public int magicalDamagePoint;
     [JsonIgnore]
-    public int spiritDamagePoint; // value
+    public int spiritDamagePoint;
     [JsonIgnore]
-    public int physicalDefensePoint; // value
+    public int physicalDefensePoint;
     [JsonIgnore]
-    public int magicalDefensePoint; // value
+    public int magicalDefensePoint;
     [JsonIgnore]
-    public int spiritDefensePoint; // value
+    public int spiritDefensePoint;
     [JsonIgnore]
     public int healthPoint;
     [JsonIgnore]

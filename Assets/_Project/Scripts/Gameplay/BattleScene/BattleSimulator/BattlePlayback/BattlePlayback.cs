@@ -129,7 +129,7 @@ public class BattlePlayback : Singleton<BattlePlayback>
                 skillData.skillEffectPrefab = skillsObject[skillData.instanceId].skillPrefab;
             }
             statData.SetUpItem(championData);
-            chamHeal.Setup(eventInit.maxHp, eventInit.curtHp);
+            chamHeal.Setup(eventInit.maxHp, eventInit.curtHp, eventInit.maxMana, eventInit.curMana, eventInit.maxSpirit, eventInit.curSpirit);
             chamAnim.GetComponent<ChampionController>().SetTeamId((int)eventInit.team);
             if (eventInit.team == TeamId.Heroes)
                 champions.Add(eventInit.ownerUid, chamAnim);
@@ -262,7 +262,7 @@ public class BattlePlayback : Singleton<BattlePlayback>
         if (chamAnim == null)
             yield break;
 
-        var health = chamAnim.GetComponent<HealthController>();
+        var health = chamAnim.GetComponent<Champion_Heal>();
         if (health == null)
             yield break;
 
@@ -317,6 +317,13 @@ public class BattlePlayback : Singleton<BattlePlayback>
             return;
         atkCham.GetComponent<TargetFinderBase>().SetTarget(defCham.transform);
         atkCham.PlayAnimationSkill(skill.skillId);
+        var championVital = atkCham.gameObject.GetComponent<Champion_Heal>();
+        if (championVital != null)
+        {
+            championVital.DecreaseHealth(skill.damage, 0);
+            championVital.DecreaseMana(skill.manaCost);
+            championVital.DecreaseSpirit(skill.spiritCost);
+        }
         StartCoroutine(DecreaseHealthBattle(skill));
     }
     public void PlayMovement(BattleEvent e)

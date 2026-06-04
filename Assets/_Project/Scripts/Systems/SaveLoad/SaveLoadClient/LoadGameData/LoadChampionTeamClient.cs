@@ -21,7 +21,6 @@ public class LoadChampionTeamClient : ILoadGameData<GameData, PlayerClientDataDt
                 if (heroData != null)
                 {
                     IsCharacter(dataManager, championDto, heroData);
-                    // Set other hero properties as needed
                     if (championDto.posX.HasValue && championDto.posY.HasValue)
                     {
                         int posX = championDto.posX.Value;

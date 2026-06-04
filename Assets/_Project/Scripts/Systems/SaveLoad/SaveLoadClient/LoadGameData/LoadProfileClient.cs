@@ -21,6 +21,9 @@ public class LoadProfileClient : ILoadGameData<GameData, PlayerClientDataDto>
             gameData.coins = profile.coins;
             gameData.createdAt = profile.createdAt;
             gameData.currentHealth = profile.currentHealth;
+            gameData.currentMana = profile.currentMana;
+            gameData.currentSpirit = profile.currentSpirit;
+
             gameData.position = profile.position.ToVector3();
             gameData.rotation = Quaternion.LookRotation(profile.rotation.ToVector3());
             gameData.potentialPoint = profile.potentialPoint;
