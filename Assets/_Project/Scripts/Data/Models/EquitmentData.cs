@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 public class EquipmentData : ItemData
 {
     [Header("Equipment Type")]
-    [JsonIgnore]
     public EquipmentType equipmentType;
     [JsonIgnore]
     public int level;

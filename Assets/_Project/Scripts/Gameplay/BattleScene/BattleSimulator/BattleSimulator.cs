@@ -52,7 +52,7 @@ public static class BattleSimulator
                 cell = s.cell[i],
                 type = BattleEventType.Init,
                 maxHp = s.units[i].hpMax,
-                curtHp = s.units[i].hp,
+                curtHp = s.units[i].health,
                 maxMana = s.units[i].manaMax,
                 curMana = s.units[i].mana,
                 maxSpirit = s.units[i].spiritMax,
@@ -77,7 +77,7 @@ public static class BattleSimulator
             t = bestT;
             // commit any moves that finished by time t
             sched.CommitPendingMoves(s, board, t);
-            if (s.units[a].hp <= 0) continue;
+            if (s.units[a].health <= 0) continue;
             TeamId enemyTeam = (s.units[a].team == TeamId.Heroes) ? TeamId.Enemies : TeamId.Heroes;
             int target = BattleTargeting.FindNearestAlive(s, enemyTeam, a);
             if (target < 0) continue;
@@ -149,7 +149,7 @@ public static class BattleSimulator
 
     static void HandleDeath(BattleSimState s, BattleBoardGrid board, int a, int target, float t, List<BattleEvent> events, bool recordEvents)
     {
-        if (s.units[target].hp <= 0)
+        if (s.units[target].health <= 0)
         {
             board.FreeCell(s.cell[target], target);
 
@@ -169,7 +169,7 @@ public static class BattleSimulator
                 });
         }
 
-        if (s.units[a].hp <= 0)
+        if (s.units[a].health <= 0)
         {
             board.FreeCell(s.cell[a], a);
 
@@ -193,7 +193,7 @@ public static class BattleSimulator
     static bool HasAlive(List<UnitSnapshot> units, TeamId team)
     {
         for (int i = 0; i < units.Count; i++)
-            if (units[i].team == team && units[i].hp > 0) return true;
+            if (units[i].team == team && units[i].health > 0) return true;
         return false;
     }
 
@@ -215,7 +215,7 @@ public static class BattleSimulator
                         endEvent.maxHealthHero = s.units[i].hpMax;
                         endEvent.maxManaHero = s.units[i].manaMax;
                         endEvent.maxSpiritHero = s.units[i].spiritMax;
-                        endEvent.curHealthHero = s.units[i].hp;
+                        endEvent.curHealthHero = s.units[i].health;
                         endEvent.curManaHero = s.units[i].mana;
                         endEvent.curSpiritHero = s.units[i].spirit;
                     }
@@ -228,7 +228,7 @@ public static class BattleSimulator
                         endEvent.maxHealthEnemy = s.units[i].hpMax;
                         endEvent.maxManaEnemy = s.units[i].manaMax;
                         endEvent.maxSpiritEnemy = s.units[i].spiritMax;
-                        endEvent.curHealthEnemy = s.units[i].hp;
+                        endEvent.curHealthEnemy = s.units[i].health;
                         endEvent.curManaEnemy = s.units[i].mana;
                         endEvent.curSpiritEnemy = s.units[i].spirit;
                     }
@@ -244,9 +244,9 @@ public static class BattleSimulator
         long heroHp = 0, enemyHp = 0;
         for (int i = 0; i < units.Count; i++)
         {
-            if (units[i].hp <= 0) continue;
-            if (units[i].team == TeamId.Heroes) heroHp += units[i].hp;
-            else enemyHp += units[i].hp;
+            if (units[i].health <= 0) continue;
+            if (units[i].team == TeamId.Heroes) heroHp += units[i].health;
+            else enemyHp += units[i].health;
         }
         return heroHp >= enemyHp ? TeamId.Heroes : TeamId.Enemies;
     }

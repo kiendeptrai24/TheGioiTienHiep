@@ -47,7 +47,7 @@ public class IncreasePointBtn : TGTHMonoBehaviour
 
             AddPoint(hero, profileManager.GetProfile().itemDataPoint, result.value, statType);
             statsData.SetUpItem(hero);
-            InventoryCenterManager.Instance.ItemPlayerChanged(hero);
+            InventoryCenterManager.Instance.PlayerDataChanged(hero);
             TopNotificationUI.Instance.ShowNotification($"bạn đã cộng {result.value} điểm vào {StatTypeViName.ToVietnamese(statType)}");
         },
         onCancel: () =>

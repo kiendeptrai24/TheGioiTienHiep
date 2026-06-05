@@ -16,7 +16,14 @@ public class InventoryUseSystem : SingletonNetwork<InventoryUseSystem>, IUsable
         if (TryAddItemToPages(uiItem.inventoryItem))
         {
             this.uiItem = uiItem;
-            UseItemServerRpc(playerClientId);
+            if (uiItem.inventoryItem.data is PillData)
+            {
+                UseItemPillServerRpc(playerClientId, uiItem.inventoryItem.data.instanceId);
+            }
+            else
+            {
+                UseItemServerRpc(playerClientId);
+            }
         }
         else
         {
@@ -36,23 +43,33 @@ public class InventoryUseSystem : SingletonNetwork<InventoryUseSystem>, IUsable
         var skillPoint = playerProfile.GetSkillPoint();
         if (skillPoint <= 0)
         {
-            SendMessegeToClientRpc(false, "Không đủ điểm kỹ năng",
-            new ClientRpcParams
-            {
-                Send = new ClientRpcSendParams { TargetClientIds = new[] { playerObj.OwnerClientId } }
-            });
+            SendMessegeToClientRpc(false, "Không đủ điểm kỹ năng", RpcTargetUtils.Single(playerClientId));
         }
         else
         {
             client.PlayerObject.GetComponent<PlayerProfile>().SetSkillPoint(-1);
-            SendMessegeToClientRpc(true, "Đã sử dụng",
-            new ClientRpcParams
-            {
-                Send = new ClientRpcSendParams { TargetClientIds = new[] { playerObj.OwnerClientId } }
-            });
+            SendMessegeToClientRpc(true, "Đã sử dụng", RpcTargetUtils.Single(playerClientId));
 
         }
 
+    }
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    public void UseItemPillServerRpc(ulong playerClientId, string instanceId)
+    {
+        if (!NetworkManager.ConnectedClients.TryGetValue(playerClientId, out var client))
+            return;
+        var playerObj = client.PlayerObject;
+        if (playerObj == null) return;
+        var playerViral = playerObj.GetComponent<PlayerVitals>();
+        if (playerViral == null) return;
+
+        var item = GameDataCenterManager.Instance.GetItemById(instanceId) as PillData;
+        if (item == null) return;
+        playerViral.Increase(VitalType.Health, Mathf.RoundToInt(item.health));
+        playerViral.Increase(VitalType.Mana, Mathf.RoundToInt(item.mana));
+        playerViral.Increase(VitalType.Spirit, Mathf.RoundToInt(item.spirit));
+
+        SendUsePillDataToClientRpc(true, "Đã sử dụng", RpcTargetUtils.Single(playerClientId));
     }
     [ClientRpc]
     public void SendMessegeToClientRpc(bool success, string message, ClientRpcParams clientRpcParams)
@@ -63,10 +80,21 @@ public class InventoryUseSystem : SingletonNetwork<InventoryUseSystem>, IUsable
             InventoryCenterManager.Instance.UseData(uiItem.inventoryItem.data);
         }
     }
+    [ClientRpc]
+    public void SendUsePillDataToClientRpc(bool success, string message, ClientRpcParams clientRpcParams)
+    {
+        TopNotificationUI.Instance.ShowNotification(message);
+        if (success)
+        {
+            InventoryCenterManager.Instance.RemoveData(uiItem.inventoryItem.data);
+        }
+    }
     private bool TryAddItemToPages(InventoryItem inventoryItem)
     {
         if (inventoryItem == null)
             return false;
+        if (inventoryItem.data is PillData)
+            return true;
 
         if (techniqueManager.AddItemData(inventoryItem.data))
             return true;

@@ -53,7 +53,7 @@ public sealed class BattleScheduler
         bestT = float.MaxValue;
         for (int i = 0; i < s.units.Count; i++)
         {
-            if (s.units[i].hp <= 0) continue;
+            if (s.units[i].health <= 0) continue;
 
             float ti = nextBasic[i];
 

@@ -23,6 +23,7 @@ public class PlayerVitals : TGTHNetworkBehaviour
         base.OnNetworkSpawn();
         if (IsOwner)
         {
+            InventoryCenterManager.Instance.OnItemPlayerChanged += OnPlayerChamChanged;
             MaxHealth.OnValueChanged += OnMaxHealthChanged;
             CurrentHealth.OnValueChanged += OnCurrentHealthChanged;
             MaxMana.OnValueChanged += OnMaxManaChanged;
@@ -34,6 +35,11 @@ public class PlayerVitals : TGTHNetworkBehaviour
             statsData.OnStatReady += OnStatReady;
             statsData.SetUpItem(InventoryCenterManager.Instance.playerCham);
         }
+    }
+
+    private void OnPlayerChamChanged(ItemData data)
+    {
+        ResetViral();
     }
     #region Callback Sync
 
@@ -117,6 +123,15 @@ public class PlayerVitals : TGTHNetworkBehaviour
 
         var vital = vitals.Get(type);
         vital.Decrease(amount);
+
+        SyncToNetwork(type, vital);
+    }
+    public void Increase(VitalType type, int amount)
+    {
+        if (!IsServer) return;
+
+        var vital = vitals.Get(type);
+        vital.Increase(amount);
 
         SyncToNetwork(type, vital);
     }

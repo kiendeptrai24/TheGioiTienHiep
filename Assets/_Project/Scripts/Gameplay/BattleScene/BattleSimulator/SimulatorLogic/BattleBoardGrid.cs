@@ -140,7 +140,7 @@ public sealed class BattleBoardGrid
         if (!InBoard(p)) return;
 
         int idx = occ[p.x, p.y];
-        if (idx != -1 && units[idx].hp > 0) return;
+        if (idx != -1 && units[idx].health > 0) return;
 
         int d = Dist(p, toTarget);
         if (d < bestScore)
@@ -166,7 +166,7 @@ public sealed class BattleBoardGrid
         if (!validStep) return false;
 
         int idx = occ[to.x, to.y];
-        if (idx != -1 && units[idx].hp > 0) return false;
+        if (idx != -1 && units[idx].health > 0) return false;
 
         occ[from.x, from.y] = -1;
         occ[to.x, to.y] = unitIndex;

@@ -173,6 +173,29 @@ namespace TGTH.Mobile
                 }
                 return;
             }
+            else if (uiItem.inventoryItem.data is PillData)
+            {
+                var popup = PopupManager.Instance.GetPopup<UseItemPopup>();
+                BaseSetupData data = new BaseSetupData("Bạn có muốn sử dụng kỹ năng này không?");
+                if (popup != null)
+                {
+                    popup.ShowPopup(data,
+                    onConfirm: (BasePopupData result) =>
+                    {
+                        inventoryUseSystem.UseItem(playerClientId, uiItem);
+                    },
+                    onInfo: () =>
+                    {
+                        ItemClicked(uiItem);
+                        uiItem?.navigation.OnClick();
+                    },
+                    onCancel: () =>
+                    {
+
+                    });
+                }
+                return;
+            }
             uiItem?.navigation.OnClick();
         }
 

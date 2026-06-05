@@ -148,7 +148,7 @@ namespace TGTH.Mobile
                     var skillData = item1.data as SkillData;
                     heroData.skillDatas.Remove(skillData);
                     heroData.skillIds.Remove(skillData.instanceId);
-                    inventoryCenterManager.ItemPlayerChanged(heroData);
+                    inventoryCenterManager.PlayerDataChanged(heroData);
                 }
 
             }
@@ -160,7 +160,7 @@ namespace TGTH.Mobile
                     var skillData = item2.data as SkillData;
                     heroData.skillDatas.Add(skillData);
                     heroData.skillIds.Add(skillData.instanceId);
-                    inventoryCenterManager.ItemPlayerChanged(heroData);
+                    inventoryCenterManager.PlayerDataChanged(heroData);
                 }
             }
             if (item1 != null && item1.data != null)

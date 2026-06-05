@@ -22,7 +22,7 @@ public static class SnapshotMapper
                 uid = heroData.instanceId,
                 team = team,
                 hpMax = hpMax,
-                hp = hp,
+                health = hp,
                 manaMax = manaMax,
                 mana = mana,
                 spiritMax = spiritMax,

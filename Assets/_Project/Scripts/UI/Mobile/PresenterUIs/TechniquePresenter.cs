@@ -143,7 +143,7 @@ namespace TGTH.Mobile
                     var techniqueData = item1.data as TechniqueData;
                     heroData.techniqueDatas.Remove(techniqueData);
                     heroData.techniqueIds.Remove(techniqueData.instanceId);
-                    inventoryCenterManager.ItemPlayerChanged(heroData);
+                    inventoryCenterManager.PlayerDataChanged(heroData);
                 }
             }
             if (item2 != null && item2.data != null)
@@ -154,7 +154,7 @@ namespace TGTH.Mobile
                     var techniqueData = item2.data as TechniqueData;
                     heroData.techniqueDatas.Add(techniqueData);
                     heroData.techniqueIds.Add(techniqueData.instanceId);
-                    inventoryCenterManager.ItemPlayerChanged(heroData);
+                    inventoryCenterManager.PlayerDataChanged(heroData);
                 }
             }
             if (item1 != null && item1.data != null)

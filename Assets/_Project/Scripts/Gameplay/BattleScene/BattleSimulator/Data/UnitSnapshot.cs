@@ -8,12 +8,12 @@ public class UnitSnapshot
 {
     public bool isChacater;
     public float startActionTime; // dùng để sắp xếp action giữa các tick, vd: unit nào có startActionTime nhỏ hơn sẽ hành động trước
-    public float animationEndTime; 
+    public float animationEndTime;
     public float nextActionTime; // dùng để sắp xếp action trong 1 tick, vd: move trước rồi attack sau
     public string uid;          // index trong list
     public TeamId team;
     public int hpMax;
-    public int hp;
+    public int health;
     public int manaMax;
     public int mana;
     public int spiritMax;

@@ -15,7 +15,7 @@ public class RealmUpgrade : IUpgradeable
             heroData.realmId = nextRealm.realmId;
             heroData.realmType = nextRealm.realmType;
             heroData.realmData = nextRealm;
-            inventoryCM.ItemPlayerChanged(heroData);
+            inventoryCM.PlayerDataChanged(heroData);
         }
     }
 }

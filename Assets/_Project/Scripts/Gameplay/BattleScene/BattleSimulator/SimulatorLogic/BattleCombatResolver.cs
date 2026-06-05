@@ -44,9 +44,11 @@ public static class BattleCombatResolver
 
         if (recordEvents)
         {
-            if (HasEnnoughMana(s, attackerIndex, skillIndex))
+            if (HasEnnoughVital(s, attackerIndex, skillIndex))
             {
-                atk.mana -= Mathf.RoundToInt(skill.manaCost);
+                atk.health -= skill.healthCost;
+                atk.mana -= skill.manaCost;
+                atk.spirit -= skill.spiritCost;
                 events.Add(new BattleEventSkill
                 {
                     time = t,
@@ -58,11 +60,11 @@ public static class BattleCombatResolver
                     targetUid = def.uid,
                     damage = dmg,
                     isCrit = isCrit,
-                    targetHpAfter = def.hp,
+                    targetHpAfter = def.health,
                     skillId = skill.instanceId,
-                    healthCost = 0,
+                    healthCost = skill.healthCost,
                     manaCost = skill.manaCost,
-                    spiritCost = 0,
+                    spiritCost = skill.spiritCost,
                     castTime = skill.castTime
                 });
             }
@@ -131,7 +133,7 @@ public static class BattleCombatResolver
                 targetUid = def.uid,
                 damage = dmg,
                 isCrit = isCrit,
-                targetHpAfter = def.hp,
+                targetHpAfter = def.health,
                 castTime = atk.castTime
             });
         }
@@ -141,16 +143,19 @@ public static class BattleCombatResolver
 
     static void ApplyDamageAndReturn(ref UnitSnapshot atk, ref UnitSnapshot def, int dmg, float ls, float rf)
     {
-        def.hp = Mathf.Max(0, def.hp - dmg);
+        def.health = Mathf.Max(0, def.health - dmg);
 
-        if (ls > 0 && atk.hp > 0) atk.hp = Mathf.Min(atk.hpMax, atk.hp + Mathf.RoundToInt(ls));
-        if (rf > 0 && def.hp > 0) atk.hp = Mathf.Max(0, atk.hp - Mathf.RoundToInt(rf));
+        if (ls > 0 && atk.health > 0) atk.health = Mathf.Min(atk.hpMax, atk.health + Mathf.RoundToInt(ls));
+        if (rf > 0 && def.health > 0) atk.health = Mathf.Max(0, atk.health - Mathf.RoundToInt(rf));
     }
-    static bool HasEnnoughMana(BattleSimState s, int attackerIndex, int skillIndex)
+    static bool HasEnnoughVital(BattleSimState s, int attackerIndex, int skillIndex)
     {
         var skill = s.skillsByUnit[attackerIndex][skillIndex];
         var atk = s.units[attackerIndex];
-        return atk.mana >= skill.manaCost;
+        var canCast = atk.mana >= skill.manaCost
+                        && atk.spirit >= skill.spiritCost
+                        && atk.health >= skill.healthCost;
+        return canCast;
     }
     static int GetReadySkillIndexInRange(List<SkillData> skills, float[] nextSkillTimes, float t, int distToTarget, int fallbackRange)
     {

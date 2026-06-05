@@ -269,7 +269,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
 
                 case BattleEventSkill s:
                     text += $"{s.time:0.00}s SKILL uid: {s.ownerUid} team {s.team} enemyTeam {s.targetTeam} -> {s.targetUid} " +
-                            $"skillId={s.skillId} dmg={s.damage} crit={s.isCrit} hpAfter={s.targetHpAfter}\n\n";
+                            $"skillId={s.skillId} hpCost={s.healthCost} manaCost={s.manaCost} spiritCost={s.spiritCost} dmg={s.damage} crit={s.isCrit} hpAfter={s.targetHpAfter}\n\n";
                     break;
                 case BattleEventAttack a:
                     text += $"{a.time:0.00}s ATK uid: {a.ownerUid} team {a.team} enemyTeam {a.targetTeam} -> uid: {a.targetUid}" +
