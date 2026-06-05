@@ -18,10 +18,14 @@ public class InventoryUseSystem : SingletonNetwork<InventoryUseSystem>, IUsable
             this.uiItem = uiItem;
             if (uiItem.inventoryItem.data is PillData)
             {
-                UseItemPillServerRpc(playerClientId, uiItem.inventoryItem.data.instanceId);
+                string instanceId = uiItem.inventoryItem.data.instanceId;
+                if (InventoryCenterManager.Instance.RemoveData(uiItem.inventoryItem.data) == false)
+                    return;
+                UseItemPillServerRpc(playerClientId, instanceId);
             }
             else
             {
+
                 UseItemServerRpc(playerClientId);
             }
         }
@@ -86,7 +90,7 @@ public class InventoryUseSystem : SingletonNetwork<InventoryUseSystem>, IUsable
         TopNotificationUI.Instance.ShowNotification(message);
         if (success)
         {
-            InventoryCenterManager.Instance.RemoveData(uiItem.inventoryItem.data);
+            ;
         }
     }
     private bool TryAddItemToPages(InventoryItem inventoryItem)

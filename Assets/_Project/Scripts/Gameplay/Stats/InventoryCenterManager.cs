@@ -256,12 +256,20 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         var existingItem = listItemDatas.FirstOrDefault(i => i.instanceId == item.instanceId);
         if (existingItem != null)
         {
-            if (existingItem.currentstack <= quantity)
+            if (existingItem.currentstack < quantity)
+            {
+                return false;
+            }
+            else if (existingItem.currentstack == quantity)
             {
                 listItemDatas.Remove(item);
                 listItemDatasExisting.Remove(item);
             }
-            existingItem.currentstack += quantity;
+            else
+            {
+                existingItem.currentstack -= quantity;
+            }
+
         }
         ItemChange(item);
         ItemExistingChange(item);

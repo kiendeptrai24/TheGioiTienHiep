@@ -96,16 +96,17 @@ public class PlayerVitals : TGTHNetworkBehaviour
     public void SetViral(float healthPersent, float manaPersent, float spiritPersent)
     {
         if (!IsServer) return;
-        CurrentHealth.Value = Mathf.RoundToInt(MaxHealth.Value * healthPersent);
-        CurrentMana.Value = Mathf.RoundToInt(MaxMana.Value * manaPersent);
-        CurrentSpirit.Value = Mathf.RoundToInt(MaxSpirit.Value * spiritPersent);
+        SetVital(VitalType.Health, MaxHealth.Value, Mathf.RoundToInt(MaxHealth.Value * healthPersent));
+        SetVital(VitalType.Mana, MaxMana.Value, Mathf.RoundToInt(MaxMana.Value * manaPersent));
+        SetVital(VitalType.Spirit, MaxSpirit.Value, Mathf.RoundToInt(MaxSpirit.Value * spiritPersent));
     }
     public void ResetViral()
     {
         if (!IsServer) return;
-        CurrentHealth.Value = MaxHealth.Value;
-        CurrentMana.Value = MaxMana.Value;
-        CurrentSpirit.Value = MaxSpirit.Value;
+
+        SetVital(VitalType.Health, MaxHealth.Value, MaxHealth.Value);
+        SetVital(VitalType.Mana, MaxMana.Value, MaxMana.Value);
+        SetVital(VitalType.Spirit, MaxSpirit.Value, MaxSpirit.Value);
     }
     public void SetVital(VitalType type, int max, int current)
     {
