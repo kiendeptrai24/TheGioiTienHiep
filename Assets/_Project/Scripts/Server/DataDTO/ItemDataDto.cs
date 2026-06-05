@@ -76,5 +76,10 @@ public class ItemDataDto
     public string rate;
     [JsonProperty("loại thuốc")]
     public PillType pillType;
-    internal ElementType elementType;
+    [JsonProperty("Khí huyết tiêu hao")]
+    public int healthCost;
+    [JsonProperty("Linh lực tiêu hao")]
+    public int manaCost;
+    [JsonProperty("Linh thức tiêu hao")]
+    public int spiritCost;
 }

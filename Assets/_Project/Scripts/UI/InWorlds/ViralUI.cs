@@ -19,15 +19,15 @@ public class ViralUI : TGTHMonoBehaviour
         switch (type)
         {
             case VitalType.Health:
-                m_viralHealthSlider.value = curValue / maxValue;
+                m_viralHealthSlider.value = (float)curValue / maxValue;
                 m_viralHealthText.text = curValue.ToString();
                 break;
             case VitalType.Mana:
-                m_viralManaSlider.value = curValue / maxValue;
+                m_viralManaSlider.value = (float)curValue / maxValue;
                 m_viralManaText.text = curValue.ToString();
                 break;
             case VitalType.Spirit:
-                m_viralSpiritSlider.value = curValue / maxValue;
+                m_viralSpiritSlider.value = (float)curValue / maxValue;
                 m_viralSpiritText.text = curValue.ToString();
                 break;
         }

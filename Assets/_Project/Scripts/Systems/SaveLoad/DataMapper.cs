@@ -95,6 +95,10 @@ public static class DataMapper
             skillData.cooldown = dto.cooldown;
             skillData.animationDuration = dto.animationDuration;
             skillData.castTime = dto.castTime;
+
+            skillData.healthCost = dto.healthCost;
+            skillData.manaCost = dto.manaCost;
+            skillData.spiritCost = dto.spiritCost;
             itemData = skillData;
         }
         else if (dto.itemType == ItemType.Technique)
@@ -384,6 +388,9 @@ public static class DataMapper
                 dto.animationDuration = s.animationDuration;
                 dto.castTime = s.castTime;
                 dto.skillType = s.skillType;
+                dto.healthCost = s.healthCost;
+                dto.manaCost = s.manaCost;
+                dto.spiritCost = s.spiritCost;
                 break;
 
             case TechniqueData t:

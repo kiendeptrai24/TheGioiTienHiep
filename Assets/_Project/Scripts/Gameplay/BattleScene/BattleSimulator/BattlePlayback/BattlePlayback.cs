@@ -111,7 +111,7 @@ public class BattlePlayback : Singleton<BattlePlayback>
             aiMovement.Setspeed(eventInit.moveSpeed);
             var championData = GameDataCenterManager.Instance.GetItemById(eventInit.ownerUid);
             HeroData heroData = championData as HeroData;
-            if (heroData != null && heroData.isCharacter)
+            if (heroData != null)
             {
                 heroData.skillDatas.Clear();
                 foreach (var skillId in eventInit.skillIds)
@@ -320,7 +320,7 @@ public class BattlePlayback : Singleton<BattlePlayback>
         var championVital = atkCham.gameObject.GetComponent<Champion_Heal>();
         if (championVital != null)
         {
-            championVital.DecreaseHealth(skill.damage, 0);
+            championVital.DecreaseHealth(skill.healthCost, 0);
             championVital.DecreaseMana(skill.manaCost);
             championVital.DecreaseSpirit(skill.spiritCost);
         }
