@@ -30,22 +30,18 @@ public class ItemChamDetailPageView : IItemDetailPageView
     private ulong playerClientId;
     private InventoryCenterManager inventoryCenterManager;
     private HeroData heroData;
-    private ulong PlayerNetId;
     private bool isUpdating = false;
     public bool canLevelup = false;
 
     protected override void Awake()
     {
         base.Awake();
-        levelUpValidator = LevelUpValidator.Instance;
-        levelUpDatabase = LevelUpDatabase.Instance;
+        SetUpValidator();
+        SetUpDataBase();
         SegmentRealmManager.Instance.OnRealmUplevelResult += OnRealmUplevelResult;
         SegmentRealmManager.Instance.OnRealmUpgrade += OnRealmUpgrade;
         inventoryCenterManager = InventoryCenterManager.Instance;
-        playerClientId = NetworkManager.Singleton.LocalClientId;
-
         levelUpBtn.onClick.AddListener(OnLevelUpButtonClicked);
-        levelUpValidator.OnNotificationConditionResult += OnNotificationConditionResult;
 
         inventoryCenterManager.OnItemUpdated += OnItemUpdated;
         inventoryCenterManager.OnItemDataChanged += OnItemDataChanged;
@@ -57,7 +53,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
 
     private void OnItemDataChanged(List<ItemData> list)
     {
-        levelUpValidator.RequestCheckConditionResult(PlayerNetId, itemData.instanceId);
+        levelUpValidator.RequestCheckConditionResult(playerClientId, itemData.instanceId);
     }
 
     private void OnRealmUpgrade(UpgradeState state)
@@ -72,9 +68,24 @@ public class ItemChamDetailPageView : IItemDetailPageView
         if (levelUpValidator == null) return;
 
         isUpdating = false;
-        levelUpValidator.RequestCheckConditionResult(PlayerNetId, itemData.instanceId);
+        levelUpValidator.RequestCheckConditionResult(playerClientId, itemData.instanceId);
     }
-
+    private void SetUpValidator()
+    {
+        if (levelUpValidator == null)
+        {
+            playerClientId = NetworkManager.Singleton.LocalClientId;
+            levelUpValidator = LevelUpValidator.Instance;
+            levelUpValidator.OnNotificationConditionResult += OnNotificationConditionResult;
+        }
+    }
+    public void SetUpDataBase()
+    {
+        if (levelUpDatabase == null)
+        {
+            levelUpDatabase = LevelUpDatabase.Instance;
+        }
+    }
     private void OnItemUpdated(ItemData data, string instanceIdOld)
     {
         if (data == null || heroData == null) return;
@@ -129,14 +140,14 @@ public class ItemChamDetailPageView : IItemDetailPageView
         }
         if (itemData is RealmData)
         {
-            PlayerNetId = NetworkManager.Singleton.LocalClientId;
-
-            levelUpValidator.RequestRealmLevelUp(PlayerNetId);
+            levelUpValidator.RequestRealmLevelUp(playerClientId, itemData.realmId);
         }
     }
 
     public override void HandleItemClicked(InventoryItem inventoryItem)
     {
+        SetUpDataBase();
+        SetUpValidator();
         heroData = inventoryItem.data as HeroData;
         itemData = heroData.realmData;
         if (itemData == null) return;
@@ -146,10 +157,6 @@ public class ItemChamDetailPageView : IItemDetailPageView
         realmTxt.text = EnumTranslator.ToVietnamese(itemData.realmType);
         effectDescriptionTxt.text = itemData.itemDescription.Replace(". ", ".\n");
         descriptionTxt.text = GetDescriptionText(itemData);
-        if (levelUpDatabase == null)
-        {
-            levelUpDatabase = LevelUpDatabase.Instance;
-        }
         if (levelUpValidator != null)
         {
             levelUpValidator.RequestCheckConditionResult(playerClientId, itemData.instanceId);

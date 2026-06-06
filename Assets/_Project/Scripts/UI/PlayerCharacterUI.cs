@@ -53,21 +53,27 @@ public class PlayerCharacterUI : TGTHNetworkBehaviour
 
     private void SetSpiritBar(int maxValue, int curValue)
     {
-        uIPiritBar.fillAmount = (float)curValue / (float)maxValue;
+        uIPiritBar.fillAmount = GetPercent(maxValue, curValue);
         spiritTxt.text = curValue.ToString();
     }
 
     private void SetManaBar(int maxValue, int curValue)
     {
-        uIManaBar.fillAmount = (float)curValue / (float)maxValue;
+        uIManaBar.fillAmount = GetPercent(maxValue, curValue);
         manaTxt.text = curValue.ToString();
     }
     private void SetHealthBar(float maxValue, float curValue)
     {
-        uIHealthBar.fillAmount = (float)curValue / (float)maxValue;
+        uIHealthBar.fillAmount = GetPercent(maxValue, curValue);
         healthTxt.text = curValue.ToString();
     }
+    private float GetPercent(float maxValue, float curValue)
+    {
+        if (maxValue <= 0)
+            return 0f;
 
+        return Mathf.Clamp01(curValue / maxValue);
+    }
     private void OnPlayerNameChanged(string value)
     {
         nameTxt.text = value;

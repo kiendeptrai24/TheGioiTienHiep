@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 
 public class UpgradeSystemManager : Singleton<UpgradeSystemManager>
 {
     public static string RealmUpgradeId = "Realm";
+    public event Action<bool> OnRealmUpgrade;
     private readonly Dictionary<string, IUpgradeable> upgrades = new();
     protected override void Awake()
     {
@@ -36,6 +38,7 @@ public class UpgradeSystemManager : Singleton<UpgradeSystemManager>
             return false;
 
         upgrade.Upgrade();
+        OnRealmUpgrade?.Invoke(true);
         return true;
     }
 }

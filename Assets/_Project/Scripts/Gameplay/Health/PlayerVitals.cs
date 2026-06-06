@@ -16,14 +16,14 @@ public class PlayerVitals : TGTHNetworkBehaviour
 
     [SerializeField] private NetworkVariable<int> MaxSpirit = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField] private NetworkVariable<int> CurrentSpirit = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
+    private StatsData statsData;
     public event Action<VitalType, int, int> OnVitalChanged;
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         if (IsOwner)
         {
-            InventoryCenterManager.Instance.OnItemPlayerChanged += OnPlayerChamChanged;
+            UpgradeSystemManager.Instance.OnRealmUpgrade += OnRealmUpgrade;
             MaxHealth.OnValueChanged += OnMaxHealthChanged;
             CurrentHealth.OnValueChanged += OnCurrentHealthChanged;
             MaxMana.OnValueChanged += OnMaxManaChanged;
@@ -31,15 +31,25 @@ public class PlayerVitals : TGTHNetworkBehaviour
             MaxSpirit.OnValueChanged += OnMaxSpiritChanged;
             CurrentSpirit.OnValueChanged += OnCurrentSpiritChanged;
 
-            StatsData statsData = GetComponent<StatsData>();
+            statsData = GetComponent<StatsData>();
             statsData.OnStatReady += OnStatReady;
             statsData.SetUpItem(InventoryCenterManager.Instance.playerCham);
         }
     }
 
-    private void OnPlayerChamChanged(ItemData data)
+    private void OnRealmUpgrade(bool result)
     {
-        ResetViral();
+        if (result)
+        {
+            statsData.SetUpItem(InventoryCenterManager.Instance.playerCham);
+            var dataDto = new List<VitalValueDto>();
+
+            dataDto.Add(new VitalValueDto(VitalType.Health.ToString(), statsData.Health, statsData.Health));
+            dataDto.Add(new VitalValueDto(VitalType.Mana.ToString(), statsData.Mana, statsData.Mana));
+            dataDto.Add(new VitalValueDto(VitalType.Spirit.ToString(), statsData.Spirit, statsData.Spirit));
+            string payload = JsonConvert.SerializeObject(dataDto);
+            SetVitalServerRpc(payload);
+        }
     }
     #region Callback Sync
 
@@ -103,10 +113,16 @@ public class PlayerVitals : TGTHNetworkBehaviour
     public void ResetViral()
     {
         if (!IsServer) return;
+        int curHealth = vitals.Get(VitalType.Health).Current;
+        int maxHealth = vitals.Get(VitalType.Health).Max;
+        int curMana = vitals.Get(VitalType.Mana).Current;
+        int maxMana = vitals.Get(VitalType.Mana).Max;
+        int curSpirit = vitals.Get(VitalType.Spirit).Current;
+        int maxSpirit = vitals.Get(VitalType.Spirit).Max;
 
-        SetVital(VitalType.Health, MaxHealth.Value, MaxHealth.Value);
-        SetVital(VitalType.Mana, MaxMana.Value, MaxMana.Value);
-        SetVital(VitalType.Spirit, MaxSpirit.Value, MaxSpirit.Value);
+        SetVital(VitalType.Health, maxHealth, curHealth);
+        SetVital(VitalType.Mana, maxMana, curMana);
+        SetVital(VitalType.Spirit, maxSpirit, curSpirit);
     }
     public void SetVital(VitalType type, int max, int current)
     {

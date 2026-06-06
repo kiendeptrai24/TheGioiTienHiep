@@ -15,15 +15,15 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
     }
 
     #region Client Request To Server
-    public void RequestRealmLevelUp(ulong playerNetId)
+    public void RequestRealmLevelUp(ulong playerNetId, string instanceId)
     {
-        ValidateRealmLevelUpServerRpc(playerNetId);
+        ValidateRealmLevelUpServerRpc(playerNetId, instanceId);
     }
     #endregion
     #region RPC Server
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    public void ValidateRealmLevelUpServerRpc(ulong playerClientId)
+    public void ValidateRealmLevelUpServerRpc(ulong playerClientId, string instanceId)
     {
         if (!IsServer)
             return;
@@ -32,15 +32,15 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
             return;
         var playerObj = client.PlayerObject;
 
-        var statsData = playerObj.GetComponent<StatsData>();
         var playerProfile = playerObj.GetComponent<PlayerProfile>();
         var resource = playerObj.GetComponent<ResourceStorage>();
         var playerResource = playerProfile.GetPlayerResource();
 
 
-        HeroData heroData = statsData.chamionData as HeroData;
+        RealmData realmData = GameDataCenterManager.Instance.GetItemById(instanceId) as RealmData;
 
-        var realmType = heroData.realmType;
+
+        var realmType = realmData.realmType;
         if (realmType == RealmType.PhiThang)
             result = new LevelUpValidationResult(false, "Đã đạt cấp độ tối đa, không thể lên cấp tiếp");
 
@@ -54,7 +54,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         conditionData.requiredItem = nextRealm.itemsCost;
 
 
-        if (heroData == null)
+        if (realmData == null)
             result = new LevelUpValidationResult(false, "không hợp lệ");
 
         if (playerResource == null)
@@ -106,8 +106,8 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         var profile = playerObj.GetComponent<PlayerProfile>();
         if (profile == null) return;
         var playerResource = profile.GetPlayerResource();
-        var statsData = playerObj.GetComponent<StatsData>();
-        var nextRealm = levelUpStranlation.GetNextRealm(statsData.chamionData.realmType);
+        var realmData = GameDataCenterManager.Instance.GetItemById(instanceId) as RealmData;
+        var nextRealm = levelUpStranlation.GetNextRealm(realmData.realmType);
 
         var conditionData = new LevelUpConditionData(nextRealm.itemsCost);
         if (nextRealm != null)
