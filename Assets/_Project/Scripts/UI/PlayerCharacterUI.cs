@@ -117,7 +117,6 @@ public class PlayerCharacterUI : TGTHNetworkBehaviour
         levelTxt.text = EnumTranslator.ToVietnameseAcronym(data.realmType);
         nameTxt.text = data.itemName;
         healthTxt.text = data.health.ToString();
-        SetHealthBar(data.health, data.health);
     }
 
 }

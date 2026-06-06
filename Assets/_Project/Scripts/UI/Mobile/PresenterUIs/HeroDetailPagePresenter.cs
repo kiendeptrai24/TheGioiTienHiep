@@ -13,7 +13,6 @@ namespace TGTH.Mobile
         [SerializeField] private StatsData statsManager;
         private InventoryCenterManager inventoryCenterManager;
         private bool setup = false;
-        [SerializeField] private StatsData statManager;
         protected override void Awake()
         {
             inventoryCenterManager = InventoryCenterManager.Instance;

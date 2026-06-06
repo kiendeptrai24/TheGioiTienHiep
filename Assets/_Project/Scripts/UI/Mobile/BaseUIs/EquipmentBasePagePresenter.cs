@@ -44,7 +44,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
 
     protected virtual void OnEnable()
     {
-        ShowItemEquipment();
+        ShowItemChampion();
         isOwnEquipmentPage = true;
     }
 
@@ -53,9 +53,10 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         isOwnEquipmentPage = false;
     }
 
-    private void ShowItemEquipment()
+    private void ShowItemChampion()
     {
         isShowEquipment = true;
+        view.ShowItem(statsManager.chamionData);
         view.ShowEquipmentItems(statsManager.chamionData);
         isShowEquipment = false;
     }
@@ -105,6 +106,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
     {
         if (isShowEquipment) return false;
         ItemData item = null;
+        var heroData = statsManager.chamionData as HeroData;
         if (item1 != null && item1.data != null)
         {
             if (item1.data.canStack == false)
@@ -115,7 +117,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
             var result = inventoryCenterManager.AddData(item);
             if (result)
             {
-                var heroData = statsManager.chamionData as HeroData;
+                heroData = statsManager.chamionData as HeroData;
                 var equipmentData = item1.data as EquipmentData;
                 heroData.equipmentDatas.Remove(equipmentData);
                 heroData.equipmentIds.Remove(equipmentData.instanceId);
@@ -127,7 +129,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
             var result = inventoryCenterManager.RemoveData(item2.data);
             if (result)
             {
-                var heroData = statsManager.chamionData as HeroData;
+                heroData = statsManager.chamionData as HeroData;
                 var equipmentData = item2.data as EquipmentData;
                 heroData.equipmentDatas.Add(equipmentData);
                 heroData.equipmentIds.Add(equipmentData.instanceId);
@@ -137,7 +139,8 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         {
             item1.data = item;
         }
-        inventoryCenterManager.NotifyItemPlayerChanged();
+        if (heroData != null && heroData.isCharacter)
+            inventoryCenterManager.NotifyItemPlayerChanged();
         return true;
     }
 
