@@ -10,11 +10,7 @@ using UnityEngine;
 public class PlayerCharacterUI : TGTHNetworkBehaviour
 {
     [SerializeField] private UIProgressBar uIHealthBar;
-    [SerializeField] private UIProgressBar uIManaBar;
-    [SerializeField] private UIProgressBar uIPiritBar;
     [SerializeField] private TextMeshProUGUI healthTxt;
-    [SerializeField] private TextMeshProUGUI manaTxt;
-    [SerializeField] private TextMeshProUGUI spiritTxt;
     [SerializeField] private TextMeshProUGUI nameTxt;
     [SerializeField] private TextMeshProUGUI levelTxt;
     private StatsData stats;
@@ -42,26 +38,9 @@ public class PlayerCharacterUI : TGTHNetworkBehaviour
             case VitalType.Health:
                 SetHealthBar(maxValue, curValue);
                 break;
-            case VitalType.Mana:
-                SetManaBar(maxValue, curValue);
-                break;
-            case VitalType.Spirit:
-                SetSpiritBar(maxValue, curValue);
-                break;
         }
     }
 
-    private void SetSpiritBar(int maxValue, int curValue)
-    {
-        uIPiritBar.fillAmount = GetPercent(maxValue, curValue);
-        spiritTxt.text = curValue.ToString();
-    }
-
-    private void SetManaBar(int maxValue, int curValue)
-    {
-        uIManaBar.fillAmount = GetPercent(maxValue, curValue);
-        manaTxt.text = curValue.ToString();
-    }
     private void SetHealthBar(float maxValue, float curValue)
     {
         uIHealthBar.fillAmount = GetPercent(maxValue, curValue);

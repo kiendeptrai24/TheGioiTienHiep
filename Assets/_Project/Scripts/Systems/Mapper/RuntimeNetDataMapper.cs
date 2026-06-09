@@ -1,41 +1,24 @@
 using System.Collections.Generic;
+using Unity.Collections;
 
 public static class RuntimeNetDataMapper
 {
-    // ItemData -> BaseDataNetDto
-    public static BaseDataNetDto ToNetDto(ItemData item)
-    {
-        if (item == null) return null;
-
-        return new BaseDataNetDto
-        {
-            instanceId = item.instanceId
-        };
-    }
-
-    public static ItemData ToItemData(BaseDataNetDto dto, GameDataCenterManager dataManager)
-    {
-        if (dto == null) return null;
-        ItemData item = dataManager.GetItemById(dto.instanceId);
-        return item;
-    }
-
-    // HeroData -> ChampionDataNetDto
     public static ChampionDataNetDto ToNetDto(HeroData hero)
     {
-        if (hero == null) return null;
+        if (hero == null)
+            return default;
 
-        var itemDto = new ChampionDataNetDto
+        return new ChampionDataNetDto
         {
-            instanceId = hero.instanceId,
+            instanceId = ToFixed(hero.instanceId),
 
             isCharacter = hero.isCharacter,
             manaPersent = hero.manaPersent,
-            raceId = hero.raceId,
-            essenceId = hero.essenceId,
-            realmId = hero.realmId,
             healthPersent = hero.healthPersent,
 
+            raceId = ToFixed(hero.raceId),
+            essenceId = ToFixed(hero.essenceId),
+            realmId = ToFixed(hero.realmId),
 
             physicalDamagePoint = hero.physicalDamagePoint,
             magicalDamagePoint = hero.magicalDamagePoint,
@@ -50,41 +33,42 @@ public static class RuntimeNetDataMapper
             spiritPoint = hero.spiritPoint,
 
             moveSpeedPoint = hero.moveSpeedPoint,
-            spititRangePoint = hero.spiritRangePoint,
+            spiritRangePoint = hero.spiritRangePoint,
 
             championIndex = hero.championIndex,
 
-            equipmentIds = hero.equipmentIds != null
-                ? new List<string>(hero.equipmentIds)
-                : new List<string>(),
-
-            skillIds = hero.skillIds != null
-                ? new List<string>(hero.skillIds)
-                : new List<string>(),
-
-            techniqueIds = hero.techniqueIds != null
-                ? new List<string>(hero.techniqueIds)
-                : new List<string>()
+            equipmentIds = ToFixedList(hero.equipmentIds),
+            skillIds = ToFixedList(hero.skillIds),
+            techniqueIds = ToFixedList(hero.techniqueIds)
         };
-        return itemDto;
     }
 
-    // ChampionDataNetDto -> HeroData
-    public static HeroData ApplyToHero(ChampionDataNetDto dto, GameDataCenterManager dataManager)
+    public static HeroData ToHeroData(ChampionDataNetDto dto, GameDataCenterManager dataManager)
     {
-        if (dto == null) return null;
+        if (dataManager == null)
+            return null;
 
-        HeroData hero = dataManager.GetItemById(dto.instanceId) as HeroData;
+        string instanceId = dto.instanceId.ToString();
+
+        HeroData hero = dataManager.GetItemById(instanceId) as HeroData;
+
+        if (hero == null)
+            return null;
+
         hero.championIndex = dto.championIndex;
+
         hero.healthPersent = dto.healthPersent;
         hero.manaPersent = dto.manaPersent;
         hero.isCharacter = dto.isCharacter;
-        hero.raceId = dto.raceId;
-        hero.raceData = dataManager.GetItemById(dto.raceId) as RaceData;
-        hero.essenceId = dto.essenceId;
-        hero.essenceData = dataManager.GetItemById(dto.essenceId) as EssenceData;
-        hero.realmId = dto.realmId;
-        hero.realmData = dataManager.GetItemById(dto.realmId) as RealmData;
+
+        hero.raceId = dto.raceId.ToString();
+        hero.raceData = dataManager.GetItemById(hero.raceId) as RaceData;
+
+        hero.essenceId = dto.essenceId.ToString();
+        hero.essenceData = dataManager.GetItemById(hero.essenceId) as EssenceData;
+
+        hero.realmId = dto.realmId.ToString();
+        hero.realmData = dataManager.GetItemById(hero.realmId) as RealmData;
 
         hero.physicalDamagePoint = dto.physicalDamagePoint;
         hero.magicalDamagePoint = dto.magicalDamagePoint;
@@ -99,55 +83,130 @@ public static class RuntimeNetDataMapper
         hero.spiritPoint = dto.spiritPoint;
 
         hero.moveSpeedPoint = dto.moveSpeedPoint;
-        hero.spiritRangePoint = dto.spititRangePoint;
+        hero.spiritRangePoint = dto.spiritRangePoint;
 
-        hero.skillIds = dto.skillIds != null
-            ? new List<string>(dto.skillIds)
-            : new List<string>();
-        hero.skillDatas = new List<SkillData>();
+        hero.equipmentIds = ToStringList(dto.equipmentIds);
+        hero.skillIds = ToStringList(dto.skillIds);
+        hero.techniqueIds = ToStringList(dto.techniqueIds);
 
-        foreach (var skillId in hero.skillIds)
-        {
-            var skillData = dataManager.GetItemById(skillId).Clone() as SkillData;
-            if (skillData != null)
-            {
-                hero.skillDatas.Add(skillData);
-            }
-        }
+        RebuildEquipmentDatas(hero, dataManager);
+        RebuildSkillDatas(hero, dataManager);
+        RebuildTechniqueDatas(hero, dataManager);
 
-        hero.techniqueIds = dto.techniqueIds != null
-            ? new List<string>(dto.techniqueIds)
-            : new List<string>();
-        hero.techniqueDatas = new List<TechniqueData>();
-        foreach (var techniqueId in hero.techniqueIds)
-        {
-            var techniqueData = dataManager.GetItemById(techniqueId).Clone() as TechniqueData;
-            if (techniqueData != null)
-            {
-                hero.techniqueDatas.Add(techniqueData);
-            }
-        }
-
-        hero.equipmentIds = dto.equipmentIds != null
-            ? new List<string>(dto.equipmentIds)
-            : new List<string>();
-        hero.equipmentDatas = new List<EquipmentData>();
-        foreach (var equipmentId in hero.equipmentIds)
-        {
-            var equipmentData = dataManager.GetItemById(equipmentId).Clone() as EquipmentData;
-            if (equipmentData != null)
-            {
-                hero.equipmentDatas.Add(equipmentData);
-            }
-        }
         return hero;
     }
-    public static ItemData GetItemData(string instanceId, GameDataCenterManager dataManager) => dataManager.GetItemById(instanceId);
-    public static HeroData ToHeroData(ChampionDataNetDto dto, GameDataCenterManager dataManager)
-    {
-        if (dto == null) return null;
 
-        HeroData hero = ApplyToHero(dto, dataManager);
-        return hero;
+    public static ItemData GetItemData(string instanceId, GameDataCenterManager dataManager)
+    {
+        if (dataManager == null)
+            return null;
+
+        return dataManager.GetItemById(instanceId);
+    }
+
+    private static FixedString64Bytes ToFixed(string value)
+    {
+        return string.IsNullOrEmpty(value)
+            ? default
+            : new FixedString64Bytes(value);
+    }
+
+    private static FixedList512Bytes<FixedString64Bytes> ToFixedList(List<string> ids)
+    {
+        var fixedList = new FixedList512Bytes<FixedString64Bytes>();
+
+        if (ids == null)
+            return fixedList;
+
+        for (int i = 0; i < ids.Count; i++)
+        {
+            if (fixedList.Length >= fixedList.Capacity)
+                break;
+
+            if (string.IsNullOrEmpty(ids[i]))
+                continue;
+
+            fixedList.Add(new FixedString64Bytes(ids[i]));
+        }
+
+        return fixedList;
+    }
+
+    private static List<string> ToStringList(FixedList512Bytes<FixedString64Bytes> fixedList)
+    {
+        var list = new List<string>(fixedList.Length);
+
+        for (int i = 0; i < fixedList.Length; i++)
+        {
+            string value = fixedList[i].ToString();
+
+            if (!string.IsNullOrEmpty(value))
+                list.Add(value);
+        }
+
+        return list;
+    }
+
+    private static void RebuildEquipmentDatas(HeroData hero, GameDataCenterManager dataManager)
+    {
+        hero.equipmentDatas = new List<EquipmentData>();
+
+        if (hero.equipmentIds == null)
+            return;
+
+        foreach (string equipmentId in hero.equipmentIds)
+        {
+            var item = dataManager.GetItemById(equipmentId);
+
+            if (item == null)
+                continue;
+
+            var equipmentData = item.Clone() as EquipmentData;
+
+            if (equipmentData != null)
+                hero.equipmentDatas.Add(equipmentData);
+        }
+    }
+
+    private static void RebuildSkillDatas(HeroData hero, GameDataCenterManager dataManager)
+    {
+        hero.skillDatas = new List<SkillData>();
+
+        if (hero.skillIds == null)
+            return;
+
+        foreach (string skillId in hero.skillIds)
+        {
+            var item = dataManager.GetItemById(skillId);
+
+            if (item == null)
+                continue;
+
+            var skillData = item.Clone() as SkillData;
+
+            if (skillData != null)
+                hero.skillDatas.Add(skillData);
+        }
+    }
+
+    private static void RebuildTechniqueDatas(HeroData hero, GameDataCenterManager dataManager)
+    {
+        hero.techniqueDatas = new List<TechniqueData>();
+
+        if (hero.techniqueIds == null)
+            return;
+
+        foreach (string techniqueId in hero.techniqueIds)
+        {
+            var item = dataManager.GetItemById(techniqueId);
+
+            if (item == null)
+                continue;
+
+            var techniqueData = item.Clone() as TechniqueData;
+
+            if (techniqueData != null)
+                hero.techniqueDatas.Add(techniqueData);
+        }
     }
 }

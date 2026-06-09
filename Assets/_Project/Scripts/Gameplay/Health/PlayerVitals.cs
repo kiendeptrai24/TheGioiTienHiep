@@ -18,52 +18,70 @@ public class PlayerVitals : TGTHNetworkBehaviour
     [SerializeField] private NetworkVariable<int> CurrentSpirit = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     private StatsData statsData;
     public event Action<VitalType, int, int> OnVitalChanged;
+    private PlayerBattleRoster roster;
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        roster = GetComponentInParent<PlayerBattleRoster>();
+        SubscribeVitalEvents();
         if (IsOwner)
         {
             UpgradeSystemManager.Instance.OnRealmUpgrade += OnRealmUpgrade;
-            MaxHealth.OnValueChanged += OnMaxHealthChanged;
-            CurrentHealth.OnValueChanged += OnCurrentHealthChanged;
-            MaxMana.OnValueChanged += OnMaxManaChanged;
-            CurrentMana.OnValueChanged += OnCurrentManaChanged;
-            MaxSpirit.OnValueChanged += OnMaxSpiritChanged;
-            CurrentSpirit.OnValueChanged += OnCurrentSpiritChanged;
 
             statsData = GetComponent<StatsData>();
             statsData.OnStatReady += OnStatReady;
             statsData.SetUpItem(InventoryCenterManager.Instance.playerCham);
         }
     }
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        UnsubscribeVitalEvents();
+    }
+    private void SubscribeVitalEvents()
+    {
+        MaxHealth.OnValueChanged += OnHealthChanged;
+        CurrentHealth.OnValueChanged += OnHealthChanged;
 
+        MaxMana.OnValueChanged += OnManaChanged;
+        CurrentMana.OnValueChanged += OnManaChanged;
+
+        MaxSpirit.OnValueChanged += OnSpiritChanged;
+        CurrentSpirit.OnValueChanged += OnSpiritChanged;
+    }
+    private void UnsubscribeVitalEvents()
+    {
+        MaxHealth.OnValueChanged -= OnHealthChanged;
+        CurrentHealth.OnValueChanged -= OnHealthChanged;
+
+        MaxMana.OnValueChanged -= OnManaChanged;
+        CurrentMana.OnValueChanged -= OnManaChanged;
+
+        MaxSpirit.OnValueChanged -= OnSpiritChanged;
+        CurrentSpirit.OnValueChanged -= OnSpiritChanged;
+    }
     private void OnRealmUpgrade(bool result)
     {
         if (result)
         {
-            statsData.SetUpItem(InventoryCenterManager.Instance.playerCham);
-            var dataDto = new List<VitalValueDto>();
+            if (!result) return;
 
-            dataDto.Add(new VitalValueDto(VitalType.Health.ToString(), statsData.Health, statsData.Health));
-            dataDto.Add(new VitalValueDto(VitalType.Mana.ToString(), statsData.Mana, statsData.Mana));
-            dataDto.Add(new VitalValueDto(VitalType.Spirit.ToString(), statsData.Spirit, statsData.Spirit));
-            string payload = JsonConvert.SerializeObject(dataDto);
-            SetVitalServerRpc(payload);
+            statsData.SetUpItem(InventoryCenterManager.Instance.playerCham);
+
+            SetVitalServerRpc(
+                new VitalValueNetDto(VitalType.Health, statsData.Health, statsData.Health),
+                new VitalValueNetDto(VitalType.Mana, statsData.Mana, statsData.Mana),
+                new VitalValueNetDto(VitalType.Spirit, statsData.Spirit, statsData.Spirit)
+            );
         }
     }
     #region Callback Sync
 
-    private void OnCurrentSpiritChanged(int maxValue, int curValue) => NotiVitalChanged(VitalType.Spirit, MaxSpirit.Value, CurrentSpirit.Value);
+    private void OnSpiritChanged(int maxValue, int curValue) => NotiVitalChanged(VitalType.Spirit, MaxSpirit.Value, CurrentSpirit.Value);
 
-    private void OnMaxSpiritChanged(int maxValue, int curValue) => NotiVitalChanged(VitalType.Spirit, MaxSpirit.Value, CurrentSpirit.Value);
+    private void OnManaChanged(int maxValue, int curValue) => NotiVitalChanged(VitalType.Mana, MaxMana.Value, CurrentMana.Value);
 
-    private void OnCurrentManaChanged(int maxValue, int curValue) => NotiVitalChanged(VitalType.Mana, MaxMana.Value, CurrentMana.Value);
-
-    private void OnMaxManaChanged(int maxValue, int curValue) => NotiVitalChanged(VitalType.Mana, MaxMana.Value, CurrentMana.Value);
-
-    private void OnCurrentHealthChanged(int maxValue, int curValue) => NotiVitalChanged(VitalType.Health, MaxHealth.Value, CurrentHealth.Value);
-
-    private void OnMaxHealthChanged(int maxValue, int curValue) => NotiVitalChanged(VitalType.Health, MaxHealth.Value, CurrentHealth.Value);
+    private void OnHealthChanged(int maxValue, int curValue) => NotiVitalChanged(VitalType.Health, MaxHealth.Value, CurrentHealth.Value);
 
     #endregion
     public (int max, int current) GetVital(VitalType type)
@@ -82,26 +100,21 @@ public class PlayerVitals : TGTHNetworkBehaviour
     {
         var profile = ProfileManager.Instance.GetProfile();
 
-        var curHealth = profile.currentHealth;
-        var curMana = profile.currentMana;
-        var curSpirit = profile.currentSpirit;
-        var dataDto = new List<VitalValueDto>();
-
-        dataDto.Add(new VitalValueDto(VitalType.Health.ToString(), data.Health, curHealth));
-        dataDto.Add(new VitalValueDto(VitalType.Mana.ToString(), data.Mana, curMana));
-        dataDto.Add(new VitalValueDto(VitalType.Spirit.ToString(), data.Spirit, curSpirit));
-
-        string payload = JsonConvert.SerializeObject(dataDto);
-        SetVitalServerRpc(payload);
+        SetVitalServerRpc(
+            new VitalValueNetDto(VitalType.Health, data.Health, profile.currentHealth),
+            new VitalValueNetDto(VitalType.Mana, data.Mana, profile.currentMana),
+            new VitalValueNetDto(VitalType.Spirit, data.Spirit, profile.currentSpirit)
+        );
     }
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-    private void SetVitalServerRpc(string data)
+    private void SetVitalServerRpc(
+        VitalValueNetDto health,
+        VitalValueNetDto mana,
+        VitalValueNetDto spirit)
     {
-        var dataDto = JsonConvert.DeserializeObject<List<VitalValueDto>>(data);
-        foreach (var dto in dataDto)
-        {
-            SetVital(Enum.Parse<VitalType>(dto.type), dto.max, dto.current);
-        }
+        SetVital(health.type, health.max, health.current);
+        SetVital(mana.type, mana.max, mana.current);
+        SetVital(spirit.type, spirit.max, spirit.current);
     }
     public void SetViral(float healthPersent, float manaPersent, float spiritPersent)
     {
@@ -175,21 +188,45 @@ public class PlayerVitals : TGTHNetworkBehaviour
     }
     private void NotiVitalChanged(VitalType type, int maxValue, int curValue)
     {
+
         float persent = Mathf.Clamp01((float)curValue / maxValue);
         var inventory = InventoryCenterManager.Instance;
+
         switch (type)
         {
             case VitalType.Health:
-                inventory.championData.healthPersent = persent;
+                if (IsOwner)
+                {
+                    inventory.championData.healthPersent = persent;
+                }
+                else if (IsServer)
+                {
+                    roster.SetCharacterPersent(type, persent);
+                }
                 break;
             case VitalType.Mana:
-                inventory.championData.manaPersent = persent;
+                if (IsOwner)
+                {
+                    inventory.championData.manaPersent = persent;
+                }
+                else if (IsServer)
+                {
+                    roster.SetCharacterPersent(type, persent);
+                }
                 break;
             case VitalType.Spirit:
-                inventory.championData.spiritPersent = persent;
+                if (IsOwner)
+                {
+                    inventory.championData.spiritPersent = persent;
+                }
+                else if (IsServer)
+                {
+                    roster.SetCharacterPersent(type, persent);
+                }
                 break;
         }
-        InventoryCenterManager.Instance.NotifyListItemDatasChampionChanged();
+        if (IsOwner)
+            inventory.NotifyListItemDatasChampionChanged();
         OnVitalChanged?.Invoke(type, maxValue, curValue);
     }
 }

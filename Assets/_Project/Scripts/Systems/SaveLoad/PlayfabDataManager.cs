@@ -253,6 +253,13 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
         gameData.potentialPoint = heroData.realmData.rewardPotentialPoint;
         gameData.skillPoint = heroData.realmData.rewardSkillPoint;
+        var realmData = GameDataCenterManager.Instance.GetItemById(heroData.realmId);
+        if (realmData != null)
+        {
+            gameData.currentHealth = (int)realmData.health;
+            gameData.currentMana = (int)realmData.mana;
+            gameData.currentSpirit = (int)realmData.spirit;
+        }
         characterService.SaveGame(gameData);
         SaveGameData();
     }
@@ -264,7 +271,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         SceneLoadManager.Instance.LoadSceneLoading();
         LoadGameData(() =>
         {
-            NetworkManager.Singleton.StartClient();
+            NetworkManager.Singleton.StartHost();
             SceneLoadManager.Instance.UnLoadScene("LoadingScene");
         });
     }

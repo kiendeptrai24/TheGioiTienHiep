@@ -40,8 +40,7 @@ public class PlayerNetManager : Singleton<PlayerNetManager>, ISaveable
     }
     private void Update()
     {
-        if (player == null) return;
-
+        if (player == null || player.moveable == null) return;
         if (player.moveable.IsMoving())
         {
             position = player.gameObject.transform.position;

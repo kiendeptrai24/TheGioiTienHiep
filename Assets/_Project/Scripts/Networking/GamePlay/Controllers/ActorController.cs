@@ -98,6 +98,7 @@ public class ActorController : TGTHNetworkBehaviour
     {
         if (IsOwner)
         {
+            if (inputManager == null) return;
             inputDirection = inputManager.GetInputDirection();
             if (inputDirection.sqrMagnitude < 0.0001f && OldDirection.Value.sqrMagnitude < 0.0001f)
                 return;

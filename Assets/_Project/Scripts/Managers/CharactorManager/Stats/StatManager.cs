@@ -14,6 +14,7 @@ public class StatManager : Singleton<StatManager>
     }
     public void SetStat(ItemData item)
     {
+        if(statsData == null) return;
         statsData.SetUpItem(item);
         if (item is HeroData heroData)
         {

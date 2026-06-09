@@ -16,6 +16,7 @@ public class WorldClickSystem : TGTHMonoBehaviour
     protected override void Awake()
     {
         base.Awake();
+        if (Configuration.Instance.IsServerBuild()) return;
         input = FindAnyObjectByType<InputManager>();
         PlayerNetManager.Instance.OnPlayerExiststed += OnPlayerExists;
         input.OnPointerPositionClick += (Vector2 pos) =>

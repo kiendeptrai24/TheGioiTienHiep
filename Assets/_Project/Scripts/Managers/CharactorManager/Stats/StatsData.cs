@@ -66,9 +66,9 @@ public class StatsData : TGTHMonoBehaviour
         StatChange();
     }
     #region Stats Emplementation
-    public Dictionary<StatType, Stat> GetStats() => stats.GetStats();
-    public int GetStatValue(StatType type) => stats.GetStatValue(type);
-    public Stat GetStatType(StatType type) => stats.GetStat(type);
+    public Dictionary<StatType, Stat> GetStats() =>  stats == null ? null : stats.GetStats();
+    public int GetStatValue(StatType type) => stats == null ? 0 : stats.GetStatValue(type);
+    public Stat GetStatType(StatType type) =>  stats == null ? null : stats.GetStat(type);
     #endregion
 
     #region Setup Item Data

@@ -11,6 +11,7 @@ public class PlayerCameraControl : TGTHNetworkBehaviour
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
+        if(cameraManager == null) return;
         cameraManager.SetTarget(this.transform);
     }
     override protected void LoadComponent()

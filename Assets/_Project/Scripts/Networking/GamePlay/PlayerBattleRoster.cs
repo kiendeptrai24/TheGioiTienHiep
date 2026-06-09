@@ -1,119 +1,220 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using Unity.Netcode;
 using UnityEngine;
+
 [Serializable]
 public class ChampionSetUp
 {
     public string championId;
     public Vector2Int championIndex;
 }
+
 public class PlayerBattleRoster : TGTHNetworkBehaviour
 {
     public bool player = false;
+
     [SerializeField] private List<ChampionSetUp> championSetUps = new();
-    [Header("Hero prefabs of this player (must be NetworkObject prefabs + registered in NetworkManager)")]
+
     public List<ItemData> itemDatas = new();
-    // Bạn có thể thêm logic chọn đội hình (chỉ spawn N con đầu tiên)
     public int maxHeroesToSpawn = 5;
 
-    public Action result = default;
-    public Action<List<ItemData>> OnChampionPlayerChanged = default;
+    public Action result;
+    public Action<List<ItemData>> OnChampionPlayerChanged;
+
+    private ItemPrefabDatabase itemPrefabDatabase;
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
 
+        if (IsServer)
+        {
+            LoadDefaultTeamOnServer();
+        }
+
         if (IsOwner && player)
         {
-            var itemPrefabDatabase = ItemPrefabDatabase.Instance;
-            itemPrefabDatabase.OnPlayerPrefabChanged += OnPlayerPrefabChanged;
-            OnPlayerPrefabChanged(itemPrefabDatabase.ListIteDataChampion());
-        }
-        if (!IsServer) return;
-        foreach (var item in championSetUps)
-        {
-            itemDatas.Clear();
-            var itemData = GameDataCenterManager.Instance.GetItemById(item.championId) as HeroData;
-            itemData.championIndex = item.championIndex;
-            itemDatas.Add(itemData);
+            itemPrefabDatabase = ItemPrefabDatabase.Instance;
+
+            if (itemPrefabDatabase != null)
+            {
+                itemPrefabDatabase.OnPlayerPrefabChanged += OnPlayerPrefabChanged;
+                OnPlayerPrefabChanged(itemPrefabDatabase.ListIteDataChampion());
+            }
         }
     }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+
+        if (itemPrefabDatabase != null)
+        {
+            itemPrefabDatabase.OnPlayerPrefabChanged -= OnPlayerPrefabChanged;
+            itemPrefabDatabase = null;
+        }
+    }
+
+    private void LoadDefaultTeamOnServer()
+    {
+        itemDatas.Clear();
+
+        int count = Mathf.Min(championSetUps.Count, maxHeroesToSpawn);
+
+        for (int i = 0; i < count; i++)
+        {
+            var setup = championSetUps[i];
+
+            var hero = GameDataCenterManager.Instance.GetItemById(setup.championId) as HeroData;
+
+            if (hero == null)
+                continue;
+
+            hero.championIndex = setup.championIndex;
+            itemDatas.Add(hero);
+        }
+    }
+
     private void OnPlayerPrefabChanged(List<ItemData> list)
     {
         if (!IsSpawned) return;
-        itemDatas = list;
-        var datasDto = new List<ChampionDataNetDto>();
-        foreach (var item in itemDatas)
+        if (!IsOwner) return;
+        if (list == null) return;
+
+        itemDatas.Clear();
+
+        int count = Mathf.Min(list.Count, maxHeroesToSpawn);
+        var dtoArray = new ChampionDataNetDto[count];
+
+        for (int i = 0; i < count; i++)
         {
-            datasDto.Add(RuntimeNetDataMapper.ToNetDto(item as HeroData));
+            if (list[i] is not HeroData hero)
+                continue;
+
+            itemDatas.Add(hero);
+            dtoArray[i] = RuntimeNetDataMapper.ToNetDto(hero);
         }
-        string json = JsonConvert.SerializeObject(datasDto);
-        SendToServerOnPlayerPrefabChangedServerRpc(json);
+
+        SendToServerOnPlayerPrefabChangedServerRpc(dtoArray);
     }
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    private void SendToServerOnPlayerPrefabChangedServerRpc(string itemDataDTO)
+
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+    private void SendToServerOnPlayerPrefabChangedServerRpc(ChampionDataNetDto[] datasDto)
     {
         if (!IsServer) return;
-        var datasDto = JsonConvert.DeserializeObject<List<ChampionDataNetDto>>(itemDataDTO);
-        var itemDatas = new List<ItemData>();
-        foreach (var dto in datasDto)
+        if (datasDto == null) return;
+
+        itemDatas.Clear();
+
+        int count = Mathf.Min(datasDto.Length, maxHeroesToSpawn);
+
+        for (int i = 0; i < count; i++)
         {
-            itemDatas.Add(RuntimeNetDataMapper.ToHeroData(dto, GameDataCenterManager.Instance));
+            var hero = RuntimeNetDataMapper.ToHeroData(
+                datasDto[i],
+                GameDataCenterManager.Instance
+            );
+
+            if (hero == null)
+                continue;
+
+            itemDatas.Add(hero);
         }
-        this.itemDatas = itemDatas;
+
         OnChampionPlayerChanged?.Invoke(itemDatas);
     }
 
-    public void GetPlayerTeam(Action result = default)
+    public void GetPlayerTeam(Action callback = null)
     {
-        this.result = result;
+        result = callback;
+
         if (IsServer)
         {
-            // Nếu đang chạy trên server luôn thì khỏi RPC
-            OnPlayerTeamReceived(OwnerClientId, new List<ItemData>(itemDatas));
+            OnPlayerTeamReceived(OwnerClientId, itemDatas);
             return;
         }
+
         GetPlayerTeamServerRpc();
     }
 
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    public void GetPlayerTeamServerRpc(RpcParams rpcParams = default)
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+    private void GetPlayerTeamServerRpc(RpcParams rpcParams = default)
     {
         if (!IsServer) return;
 
         ulong requesterClientId = rpcParams.Receive.SenderClientId;
 
-        var datasDto = new List<ChampionDataNetDto>();
-        foreach (var item in itemDatas)
+        int count = Mathf.Min(itemDatas.Count, maxHeroesToSpawn);
+        var dtoArray = new ChampionDataNetDto[count];
+
+        for (int i = 0; i < count; i++)
         {
-            datasDto.Add(RuntimeNetDataMapper.ToNetDto(item as HeroData));
+            if (itemDatas[i] is not HeroData hero)
+                continue;
+
+            dtoArray[i] = RuntimeNetDataMapper.ToNetDto(hero);
         }
-        string json = JsonConvert.SerializeObject(datasDto);
-        ReturnPlayerTeamClientRpc(requesterClientId, json);
+
+        ReturnPlayerTeamClientRpc(requesterClientId, dtoArray);
     }
 
-    /// <summary>
-    /// Server trả dữ liệu team lại cho đúng client đã request.
-    /// </summary>
     [Rpc(SendTo.NotServer)]
-    private void ReturnPlayerTeamClientRpc(ulong requesterClientId, string itemDataDTO)
+    private void ReturnPlayerTeamClientRpc(ulong requesterClientId, ChampionDataNetDto[] datasDto)
     {
         if (NetworkManager.Singleton.LocalClientId != requesterClientId)
             return;
 
-        var datasDto = JsonConvert.DeserializeObject<List<ChampionDataNetDto>>(itemDataDTO);
         var list = new List<ItemData>();
-        foreach (var dto in datasDto)
+
+        if (datasDto != null)
         {
-            list.Add(RuntimeNetDataMapper.ToHeroData(dto, GameDataCenterManager.Instance));
+            for (int i = 0; i < datasDto.Length; i++)
+            {
+                var hero = RuntimeNetDataMapper.ToHeroData(
+                    datasDto[i],
+                    GameDataCenterManager.Instance
+                );
+
+                if (hero != null)
+                    list.Add(hero);
+            }
         }
+
         OnPlayerTeamReceived(requesterClientId, list);
-        Debug.Log($"Received team of player {OwnerClientId}, count = {list?.Count ?? 0}");
     }
-    public void OnPlayerTeamReceived(ulong requesterClientId, List<ItemData> list)
+
+    private void OnPlayerTeamReceived(ulong requesterClientId, List<ItemData> list)
     {
-        itemDatas = list;
+        if (IsServer == false)
+        {
+            itemDatas.Clear();
+
+            if (list != null)
+                itemDatas.AddRange(list);
+        }
         result?.Invoke();
+    }
+    public void SetCharacterPersent(VitalType type, float persent)
+    {
+        if (!IsServer) return;
+        foreach (var item in itemDatas)
+        {
+            if (item is not HeroData hero) continue;
+            if (hero.isCharacter == false) continue;
+
+            switch (type)
+            {
+                case VitalType.Health:
+                    hero.healthPersent = persent;
+                    break;
+                case VitalType.Mana:
+                    hero.manaPersent = persent;
+                    break;
+                case VitalType.Spirit:
+                    hero.spiritPersent = persent;
+                    break;
+            }
+        }
     }
 }
