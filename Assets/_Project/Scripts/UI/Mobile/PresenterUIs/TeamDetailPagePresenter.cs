@@ -16,52 +16,60 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
     [SerializeField] private TeamDetailPageView view;
     [SerializeField] private ChooseHeroPresenter chooseHeroPresenter;
     private InventoryCenterManager inventoryCenterManager;
-    [SerializeField] private List<ItemData> listDatas = new();
+    [SerializeField] private Dictionary<ItemData, Vector2Int> listAddDatas = new();
     private UIItemSlotBase currentItemSelect;
     private int currentlyDraggedItemIndex = -1;
     private bool isDraging;
-
+    private ChampionListSnapshot championLS;
     protected override void Awake()
     {
         base.Awake();
+        listAddDatas = new();
+        view.OnCancelClicked += OnCancelClicked;
+        view.OnOkClicked += OnOkClicked;
         inventoryCenterManager = InventoryCenterManager.Instance;
-        inventoryCenterManager.OnLoadDataSuccessed += () =>
+        championLS = ChampionListSnapshot.Instance;
+        championLS.OnLoadDataSuccessed += () =>
         {
-            listDatas.Clear();
-            view.Reset();
-            SetInit(inventoryCenterManager.GetDatasChampionInTeam());
+            SetInit(championLS.GetDicDatasChampionInTeam());
+        };
+        championLS.OnDataSave += () =>
+        {
+            SetInit(championLS.GetDicDatasChampionInTeam());
+        };
+        championLS.OnDataUndo += () =>
+        {
+            SetInit(championLS.GetDicDatasChampionInTeam());
         };
         InitializeInventoryUI();
+        SetInit(championLS.GetDicDatasChampionInTeam());
     }
-    protected override void Start()
+
+    private void OnOkClicked()
     {
-        base.Start();
-        SetInit(inventoryCenterManager.GetDatasChampionInTeam());
+        championLS.Save();
     }
-    public void SetInit(List<ItemData> itemDatas)
+
+    private void OnCancelClicked()
     {
+        championLS.Undo();
+    }
+    public void SetInit(Dictionary<ItemData, Vector2Int> itemDatas)
+    {
+        listAddDatas.Clear();
+        view.Reset();
         int index = 0;
         foreach (var item in itemDatas)
         {
             if (index >= inventoryCenterManager.MaxChampion())
                 break;
-            AddItem(item, (item as HeroData).championIndex);
+            AddItemUI(item.Key, item.Value);
             index++;
         }
-    }
-    public List<ItemData> GetAllItems()
-    {
-        var items = new List<ItemData>();
-        foreach (var item in listDatas)
-        {
-            items.Add(item);
-        }
-        return items;
     }
 
     private void InitializeInventoryUI()
     {
-
         foreach (var uiItem in view.listOfUIItems)
         {
             var item = uiItem as UIChoseChampionItem;
@@ -76,22 +84,20 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
 
     }
 
-    public void AddItem(ItemData data)
+    public void AddItem(ItemData data, Vector2Int index)
     {
-        if (listDatas.Count >= inventoryCenterManager.MaxChampion())
+        if (listAddDatas.Count >= inventoryCenterManager.MaxChampion())
         {
             Debug.Log("Max Champion");
             return;
         }
-        listDatas.Add(data);
-        inventoryCenterManager.EquipData(data);
-        inventoryCenterManager.SetItemChampionData(GetAllItems());
+        listAddDatas.Add(data, new Vector2Int(index.x, index.y));
+        championLS.EquipData(data, index);
     }
     public void RemoveItem(ItemData data)
     {
-        listDatas.Remove(data);
-        inventoryCenterManager.UnEquipData(data);
-        inventoryCenterManager.SetItemChampionData(GetAllItems());
+        listAddDatas.Remove(data);
+        championLS.UnEquipData(data);
     }
     private void HandleEmptySlotClicked(UIChoseChampionItem item)
     {
@@ -100,16 +106,16 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
     }
     public bool CheckTeamIsFull()
     {
-        return listDatas.Count >= inventoryCenterManager.MaxChampion();
+        return listAddDatas.Count >= inventoryCenterManager.MaxChampion();
     }
     private void HandleEndDrag(UIItemSlotBase uiItem)
     {
         isDraging = false;
         ResetDrag();
     }
-    public bool AddItem(ItemData itemData, Vector2 index)
+    public bool AddItemUI(ItemData itemData, Vector2 index)
     {
-        if (listDatas.Count >= inventoryCenterManager.MaxChampion())
+        if (listAddDatas.Count > inventoryCenterManager.MaxChampion())
         {
             return false;
         }
@@ -117,8 +123,8 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
         ShowItem(itemData, index);
         int x = (int)index.x;
         int y = (int)index.y;
-        (itemData as HeroData).championIndex = new Vector2Int(x, y);
-        AddItem(itemData);
+        var championIndex = new Vector2Int(x, y);
+        AddItem(itemData, championIndex);
         return true;
     }
 
@@ -157,7 +163,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
             view.listOfUIItems[i].SetItem(new InventoryItem(itemData));
             break;
         }
-        AddItem(itemData);
+        AddItemUI(itemData, index);
     }
     private void HandleItemDropped(UIItemSlotBase uiItem)
     {
@@ -218,17 +224,23 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
 
         if (fromHero == null && toHero == null)
             return;
-
         if (fromHero != null)
         {
-            fromHero.championIndex = toItem.championIndex;
+            if (listAddDatas.ContainsKey(fromHero))
+            {
+                listAddDatas[fromHero] = toItem.championIndex;
+                championLS.SwapIndex(fromHero, toItem.championIndex);
+            }
         }
 
         if (toHero != null)
         {
-            toHero.championIndex = fromItem.championIndex;
+            if (listAddDatas.ContainsKey(toHero))
+            {
+                listAddDatas[toHero] = fromItem.championIndex;
+                championLS.SwapIndex(toHero, fromItem.championIndex);
+            }
         }
-        inventoryCenterManager.SetItemChampionData(GetAllItems());
     }
     private void HandleItemClicked(UIItemSlotBase uiItem)
     {

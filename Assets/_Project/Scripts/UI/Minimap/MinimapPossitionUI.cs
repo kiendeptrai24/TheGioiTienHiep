@@ -4,27 +4,19 @@ using UnityEngine;
 public class MinimapPossitionUI : TGTHMonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI posTxt;
-    private MapSpawn mapSpawn;
-    protected override void Awake()
-    {
-        base.Awake();
-        LoadComponent();
-        mapSpawn.posPlayer += OnPosPlayer;
-
-    }
-
-    private void OnPosPlayer(int xPos, int yPos)
-    {
-        posTxt.text = xPos.ToString() + ":" + yPos.ToString();
-    }
-
+    private PlayerPositionTracker localPlayerPositionTracker;
     protected override void Start()
     {
-        base.Start();
+        localPlayerPositionTracker = PlayerPositionTracker.Instance;
+        localPlayerPositionTracker.OnPositionChanged += OnPlayerPosChanged;
     }
-    protected override void LoadComponent()
+    private void OnDestroy()
     {
-        base.LoadComponent();
-        mapSpawn = FindAnyObjectByType<MapSpawn>();
+        if (localPlayerPositionTracker == null) return;
+        localPlayerPositionTracker.OnPositionChanged -= OnPlayerPosChanged;
+    }
+    private void OnPlayerPosChanged(int xPos, int yPos)
+    {
+        posTxt.text = xPos.ToString() + ":" + yPos.ToString();
     }
 }

@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
-using WorldMap.Domain;
 
 public class PathFinding : Singleton<PathFinding>
 {
-    public NavMeshPathFollower follower;
+    private NavMeshPathFollower follower;
     public Transform B;
     private PathVisualizer pathVisualizer;
 
@@ -19,7 +18,6 @@ public class PathFinding : Singleton<PathFinding>
         public bool ok;
         public int distance;
     }
-    private readonly List<GridCoord> path = new List<GridCoord>(512);
     public List<Vector3> corners = new List<Vector3>();
     protected override void Start()
     {
@@ -96,36 +94,4 @@ public class PathFinding : Singleton<PathFinding>
             follower.RequesMove(corners);
         }
     }
-    public static void SimplifyInPlace(List<GridCoord> path)
-    {
-        if (path == null || path.Count < 3) return;
-
-        int write = 1;
-        GridCoord prev = path[0];
-        GridCoord cur = path[1];
-
-        int lastDx = cur.x - prev.x;
-        int lastDz = cur.z - prev.z;
-
-        for (int i = 2; i < path.Count; i++)
-        {
-            GridCoord next = path[i];
-            int dx = next.x - cur.x;
-            int dz = next.z - cur.z;
-
-            // nếu đổi hướng -> giữ cur
-            if (dx != lastDx || dz != lastDz)
-            {
-                path[write++] = cur;
-                lastDx = dx; lastDz = dz;
-            }
-
-            prev = cur;
-            cur = next;
-        }
-
-        path[write++] = path[^1];
-        path.RemoveRange(write, path.Count - write);
-    }
-
 }

@@ -191,42 +191,23 @@ public class PlayerVitals : TGTHNetworkBehaviour
 
         float persent = Mathf.Clamp01((float)curValue / maxValue);
         var inventory = InventoryCenterManager.Instance;
-
-        switch (type)
-        {
-            case VitalType.Health:
-                if (IsOwner)
-                {
-                    inventory.championData.healthPersent = persent;
-                }
-                else if (IsServer)
-                {
-                    roster.SetCharacterPersent(type, persent);
-                }
-                break;
-            case VitalType.Mana:
-                if (IsOwner)
-                {
-                    inventory.championData.manaPersent = persent;
-                }
-                else if (IsServer)
-                {
-                    roster.SetCharacterPersent(type, persent);
-                }
-                break;
-            case VitalType.Spirit:
-                if (IsOwner)
-                {
-                    inventory.championData.spiritPersent = persent;
-                }
-                else if (IsServer)
-                {
-                    roster.SetCharacterPersent(type, persent);
-                }
-                break;
-        }
         if (IsOwner)
-            inventory.NotifyListItemDatasChampionChanged();
+        {
+            switch (type)
+            {
+                case VitalType.Health:
+                    inventory.championData.healthPersent = persent;
+                    break;
+                case VitalType.Mana:
+                    inventory.championData.manaPersent = persent;
+                    break;
+                case VitalType.Spirit:
+                    inventory.championData.spiritPersent = persent;
+                    break;
+            }
+
+        }
+        roster.SetCharacterPersent(type, persent);
         OnVitalChanged?.Invoke(type, maxValue, curValue);
     }
 }

@@ -54,10 +54,9 @@ public class WorldClickSystem : TGTHMonoBehaviour
                 {
                     if (netObj.IsPlayerObject && netObj.IsOwner)
                         return;
+                    clickable.OnClicked();
+                    return;
                 }
-
-                clickable.OnClicked();
-                return;
             }
         }
         if (pathFollowerRB == null) return;

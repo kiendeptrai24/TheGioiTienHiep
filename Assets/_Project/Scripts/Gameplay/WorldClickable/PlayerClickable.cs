@@ -1,7 +1,6 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Playables;
 
 public class PlayerClickable : EntityClickable
 {

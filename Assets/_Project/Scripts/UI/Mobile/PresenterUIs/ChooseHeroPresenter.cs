@@ -18,7 +18,7 @@ namespace TGTH.Mobile
         public event Action<int> OnStartDragging;
         private bool isDraging = false;
         private UIItemSlotBase currentItem;
-        [SerializeField] private InventoryCenterManager inventoryCenterManager;
+        private ChampionListSnapshot championLS;
 
         protected override void Awake()
         {
@@ -28,25 +28,37 @@ namespace TGTH.Mobile
 
             InitializeInventoryUI(50);
             ShowAllItems();
+        }
+        protected override void Start()
+        {
+            base.Start();
             LoadDataCenter();
         }
-
-        private void OnLoadDataSuccessed()
-        {
-            view.Reset();
-            SetItemData(inventoryCenterManager.GetDataType(ItemType.Champion, true));
-        }
-
         private void LoadDataCenter()
         {
-            inventoryCenterManager = InventoryCenterManager.Instance;
-            inventoryCenterManager.OnItemExistingChampionDataChanged += SetItemData;
-            SetItemData(inventoryCenterManager.GetDataType(ItemType.Champion, true));
-            inventoryCenterManager.OnLoadDataSuccessed += OnLoadDataSuccessed;
+            championLS = ChampionListSnapshot.Instance;
+            championLS.OnDataChanged += () =>
+            {
+                view.Reset();
+                SetItemData(championLS.GetDatasChampionInInventory());
+            };
+            championLS.OnLoadDataSuccessed += () =>
+            {
+                view.Reset();
+                SetItemData(championLS.GetDatasChampionInInventory());
+            };
+            championLS.OnDataUndo += () =>
+            {
+                view.Reset();
+                SetItemData(championLS.GetDatasChampionInInventory());
+            };
+            view.Reset();
+            SetItemData(championLS.GetDatasChampionInInventory());
         }
 
         private void SetItemData(List<ItemData> list)
         {
+            view.Reset();
             var temp = new List<InventoryItem>();
             foreach (var item in list)
             {
@@ -69,12 +81,6 @@ namespace TGTH.Mobile
                 uiItem.OnItemEndDrag += HandleEndDrag;
                 uiItem.OnRightMouseBtnClick += HandleItemRightClick;
             }
-        }
-
-        public void SetInventoryData(List<InventoryItem> items)
-        {
-            listItemDatas = items;
-            ShowAllItems();
         }
 
         private void ShowAllItems()
@@ -141,7 +147,7 @@ namespace TGTH.Mobile
                             TopNotificationUI.Instance.ShowNotification("Đội hình đã đầy, không thể thêm tướng.");
                             return;
                         }
-                        teamDetailPagePresenter.AddItem(uiItem.inventoryItem.data, item.championIndex);
+                        teamDetailPagePresenter.AddItemUI(uiItem.inventoryItem.data, item.championIndex);
                     }
                 },
                 onCancel: () =>
@@ -157,7 +163,7 @@ namespace TGTH.Mobile
         }
         public bool CheckChampionHasInTeam(string championId)
         {
-            foreach (var data in inventoryCenterManager.GetDatasChampionInTeam())
+            foreach (var data in championLS.GetDatasChampionInTeam())
             {
                 if (data != null && data.instanceId == championId)
                     return true;

@@ -39,7 +39,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public event Action OnLoadDataSuccessed;
     public int MaxChampion()
     {
-        if (playerCham == null) return 0;
+        if (playerCham == null) return 1;
         var cham = playerCham as HeroData;
         switch (cham.realmId)
         {
@@ -101,17 +101,48 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     public List<ItemData> GetDatasChampionInTeam() => listItemDatasChampionInTeam;
     public List<ItemData> GetDatasUsed() => listItemDatasUsed;
     public List<ItemData> GetDatas() => listItemDatas;
-
-
+    public List<ItemData> GeChampiontDatasExisting()
+    {
+        var list = new List<ItemData>();
+        foreach (var item in listItemDatasExisting)
+        {
+            if (item is HeroData)
+                list.Add(item);
+        }
+        return list;
+    }
     public void SetItemChampionData(List<ItemData> data)
     {
         listItemDatasChampionInTeam = data;
         NotifyListItemDatasChampionChanged();
     }
+    public void SetItemChampionDataExists(List<ItemData> data)
+    {
+        listItemDatasExisting.RemoveAll(item => item is HeroData);
+
+        if (data == null)
+            return;
+        foreach (var item in data)
+        {
+            if (item == null)
+                continue;
+
+            listItemDatasExisting.Add(item);
+        }
+        // foreach (var item in data)
+        // {
+        //     if (item == null)
+        //         continue;
+
+        //     if (listItemDatasExisting.Exists(x => x.instanceId == item.instanceId && x.itemId == item.itemId))
+        //         continue;
+
+        //     listItemDatasExisting.Add(item);
+        // }
+    }
     public void NotifyListItemDatasChampionChanged()
     {
         OnListItemDatasChampionChanged?.Invoke(listItemDatasChampionInTeam);
-
     }
     public void PlayerDataChanged(ItemData item)
     {

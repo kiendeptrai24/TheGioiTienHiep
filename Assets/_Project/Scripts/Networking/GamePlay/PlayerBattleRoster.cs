@@ -138,7 +138,7 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
         GetPlayerTeamServerRpc();
     }
 
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     private void GetPlayerTeamServerRpc(RpcParams rpcParams = default)
     {
         if (!IsServer) return;

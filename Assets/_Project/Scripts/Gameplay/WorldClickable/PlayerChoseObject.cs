@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerChoseObject : Singleton<PlayerChoseObject>
 {
-    private EntityClickable currentEntity;
+    [SerializeField] private EntityClickable currentEntity;
     private UIFollow uIFollow;
     private NetworkObject playerNet;
     public event Action<EntityClickable> OnEntityClicked;

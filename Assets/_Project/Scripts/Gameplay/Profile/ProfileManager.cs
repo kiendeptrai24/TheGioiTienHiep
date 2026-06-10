@@ -10,17 +10,19 @@ public class ProfileManager : Singleton<ProfileManager>, ISaveable
     public List<ulong> resourceIds = new List<ulong>();
     public event Action<ProfileUser> OnProfileChanged;
     public event Action<ProfileUser> OnProfileReady;
+    public event Action<ProfileUser> OnPlayerPosChanged;
     private PlayerNetManager playerNM;
     protected override void Awake()
     {
         base.Awake();
-
-        playerNM = PlayerNetManager.Instance;
-        playerNM.OnPlayerExiststed += OnPlayerExiststed;
-
         string userId = "";
         profileUser = new ProfileUser(userId, "người chơi", "");
-
+    }
+    protected override void Start()
+    {
+        base.Start();
+        playerNM = PlayerNetManager.Instance;
+        playerNM.OnPlayerExiststed += OnPlayerExiststed;
         NotiProfileChanged();
     }
     private void OnPlayerExiststed(NetworkObject playerNet)

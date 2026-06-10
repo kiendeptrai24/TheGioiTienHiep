@@ -12,13 +12,18 @@ public class TeamDetailPageView : TGTHMonoBehaviour
     [SerializeField] private TextMeshProUGUI realmTxt;
     [SerializeField] private TextMeshProUGUI qualityTypeTxt;
     [SerializeField] private TextMeshProUGUI championIndexTxt;
+    [SerializeField] private Button okBtn;
+    [SerializeField] private Button cancelBtn;
     [SerializeField] private Image itemIconImge;
-    [SerializeField] private Transform content;
     public MouseFollower mouseFollower;
     public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
+    public event Action OnOkClicked;
+    public event Action OnCancelClicked;
     protected override void Awake()
     {
         base.Awake();
+        okBtn.onClick.AddListener(() => OnOkClicked?.Invoke());
+        cancelBtn.onClick.AddListener(() => OnCancelClicked?.Invoke());
         Init();
     }
     private void Init()

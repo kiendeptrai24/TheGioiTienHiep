@@ -62,32 +62,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 #if UNITY_STANDALONE_WIN || UNITY_SERVER
             IAuthService authService = new PlayFabAuthService(clientApi);
             authFacade = new AuthFacade(authService);
-            LobbyController.Instance.OnLobbySearchLobbiesCompleted += (success, lobby) =>
-            {
-                if (success)
-                {
-                    if (LobbyController.Instance.HasLobby()) return;
-                    LobbyController.Instance.JoinLobby(clientApi.authenticationContext, lobby.ConnectionString);
-                    ready = true;
-                }
-                else
-                {
-                    if (LobbyController.Instance.HasLobby()) return;
-                    var playfabConnectMutiplayer = new PlayfabConnectMutiplayer(clientApi.authenticationContext);
-                    playfabConnectMutiplayer.RequestMultiplayerServer(clientApi, Configuration.Instance, result =>
-                    {
-                        if (result.success)
-                        {
-                            LobbyController.Instance.CreateLobby(clientApi.authenticationContext, result.ipAddress, result.port);
-                            ready = true;
-                        }
-                        else
-                        {
-                            Debug.Log("RequestMultiplayerServer failed");
-                        }
-                    });
-                }
-            };
+            var playfabConnectMutiplayer = new PlayfabConnectMutiplayer(clientApi.authenticationContext);
 #endif
         }
     }
@@ -201,7 +176,6 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         {
             sessionId = result.sessionId;
             CreateSession();
-            FindRemoteServer();
             LoginSuccess?.Invoke(result);
             hasLogined = true;
             if (gameDataCenterManager.IsReady() == false) return;
@@ -227,12 +201,6 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         loadRemotes.Add(gameBaseCharacterService);
     }
 
-    private void FindRemoteServer()
-    {
-#if UNITY_STANDALONE_WIN || UNITY_SERVER
-        LobbyController.Instance.GetLobbyServer(clientApi.authenticationContext);
-#endif
-    }
     public void AddCharacter(ItemData itemCharacter)
     {
         var heroData = itemCharacter as HeroData;
@@ -272,6 +240,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         LoadGameData(() =>
         {
             NetworkManager.Singleton.StartHost();
+            // NetworkManager.Singleton.StartClient();
             SceneLoadManager.Instance.UnLoadScene("LoadingScene");
         });
     }

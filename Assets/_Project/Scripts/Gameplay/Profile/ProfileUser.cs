@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 [Serializable]
 public class ProfileUser
@@ -16,6 +17,8 @@ public class ProfileUser
     public int experience;
     public int potentialPoint;
     public int skillPoint;
+    public Vector3 pos;
+    public Quaternion rot;
     public ItemDataPoint itemDataPoint;
     public PlayerResource playerResource;
     private List<string> listFriend;
@@ -25,6 +28,8 @@ public class ProfileUser
         this.userId = userId;
         this.userName = userName;
         this.createdAt = createdAt;
+        pos = new Vector3(0, 0, 0);
+        rot = Quaternion.Identity;
         listFriend = new List<string>();
         itemDataPoint = new ItemDataPoint();
         playerResource = new PlayerResource();
