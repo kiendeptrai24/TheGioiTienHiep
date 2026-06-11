@@ -21,6 +21,11 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
     private int currentlyDraggedItemIndex = -1;
     private bool isDraging;
     private ChampionListSnapshot championLS;
+    private float cooldownSave = 1;
+    private float cooldownUndo = 1;
+    private float saveTimer = 0;
+    private float undoTimer = 0;
+    private bool hasChanged;
     protected override void Awake()
     {
         base.Awake();
@@ -35,10 +40,12 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
         };
         championLS.OnDataSave += () =>
         {
+            TopNotificationUI.Instance.ShowNotification("Lưu thành công");
             SetInit(championLS.GetDicDatasChampionInTeam());
         };
         championLS.OnDataUndo += () =>
         {
+            TopNotificationUI.Instance.ShowNotification("Hoàn tác thành công");
             SetInit(championLS.GetDicDatasChampionInTeam());
         };
         InitializeInventoryUI();
@@ -47,11 +54,19 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
 
     private void OnOkClicked()
     {
+        if (!hasChanged) return;
+        if (Time.time < cooldownSave + saveTimer) return;
+
+        saveTimer = Time.time;
         championLS.Save();
     }
 
     private void OnCancelClicked()
     {
+        if (!hasChanged) return;
+        if (Time.time < cooldownUndo + undoTimer) return;
+
+        undoTimer = Time.time;
         championLS.Undo();
     }
     public void SetInit(Dictionary<ItemData, Vector2Int> itemDatas)
@@ -66,6 +81,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
             AddItemUI(item.Key, item.Value);
             index++;
         }
+        hasChanged = false;
     }
 
     private void InitializeInventoryUI()
@@ -125,6 +141,8 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
         int y = (int)index.y;
         var championIndex = new Vector2Int(x, y);
         AddItem(itemData, championIndex);
+        if (hasChanged == false)
+            hasChanged = true;
         return true;
     }
 
@@ -164,6 +182,8 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
             break;
         }
         AddItemUI(itemData, index);
+        if (hasChanged == false)
+            hasChanged = true;
     }
     private void HandleItemDropped(UIItemSlotBase uiItem)
     {
@@ -213,6 +233,8 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
         }
         ChangePosition(fromSlot, toSlot);
         fromSlot.SwapWith(toSlot);
+        if (hasChanged == false)
+            hasChanged = true;
     }
     public void ChangePosition(UIItemSlotBase from, UIItemSlotBase to)
     {
@@ -258,6 +280,8 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
             {
                 RemoveItem(uiItem.inventoryItem.data);
                 uiItem.ResetData();
+                if (hasChanged == false)
+                    hasChanged = true;
             },
             onCancel: () =>
             {

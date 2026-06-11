@@ -40,9 +40,14 @@ public class ChampionListSnapshot : Singleton<ChampionListSnapshot>
     public List<ItemData> GetDatasChampionInInventory() => championDatasInInventoryTemp.ToList();
     public void SetUpOrigin()
     {
+        if (inventoryCM == null) return;
         championDatasInInventory = inventoryCM.GeChampiontDatasExisting();
         championDatasInTeam = inventoryCM.GetDatasChampionInTeam();
+        ResetData();
+    }
 
+    private void ResetData()
+    {
         championDatasInInventoryTemp.Clear();
         championDatasInTeamTemp.Clear();
         championDatasInTeamTemp1.Clear();
@@ -60,6 +65,7 @@ public class ChampionListSnapshot : Singleton<ChampionListSnapshot>
             }
         }
     }
+
     public void Save()
     {
         foreach (var item in championDatasInTeamTemp)

@@ -1,10 +1,13 @@
 using Unity.Netcode;
 using UnityEngine;
-public class NetworkVisibilityChecker : NetworkBehaviour
+public class NetworkVisibilityChecker : TGTHNetworkBehaviour
 {
     [Header("Distance Settings")]
     public float maxDistance = 5;
-
+    private int defauseDistance = 10;
+    protected override void Awake() {
+        
+    }
     public override void OnNetworkSpawn()
     {
         if (!IsServer) return;

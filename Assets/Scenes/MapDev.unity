@@ -11344,6 +11344,7 @@ GameObject:
   - component: {fileID: 139199922}
   - component: {fileID: 139199921}
   - component: {fileID: 139199923}
+  - component: {fileID: 139199924}
   m_Layer: 5
   m_Name: Team
   m_TagString: Untagged
@@ -11407,6 +11408,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ffb02c9ac889b347aca39881ebdfc15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActiveGameObjectStateNotifier
+--- !u!114 &139199924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139199920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ae3b63706631d449b19ab6f16914b07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClosePopup
 --- !u!1 &139469682
 GameObject:
   m_ObjectHideFlags: 0
@@ -82792,6 +82805,7 @@ GameObject:
   - component: {fileID: 891304564}
   - component: {fileID: 891304563}
   - component: {fileID: 891304562}
+  - component: {fileID: 891304566}
   m_Layer: 5
   m_Name: Setting
   m_TagString: Untagged
@@ -82884,6 +82898,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &891304566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891304561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ae3b63706631d449b19ab6f16914b07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClosePopup
 --- !u!1 &891795642
 GameObject:
   m_ObjectHideFlags: 0
@@ -138165,6 +138191,79 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1469899818}
   m_CullTransparentMesh: 1
+--- !u!1001 &1470429897
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 902700492962400439, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3269475266
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -101.30345
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.04992
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 97.91803
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7804178499550283321, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_Name
+      value: CharacterBeast
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 49455877ced09b647ae84c55e935ba3d, type: 3}
 --- !u!1 &1470560677
 GameObject:
   m_ObjectHideFlags: 0
@@ -283907,6 +284006,7 @@ GameObject:
   - component: {fileID: 6063618360336613409}
   - component: {fileID: 7608123393872475998}
   - component: {fileID: 5648018437522811145}
+  - component: {fileID: 7608123393872475999}
   m_Layer: 5
   m_Name: Home
   m_TagString: Untagged
@@ -311475,6 +311575,7 @@ GameObject:
   - component: {fileID: 1345962775971590071}
   - component: {fileID: 2503028153629827402}
   - component: {fileID: 609626674032186848}
+  - component: {fileID: 3992171725207246547}
   m_Layer: 5
   m_Name: Shop
   m_TagString: Untagged
@@ -336412,6 +336513,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3992171725207246547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3275226291125394704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ae3b63706631d449b19ab6f16914b07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClosePopup
 --- !u!1 &3993427259036886745
 GameObject:
   m_ObjectHideFlags: 0
@@ -462662,6 +462775,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7608123393872475999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2451295849949466724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ae3b63706631d449b19ab6f16914b07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClosePopup
 --- !u!114 &7608282857271117416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -492503,6 +492628,7 @@ GameObject:
   - component: {fileID: 7663553954609348077}
   - component: {fileID: 6306715518095900037}
   - component: {fileID: 1775987466531709056}
+  - component: {fileID: 8457963230678125708}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -494013,6 +494139,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8457963230678125708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8416213611027430526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ae3b63706631d449b19ab6f16914b07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClosePopup
 --- !u!224 &8459006418894075814
 RectTransform:
   m_ObjectHideFlags: 0
@@ -510098,6 +510236,7 @@ GameObject:
   - component: {fileID: 2277850712242627204}
   - component: {fileID: 5412839662984550154}
   - component: {fileID: 8896085094165204184}
+  - component: {fileID: 8896085094165204185}
   m_Layer: 5
   m_Name: Screens
   m_TagString: Untagged
@@ -510117,6 +510256,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ffb02c9ac889b347aca39881ebdfc15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActiveGameObjectStateNotifier
+--- !u!114 &8896085094165204185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8896085094165204183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ae3b63706631d449b19ab6f16914b07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClosePopup
 --- !u!224 &8896105746431769501
 RectTransform:
   m_ObjectHideFlags: 0
@@ -521881,3 +522032,4 @@ SceneRoots:
   - {fileID: 1719310318}
   - {fileID: 359353256}
   - {fileID: 1484162752}
+  - {fileID: 1470429897}
