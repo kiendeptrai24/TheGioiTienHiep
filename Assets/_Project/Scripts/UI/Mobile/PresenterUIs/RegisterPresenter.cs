@@ -15,7 +15,7 @@ namespace TGTH.Mobile
             IAuthService authService = null;
             if (Configuration.Instance.buildType == BuildType.LOCAL_CLIENT)
             {
-                authService = new PlayFabAuthCustomService(clientAPI);
+                authService = new PlayFabAuthService(clientAPI);
                 authFacade = new AuthFacade(authService);
             }
             else if (Configuration.Instance.buildType == BuildType.REMOTE_CLIENT)
@@ -37,12 +37,13 @@ namespace TGTH.Mobile
 
         private void onError(AuthError error)
         {
+            TopNotificationUI.Instance.ShowNotification(error.message);
             view.ShowMessege(error.message);
         }
 
         private void onSuccess(AuthResult result)
         {
-            Debug.Log(result.message);
+            TopNotificationUI.Instance.ShowNotification(result.message);
             navigation.OnClick();
         }
     }

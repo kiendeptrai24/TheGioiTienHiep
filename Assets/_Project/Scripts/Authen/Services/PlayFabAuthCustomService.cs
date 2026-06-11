@@ -15,7 +15,7 @@ public class PlayFabAuthCustomService : AuthServiceBase
     private const string CUSTOM_ID_KEY = "CUSTOM_ID";
     public override void Login(LoginData data, Action<AuthResult> onSuccess, Action<AuthError> onError)
     {
-        string playerLoginId = isServer ? "Server" : Guid.NewGuid().ToString();
+        string playerLoginId = isServer ? "Server" : "CLIENT";
 
         var request = new LoginWithCustomIDRequest { CustomId = playerLoginId, CreateAccount = true };
         clientAPI.LoginWithCustomID(request,

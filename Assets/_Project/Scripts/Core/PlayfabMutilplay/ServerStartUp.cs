@@ -15,11 +15,11 @@ public class ServerStartUp : Singleton<ServerStartUp>
     private UnityTransport transport;
     protected override void Start()
     {
-        if (configuration.buildType == BuildType.REMOTE_SERVER)
+        if (configuration.IsServerRemoteBuild())
         {
             StartRemoteServer();
         }
-        else if (configuration.buildType == BuildType.LOCAL_SERVER)
+        else if (configuration.IsServerLocalBuild())
         {
             //TryStartServerWithAutoPort();
         }

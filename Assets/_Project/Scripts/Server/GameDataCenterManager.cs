@@ -133,10 +133,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         ConfigShopDataCenter();
         DataCenterReady = true;
         OnLoadGameDataCenterSuccessed?.Invoke(gameDatas);
-        if (Configuration.Instance.IsServerBuild())
-        {
-            ServerStartUp.Instance.StartServer();
-        }
+        ServerStartUp.Instance.StartServer();
     }
 
     private void LoadDataRemote(PlayFabClientInstanceAPI clientApi)
@@ -171,10 +168,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
             gameDatas.version = serverVersion;
             fileDataHandler.Save(gameDatas);
             OnLoadGameDataCenterSuccessed?.Invoke(gameDatas);
-            if (Configuration.Instance.IsServerBuild())
-            {
-                ServerStartUp.Instance.StartServer();
-            }
+            ServerStartUp.Instance.StartServer();
         }
         catch (System.Exception ex)
         {

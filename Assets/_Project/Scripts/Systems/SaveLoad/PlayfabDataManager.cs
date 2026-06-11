@@ -51,19 +51,22 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             authFacade = new AuthFacade(authService);
             authFacade.Login(new LoginData(), onSuccess, onError);
         }
-        if (Configuration.Instance.IsClientLocalBuild())
+        else if (Configuration.Instance.IsClientBuild())
         {
-            IAuthService authService = new PlayFabAuthCustomService(clientApi);
-            authFacade = new AuthFacade(authService);
-            ready = true;
-        }
-        else if (Configuration.Instance.IsClientRemoteBuild())
-        {
+            if (Configuration.Instance.IsClientLocalBuild())
+            {
+                IAuthService authService = new PlayFabAuthService(clientApi);
+                authFacade = new AuthFacade(authService);
+                ready = true;
+            }
+            else if (Configuration.Instance.IsClientRemoteBuild())
+            {
 #if UNITY_STANDALONE_WIN || UNITY_SERVER
-            IAuthService authService = new PlayFabAuthService(clientApi);
-            authFacade = new AuthFacade(authService);
-            var playfabConnectMutiplayer = new PlayfabConnectMutiplayer(clientApi.authenticationContext);
+                IAuthService authService = new PlayFabAuthService(clientApi);
+                authFacade = new AuthFacade(authService);
+                var playfabConnectMutiplayer = new PlayfabConnectMutiplayer(clientApi.authenticationContext);
 #endif
+            }
         }
     }
 
@@ -239,8 +242,8 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         SceneLoadManager.Instance.LoadSceneLoading();
         LoadGameData(() =>
         {
-            NetworkManager.Singleton.StartHost();
-            // NetworkManager.Singleton.StartClient();
+            // NetworkManager.Singleton.StartHost();
+            NetworkManager.Singleton.StartClient();
             SceneLoadManager.Instance.UnLoadScene("LoadingScene");
         });
     }
