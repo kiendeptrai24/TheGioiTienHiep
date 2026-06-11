@@ -17,7 +17,12 @@ public class TopDownMovement : IMoveable
         Vector3 current = rb.linearVelocity;
         rb.linearVelocity = new Vector3(v.x * speed, current.y, v.z * speed);
     }
-
+    public void Stop()
+    {
+        inputDirection = Vector2.zero;
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
     public bool IsMoving()
     {
         return inputDirection.magnitude > .001f;

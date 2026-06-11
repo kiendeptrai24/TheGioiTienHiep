@@ -46,7 +46,6 @@ public class ActorController : TGTHNetworkBehaviour
         if (!IsServer) return;
         _autoMove = false;
         _autoDir = Vector2.zero;
-        Debug.Log("ClearAutoMove");
         StopServerRpc();
     }
     protected override void Awake()
@@ -83,7 +82,6 @@ public class ActorController : TGTHNetworkBehaviour
         rig.linearVelocity = Vector3.zero;
         rig.angularVelocity = Vector3.zero;
         yield return new WaitForFixedUpdate();
-        // yield return new WaitUntil(() => rig.linearVelocity.sqrMagnitude < 0.0001f);
 
         nt.Teleport(pos, rot, scale);
 
@@ -125,11 +123,14 @@ public class ActorController : TGTHNetworkBehaviour
         if (!IsServer) return;
         if (lockMove) return;
         OldDirection.Value = Direction.Value;
-        Direction.Value = dir;
         if (dir.sqrMagnitude < 0.1f)
         {
             moveable.Move(Vector2.zero, 0);
             return;
+        }
+        else
+        {
+            Direction.Value = dir;
         }
 
         Vector2 inputDirection = dir;
@@ -140,8 +141,9 @@ public class ActorController : TGTHNetworkBehaviour
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Server)]
     public void StopServerRpc()
     {
-        moveable.Move(Vector2.zero, 0);
+        moveable.Stop();
         HandleDirectionChanged(Vector2.zero, Vector2.zero);
+        Direction.Value = Vector2.zero;
     }
 
     protected override void LoadComponent()

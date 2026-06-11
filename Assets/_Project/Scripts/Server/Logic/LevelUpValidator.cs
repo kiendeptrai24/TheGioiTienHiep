@@ -87,7 +87,8 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         result.result = rollResut;
         result.instanceId = nextRealm.instanceId;
         result.playerId = playerProfile.GetPlayerId().ToString();
-
+        Debug.Log("Update: " + result.playerId);
+        Debug.Log("Update: " + playerObj.OwnerClientId);
         SegmentRealmManager.Instance.AddRealmSegment(result);
         SendMessegeToClientRpc(JsonConvert.SerializeObject(result), RpcTargetUtils.Single(playerObj.OwnerClientId));
     }
@@ -204,6 +205,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
     [ClientRpc]
     private void SendMessegeToClientRpc(string message, ClientRpcParams clientRpcParams)
     {
+
         var messege = JsonConvert.DeserializeObject<LevelUpValidationResult>(message);
         TopNotificationUI.Instance.ShowNotification(messege.message);
     }

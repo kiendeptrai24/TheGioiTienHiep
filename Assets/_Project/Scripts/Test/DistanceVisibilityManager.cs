@@ -10,10 +10,19 @@ public class DistanceVisibilityManager : SingletonNetwork<DistanceVisibilityMana
     public float checkInterval = 0.5f;
 
     private readonly List<NetworkVisibilityChecker> _checkers = new();
+    [SerializeField] private List<NetworkVisibilityChecker> _checkersTest = new();
     private float _timer;
 
-    public void Register(NetworkVisibilityChecker checker) => _checkers.Add(checker);
-    public void Unregister(NetworkVisibilityChecker checker) => _checkers.Remove(checker);
+    public void Register(NetworkVisibilityChecker checker)
+    {
+        _checkersTest.Add(checker);
+        _checkers.Add(checker);
+    }
+    public void Unregister(NetworkVisibilityChecker checker)
+    {
+        _checkersTest.Remove(checker);
+        _checkers.Remove(checker);
+    }
 
     private void Update()
     {
@@ -49,7 +58,7 @@ public class DistanceVisibilityManager : SingletonNetwork<DistanceVisibilityMana
                 if (clientPlayerObj == null) continue;
 
                 float dist = Vector3.Distance(ownerPos, clientPlayerObj.transform.position);
-                float maxDist = 5;//checker.maxDistance > 0 ? checker.maxDistance : defaultMaxDistance;
+                float maxDist = checker.maxDistance > 0 ? checker.maxDistance : defaultMaxDistance;
 
                 var networkObj = checker.GetComponent<NetworkObject>();
                 if (networkObj == null) continue;

@@ -97289,6 +97289,84 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1049840308}
   m_Mesh: {fileID: -1507543455916202312, guid: 3c044956d7ec91140893fd07acaaa843, type: 3}
+--- !u!1001 &1051224906
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 902700492962400439, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2967531864
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -101.30345
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.04992
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 97.91803
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232829450382649437, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7804178499550283321, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_Name
+      value: CharacterBeast
+      objectReference: {fileID: 0}
+    - target: {fileID: 7804178499550283321, guid: 49455877ced09b647ae84c55e935ba3d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 49455877ced09b647ae84c55e935ba3d, type: 3}
 --- !u!1 &1054115845
 GameObject:
   m_ObjectHideFlags: 0
@@ -117871,7 +117949,6 @@ MonoBehaviour:
   championDatasInInventory: []
   championDatasInTeam: []
   championDatasInInventoryTemp: []
-  championDatasInTeamTemp1: []
 --- !u!1 &1263171506
 GameObject:
   m_ObjectHideFlags: 0
@@ -171064,7 +171141,6 @@ MonoBehaviour:
   championDatasInInventory: []
   championDatasInTeam: []
   championDatasInInventoryTemp: []
-  championDatasInTeamTemp1: []
 --- !u!1 &1840939690
 GameObject:
   m_ObjectHideFlags: 0
@@ -185566,6 +185642,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   defaultMaxDistance: 5
   checkInterval: 0.5
+  _checkersTest: []
 --- !u!114 &2005512648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236438,8 +236515,8 @@ Transform:
   - {fileID: 1837957109}
   - {fileID: 1316675999}
   - {fileID: 337687885}
-  - {fileID: 762180693}
   - {fileID: 1261678411}
+  - {fileID: 762180693}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &1092809174796617438
@@ -521961,3 +522038,4 @@ SceneRoots:
   - {fileID: 1719310318}
   - {fileID: 359353256}
   - {fileID: 1484162752}
+  - {fileID: 1051224906}

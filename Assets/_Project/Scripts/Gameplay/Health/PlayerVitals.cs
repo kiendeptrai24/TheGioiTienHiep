@@ -8,14 +8,14 @@ public class PlayerVitals : TGTHNetworkBehaviour
 {
     private readonly PlayerVitalData vitals = new();
 
-    [SerializeField] private NetworkVariable<int> MaxHealth = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField] private NetworkVariable<int> MaxHealth = new(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField] private NetworkVariable<int> CurrentHealth = new(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
-    [SerializeField] private NetworkVariable<int> MaxMana = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    [SerializeField] private NetworkVariable<int> CurrentMana = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField] private NetworkVariable<int> MaxMana = new(1, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
+    [SerializeField] private NetworkVariable<int> CurrentMana = new(1, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
 
-    [SerializeField] private NetworkVariable<int> MaxSpirit = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    [SerializeField] private NetworkVariable<int> CurrentSpirit = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField] private NetworkVariable<int> MaxSpirit = new(1, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
+    [SerializeField] private NetworkVariable<int> CurrentSpirit = new(1, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
     private StatsData statsData;
     public event Action<VitalType, int, int> OnVitalChanged;
     private PlayerBattleRoster roster;
@@ -86,15 +86,29 @@ public class PlayerVitals : TGTHNetworkBehaviour
     #endregion
     public (int max, int current) GetVital(VitalType type)
     {
-        var vital = vitals.Get(type);
-
-        return (vital.Max, vital.Current);
+        switch (type)
+        {
+            case VitalType.Health:
+                return (MaxHealth.Value, CurrentHealth.Value);
+            case VitalType.Mana:
+                return (MaxMana.Value, CurrentMana.Value);
+            case VitalType.Spirit:
+                return (MaxSpirit.Value, CurrentSpirit.Value);
+        }
+        return (1, 1);
     }
     public int GetCurrent(VitalType type)
     {
-        var vital = vitals.Get(type);
-
-        return vital.Current;
+        switch (type)
+        {
+            case VitalType.Health:
+                return CurrentHealth.Value;
+            case VitalType.Mana:
+                return CurrentMana.Value;
+            case VitalType.Spirit:
+                return CurrentSpirit.Value;
+        }
+        return 1;
     }
     private void OnStatReady(StatsData data)
     {
@@ -126,11 +140,11 @@ public class PlayerVitals : TGTHNetworkBehaviour
     public void ResetViral()
     {
         if (!IsServer) return;
-        int curHealth = vitals.Get(VitalType.Health).Current;
+        int curHealth = vitals.Get(VitalType.Health).Max;
         int maxHealth = vitals.Get(VitalType.Health).Max;
-        int curMana = vitals.Get(VitalType.Mana).Current;
+        int curMana = vitals.Get(VitalType.Mana).Max;
         int maxMana = vitals.Get(VitalType.Mana).Max;
-        int curSpirit = vitals.Get(VitalType.Spirit).Current;
+        int curSpirit = vitals.Get(VitalType.Spirit).Max;
         int maxSpirit = vitals.Get(VitalType.Spirit).Max;
 
         SetVital(VitalType.Health, maxHealth, curHealth);

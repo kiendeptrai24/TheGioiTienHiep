@@ -85,6 +85,8 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
                     string realm = result.result ? $"cảnh giới hiện tại là {realmTxt}" : "";
                     result.message = $"{TextColorUtil.Color(res, Color.green)} {realm}";
                     var json = JsonConvert.SerializeObject(result);
+                    Debug.Log("Update: " + result.playerId);
+                    Debug.Log("Update: " + clientData.playerObject.OwnerClientId);
                     NotifiResultToClientRpc(json, RpcTargetUtils.Single(clientData.playerObject.OwnerClientId));
                 }
                 RemoveRealmSegment(playerId);
@@ -113,6 +115,8 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
             if (messege.result)
             {
                 UpgradeSystemManager.Instance.TryUpgrade(UpgradeSystemManager.RealmUpgradeId);
+                Debug.Log("UpgradeRealm: " + messege.playerId);
+                Debug.Log("UpgradeRealm: " + clientRpcParams.Send.TargetClientIds[0]);
                 OnRealmUplevelResult?.Invoke(true);
             }
         }

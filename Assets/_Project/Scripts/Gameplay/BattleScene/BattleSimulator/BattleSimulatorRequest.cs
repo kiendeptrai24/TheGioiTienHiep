@@ -148,7 +148,6 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         }
         result?.Invoke(res.winner == TeamId.Heroes);
 
-        // RewardsAndPunishments(res.winner, playerObj, enemyObj);
         SendReplayToClientClientRpc(heroRoster.name, enemyRoster.name,
             res.winner.ToString(), res.duration, dto,
             new ClientRpcParams
@@ -199,25 +198,60 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
     }
 
     #endregion
+    private float GetPercent(int current, int max)
+    {
+        if (max <= 0)
+            return 0f;
 
+        return Mathf.Clamp01((float)current / max);
+    }
     private void ApplyCharacterViralRatioFromBattle(List<BattleEvent> events, PlayerVitals playerVital, TeamId winner)
     {
         var battleEvent = events.Find(x => x.type == BattleEventType.End);
-        if (battleEvent == null || battleEvent is BattleEventEnd == false) return;
-        var battleEventEnd = (BattleEventEnd)battleEvent;
+
+        if (battleEvent is not BattleEventEnd battleEventEnd)
+            return;
+
+        if (playerVital == null)
+            return;
+
         if (winner == TeamId.Heroes)
         {
-            var healthPersent = (float)battleEventEnd.curHealthHero / battleEventEnd.maxHealthHero;
-            var manaPersent = (float)battleEventEnd.curManaHero / battleEventEnd.maxManaHero;
-            var spiritPersent = (float)battleEventEnd.curSpiritHero / battleEventEnd.maxSpiritHero;
-            playerVital.SetViral(healthPersent, manaPersent, spiritPersent);
+            float healthPercent = GetPercent(
+                battleEventEnd.curHealthHero,
+                battleEventEnd.maxHealthHero
+            );
+
+            float manaPercent = GetPercent(
+                battleEventEnd.curManaHero,
+                battleEventEnd.maxManaHero
+            );
+
+            float spiritPercent = GetPercent(
+                battleEventEnd.curSpiritHero,
+                battleEventEnd.maxSpiritHero
+            );
+
+            playerVital.SetViral(healthPercent, manaPercent, spiritPercent);
         }
         else
         {
-            var healthPersent = battleEventEnd.curHealthEnemy / battleEventEnd.maxHealthEnemy;
-            var manaPersent = battleEventEnd.curManaEnemy / battleEventEnd.maxManaEnemy;
-            var spiritPersent = battleEventEnd.curSpiritEnemy / battleEventEnd.maxSpiritEnemy;
-            playerVital.SetViral(healthPersent, manaPersent, spiritPersent);
+            float healthPercent = GetPercent(
+                battleEventEnd.curHealthEnemy,
+                battleEventEnd.maxHealthEnemy
+            );
+
+            float manaPercent = GetPercent(
+                battleEventEnd.curManaEnemy,
+                battleEventEnd.maxManaEnemy
+            );
+
+            float spiritPercent = GetPercent(
+                battleEventEnd.curSpiritEnemy,
+                battleEventEnd.maxSpiritEnemy
+            );
+
+            playerVital.SetViral(healthPercent, manaPercent, spiritPercent);
         }
     }
 

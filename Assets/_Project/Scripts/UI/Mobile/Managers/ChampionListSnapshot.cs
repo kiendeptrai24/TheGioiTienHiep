@@ -8,7 +8,6 @@ public class ChampionListSnapshot : Singleton<ChampionListSnapshot>
     [SerializeField] private List<ItemData> championDatasInInventory = new();
     [SerializeField] private List<ItemData> championDatasInTeam = new();
     [SerializeField] private List<ItemData> championDatasInInventoryTemp = new();
-    [SerializeField] private List<ItemData> championDatasInTeamTemp1 = new();
     [SerializeField] private Dictionary<ItemData, Vector2Int> championDatasInTeamTemp = new();
     private InventoryCenterManager inventoryCM;
     public event Action OnLoadDataSuccessed;
@@ -50,7 +49,6 @@ public class ChampionListSnapshot : Singleton<ChampionListSnapshot>
     {
         championDatasInInventoryTemp.Clear();
         championDatasInTeamTemp.Clear();
-        championDatasInTeamTemp1.Clear();
         foreach (var item in championDatasInInventory)
         {
             if (championDatasInInventoryTemp.Contains(item) == false)
@@ -61,7 +59,6 @@ public class ChampionListSnapshot : Singleton<ChampionListSnapshot>
             if (championDatasInTeamTemp.ContainsKey(item) == false)
             {
                 championDatasInTeamTemp.Add(item, (item as HeroData).championIndex);
-                championDatasInTeamTemp1.Add(item);
             }
         }
     }
@@ -89,7 +86,6 @@ public class ChampionListSnapshot : Singleton<ChampionListSnapshot>
         if (championDatasInTeamTemp.ContainsKey(item) == false)
         {
             championDatasInTeamTemp.Add(item, index);
-            championDatasInTeamTemp1.Add(item);
         }
 
         if (championDatasInInventoryTemp.Contains(item))
@@ -102,7 +98,6 @@ public class ChampionListSnapshot : Singleton<ChampionListSnapshot>
         if (championDatasInTeamTemp.ContainsKey(item))
         {
             championDatasInTeamTemp.Remove(item);
-            championDatasInTeamTemp1.Remove(item);
         }
         if (championDatasInInventoryTemp.Contains(item) == false)
             championDatasInInventoryTemp.Add(item);
