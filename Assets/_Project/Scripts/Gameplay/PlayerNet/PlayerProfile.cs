@@ -68,8 +68,8 @@ public class PlayerProfile : TGTHNetworkBehaviour
 
             // load coins to resourcestorage
             LoadCoinsServerRpc(profileUser.coins);
+            LoadPlayerIdServerRpc(user.userId, user.potentialPoint, user.skillPoint);
         }
-        LoadPlayerIdServerRpc(user.userId, user.potentialPoint, user.skillPoint);
     }
 
     private void OnPlayerNameChanged(FixedString64Bytes previousValue, FixedString64Bytes newValue)
@@ -155,7 +155,7 @@ public class PlayerProfile : TGTHNetworkBehaviour
         resourceStorage.InitSpiritStone(coins);
     }
 
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
     private void LoadPlayerIdServerRpc(string playerId, int potentialPoint = 0, int skillPoint = 0)
     {
         this.playerId.Value = new FixedString64Bytes(playerId);

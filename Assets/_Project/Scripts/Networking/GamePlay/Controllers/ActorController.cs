@@ -125,6 +125,8 @@ public class ActorController : TGTHNetworkBehaviour
         OldDirection.Value = Direction.Value;
         if (dir.sqrMagnitude < 0.1f)
         {
+            if (_autoMove == false)
+                Direction.Value = dir;
             moveable.Move(Vector2.zero, 0);
             return;
         }
