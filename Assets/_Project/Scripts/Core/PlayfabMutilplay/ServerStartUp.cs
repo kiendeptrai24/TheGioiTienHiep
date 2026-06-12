@@ -23,8 +23,6 @@ public class ServerStartUp : Singleton<ServerStartUp>
         {
             //TryStartServerWithAutoPort();
         }
-        else
-            Destroy(gameObject, 1);
     }
     public void StartServer()
     {

@@ -17,6 +17,7 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
     [SerializeField] private List<ChampionSetUp> championSetUps = new();
 
     public List<ItemData> itemDatas = new();
+    public HeroData heroData;
     public int maxHeroesToSpawn = 5;
 
     public Action result;
@@ -78,7 +79,7 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
 
     private void OnPlayerPrefabChanged(List<ItemData> list)
     {
-        if (!IsSpawned) return;
+            if (!IsSpawned) return;
         if (!IsOwner) return;
         if (list == null) return;
 
@@ -118,6 +119,8 @@ public class PlayerBattleRoster : TGTHNetworkBehaviour
 
             if (hero == null)
                 continue;
+            if (hero.isCharacter == true)
+                heroData = hero;
 
             itemDatas.Add(hero);
         }

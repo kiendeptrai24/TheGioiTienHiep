@@ -37,6 +37,9 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     /// </summary>
     public List<ItemData> listItemDatasChampionInTeam = new List<ItemData>();
     public event Action OnLoadDataSuccessed;
+    public List<HeroData> listHeroInTeam = new List<HeroData>();
+    public List<HeroData> listHeroInInventory = new List<HeroData>();
+
     public int MaxChampion()
     {
         if (playerCham == null) return 1;
@@ -550,6 +553,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
             {
                 if (heroData.isCharacter)
                     PlayerDataChanged(item);
+                listHeroInInventory.Add(heroData);
+
             }
             listItemDatas.Add(item);
             listItemDatasExisting.Add(item);
@@ -564,6 +569,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
             {
                 if (heroData.isCharacter)
                     PlayerDataChanged(item);
+                listHeroInTeam.Add(heroData);
             }
             listItemDatasChampionInTeam.Add(item);
         }

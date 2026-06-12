@@ -33,6 +33,10 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     protected override void Awake()
     {
         fileDataHandler = new FileDataHandler<GameDataCenter>(Application.persistentDataPath, fileName, encryptData);
+    }
+    protected override void Start()
+    {
+        base.Start();
         if (Configuration.Instance.startwithHost)
         {
             LoadData();
@@ -255,12 +259,17 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
                 item.realmData = realmData;
                 item.essenceData = essenceData;
                 item.raceData = raceData;
+                item.techniqueDatas.Clear();
                 foreach (var technique in item.techniqueIds)
                 {
                     var techniqueData = GetItemById(technique) as TechniqueData;
+
                     if (techniqueData != null)
+                    {
                         item.techniqueDatas.Add(techniqueData);
+                    }
                 }
+                item.skillDatas.Clear();
                 foreach (var skill in item.skillIds)
                 {
                     var skillData = GetItemById(skill) as SkillData;

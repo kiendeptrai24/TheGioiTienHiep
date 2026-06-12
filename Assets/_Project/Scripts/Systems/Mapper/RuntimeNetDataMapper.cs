@@ -3,43 +3,52 @@ using Unity.Collections;
 
 public static class RuntimeNetDataMapper
 {
+    private const int SPLIT_SIZE = 7; // FixedList512Bytes chứa tối đa 7 FixedString64Bytes
+
     public static ChampionDataNetDto ToNetDto(HeroData hero)
     {
         if (hero == null)
             return default;
 
+        SplitToFixedLists(hero.equipmentIds, out var equipA, out var equipB);
+        SplitToFixedLists(hero.skillIds,     out var skillA, out var skillB);
+        SplitToFixedLists(hero.techniqueIds, out var techA,  out var techB);
+
         return new ChampionDataNetDto
         {
             instanceId = ToFixed(hero.instanceId),
 
-            isCharacter = hero.isCharacter,
-            manaPersent = hero.manaPersent,
-            healthPersent = hero.healthPersent,
+            isCharacter    = hero.isCharacter,
+            manaPersent    = hero.manaPersent,
+            healthPersent  = hero.healthPersent,
 
-            raceId = ToFixed(hero.raceId),
+            raceId    = ToFixed(hero.raceId),
             essenceId = ToFixed(hero.essenceId),
-            realmId = ToFixed(hero.realmId),
+            realmId   = ToFixed(hero.realmId),
 
             physicalDamagePoint = hero.physicalDamagePoint,
-            magicalDamagePoint = hero.magicalDamagePoint,
-            spiritDamagePoint = hero.spiritDamagePoint,
+            magicalDamagePoint  = hero.magicalDamagePoint,
+            spiritDamagePoint   = hero.spiritDamagePoint,
 
             physicalDefensePoint = hero.physicalDefensePoint,
-            magicalDefensePoint = hero.magicalDefensePoint,
-            spiritDefensePoint = hero.spiritDefensePoint,
+            magicalDefensePoint  = hero.magicalDefensePoint,
+            spiritDefensePoint   = hero.spiritDefensePoint,
 
             healthPoint = hero.healthPoint,
-            manaPoint = hero.manaPoint,
+            manaPoint   = hero.manaPoint,
             spiritPoint = hero.spiritPoint,
 
-            moveSpeedPoint = hero.moveSpeedPoint,
+            moveSpeedPoint  = hero.moveSpeedPoint,
             spiritRangePoint = hero.spiritRangePoint,
 
             championIndex = hero.championIndex,
 
-            equipmentIds = ToFixedList(hero.equipmentIds),
-            skillIds = ToFixedList(hero.skillIds),
-            techniqueIds = ToFixedList(hero.techniqueIds)
+            equipmentIds  = equipA,
+            equipmentIds1 = equipB,
+            skillIds      = skillA,
+            skillIds1     = skillB,
+            techniqueIds  = techA,
+            techniqueIds1 = techB,
         };
     }
 
@@ -49,7 +58,6 @@ public static class RuntimeNetDataMapper
             return null;
 
         string instanceId = dto.instanceId.ToString();
-
         HeroData hero = dataManager.GetItemById(instanceId) as HeroData;
 
         if (hero == null)
@@ -58,36 +66,36 @@ public static class RuntimeNetDataMapper
         hero.championIndex = dto.championIndex;
 
         hero.healthPersent = dto.healthPersent;
-        hero.manaPersent = dto.manaPersent;
-        hero.isCharacter = dto.isCharacter;
+        hero.manaPersent   = dto.manaPersent;
+        hero.isCharacter   = dto.isCharacter;
 
-        hero.raceId = dto.raceId.ToString();
+        hero.raceId   = dto.raceId.ToString();
         hero.raceData = dataManager.GetItemById(hero.raceId) as RaceData;
 
-        hero.essenceId = dto.essenceId.ToString();
+        hero.essenceId   = dto.essenceId.ToString();
         hero.essenceData = dataManager.GetItemById(hero.essenceId) as EssenceData;
 
-        hero.realmId = dto.realmId.ToString();
+        hero.realmId   = dto.realmId.ToString();
         hero.realmData = dataManager.GetItemById(hero.realmId) as RealmData;
 
         hero.physicalDamagePoint = dto.physicalDamagePoint;
-        hero.magicalDamagePoint = dto.magicalDamagePoint;
-        hero.spiritDamagePoint = dto.spiritDamagePoint;
+        hero.magicalDamagePoint  = dto.magicalDamagePoint;
+        hero.spiritDamagePoint   = dto.spiritDamagePoint;
 
         hero.physicalDefensePoint = dto.physicalDefensePoint;
-        hero.magicalDefensePoint = dto.magicalDefensePoint;
-        hero.spiritDefensePoint = dto.spiritDefensePoint;
+        hero.magicalDefensePoint  = dto.magicalDefensePoint;
+        hero.spiritDefensePoint   = dto.spiritDefensePoint;
 
         hero.healthPoint = dto.healthPoint;
-        hero.manaPoint = dto.manaPoint;
+        hero.manaPoint   = dto.manaPoint;
         hero.spiritPoint = dto.spiritPoint;
 
-        hero.moveSpeedPoint = dto.moveSpeedPoint;
+        hero.moveSpeedPoint  = dto.moveSpeedPoint;
         hero.spiritRangePoint = dto.spiritRangePoint;
 
-        hero.equipmentIds = ToStringList(dto.equipmentIds);
-        hero.skillIds = ToStringList(dto.skillIds);
-        hero.techniqueIds = ToStringList(dto.techniqueIds);
+        hero.equipmentIds  = MergeToStringList(dto.equipmentIds, dto.equipmentIds1);
+        hero.skillIds      = MergeToStringList(dto.skillIds,     dto.skillIds1);
+        hero.techniqueIds  = MergeToStringList(dto.techniqueIds, dto.techniqueIds1);
 
         RebuildEquipmentDatas(hero, dataManager);
         RebuildSkillDatas(hero, dataManager);
@@ -104,109 +112,98 @@ public static class RuntimeNetDataMapper
         return dataManager.GetItemById(instanceId);
     }
 
-    private static FixedString64Bytes ToFixed(string value)
-    {
-        return string.IsNullOrEmpty(value)
-            ? default
-            : new FixedString64Bytes(value);
-    }
+    // ─── Helpers ────────────────────────────────────────────────────────────
 
-    private static FixedList512Bytes<FixedString64Bytes> ToFixedList(List<string> ids)
-    {
-        var fixedList = new FixedList512Bytes<FixedString64Bytes>();
+    private static FixedString64Bytes ToFixed(string value) =>
+        string.IsNullOrEmpty(value) ? default : new FixedString64Bytes(value);
 
-        if (ids == null)
-            return fixedList;
+    /// <summary>
+    /// Split List<string> thành 2 FixedList512Bytes (mỗi cái tối đa SPLIT_SIZE items).
+    /// Đủ chứa tổng 14 items; chỉnh SPLIT_SIZE nếu cần nhiều hơn.
+    /// </summary>
+    private static void SplitToFixedLists(
+        List<string> ids,
+        out FixedList512Bytes<FixedString64Bytes> partA,
+        out FixedList512Bytes<FixedString64Bytes> partB)
+    {
+        partA = new FixedList512Bytes<FixedString64Bytes>();
+        partB = new FixedList512Bytes<FixedString64Bytes>();
+
+        if (ids == null) return;
 
         for (int i = 0; i < ids.Count; i++)
         {
-            if (fixedList.Length >= fixedList.Capacity)
-                break;
+            if (string.IsNullOrEmpty(ids[i])) continue;
 
-            if (string.IsNullOrEmpty(ids[i]))
-                continue;
+            var fixedStr = new FixedString64Bytes(ids[i]);
 
-            fixedList.Add(new FixedString64Bytes(ids[i]));
+            if (i < SPLIT_SIZE)
+                partA.Add(fixedStr);
+            else
+                partB.Add(fixedStr);
         }
-
-        return fixedList;
     }
 
-    private static List<string> ToStringList(FixedList512Bytes<FixedString64Bytes> fixedList)
+    /// <summary>
+    /// Merge 2 FixedList512Bytes trở lại thành List<string>.
+    /// Fix bug code gốc (đọc nhầm partA thay vì partB ở vòng 2).
+    /// </summary>
+    private static List<string> MergeToStringList(
+        FixedList512Bytes<FixedString64Bytes> partA,
+        FixedList512Bytes<FixedString64Bytes> partB)
     {
-        var list = new List<string>(fixedList.Length);
+        var list = new List<string>(partA.Length + partB.Length);
 
-        for (int i = 0; i < fixedList.Length; i++)
+        for (int i = 0; i < partA.Length; i++)
         {
-            string value = fixedList[i].ToString();
+            string v = partA[i].ToString();
+            if (!string.IsNullOrEmpty(v)) list.Add(v);
+        }
 
-            if (!string.IsNullOrEmpty(value))
-                list.Add(value);
+        for (int i = 0; i < partB.Length; i++)
+        {
+            string v = partB[i].ToString();  // fix: partB[i], không phải partA[i]
+            if (!string.IsNullOrEmpty(v)) list.Add(v);
         }
 
         return list;
     }
 
+    // ─── Rebuild ─────────────────────────────────────────────────────────────
+
     private static void RebuildEquipmentDatas(HeroData hero, GameDataCenterManager dataManager)
     {
         hero.equipmentDatas = new List<EquipmentData>();
+        if (hero.equipmentIds == null) return;
 
-        if (hero.equipmentIds == null)
-            return;
-
-        foreach (string equipmentId in hero.equipmentIds)
+        foreach (string id in hero.equipmentIds)
         {
-            var item = dataManager.GetItemById(equipmentId);
-
-            if (item == null)
-                continue;
-
-            var equipmentData = item.Clone() as EquipmentData;
-
-            if (equipmentData != null)
-                hero.equipmentDatas.Add(equipmentData);
+            var equipmentData = dataManager.GetItemById(id) as EquipmentData;
+            if (equipmentData != null) hero.equipmentDatas.Add(equipmentData);
         }
     }
 
     private static void RebuildSkillDatas(HeroData hero, GameDataCenterManager dataManager)
     {
         hero.skillDatas = new List<SkillData>();
+        if (hero.skillIds == null) return;
 
-        if (hero.skillIds == null)
-            return;
-
-        foreach (string skillId in hero.skillIds)
+        foreach (string id in hero.skillIds)
         {
-            var item = dataManager.GetItemById(skillId);
-
-            if (item == null)
-                continue;
-
-            var skillData = item.Clone() as SkillData;
-
-            if (skillData != null)
-                hero.skillDatas.Add(skillData);
+            var skillData = dataManager.GetItemById(id)as SkillData;
+            if (skillData != null) hero.skillDatas.Add(skillData);
         }
     }
 
     private static void RebuildTechniqueDatas(HeroData hero, GameDataCenterManager dataManager)
     {
         hero.techniqueDatas = new List<TechniqueData>();
+        if (hero.techniqueIds == null) return;
 
-        if (hero.techniqueIds == null)
-            return;
-
-        foreach (string techniqueId in hero.techniqueIds)
+        foreach (string id in hero.techniqueIds)
         {
-            var item = dataManager.GetItemById(techniqueId);
-
-            if (item == null)
-                continue;
-
-            var techniqueData = item.Clone() as TechniqueData;
-
-            if (techniqueData != null)
-                hero.techniqueDatas.Add(techniqueData);
+            var techniqueData = dataManager.GetItemById(id) as TechniqueData;
+            if (techniqueData != null) hero.techniqueDatas.Add(techniqueData);
         }
     }
 }

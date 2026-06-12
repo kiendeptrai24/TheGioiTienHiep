@@ -7,6 +7,8 @@ namespace TGTH.Mobile
 {
     public class HeroDetailPageView : TGTHMonoBehaviour
     {
+        public HeroData heroData;
+
         [Header("Content")]
         [SerializeField] private TextMeshProUGUI itemNameTxt;
         [SerializeField] private TextMeshProUGUI realmTxt;
@@ -24,7 +26,7 @@ namespace TGTH.Mobile
         public event Action OnBiographyClicked;
         public event Action OnHeroStatsClicked;
         public event Action OnHeroDetailClicked;
-        
+
 
         protected override void Awake()
         {
@@ -44,8 +46,18 @@ namespace TGTH.Mobile
             realmTxt.text = EnumTranslator.ToVietnamese(heroData.realmType);
             qualityTypeTxt.text = EnumTranslator.ToVietnamese(heroData.qualityType);
             itemIconImge.sprite = heroData.itemIcon;
+            this.heroData = heroData;
 
+            // Show lên uIEquipmentSlots
             foreach (var item in uIEquipmentSlots)
+            {
+                item.ResetData();
+            }
+            foreach (var item in uISkillItems)
+            {
+                item.ResetData();
+            }
+            foreach (var item in uITechniqueItems)
             {
                 item.ResetData();
             }

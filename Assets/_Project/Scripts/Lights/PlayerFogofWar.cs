@@ -18,6 +18,7 @@ public class PlayerFogofWar : TGTHNetworkBehaviour
         int spiritRange = statsData.SpiritRange;
         if (spiritRange <= 10) return;
         int persent = (10 - spiritRange) / 10 + 1;
+        if (playerLight == null) return;
         playerLight.intensity = 200 * persent;
         playerLight.range = 20 * persent;
         playerLight.transform.localPosition = new Vector3(0, 10 * persent, 0);

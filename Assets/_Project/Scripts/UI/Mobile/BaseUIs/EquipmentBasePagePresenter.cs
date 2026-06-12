@@ -11,8 +11,9 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
     [SerializeField] protected EquipmentBasePageView view;
     [SerializeField] protected IItemDetailPageView itemDetailPageView;
     [SerializeField] protected StatsData statsManager;
-    [SerializeField] protected InventoryCenterManager inventoryCenterManager;
+    [SerializeField] protected InventoryCenterManager inventoryCM;
     [SerializeField] protected List<InventoryItem> listItemDatas;
+    private bool equipmentChanged = false;
     protected UIItemSlotBase currentItemSelect;
     protected int currentlyDraggedItemIndex = -1;
     protected bool isDraging = false;
@@ -30,12 +31,11 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
 
         LoadData();
     }
-
     private void LoadData()
     {
-        inventoryCenterManager = InventoryCenterManager.Instance;
-        inventoryCenterManager.OnItemEquitmentDataChanged += SetItemData;
-        SetItemData(inventoryCenterManager.GetDataType(ItemType.Equipment, true));
+        inventoryCM = InventoryCenterManager.Instance;
+        inventoryCM.OnItemEquitmentDataChanged += SetItemData;
+        SetItemData(inventoryCM.GetDataType(ItemType.Equipment, true));
         isShowEquipment = true;
         view.ShowEquipmentItems(statsManager.chamionData);
         view.ShowItem(statsManager.chamionData);
@@ -46,11 +46,18 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
     {
         ShowItemChampion();
         isOwnEquipmentPage = true;
+        if (equipmentChanged == true)
+            equipmentChanged = false;
     }
 
     protected virtual void OnDisable()
     {
         isOwnEquipmentPage = false;
+        if (equipmentChanged == true)
+        {
+            inventoryCM.NotifyListItemDatasChampionChanged();
+            equipmentChanged = false;
+        }
     }
 
     private void ShowItemChampion()
@@ -114,7 +121,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
                 item = item1.data.Clone();
                 item.itemId = Guid.NewGuid().ToString();
             }
-            var result = inventoryCenterManager.AddData(item);
+            var result = inventoryCM.AddData(item);
             if (result)
             {
                 heroData = statsManager.chamionData as HeroData;
@@ -126,7 +133,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         }
         if (item2 != null && item2.data != null)
         {
-            var result = inventoryCenterManager.RemoveData(item2.data);
+            var result = inventoryCM.RemoveData(item2.data);
             if (result)
             {
                 heroData = statsManager.chamionData as HeroData;
@@ -140,7 +147,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
             item1.data = item;
         }
         if (heroData != null && heroData.isCharacter)
-            inventoryCenterManager.NotifyItemPlayerChanged();
+            inventoryCM.NotifyItemPlayerChanged();
         return true;
     }
 
@@ -283,6 +290,8 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
             return;
         }
         isSWapped = true;
+        if (equipmentChanged == false)
+            equipmentChanged = true;
         fromSlot.SwapWith(toSlot);
     }
     protected void ResetDrag()

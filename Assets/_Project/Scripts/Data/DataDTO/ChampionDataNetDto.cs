@@ -6,7 +6,7 @@ public struct ChampionDataNetDto : INetworkSerializable
 {
     public FixedString64Bytes instanceId;
 
-    public bool isCharacter;
+    public bool  isCharacter;
     public float manaPersent;
     public float healthPersent;
 
@@ -31,12 +31,16 @@ public struct ChampionDataNetDto : INetworkSerializable
 
     public Vector2Int championIndex;
 
+    // Mỗi FixedList512Bytes chứa tối đa 7 items × 64 bytes = 448 bytes
+    // 6 list × 512 bytes = 3072 bytes tổng — nằm trong giới hạn an toàn
     public FixedList512Bytes<FixedString64Bytes> equipmentIds;
+    public FixedList512Bytes<FixedString64Bytes> equipmentIds1;
     public FixedList512Bytes<FixedString64Bytes> skillIds;
+    public FixedList512Bytes<FixedString64Bytes> skillIds1;
     public FixedList512Bytes<FixedString64Bytes> techniqueIds;
+    public FixedList512Bytes<FixedString64Bytes> techniqueIds1;
 
-    public void NetworkSerialize<T>(BufferSerializer<T> serializer)
-        where T : IReaderWriter
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         serializer.SerializeValue(ref instanceId);
 
@@ -65,14 +69,18 @@ public struct ChampionDataNetDto : INetworkSerializable
 
         serializer.SerializeValue(ref championIndex);
 
-        SerializeFixedStringList(serializer, ref equipmentIds);
-        SerializeFixedStringList(serializer, ref skillIds);
-        SerializeFixedStringList(serializer, ref techniqueIds);
+        SerializeList(serializer, ref equipmentIds);
+        SerializeList(serializer, ref equipmentIds1);
+        SerializeList(serializer, ref skillIds);
+        SerializeList(serializer, ref skillIds1);
+        SerializeList(serializer, ref techniqueIds);
+        SerializeList(serializer, ref techniqueIds1);
     }
-    private static void SerializeFixedStringList<T>(
-    BufferSerializer<T> serializer,
-    ref FixedList512Bytes<FixedString64Bytes> list)
-    where T : IReaderWriter
+
+    private static void SerializeList<T>(
+        BufferSerializer<T> serializer,
+        ref FixedList512Bytes<FixedString64Bytes> list)
+        where T : IReaderWriter
     {
         int count = list.Length;
         serializer.SerializeValue(ref count);
@@ -80,7 +88,6 @@ public struct ChampionDataNetDto : INetworkSerializable
         if (serializer.IsReader)
         {
             list.Clear();
-
             for (int i = 0; i < count; i++)
             {
                 FixedString64Bytes value = default;
