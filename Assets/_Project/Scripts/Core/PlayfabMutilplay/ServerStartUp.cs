@@ -26,7 +26,11 @@ public class ServerStartUp : Singleton<ServerStartUp>
         else
             Destroy(gameObject, 1);
     }
-    public void StartServer() => NetworkManager.Singleton.StartServer();
+    public void StartServer()
+    {
+        if (configuration.startwithHost) return;
+        NetworkManager.Singleton.StartServer();
+    }
     private void TryStartServerWithAutoPort()
     {
         if (transport == null)

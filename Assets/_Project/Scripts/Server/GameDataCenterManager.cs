@@ -33,6 +33,10 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     protected override void Awake()
     {
         fileDataHandler = new FileDataHandler<GameDataCenter>(Application.persistentDataPath, fileName, encryptData);
+        if (Configuration.Instance.startwithHost)
+        {
+            LoadData();
+        }
         if (Configuration.Instance.buildType == BuildType.LOCAL_CLIENT ||
             Configuration.Instance.buildType == BuildType.REMOTE_CLIENT)
             return;

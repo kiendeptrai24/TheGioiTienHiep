@@ -9,6 +9,7 @@ public class Configuration : Singleton<Configuration>
     public string ipAddress = "";
     public ushort port = 0;
     public bool useEditor = false;
+    public bool startwithHost = false;
     public bool isEditor;
     public bool playFabDebugging = false;
     public bool IsServerBuild() => buildType == BuildType.LOCAL_SERVER || buildType == BuildType.REMOTE_SERVER || isEditor;
