@@ -98,8 +98,8 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
     {
         if (!IsServer)
             return;
-        CheckLevelUpValidationResult levelupChecking = new();
-
+        CheckLevelUpValidationResult result = new();
+        result.result = true;
         if (!NetworkManager.ConnectedClients.TryGetValue(playerClientId, out var client))
             return;
 
@@ -109,12 +109,16 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         var playerResource = profile.GetPlayerResource();
         var realmData = GameDataCenterManager.Instance.GetItemById(instanceId) as RealmData;
         var nextRealm = levelUpStranlation.GetNextRealm(realmData.realmType);
-
-        var conditionData = new LevelUpConditionData(nextRealm.itemsCost);
-        if (nextRealm != null)
+        if (nextRealm == null)
         {
-            conditionData.linhThach = nextRealm.linhThachCost;
+            result.message = "Đã đạt cấp độ tối đa, không thể lên cấp tiếp";
+            result.result = false;
+            string json = JsonConvert.SerializeObject(result);
+            SendMessegeConditionToClientRpc(json, RpcTargetUtils.Single(playerClientId));
+            return;
         }
+        var conditionData = new LevelUpConditionData(nextRealm.itemsCost);
+        conditionData.linhThach = nextRealm.linhThachCost;
 
         List<IResourceValidator> validators = new List<IResourceValidator>();
 
@@ -135,17 +139,17 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         {
             if (validator.CanUse(playerResource, null) == false)
             {
-                levelupChecking.results.Add(new LevelUpValidationResult(false,
+                result.results.Add(new LevelUpValidationResult(false,
                 $"{validator.GetResourceName()} <color=red>{validator.GetCurrentAmount(playerResource)} / {validator.GetRequiredAmount()} </color>"));
             }
             else
             {
-                levelupChecking.results.Add(new LevelUpValidationResult(true,
+                result.results.Add(new LevelUpValidationResult(true,
                 $"{validator.GetResourceName()} <color=green>{validator.GetCurrentAmount(playerResource)} / {validator.GetRequiredAmount()} </color>"));
             }
         }
 
-        string message = JsonConvert.SerializeObject(levelupChecking);
+        string message = JsonConvert.SerializeObject(result);
         SendMessegeConditionToClientRpc(message, RpcTargetUtils.Single(playerClientId));
     }
     #endregion
@@ -199,8 +203,11 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
     private void SendMessegeConditionToClientRpc(string message, ClientRpcParams clientRpcParams)
     {
         var results = JsonConvert.DeserializeObject<CheckLevelUpValidationResult>(message);
-        if (results != null)
+
+        if (results != null && results.result == true)
             OnNotificationConditionResult?.Invoke(results);
+        else if (results != null && string.IsNullOrEmpty(results.message) == false)
+            TopNotificationUI.Instance.ShowNotification(results.message);
     }
     [ClientRpc]
     private void SendMessegeToClientRpc(string message, ClientRpcParams clientRpcParams)

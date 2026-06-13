@@ -40,10 +40,80 @@ public class PlayFabAuthService : AuthServiceBase
         }
         , onResError =>
         {
-
-            onError?.Invoke(new AuthError("PLAYFAB_LOGIN_FAILED", onResError.GenerateErrorReport()));
+            HandlePlayFabError(onResError, onError);
         });
 
+    }
+    private void HandlePlayFabError(PlayFabError error, Action<AuthError> onError)
+    {
+        string code = error.Error.ToString();
+        string message = GetPlayFabErrorMessage(error);
+
+        Debug.LogWarning(
+            $"PlayFab Error\n" +
+            $"Code: {code}\n" +
+            $"HttpCode: {error.HttpCode}\n" +
+            $"HttpStatus: {error.HttpStatus}\n" +
+            $"Message: {error.ErrorMessage}\n" +
+            $"Report: {error.GenerateErrorReport()}"
+        );
+
+        onError?.Invoke(new AuthError(code, message));
+    }
+    private string GetPlayFabErrorMessage(PlayFabError error)
+    {
+        switch (error.Error)
+        {
+            case PlayFabErrorCode.AccountNotFound:
+                return "Tài khoản không tồn tại.";
+
+            case PlayFabErrorCode.InvalidUsernameOrPassword:
+            case PlayFabErrorCode.InvalidEmailOrPassword:
+                return "Sai email hoặc mật khẩu.";
+
+            case PlayFabErrorCode.InvalidEmailAddress:
+                return "Email không hợp lệ.";
+
+            case PlayFabErrorCode.EmailAddressNotAvailable:
+            case PlayFabErrorCode.DuplicateEmail:
+                return "Email này đã được đăng ký.";
+
+            case PlayFabErrorCode.InvalidPassword:
+                return "Mật khẩu không hợp lệ.";
+
+            case PlayFabErrorCode.UsernameNotAvailable:
+            case PlayFabErrorCode.DuplicateUsername:
+                return "Tên tài khoản đã tồn tại.";
+
+            case PlayFabErrorCode.AccountBanned:
+                return "Tài khoản đã bị khóa.";
+
+            case PlayFabErrorCode.InvalidParams:
+                return "Thông tin nhập vào không hợp lệ.";
+
+            case PlayFabErrorCode.ConnectionError:
+                return "Không thể kết nối tới PlayFab. Kiểm tra mạng.";
+
+            case PlayFabErrorCode.ServiceUnavailable:
+            case PlayFabErrorCode.DownstreamServiceUnavailable:
+                return "Máy chủ PlayFab đang bận. Vui lòng thử lại sau.";
+
+            case PlayFabErrorCode.APIClientRequestRateLimitExceeded:
+            case PlayFabErrorCode.APIRequestLimitExceeded:
+            case PlayFabErrorCode.OverLimit:
+                return "Bạn thao tác quá nhanh. Vui lòng thử lại sau.";
+
+            case PlayFabErrorCode.NotAuthorized:
+            case PlayFabErrorCode.NotAuthenticated:
+            case PlayFabErrorCode.InvalidSessionTicket:
+                return "Phiên đăng nhập không hợp lệ.";
+
+            case PlayFabErrorCode.InvalidTitleId:
+                return "PlayFab TitleId không đúng.";
+
+            default:
+                return $"Lỗi PlayFab: {error.ErrorMessage}";
+        }
     }
     public override void Register(RegisterData data, Action<AuthResult> onSuccess, Action<AuthError> onError)
     {
@@ -73,7 +143,7 @@ public class PlayFabAuthService : AuthServiceBase
         }
         , onResError =>
         {
-            onError?.Invoke(new AuthError("PLAYFAB_REGISTER_FAILED", onResError.GenerateErrorReport()));
+            HandlePlayFabError(onResError, onError);
         });
     }
 
@@ -142,7 +212,7 @@ public class PlayFabAuthService : AuthServiceBase
         }
         , onResError =>
         {
-            onError?.Invoke(new AuthError("PLAYFAB_LOGIN_FAILED", onResError.GenerateErrorReport()));
+            HandlePlayFabError(onResError, onError);
         });
     }
 }
