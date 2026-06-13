@@ -35,6 +35,11 @@ namespace TGTH.Mobile
         {
             descriptionErrorTxt.text = "+ " + error;
         }
+        public void ShowAccount(string email, string password)
+        {
+            emailField.text = email == null ? "" : email;
+            passwordField.text = password == null ? "" : password;
+        }
 
     }
 }

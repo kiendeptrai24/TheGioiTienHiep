@@ -75,6 +75,14 @@ public class MineClickable : EntityClickable
                 }
                 else
                 {
+                    var actorC = playerNet.GetComponent<ActorController>();
+                    if (actorC != null)
+                    {
+                        Vector3 pos = new Vector3(500, 0, 440);
+                        Vector3 scale = playerNet.transform.localScale;
+                        Quaternion rot = Quaternion.identity;
+                        actorC.TelePort(pos, rot, scale);
+                    }
                     NotifyResultClientRpc(
                     $"{TextColorUtil.Color("Chiếm mỏ thất bại", Color.red)} sẽ được chuyển về {TextColorUtil.Color("TÔNG MÔN", Color.yellow)}!",
                     new ClientRpcParams

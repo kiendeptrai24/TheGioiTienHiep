@@ -26,7 +26,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1342129384734396264}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.38268343, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -34,7 +34,7 @@ RectTransform:
   - {fileID: 3583416200309922253}
   - {fileID: 8672087739675893007}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 45}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -97,6 +97,7 @@ MonoBehaviour:
   borderImage: {fileID: 0}
   inventoryItem:
     data:
+      instanceId: 
       itemId: 
       itemType: 0
       itemName: 
@@ -108,14 +109,19 @@ MonoBehaviour:
       itemDescription: 
       currentstack: 0
       realmType: 0
+      realmId: 
       qualityType: 0
       elementType: 0
+      health: 0
+      mana: 0
+      spirit: 0
       physicalDamage: 0
       magicalDamage: 0
       spiritDamage: 0
       physicalDefense: 0
       magicalDefense: 0
       spiritDefense: 0
+      potentialPoints: 0
     stackSize: 0
   quantityTxt: {fileID: 0}
 --- !u!1 &5094215986748862077
@@ -218,17 +224,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8193161080492039029}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.38268343, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7867858087641249758}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000061035156, y: 0.0000019073486}
-  m_SizeDelta: {x: 118.2169, y: 114.8142}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -45}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -160, y: -160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3323532110603889501
 CanvasRenderer:
@@ -258,7 +264,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1470902421, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cf2dc81a6716d0740a17d590f6674122, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

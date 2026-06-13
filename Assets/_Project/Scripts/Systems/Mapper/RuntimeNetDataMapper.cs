@@ -11,43 +11,44 @@ public static class RuntimeNetDataMapper
             return default;
 
         SplitToFixedLists(hero.equipmentIds, out var equipA, out var equipB);
-        SplitToFixedLists(hero.skillIds,     out var skillA, out var skillB);
-        SplitToFixedLists(hero.techniqueIds, out var techA,  out var techB);
+        SplitToFixedLists(hero.skillIds, out var skillA, out var skillB);
+        SplitToFixedLists(hero.techniqueIds, out var techA, out var techB);
 
         return new ChampionDataNetDto
         {
             instanceId = ToFixed(hero.instanceId),
+            name = ToFixed(hero.itemName),
 
-            isCharacter    = hero.isCharacter,
-            manaPersent    = hero.manaPersent,
-            healthPersent  = hero.healthPersent,
+            isCharacter = hero.isCharacter,
+            manaPersent = hero.manaPersent,
+            healthPersent = hero.healthPersent,
 
-            raceId    = ToFixed(hero.raceId),
+            raceId = ToFixed(hero.raceId),
             essenceId = ToFixed(hero.essenceId),
-            realmId   = ToFixed(hero.realmId),
+            realmId = ToFixed(hero.realmId),
 
             physicalDamagePoint = hero.physicalDamagePoint,
-            magicalDamagePoint  = hero.magicalDamagePoint,
-            spiritDamagePoint   = hero.spiritDamagePoint,
+            magicalDamagePoint = hero.magicalDamagePoint,
+            spiritDamagePoint = hero.spiritDamagePoint,
 
             physicalDefensePoint = hero.physicalDefensePoint,
-            magicalDefensePoint  = hero.magicalDefensePoint,
-            spiritDefensePoint   = hero.spiritDefensePoint,
+            magicalDefensePoint = hero.magicalDefensePoint,
+            spiritDefensePoint = hero.spiritDefensePoint,
 
             healthPoint = hero.healthPoint,
-            manaPoint   = hero.manaPoint,
+            manaPoint = hero.manaPoint,
             spiritPoint = hero.spiritPoint,
 
-            moveSpeedPoint  = hero.moveSpeedPoint,
+            moveSpeedPoint = hero.moveSpeedPoint,
             spiritRangePoint = hero.spiritRangePoint,
 
             championIndex = hero.championIndex,
 
-            equipmentIds  = equipA,
+            equipmentIds = equipA,
             equipmentIds1 = equipB,
-            skillIds      = skillA,
-            skillIds1     = skillB,
-            techniqueIds  = techA,
+            skillIds = skillA,
+            skillIds1 = skillB,
+            techniqueIds = techA,
             techniqueIds1 = techB,
         };
     }
@@ -62,40 +63,40 @@ public static class RuntimeNetDataMapper
 
         if (hero == null)
             return null;
-
+        hero.itemName = dto.name.ToString();
         hero.championIndex = dto.championIndex;
 
         hero.healthPersent = dto.healthPersent;
-        hero.manaPersent   = dto.manaPersent;
-        hero.isCharacter   = dto.isCharacter;
+        hero.manaPersent = dto.manaPersent;
+        hero.isCharacter = dto.isCharacter;
 
-        hero.raceId   = dto.raceId.ToString();
+        hero.raceId = dto.raceId.ToString();
         hero.raceData = dataManager.GetItemById(hero.raceId) as RaceData;
 
-        hero.essenceId   = dto.essenceId.ToString();
+        hero.essenceId = dto.essenceId.ToString();
         hero.essenceData = dataManager.GetItemById(hero.essenceId) as EssenceData;
 
-        hero.realmId   = dto.realmId.ToString();
+        hero.realmId = dto.realmId.ToString();
         hero.realmData = dataManager.GetItemById(hero.realmId) as RealmData;
 
         hero.physicalDamagePoint = dto.physicalDamagePoint;
-        hero.magicalDamagePoint  = dto.magicalDamagePoint;
-        hero.spiritDamagePoint   = dto.spiritDamagePoint;
+        hero.magicalDamagePoint = dto.magicalDamagePoint;
+        hero.spiritDamagePoint = dto.spiritDamagePoint;
 
         hero.physicalDefensePoint = dto.physicalDefensePoint;
-        hero.magicalDefensePoint  = dto.magicalDefensePoint;
-        hero.spiritDefensePoint   = dto.spiritDefensePoint;
+        hero.magicalDefensePoint = dto.magicalDefensePoint;
+        hero.spiritDefensePoint = dto.spiritDefensePoint;
 
         hero.healthPoint = dto.healthPoint;
-        hero.manaPoint   = dto.manaPoint;
+        hero.manaPoint = dto.manaPoint;
         hero.spiritPoint = dto.spiritPoint;
 
-        hero.moveSpeedPoint  = dto.moveSpeedPoint;
+        hero.moveSpeedPoint = dto.moveSpeedPoint;
         hero.spiritRangePoint = dto.spiritRangePoint;
 
-        hero.equipmentIds  = MergeToStringList(dto.equipmentIds, dto.equipmentIds1);
-        hero.skillIds      = MergeToStringList(dto.skillIds,     dto.skillIds1);
-        hero.techniqueIds  = MergeToStringList(dto.techniqueIds, dto.techniqueIds1);
+        hero.equipmentIds = MergeToStringList(dto.equipmentIds, dto.equipmentIds1);
+        hero.skillIds = MergeToStringList(dto.skillIds, dto.skillIds1);
+        hero.techniqueIds = MergeToStringList(dto.techniqueIds, dto.techniqueIds1);
 
         RebuildEquipmentDatas(hero, dataManager);
         RebuildSkillDatas(hero, dataManager);
@@ -190,7 +191,7 @@ public static class RuntimeNetDataMapper
 
         foreach (string id in hero.skillIds)
         {
-            var skillData = dataManager.GetItemById(id)as SkillData;
+            var skillData = dataManager.GetItemById(id) as SkillData;
             if (skillData != null) hero.skillDatas.Add(skillData);
         }
     }

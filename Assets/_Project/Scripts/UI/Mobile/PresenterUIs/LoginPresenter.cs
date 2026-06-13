@@ -1,7 +1,6 @@
 
 using System;
 using System.Collections.Generic;
-
 using UnityEngine;
 namespace TGTH.Mobile
 {
@@ -20,7 +19,19 @@ namespace TGTH.Mobile
             playfabDataManager.LoginError += onError;
             playfabDataManager.OnLoadCharacterFormPlayfab += OnStartGame;
             view.OnLoginClicked += OnStartClicked;
+            GetAccountCache();
         }
+
+        private void GetAccountCache()
+        {
+            string email = PlayerPrefs.GetString("EMAIL");
+            string password = PlayerPrefs.GetString("PASSWORD");
+            if (string.IsNullOrEmpty(email) == false || string.IsNullOrEmpty(password) == false)
+            {
+                view.ShowAccount(email, password);
+            }
+        }
+
         private void OnEnable()
         {
             view.HideMessege();

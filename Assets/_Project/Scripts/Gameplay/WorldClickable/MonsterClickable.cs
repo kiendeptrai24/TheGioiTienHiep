@@ -28,16 +28,13 @@ public class MonsterClickable : EntityClickable
             }
             else
             {
-                if (playerNet != null)
+                var actorC = playerNet.GetComponent<ActorController>();
+                if (actorC != null)
                 {
-                    var actorC = playerNet.GetComponent<ActorController>();
-                    if (actorC != null)
-                    {
-                        Vector3 pos = new Vector3(500, 0, 440);
-                        Vector3 scale = playerNet.transform.localScale;
-                        Quaternion rot = Quaternion.identity;
-                        actorC.TelePort(pos, rot, scale);
-                    }
+                    Vector3 pos = new Vector3(500, 0, 440);
+                    Vector3 scale = playerNet.transform.localScale;
+                    Quaternion rot = Quaternion.identity;
+                    actorC.TelePort(pos, rot, scale);
                 }
 
                 NotifyResultClientRpc(

@@ -5,8 +5,8 @@ using UnityEngine;
 public struct ChampionDataNetDto : INetworkSerializable
 {
     public FixedString64Bytes instanceId;
-
-    public bool  isCharacter;
+    public FixedString64Bytes name;
+    public bool isCharacter;
     public float manaPersent;
     public float healthPersent;
 
@@ -43,6 +43,7 @@ public struct ChampionDataNetDto : INetworkSerializable
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         serializer.SerializeValue(ref instanceId);
+        serializer.SerializeValue(ref name);
 
         serializer.SerializeValue(ref isCharacter);
         serializer.SerializeValue(ref manaPersent);
