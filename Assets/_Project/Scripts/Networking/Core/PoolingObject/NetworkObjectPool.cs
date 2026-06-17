@@ -95,6 +95,7 @@ public class NetworkObjectPool : NetworkBehaviour
         NetworkObject networkObject = null;
         try
         {
+
             networkObject = m_PooledObjects[prefab].Get();
 
             var noTransform = networkObject.transform;

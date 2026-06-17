@@ -10,7 +10,7 @@ public class SpawnMine : SingletonNetwork<SpawnMine>, INetObjectRegistry
     [SerializeField] private int maxObject = 50;
     private ISpawnArea area;
     private ISpawnPattern pattern;
-    [SerializeField] private GameObject prefab;
+    [SerializeField] private List<GameObject> listPrefab;
     [SerializeField] private SpawnService spawnManager;
     [SerializeField] public List<NetworkObject> mineNetObjects = new();
 
@@ -37,7 +37,7 @@ public class SpawnMine : SingletonNetwork<SpawnMine>, INetObjectRegistry
         area = new RectSpawnArea(new Vector3(100, 0, 100), new Vector2(200, 200));
         pattern = new RandomSpawnPattern();
 
-        spawnManager.SpawnNetwork(prefab, area, pattern, settings);
+        spawnManager.SpawnNetwork(listPrefab, area, pattern, settings);
     }
     
     private void RemoveAll()
@@ -55,7 +55,7 @@ public class SpawnMine : SingletonNetwork<SpawnMine>, INetObjectRegistry
         if (mineNetObjects.Count >= maxObject) return;
 
         settings.count = 1;
-        spawnManager.SpawnNetwork(prefab, area, pattern, settings);
+        spawnManager.SpawnNetwork(listPrefab, area, pattern, settings);
     }
     public void RemoveNetObject(NetworkObject entityObject)
     {
