@@ -9,10 +9,16 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
 {
     public event Action<bool> OnRealmUplevelResult;
     public event Action<UpgradeState> OnRealmUpgrade;
+    private bool isUpdating = false;
 
     private readonly Dictionary<string, UpgradeState> _realmSegment = new();
     private readonly SortedSet<UpgradeState> _sortedQueue = new();
     private UpgradeState curUpdatestate;
+    public bool GetIsUpdating()
+    {
+        return isUpdating;
+    }
+
     public void AddRealmSegment(LevelUpValidationResult upgradeState)
     {
         if (!IsServer) return;
@@ -70,13 +76,13 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
             result.endTime = upgradeState.endTime;
             result.startTime = upgradeState.startTime;
             result.result = upgradeState.result;
-
+            result.isCompleted = upgradeState.isCompleted;
             if (upgradeState.isCompleted)
             {
                 var nextRealm = GameDataCenterManager.Instance.GetItemById(upgradeState.upgradeId);
                 if (nextRealm == null)
                 {
-                    result.message = "Không tìm thấy realm tiếp theo";
+                    result.message = "Không tìm thấy cảnh tiếp theo";
                 }
                 else
                 {
@@ -84,16 +90,14 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
                     string realmTxt = TextColorUtil.Color(EnumTranslator.ToVietnamese(nextRealm.realmType), Color.green);
                     string realm = result.result ? $"cảnh giới hiện tại là {realmTxt}" : "";
                     result.message = $"{TextColorUtil.Color(res, Color.green)} {realm}";
-                    var json = JsonConvert.SerializeObject(result);
-                    Debug.Log("Update: " + result.playerId);
-                    Debug.Log("Update: " + clientData.playerObject.OwnerClientId);
-                    NotifiResultToClientRpc(json, RpcTargetUtils.Single(clientData.playerObject.OwnerClientId));
                 }
+                var json = JsonConvert.SerializeObject(result);
+                NotifiResultToClientRpc(json, RpcTargetUtils.Single(clientData.playerObject.OwnerClientId));
                 RemoveRealmSegment(playerId);
             }
             else
             {
-                result.message = "Đang đợi kết thúc";
+                result.message = "đang bế quan";
                 var json = JsonConvert.SerializeObject(result);
                 NotifiResultToClientRpc(json, RpcTargetUtils.Single(clientData.playerObject.OwnerClientId));
             }
@@ -109,14 +113,12 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
     {
         var messege = JsonConvert.DeserializeObject<LevelUpValidationResult>(message);
         TopNotificationUI.Instance.ShowNotification(messege.message);
-        var now = TimeUtils.DateTimeOffset();
-        if (now > messege.endTime)
+        if (messege.isCompleted)
         {
             if (messege.result)
             {
                 UpgradeSystemManager.Instance.TryUpgrade(UpgradeSystemManager.RealmUpgradeId);
-                Debug.Log("UpgradeRealm: " + messege.playerId);
-                Debug.Log("UpgradeRealm: " + clientRpcParams.Send.TargetClientIds[0]);
+                isUpdating = false;
                 OnRealmUplevelResult?.Invoke(true);
             }
         }
@@ -129,6 +131,7 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
             upgradeState.endTime = messege.endTime;
             upgradeState.result = messege.result;
             curUpdatestate = upgradeState;
+            isUpdating = true;
             OnRealmUpgrade?.Invoke(curUpdatestate);
         }
     }

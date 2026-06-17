@@ -1178,8 +1178,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5674988850956882470}
   - component: {fileID: 1749358295012249173}
-  - component: {fileID: 1332265592582713279}
-  - component: {fileID: 6879133659155713536}
   - component: {fileID: 6894223928933206975}
   - component: {fileID: 7595186681768438443}
   - component: {fileID: 4653743167290161615}
@@ -1235,67 +1233,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &1332265592582713279
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4546658479400525563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkTransform
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkTransformExpanded: 0
-  AutoOwnerAuthorityTickOffset: 1
-  PositionInterpolationType: 0
-  RotationInterpolationType: 0
-  ScaleInterpolationType: 0
-  PositionLerpSmoothing: 1
-  PositionMaxInterpolationTime: 0.1
-  RotationLerpSmoothing: 1
-  RotationMaxInterpolationTime: 0.1
-  ScaleLerpSmoothing: 1
-  ScaleMaxInterpolationTime: 0.1
-  AuthorityMode: 1
-  TickSyncChildren: 0
-  UseUnreliableDeltas: 0
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 1
-  SyncRotAngleX: 1
-  SyncRotAngleY: 1
-  SyncRotAngleZ: 1
-  SyncScaleX: 0
-  SyncScaleY: 0
-  SyncScaleZ: 0
-  PositionThreshold: 0.001
-  RotAngleThreshold: 0.01
-  ScaleThreshold: 0.01
-  UseQuaternionSynchronization: 0
-  UseQuaternionCompression: 0
-  UseHalfFloatPrecision: 0
-  InLocalSpace: 0
-  SwitchTransformSpaceWhenParented: 0
-  Interpolate: 1
-  SlerpPosition: 0
---- !u!114 &6879133659155713536
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4546658479400525563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cecdf3dc07f39548a582c728f38d442, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::OwnerNetworkAnimator
-  ShowTopMostFoldoutHeaderGroup: 1
-  TransitionStateInfoList: []
-  m_Animator: {fileID: 601636050519023594}
 --- !u!114 &6894223928933206975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1348,7 +1285,221 @@ MonoBehaviour:
   championSetUps:
   - championId: ID_CHAMPION_00005
     championIndex: {x: 1, y: 1}
+  - championId: ID_CHAMPION_00002
+    championIndex: {x: 1, y: 2}
+  - championId: ID_CHAMPION_00003
+    championIndex: {x: 2, y: 2}
   itemDatas: []
+  heroData:
+    instanceId: 
+    itemId: 
+    itemType: 0
+    itemName: 
+    itemIcon: {fileID: 0}
+    itemIconPath: 
+    itemFilePath: 
+    itemPrice: 0
+    canStack: 0
+    itemDescription: 
+    currentstack: 0
+    realmType: 0
+    realmId: 
+    qualityType: 0
+    elementType: 0
+    health: 0
+    mana: 0
+    spirit: 0
+    physicalDamage: 0
+    magicalDamage: 0
+    spiritDamage: 0
+    physicalDefense: 0
+    magicalDefense: 0
+    spiritDefense: 0
+    potentialPoints: 0
+    isCharacter: 0
+    healthPersent: 0
+    manaPersent: 0
+    spiritPersent: 0
+    characterId: 
+    realmData:
+      instanceId: 
+      itemId: 
+      itemType: 0
+      itemName: 
+      itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
+      itemPrice: 0
+      canStack: 0
+      itemDescription: 
+      currentstack: 0
+      realmType: 0
+      realmId: 
+      qualityType: 0
+      elementType: 0
+      health: 0
+      mana: 0
+      spirit: 0
+      physicalDamage: 0
+      magicalDamage: 0
+      spiritDamage: 0
+      physicalDefense: 0
+      magicalDefense: 0
+      spiritDefense: 0
+      potentialPoints: 0
+      critRate: 0
+      critDamage: 0
+      evasion: 0
+      armorPenetration: 0
+      movementSpeed: 0
+      attackSpeed: 0
+      castSpeed: 0
+      potential: 0
+      skillPoints: 0
+      combatPower: 0
+      spiritRange: 0
+      powerCost: 0
+      linhThaoCost: 0
+      khoangThachCost: 0
+      yeuDanCost: 0
+      maHachCost: 0
+      linhThachCost: 0
+      trucCoDanCost: 0
+      itemsCost: 
+      rewardPotentialPoint: 0
+      rewardSkillPoint: 0
+      rate: 0
+      increaseRate: 0
+      timeSeconds: 0
+    raceId: 
+    raceType: 0
+    raceData:
+      instanceId: 
+      itemId: 
+      itemType: 0
+      itemName: 
+      itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
+      itemPrice: 0
+      canStack: 0
+      itemDescription: 
+      currentstack: 0
+      realmType: 0
+      realmId: 
+      qualityType: 0
+      elementType: 0
+      health: 0
+      mana: 0
+      spirit: 0
+      physicalDamage: 0
+      magicalDamage: 0
+      spiritDamage: 0
+      physicalDefense: 0
+      magicalDefense: 0
+      spiritDefense: 0
+      potentialPoints: 0
+      raceType: 0
+      healthPoint: 0
+      manaPoint: 0
+      spiritPoint: 0
+      physicalDamagePoint: 0
+      magicalDamagePoint: 0
+      spiritDamagePoint: 0
+      physicalDefensePoint: 0
+      magicalDefensePoint: 0
+      spiritDefensePoint: 0
+      spiritRangePoint: 0
+      movementSpeedPoint: 0
+    essenceId: 
+    essenceType: 0
+    essenceData:
+      instanceId: 
+      itemId: 
+      itemType: 0
+      itemName: 
+      itemIcon: {fileID: 0}
+      itemIconPath: 
+      itemFilePath: 
+      itemPrice: 0
+      canStack: 0
+      itemDescription: 
+      currentstack: 0
+      realmType: 0
+      realmId: 
+      qualityType: 0
+      elementType: 0
+      health: 0
+      mana: 0
+      spirit: 0
+      physicalDamage: 0
+      magicalDamage: 0
+      spiritDamage: 0
+      physicalDefense: 0
+      magicalDefense: 0
+      spiritDefense: 0
+      potentialPoints: 0
+      essenceType: 0
+      counterEssenceType: 0
+      counterPercentage: 0
+      healthPoint: 0
+      manaPoint: 0
+      spiritPoint: 0
+      physicalDamagePoint: 0
+      magicalDamagePoint: 0
+      spiritDamagePoint: 0
+      physicalDefensePoint: 0
+      magicalDefensePoint: 0
+      spiritDefensePoint: 0
+      movementSpeedPoint: 0
+      spiritRangePoint: 0
+    level: 0
+    attackRange: 0
+    movementSpeed: 0
+    attackSpeed: 0
+    healthRegen: 0
+    manaRegen: 0
+    spiritRegen: 0
+    physicalDamagePoint: 0
+    magicalDamagePoint: 0
+    spiritDamagePoint: 0
+    physicalDefensePoint: 0
+    magicalDefensePoint: 0
+    spiritDefensePoint: 0
+    healthPoint: 0
+    manaPoint: 0
+    spiritPoint: 0
+    moveSpeedPoint: 0
+    spiritRangePoint: 0
+    championIndex: {x: 0, y: 0}
+    equipmentIds: []
+    equipmentDatas: []
+    skillIds: []
+    skillDatas: []
+    techniqueIds: []
+    techniqueDatas: []
+    levelUpConditionData:
+      level: 0
+      conditionType: 0
+      levelName: 
+      linhThao: 0
+      khoangThach: 0
+      yeuDan: 0
+      maHach: 0
+      linhThach: 0
+      requiredItem: 
+      requiredCharacterLevel: 0
+    heroPrefab: {fileID: 0}
+    potentialPoint: 0
+    skillPoint: 0
+    healthBonus: 0
+    manaBonus: 0
+    spiritBonus: 0
+    physicalDamageBonus: 0
+    magicalDamageBonus: 0
+    spiritDamageBonus: 0
+    physicalDefenseBonus: 0
+    spiritDefenseBonus: 0
   maxHeroesToSpawn: 5
 --- !u!114 &7956332767049086533
 MonoBehaviour:

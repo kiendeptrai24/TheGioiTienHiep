@@ -12,6 +12,8 @@ public class ToanLucNhatKichState_Champion : ChampionState, ISkillTrigger, IAnim
         direction.position = m_champion.transform.position;
         direction.rotation = m_champion.transform.rotation;
         m_champion.skillController.PlayBackActiveSkill(m_champion.currentSkillId, direction);
+        var clip = PlayerSoundManager.Instance.GetSound("melee-attack");
+        m_champion.PlayAudio(clip);
     }
 
     public void ActiveTrigger()

@@ -9,6 +9,8 @@ public class MoveState_Champion : GroundState_Champion
     public override void Enter()
     {
         base.Enter();
+        var clip = PlayerSoundManager.Instance.GetSound("move");
+        m_champion.PlayAudio(clip, true);
     }
 
     public override void Excute()
@@ -21,5 +23,6 @@ public class MoveState_Champion : GroundState_Champion
     public override void Exit()
     {
         base.Exit();
+        m_champion.StopAutio();
     }
 }

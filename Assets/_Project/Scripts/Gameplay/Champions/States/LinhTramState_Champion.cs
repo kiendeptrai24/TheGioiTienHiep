@@ -19,6 +19,8 @@ public class LinhTramState_Champion : ChampionState, ISkillTrigger, IAnimationTr
             m_champion.currentSkillId,
             direction
         );
+        var clip = PlayerSoundManager.Instance.GetSound("melee-attack");
+        m_champion.PlayAudio(clip);
     }
 
     public void ActiveTrigger()

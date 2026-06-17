@@ -30,6 +30,7 @@ public class SaveLoadManager : Singleton<SaveLoadManager>
     }
     public void SaveGame()
     {
+        if (saveManager == null) return;
         if (gameData == null) return;
         saveManager.SaveGame();
     }

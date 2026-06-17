@@ -7,6 +7,7 @@ public class LevelUpValidationResult
     public long startTime;
     public long endTime;
     public int Level;
+    public bool isCompleted;
     public LevelUpConditionType conditionType;
     public LevelUpValidationResult() { }
     public LevelUpValidationResult(bool valid, string msg)

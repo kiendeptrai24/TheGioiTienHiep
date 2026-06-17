@@ -30,7 +30,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
     private ulong playerClientId;
     private InventoryCenterManager inventoryCenterManager;
     private HeroData heroData;
-    private bool isUpdating = false;
+    private bool isUpgrading = false;
     public bool canLevelup = false;
 
     protected override void Awake()
@@ -50,7 +50,9 @@ public class ItemChamDetailPageView : IItemDetailPageView
             OnRealmUplevelResult(true);
         }
     }
-
+    private void OnEnable() {
+        isUpgrading = SegmentRealmManager.Instance.GetIsUpdating();
+    }
     private void OnItemDataChanged(List<ItemData> list)
     {
         levelUpValidator.RequestCheckConditionResult(playerClientId, itemData.instanceId);
@@ -58,7 +60,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
 
     private void OnRealmUpgrade(UpgradeState state)
     {
-        isUpdating = true;
+        isUpgrading = SegmentRealmManager.Instance.GetIsUpdating();
     }
 
     private void OnRealmUplevelResult(bool success)
@@ -67,7 +69,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
         if (itemData == null) return;
         if (levelUpValidator == null) return;
 
-        isUpdating = false;
+        isUpgrading = SegmentRealmManager.Instance.GetIsUpdating();
         levelUpValidator.RequestCheckConditionResult(playerClientId, itemData.instanceId);
     }
     private void SetUpValidator()
@@ -125,7 +127,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
             TopNotificationUI.Instance.ShowNotification("Không đủ điều kiện để đột phá");
             return;
         }
-        if (isUpdating)
+        if (isUpgrading)
         {
             TopNotificationUI.Instance.ShowNotification("Đang trong quá trình đột phá");
             return;

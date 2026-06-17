@@ -24,12 +24,6 @@ public class BotBehaviour : NetworkBehaviour
             Vector2 input = Random.insideUnitCircle.normalized;
             BotMoveServerRpc(input);
         }
-
-        if (actionTimer >= actionInterval)
-        {
-            actionTimer = 0f;
-            BotActionServerRpc();
-        }
     }
 
     [ServerRpc]
@@ -43,10 +37,14 @@ public class BotBehaviour : NetworkBehaviour
         transform.position += dir.normalized * moveSpeed * moveInterval;
         transform.forward = dir.normalized;
     }
-
-    [ServerRpc]
-    private void BotActionServerRpc()
+    private void Move(Vector2 input)
     {
-        Debug.Log($"Bot action from client {OwnerClientId}");
+        Vector3 dir = new Vector3(input.x, 0f, input.y);
+
+        if (dir.sqrMagnitude <= 0.001f)
+            return;
+
+        transform.position += dir.normalized * moveSpeed * moveInterval;
+        transform.forward = dir.normalized;
     }
 }

@@ -68,7 +68,7 @@ public class ChatPageView : TGTHMonoBehaviour
         {
             if (showZoomOut == false)
             {
-                if (EmptyText(chatInputZoomOutField.text))
+                if (EmptyText(chatInputField.text))
                     return;
 
                 OnSubmitChat?.Invoke(chatInputField.text);
@@ -91,7 +91,7 @@ public class ChatPageView : TGTHMonoBehaviour
     {
         submitSmallChatButton.onClick.AddListener(() =>
         {
-            if (EmptyText(chatInputZoomOutField.text))
+            if (EmptyText(chatInputField.text))
                 return;
 
             OnSubmitChat?.Invoke(chatInputField.text);

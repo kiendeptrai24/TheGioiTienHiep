@@ -14,6 +14,8 @@ public class AttackState_Champion : ChampionState, ISkillTrigger, IAnimationTrig
         Quaternion rot = m_champion.transform.rotation;
         var slash = ObjectPool.Instance.GetObject(m_champion.attackPrefab, pos, rot);
         ObjectPool.Instance.ReturnObject(slash, 1);
+        var clip = PlayerSoundManager.Instance.GetSound("melee-attack");
+        m_champion.PlayAudio(clip);
     }
 
     public void ActiveTrigger()

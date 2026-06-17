@@ -12,6 +12,8 @@ public class DonTramState_Champion : ChampionState, ISkillTrigger, IAnimationTri
         direction.position = m_champion.transform.position;
         direction.rotation = m_champion.transform.rotation;
         m_champion.skillController.PlayBackActiveSkill(m_champion.currentSkillId, direction);
+        var clip = PlayerSoundManager.Instance.GetSound("range-attack");
+        m_champion.PlayAudio(clip);
     }
 
     public void ActiveTrigger()

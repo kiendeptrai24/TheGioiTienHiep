@@ -13,13 +13,16 @@ public class TopDownMovement : IMoveable
         Vector3 v = new Vector3(direction.x, 0f, direction.y);
         inputDirection = direction;
         if (v.sqrMagnitude > 1f) v.Normalize();
-
+        if (rb.isKinematic)
+            return;
         Vector3 current = rb.linearVelocity;
         rb.linearVelocity = new Vector3(v.x * speed, current.y, v.z * speed);
     }
     public void Stop()
     {
         inputDirection = Vector2.zero;
+        if (rb.isKinematic)
+            return;
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }

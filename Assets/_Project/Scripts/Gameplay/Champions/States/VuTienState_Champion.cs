@@ -21,6 +21,8 @@ public class VuTienState_Champion : ChampionState, ISkillTrigger, IAnimationTrig
             m_champion.currentSkillId,
             direction
         );
+        var clip = PlayerSoundManager.Instance.GetSound("range-attack");
+        m_champion.PlayAudio(clip);
     }
 
     public void ActiveTrigger()

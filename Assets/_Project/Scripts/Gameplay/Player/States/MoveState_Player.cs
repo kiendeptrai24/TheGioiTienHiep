@@ -9,8 +9,9 @@ public class MoveState_Player : GroundState_Player
     public override void Enter()
     {
         base.Enter();
+        PlayerSoundManager.Instance.PlayClip("move", true);
     }
-    
+
     public override void Excute()
     {
         base.Excute();
@@ -21,5 +22,6 @@ public class MoveState_Player : GroundState_Player
     public override void Exit()
     {
         base.Exit();
+        PlayerSoundManager.Instance.StopMusic();
     }
 }

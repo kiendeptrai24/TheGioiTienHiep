@@ -15,6 +15,8 @@ public class AttackRangeState_Champion : ChampionState, ISkillTrigger, IAnimatio
         var bulletBase = bullet.GetComponent<BulletPlayBackBase>();
         var target = m_champion.findTarget.Target;
         bulletBase.SetUpTarGet(m_champion, target, m_champion.GetStats());
+        var clip = PlayerSoundManager.Instance.GetSound("range-attack");
+        m_champion.PlayAudio(clip);
     }
 
     public void ActiveTrigger()

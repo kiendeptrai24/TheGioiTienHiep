@@ -1,39 +1,54 @@
 using UnityEngine;
 using Unity.Netcode;
+using System.Collections;
 
 public class RandomSpawnClient : NetworkBehaviour
 {
     [Header("Spawn Area")]
     [SerializeField] private Vector3 center = Vector3.zero;
-    [SerializeField] private Vector3 size = new Vector3(5f, 5f, 5f);
+    [SerializeField] private Vector3 size = new Vector3(200f, 5f, 200f);
+    [SerializeField] private NetworkObject spawnObject;
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
 
-        // Chỉ xử lý player của local client
-        if (!IsOwner) return;
-
-        RandomSpawn();
+        if (!IsServer) return;
+        RandomSpawn(20);
     }
 
-    private void RandomSpawn()
+    private void RandomSpawn(int value)
+    {
+        StartCoroutine(RandomSpawnCoroutine(value));
+    }
+
+    private IEnumerator RandomSpawnCoroutine(int value)
+    {
+        for (int i = 0; i < value; i++)
+        {
+            SpawnObject();
+
+            yield return new WaitForSeconds(.2f);
+        }
+    }
+
+    private void SpawnObject()
     {
         Vector3 randomPosition = GetRandomPosition();
 
-        // Nếu có NavMesh thì có thể sample thêm
-        transform.position = randomPosition;
+        var netObj = Instantiate(spawnObject, randomPosition, Quaternion.identity);
+
+        netObj.Spawn();
     }
 
     private Vector3 GetRandomPosition()
     {
-        float randomX = Random.Range(-size.x / 2f, size.x / 2f);
-        float randomT = Random.Range(-size.y / 2f, size.y / 2f);
-        float randomZ = Random.Range(-size.z / 2f, size.z / 2f);
+        float randomX = Random.Range(500, 400);
+        float randomZ = Random.Range(500, 400);
 
         return new Vector3(
             center.x + randomX,
-            center.y + randomT,
+            0,
             center.z + randomZ
         );
     }

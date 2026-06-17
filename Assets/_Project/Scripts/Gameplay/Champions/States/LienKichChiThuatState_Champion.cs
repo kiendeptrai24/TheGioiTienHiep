@@ -21,6 +21,8 @@ public class LienKichChiThuatState_Champion : ChampionState, ISkillTrigger, IAni
             m_champion.currentSkillId,
             direction
         );
+        var clip = PlayerSoundManager.Instance.GetSound("melee-attack");
+        m_champion.PlayAudio(clip);
     }
 
     public void ActiveTrigger()

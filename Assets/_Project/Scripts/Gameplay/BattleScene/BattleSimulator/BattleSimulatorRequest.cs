@@ -81,7 +81,6 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             if (itemData == null) continue;
             stats.SetUp(itemData);
             var snap = SnapshotMapper.FromStats(stats, TeamId.Heroes, heroHealthPersent, heroManaPersent, heroHealthPersent);
-
             Vector2Int pos = (stats.heroData as HeroData).championIndex;
             pos = boardGrid.ClampToValidCell(pos);
 

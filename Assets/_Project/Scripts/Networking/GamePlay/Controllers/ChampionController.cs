@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 
 public class ChampionController : TGTHMonoBehaviour, ISkillCaster
@@ -6,6 +7,7 @@ public class ChampionController : TGTHMonoBehaviour, ISkillCaster
     public bool isMeleeChampion = true;
     protected StatsData stats;
     public GameObject attackPrefab;
+    private AudioSource audioRes;
     protected IStateMachine m_championSM;
     public AIChampionMovement m_aiMovement;
     public ChampionBaseSkill skillController;
@@ -70,6 +72,7 @@ public class ChampionController : TGTHMonoBehaviour, ISkillCaster
         stats = GetComponent<StatsData>();
         healthController = GetComponent<HealthController>();
         findTarget = GetComponent<TargetFinderBase>();
+        audioRes = GetComponent<AudioSource>();
     }
     public StatsData GetStats() => stats;
 
@@ -77,7 +80,19 @@ public class ChampionController : TGTHMonoBehaviour, ISkillCaster
     {
         _mana -= amount;
     }
-
+    public void PlayAudio(AudioClip clip, bool loop = false)
+    {
+        if (audioRes == null) return;
+        audioRes.clip = clip;
+        audioRes.loop = loop;
+        audioRes.Play();
+    }
+    public void StopAutio()
+    {
+        if (audioRes == null) return;
+        if (audioRes.isPlaying)
+            audioRes.Stop();
+    }
     public void ConsumeStamina(float amount)
     {
         _stamina -= amount;

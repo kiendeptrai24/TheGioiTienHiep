@@ -21,6 +21,8 @@ public class VanLinhTienState_Champion : ChampionState, ISkillTrigger, IAnimatio
             m_champion.currentSkillId,
             direction
         );
+        var clip = PlayerSoundManager.Instance.GetSound("range-attack");
+        m_champion.PlayAudio(clip);
     }
 
     public void ActiveTrigger()
