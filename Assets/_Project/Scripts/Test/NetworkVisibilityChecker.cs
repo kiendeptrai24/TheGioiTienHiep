@@ -1,17 +1,26 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 public class NetworkVisibilityChecker : TGTHNetworkBehaviour
 {
     [Header("Distance Settings")]
-    public float maxDistance = 5;
-    private int defauseDistance = 10;
-    protected override void Awake() {
-        
+    public float distance = 10;
+    private StatsData statsData;
+    protected override void Awake()
+    {
+        statsData = GetComponent<StatsData>();
+        statsData.OnStatReady += OnStatReady;
     }
     public override void OnNetworkSpawn()
     {
         if (!IsServer) return;
         DistanceVisibilityManager.Instance?.Register(this);
+    }
+
+    private void OnStatReady(StatsData data)
+    {
+        float distance = Mathf.Max(this.distance, data.SpiritRange);
+        SetVisibilityRangeServerRpc(distance);
     }
 
     public override void OnNetworkDespawn()
@@ -30,6 +39,6 @@ public class NetworkVisibilityChecker : TGTHNetworkBehaviour
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
     private void SetVisibilityRangeServerRpc(float newRange)
     {
-        maxDistance = Mathf.Max(0f, newRange); // tránh giá trị âm
+        distance = Mathf.Max(0f, newRange);
     }
 }

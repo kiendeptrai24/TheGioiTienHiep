@@ -2689,7 +2689,6 @@ GameObject:
   - component: {fileID: 6104340091819196650}
   - component: {fileID: 8805637365219129844}
   - component: {fileID: 3401861871345899725}
-  - component: {fileID: 8009670633140586549}
   m_Layer: 12
   m_Name: CharacterBeast
   m_TagString: Untagged
@@ -2727,7 +2726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2967531864
+  GlobalObjectIdHash: 3361531536
   InScenePlacedSourceGlobalObjectIdHash: 3348537847
   DeferredDespawnTick: 0
   Ownership: 1
@@ -3899,23 +3898,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NetworkVisibilityChecker
   ShowTopMostFoldoutHeaderGroup: 1
-  maxDistance: 5
---- !u!114 &8009670633140586549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7804178499550283321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f4a879e07ccdbf47b2a36a47c8f85e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BotBehaviour
-  ShowTopMostFoldoutHeaderGroup: 1
-  moveInterval: 0.2
-  actionInterval: 2
-  moveSpeed: 3
+  distance: 10
 --- !u!1 &7810243676748849088
 GameObject:
   m_ObjectHideFlags: 0

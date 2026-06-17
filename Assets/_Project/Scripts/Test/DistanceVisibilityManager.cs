@@ -6,7 +6,7 @@ public class DistanceVisibilityManager : SingletonNetwork<DistanceVisibilityMana
 {
 
     [Header("Default Distance")]
-    public float defaultMaxDistance = 5f;
+    public float defaultMaxDistance = 10f;
     public float checkInterval = 0.5f;
 
     private readonly List<NetworkVisibilityChecker> _checkers = new();
@@ -58,7 +58,7 @@ public class DistanceVisibilityManager : SingletonNetwork<DistanceVisibilityMana
                 if (clientPlayerObj == null) continue;
 
                 float dist = Vector3.Distance(ownerPos, clientPlayerObj.transform.position);
-                float maxDist = checker.maxDistance > 0 ? checker.maxDistance : defaultMaxDistance;
+                float maxDist = checker.distance > 0 ? checker.distance : defaultMaxDistance;
 
                 var networkObj = checker.GetComponent<NetworkObject>();
                 if (networkObj == null) continue;
