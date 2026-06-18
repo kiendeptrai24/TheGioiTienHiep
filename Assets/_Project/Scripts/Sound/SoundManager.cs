@@ -80,7 +80,6 @@ public class SoundManager : Singleton<SoundManager>
     {
         float savedMaster = PlayerPrefs.GetFloat(GameConstantsUtils.MASTER_VOL_PARAM, 1f);
         float savedMusic = PlayerPrefs.GetFloat(GameConstantsUtils.MUSIC_VOL_PARAM, 1f);
-        Debug.Log(savedMaster + " " + savedMusic);
         ApplyVolumeToMixer(GameConstantsUtils.MASTER_VOL_PARAM, savedMaster);
         ApplyVolumeToMixer(GameConstantsUtils.MUSIC_VOL_PARAM, savedMusic);
     }

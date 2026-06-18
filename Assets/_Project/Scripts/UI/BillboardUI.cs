@@ -9,11 +9,12 @@ public class BillboardUI : MonoBehaviour
     {
         mainCam = Camera.main;
         target = gameObject.transform.root;
-        offset =  new Vector3(.5f, 2f, 0);
+        offset = new Vector3(.5f, 2f, 0);
     }
 
     private void LateUpdate()
     {
+        if (mainCam == null || target == null) return;
         transform.position = target.position + offset;
         transform.LookAt(transform.position + mainCam.transform.forward);
     }

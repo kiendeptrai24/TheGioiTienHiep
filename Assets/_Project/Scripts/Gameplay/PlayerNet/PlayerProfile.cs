@@ -54,12 +54,12 @@ public class PlayerProfile : TGTHNetworkBehaviour
         base.OnNetworkSpawn();
         playerName.OnValueChanged += OnPlayerNameChanged;
         var playerProfile = GetComponent<PlayerProfile>();
-        var user = ProfileManager.Instance.GetProfile();
         playerResource = new PlayerResource();
 
         if (IsOwner)
         {
             // callback networkvariable
+            var user = ProfileManager.Instance.GetProfile();
             profileUser = user;
             playerProfile.OnProfileChanged += OnPlayerProfileChanged;
             potentialPoint.OnValueChanged += OnPotentialPointChanged;

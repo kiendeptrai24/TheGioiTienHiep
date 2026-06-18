@@ -32,6 +32,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private bool hasLogined = false;
     public bool ready = false;
     private string sessionId;
+    public List<ItemData> GetCharactersData() => gameData.itemCharacterDatas;
 
     protected override void Awake()
     {
@@ -39,13 +40,20 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         gameDataCenterManager = GameDataCenterManager.Instance;
         gameDataCenterManager.OnLoadGameDataCenterSuccessed += OnDataCenterReady;
         navigationToCharacterSelectionScreen = GetComponent<ActionNavigationSpecificScreen>();
-        Authen();
     }
-    public List<ItemData> GetCharactersData() => gameData.itemCharacterDatas;
-    private void Authen()
+    protected override void Start()
+    {
+        base.Start();
+        ConfigAuthen();
+        if (Configuration.Instance.IsClientBuild() || Configuration.Instance.startwithHost)
+        {
+            authFacade.AutoLogin(onSuccess, onError);
+        }
+    }
+    private void ConfigAuthen()
     {
         clientApi = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
-        if (Configuration.Instance.IsServerBuild())
+        if (Configuration.Instance.startwithHost)
         {
             IAuthService authService = new PlayFabAuthCustomService(clientApi, true);
             authFacade = new AuthFacade(authService);
@@ -53,96 +61,17 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         }
         else if (Configuration.Instance.IsClientBuild())
         {
-            if (Configuration.Instance.IsClientLocalBuild())
-            {
-                IAuthService authService = new PlayFabAuthService(clientApi);
-                authFacade = new AuthFacade(authService);
-                ready = true;
-            }
-            else if (Configuration.Instance.IsClientRemoteBuild())
-            {
-#if UNITY_STANDALONE_WIN || UNITY_SERVER
-                IAuthService authService = new PlayFabAuthService(clientApi);
-                authFacade = new AuthFacade(authService);
-                var playfabConnectMutiplayer = new PlayfabConnectMutiplayer(clientApi.authenticationContext);
-#endif
-            }
+            IAuthService authService = new PlayFabAuthService(clientApi);
+            authFacade = new AuthFacade(authService);
+            ready = true;
         }
-    }
-
-    private void StartHeartbeat()
-    {
-        InvokeRepeating(nameof(SendHeartbeat), 5f, 10f);
-    }
-    private void SendHeartbeat()
-    {
-        clientApi.ExecuteCloudScript(new ExecuteCloudScriptRequest
-        {
-            FunctionName = "Heartbeat",
-            FunctionParameter = new
-            {
-                sessionId = sessionId
-            }
-        },
-        result =>
-        {
-            var data = result.FunctionResult as IDictionary<string, object>;
-
-            if (data == null)
-            {
-                return;
-            }
-            bool valid = Convert.ToBoolean(data["valid"]);
-            if (!valid)
-            {
-                OnKicked();
-            }
-        },
-        error =>
-        {
-            Debug.LogError(error.GenerateErrorReport());
-        });
-    }
-    public void CreateSession()
-    {
-        sessionId = Guid.NewGuid().ToString();
-
-        clientApi.ExecuteCloudScript(new ExecuteCloudScriptRequest
-        {
-            FunctionName = "RequestSession",
-            FunctionParameter = new
-            {
-                sessionId = sessionId
-            }
-        },
-        result =>
-        {
-            Debug.Log("Session created");
-            StartHeartbeat();
-        },
-        error =>
-        {
-            Debug.LogError(error.GenerateErrorReport());
-        });
-    }
-    private void OnKicked()
-    {
-        authFacade.Logout((result) =>
-        {
-
-        }, onError);
     }
     private void OnDataCenterReady(GameDataCenter center)
     {
         if (hasLogined == false) return;
         LoadCharacterDataChoose();
     }
-    protected override void Start()
-    {
-        base.Start();
-        if (Configuration.Instance.IsServerBuild()) return;
-        authFacade.AutoLogin(onSuccess, onError);
-    }
+
     public void Login(LoginData loginData)
     {
         authFacade.Login(loginData, onSuccess, onError);
@@ -178,7 +107,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         if (Configuration.Instance.IsClientBuild())
         {
             sessionId = result.sessionId;
-            CreateSession();
+            //CreateSession();
             LoginSuccess?.Invoke(result);
             hasLogined = true;
             if (gameDataCenterManager.IsReady() == false) return;

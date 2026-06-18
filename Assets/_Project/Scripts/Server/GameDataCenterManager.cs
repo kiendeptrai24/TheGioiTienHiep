@@ -37,15 +37,11 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     protected override void Start()
     {
         base.Start();
-        if (Configuration.Instance.startwithHost)
+        if (Configuration.Instance.IsServerBuild())
         {
+            service = new PlayFabDataServerService();
             LoadData();
         }
-        if (Configuration.Instance.buildType == BuildType.LOCAL_CLIENT ||
-            Configuration.Instance.buildType == BuildType.REMOTE_CLIENT)
-            return;
-        service = new PlayFabDataServerService();
-        LoadData();
     }
     public ItemData GetItemById(string id)
     {
@@ -68,10 +64,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         {
             localVersion = gameDatas.version;
         }
-        else
-        {
-            onSuccess();
-        }
+        onSuccess();
     }
 
     public void onSuccess(PlayFabClientInstanceAPI clientApi = null)
@@ -89,7 +82,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     }
     private void LoadVersionRemove(Action<bool> callback)
     {
-        if (Configuration.Instance.IsClientLocalBuild())
+        if (Configuration.Instance.IsClientBuild())
         {
             clientApi.GetTitleData(new GetTitleDataRequest
             {
@@ -127,8 +120,6 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
             },
             error => Debug.LogError(error.GenerateErrorReport()));
         }
-
-
     }
 
     private void LoadDataLocal()

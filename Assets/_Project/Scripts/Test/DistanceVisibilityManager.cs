@@ -9,7 +9,6 @@ public class DistanceVisibilityManager : SingletonNetwork<DistanceVisibilityMana
     public float checkInterval = 0.5f;
 
     private readonly List<NetworkVisibilityChecker> _checkers = new();
-    [SerializeField] private List<NetworkVisibilityChecker> _checkersTest = new();
     private readonly HashSet<ulong> _pendingClientRefreshes = new();
     private readonly List<ulong> _resolvedClientIds = new();
     private float _timer;
@@ -40,14 +39,12 @@ public class DistanceVisibilityManager : SingletonNetwork<DistanceVisibilityMana
         if (checker == null || _checkers.Contains(checker)) return;
 
         _checkers.Add(checker);
-        _checkersTest.Add(checker);
         RefreshVisibilityForAllClients(checker);
     }
 
     public void Unregister(NetworkVisibilityChecker checker)
     {
         _checkers.Remove(checker);
-        _checkersTest.Remove(checker);
     }
 
     private void Update()

@@ -2,7 +2,6 @@
 using System;
 using ExitGames.Client.Photon;
 using Photon.Chat.DemoChat;
-using TMPro;
 using UnityEngine;
 namespace Photon.Chat.TGTHChat
 {

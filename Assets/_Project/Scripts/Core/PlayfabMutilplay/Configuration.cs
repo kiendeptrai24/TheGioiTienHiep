@@ -13,7 +13,7 @@ public class Configuration : Singleton<Configuration>
     public bool isEditor;
     public bool playFabDebugging = false;
     public bool IsServerBuild() => buildType == BuildType.LOCAL_SERVER || buildType == BuildType.REMOTE_SERVER || isEditor;
-    public bool IsClientBuild() => buildType == BuildType.LOCAL_CLIENT || buildType == BuildType.REMOTE_CLIENT && !isEditor;
+    public bool IsClientBuild() => (buildType == BuildType.LOCAL_CLIENT || buildType == BuildType.REMOTE_CLIENT) && !isEditor;
     public bool IsClientLocalBuild() => buildType == BuildType.LOCAL_CLIENT;
     public bool IsClientRemoteBuild() => buildType == BuildType.REMOTE_CLIENT;
     public bool IsServerLocalBuild() => buildType == BuildType.LOCAL_SERVER;
