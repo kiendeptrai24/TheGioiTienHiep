@@ -350,7 +350,6 @@ public class BattlePlayback : Singleton<BattlePlayback>
         );
 
         lastDestination = destination;
-        hasDestination = true;
 
         ownerCham.GetComponent<TargetFinderBase>().SetTarget(targetCham.transform);
         ownerCham.PlayMovement(destination);
@@ -390,14 +389,4 @@ public class BattlePlayback : Singleton<BattlePlayback>
         base.LoadComponent();
     }
     private Vector3 lastDestination;
-    private bool hasDestination;
-    private void OnDrawGizmos()
-    {
-        if (!hasDestination) return;
-
-        Gizmos.color = Color.green;
-        var pos = lastDestination;
-        pos.y = 1;
-        Gizmos.DrawSphere(pos, 1f);
-    }
 }
