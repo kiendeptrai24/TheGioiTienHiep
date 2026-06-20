@@ -5,7 +5,6 @@ using UnityEngine;
 public class Configuration : Singleton<Configuration>
 {
     public BuildType buildType;
-    public string buildId = "";
     public string ipAddress = "";
     public ushort port = 0;
     public bool useEditor = false;

@@ -5,6 +5,7 @@ using UnityEngine.Rendering;
 [DisallowMultipleComponent]
 public class OccluderFadable : TGTHMonoBehaviour
 {
+#if !UNITY_SERVER
     [Header("Fade")]
     [Range(0f, 1f)] public float fadedAlpha = 0.25f;
     public float fadeSpeed = 8f;
@@ -251,4 +252,5 @@ public class OccluderFadable : TGTHMonoBehaviour
             if (m) Destroy(m);
         _created.Clear();
     }
+#endif
 }

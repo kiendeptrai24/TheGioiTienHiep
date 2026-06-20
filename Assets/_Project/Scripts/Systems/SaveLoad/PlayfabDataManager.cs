@@ -5,6 +5,7 @@ using FeatureToggles;
 using PlayFab;
 using PlayFab.ClientModels;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 
 public class PlayfabDataManager : Singleton<PlayfabDataManager>
@@ -32,6 +33,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private bool hasLogined = false;
     public bool ready = false;
     private string sessionId;
+    private bool netcodeCallbacksRegistered = false;
     public List<ItemData> GetCharactersData() => gameData.itemCharacterDatas;
 
     protected override void Awake()
@@ -58,6 +60,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             IAuthService authService = new PlayFabAuthCustomService(clientApi, true);
             authFacade = new AuthFacade(authService);
             authFacade.Login(new LoginData(), onSuccess, onError);
+            ready = true;
         }
         else if (Configuration.Instance.IsClientBuild())
         {
@@ -171,11 +174,49 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         SceneLoadManager.Instance.LoadSceneLoading();
         LoadGameData(() =>
         {
+            bool canUnloadLoadingScene = false;
+
             if (Configuration.Instance.startwithHost)
-                NetworkManager.Singleton.StartHost();
+            {
+                canUnloadLoadingScene = NetworkManager.Singleton.StartHost();
+                if (!canUnloadLoadingScene)
+                {
+                    Debug.LogError("StartHost failed, keep LoadingScene open.");
+                }
+            }
             else
-                NetworkManager.Singleton.StartClient();
-            SceneLoadManager.Instance.UnLoadScene("LoadingScene");
+            {
+                if (Configuration.Instance.IsClientRemoteBuild())
+                {
+                    var utp = NetworkManager.Singleton.NetworkConfig.NetworkTransport as UnityTransport;
+                    if (utp != null)
+                    {
+                        var config = Configuration.Instance;
+                        if (config != null)
+                        {
+                            var ipAddress = config.ipAddress;
+                            var port = config.port;
+                            if (string.IsNullOrEmpty(ipAddress) || port == 0)
+                            {
+                                Debug.Log("Invalid IP address or port in configuration. Please check the settings.");
+                                return;
+                            }
+                            utp.SetConnectionData(config.ipAddress, config.port);
+                        }
+                    }
+                }
+
+                canUnloadLoadingScene = NetworkManager.Singleton.StartClient();
+                if (!canUnloadLoadingScene)
+                {
+                    Debug.LogError("StartClient failed, keep LoadingScene open.");
+                }
+            }
+
+            if (canUnloadLoadingScene)
+            {
+                SceneLoadManager.Instance.UnLoadScene("LoadingScene");
+            }
         });
     }
     private void LoadGameData(Action callback)

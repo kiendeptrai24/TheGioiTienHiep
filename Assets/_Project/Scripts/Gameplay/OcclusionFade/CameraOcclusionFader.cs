@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CameraOcclusionFader : TGTHMonoBehaviour
 {
+#if !UNITY_SERVER
     [Header("Refs")]
     public Transform target;                 // player
     public Transform camPivotOrCamera;       // camera transform
@@ -164,4 +165,5 @@ public class CameraOcclusionFader : TGTHMonoBehaviour
         public static List<T> Get() => Pool.Count > 0 ? Pool.Pop() : new List<T>(16);
         public static void Release(List<T> list) { list.Clear(); Pool.Push(list); }
     }
+#endif
 }

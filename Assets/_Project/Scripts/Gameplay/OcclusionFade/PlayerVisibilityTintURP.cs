@@ -3,6 +3,7 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class PlayerVisibilityTintURP : TGTHNetworkBehaviour
 {
+#if !UNITY_SERVER
     [Header("Renderers")]
     public Renderer[] renderers;
 
@@ -94,4 +95,5 @@ public class PlayerVisibilityTintURP : TGTHNetworkBehaviour
                 r.sharedMaterials = shared;
         }
     }
+#endif
 }

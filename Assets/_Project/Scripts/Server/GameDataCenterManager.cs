@@ -6,6 +6,7 @@ using PlayFab.ClientModels;
 using UnityEngine;
 using System;
 using System.Linq;
+using Newtonsoft.Json;
 
 public class GameDataCenterManager : Singleton<GameDataCenterManager>
 {
@@ -13,6 +14,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     [SerializeField] private string fileName;
     [SerializeField] private bool encryptData;
     private FileDataHandler<GameDataCenter> fileDataHandler;
+    private ConfigurationData configurationData;
     #endregion
     #region Data
     private Dictionary<string, ItemData> allItemsById = new();
@@ -86,11 +88,35 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         {
             clientApi.GetTitleData(new GetTitleDataRequest
             {
-                Keys = new List<string> { "game_data_version" }
+                Keys = new List<string> { "game_config" }
             },
             result =>
             {
-                serverVersion = result.Data["game_data_version"];
+                string gameConfig = result.Data["game_config"];
+                if (string.IsNullOrEmpty(gameConfig))
+                {
+                    callback?.Invoke(false);
+                    return;
+                }
+                try
+                {
+                    configurationData = JsonConvert.DeserializeObject<ConfigurationData>(gameConfig);
+                    serverVersion = configurationData.version;
+                    if (!string.IsNullOrEmpty(configurationData.ipAddress))
+                    {
+                        Configuration.Instance.ipAddress = configurationData.ipAddress;
+                    }
+                    if (configurationData.port != 0)
+                    {
+                        Configuration.Instance.port = configurationData.port;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Failed to parse game config: {ex.Message}");
+                    callback?.Invoke(false);
+                    return;
+                }
                 if (string.IsNullOrEmpty(serverVersion))
                 {
                     callback?.Invoke(false);
@@ -105,11 +131,27 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         {
             PlayFabServerAPI.GetTitleData(new PlayFab.ServerModels.GetTitleDataRequest
             {
-                Keys = new List<string> { "game_data_version" }
+                Keys = new List<string> { "game_config" }
             },
             result =>
             {
-                serverVersion = result.Data["game_data_version"];
+                string gameConfig = result.Data["game_config"];
+                if (string.IsNullOrEmpty(gameConfig))
+                {
+                    callback?.Invoke(false);
+                    return;
+                }
+                try
+                {
+                    configurationData = JsonConvert.DeserializeObject<ConfigurationData>(gameConfig);
+                    serverVersion = configurationData.version;
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Failed to parse game config: {ex.Message}");
+                    callback?.Invoke(false);
+                    return;
+                }
                 if (string.IsNullOrEmpty(serverVersion))
                 {
                     callback?.Invoke(false);
@@ -132,6 +174,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         ConfigShopDataCenter();
         DataCenterReady = true;
         OnLoadGameDataCenterSuccessed?.Invoke(gameDatas);
+        if (Configuration.Instance.IsServerRemoteBuild()) return;
         ServerStartUp.Instance.StartServer();
     }
 
@@ -167,6 +210,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
             gameDatas.version = serverVersion;
             fileDataHandler.Save(gameDatas);
             OnLoadGameDataCenterSuccessed?.Invoke(gameDatas);
+            if (Configuration.Instance.IsServerRemoteBuild()) return;
             ServerStartUp.Instance.StartServer();
         }
         catch (System.Exception ex)
@@ -363,4 +407,14 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     public GameDataCenter GetDataCenter() => gameDatas;
     public List<ItemData> GetShopDatas() => shopItems;
     public List<HeroData> GetChampionDatas() => gameDatas.championItems;
+}
+
+public class ConfigurationData
+{
+    [JsonProperty("game_data_version")]
+    public string version;
+    [JsonProperty("server_ip_address")]
+    public string ipAddress;
+    [JsonProperty("server_port")]
+    public ushort port;
 }

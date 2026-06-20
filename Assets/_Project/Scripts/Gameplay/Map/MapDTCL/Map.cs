@@ -349,6 +349,7 @@ public class Map : MonoBehaviour
     /// </summary>
     public void resetIndicators()
     {
+#if !UNITY_SERVER
         for (int x = 0; x < hexMapSizeX; x++)
         {
             for (int z = 0; z < hexMapSizeZ / 2; z++)
@@ -363,7 +364,7 @@ public class Map : MonoBehaviour
            ownIndicatorArray[x].GetComponent<MeshRenderer>().material.color = indicatorDefaultColor;
           // oponentIndicatorArray[x].GetComponent<MeshRenderer>().material.color = indicatorDefaultColor;
         }
-        
+#endif
     }
 
     /// <summary>
