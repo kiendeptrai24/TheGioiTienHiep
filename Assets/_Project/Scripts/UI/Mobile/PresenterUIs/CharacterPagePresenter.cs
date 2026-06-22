@@ -44,14 +44,25 @@ namespace TGTH.Mobile
             };
             SegmentRealmManager.Instance.OnRealmUpgrade += (UpgradeState upgradeState) =>
             {
-                isUpgrading = SegmentRealmManager.Instance.GetIsUpdating();
-                view.SetRealmBtnName(updateRealmName);
+                if (heroData == null || heroData.characterId != upgradeState.playerId)
+                    return;
+
+                isUpgrading = SegmentRealmManager.Instance.GetIsUpdating(heroData.characterId);
+                view.SetRealmBtnName(isUpgrading ? updateRealmName : baseRealmName);
                 this.upgradeState = upgradeState;
             };
             SegmentRealmManager.Instance.OnRealmUplevelResult += (bool result) =>
             {
-                view.SetRealmBtnName(baseRealmName);
-                isUpgrading = SegmentRealmManager.Instance.GetIsUpdating();
+                if (heroData == null)
+                    return;
+
+                isUpgrading = SegmentRealmManager.Instance.GetIsUpdating(heroData.characterId);
+                view.SetRealmBtnName(isUpgrading ? updateRealmName : baseRealmName);
+
+                if (isUpgrading)
+                    this.upgradeState = SegmentRealmManager.Instance.GetUpgradeState(heroData.characterId);
+                else
+                    this.upgradeState = null;
             };
             SegmentRealmManager.Instance.RefreshUpgradeState();
         }
@@ -65,7 +76,18 @@ namespace TGTH.Mobile
         }
         private void OnEnable()
         {
-            isUpgrading = SegmentRealmManager.Instance.GetIsUpdating();
+            if (heroData != null)
+            {
+                isUpgrading = SegmentRealmManager.Instance.GetIsUpdating(heroData.characterId);
+                view.SetRealmBtnName(isUpgrading ? updateRealmName : baseRealmName);
+                upgradeState = isUpgrading ? SegmentRealmManager.Instance.GetUpgradeState(heroData.characterId) : null;
+            }
+            else
+            {
+                isUpgrading = false;
+                view.SetRealmBtnName(baseRealmName);
+                upgradeState = null;
+            }
         }
         private void HandleItemClicked(UIItemSlotBase uiItem)
         {
@@ -76,6 +98,19 @@ namespace TGTH.Mobile
         {
             heroData = data as HeroData;
             view.ShowData(data);
+
+            if (heroData != null)
+            {
+                isUpgrading = SegmentRealmManager.Instance.GetIsUpdating(heroData.characterId);
+                view.SetRealmBtnName(isUpgrading ? updateRealmName : baseRealmName);
+                upgradeState = isUpgrading ? SegmentRealmManager.Instance.GetUpgradeState(heroData.characterId) : null;
+            }
+            else
+            {
+                isUpgrading = false;
+                view.SetRealmBtnName(baseRealmName);
+                upgradeState = null;
+            }
         }
 
         protected override void LoadComponent()

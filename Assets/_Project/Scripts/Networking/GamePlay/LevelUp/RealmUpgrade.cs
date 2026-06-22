@@ -9,13 +9,36 @@ public class RealmUpgrade : IUpgradeable
     }
     public void Upgrade()
     {
-        var nextRealm = LevelUpDatabase.Instance.GetNextRealm(heroData.realmType);
+        Upgrade(heroData?.characterId);
+    }
+
+    public void Upgrade(string characterId)
+    {
+        HeroData targetHero = null;
+
+        if (string.IsNullOrEmpty(characterId) == false)
+            targetHero = inventoryCM.GetHeroByCharacterId(characterId);
+
+        if (targetHero == null)
+            targetHero = heroData;
+
+        if (targetHero == null)
+            targetHero = inventoryCM.playerCham as HeroData;
+
+        if (targetHero == null)
+            return;
+
+        var nextRealm = LevelUpDatabase.Instance.GetNextRealm(targetHero.realmType);
         if (nextRealm != null)
         {
-            heroData.realmId = nextRealm.realmId;
-            heroData.realmType = nextRealm.realmType;
-            heroData.realmData = nextRealm;
-            inventoryCM.PlayerDataChanged(heroData);
+            targetHero.realmId = nextRealm.realmId;
+            targetHero.realmType = nextRealm.realmType;
+            targetHero.realmData = nextRealm;
+
+            inventoryCM.UpdateItemData(targetHero.itemId, targetHero);
+
+            if (inventoryCM.playerCham is HeroData currentHero && currentHero.characterId == targetHero.characterId)
+                inventoryCM.PlayerDataChanged(targetHero);
         }
     }
 }

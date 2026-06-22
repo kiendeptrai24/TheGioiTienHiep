@@ -41,4 +41,21 @@ public class UpgradeSystemManager : Singleton<UpgradeSystemManager>
         OnRealmUpgrade?.Invoke(true);
         return true;
     }
+
+    public bool TryUpgrade(string upgradeId, string characterId)
+    {
+        if (!upgrades.TryGetValue(upgradeId, out IUpgradeable upgrade))
+            return false;
+
+        if (upgradeId == RealmUpgradeId && upgrade is RealmUpgrade realmUpgrade)
+        {
+            realmUpgrade.Upgrade(characterId);
+            OnRealmUpgrade?.Invoke(true);
+            return true;
+        }
+
+        upgrade.Upgrade();
+        OnRealmUpgrade?.Invoke(true);
+        return true;
+    }
 }

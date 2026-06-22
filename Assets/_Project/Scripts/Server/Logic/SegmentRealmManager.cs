@@ -10,6 +10,7 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
     public event Action<bool> OnRealmUplevelResult;
     public event Action<UpgradeState> OnRealmUpgrade;
     private bool isUpdating = false;
+    private readonly Dictionary<string, UpgradeState> activeUpgradeStates = new();
 
     private readonly Dictionary<string, UpgradeState> _realmSegment = new();
     private readonly SortedSet<UpgradeState> _sortedQueue = new();
@@ -17,6 +18,25 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
     public bool GetIsUpdating()
     {
         return isUpdating;
+    }
+
+    public bool GetIsUpdating(string playerId)
+    {
+        if (string.IsNullOrEmpty(playerId))
+            return false;
+
+        return activeUpgradeStates.ContainsKey(playerId);
+    }
+
+    public UpgradeState GetUpgradeState(string playerId)
+    {
+        if (string.IsNullOrEmpty(playerId))
+            return null;
+
+        if (activeUpgradeStates.TryGetValue(playerId, out var state))
+            return state;
+
+        return null;
     }
 
     public void AddRealmSegment(LevelUpValidationResult upgradeState)
@@ -112,14 +132,21 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
     private void NotifiResultToClientRpc(string message, ClientRpcParams clientRpcParams)
     {
         var messege = JsonConvert.DeserializeObject<LevelUpValidationResult>(message);
+        if (messege == null) return;
         TopNotificationUI.Instance.ShowNotification(messege.message);
         if (messege.isCompleted)
         {
             if (messege.result)
             {
-                UpgradeSystemManager.Instance.TryUpgrade(UpgradeSystemManager.RealmUpgradeId);
+                UpgradeSystemManager.Instance.TryUpgrade(UpgradeSystemManager.RealmUpgradeId, messege.playerId);
                 isUpdating = false;
+                if (string.IsNullOrEmpty(messege.playerId) == false)
+                    activeUpgradeStates.Remove(messege.playerId);
                 OnRealmUplevelResult?.Invoke(true);
+            }
+            else if (string.IsNullOrEmpty(messege.playerId) == false)
+            {
+                activeUpgradeStates.Remove(messege.playerId);
             }
         }
         else
@@ -132,6 +159,8 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
             upgradeState.result = messege.result;
             curUpdatestate = upgradeState;
             isUpdating = true;
+            if (string.IsNullOrEmpty(upgradeState.playerId) == false)
+                activeUpgradeStates[upgradeState.playerId] = upgradeState;
             OnRealmUpgrade?.Invoke(curUpdatestate);
         }
     }

@@ -15,6 +15,7 @@ public class TeamDetailPageView : TGTHMonoBehaviour
     [SerializeField] private Button okBtn;
     [SerializeField] private Button cancelBtn;
     [SerializeField] private Image itemIconImge;
+    [SerializeField] private Sprite defaultSprite;
     public MouseFollower mouseFollower;
     public List<UIItemSlotBase> listOfUIItems = new List<UIItemSlotBase>();
     public event Action OnOkClicked;
@@ -88,12 +89,12 @@ public class TeamDetailPageView : TGTHMonoBehaviour
         itemIconImge.sprite = champion.itemIcon;
         championIndexTxt.text = $"Vị trí Hiện tại: {champion.championIndex.x},{champion.championIndex.y}";
     }
-    private void ResetShowData()
+    public void ResetShowData()
     {
         itemNameTxt.text = "";
         realmTxt.text = "";
         qualityTypeTxt.text = "";
-        itemIconImge.sprite = null;
+        itemIconImge.sprite = defaultSprite;
         championIndexTxt.text = "";
     }
 }

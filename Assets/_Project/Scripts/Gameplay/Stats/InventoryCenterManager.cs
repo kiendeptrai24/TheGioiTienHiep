@@ -224,7 +224,6 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         if (item == null) return false;
         if (item.canStack)
         {
-
             var existingItem = listItemDatas.FirstOrDefault(i => i.instanceId == item.instanceId);
             if (existingItem != null)
             {
@@ -243,7 +242,7 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         {
             if (quantity > 1)
             {
-                for (int i = 0; i < quantity - 1; i++)
+                for (int i = 0; i < quantity; i++)
                 {
                     var newItem = item.Clone();
                     newItem.itemId = Guid.NewGuid().ToString();
@@ -257,8 +256,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
             {
                 var newItem = item.Clone();
                 newItem.itemId = Guid.NewGuid().ToString();
-                listItemDatas.Add(item);
-                listItemDatasExisting.Add(item);
+                listItemDatas.Add(newItem);
+                listItemDatasExisting.Add(newItem);
                 ItemChange(newItem);
                 ItemExistingChange(newItem);
             }
@@ -322,6 +321,25 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
 
         Debug.LogWarning($"Item with itemId {itemId} not found in inventory!");
         return null;
+    }
+    public HeroData GetHeroByCharacterId(string characterId)
+    {
+        if (string.IsNullOrEmpty(characterId))
+            return null;
+
+        if (playerCham is HeroData currentHero && currentHero.characterId == characterId)
+            return currentHero;
+
+        var hero = listItemDatas.OfType<HeroData>().FirstOrDefault(x => x.characterId == characterId);
+        if (hero != null)
+            return hero;
+
+        hero = listItemDatasChampionInTeam.OfType<HeroData>().FirstOrDefault(x => x.characterId == characterId);
+        if (hero != null)
+            return hero;
+
+        hero = listItemDatasExisting.OfType<HeroData>().FirstOrDefault(x => x.characterId == characterId);
+        return hero;
     }
     public void UpdateItemData(string itemId, ItemData updatedItem)
     {

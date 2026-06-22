@@ -50,8 +50,10 @@ public class ItemChamDetailPageView : IItemDetailPageView
             OnRealmUplevelResult(true);
         }
     }
-    private void OnEnable() {
-        isUpgrading = SegmentRealmManager.Instance.GetIsUpdating();
+    private void OnEnable()
+    {
+        isUpgrading = heroData != null && SegmentRealmManager.Instance.GetIsUpdating(heroData.characterId);
+        playerClientId = NetworkManager.Singleton.LocalClientId;
         levelUpValidator.RequestCheckConditionResult(playerClientId, itemData.instanceId);
     }
     private void OnItemDataChanged(List<ItemData> list)
@@ -61,7 +63,13 @@ public class ItemChamDetailPageView : IItemDetailPageView
 
     private void OnRealmUpgrade(UpgradeState state)
     {
-        isUpgrading = SegmentRealmManager.Instance.GetIsUpdating();
+        if (heroData == null || state == null)
+        {
+            isUpgrading = false;
+            return;
+        }
+
+        isUpgrading = heroData.characterId == state.playerId && SegmentRealmManager.Instance.GetIsUpdating(heroData.characterId);
     }
 
     private void OnRealmUplevelResult(bool success)
@@ -70,7 +78,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
         if (itemData == null) return;
         if (levelUpValidator == null) return;
 
-        isUpgrading = SegmentRealmManager.Instance.GetIsUpdating();
+        isUpgrading = heroData != null && SegmentRealmManager.Instance.GetIsUpdating(heroData.characterId);
         levelUpValidator.RequestCheckConditionResult(playerClientId, itemData.instanceId);
     }
     private void SetUpValidator()
@@ -101,7 +109,11 @@ public class ItemChamDetailPageView : IItemDetailPageView
 
     private void OnNotificationConditionResult(CheckLevelUpValidationResult notifications)
     {
-        if (notifications == null) return;
+        if (notifications == null)
+        {
+            RemoveAllNotification();
+            return;
+        }
         RemoveAllNotification();
         canLevelup = true;
         foreach (var noti in notifications.results)
@@ -154,6 +166,8 @@ public class ItemChamDetailPageView : IItemDetailPageView
         heroData = inventoryItem.data as HeroData;
         itemData = heroData.realmData;
         if (itemData == null) return;
+
+        isUpgrading = heroData != null && SegmentRealmManager.Instance.GetIsUpdating(heroData.characterId);
 
         itemIcon.sprite = itemData.itemIcon;
         techniquenameTxt.text = itemData.itemName;

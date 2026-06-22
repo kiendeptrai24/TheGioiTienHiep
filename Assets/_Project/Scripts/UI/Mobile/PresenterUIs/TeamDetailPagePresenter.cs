@@ -73,6 +73,7 @@ public class TeamDetailPagePresenter : TGTHMonoBehaviour
     {
         listAddDatas.Clear();
         view.Reset();
+        view.ResetShowData();
         int index = 0;
         foreach (var item in itemDatas)
         {
