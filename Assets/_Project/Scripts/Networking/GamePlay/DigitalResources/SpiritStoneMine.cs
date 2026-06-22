@@ -149,19 +149,27 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         if (!ownership.HasOwner())
             return;
 
-        if (ownership.IsOnline())
+        var success = production.Tick(
+            TimeUtils.GetServerTime(),
+            out int producedAmount
+        );
+        if (success)
         {
-            var success = production.Tick(
-                TimeUtils.GetServerTime(),
-                ownerStorage
-            );
-            if (success)
+            CurrentAmount.Value = networkState.currentAmount;
+            CurrentMiningProgress.Value = networkState.currentMiningProgress;
+            miningData.currentAmount = networkState.currentAmount;
+            miningData.currentMiningProgress = networkState.currentMiningProgress;
+
+            if (producedAmount <= 0)
+                return;
+
+            if (ownership.IsOnline() && ownerStorage != null)
             {
-                CurrentAmount.Value = networkState.currentAmount;
-                CurrentMiningProgress.Value = networkState.currentMiningProgress;
-                miningData.currentAmount = networkState.currentAmount;
-                miningData.currentMiningProgress = networkState.currentMiningProgress;
+                ownerStorage.PlusCost((ulong)producedAmount);
+                return;
             }
+
+            segmentMineManager.AddOfflineReward(networkState.playerId, (ulong)producedAmount);
         }
     }
     public void SetOwner(ulong netId, bool isRestore = false)

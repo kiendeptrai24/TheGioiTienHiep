@@ -26,10 +26,9 @@ public class MineProductionSystem
 
     public bool Tick(
         double now,
-        ResourceStorage storage)
+        out int producedAmount)
     {
-        if (storage == null)
-            return false;
+        producedAmount = 0;
 
         if (now - lastProduceTime <
             miningTime)
@@ -40,13 +39,12 @@ public class MineProductionSystem
 
         lastProduceTime += ticks;
 
-        Produce(ticks, storage);
+        producedAmount = Produce(ticks);
         return true;
     }
 
-    private void Produce(
-        int times,
-        ResourceStorage storage)
+    private int Produce(
+        int times)
     {
         int amount =
             yieldPerHarvest * times;
@@ -61,7 +59,6 @@ public class MineProductionSystem
 
         networkState.currentAmount += amount;
         networkState.currentMiningProgress += times;
-
-        storage.PlusCost((ulong)amount);
+        return amount;
     }
 }

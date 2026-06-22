@@ -13,6 +13,8 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
     private readonly Dictionary<string, HashSet<string>> _playerMines = new();
     // persistent sessions
     private readonly Dictionary<string, List<MineOwnershipSession>> _mineSessions = new();
+    // pending reward while owner is offline
+    private readonly Dictionary<string, ulong> _pendingOfflineRewards = new();
     // ───────── REGISTER ─────────
     public void RegisterMine(string persistentId, ulong networkObjectId, int stonePerSecond)
     {
@@ -189,8 +191,7 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
         if (!TryGetResourceStorage(playerNetId, out var resourceStorage)) return;
         if (!_playerMines.TryGetValue(playerId, out var mineIds)) return;
 
-        ulong totalReward = 0;
-        long now = TimeUtils.DateTimeOffset();
+        ulong totalReward = ConsumeOfflineReward(playerId);
         var mineIdsToRemove = new List<string>();
 
         foreach (var mineId in new List<string>(mineIds))
@@ -198,26 +199,11 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
             if (!_mineSessions.TryGetValue(mineId, out var sessions)) continue;
 
             foreach (var session in sessions)
-            {
-                if (session.PlayerId != playerId) continue;
-                if (session.OfflineTime == 0) continue;
-
-                long sessionEnd = session.EndTime == 0 ? now : session.EndTime;
-                if (sessionEnd <= session.OfflineTime) continue;
-
-                long rewardStart = Math.Max(session.StartTime, session.OfflineTime);
-                long duration = sessionEnd - rewardStart;
-                if (duration <= 0) continue;
-
-                totalReward += (ulong)(duration * (long)session.YieldPerSecond);
-                session.OfflineTime = 0;
-
-                Debug.Log($"Mine: {mineId} | Duration: {duration}s | Reward: {totalReward}");
-            }
+                if (session.PlayerId == playerId && session.EndTime == 0)
+                    session.OfflineTime = 0;
 
             bool hasActiveOwnedSession = sessions.Exists(s => s.PlayerId == playerId && s.EndTime == 0);
-            bool hasPendingOfflineReward = sessions.Exists(s => s.PlayerId == playerId && s.OfflineTime != 0);
-            if (!hasActiveOwnedSession && !hasPendingOfflineReward)
+            if (!hasActiveOwnedSession)
                 mineIdsToRemove.Add(mineId);
         }
 
@@ -228,6 +214,30 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
             RemoveFromPlayerIndex(playerId, mineId);
 
         RestoreOwnedMines(playerId, playerNetId);
+    }
+
+    public void AddOfflineReward(string playerId, ulong amount)
+    {
+        if (!IsServer) return;
+        if (string.IsNullOrEmpty(playerId)) return;
+        if (amount == 0) return;
+
+        if (_pendingOfflineRewards.TryGetValue(playerId, out var current))
+            _pendingOfflineRewards[playerId] = current + amount;
+        else
+            _pendingOfflineRewards[playerId] = amount;
+    }
+
+    private ulong ConsumeOfflineReward(string playerId)
+    {
+        if (string.IsNullOrEmpty(playerId))
+            return 0;
+
+        if (!_pendingOfflineRewards.TryGetValue(playerId, out var reward))
+            return 0;
+
+        _pendingOfflineRewards.Remove(playerId);
+        return reward;
     }
 
     public void DisconnectSegment(ClientData data)
