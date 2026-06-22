@@ -23,7 +23,7 @@ public class ResourceNode : TGTHNetworkBehaviour, IDataMapWorld
     }
     private void InitializeItemData()
     {
-        itemData = GameDataCenterManager.Instance.GetItemById(instanceId).Clone() as ItemResourseData;
+        itemData = GameDataCenterManager.Instance.GetItemById(instanceId) as ItemResourseData;
         itemData.position = transform.position;
         itemData.resourceId = Guid.NewGuid().ToString();
         if (itemData != null)

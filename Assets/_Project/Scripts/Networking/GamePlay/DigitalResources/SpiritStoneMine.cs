@@ -52,15 +52,14 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         segmentMineManager = SegmentResourceManager.Instance;
         itemMapWorld = GetComponent<ResourceNode>();
         AddEvent();
-        if (itemMapWorld.IsDataReady())
-        {
-            SetupMine();
-        }
         itemMapWorld.OnDataReady += (itemData) =>
         {
             SetupMine();
         };
-        UpdateMineData();
+        if (itemMapWorld.IsDataReady())
+        {
+            SetupMine();
+        }
     }
     private void UpdateMineData()
     {
@@ -137,6 +136,9 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
 
         rosterLinker =
             new MineRosterLinker(GetComponent<PlayerBattleRoster>());
+
+        // Apply current replicated values when data becomes ready after spawn.
+        UpdateMineData();
     }
 
     private void Update()
@@ -162,7 +164,7 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
             }
         }
     }
-    public void SetOwner(ulong netId)
+    public void SetOwner(ulong netId, bool isRestore = false)
     {
         if (!IsServer)
             return;
@@ -177,10 +179,14 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         CurrentAmount.Value = miningData.currentAmount;
         CurrentMiningProgress.Value = miningData.currentMiningProgress;
 
-        production.ResetTime(now);
         ownerStorage = owner.GetComponent<ResourceStorage>();
         ownership.SetOwner(owner, playerId.ToString(), now);
-        segmentMineManager.ChangeMineOwner(miningData.resourceId, playerId.ToString(), yieldPerSecond);
+
+        if (isRestore)
+            return;
+
+        production.ResetTime(now);
+        segmentMineManager.ChangeMineOwner(miningData.resourceId, playerId.ToString(), yieldPerSecond, NetworkObjectId);
     }
     public void UnSetOwner(ulong netId)
     {

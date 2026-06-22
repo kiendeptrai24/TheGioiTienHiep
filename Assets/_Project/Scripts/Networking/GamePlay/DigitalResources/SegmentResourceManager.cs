@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, ISegmentSystem
@@ -27,10 +28,18 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
 
     // ───────── OWNER ─────────
 
-    public void ChangeMineOwner(string persistentId, string newPlayerId, int stonePerSecond)
+    public void ChangeMineOwner(string persistentId, string newPlayerId, int stonePerSecond, ulong mineNetId)
     {
         if (!IsServer) return;
-        if (!_mineSessions.TryGetValue(persistentId, out var sessions)) return;
+        if (!_mineSessions.TryGetValue(persistentId, out var sessions))
+        {
+            _mineSessions[persistentId] = sessions = new List<MineOwnershipSession>();
+            _mineRuntime[persistentId] = new MineRuntimeData
+            {
+                IsAlive = true,
+                NetworkObjectId = mineNetId
+            };
+        }
 
         long now = TimeUtils.DateTimeOffset();
 
@@ -56,7 +65,11 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
     {
         // Xóa mine khỏi index của owner cũ
         if (sessions.FindLast(s => s.EndTime == 0) is { } prev)
-            RemoveFromPlayerIndex(prev.PlayerId, persistentId);
+        {
+            // Nếu owner cũ đang offline thì giữ lại index để trả reward pending khi họ online lại.
+            if (prev.OfflineTime == 0)
+                RemoveFromPlayerIndex(prev.PlayerId, persistentId);
+        }
 
         CloseActiveSession(sessions, now);
 
@@ -139,7 +152,7 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
         if (!NetworkManager.SpawnManager.SpawnedObjects
             .TryGetValue(mineNetId, out var mineObject)) return;
         var mine = mineObject.GetComponent<SpiritStoneMine>();
-        mine?.SetOwner(playerNetId);
+        mine?.SetOwner(playerNetId, true);
     }
 
     private bool TryGetResourceStorage(ulong networkObjectId, out ResourceStorage storage)
@@ -160,7 +173,7 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
         {
             networkObjectId = networkClient.PlayerObject.NetworkObjectId;
             return true;
-        }   
+        }
 
         return false;
     }
@@ -178,6 +191,7 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
 
         ulong totalReward = 0;
         long now = TimeUtils.DateTimeOffset();
+        var mineIdsToRemove = new List<string>();
 
         foreach (var mineId in new List<string>(mineIds))
         {
@@ -199,12 +213,19 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
                 session.OfflineTime = 0;
 
                 Debug.Log($"Mine: {mineId} | Duration: {duration}s | Reward: {totalReward}");
-                break;
             }
+
+            bool hasActiveOwnedSession = sessions.Exists(s => s.PlayerId == playerId && s.EndTime == 0);
+            bool hasPendingOfflineReward = sessions.Exists(s => s.PlayerId == playerId && s.OfflineTime != 0);
+            if (!hasActiveOwnedSession && !hasPendingOfflineReward)
+                mineIdsToRemove.Add(mineId);
         }
 
         if (totalReward > 0)
             resourceStorage.PlusCost(totalReward);
+
+        foreach (var mineId in mineIdsToRemove)
+            RemoveFromPlayerIndex(playerId, mineId);
 
         RestoreOwnedMines(playerId, playerNetId);
     }
