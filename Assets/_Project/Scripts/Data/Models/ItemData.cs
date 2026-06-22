@@ -6,6 +6,7 @@ using UnityEngine;
 public class ItemData
 {
     public string instanceId;
+    public string itemBaseId;
     public string itemId;
     public ItemType itemType;
     public string itemName;
@@ -16,7 +17,7 @@ public class ItemData
     public ulong itemPrice;
     public bool canStack;
     public string itemDescription;
-    public int currentstack;
+    public int currentStack;
     public RealmType realmType;
     public string realmId;
     public QuanlityType qualityType;

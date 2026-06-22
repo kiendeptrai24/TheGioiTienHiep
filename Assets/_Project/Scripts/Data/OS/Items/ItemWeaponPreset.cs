@@ -369,7 +369,7 @@ public class ItemWeaponPreset : ItemEquipmentPreset
             itemDescription = data.itemDescription,
             itemIconPath = data.itemIconPath,
             itemPrice = data.itemPrice,
-            currentstack = data.currentstack,
+            currentStack = data.currentStack,
 
             // equipment meta
             equipmentType = equipmentType,

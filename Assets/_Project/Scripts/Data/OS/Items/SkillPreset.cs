@@ -425,7 +425,7 @@ public class SkillPreset : ItemPreset
         skillData.itemIcon = data.itemIcon;
         skillData.itemIconPath = data.itemIconPath;
         skillData.itemDescription = data.itemDescription;
-        skillData.currentstack = data.currentstack;
+        skillData.currentStack = data.currentStack;
         skillData.canStack = data.canStack;
         skillData.itemPrice = data.itemPrice;
         skillData.realmType = data.realmType;

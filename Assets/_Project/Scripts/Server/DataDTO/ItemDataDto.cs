@@ -4,6 +4,8 @@ public class ItemDataDto
 {
     [JsonProperty("mã")]
     public string instanceId;
+    [JsonProperty("mã gốc")]
+    public string itemBaseId;
 
     [JsonProperty("tên")]
     public string itemName;

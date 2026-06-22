@@ -228,11 +228,11 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
             var existingItem = listItemDatas.FirstOrDefault(i => i.instanceId == item.instanceId);
             if (existingItem != null)
             {
-                existingItem.currentstack += quantity;
+                existingItem.currentStack += quantity;
                 ItemChange(existingItem);
                 return true;
             }
-            item.currentstack = quantity;
+            item.currentStack = quantity;
             listItemDatas.Add(item);
             listItemDatasExisting.Add(item);
             ItemChange(item);
@@ -271,8 +271,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
         if (item != null)
         {
             if (item.canStack == false) return false;
-            item.currentstack = currentAmount;
-            if (item.currentstack <= 0)
+            item.currentStack = currentAmount;
+            if (item.currentStack <= 0)
             {
                 listItemDatas.Remove(item);
                 listItemDatasExisting.Remove(item);
@@ -295,18 +295,18 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
                 listItemDatas.Remove(item);
                 listItemDatasExisting.Remove(item);
             }
-            else if (existingItem.currentstack < quantity)
+            else if (existingItem.currentStack < quantity)
             {
                 return false;
             }
-            else if (existingItem.currentstack == quantity)
+            else if (existingItem.currentStack == quantity)
             {
                 listItemDatas.Remove(item);
                 listItemDatasExisting.Remove(item);
             }
             else
             {
-                existingItem.currentstack -= quantity;
+                existingItem.currentStack -= quantity;
             }
 
         }

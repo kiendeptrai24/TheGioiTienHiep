@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// </summary>
 public class TrucCoDanReource : IResourceValidator
 {
-    private string instacnceId = "ID_DANDUOC_TRUCCODAN_00001";
+    private string instacnceId = "ID_DANDUOC_TRUCCODAN";
     public int requiredAmount;
     private string requiredItemId;
 
@@ -44,10 +44,19 @@ public class TrucCoDanReource : IResourceValidator
     {
         foreach (ItemAmount item in playerResource.itemAmounts)
         {
-            if (item.itemId == instacnceId)
+            if (!string.IsNullOrEmpty(requiredItemId) && item.itemId == requiredItemId)
             {
                 return item;
             }
+        }
+
+        if (!string.IsNullOrEmpty(requiredItemId))
+            return null;
+
+        foreach (ItemAmount item in playerResource.itemAmounts)
+        {
+            if (item.itemId == instacnceId)
+                return item;
         }
 
         return null;

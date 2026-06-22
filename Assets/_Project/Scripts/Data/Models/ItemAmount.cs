@@ -2,11 +2,13 @@ using System.Collections.Generic;
 
 public class ItemAmount
 {
+    public string instanceId;
     public string itemId;
     public int amount;
 
-    public ItemAmount(string itemId, int amount)
+    public ItemAmount(string instanceId, string itemId, int amount)
     {
+        this.instanceId = instanceId;
         this.itemId = itemId;
         this.amount = amount;
     }
@@ -30,7 +32,7 @@ public class ItemAmount
 
             if (int.TryParse(parts[1], out int amount))
             {
-                result.Add(new ItemAmount(id, amount));
+                result.Add(new ItemAmount("", id, amount));
             }
         }
 
@@ -39,10 +41,9 @@ public class ItemAmount
     public static int GetTrucCoDan(string data)
     {
         var items = ParseItems(data);
-        int count = 0;
         foreach (var item in items)
         {
-            if (item.itemId == "ID_DANDUOC_TRUCCODAN_00001")
+            if (item.itemId == "ID_DANDUOC_TRUCCODAN")
                 return item.amount;
         }
 

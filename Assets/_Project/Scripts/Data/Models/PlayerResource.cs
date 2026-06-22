@@ -32,7 +32,7 @@ public class PlayerResource
             if (!int.TryParse(parts[1], out int amount))
                 continue;
 
-            var itemAmount = new ItemAmount(itemId, amount);
+            var itemAmount = new ItemAmount("", itemId, amount);
             itemAmounts.Add(itemAmount);
         }
     }

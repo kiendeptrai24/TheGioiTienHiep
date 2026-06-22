@@ -50,7 +50,7 @@ public abstract class ItemPreset : ScriptableObject
 
         data.itemPrice = itemPrice;
         data.itemDescription = itemDescription;
-        data.currentstack = currentstack;
+        data.currentStack = currentstack;
         data.canStack = canStack;
         data.qualityType = qualityType;
 

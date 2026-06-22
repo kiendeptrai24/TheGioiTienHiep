@@ -51,7 +51,7 @@ public class HeroPreset : ItemStatsPreset
             itemType = data.itemType,
             itemIcon = data.itemIcon,
             itemDescription = data.itemDescription,
-            currentstack = data.currentstack,
+            currentStack = data.currentStack,
             itemIconPath = data.itemIconPath,
             canStack = data.canStack,
             itemPrice = data.itemPrice,

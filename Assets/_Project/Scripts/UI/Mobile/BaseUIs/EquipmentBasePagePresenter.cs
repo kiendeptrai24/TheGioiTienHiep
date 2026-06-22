@@ -255,7 +255,7 @@ public abstract class EquipmentBasePagePresenter : TGTHMonoBehaviour
         if (item == null) return;
 
         view.ToggleMouseFollower(true);
-        view.SetFollowerData(item.data.itemIcon, item.data.currentstack);
+        view.SetFollowerData(item.data.itemIcon, item.data.currentStack);
 
         OnStartDragging?.Invoke(index);
     }

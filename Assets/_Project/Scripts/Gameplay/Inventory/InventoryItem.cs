@@ -27,7 +27,7 @@ public class InventoryItem
             stackSize = 99;
         else
             stackSize += quantity;
-        data.currentstack = stackSize;
+        data.currentStack = stackSize;
     }
     public void RemoveStack(int quantity = 1)
     {
@@ -36,7 +36,7 @@ public class InventoryItem
             stackSize = 0;
         else
             stackSize -= quantity;
-        data.currentstack = stackSize;
+        data.currentStack = stackSize;
     }
     public bool CanStack() => canStack;
 }

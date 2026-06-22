@@ -318,7 +318,7 @@ public class TechniquePreset : ItemPreset
         techniqueData.itemIcon = data.itemIcon;
         techniqueData.itemIconPath = data.itemIconPath;
         techniqueData.itemDescription = data.itemDescription;
-        techniqueData.currentstack = data.currentstack;
+        techniqueData.currentStack = data.currentStack;
         techniqueData.canStack = data.canStack;
         techniqueData.itemPrice = data.itemPrice;
         techniqueData.realmType = data.realmType;

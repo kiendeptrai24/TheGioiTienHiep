@@ -6,6 +6,8 @@ public class PillDataDto
 {
     [JsonProperty("Mã")]
     public string instanceId;
+    [JsonProperty("Mã Gốc")]
+    public string itemBaseId;
     [JsonProperty("Tên")]
     public string itemName;
     [JsonProperty("Mô Tả")]

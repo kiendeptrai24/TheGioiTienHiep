@@ -77,7 +77,7 @@ public class ItemEquipmentPreset : ItemStatsPreset
             itemType = data.itemType,
             itemIcon = data.itemIcon,
             itemDescription = data.itemDescription,
-            currentstack = data.currentstack,
+            currentStack = data.currentStack,
             canStack = data.canStack,
             itemPrice = data.itemPrice,
             itemIconPath = data.itemIconPath,

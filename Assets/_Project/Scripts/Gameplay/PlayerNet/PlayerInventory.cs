@@ -8,6 +8,11 @@ using UnityEngine;
 
 public class PlayerInventory : TGTHNetworkBehaviour
 {
+    private static readonly HashSet<string> itemRequirment = new()
+    {
+        "ID_DANDUOC_TRUCCODAN",
+    };
+
     [SerializeField] private List<ItemData> items;
     public override void OnNetworkSpawn()
     {
@@ -50,8 +55,10 @@ public class PlayerInventory : TGTHNetworkBehaviour
         List<ItemAmount> itemRequirments = new();
         foreach (var item in items)
         {
-            if (item.instanceId == "ID_DANDUOC_TRUCCODAN_00001")
-                itemRequirments.Add(new ItemAmount(item.instanceId, item.currentstack));
+            if (itemRequirment.Contains(item.itemBaseId))
+            {
+                itemRequirments.Add(new ItemAmount(item.instanceId, item.itemBaseId, item.currentStack));
+            }
         }
         return itemRequirments;
     }
@@ -68,7 +75,7 @@ public class PlayerInventory : TGTHNetworkBehaviour
         var pasteData = JsonConvert.DeserializeObject<List<ItemAmount>>(data);
         foreach (var item in pasteData)
         {
-            InventoryCenterManager.Instance.SetItem(item.itemId, item.amount);
+            InventoryCenterManager.Instance.SetItem(item.instanceId, item.amount);
         }
     }
 }

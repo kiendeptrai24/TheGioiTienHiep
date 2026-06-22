@@ -24,7 +24,7 @@ public class LevelUpConditionData
     {
         foreach (ItemAmount item in itemAmounts)
         {
-            if (item.itemId == "ID_DANDUOC_TRUCCODAN_00001")
+            if (item.itemId == "ID_DANDUOC_TRUCCODAN")
             {
                 return item.amount;
             }

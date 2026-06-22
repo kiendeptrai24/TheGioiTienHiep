@@ -52,6 +52,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
     }
     private void OnEnable() {
         isUpgrading = SegmentRealmManager.Instance.GetIsUpdating();
+        levelUpValidator.RequestCheckConditionResult(playerClientId, itemData.instanceId);
     }
     private void OnItemDataChanged(List<ItemData> list)
     {

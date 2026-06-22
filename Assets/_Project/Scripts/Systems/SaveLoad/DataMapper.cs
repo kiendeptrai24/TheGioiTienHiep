@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 
 public static class DataMapper
 {
@@ -122,12 +123,13 @@ public static class DataMapper
         }
 
         itemData.instanceId = dto.instanceId;
+        itemData.itemBaseId = dto.itemBaseId;
         itemData.itemName = dto.itemName;
         itemData.itemDescription = dto.description;
         itemData.itemIconPath = dto.iconPath;
         itemData.itemType = dto.itemType;
         itemData.canStack = dto.canStack;
-        itemData.currentstack = dto.currentStack;
+        itemData.currentStack = dto.currentStack;
         itemData.qualityType = dto.qualityType;
         itemData.realmType = dto.realmType;
         itemData.health = DataParseUtils.ParseNumberOrPercent(dto.health);
@@ -149,6 +151,7 @@ public static class DataMapper
     {
         var item = new PillData();
         item.instanceId = dto.instanceId;
+        item.itemBaseId = dto.itemBaseId;
         item.itemName = dto.itemName;
         item.itemIconPath = dto.iconPath;
         item.itemType = dto.itemType;
@@ -354,12 +357,13 @@ public static class DataMapper
         var dto = new ItemDataDto
         {
             instanceId = data.instanceId,
+            itemBaseId = data.itemBaseId,
             itemName = data.itemName,
             description = data.itemDescription,
             iconPath = data.itemIconPath,
             itemType = data.itemType,
             canStack = data.canStack,
-            currentStack = data.currentstack,
+            currentStack = data.currentStack,
             qualityType = data.qualityType,
             realmType = data.realmType,
 
