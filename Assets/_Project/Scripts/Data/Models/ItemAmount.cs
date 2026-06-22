@@ -45,6 +45,7 @@ public class ItemAmount
             if (item.itemId == "ID_DANDUOC_TRUCCODAN_00001")
                 return item.amount;
         }
-        return count;
+
+        return 0;
     }
 }
