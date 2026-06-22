@@ -7,14 +7,14 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
 {
     #region Networkvariable
     [SerializeField]
-    private NetworkVariable<float> CurrentMiningProgress = new(
+    public NetworkVariable<float> CurrentMiningProgress = new(
         0,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
 
     [SerializeField]
-    private NetworkVariable<int> CurrentAmount = new(
+    public NetworkVariable<int> CurrentAmount = new(
         0,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
@@ -60,6 +60,13 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         {
             SetupMine();
         };
+        UpdateMineData();
+    }
+    private void UpdateMineData()
+    {
+        if (miningData == null) return;
+        miningData.currentAmount = CurrentAmount.Value;
+        miningData.currentMiningProgress = CurrentMiningProgress.Value;
     }
     public override void OnNetworkPreDespawn()
     {
@@ -190,7 +197,7 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
         PlayerId.Value = "";
         OwnerNetworkId.Value = 0;
         ownerStorage = null;
-
+        segmentMineManager.RemoveFromPlayerIndex(playerId.ToString(), miningData.resourceId);
         ownership.ClearOwner();
     }
     public bool HasOwner() => string.IsNullOrEmpty(PlayerId.Value.ToString()) == false;

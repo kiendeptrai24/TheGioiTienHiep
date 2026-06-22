@@ -13,7 +13,6 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
     // persistent sessions
     private readonly Dictionary<string, List<MineOwnershipSession>> _mineSessions = new();
     // ───────── REGISTER ─────────
-
     public void RegisterMine(string persistentId, ulong networkObjectId, int stonePerSecond)
     {
         if (!IsServer) return;
@@ -23,7 +22,6 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
             IsAlive = true,
             NetworkObjectId = networkObjectId
         };
-
         _mineSessions.TryAdd(persistentId, new List<MineOwnershipSession>());
     }
 
@@ -94,7 +92,7 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
 
     // ───────── HELPERS ─────────
 
-    private void RemoveFromPlayerIndex(string playerId, string mineId)
+    public void RemoveFromPlayerIndex(string playerId, string mineId)
     {
         if (playerId == null) return;
         if (_playerMines.TryGetValue(playerId, out var set))
@@ -117,11 +115,11 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
             if (s.EndTime == 0) { s.EndTime = now; break; }
     }
 
-    private void RestoreOwnedMines(string playerId, ulong LocalClientId)
+    private void RestoreOwnedMines(string playerId, ulong playerNetId)
     {
         if (!_playerMines.TryGetValue(playerId, out var mineIds)) return;
 
-        foreach (var mineId in mineIds)
+        foreach (var mineId in new List<string>(mineIds))
         {
             if (!_mineRuntime.TryGetValue(mineId, out var runtime)) continue;
             if (!runtime.IsAlive) continue;
@@ -130,20 +128,18 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
             var active = sessions.FindLast(s => s.EndTime == 0);
             if (active?.PlayerId != playerId) continue;
 
-            RestoreMineForPlayer(LocalClientId, runtime.NetworkObjectId);
+            RestoreMineForPlayer(playerNetId, runtime.NetworkObjectId);
         }
     }
 
-    private void RestoreMineForPlayer(ulong localClientId, ulong mineNetworkObjectId)
+    private void RestoreMineForPlayer(ulong playerNetId, ulong mineNetId)
     {
         // 1. Chỉ Server mới có quyền cấu hình lại thế giới và đổi chủ vật thể
         if (!IsServer) return;
         if (!NetworkManager.SpawnManager.SpawnedObjects
-            .TryGetValue(mineNetworkObjectId, out var mineObject)) return;
-        if (TryGetNetworkOhjectId(localClientId, out var networkObjectId) == false)
-            return;
+            .TryGetValue(mineNetId, out var mineObject)) return;
         var mine = mineObject.GetComponent<SpiritStoneMine>();
-        mine?.SetOwner(networkObjectId);
+        mine?.SetOwner(playerNetId);
     }
 
     private bool TryGetResourceStorage(ulong networkObjectId, out ResourceStorage storage)
@@ -155,14 +151,17 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
         storage = netObj.GetComponent<ResourceStorage>();
         return storage != null;
     }
-    public bool TryGetNetworkOhjectId(ulong clientId, out ulong networkObjectId)
+    public bool TryGetNetworkObjectId(ulong clientId, out ulong networkObjectId)
     {
         networkObjectId = 0;
-        if (NetworkManager.ConnectedClients.TryGetValue(clientId, out var networkClient))
+
+        if (NetworkManager.ConnectedClients.TryGetValue(clientId, out var networkClient) &&
+            networkClient.PlayerObject != null)
         {
             networkObjectId = networkClient.PlayerObject.NetworkObjectId;
             return true;
-        }
+        }   
+
         return false;
     }
 
@@ -172,15 +171,15 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
         string playerId = data.playerId;
         ulong localClientId = data.clientId;
 
-        if (TryGetNetworkOhjectId(localClientId, out var networkObjectId))
+        if (!TryGetNetworkObjectId(localClientId, out var playerNetId))
             return;
-        if (!TryGetResourceStorage(networkObjectId, out var resourceStorage)) return;
+        if (!TryGetResourceStorage(playerNetId, out var resourceStorage)) return;
         if (!_playerMines.TryGetValue(playerId, out var mineIds)) return;
 
         ulong totalReward = 0;
         long now = TimeUtils.DateTimeOffset();
 
-        foreach (var mineId in mineIds)
+        foreach (var mineId in new List<string>(mineIds))
         {
             if (!_mineSessions.TryGetValue(mineId, out var sessions)) continue;
 
@@ -207,7 +206,7 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
         if (totalReward > 0)
             resourceStorage.PlusCost(totalReward);
 
-        RestoreOwnedMines(playerId, localClientId);
+        RestoreOwnedMines(playerId, playerNetId);
     }
 
     public void DisconnectSegment(ClientData data)
@@ -218,7 +217,7 @@ public class SegmentResourceManager : SingletonNetwork<SegmentResourceManager>, 
 
         long now = TimeUtils.DateTimeOffset();
 
-        foreach (var mineId in mineIds)
+        foreach (var mineId in new List<string>(mineIds))
         {
             if (!_mineSessions.TryGetValue(mineId, out var sessions)) continue;
 

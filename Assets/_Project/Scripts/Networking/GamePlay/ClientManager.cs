@@ -15,10 +15,12 @@ public class ClientManager : SingletonNetwork<ClientManager>
     protected override void Awake()
     {
         base.Awake();
-        DontDestroyOnLoad(gameObject);
+    }
+    protected override void Start()
+    {
+        base.Start();
         OnServerStarted();
     }
-
     private void OnServerStarted()
     {
         if (NetworkManager.Singleton != null)
