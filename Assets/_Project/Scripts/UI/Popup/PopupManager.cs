@@ -54,14 +54,9 @@ public class PopupManager : Singleton<PopupManager>
         }
         // Nếu popup đã ở trong stack rồi thì khỏi add lại (tránh double)
         if (_popupStack.Contains(popup)) return;
-
+        HideAllPopups();
         popup.Show();
         _popupStack.Add(popup);
-
-
-        // chỉ add blocker khi stack từ 0 -> 1
-        // if (wasEmpty)
-        //     _mgr.AddBlocker(FeatureId.WorldClick_Enabled, BLOCK_SRC);
 
         if (popup is MonoBehaviour mb)
             mb.transform.SetAsLastSibling();
@@ -73,10 +68,6 @@ public class PopupManager : Singleton<PopupManager>
         if (!_popupStack.Remove(popup)) return;
 
         popup.Hide();
-
-        // chỉ remove blocker khi stack về 0
-        // if (_popupStack.Count == 0)
-        //     _mgr.RemoveBlocker(FeatureId.WorldClick_Enabled, BLOCK_SRC);
     }
 
     public void HideAllPopups()
@@ -85,7 +76,6 @@ public class PopupManager : Singleton<PopupManager>
             popup.Hide();
 
         _popupStack.Clear();
-        // _mgr.RemoveBlocker(FeatureId.WorldClick_Enabled, BLOCK_SRC);
     }
 
     private void OnEnable() => SceneManager.activeSceneChanged += OnSceneLoaded;

@@ -50,14 +50,17 @@ namespace TGTH.Mobile
         #endregion
         public void SetStatsData(Dictionary<StatType, Stat> stats)
         {
+            var profile = ProfileManager.Instance != null ? ProfileManager.Instance.GetProfile() : null;
+
             if (potentialPointTxt != null)
             {
-                potentialPointTxt.text = ProfileManager.Instance.GetProfile().potentialPoint.ToString();
+                potentialPointTxt.text = profile != null ? profile.potentialPoint.ToString() : "0";
             }
             if (skillPointTxt != null)
             {
-                skillPointTxt.text = ProfileManager.Instance.GetProfile().skillPoint.ToString();
+                skillPointTxt.text = profile != null ? profile.skillPoint.ToString() : "0";
             }
+
             damagePointTxt.text = stats[StatType.PhicialDamagePoint].GetValue().ToString();
             defensePointTxt.text = stats[StatType.PhicialDefensePoint].GetValue().ToString();
 
@@ -80,10 +83,24 @@ namespace TGTH.Mobile
 
             armorPenetrationTxt.text = stats[StatType.ArmorPenetration].GetValue().ToString();
             lifeStealTxt.text = stats[StatType.LifeSteal].GetValue().ToString();
+            float maxHealth = stats[StatType.Health].GetValue();
+            float maxMana = stats[StatType.Mana].GetValue();
+            float maxSpirit = stats[StatType.Spirit].GetValue();
 
-            healthTxt.text = stats[StatType.Health].GetValue().ToString();
-            manaTxt.text = stats[StatType.Mana].GetValue().ToString();
-            spiritTxt.text = stats[StatType.Spirit].GetValue().ToString();
+            float curHealth = maxHealth;
+            float curMana = maxMana;
+            float curSpirit = maxSpirit;
+
+            if (profile != null)
+            {
+                curHealth = profile.currentHealth;
+                curMana = profile.currentMana;
+                curSpirit = profile.currentSpirit;
+            }
+
+            healthTxt.text = $"{curHealth}/{maxHealth}";
+            manaTxt.text = $"{curMana}/{maxMana}";
+            spiritTxt.text = $"{curSpirit}/{maxSpirit}";
 
             healthRegenTxt.text = stats[StatType.HealthRegen].GetValue().ToString();
             manaRegenTxt.text = stats[StatType.ManaRegen].GetValue().ToString();
