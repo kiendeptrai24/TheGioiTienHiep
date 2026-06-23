@@ -17,6 +17,7 @@ public abstract class BasePopup<TData, TResult> : TGTHMonoBehaviour, IPopup
 
     protected Action<TResult> onConfirm;
     protected Action onCancel;
+    protected EffectManager m_EffectManager;
 
     public bool IsVisible => gameObject.activeInHierarchy;
 
@@ -26,6 +27,8 @@ public abstract class BasePopup<TData, TResult> : TGTHMonoBehaviour, IPopup
         LoadComponent();
         SetupButtons();
         //Hide();
+        if (m_EffectManager == null)
+            m_EffectManager = EffectManager.Instance;
     }
 
     protected virtual void SetupButtons()
@@ -33,6 +36,7 @@ public abstract class BasePopup<TData, TResult> : TGTHMonoBehaviour, IPopup
         if (okBtn != null)
         {
             okBtn.onClick.AddListener(OnOkClicked);
+            m_EffectManager?.PlayOneShot("button-click");
         }
     }
 

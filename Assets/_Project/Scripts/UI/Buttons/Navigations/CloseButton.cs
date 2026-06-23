@@ -10,6 +10,7 @@ public class CloseButton : ActionButton
 
     public override void OnClick()
     {
+        base.OnClick();
         screenManager.NavigateTo("IngameUI");
     }
 }

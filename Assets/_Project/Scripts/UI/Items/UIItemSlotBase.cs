@@ -18,6 +18,9 @@ public abstract class UIItemSlotBase : TGTHMonoBehaviour,
     IDropHandler,
     IDragHandler
 {
+    private const string SwapSoundId = "button-swap";
+    private const string SelectSoundId = "button-select";
+
     public ActionNavigation navigation;
     [SerializeField] private bool resetDataOnAwake = true;
     [SerializeField] protected UIInventoryType uiInventoryType;
@@ -65,6 +68,12 @@ public abstract class UIItemSlotBase : TGTHMonoBehaviour,
         var temp = inventoryItem;
         SetItem(other.inventoryItem);
         other.SetItem(temp);
+
+        var effectManager = EffectManager.Instance;
+        if (effectManager != null)
+        {
+            effectManager.PlayOneShot(SwapSoundId);
+        }
     }
     public virtual void Select()
     {
@@ -82,6 +91,11 @@ public abstract class UIItemSlotBase : TGTHMonoBehaviour,
     #region Pointer Events
     public virtual void OnPointerClick(PointerEventData eventData)
     {
+        var effectManager = EffectManager.Instance;
+        if (effectManager != null)
+        {
+            effectManager.PlayOneShot(SelectSoundId);
+        }
         if (empty) return;
         if (eventData.button == PointerEventData.InputButton.Right)
             OnRightMouseBtnClick?.Invoke(this);

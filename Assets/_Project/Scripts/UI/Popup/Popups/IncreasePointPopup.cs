@@ -18,7 +18,9 @@ public class IncreasePointPopup : BasePopup<PointSetupData, StatsPointPopupData>
     protected override void SetupButtons()
     {
         base.SetupButtons();
-        cancelBtn.onClick.AddListener(OnCancelClicked);
+        cancelBtn.onClick.AddListener(() => { 
+            m_EffectManager?.PlayOneShot("button-click");
+            OnCancelClicked(); });
     }
     public override void Hide()
     {

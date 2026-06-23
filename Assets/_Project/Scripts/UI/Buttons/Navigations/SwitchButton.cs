@@ -8,6 +8,7 @@ public class SwitchButton : ActionButton
 
     public override void OnClick()
     {
+        base.OnClick();
         screenManager.SwitchTo(m_ScreenName);
     }
 }

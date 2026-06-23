@@ -111,6 +111,7 @@ public class OpptionsPopup : BasePopup<AudioSetupData, StatsPointPopupData>
     }
     private void OnCancelClicked()
     {
+        m_EffectManager?.PlayOneShot("button-click");
         Hide();
     }
 

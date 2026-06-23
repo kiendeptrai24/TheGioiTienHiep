@@ -27,17 +27,20 @@ public class AccountPopup : BasePopup<AccountDataPopup, BasePopupData>
 
     private void OnCloseClicked()
     {
+        m_EffectManager?.PlayOneShot("button-click");
         OnCancelClicked();
     }
 
     private void OnLogoutClicked()
     {
+        m_EffectManager?.PlayOneShot("button-click");
         onLogout?.Invoke();
         Hide();
     }
 
     private void OnChangeAccountClicked()
     {
+        m_EffectManager?.PlayOneShot("button-click");
         onChangeAccount?.Invoke();
         Hide();
     }

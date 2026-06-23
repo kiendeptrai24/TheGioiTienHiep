@@ -425,6 +425,10 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         loadRemotes.Clear();
         saveRemotes.Clear();
         gameData.Clear();
+        if (BattleHistoryController.Instance != null)
+        {
+            BattleHistoryController.Instance.ClearBattleHistory();
+        }
     }
 
     private void ForceLogoutFromRemoteSession()

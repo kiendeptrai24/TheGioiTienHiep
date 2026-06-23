@@ -34,8 +34,12 @@ public class FeedbackPopup : BasePopup<BaseSetupData, FeedbackPopupData>
     protected override void SetupButtons()
     {
         base.SetupButtons();
-        cancelBtn.onClick.AddListener(OnCancelClicked);
-        closeBtn.onClick.AddListener(OnCancelClicked);
+        cancelBtn.onClick.AddListener(() => { 
+            m_EffectManager?.PlayOneShot("button-click");
+            OnCancelClicked(); });
+        closeBtn.onClick.AddListener(() => { 
+            m_EffectManager?.PlayOneShot("button-click");
+            OnCancelClicked(); });
     }
     public override void Hide()
     {

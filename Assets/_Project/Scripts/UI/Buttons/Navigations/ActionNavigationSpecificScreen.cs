@@ -9,6 +9,7 @@ public class ActionNavigationSpecificScreen : ActionNavigation
 
     public override void OnClick()
     {
+        base.OnClick();
         m_ScreenManager.NavigateTo(m_ScreenName);
         m_ScreenSpecific.NavigateTo(m_SpecificScreenName);
     }

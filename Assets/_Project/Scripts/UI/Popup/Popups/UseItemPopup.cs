@@ -18,8 +18,12 @@ public class UseItemPopup : BasePopup<BaseSetupData, BasePopupData>
     protected override void SetupButtons()
     {
         base.SetupButtons();
-        cancelBtn.onClick.AddListener(OnCancelClicked);
-        infoBtn.onClick.AddListener(OnInfoClicked);
+        cancelBtn.onClick.AddListener(() => { 
+            m_EffectManager?.PlayOneShot("button-click");
+            OnCancelClicked(); });
+        infoBtn.onClick.AddListener(() => { 
+            m_EffectManager?.PlayOneShot("button-click");
+            OnInfoClicked(); });
     }
 
     private void OnInfoClicked()

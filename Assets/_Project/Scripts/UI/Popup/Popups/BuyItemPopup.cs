@@ -54,6 +54,7 @@ public class BuyItemPopup : BasePopup<ShopSetupData, QuantityPopupData>
     }
     private void OnShowInfoClicked()
     {
+        m_EffectManager?.PlayOneShot("button-click");
         onShowInfoBtn?.Invoke();
         PopupManager.Instance.HidePopup(this);
     }

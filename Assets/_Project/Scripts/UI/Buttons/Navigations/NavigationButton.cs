@@ -7,6 +7,7 @@ public class NavigationButton : ActionButton
 
     public override void OnClick()
     {
+        base.OnClick();
         screenManager.NavigateTo(m_ScreenName);
     }
 }
