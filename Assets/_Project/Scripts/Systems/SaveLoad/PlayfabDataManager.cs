@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class PlayfabDataManager : Singleton<PlayfabDataManager>
 {
-    private const float SessionHeartbeatIntervalSeconds = 10f;
+    private const float SessionHeartbeatIntervalSeconds = 20f;
 
     public ActionNavigationSpecificScreen navigationToCharacterSelectionScreen;
 
@@ -171,7 +171,6 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         {
             sessionLockAcquired = true;
             hasLogined = true;
-            StartSessionHeartbeat();
             LoginSuccess?.Invoke(result);
 
             if (gameDataCenterManager.IsReady())
@@ -253,6 +252,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             return;
         }
 
+        StartSessionHeartbeat();
         gameData.Clear();
         gameData.characterId = characterId;
         Debug.Log("OnCharacterLoaded: " + characterId);
@@ -351,6 +351,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private void StartSessionHeartbeat()
     {
         CancelInvoke(nameof(RefreshRealtimeSessionLock));
+        RefreshRealtimeSessionLock();
         InvokeRepeating(nameof(RefreshRealtimeSessionLock), SessionHeartbeatIntervalSeconds, SessionHeartbeatIntervalSeconds);
     }
 
