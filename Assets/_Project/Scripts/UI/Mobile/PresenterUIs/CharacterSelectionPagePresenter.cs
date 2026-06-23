@@ -1,8 +1,6 @@
-
-using System;
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
+
 namespace TGTH.Mobile
 {
     public class CharacterSelectionPagePresenter : TGTHMonoBehaviour
@@ -11,7 +9,9 @@ namespace TGTH.Mobile
         [SerializeField] private IItemClickHandler itemOnClick;
         [SerializeField] private ActionNavigation navigation;
         [SerializeField] private UIItemSlotBase currentItemSelect;
+
         private PlayfabDataManager playfabDataManager;
+
         protected override void Awake()
         {
             base.Awake();
@@ -23,10 +23,12 @@ namespace TGTH.Mobile
             view.OnStartClicked += OnStartClicked;
             view.OnLogoutClicked += OnLogoutClicked;
         }
+
         private void OnEnable()
         {
             OnItemCharacterChanged(playfabDataManager.GetCharactersData());
         }
+
         private void OnLogoutClicked()
         {
             playfabDataManager.Logout();
@@ -34,8 +36,10 @@ namespace TGTH.Mobile
 
         private void OnStartClicked()
         {
-            if (PlayfabDataManager.Instance.ready == false) return;
-            if (currentItemSelect == null || currentItemSelect.HasItem() == false) return;
+            if (!PlayfabDataManager.Instance.ready) return;
+            if (!playfabDataManager.IsAuthenticated) return;
+            if (currentItemSelect == null || !currentItemSelect.HasItem()) return;
+
             string characterId = (currentItemSelect.inventoryItem.data as HeroData).characterId;
             PlayerPrefabSelector.Instance.SetItemData(currentItemSelect.inventoryItem.data);
             PlayfabDataManager.Instance.OnCharacterLoaded(characterId);
@@ -44,11 +48,18 @@ namespace TGTH.Mobile
 
         private void OnItemCharacterChanged(List<ItemData> list)
         {
+            if (!playfabDataManager.IsAuthenticated)
+            {
+                view.ShowAllItems(new List<InventoryItem>());
+                return;
+            }
+
             var temp = new List<InventoryItem>();
             foreach (var item in list)
             {
                 temp.Add(new InventoryItem(item));
             }
+
             view.ShowAllItems(temp);
         }
 
@@ -59,7 +70,10 @@ namespace TGTH.Mobile
             {
                 var item = uiItem as UICharacterSelection;
                 if (item == null)
+                {
                     continue;
+                }
+
                 item.OnItemClicked += HandleItemClicked;
                 item.OnItemEmptySlotClicked += HandleEmptySlotClicked;
             }
@@ -78,6 +92,7 @@ namespace TGTH.Mobile
             view.ShowData(uiItem.inventoryItem.data);
             ItemClicked(uiItem);
         }
+
         private void ItemClicked(UIItemSlotBase uiItem)
         {
             int index = view.listOfUIItems.IndexOf(uiItem);
@@ -85,7 +100,6 @@ namespace TGTH.Mobile
 
             view.DeselectItem(currentItemSelect);
             view.SelectUIItem(currentItemSelect, uiItem);
-
             currentItemSelect = uiItem;
         }
     }

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,11 +17,11 @@ public class GameData
     public int skillPoint;
     public ItemDataPoint itemDataPoint;
     public List<ItemData> itemDatas;
-    public List<ItemData> itemUsedDatas; // champion 
-    public List<ItemData> itemChampionInTeamDatas; // champion in team
-    public List<ItemData> itemShopDatas; // item shop
-    public List<ItemData> itemCharacterDatas; // item character you have
-    public List<ItemData> gameBaseCharacterDatas; // item character base
+    public List<ItemData> itemUsedDatas;
+    public List<ItemData> itemChampionInTeamDatas;
+    public List<ItemData> itemShopDatas;
+    public List<ItemData> itemCharacterDatas;
+    public List<ItemData> gameBaseCharacterDatas;
     public MineOfflineDataList mineOfflineDataList;
 
     public GameData()
@@ -37,6 +36,7 @@ public class GameData
         position = new Vector3(0, 0, 0);
         rotation = Quaternion.identity;
     }
+
     public void Clear()
     {
         characterName = "";
@@ -51,8 +51,8 @@ public class GameData
         itemUsedDatas.Clear();
         itemChampionInTeamDatas.Clear();
         itemShopDatas.Clear();
+        itemCharacterDatas.Clear();
         gameBaseCharacterDatas.Clear();
         mineOfflineDataList.Clear();
     }
-
 }

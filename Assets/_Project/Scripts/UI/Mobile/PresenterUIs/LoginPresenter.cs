@@ -1,15 +1,14 @@
-
-using System;
 using System.Collections.Generic;
 using UnityEngine;
+
 namespace TGTH.Mobile
 {
     public class LoginPresenter : TGTHMonoBehaviour
     {
         [SerializeField] private LoginPageView view;
+        [SerializeField] private ActionNavigation navigation;
 
         private PlayfabDataManager playfabDataManager;
-        [SerializeField] private ActionNavigation navigation;
 
         protected override void Awake()
         {
@@ -26,7 +25,7 @@ namespace TGTH.Mobile
         {
             string email = PlayerPrefs.GetString("EMAIL");
             string password = PlayerPrefs.GetString("PASSWORD");
-            if (string.IsNullOrEmpty(email) == false || string.IsNullOrEmpty(password) == false)
+            if (!string.IsNullOrEmpty(email) || !string.IsNullOrEmpty(password))
             {
                 view.ShowAccount(email, password);
             }
@@ -36,8 +35,14 @@ namespace TGTH.Mobile
         {
             view.HideMessege();
         }
+
         private void OnStartGame(List<ItemData> list)
         {
+            if (!playfabDataManager.IsAuthenticated)
+            {
+                return;
+            }
+
             navigation.OnClick();
         }
 
@@ -49,12 +54,11 @@ namespace TGTH.Mobile
         private void onSuccess(AuthResult result)
         {
             view.ShowMessege(result.message);
-
         }
+
         private void onError(AuthError error)
         {
             view.ShowMessege(error.message);
         }
-
     }
 }

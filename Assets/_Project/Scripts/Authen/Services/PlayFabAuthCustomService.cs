@@ -81,6 +81,7 @@ public class PlayFabAuthCustomService : AuthServiceBase
                 clientApi = clientAPI,
                 userId = onResSuccess.PlayFabId,
                 accessToken = onResSuccess.SessionTicket,
+                sessionId = Guid.NewGuid().ToString(),
                 message = "Đăng nhập thành công"
             });
         }
