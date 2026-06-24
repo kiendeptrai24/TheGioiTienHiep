@@ -8,6 +8,7 @@ public class PlayerChoseObject : Singleton<PlayerChoseObject>
     private UIFollow uIFollow;
     private NetworkObject playerNet;
     public event Action<EntityClickable> OnEntityClicked;
+    private SafeZoneManager safeZoneManager;
     public EntityClickable GetCurrentEntity()
     {
         return currentEntity;
@@ -19,7 +20,11 @@ public class PlayerChoseObject : Singleton<PlayerChoseObject>
         uIFollow = GetComponent<UIFollow>();
         PlayerNetManager.Instance.OnPlayerExiststed += OnPlayerExists;
     }
-
+    override protected void Start()
+    {
+        base.Start();
+        safeZoneManager = SafeZoneManager.Instance;
+    }
     private void OnPlayerExists(NetworkObject @object)
     {
         playerNet = @object;
@@ -38,6 +43,14 @@ public class PlayerChoseObject : Singleton<PlayerChoseObject>
         {
             Debug.Log("object null");
             return;
+        }
+        if (safeZoneManager != null)
+        {
+            if (safeZoneManager.OutSide(currentEntity.transform.position) || safeZoneManager.OutSide(playerNet.transform.position))
+            {
+                TopNotificationUI.Instance.ShowNotification("bạn hoặc đối phương đang ở ngoài khu vực an toàn, không thể chiến đấu");
+                return;
+            }
         }
         currentEntity.OnEntityClickedAccept(playerNet);
     }

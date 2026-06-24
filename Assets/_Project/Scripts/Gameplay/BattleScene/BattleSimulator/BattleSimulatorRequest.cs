@@ -11,6 +11,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
     public List<BattleEvent> battleEvents = new();
     public BattleHistoryController battleHistoryController;
     private StatsDataCore stats;
+    private SafeZoneManager safeZoneManager;
     protected override void Awake()
     {
         base.Awake();
@@ -26,6 +27,12 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         statsModifiers.Add(new StatsSkillModifier());
         stats.SetStatsModifier(statsModifiers);
     }
+    protected override void Start()
+    {
+        base.Start();
+        if (!IsServer) return;
+        safeZoneManager = SafeZoneManager.Instance;
+    }
     protected override void LoadComponent()
     {
         base.LoadComponent();
@@ -37,11 +44,24 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
 
         if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(playerNetId, out var playerNet))
             return;
-        if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(monsterNetId, out var enemyNO))
+        if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(monsterNetId, out var player2Net))
             return;
-        var enemyObj = enemyNO.gameObject;
+        if (playerNet == null || player2Net == null) return;
+        if (playerNet.IsPlayerObject && player2Net.IsPlayerObject)
+        {
+            if (safeZoneManager != null)
+            {
+                if (safeZoneManager.OutSide(playerNet.transform.position) || safeZoneManager.OutSide(player2Net.transform.position))
+                {
+                    return;
+                }
+            }
+        }
+
         var playerObj = playerNet.gameObject;
-        if (playerObj == null || enemyObj == null) return;
+        var player2Obj = player2Net.gameObject;
+
+        if (playerObj == null || player2Obj == null) return;
 
         var senderNet = playerObj.GetComponent<NetworkBehaviour>();
 
@@ -50,22 +70,22 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         ulong senderClientId = senderNet.OwnerClientId;
 
         if (playerObj == null) return;
-        if (enemyObj == null) return;
+        if (player2Obj == null) return;
 
-        var heroRoster = playerObj.GetComponent<PlayerBattleRoster>();
-        var enemyRoster = enemyObj.GetComponent<PlayerBattleRoster>();
+        var playerRoster = playerObj.GetComponent<PlayerBattleRoster>();
+        var player2Roster = player2Obj.GetComponent<PlayerBattleRoster>();
 
-        float heroHealthPersent = GetHealthPercent(heroRoster.itemDatas);
-        float enemyHealthPersent = GetHealthPercent(enemyRoster.itemDatas);
+        float playerHealthPersent = GetHealthPercent(playerRoster.itemDatas);
+        float player2HealthPersent = GetHealthPercent(player2Roster.itemDatas);
 
-        float heroManaPersent = GetManaPercent(heroRoster.itemDatas);
-        float enemyManaPersent = GetManaPercent(enemyRoster.itemDatas);
+        float playerManaPersent = GetManaPercent(playerRoster.itemDatas);
+        float player2ManaPersent = GetManaPercent(player2Roster.itemDatas);
 
-        float heroSpiritPersent = GetSpiritPercent(heroRoster.itemDatas);
-        float enemySpiritPersent = GetSpiritPercent(enemyRoster.itemDatas);
+        float playerSpiritPersent = GetSpiritPercent(playerRoster.itemDatas);
+        float player2SpiritPersent = GetSpiritPercent(player2Roster.itemDatas);
 
-        List<UnitInput> enemySnaps = new();
-        List<UnitInput> heroSnaps = new();
+        List<UnitInput> player2Snaps = new();
+        List<UnitInput> playerSnaps = new();
         Board board = new Board
         {
             width = 5,
@@ -76,26 +96,26 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
 
         BattleBoardGrid boardGrid = new BattleBoardGrid(board.moveInterval, board.allowDiagonal);
         // HERO
-        foreach (var itemData in heroRoster.itemDatas)
+        foreach (var itemData in playerRoster.itemDatas)
         {
             if (itemData == null) continue;
             stats.SetUp(itemData);
-            var snap = SnapshotMapper.FromStats(stats, TeamId.Heroes, heroHealthPersent, heroManaPersent, heroHealthPersent);
+            var snap = SnapshotMapper.FromStats(stats, TeamId.Heroes, playerHealthPersent, playerManaPersent, playerSpiritPersent);
             Vector2Int pos = (stats.heroData as HeroData).championIndex;
             pos = boardGrid.ClampToValidCell(pos);
 
             snap.placement.cell = pos;
             snap.placement.attackRange = (int)snap.snap.attackRange;
-            heroSnaps.Add(snap);
+            playerSnaps.Add(snap);
         }
 
         // ENEMY
-        foreach (var itemData in enemyRoster.itemDatas)
+        foreach (var itemData in player2Roster.itemDatas)
         {
             if (itemData == null) continue;
             stats.SetUp(itemData);
 
-            var snap = SnapshotMapper.FromStats(stats, TeamId.Enemies, enemyHealthPersent, enemyManaPersent, enemyHealthPersent);
+            var snap = SnapshotMapper.FromStats(stats, TeamId.Enemies, player2HealthPersent, player2ManaPersent, player2SpiritPersent);
 
             Vector2Int pos = (stats.heroData as HeroData).championIndex;
 
@@ -105,13 +125,13 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
 
             snap.placement.cell = pos;
             snap.placement.attackRange = (int)snap.snap.attackRange;
-            enemySnaps.Add(snap);
+            player2Snaps.Add(snap);
         }
 
         uint seed = (uint)(playerNetId.GetHashCode() ^ monsterNetId.GetHashCode() ^ Environment.TickCount);
 
 
-        var res = BattleSimulator.Simulate(heroSnaps, enemySnaps, seed, boardGrid, 60f);
+        var res = BattleSimulator.Simulate(playerSnaps, player2Snaps, seed, boardGrid, 60f);
         // convert to DTO
         var dto = new BattleEventDTO[res.events.Count];
         for (int i = 0; i < res.events.Count; i++)
@@ -120,7 +140,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
             dto[i] = BattleEventMapper.ToDTO(ev);
         }
         var playerHealth = playerNet.gameObject.GetComponent<PlayerVitals>();
-        var enemyHealth = enemyNO.gameObject.GetComponent<PlayerVitals>();
+        var enemyHealth = player2Net.gameObject.GetComponent<PlayerVitals>();
         if (res.winner == TeamId.Heroes)
         {
             if (playerNet.IsPlayerObject)
@@ -130,12 +150,12 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
                     ApplyCharacterViralRatioFromBattle(res.events, playerHealth, res.winner);
                 }
             }
-            if (enemyNO.IsPlayerObject)
+            if (player2Net.IsPlayerObject)
                 enemyHealth.ResetViral();
         }
         else
         {
-            if (enemyNO.IsPlayerObject)
+            if (player2Net.IsPlayerObject)
             {
                 if (enemyHealth != null)
                 {
@@ -147,7 +167,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         }
         result?.Invoke(res.winner == TeamId.Heroes);
 
-        SendReplayToClientClientRpc(heroRoster.name, enemyRoster.name,
+        SendReplayToClientClientRpc(playerRoster.name, player2Roster.name,
             res.winner.ToString(), res.duration, dto,
             new ClientRpcParams
             {
