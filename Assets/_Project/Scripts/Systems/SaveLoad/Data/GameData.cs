@@ -55,4 +55,21 @@ public class GameData
         gameBaseCharacterDatas.Clear();
         mineOfflineDataList.Clear();
     }
+    public void ClearNotCharacterData()
+    {
+        characterName = "";
+        characterId = "";
+        coins = 0;
+        potentialPoint = 0;
+        skillPoint = 0;
+        currentHealth = 0;
+        currentMana = 0;
+        currentSpirit = 0;
+        itemDatas.Clear();
+        itemUsedDatas.Clear();
+        itemChampionInTeamDatas.Clear();
+        itemShopDatas.Clear();
+        gameBaseCharacterDatas.Clear();
+        mineOfflineDataList.Clear();
+    }
 }

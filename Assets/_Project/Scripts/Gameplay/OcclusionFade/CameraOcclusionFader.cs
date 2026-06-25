@@ -15,6 +15,9 @@ public class CameraOcclusionFader : Singleton<CameraOcclusionFader>
     public float sphereRadius = 0.25f;
     public float extraDistance = 0.2f;
     public QueryTriggerInteraction triggerMode = QueryTriggerInteraction.Ignore;
+    [Min(0f)] public float castInterval = 0.02f;
+    [Min(0f)] public float recastPositionThreshold = 0.02f;
+    [Min(0f)] public float staticRecastInterval = 0.1f;
 
     [Header("Ignore Target Colliders")]
     public bool ignoreTargetColliders = true;
@@ -28,9 +31,17 @@ public class CameraOcclusionFader : Singleton<CameraOcclusionFader>
     readonly HashSet<OccluderFadable> _next = new();
     readonly HashSet<Collider> _ignore = new();
     readonly Dictionary<Collider, OccluderFadable> _fadableCache = new();
+    readonly List<OccluderFadable> _toRestore = new(16);
 
     RaycastHit[] _hits = new RaycastHit[64];
     bool _isOccluded;
+    private bool canOcclude = false;
+    float _nextCastTime;
+    float _nextStaticCastTime;
+    float _recastPositionThresholdSqr;
+    Vector3 _lastCameraPosition;
+    Vector3 _lastTargetPosition;
+    bool _hasLastSample;
 
     protected override void LoadComponent()
     {
@@ -45,14 +56,20 @@ public class CameraOcclusionFader : Singleton<CameraOcclusionFader>
     protected override void Awake()
     {
         base.Awake();
+        _recastPositionThresholdSqr = recastPositionThreshold * recastPositionThreshold;
 
         if (PlayerNetManager.Instance != null)
             PlayerNetManager.Instance.OnPlayerExiststed += OnPlayerExists;
+        SetOccluded(false);
     }
 
-    protected override void OnDestroy()
+    protected void OnValidate()
     {
-        base.OnDestroy();
+        _recastPositionThresholdSqr = recastPositionThreshold * recastPositionThreshold;
+    }
+
+    protected void OnDestroy()
+    {
         if (PlayerNetManager.Instance != null)
             PlayerNetManager.Instance.OnPlayerExiststed -= OnPlayerExists;
     }
@@ -62,6 +79,9 @@ public class CameraOcclusionFader : Singleton<CameraOcclusionFader>
         if (!obj) return;
 
         target = obj.transform;
+        _hasLastSample = false;
+        _nextCastTime = 0f;
+        _nextStaticCastTime = 0f;
         RebuildIgnoreList();
     }
 
@@ -82,9 +102,48 @@ public class CameraOcclusionFader : Singleton<CameraOcclusionFader>
 
         Vector3 cameraPosition = camPivotOrCamera.position;
         Vector3 targetPosition = target.position;
+
+        if (!ShouldRecast(cameraPosition, targetPosition))
+        {
+            if (drawDebug)
+                DebugDraw(cameraPosition, targetPosition);
+            return;
+        }
+
+        ProcessOcclusion(cameraPosition, targetPosition);
+    }
+
+    bool ShouldRecast(Vector3 cameraPosition, Vector3 targetPosition)
+    {
+        if (!_hasLastSample) return true;
+
+        float now = Time.unscaledTime;
+        bool castIntervalElapsed = castInterval <= 0f || now >= _nextCastTime;
+        bool staticIntervalElapsed = staticRecastInterval <= 0f || now >= _nextStaticCastTime;
+        if (!castIntervalElapsed) return false;
+
+        if (_recastPositionThresholdSqr <= 0f) return true;
+
+        bool cameraMoved = (cameraPosition - _lastCameraPosition).sqrMagnitude >= _recastPositionThresholdSqr;
+        bool targetMoved = (targetPosition - _lastTargetPosition).sqrMagnitude >= _recastPositionThresholdSqr;
+        return cameraMoved || targetMoved || staticIntervalElapsed;
+    }
+
+    void ProcessOcclusion(Vector3 cameraPosition, Vector3 targetPosition)
+    {
+        _hasLastSample = true;
+        _lastCameraPosition = cameraPosition;
+        _lastTargetPosition = targetPosition;
+        _nextCastTime = Time.unscaledTime + castInterval;
+        _nextStaticCastTime = Time.unscaledTime + staticRecastInterval;
+
         Vector3 direction = targetPosition - cameraPosition;
         float distance = direction.magnitude;
-        if (distance <= 0.0001f) return;
+        if (distance <= 0.0001f)
+        {
+            RestoreAll();
+            return;
+        }
 
         direction /= distance;
 
@@ -100,6 +159,9 @@ public class CameraOcclusionFader : Singleton<CameraOcclusionFader>
             occluderMask,
             triggerMode
         );
+
+        if (hitCount == _hits.Length)
+            Array.Resize(ref _hits, _hits.Length * 2);
 
         _next.Clear();
 
@@ -125,43 +187,69 @@ public class CameraOcclusionFader : Singleton<CameraOcclusionFader>
 
         if (_current.Count > 0)
         {
-            var toRestore = ListPool<OccluderFadable>.Get();
+            _toRestore.Clear();
 
             foreach (var fadable in _current)
                 if (!_next.Contains(fadable))
-                    toRestore.Add(fadable);
+                    _toRestore.Add(fadable);
 
-            foreach (var fadable in toRestore)
+            for (int i = 0; i < _toRestore.Count; i++)
             {
+                var fadable = _toRestore[i];
                 _current.Remove(fadable);
                 if (fadable) fadable.SetOccluding(false);
             }
-
-            ListPool<OccluderFadable>.Release(toRestore);
         }
 
-        bool nowOccluded = _next.Count > 0;
-        if (nowOccluded != _isOccluded)
-        {
-            _isOccluded = nowOccluded;
-            OnOccluded?.Invoke(_isOccluded);
-        }
+        UpdateOccludedState();
 
         if (drawDebug)
             Debug.DrawLine(origin, origin + direction * distance, Color.yellow);
     }
 
-    static class ListPool<T>
+    void RestoreAll()
     {
-        static readonly Stack<List<T>> Pool = new();
-
-        public static List<T> Get() => Pool.Count > 0 ? Pool.Pop() : new List<T>(16);
-
-        public static void Release(List<T> list)
+        if (_current.Count > 0)
         {
-            list.Clear();
-            Pool.Push(list);
+            _toRestore.Clear();
+            foreach (var fadable in _current)
+                _toRestore.Add(fadable);
+
+            _current.Clear();
+
+            for (int i = 0; i < _toRestore.Count; i++)
+            {
+                var fadable = _toRestore[i];
+                if (fadable) fadable.SetOccluding(false);
+            }
         }
+
+        UpdateOccludedState();
+    }
+
+    void UpdateOccludedState()
+    {
+        bool nowOccluded = _current.Count > 0;
+        if (nowOccluded == _isOccluded) return;
+
+        _isOccluded = nowOccluded;
+        if (canOcclude)
+            OnOccluded?.Invoke(_isOccluded);
+    }
+    public void SetOccluded(bool occluded)
+    {
+        canOcclude = occluded;
+    }
+
+    void DebugDraw(Vector3 cameraPosition, Vector3 targetPosition)
+    {
+        Vector3 direction = targetPosition - cameraPosition;
+        float distance = direction.magnitude;
+        if (distance <= 0.0001f) return;
+
+        direction /= distance;
+        Vector3 origin = cameraPosition + direction * 0.05f;
+        Debug.DrawLine(origin, origin + direction * distance, Color.yellow);
     }
 #endif
 }
