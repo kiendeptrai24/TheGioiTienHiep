@@ -6,6 +6,8 @@ using UnityEngine;
 public class PlayfabDataManager : Singleton<PlayfabDataManager>
 {
     private const float SessionHeartbeatIntervalSeconds = 20f;
+    private const float SessionRetryIntervalSeconds = 2f;
+    private const int MaxSessionRetryAttempts = 30;
     private const string CreateAccountScreenName = "CreateAccount";
     private const string CreateCharacterPanelName = "Panel (CreateNv)";
 
@@ -16,6 +18,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     public event Action<List<ItemData>> OnCharacterChanged;
     public event Action<AuthResult> LoginSuccess;
     public event Action<AuthError> LoginError;
+    public event Action<string> LoginStatusChanged;
 
     [SerializeField] private GameData gameData = new GameData();
 
@@ -25,6 +28,9 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private PlayfabClientRuntimeService clientRuntimeService;
     private GameDataCenterManager gameDataCenterManager;
     private bool isApplicationQuitting;
+
+    private AuthResult _pendingAuthResult;
+    private Coroutine _sessionRetryCoroutine;
 
     public bool ready => sessionState != null && sessionState.Ready;
     public bool IsAuthenticated => authSessionService != null && authSessionService.IsAuthenticated;
@@ -71,6 +77,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     public void ShutDownPlayfab()
     {
         isApplicationQuitting = true;
+        CancelSessionRetry();
         MarkLoggedOutLocally();
         ReleaseRealtimeSessionLock();
     }
@@ -151,9 +158,9 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         });
     }
 
-    public void SaveGameData()
+    public void SaveGameData(Action<bool> onCompleted = null)
     {
-        remoteGameDataService.SaveGameData();
+        remoteGameDataService.SaveGameData(onCompleted);
     }
 
     public void onSuccess(AuthResult result)
@@ -177,9 +184,12 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private void HandleLoginSuccess(AuthResult result)
     {
         gameDataCenterManager.onSuccess(result.clientApi);
+        _pendingAuthResult = result;
 
         authSessionService.AcquireRealtimeSession(result, sessionResult =>
         {
+            _pendingAuthResult = null;
+            StartSessionHeartbeat();
             LoginSuccess?.Invoke(sessionResult);
 
             if (gameDataCenterManager.IsReady())
@@ -187,7 +197,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
                 gameData.Clear();
                 LoadCharacterDataChoose();
             }
-        }, HandleLoginError);
+        }, HandleLoginError, HandleSessionWaiting);
     }
 
     private void HandleLoginError(AuthError error)
@@ -278,16 +288,159 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     private void ForceLogoutFromRemoteSession()
     {
-        MarkLoggedOutLocally();
-        authSessionService.Logout(_ => PostRemoteKick(), _ => PostRemoteKick());
+        authSessionService.MarkLoggedOutLocally();
+        LoginStatusChanged?.Invoke("Phat hien dang nhap o thiet bi khac. Dang luu du lieu truoc khi dang xuat...");
+        SaveBeforeRemoteKick(PostRemoteKick);
     }
 
-    private void PostRemoteKick()
+    private void PostRemoteKick(bool saveSucceeded)
     {
-        SaveLoadManager.Instance.SaveGame();
+        if (!saveSucceeded)
+        {
+            CancelInvoke(nameof(RefreshRealtimeSessionLock));
+            authSessionService.Logout(_ => CompleteRemoteKick(false), _ => CompleteRemoteKick(false));
+            return;
+        }
+
+        ReleaseRealtimeSessionLock(() =>
+        {
+            authSessionService.Logout(_ => CompleteRemoteKick(true), _ => CompleteRemoteKick(true));
+        });
+    }
+
+    private void CompleteRemoteKick(bool saveSucceeded)
+    {
         ResetLocalSessionState();
         clientRuntimeService.ShutdownNetworkIfNeeded();
         clientRuntimeService.ResetClientSystems();
-        LoginError?.Invoke(new AuthError("SESSION_REVOKED", "Tai khoan nay vua dang nhap o thiet bi khac."));
+
+        var message = saveSucceeded
+            ? "Tai khoan nay vua dang nhap o thiet bi khac."
+            : "Tai khoan nay vua dang nhap o thiet bi khac. Da co loi khi luu du lieu truoc khi dang xuat.";
+        LoginError?.Invoke(new AuthError("SESSION_REVOKED", message));
+    }
+
+    private void SaveBeforeRemoteKick(Action<bool> onCompleted)
+    {
+        var saveManager = SaveLoadManager.Instance != null ? SaveLoadManager.Instance.saveManager as SaveLoadPlayfab : null;
+        if (saveManager == null)
+        {
+            Debug.LogWarning("[PlayfabDataManager] SaveLoadPlayfab not found. Releasing session without save confirmation.");
+            onCompleted?.Invoke(false);
+            return;
+        }
+
+        saveManager.SaveGame(success =>
+        {
+            if (!success)
+            {
+                Debug.LogWarning("[PlayfabDataManager] Remote save failed during forced logout.");
+            }
+
+            onCompleted?.Invoke(success);
+        });
+    }
+
+    private void HandleSessionWaiting(CloudSessionRequestResult sessionResult)
+    {
+        LoginStatusChanged?.Invoke(string.IsNullOrEmpty(sessionResult.message)
+            ? "Dang dong bo du lieu va dang xuat phien cu..."
+            : sessionResult.message);
+        Debug.Log($"[PlayfabDataManager] Phien dang nhap khac dang hoat dong (session: {sessionResult.previousSessionId}). Dang cho giai phong...");
+
+        if (_sessionRetryCoroutine != null)
+        {
+            StopCoroutine(_sessionRetryCoroutine);
+        }
+
+        _sessionRetryCoroutine = StartCoroutine(SessionRetryRoutine());
+    }
+
+    private System.Collections.IEnumerator SessionRetryRoutine()
+    {
+        var authResult = _pendingAuthResult;
+        if (authResult == null)
+        {
+            Debug.LogError("[PlayfabDataManager] SessionRetryRoutine: No pending auth result!");
+            yield break;
+        }
+
+        var wait = new WaitForSeconds(SessionRetryIntervalSeconds);
+
+        for (int attempt = 1; attempt <= MaxSessionRetryAttempts; attempt++)
+        {
+            Debug.Log($"[PlayfabDataManager] Thu lai lay session... (lan {attempt}/{MaxSessionRetryAttempts})");
+            yield return wait;
+
+            if (isApplicationQuitting)
+            {
+                yield break;
+            }
+
+            bool completed = false;
+            bool succeeded = false;
+            AuthError fatalError = null;
+
+            authSessionService.RetryAcquireSession(authResult, result =>
+            {
+                succeeded = true;
+                completed = true;
+                _pendingAuthResult = null;
+                _sessionRetryCoroutine = null;
+
+                Debug.Log("[PlayfabDataManager] Session da san sang, dang nhap thanh cong!");
+                StartSessionHeartbeat();
+                LoginSuccess?.Invoke(result);
+
+                if (gameDataCenterManager.IsReady())
+                {
+                    gameData.Clear();
+                    LoadCharacterDataChoose();
+                }
+            }, error =>
+            {
+                completed = true;
+                // If still waiting, continue the loop. Other errors will break.
+                if (error.code != "SESSION_STILL_WAITING")
+                {
+                    fatalError = error;
+                    Debug.LogError($"[PlayfabDataManager] Loi khi thu lai session: {error.message}");
+                }
+            });
+
+            // Wait for the async call to complete
+            yield return new WaitUntil(() => completed);
+
+            if (succeeded)
+            {
+                yield break;
+            }
+
+            if (fatalError != null)
+            {
+                _pendingAuthResult = null;
+                _sessionRetryCoroutine = null;
+                ResetLocalSessionState();
+                LoginError?.Invoke(fatalError);
+                yield break;
+            }
+        }
+
+        // Max retries reached
+        Debug.LogError("[PlayfabDataManager] Het thoi gian cho session. Dang nhap that bai.");
+        _pendingAuthResult = null;
+        _sessionRetryCoroutine = null;
+        ResetLocalSessionState();
+        LoginError?.Invoke(new AuthError("SESSION_TIMEOUT", "Khong the lay session. Vui long thu lai sau."));
+    }
+
+    private void CancelSessionRetry()
+    {
+        if (_sessionRetryCoroutine != null)
+        {
+            StopCoroutine(_sessionRetryCoroutine);
+            _sessionRetryCoroutine = null;
+        }
+        _pendingAuthResult = null;
     }
 }

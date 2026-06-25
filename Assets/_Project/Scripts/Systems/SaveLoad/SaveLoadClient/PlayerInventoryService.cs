@@ -62,13 +62,13 @@ public class PlayerInventoryService : ILoadRemote<GameData>, ISaveRemote<GameDat
         });
     }
 
-    public void SaveGame(GameData gameData)
+    public void SaveGame(GameData gameData, Action<bool> onCompleted = null)
     {
         var playerClientDataDto = new PlayerClientDataDto();
         foreach (var saveGameData in saveGameDatas)
         {
             saveGameData.SaveGameData(gameData, playerClientDataDto);
         }
-        service.SavePlayerInventoryData(gameData, playerClientDataDto);
+        service.SavePlayerInventoryData(gameData, playerClientDataDto, onCompleted);
     }
 }

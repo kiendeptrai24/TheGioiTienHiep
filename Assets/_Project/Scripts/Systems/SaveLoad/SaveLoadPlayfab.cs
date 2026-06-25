@@ -54,11 +54,16 @@ public class SaveLoadPlayfab : TGTHMonoBehaviour, ISaveManager
     [ContextMenu("Save Game")]
     public void SaveGame()
     {
+        SaveGame(null);
+    }
+
+    public void SaveGame(Action<bool> onCompleted)
+    {
         foreach (ISaveable saveManager in saveManagers)
         {
             saveManager.SaveGame(ref gameData);
         }
-        playfabDataManager.SaveGameData();
+        playfabDataManager.SaveGameData(onCompleted);
     }
 
     public void Register(ISaveable saveManager)

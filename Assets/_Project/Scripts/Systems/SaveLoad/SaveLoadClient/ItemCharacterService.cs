@@ -182,8 +182,8 @@ public class ItemCharacterService : ILoadRemote<GameData>, ISaveRemote<GameData>
             Debug.LogError("SetHeroData: Failed to set hero data " + ex.Message);
         }
     }
-    public void SaveGame(GameData gameData)
+    public void SaveGame(GameData gameData, Action<bool> onCompleted = null)
     {
-        service.SetItemCharacter(gameData);
+        service.SetItemCharacter(gameData, onCompleted);
     }
 }

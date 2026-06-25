@@ -77,7 +77,7 @@ public class PlayfabAuthSessionService
         state.CurrentPlayFabId = result.userId;
     }
 
-    public void AcquireRealtimeSession(AuthResult result, Action<AuthResult> onSuccess, Action<AuthError> onError)
+    public void AcquireRealtimeSession(AuthResult result, Action<AuthResult> onSuccess, Action<AuthError> onError, Action<CloudSessionRequestResult> onWaiting = null)
     {
         if (!ShouldUseRealtimeSession())
         {
@@ -86,11 +86,34 @@ public class PlayfabAuthSessionService
         }
 
         PrepareAuthenticatedSession(result);
-        realtimeSessionService.TryAcquireLock(state.CurrentPlayFabId, state.SessionId, () =>
+        realtimeSessionService.TryAcquireLock(state.CurrentPlayFabId, state.SessionId, sessionResult =>
         {
-            state.SessionLockAcquired = true;
-            state.HasLoggedIn = true;
-            onSuccess?.Invoke(result);
+            var isActive = sessionResult.success &&
+                (sessionResult.status == "ACTIVE" || string.IsNullOrEmpty(sessionResult.status));
+
+            if (isActive)
+            {
+                state.SessionLockAcquired = true;
+                state.HasLoggedIn = true;
+                onSuccess?.Invoke(result);
+                return;
+            }
+
+            if (!sessionResult.success && sessionResult.status == "WAITING")
+            {
+                onWaiting?.Invoke(sessionResult);
+                return;
+            }
+
+            if (!sessionResult.success && (sessionResult.status == "TIMEOUT" || sessionResult.status == "ERROR"))
+            {
+                onError?.Invoke(new AuthError(
+                    string.IsNullOrEmpty(sessionResult.errorCode) ? "PLAYFAB_SESSION_REQUEST_FAILED" : sessionResult.errorCode,
+                    string.IsNullOrEmpty(sessionResult.message) ? "Khong the tao session online." : sessionResult.message));
+                return;
+            }
+
+            onError?.Invoke(new AuthError("PLAYFAB_SESSION_REQUEST_FAILED", "Khong the tao session online."));
         }, onError);
     }
 
@@ -124,6 +147,45 @@ public class PlayfabAuthSessionService
             onError?.Invoke(error);
             onReleased?.Invoke();
         });
+    }
+
+    public void RetryAcquireSession(AuthResult authResult, Action<AuthResult> onSuccess, Action<AuthError> onError)
+    {
+        if (!ShouldUseRealtimeSession() || string.IsNullOrEmpty(state.SessionId))
+        {
+            onSuccess?.Invoke(authResult);
+            return;
+        }
+
+        realtimeSessionService.TryAcquireLock(state.CurrentPlayFabId, state.SessionId, sessionResult =>
+        {
+            var isActive = sessionResult.success &&
+                (sessionResult.status == "ACTIVE" || string.IsNullOrEmpty(sessionResult.status));
+
+            if (isActive)
+            {
+                state.SessionLockAcquired = true;
+                state.HasLoggedIn = true;
+                onSuccess?.Invoke(authResult);
+                return;
+            }
+
+            if (!sessionResult.success && sessionResult.status == "WAITING")
+            {
+                onError?.Invoke(new AuthError("SESSION_STILL_WAITING", string.IsNullOrEmpty(sessionResult.message) ? "Phien cuoc truoc van dang hoat dong." : sessionResult.message));
+                return;
+            }
+
+            if (!sessionResult.success && (sessionResult.status == "TIMEOUT" || sessionResult.status == "ERROR"))
+            {
+                onError?.Invoke(new AuthError(
+                    string.IsNullOrEmpty(sessionResult.errorCode) ? "PLAYFAB_SESSION_REQUEST_FAILED" : sessionResult.errorCode,
+                    string.IsNullOrEmpty(sessionResult.message) ? "Khong the tao session online." : sessionResult.message));
+                return;
+            }
+
+            onError?.Invoke(new AuthError("PLAYFAB_SESSION_REQUEST_FAILED", "Khong the tao session online."));
+        }, onError);
     }
 
     public void MarkLoggedOutLocally()

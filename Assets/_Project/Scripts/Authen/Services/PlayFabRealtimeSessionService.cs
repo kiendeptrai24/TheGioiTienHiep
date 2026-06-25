@@ -11,7 +11,7 @@ public class PlayFabRealtimeSessionService
         this.clientApi = clientApi;
     }
 
-    public void TryAcquireLock(string playFabId, string sessionId, Action onSuccess, Action<AuthError> onError)
+    public void TryAcquireLock(string playFabId, string sessionId, Action<CloudSessionRequestResult> onResult, Action<AuthError> onError)
     {
         ExecuteCloudScript<CloudSessionRequestResult>("RequestSession", new
         {
@@ -19,13 +19,13 @@ public class PlayFabRealtimeSessionService
             sessionId
         }, result =>
         {
-            if (result == null || !result.success)
+            if (result == null)
             {
                 onError?.Invoke(new AuthError("PLAYFAB_SESSION_REQUEST_FAILED", "Khong the tao session online."));
                 return;
             }
 
-            onSuccess?.Invoke();
+            onResult?.Invoke(result);
         }, onError);
     }
 
@@ -84,9 +84,13 @@ public class PlayFabRealtimeSessionService
 public class CloudSessionRequestResult
 {
     public bool success;
+    public string status;
     public bool kickedPreviousSession;
     public string previousSessionId;
     public string activeSessionId;
+    public string pendingSessionId;
+    public string message;
+    public string errorCode;
 }
 
 [Serializable]
@@ -101,4 +105,5 @@ public class CloudSessionHeartbeatResult
 public class CloudSessionReleaseResult
 {
     public bool released;
+    public bool pendingActivated;
 }

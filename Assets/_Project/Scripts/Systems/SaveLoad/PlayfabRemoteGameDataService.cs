@@ -99,11 +99,29 @@ public class PlayfabRemoteGameDataService
         }
     }
 
-    public void SaveGameData()
+    public void SaveGameData(Action<bool> onCompleted = null)
     {
+        if (state.SaveRemotes.Count == 0)
+        {
+            onCompleted?.Invoke(true);
+            return;
+        }
+
+        int completed = 0;
+        bool allSucceeded = true;
+
         foreach (var saveRemote in state.SaveRemotes)
         {
-            saveRemote.SaveGame(state.GameData);
+            saveRemote.SaveGame(state.GameData, success =>
+            {
+                completed++;
+                allSucceeded &= success;
+
+                if (completed == state.SaveRemotes.Count)
+                {
+                    onCompleted?.Invoke(allSucceeded);
+                }
+            });
         }
     }
 

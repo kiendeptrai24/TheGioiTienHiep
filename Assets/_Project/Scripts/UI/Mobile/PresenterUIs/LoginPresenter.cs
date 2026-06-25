@@ -16,9 +16,23 @@ namespace TGTH.Mobile
             playfabDataManager = PlayfabDataManager.Instance;
             playfabDataManager.LoginSuccess += onSuccess;
             playfabDataManager.LoginError += onError;
+            playfabDataManager.LoginStatusChanged += onStatusChanged;
             playfabDataManager.OnLoadCharacterFormPlayfab += OnStartGame;
             view.OnLoginClicked += OnStartClicked;
             GetAccountCache();
+        }
+
+        private void OnDestroy()
+        {
+            if (playfabDataManager == null)
+            {
+                return;
+            }
+
+            playfabDataManager.LoginSuccess -= onSuccess;
+            playfabDataManager.LoginError -= onError;
+            playfabDataManager.LoginStatusChanged -= onStatusChanged;
+            playfabDataManager.OnLoadCharacterFormPlayfab -= OnStartGame;
         }
 
         private void GetAccountCache()
@@ -59,6 +73,11 @@ namespace TGTH.Mobile
         private void onError(AuthError error)
         {
             view.ShowMessege(error.message);
+        }
+
+        private void onStatusChanged(string message)
+        {
+            view.ShowMessege(message);
         }
     }
 }

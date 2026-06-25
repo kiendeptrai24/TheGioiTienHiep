@@ -32,13 +32,14 @@ public class PlayFabDataClientService
     #endregion
 
     #region Public Save Methods
-    public void SetItemCharacter(GameData gameData)
+    public void SetItemCharacter(GameData gameData, Action<bool> onCompleted = null)
     {
         try
         {
             if (gameData == null)
             {
                 Debug.LogError("SetItemCharacter failed: gameData is null");
+                onCompleted?.Invoke(false);
                 return;
             }
 
@@ -70,24 +71,26 @@ public class PlayFabDataClientService
                 inventoryData.characterNames = new List<string>();
                 inventoryData.characterIds = new List<string>();
             }
-            SaveUserData("character", inventoryData);
+            SaveUserData("character", inventoryData, onCompleted);
         }
         catch (System.Exception ex)
         {
             Debug.Log("Error " + ex.Message);
+            onCompleted?.Invoke(false);
         }
 
     }
 
-    public void SavePlayerInventoryData(GameData gameData, PlayerClientDataDto playerClientDataDto)
+    public void SavePlayerInventoryData(GameData gameData, PlayerClientDataDto playerClientDataDto, Action<bool> onCompleted = null)
     {
         try
         {
-            SaveUserData($"inventory {gameData.characterId}", playerClientDataDto);
+            SaveUserData($"inventory {gameData.characterId}", playerClientDataDto, onCompleted);
         }
         catch (System.Exception ex)
         {
             Debug.Log("Error " + ex.Message);
+            onCompleted?.Invoke(false);
         }
     }
     #endregion
@@ -152,7 +155,7 @@ public class PlayFabDataClientService
             });
     }
 
-    private void SaveUserData<T>(string key, T data)
+    private void SaveUserData<T>(string key, T data, Action<bool> onCompleted = null)
     {
         string json;
 
@@ -163,6 +166,7 @@ public class PlayFabDataClientService
         catch (Exception ex)
         {
             Debug.LogError($"Serialize Error at key '{key}': {ex}");
+            onCompleted?.Invoke(false);
             return;
         }
         try
@@ -178,15 +182,18 @@ public class PlayFabDataClientService
             result =>
             {
                 Debug.Log($"SaveUserData success: key = {key}");
+                onCompleted?.Invoke(true);
             },
             error =>
             {
                 Debug.LogError($"UpdateUserData Error at key '{key}': {error.GenerateErrorReport()}");
+                onCompleted?.Invoke(false);
             });
         }
-        catch (System.Exception)
+        catch (System.Exception ex)
         {
-            Debug.Log("Error occurred while saving data.");
+            Debug.LogError($"Error occurred while saving data at key '{key}': {ex}");
+            onCompleted?.Invoke(false);
         }
     }
 
