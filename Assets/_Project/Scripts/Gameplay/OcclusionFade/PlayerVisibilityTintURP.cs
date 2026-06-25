@@ -4,6 +4,8 @@ using UnityEngine;
 public class PlayerVisibilityTintURP : TGTHNetworkBehaviour
 {
 #if !UNITY_SERVER
+    static readonly Material[] EmptyMaterials = System.Array.Empty<Material>();
+
     [Header("Renderers")]
     public Renderer[] renderers;
 
@@ -14,6 +16,8 @@ public class PlayerVisibilityTintURP : TGTHNetworkBehaviour
     public CameraOcclusionFader fader;
 
     Material[][] _originalShared;
+    Material[][] _occludedShared;
+    bool _isOccludedApplied;
 
     protected override void LoadComponent()
     {
@@ -29,14 +33,13 @@ public class PlayerVisibilityTintURP : TGTHNetworkBehaviour
         if (renderers == null || renderers.Length == 0)
             renderers = GetComponentsInChildren<Renderer>(true);
 
-        CacheOriginal();
-
+        CacheMaterials();
     }
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         if (!IsOwner) return;
-        if (!fader) fader = FindAnyObjectByType<CameraOcclusionFader>();
+        if (!fader) fader = CameraOcclusionFader.Instance;
         if (fader) fader.OnOccluded += OnOccludedChanged;
 
     }
@@ -47,14 +50,35 @@ public class PlayerVisibilityTintURP : TGTHNetworkBehaviour
         RestoreOriginal();
     }
 
-    void CacheOriginal()
+    void CacheMaterials()
     {
         _originalShared = new Material[renderers.Length][];
+        _occludedShared = new Material[renderers.Length][];
 
         for (int i = 0; i < renderers.Length; i++)
         {
-            if (!renderers[i]) continue;
-            _originalShared[i] = renderers[i].sharedMaterials;
+            var renderer = renderers[i];
+            if (!renderer)
+            {
+                _originalShared[i] = EmptyMaterials;
+                _occludedShared[i] = EmptyMaterials;
+                continue;
+            }
+
+            var shared = renderer.sharedMaterials;
+            _originalShared[i] = shared;
+
+            if (shared == null || shared.Length == 0)
+            {
+                _occludedShared[i] = EmptyMaterials;
+                continue;
+            }
+
+            var occluded = new Material[shared.Length];
+            for (int m = 0; m < occluded.Length; m++)
+                occluded[m] = occludedMaterial;
+
+            _occludedShared[i] = occluded;
         }
     }
 
@@ -66,24 +90,21 @@ public class PlayerVisibilityTintURP : TGTHNetworkBehaviour
 
     void ApplyOccludedMaterial()
     {
-        if (!occludedMaterial || renderers == null) return;
+        if (_isOccludedApplied || !occludedMaterial || renderers == null || _occludedShared == null) return;
+        _isOccludedApplied = true;
 
         for (int i = 0; i < renderers.Length; i++)
         {
             var r = renderers[i];
             if (!r) continue;
-
-            var slots = r.sharedMaterials;
-            for (int m = 0; m < slots.Length; m++)
-                slots[m] = occludedMaterial;
-
-            r.sharedMaterials = slots;
+            r.sharedMaterials = _occludedShared[i];
         }
     }
 
     void RestoreOriginal()
     {
-        if (_originalShared == null || renderers == null) return;
+        if (!_isOccludedApplied || _originalShared == null || renderers == null) return;
+        _isOccludedApplied = false;
 
         for (int i = 0; i < renderers.Length; i++)
         {

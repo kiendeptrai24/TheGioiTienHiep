@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class CameraOcclusionFader : TGTHMonoBehaviour
+public class CameraOcclusionFader : Singleton<CameraOcclusionFader>
 {
 #if !UNITY_SERVER
     [Header("Refs")]
-    public Transform target;                 // player
-    public Transform camPivotOrCamera;       // camera transform
+    public Transform target;
+    public Transform camPivotOrCamera;
 
     [Header("Cast")]
     public LayerMask occluderMask = ~0;
@@ -26,41 +26,38 @@ public class CameraOcclusionFader : TGTHMonoBehaviour
 
     readonly HashSet<OccluderFadable> _current = new();
     readonly HashSet<OccluderFadable> _next = new();
-
     readonly HashSet<Collider> _ignore = new();
-    RaycastHit[] _hits = new RaycastHit[64];
+    readonly Dictionary<Collider, OccluderFadable> _fadableCache = new();
 
+    RaycastHit[] _hits = new RaycastHit[64];
     bool _isOccluded;
 
     protected override void LoadComponent()
     {
         base.LoadComponent();
 
-        if (!camPivotOrCamera)
-        {
-            var cam = GetComponentInChildren<Camera>();
-            if (cam) camPivotOrCamera = cam.transform;
-        }
+        if (camPivotOrCamera) return;
+
+        var cam = GetComponentInChildren<Camera>();
+        if (cam) camPivotOrCamera = cam.transform;
     }
 
     protected override void Awake()
     {
         base.Awake();
 
-        // an toàn nếu Instance chưa có
         if (PlayerNetManager.Instance != null)
             PlayerNetManager.Instance.OnPlayerExiststed += OnPlayerExists;
     }
 
-    protected void OnDestroy()
+    protected override void OnDestroy()
     {
-        // TGTHMonoBehaviour có OnDestroy override thì giữ base nếu cần
+        base.OnDestroy();
         if (PlayerNetManager.Instance != null)
             PlayerNetManager.Instance.OnPlayerExiststed -= OnPlayerExists;
-
     }
 
-    private void OnPlayerExists(NetworkObject obj)
+    void OnPlayerExists(NetworkObject obj)
     {
         if (!obj) return;
 
@@ -71,36 +68,35 @@ public class CameraOcclusionFader : TGTHMonoBehaviour
     void RebuildIgnoreList()
     {
         _ignore.Clear();
+
         if (!ignoreTargetColliders || !target) return;
 
-        var cols = target.GetComponentsInChildren<Collider>(true);
-        for (int i = 0; i < cols.Length; i++)
-            if (cols[i]) _ignore.Add(cols[i]);
+        var colliders = target.GetComponentsInChildren<Collider>(true);
+        for (int i = 0; i < colliders.Length; i++)
+            if (colliders[i]) _ignore.Add(colliders[i]);
     }
 
     void LateUpdate()
     {
         if (!target || !camPivotOrCamera) return;
 
-        Vector3 camPos = camPivotOrCamera.position;
-        Vector3 tgtPos = target.position;
+        Vector3 cameraPosition = camPivotOrCamera.position;
+        Vector3 targetPosition = target.position;
+        Vector3 direction = targetPosition - cameraPosition;
+        float distance = direction.magnitude;
+        if (distance <= 0.0001f) return;
 
-        Vector3 dir = (tgtPos - camPos);
-        float dist = dir.magnitude;
-        if (dist <= 0.0001f) return;
+        direction /= distance;
 
-        dir /= dist;
-
-        // tránh cast "dính" ngay tại camera
-        Vector3 origin = camPos + dir * 0.05f;
-        float castDist = dist + extraDistance;
+        Vector3 origin = cameraPosition + direction * 0.05f;
+        float castDistance = distance + extraDistance;
 
         int hitCount = Physics.SphereCastNonAlloc(
             origin,
             sphereRadius,
-            dir,
+            direction,
             _hits,
-            castDist,
+            castDistance,
             occluderMask,
             triggerMode
         );
@@ -109,44 +105,41 @@ public class CameraOcclusionFader : TGTHMonoBehaviour
 
         for (int i = 0; i < hitCount; i++)
         {
-            var col = _hits[i].collider;
-            if (!col) continue;
+            var colliderHit = _hits[i].collider;
+            if (!colliderHit || _ignore.Contains(colliderHit)) continue;
 
-            // ignore collider của player
-            if (_ignore.Contains(col)) continue;
+            if (!_fadableCache.TryGetValue(colliderHit, out var fadable))
+            {
+                fadable = colliderHit.GetComponentInParent<OccluderFadable>();
+                _fadableCache[colliderHit] = fadable;
+            }
 
-            var fadable = col.GetComponentInParent<OccluderFadable>();
-            if (!fadable) continue;
-
-            _next.Add(fadable);
+            if (fadable) _next.Add(fadable);
         }
 
-        // Fade out vật đang che
-        foreach (var f in _next)
+        foreach (var fadable in _next)
         {
-            _current.Add(f);
-            f.SetOccluding(true);
+            _current.Add(fadable);
+            fadable.SetOccluding(true);
         }
 
-        // Fade in vật không còn che
         if (_current.Count > 0)
         {
             var toRestore = ListPool<OccluderFadable>.Get();
 
-            foreach (var f in _current)
-                if (!_next.Contains(f))
-                    toRestore.Add(f);
+            foreach (var fadable in _current)
+                if (!_next.Contains(fadable))
+                    toRestore.Add(fadable);
 
-            foreach (var f in toRestore)
+            foreach (var fadable in toRestore)
             {
-                _current.Remove(f);
-                if (f) f.SetOccluding(false);
+                _current.Remove(fadable);
+                if (fadable) fadable.SetOccluding(false);
             }
 
             ListPool<OccluderFadable>.Release(toRestore);
         }
 
-        // ✅ báo trạng thái occluded cho player tint/outline...
         bool nowOccluded = _next.Count > 0;
         if (nowOccluded != _isOccluded)
         {
@@ -155,15 +148,20 @@ public class CameraOcclusionFader : TGTHMonoBehaviour
         }
 
         if (drawDebug)
-            Debug.DrawLine(origin, origin + dir * dist, Color.yellow);
+            Debug.DrawLine(origin, origin + direction * distance, Color.yellow);
     }
 
-    // pool list nhỏ để tránh GC
     static class ListPool<T>
     {
         static readonly Stack<List<T>> Pool = new();
+
         public static List<T> Get() => Pool.Count > 0 ? Pool.Pop() : new List<T>(16);
-        public static void Release(List<T> list) { list.Clear(); Pool.Push(list); }
+
+        public static void Release(List<T> list)
+        {
+            list.Clear();
+            Pool.Push(list);
+        }
     }
 #endif
 }

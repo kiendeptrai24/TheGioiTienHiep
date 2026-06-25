@@ -3143,7 +3143,6 @@ GameObject:
   - component: {fileID: 5961338288685753757}
   - component: {fileID: 3100323945643275413}
   - component: {fileID: 2303058893719603686}
-  - component: {fileID: 6332937592598727563}
   - component: {fileID: 3855082729364616063}
   - component: {fileID: 439217955596202718}
   - component: {fileID: 75129623076662156}
@@ -3405,6 +3404,7 @@ MonoBehaviour:
   itemDatas: []
   heroData:
     instanceId: 
+    itemBaseId: 
     itemId: 
     itemType: 0
     itemName: 
@@ -3414,7 +3414,7 @@ MonoBehaviour:
     itemPrice: 0
     canStack: 0
     itemDescription: 
-    currentstack: 0
+    currentStack: 0
     realmType: 0
     realmId: 
     qualityType: 0
@@ -3436,6 +3436,7 @@ MonoBehaviour:
     characterId: 
     realmData:
       instanceId: 
+      itemBaseId: 
       itemId: 
       itemType: 0
       itemName: 
@@ -3445,7 +3446,7 @@ MonoBehaviour:
       itemPrice: 0
       canStack: 0
       itemDescription: 
-      currentstack: 0
+      currentStack: 0
       realmType: 0
       realmId: 
       qualityType: 0
@@ -3488,6 +3489,7 @@ MonoBehaviour:
     raceType: 0
     raceData:
       instanceId: 
+      itemBaseId: 
       itemId: 
       itemType: 0
       itemName: 
@@ -3497,7 +3499,7 @@ MonoBehaviour:
       itemPrice: 0
       canStack: 0
       itemDescription: 
-      currentstack: 0
+      currentStack: 0
       realmType: 0
       realmId: 
       qualityType: 0
@@ -3528,6 +3530,7 @@ MonoBehaviour:
     essenceType: 0
     essenceData:
       instanceId: 
+      itemBaseId: 
       itemId: 
       itemType: 0
       itemName: 
@@ -3537,7 +3540,7 @@ MonoBehaviour:
       itemPrice: 0
       canStack: 0
       itemDescription: 
-      currentstack: 0
+      currentStack: 0
       realmType: 0
       realmId: 
       qualityType: 0
@@ -3614,25 +3617,6 @@ MonoBehaviour:
     physicalDefenseBonus: 0
     spiritDefenseBonus: 0
   maxHeroesToSpawn: 5
---- !u!114 &6332937592598727563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7804178499550283321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 713edccdfd4df9a4c92f971121b37848, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerVisibilityTintURP
-  ShowTopMostFoldoutHeaderGroup: 1
-  renderers:
-  - {fileID: 0}
-  - {fileID: 0}
-  occludedMaterial: {fileID: -4565884009001823619, guid: a56c65a13a78a88499b903b18001bdcb,
-    type: 3}
-  fader: {fileID: 0}
 --- !u!114 &3855082729364616063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3775,6 +3759,7 @@ MonoBehaviour:
     skillPoint: 0
     itemDataPoint:
       instanceId: 
+      itemBaseId: 
       itemId: 
       itemType: 0
       itemName: 
@@ -3784,7 +3769,7 @@ MonoBehaviour:
       itemPrice: 0
       canStack: 0
       itemDescription: 
-      currentstack: 0
+      currentStack: 0
       realmType: 0
       realmId: 
       qualityType: 0
@@ -3859,6 +3844,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StatsData
   chamionData:
     instanceId: 
+    itemBaseId: 
     itemId: 
     itemType: 0
     itemName: 
@@ -3868,7 +3854,7 @@ MonoBehaviour:
     itemPrice: 0
     canStack: 0
     itemDescription: 
-    currentstack: 0
+    currentStack: 0
     realmType: 0
     realmId: 
     qualityType: 0
@@ -3885,6 +3871,7 @@ MonoBehaviour:
     potentialPoints: 0
   ChampionData:
     instanceId: 
+    itemBaseId: 
     itemId: 
     itemType: 0
     itemName: 
@@ -3894,7 +3881,7 @@ MonoBehaviour:
     itemPrice: 0
     canStack: 0
     itemDescription: 
-    currentstack: 0
+    currentStack: 0
     realmType: 0
     realmId: 
     qualityType: 0
@@ -3916,6 +3903,7 @@ MonoBehaviour:
     characterId: 
     realmData:
       instanceId: 
+      itemBaseId: 
       itemId: 
       itemType: 0
       itemName: 
@@ -3925,7 +3913,7 @@ MonoBehaviour:
       itemPrice: 0
       canStack: 0
       itemDescription: 
-      currentstack: 0
+      currentStack: 0
       realmType: 0
       realmId: 
       qualityType: 0
@@ -3968,6 +3956,7 @@ MonoBehaviour:
     raceType: 0
     raceData:
       instanceId: 
+      itemBaseId: 
       itemId: 
       itemType: 0
       itemName: 
@@ -3977,7 +3966,7 @@ MonoBehaviour:
       itemPrice: 0
       canStack: 0
       itemDescription: 
-      currentstack: 0
+      currentStack: 0
       realmType: 0
       realmId: 
       qualityType: 0
@@ -4008,6 +3997,7 @@ MonoBehaviour:
     essenceType: 0
     essenceData:
       instanceId: 
+      itemBaseId: 
       itemId: 
       itemType: 0
       itemName: 
@@ -4017,7 +4007,7 @@ MonoBehaviour:
       itemPrice: 0
       canStack: 0
       itemDescription: 
-      currentstack: 0
+      currentStack: 0
       realmType: 0
       realmId: 
       qualityType: 0
@@ -4095,6 +4085,7 @@ MonoBehaviour:
     spiritDefenseBonus: 0
   statsRaceData:
     instanceId: 
+    itemBaseId: 
     itemId: 
     itemType: 0
     itemName: 
@@ -4104,7 +4095,7 @@ MonoBehaviour:
     itemPrice: 0
     canStack: 0
     itemDescription: 
-    currentstack: 0
+    currentStack: 0
     realmType: 0
     realmId: 
     qualityType: 0
@@ -4133,6 +4124,7 @@ MonoBehaviour:
     movementSpeedPoint: 0
   statsCultivationPathData:
     instanceId: 
+    itemBaseId: 
     itemId: 
     itemType: 0
     itemName: 
@@ -4142,7 +4134,7 @@ MonoBehaviour:
     itemPrice: 0
     canStack: 0
     itemDescription: 
-    currentstack: 0
+    currentStack: 0
     realmType: 0
     realmId: 
     qualityType: 0
@@ -4173,6 +4165,7 @@ MonoBehaviour:
     spiritRangePoint: 0
   statsRealmData:
     instanceId: 
+    itemBaseId: 
     itemId: 
     itemType: 0
     itemName: 
@@ -4182,7 +4175,7 @@ MonoBehaviour:
     itemPrice: 0
     canStack: 0
     itemDescription: 
-    currentstack: 0
+    currentStack: 0
     realmType: 0
     realmId: 
     qualityType: 0
@@ -4369,7 +4362,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NetworkVisibilityChecker
   ShowTopMostFoldoutHeaderGroup: 1
-  maxDistance: 5
+  distance: 10
 --- !u!1 &7819465943574322660
 GameObject:
   m_ObjectHideFlags: 0
