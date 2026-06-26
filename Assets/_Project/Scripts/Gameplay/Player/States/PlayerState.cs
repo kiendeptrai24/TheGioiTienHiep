@@ -5,7 +5,7 @@ public abstract class PlayerState : IState
 {
     protected PlayerController m_player;
     protected IStateMachine m_machine;
-    private Animator m_anim;
+    protected Animator m_anim;
     protected string m_animName;
     protected float m_stateTimer;
 

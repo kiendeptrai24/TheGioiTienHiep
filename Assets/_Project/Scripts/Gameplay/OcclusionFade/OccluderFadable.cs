@@ -66,7 +66,6 @@ public class OccluderFadable : TGTHMonoBehaviour
     public void SetOccluding(bool occluding)
     {
         if (_occluding == occluding) return;
-        Debug.Log($"OccluderFadable.SetOccluding({occluding}) called on {gameObject.name}");
         _occluding = occluding;
         _target = _occluding ? fadedAlpha : 1f;
 

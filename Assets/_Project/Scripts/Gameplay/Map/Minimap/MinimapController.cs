@@ -35,17 +35,16 @@ public class MinimapController : TGTHMonoBehaviour
         base.Awake();
         LoadComponent();
         MinimapManger.Instance.Register(this);
-    }
-    private void OnEnable()
-    {
-        if (followPlayer == null)
+        PlayerNetManager.Instance.OnPlayerExiststed += (player) =>
         {
-            SetFollowPlayer(MinimapManger.Instance.GetPlayer());
-        }
+            SetFollowPlayer(player.transform);
+        };
     }
+
     private void OnDestroy()
     {
-        //MinimapManger.Instance.Unregister(this);
+        if (MinimapManger.Instance != null)
+            MinimapManger.Instance.Unregister(this);
     }
     protected override void Start()
     {
