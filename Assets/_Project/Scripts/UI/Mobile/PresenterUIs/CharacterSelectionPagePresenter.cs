@@ -48,7 +48,7 @@ namespace TGTH.Mobile
 
         private void OnItemCharacterChanged(List<ItemData> list)
         {
-            if (!playfabDataManager.IsAuthenticated)
+            if (!playfabDataManager.IsAuthenticated && !playfabDataManager.IsChangingAccount)
             {
                 view.ShowAllItems(new List<InventoryItem>());
                 return;

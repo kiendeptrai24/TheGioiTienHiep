@@ -31,9 +31,11 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     private AuthResult _pendingAuthResult;
     private Coroutine _sessionRetryCoroutine;
+    private bool _isChangingAccount;
 
     public bool ready => sessionState != null && sessionState.Ready;
     public bool IsAuthenticated => authSessionService != null && authSessionService.IsAuthenticated;
+    public bool IsChangingAccount => _isChangingAccount;
 
     public AuthFacade GetAuthManager() => authSessionService.AuthFacade;
     public PlayFabClientInstanceAPI GetClientAPI() => authSessionService.ClientApi;
@@ -112,16 +114,20 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     public void ChangeAccount()
     {
-        BeginSessionExit(() =>
+        if (!IsAuthenticated)
         {
-            SaveLoadManager.Instance.SaveGame();
-            ResetLocalSessionState();
-            clientRuntimeService.ShutdownNetworkIfNeeded();
-            clientRuntimeService.ResetClientSystems();
+            return;
+        }
 
-            var createAccountScreen = ScreenManagerHub.Instance.Get(CreateAccountScreenName);
-            createAccountScreen.NavigateTo(CreateCharacterPanelName);
-        });
+        _isChangingAccount = true;
+        var saveManager = SaveLoadManager.Instance != null ? SaveLoadManager.Instance.saveManager as SaveLoadPlayfab : null;
+        if (saveManager != null)
+        {
+            saveManager.SaveGame(_ => CompleteCharacterSwitch());
+            return;
+        }
+
+        CompleteCharacterSwitch();
     }
 
     public void OnCharacterLoaded(string characterId)
@@ -194,7 +200,15 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
             if (gameDataCenterManager.IsReady())
             {
-                gameData.Clear();
+                if (_isChangingAccount)
+                {
+                    _isChangingAccount = false;
+                    gameData.ClearNotCharacterData();
+                }
+                else
+                {
+                    gameData.Clear();
+                }
                 LoadCharacterDataChoose();
             }
         }, HandleLoginError, HandleSessionWaiting);
@@ -226,6 +240,11 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             }
 
             OnLoadCharacterFormPlayfab?.Invoke(characters);
+
+            if (_isChangingAccount)
+            {
+                _isChangingAccount = false;
+            }
         });
     }
 
@@ -394,7 +413,15 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
                 if (gameDataCenterManager.IsReady())
                 {
-                    gameData.Clear();
+                    if (_isChangingAccount)
+                    {
+                        _isChangingAccount = false;
+                        gameData.ClearNotCharacterData();
+                    }
+                    else
+                    {
+                        gameData.Clear();
+                    }
                     LoadCharacterDataChoose();
                 }
             }, error =>
@@ -442,5 +469,26 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             _sessionRetryCoroutine = null;
         }
         _pendingAuthResult = null;
+    }
+
+    private void CompleteCharacterSwitch()
+    {
+        clientRuntimeService.ShutdownNetworkIfNeeded();
+        clientRuntimeService.ResetClientSystems();
+        gameData.ClearNotCharacterData();
+        LoadCharacterDataChoose();
+        NavigateToCharacterSelection();
+    }
+
+    private void NavigateToCharacterSelection()
+    {
+        if (navigationToCharacterSelectionScreen != null)
+        {
+            navigationToCharacterSelectionScreen.OnClick();
+            return;
+        }
+
+        var createAccountScreen = ScreenManagerHub.Instance.Get(CreateAccountScreenName);
+        createAccountScreen.NavigateTo(CreateCharacterPanelName);
     }
 }

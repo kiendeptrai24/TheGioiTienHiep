@@ -57,6 +57,11 @@ namespace TGTH.Mobile
                 return;
             }
 
+            if (playfabDataManager.IsChangingAccount)
+            {
+                return;
+            }
+
             navigation.OnClick();
         }
 
