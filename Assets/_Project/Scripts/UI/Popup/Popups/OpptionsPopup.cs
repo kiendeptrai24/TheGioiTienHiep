@@ -60,7 +60,6 @@ public class OpptionsPopup : BasePopup<AudioSetupData, StatsPointPopupData>
         {
             int savedGraphics = PlayerPrefs.GetInt(GameConstantsUtils.GRAPHICS_PREF_KEY, QualitySettings.GetQualityLevel());
             graphicsSlider.value = savedGraphics;
-            CameraOcclusionFader.Instance.SetOccluded(savedGraphics > 0);
         }
     }
 
@@ -85,7 +84,6 @@ public class OpptionsPopup : BasePopup<AudioSetupData, StatsPointPopupData>
         // Chuyển float từ slider thành int cho Quality Level
         int qualityLevel = Mathf.RoundToInt(value);
         QualitySettings.SetQualityLevel(qualityLevel, true);
-        CameraOcclusionFader.Instance.SetOccluded(qualityLevel > 0);
         PlayerPrefs.SetInt(GameConstantsUtils.GRAPHICS_PREF_KEY, qualityLevel);
     }
     #endregion

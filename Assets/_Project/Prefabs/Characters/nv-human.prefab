@@ -1618,6 +1618,8 @@ GameObject:
   - component: {fileID: 6568862352243266328}
   - component: {fileID: 2882623834119091599}
   - component: {fileID: 2614911297582542138}
+  - component: {fileID: 6778635590254721442}
+  - component: {fileID: 1606616436106816547}
   m_Layer: 12
   m_Name: nv-human
   m_TagString: Untagged
@@ -2822,6 +2824,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NetworkVisibilityChecker
   ShowTopMostFoldoutHeaderGroup: 1
   distance: 10
+--- !u!114 &6778635590254721442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4234549866303155634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 713edccdfd4df9a4c92f971121b37848, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerVisibilityTintURP
+  ShowTopMostFoldoutHeaderGroup: 1
+  _xRayMaterial: {fileID: 2100000, guid: 43c2a87f7c8a54348953b9696a1b269d, type: 2}
+  _renderers: []
+  _useLayerSwitch: 1
+  _xRayLayerName: XRay
+--- !u!114 &1606616436106816547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4234549866303155634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76b5944722351b840aacb7a792e55efb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TheGioiTienHiep.Gameplay.OcclusionFade.CameraOcclusionDetector
+  _occluderMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  _checkInterval: 0.1
+  _castRadius: 0.25
+  _hitBufferSize: 8
+  _targetOffset: {x: 0, y: 1.2, z: 0}
 --- !u!1 &4239670986314660124
 GameObject:
   m_ObjectHideFlags: 0
