@@ -87,8 +87,6 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         result.result = rollResut;
         result.instanceId = nextRealm.instanceId;
         result.playerId = playerProfile.GetPlayerId().ToString();
-        Debug.Log("Update: " + result.playerId);
-        Debug.Log("Update: " + playerObj.OwnerClientId);
         SegmentRealmManager.Instance.AddRealmSegment(result);
         SendMessegeToClientRpc(JsonConvert.SerializeObject(result), RpcTargetUtils.Single(playerObj.OwnerClientId));
     }
@@ -164,11 +162,19 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
             Debug.LogError("LevelUpConditionData is null");
             return false;
         }
-        validators.Add(new KhoangThachResource(condition.khoangThach));
-        validators.Add(new LinhThachResource(condition.linhThach));
-        validators.Add(new LinhThaoResource(condition.linhThao));
-        validators.Add(new MaHachResource(condition.maHach));
-        validators.Add(new YeuDanResource(condition.yeuDan));
+        if (condition.khoangThach > 0)
+            validators.Add(new KhoangThachResource(condition.khoangThach));
+        if (condition.linhThach > 0)
+            validators.Add(new LinhThachResource(condition.linhThach));
+        if (condition.linhThao > 0)
+            validators.Add(new LinhThaoResource(condition.linhThao));
+        if (condition.maHach > 0)
+            validators.Add(new MaHachResource(condition.maHach));
+        if (condition.yeuDan > 0)
+            validators.Add(new YeuDanResource(condition.yeuDan));
+        if (string.IsNullOrEmpty(condition.requiredItem) == false)
+            validators.Add(new TrucCoDanReource(condition.requiredItem));
+
         bool result = true;
         foreach (var validator in validators)
         {

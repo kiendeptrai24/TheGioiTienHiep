@@ -76,6 +76,10 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         ShutDownPlayfab();
         base.OnApplicationQuit();
     }
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause) ShutDownPlayfab();
+    }
     public void ShutDownPlayfab()
     {
         isApplicationQuitting = true;
