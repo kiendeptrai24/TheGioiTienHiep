@@ -132,16 +132,6 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
 
             listItemDatasExisting.Add(item);
         }
-        // foreach (var item in data)
-        // {
-        //     if (item == null)
-        //         continue;
-
-        //     if (listItemDatasExisting.Exists(x => x.instanceId == item.instanceId && x.itemId == item.itemId))
-        //         continue;
-
-        //     listItemDatasExisting.Add(item);
-        // }
     }
     public void NotifyListItemDatasChampionChanged()
     {
@@ -151,8 +141,8 @@ public class InventoryCenterManager : Singleton<InventoryCenterManager>, ISaveab
     {
         playerCham = item;
         championData = playerCham as HeroData;
-        OnItemPlayerChanged?.Invoke(item);
         OnItemUpdated?.Invoke(item, item.instanceId);
+        NotifyItemPlayerChanged();
     }
     public void NotifyItemPlayerChanged()
     {

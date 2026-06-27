@@ -38,7 +38,10 @@ public class RealmUpgrade : IUpgradeable
             inventoryCM.UpdateItemData(targetHero.itemId, targetHero);
 
             if (inventoryCM.playerCham is HeroData currentHero && currentHero.characterId == targetHero.characterId)
+            {
                 inventoryCM.PlayerDataChanged(targetHero);
+                inventoryCM.NotifyListItemDatasChampionChanged();
+            }
         }
     }
 }
