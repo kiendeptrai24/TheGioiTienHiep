@@ -16,7 +16,7 @@ public enum InputType
     UI,
 
 }
-public class InputManager : MonoBehaviour
+public class InputManager : Singleton<InputManager>
 {
     public InputHandler inputHandler;
     public InputType inputType;

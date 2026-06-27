@@ -17,7 +17,8 @@ public class MinimapController : TGTHMonoBehaviour
     [Header("Zoom")]
     [SerializeField] private float zoomSpeed = 10f;
     [SerializeField] private float minZoom = 5f;
-    [SerializeField] private float maxZoom = 50f;
+    [SerializeField] private float defaultZoom = 50f;
+    [SerializeField] private float maxZoom = 100f;
 
     [Header("Pan")]
     [SerializeField] private float panSpeed = 1f;
@@ -28,19 +29,27 @@ public class MinimapController : TGTHMonoBehaviour
 
     private bool _prevPressed;
     private bool _panCaptured;
-    private bool isZooming;
     [SerializeField] private bool isFollowPlayer = false;
     protected override void Awake()
     {
         base.Awake();
         LoadComponent();
         MinimapManger.Instance.Register(this);
+        if (followPlayer == null && PlayerNetManager.Instance != null && PlayerNetManager.Instance.IsPlayerExist)
+        {
+            SetFollowPlayer(PlayerNetManager.Instance.GetPlayer().transform);
+        }
         PlayerNetManager.Instance.OnPlayerExiststed += (player) =>
         {
             SetFollowPlayer(player.transform);
         };
-    }
 
+    }
+    private void OnEnable()
+    {
+        if (minimapManager == null || minimapManager.cinemachineCamera == null || canInteract == false) return;
+        minimapManager.cinemachineCamera.Lens.OrthographicSize = defaultZoom;
+    }
     private void OnDestroy()
     {
         if (MinimapManger.Instance != null)
@@ -166,10 +175,10 @@ public class MinimapController : TGTHMonoBehaviour
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        if (input == null) input = FindAnyObjectByType<InputManager>();
+        if (input == null) input = InputManager.Instance;
         if (minimapRect == null) minimapRect = GetComponent<RectTransform>();
         if (rootCanvas == null && minimapRect != null) rootCanvas = minimapRect.GetComponentInParent<Canvas>();
-        if (minimapManager == null) minimapManager = FindAnyObjectByType<MinimapManger>();
+        if (minimapManager == null) minimapManager = MinimapManger.Instance;
 
         // nếu bạn quên gán targetCollider, có thể tự tìm theo tag/name tuỳ bạn
         // if (targetCollider == null) targetCollider = FindAnyObjectByType<BoxCollider>();

@@ -45,13 +45,14 @@ public class MinimapManger : Singleton<MinimapManger>
         if (renderTextureCameras.Count < 2) return;
         if (curRendertexture == renderTextureCameras[0]) return;
         minimapCamera.targetTexture = renderTextureCameras[0];
-
+        curRendertexture = renderTextureCameras[0];
     }
     public void ChangeRendertextureCameraInMap()
     {
         if (renderTextureCameras.Count < 2) return;
         if (curRendertexture == renderTextureCameras[1]) return;
         minimapCamera.targetTexture = renderTextureCameras[1];
+        curRendertexture = renderTextureCameras[1];
     }
     public void SetPlayer(Transform player)
     {

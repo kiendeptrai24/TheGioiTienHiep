@@ -9,6 +9,7 @@ public class PlayerNetManager : Singleton<PlayerNetManager>, ISaveable
     [SerializeField] private NetworkObject playerObject;
     private PlayerController player;
     public event Action<NetworkObject> OnPlayerExiststed;
+    public bool IsPlayerExist => playerObject != null;
     [SerializeField] private Vector3 position = new Vector3(500, 0, 440);
     private Quaternion rotation = Quaternion.identity;
     public Vector3 GetPos() => position;
@@ -38,6 +39,7 @@ public class PlayerNetManager : Singleton<PlayerNetManager>, ISaveable
         OnPlayerExiststed?.Invoke(playerObject);
 
     }
+    public NetworkObject GetPlayer() => playerObject;
     private void Update()
     {
         if (player == null || player.moveable == null) return;
