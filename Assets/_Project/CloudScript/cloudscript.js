@@ -1,18 +1,13 @@
 var SESSION_KEYS = {
     sessionId: "sessionId",
     isOnline: "isOnline",
-    lastHeartbeat: "lastHeartbeat",
-    loginAt: "loginAt",
-    pendingSessionId: "pendingSessionId",
-    pendingSince: "pendingSince"
+    lastHeartbeat: "lastHeartbeat"
 };
 
 var STALE_SESSION_TIMEOUT_SECONDS = 60;
-var TAKEOVER_WAIT_TIMEOUT_SECONDS = 90;
+var FORCE_TAKEOVER_WAIT_SECONDS = 5;
 var SESSION_STATUS_ACTIVE = "ACTIVE";
 var SESSION_STATUS_WAITING = "WAITING";
-var SESSION_STATUS_ERROR = "ERROR";
-var SESSION_STATUS_TIMEOUT = "TIMEOUT";
 
 function getInternalValue(data, key, defaultValue) {
     if (!data || !data.Data || !data.Data[key] || data.Data[key].Value === undefined || data.Data[key].Value === null) {
@@ -23,27 +18,30 @@ function getInternalValue(data, key, defaultValue) {
 }
 
 function isSessionStale(lastHeartbeat, now) {
-    if (!lastHeartbeat) return true;
-    var lastHb = new Date(lastHeartbeat);
-    var diffSeconds = (new Date(now) - lastHb) / 1000;
+    if (!lastHeartbeat) {
+        return true;
+    }
+
+    var diffSeconds = (new Date(now) - new Date(lastHeartbeat)) / 1000;
     return diffSeconds > STALE_SESSION_TIMEOUT_SECONDS;
 }
 
-function isTakeoverTimedOut(pendingSince, now) {
-    if (!pendingSince) return false;
-    var pendingAt = new Date(pendingSince);
-    var diffSeconds = (new Date(now) - pendingAt) / 1000;
-    return diffSeconds > TAKEOVER_WAIT_TIMEOUT_SECONDS;
+function hasWaitedLongEnough(requestStartedAt, now) {
+    if (!requestStartedAt) {
+        return false;
+    }
+
+    var diffSeconds = (new Date(now) - new Date(requestStartedAt)) / 1000;
+    return diffSeconds >= FORCE_TAKEOVER_WAIT_SECONDS;
 }
 
-function buildSessionResponse(success, status, previousSessionId, activeSessionId, pendingSessionId, message, errorCode) {
+function buildSessionResponse(success, status, previousSessionId, activeSessionId, message, errorCode) {
     return {
         success: success,
         status: status,
         kickedPreviousSession: false,
         previousSessionId: previousSessionId || "",
         activeSessionId: activeSessionId || "",
-        pendingSessionId: pendingSessionId || "",
         message: message || "",
         errorCode: errorCode || ""
     };
@@ -62,9 +60,7 @@ handlers.RequestSession = function (args, context) {
     var currentSessionId = getInternalValue(data, SESSION_KEYS.sessionId, "");
     var currentIsOnline = getInternalValue(data, SESSION_KEYS.isOnline, "false") === "true";
     var currentLastHeartbeat = getInternalValue(data, SESSION_KEYS.lastHeartbeat, "");
-    var pendingSessionId = getInternalValue(data, SESSION_KEYS.pendingSessionId, "");
-    var pendingSince = getInternalValue(data, SESSION_KEYS.pendingSince, "");
-    var currentSessionIsStale = isSessionStale(currentLastHeartbeat, now);
+    var currentSessionIsActive = currentIsOnline && currentSessionId !== "" && !isSessionStale(currentLastHeartbeat, now);
 
     if (currentSessionId === args.sessionId && currentIsOnline) {
         server.UpdateUserInternalData({
@@ -72,62 +68,15 @@ handlers.RequestSession = function (args, context) {
             Data: {
                 sessionId: args.sessionId,
                 isOnline: "true",
-                loginAt: now,
-                lastHeartbeat: now,
-                pendingSessionId: "",
-                pendingSince: ""
+                lastHeartbeat: now
             }
         });
 
-        return buildSessionResponse(true, SESSION_STATUS_ACTIVE, "", args.sessionId, "", "", "");
+        return buildSessionResponse(true, SESSION_STATUS_ACTIVE, "", args.sessionId, "", "");
     }
 
-    if (pendingSessionId !== "" && pendingSessionId !== args.sessionId) {
-        return buildSessionResponse(false, SESSION_STATUS_ERROR, currentSessionId, "", pendingSessionId, "Tai khoan nay dang co mot phien dang cho tiep quan.", "SESSION_TAKEOVER_ALREADY_PENDING");
-    }
-
-    if (pendingSessionId === args.sessionId) {
-        if (currentIsOnline && currentSessionId !== "" && !currentSessionIsStale) {
-            if (isTakeoverTimedOut(pendingSince, now)) {
-                server.UpdateUserInternalData({
-                    PlayFabId: currentPlayerId,
-                    Data: {
-                        pendingSessionId: "",
-                        pendingSince: ""
-                    }
-                });
-
-                return buildSessionResponse(false, SESSION_STATUS_TIMEOUT, currentSessionId, "", "", "Het thoi gian cho phien cu dong bo va dang xuat.", "SESSION_TAKEOVER_TIMEOUT");
-            }
-
-            return buildSessionResponse(false, SESSION_STATUS_WAITING, currentSessionId, "", args.sessionId, "Dang doi phien cu dong bo va dang xuat.", "");
-        }
-
-        server.UpdateUserInternalData({
-            PlayFabId: currentPlayerId,
-            Data: {
-                sessionId: args.sessionId,
-                isOnline: "true",
-                loginAt: now,
-                lastHeartbeat: now,
-                pendingSessionId: "",
-                pendingSince: ""
-            }
-        });
-
-        return buildSessionResponse(true, SESSION_STATUS_ACTIVE, currentSessionId, args.sessionId, "", "", "");
-    }
-
-    if (currentIsOnline && currentSessionId !== "" && !currentSessionIsStale) {
-        server.UpdateUserInternalData({
-            PlayFabId: currentPlayerId,
-            Data: {
-                pendingSessionId: args.sessionId,
-                pendingSince: now
-            }
-        });
-
-        return buildSessionResponse(false, SESSION_STATUS_WAITING, currentSessionId, "", args.sessionId, "Dang doi phien cu dong bo va dang xuat.", "");
+    if (currentSessionIsActive && !hasWaitedLongEnough(args.requestStartedAt, now)) {
+        return buildSessionResponse(false, SESSION_STATUS_WAITING, currentSessionId, "", "Dang doi phien cu dong bo va dang xuat.", "");
     }
 
     var kickedPrevious = currentIsOnline && currentSessionId !== "" && currentSessionId !== args.sessionId;
@@ -136,14 +85,11 @@ handlers.RequestSession = function (args, context) {
         Data: {
             sessionId: args.sessionId,
             isOnline: "true",
-            loginAt: now,
-            lastHeartbeat: now,
-            pendingSessionId: "",
-            pendingSince: ""
+            lastHeartbeat: now
         }
     });
 
-    var activeResponse = buildSessionResponse(true, SESSION_STATUS_ACTIVE, currentSessionId, args.sessionId, "", "", "");
+    var activeResponse = buildSessionResponse(true, SESSION_STATUS_ACTIVE, currentSessionId, args.sessionId, "", "");
     activeResponse.kickedPreviousSession = kickedPrevious;
     return activeResponse;
 };
@@ -160,17 +106,9 @@ handlers.Heartbeat = function (args, context) {
 
     var currentSessionId = getInternalValue(data, SESSION_KEYS.sessionId, "");
     var isOnline = getInternalValue(data, SESSION_KEYS.isOnline, "false") === "true";
-    var pendingSessionId = getInternalValue(data, SESSION_KEYS.pendingSessionId, "");
+    var lastHeartbeat = getInternalValue(data, SESSION_KEYS.lastHeartbeat, "");
 
-    if (pendingSessionId !== "" && pendingSessionId !== args.sessionId) {
-        return {
-            valid: false,
-            shouldLogout: true,
-            reason: "SESSION_TAKEOVER_PENDING"
-        };
-    }
-
-    if (!isOnline || currentSessionId === "" || currentSessionId !== args.sessionId) {
+    if (!isOnline || currentSessionId === "" || currentSessionId !== args.sessionId || isSessionStale(lastHeartbeat, now)) {
         return {
             valid: false,
             shouldLogout: true,
@@ -197,13 +135,11 @@ handlers.ReleaseSession = function (args, context) {
         throw "sessionId is required";
     }
 
-    var now = new Date().toISOString();
     var data = server.GetUserInternalData({
         PlayFabId: currentPlayerId
     });
 
     var currentSessionId = getInternalValue(data, SESSION_KEYS.sessionId, "");
-    var pendingSessionId = getInternalValue(data, SESSION_KEYS.pendingSessionId, "");
 
     if (currentSessionId !== args.sessionId) {
         return {
@@ -212,30 +148,12 @@ handlers.ReleaseSession = function (args, context) {
         };
     }
 
-    if (pendingSessionId !== "" && pendingSessionId !== args.sessionId) {
-        server.UpdateUserInternalData({
-            PlayFabId: currentPlayerId,
-            Data: {
-                sessionId: pendingSessionId,
-                isOnline: "true",
-                lastHeartbeat: now,
-                pendingSessionId: "",
-                pendingSince: ""
-            }
-        });
-        return {
-            released: true,
-            pendingActivated: true
-        };
-    }
-
     server.UpdateUserInternalData({
         PlayFabId: currentPlayerId,
         Data: {
             sessionId: "",
             isOnline: "false",
-            pendingSessionId: "",
-            pendingSince: ""
+            lastHeartbeat: ""
         }
     });
 
@@ -251,10 +169,7 @@ handlers.DeleteAllInternalData = function (args, context) {
         Data: {
             sessionId: null,
             isOnline: null,
-            lastHeartbeat: null,
-            loginAt: null,
-            pendingSessionId: null,
-            pendingSince: null
+            lastHeartbeat: null
         }
     });
 

@@ -6,8 +6,8 @@ using UnityEngine;
 public class PlayfabDataManager : Singleton<PlayfabDataManager>
 {
     private const float SessionHeartbeatIntervalSeconds = 20f;
-    private const float SessionRetryIntervalSeconds = 2f;
-    private const int MaxSessionRetryAttempts = 30;
+    private const float SessionRetryIntervalSeconds = 1f;
+    private const int MaxSessionRetryAttempts = 5;
     private const string CreateAccountScreenName = "CreateAccount";
     private const string CreateCharacterPanelName = "Panel (CreateNv)";
 
@@ -32,10 +32,15 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private AuthResult _pendingAuthResult;
     private Coroutine _sessionRetryCoroutine;
     private bool _isChangingAccount;
+    private bool _isAutoLoginInProgress;
+    private bool _currentLoginIsAuto;
+    private string _sessionAcquireStartedAt;
 
     public bool ready => sessionState != null && sessionState.Ready;
     public bool IsAuthenticated => authSessionService != null && authSessionService.IsAuthenticated;
     public bool IsChangingAccount => _isChangingAccount;
+    public bool IsAutoLoginInProgress => _isAutoLoginInProgress;
+    public bool CurrentLoginIsAuto => _currentLoginIsAuto;
 
     public AuthFacade GetAuthManager() => authSessionService.AuthFacade;
     public PlayFabClientInstanceAPI GetClientAPI() => authSessionService.ClientApi;
@@ -62,12 +67,14 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
         if (Configuration.Instance.startwithHost)
         {
+            BeginLoginFlow(false);
             authSessionService.HostLogin(HandleLoginSuccess, HandleLoginError);
             return;
         }
 
         if (authSessionService.ShouldAutoLoginClient())
         {
+            BeginLoginFlow(true);
             authSessionService.AutoLogin(HandleLoginSuccess, HandleLoginError);
         }
     }
@@ -105,6 +112,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     public void Login(LoginData loginData)
     {
+        BeginLoginFlow(false);
         authSessionService.Login(loginData, HandleLoginSuccess, HandleLoginError);
     }
 
@@ -193,12 +201,15 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     private void HandleLoginSuccess(AuthResult result)
     {
+        EndLoginFlow();
         gameDataCenterManager.onSuccess(result.clientApi);
         _pendingAuthResult = result;
+        _sessionAcquireStartedAt = DateTime.UtcNow.ToString("o");
 
-        authSessionService.AcquireRealtimeSession(result, sessionResult =>
+        authSessionService.AcquireRealtimeSession(result, _sessionAcquireStartedAt, sessionResult =>
         {
             _pendingAuthResult = null;
+            _sessionAcquireStartedAt = null;
             StartSessionHeartbeat();
             LoginSuccess?.Invoke(sessionResult);
 
@@ -220,11 +231,13 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     private void HandleLoginError(AuthError error)
     {
+        EndLoginFlow();
         if (!sessionState.HasLoggedIn && !sessionState.SessionLockAcquired)
         {
             ResetLocalSessionState();
         }
 
+        _sessionAcquireStartedAt = null;
         LoginError?.Invoke(error);
     }
 
@@ -404,12 +417,13 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             bool succeeded = false;
             AuthError fatalError = null;
 
-            authSessionService.RetryAcquireSession(authResult, result =>
+            authSessionService.RetryAcquireSession(authResult, _sessionAcquireStartedAt, result =>
             {
                 succeeded = true;
                 completed = true;
                 _pendingAuthResult = null;
                 _sessionRetryCoroutine = null;
+                _sessionAcquireStartedAt = null;
 
                 Debug.Log("[PlayfabDataManager] Session da san sang, dang nhap thanh cong!");
                 StartSessionHeartbeat();
@@ -451,6 +465,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             {
                 _pendingAuthResult = null;
                 _sessionRetryCoroutine = null;
+                _sessionAcquireStartedAt = null;
                 ResetLocalSessionState();
                 LoginError?.Invoke(fatalError);
                 yield break;
@@ -461,8 +476,9 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         Debug.LogError("[PlayfabDataManager] Het thoi gian cho session. Dang nhap that bai.");
         _pendingAuthResult = null;
         _sessionRetryCoroutine = null;
+        _sessionAcquireStartedAt = null;
         ResetLocalSessionState();
-        LoginError?.Invoke(new AuthError("SESSION_TIMEOUT", "Khong the lay session. Vui long thu lai sau."));
+        LoginError?.Invoke(new AuthError("SESSION_TIMEOUT", "Khong the tiep quan session sau 5 giay. Vui long thu lai sau."));
     }
 
     private void CancelSessionRetry()
@@ -473,6 +489,19 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             _sessionRetryCoroutine = null;
         }
         _pendingAuthResult = null;
+        _sessionAcquireStartedAt = null;
+        EndLoginFlow();
+    }
+
+    private void BeginLoginFlow(bool isAutoLogin)
+    {
+        _currentLoginIsAuto = isAutoLogin;
+        _isAutoLoginInProgress = isAutoLogin;
+    }
+
+    private void EndLoginFlow()
+    {
+        _isAutoLoginInProgress = false;
     }
 
     private void CompleteCharacterSwitch()

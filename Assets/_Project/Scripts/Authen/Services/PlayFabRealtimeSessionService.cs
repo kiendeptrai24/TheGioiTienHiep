@@ -11,12 +11,13 @@ public class PlayFabRealtimeSessionService
         this.clientApi = clientApi;
     }
 
-    public void TryAcquireLock(string playFabId, string sessionId, Action<CloudSessionRequestResult> onResult, Action<AuthError> onError)
+    public void TryAcquireLock(string playFabId, string sessionId, string requestStartedAt, Action<CloudSessionRequestResult> onResult, Action<AuthError> onError)
     {
         ExecuteCloudScript<CloudSessionRequestResult>("RequestSession", new
         {
             playFabId,
-            sessionId
+            sessionId,
+            requestStartedAt
         }, result =>
         {
             if (result == null)
@@ -88,7 +89,6 @@ public class CloudSessionRequestResult
     public bool kickedPreviousSession;
     public string previousSessionId;
     public string activeSessionId;
-    public string pendingSessionId;
     public string message;
     public string errorCode;
 }
