@@ -244,3 +244,22 @@ handlers.ReleaseSession = function (args, context) {
         pendingActivated: false
     };
 };
+
+handlers.DeleteAllInternalData = function (args, context) {
+    server.UpdateUserInternalData({
+        PlayFabId: currentPlayerId,
+        Data: {
+            sessionId: null,
+            isOnline: null,
+            lastHeartbeat: null,
+            loginAt: null,
+            pendingSessionId: null,
+            pendingSince: null
+        }
+    });
+
+    return {
+        success: true,
+        message: "Da xoa tat ca Internal data"
+    };
+};

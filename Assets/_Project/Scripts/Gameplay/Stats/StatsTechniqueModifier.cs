@@ -14,21 +14,17 @@ public class StatsTechniqueModifier : StatsModifierBase
 
         foreach (var data in datas)
         {
-            AddPercent(StatType.Health, data.bonusHealth);
-            AddPercent(StatType.Mana, data.bonusMana);
-            AddPercent(StatType.Spirit, data.bonusSpirit);
-            AddPercent(StatType.CritPower, data.physicalDamage);
-            AddPercent(StatType.CritChance, data.magicalDamage);
-            AddPercent(StatType.PhysicalDamage, data.spiritDamage);
-            AddPercent(StatType.MagicalDamage, data.physicalDefense);
-            AddPercent(StatType.SpiritDamage, data.magicalDefense);
-            AddPercent(StatType.ArmorPenetration, data.spiritDefense);
-            AddPercent(StatType.CritDamageReduction, data.critDamage);
-            AddPercent(StatType.TrueDamage, data.critRate);
-            AddPercent(StatType.PhysicalDefense, data.armorPenetration);
-            AddPercent(StatType.MagicalDefense, data.critDamageReduction);
-            AddPercent(StatType.SpiritDefense, data.trueDamage);
-            AddPercent(StatType.AttackSpeed, data.attackSpeed);
+            AddPercent(StatType.Health, data.health);
+            AddPercent(StatType.Mana, data.mana);
+            AddPercent(StatType.Spirit, data.spirit);
+
+            AddPercent(StatType.PhysicalDamage, data.physicalDamage);
+            AddPercent(StatType.MagicalDamage, data.magicalDamage);
+            AddPercent(StatType.SpiritDamage, data.spiritDamage);
+
+            AddPercent(StatType.PhysicalDefense, data.physicalDefense);
+            AddPercent(StatType.MagicalDefense, data.magicalDefense);
+            AddPercent(StatType.SpiritDefense, data.spiritDefense);
         }
     }
     public override void RemoveStats(Dictionary<StatType, Stat> stats, ItemData itemData)
@@ -42,21 +38,17 @@ public class StatsTechniqueModifier : StatsModifierBase
 
         foreach (var data in datas)
         {
-            RemovePercent(StatType.Health, data.bonusHealth);
-            RemovePercent(StatType.Mana, data.bonusMana);
-            RemovePercent(StatType.Spirit, data.bonusSpirit);
-            RemovePercent(StatType.CritPower, data.physicalDamage);
-            RemovePercent(StatType.CritChance, data.magicalDamage);
-            RemovePercent(StatType.PhysicalDamage, data.spiritDamage);
-            RemovePercent(StatType.MagicalDamage, data.physicalDefense);
-            RemovePercent(StatType.SpiritDamage, data.magicalDefense);
-            RemovePercent(StatType.ArmorPenetration, data.spiritDefense);
-            RemovePercent(StatType.CritDamageReduction, data.critDamage);
-            RemovePercent(StatType.TrueDamage, data.critRate);
-            RemovePercent(StatType.PhysicalDefense, data.armorPenetration);
-            RemovePercent(StatType.MagicalDefense, data.critDamageReduction);
-            RemovePercent(StatType.SpiritDefense, data.trueDamage);
-            RemovePercent(StatType.AttackSpeed, data.attackSpeed);
+            RemovePercent(StatType.Health, data.health);
+            RemovePercent(StatType.Mana, data.mana);
+            RemovePercent(StatType.Spirit, data.spirit);
+            
+            RemovePercent(StatType.PhysicalDamage, data.physicalDamage);
+            RemovePercent(StatType.MagicalDamage, data.magicalDamage);
+            RemovePercent(StatType.SpiritDamage, data.spiritDamage);
+
+            RemovePercent(StatType.PhysicalDefense, data.physicalDefense);
+            RemovePercent(StatType.MagicalDefense, data.magicalDefense);
+            RemovePercent(StatType.SpiritDefense, data.spiritDefense);
         }
     }
 }

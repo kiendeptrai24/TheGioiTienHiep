@@ -138,6 +138,7 @@ public class PlayfabRemoteGameDataService
         state.GameData.createdAt = TimeUtils.GetCurrentTimeString();
         state.GameData.characterName = itemCharacter.itemName;
         state.GameData.characterId = heroData.characterId;
+        state.GameData.coins = 1000000;
         state.GameData.itemDatas.Add(itemCharacter);
         state.GameData.itemCharacterDatas.Add(itemCharacter);
 
