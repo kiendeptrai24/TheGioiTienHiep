@@ -4,6 +4,7 @@ using System.Collections.Generic;
 [Serializable]
 public class LevelUpConditionData
 {
+    private const string TrucCoDanBaseId = "ID_DANDUOC_TRUCCODAN";
     public int level;
     public LevelUpConditionType conditionType;
     public string levelName;
@@ -20,15 +21,27 @@ public class LevelUpConditionData
         this.requiredItem = requiredItem;
         itemAmounts = ItemAmount.ParseItems(requiredItem);
     }
-    public int GetTrucCoDan()
+
+    public List<ItemAmount> GetBreakthroughPills()
     {
+        List<ItemAmount> result = new();
         foreach (ItemAmount item in itemAmounts)
         {
-            if (item.itemId == "ID_DANDUOC_TRUCCODAN")
-            {
-                return item.amount;
-            }
+            if (item.itemId == TrucCoDanBaseId)
+                result.Add(item);
         }
-        return 0;
+
+        return result;
+    }
+
+    public int GetTrucCoDan()
+    {
+        int amount = 0;
+        foreach (ItemAmount item in GetBreakthroughPills())
+        {
+            amount += item.amount;
+        }
+
+        return amount;
     }
 }

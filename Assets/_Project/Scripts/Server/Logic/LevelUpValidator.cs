@@ -87,6 +87,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         result.playerId = playerProfile.GetPlayerId().ToString();
         result.rewardPotentialPoint = nextRealm.rewardPotentialPoint;
         result.rewardSkillPoint = nextRealm.rewardSkillPoint;
+        result.finalBreakthroughRate = finalRate;
         SegmentRealmManager.Instance.AddRealmSegment(result);
         SendMessegeToClientRpc(JsonConvert.SerializeObject(result), RpcTargetUtils.Single(playerObj.OwnerClientId));
     }
@@ -94,6 +95,8 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void RequestCheckConditionResultSerserRpc(ulong playerClientId, string instanceId)
     {
+        if(IsSpawned == false)
+            return;
         if (!IsServer)
             return;
         CheckLevelUpValidationResult result = new();
@@ -146,7 +149,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
                 $"{validator.GetResourceName()} <color=green>{validator.GetCurrentAmount(playerResource)} / {validator.GetRequiredAmount()} </color>"));
             }
         }
-
+        result.finalBreakthroughRate = GetFinalBreakthroughRate(playerResource, conditionData, nextRealm);
         string message = JsonConvert.SerializeObject(result);
         SendMessegeConditionToClientRpc(message, RpcTargetUtils.Single(playerClientId));
     }
@@ -199,18 +202,63 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         if (playerResource == null || conditionData == null)
             return 0f;
 
-        int trucCoDanAmount = conditionData.GetTrucCoDan();
-        if (trucCoDanAmount <= 0)
-            return 0f;
-
-        ItemData trucCoDanData = GameDataCenterManager.Instance.GetItemById("ID_DANDUOC_TRUCCODAN");
-        if (trucCoDanData is PillData pillData && pillData.rate > 0f)
+        float totalRate = 0f;
+        foreach (ItemAmount itemAmount in ResolveBreakthroughPillConsumes(playerResource, conditionData))
         {
-            float rate = pillData.rate * trucCoDanAmount;
-            return Mathf.Min(rate, nextRealm.increaseRateMax);
+            ItemData itemData = GameDataCenterManager.Instance.GetItemById(itemAmount.instanceId);
+            if (itemData is not PillData pillData || pillData.rate <= 0f)
+                continue;
+
+            totalRate += pillData.rate * itemAmount.amount;
         }
 
-        return 0;
+        return Mathf.Min(totalRate, nextRealm.increaseRateMax);
+    }
+
+    private List<ItemAmount> ResolveBreakthroughPillConsumes(PlayerResource playerResource, LevelUpConditionData conditionData)
+    {
+        List<ItemAmount> result = new();
+        if (playerResource == null || conditionData == null)
+            return result;
+
+        List<ItemAmount> sortedOwnedPills = new(playerResource.itemAmounts);
+        sortedOwnedPills.Sort((a, b) =>
+        {
+            float rateA = GetBreakthroughPillRate(a.instanceId);
+            float rateB = GetBreakthroughPillRate(b.instanceId);
+            return rateB.CompareTo(rateA);
+        });
+
+        foreach (ItemAmount requiredPill in conditionData.GetBreakthroughPills())
+        {
+            int remaining = requiredPill.amount;
+            if (remaining <= 0)
+                continue;
+
+            foreach (ItemAmount ownedPill in sortedOwnedPills)
+            {
+                if (ownedPill.itemId != requiredPill.itemId || ownedPill.amount <= 0)
+                    continue;
+
+                int consumeAmount = Mathf.Min(remaining, ownedPill.amount);
+                result.Add(new ItemAmount(ownedPill.instanceId, ownedPill.itemId, consumeAmount));
+                remaining -= consumeAmount;
+
+                if (remaining <= 0)
+                    break;
+            }
+        }
+
+        return result;
+    }
+
+    private float GetBreakthroughPillRate(string instanceId)
+    {
+        ItemData itemData = GameDataCenterManager.Instance.GetItemById(instanceId);
+        if (itemData is PillData pillData)
+            return pillData.rate;
+
+        return 0f;
     }
 
     private void ConsumeResources(PlayerResource playerResource, LevelUpConditionData condition)
@@ -223,7 +271,24 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         new KhoangThachResource().Consume(playerResource, condition.khoangThach);
         new MaHachResource().Consume(playerResource, condition.maHach);
         new YeuDanResource().Consume(playerResource, condition.yeuDan);
-        new TrucCoDanReource().Consume(playerResource, condition.GetTrucCoDan());
+        foreach (ItemAmount itemAmount in ResolveBreakthroughPillConsumes(playerResource, condition))
+        {
+            ConsumeBreakthroughPill(playerResource, itemAmount);
+        }
+    }
+
+    private void ConsumeBreakthroughPill(PlayerResource playerResource, ItemAmount consumedItem)
+    {
+        foreach (ItemAmount ownedItem in playerResource.itemAmounts)
+        {
+            if (ownedItem.instanceId != consumedItem.instanceId)
+                continue;
+
+            ownedItem.amount -= consumedItem.amount;
+            if (ownedItem.amount < 0)
+                ownedItem.amount = 0;
+            return;
+        }
     }
     public void RequestCheckConditionResult(ulong playerClientId, string instanceId)
     {
@@ -247,7 +312,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
     {
 
         var messege = JsonConvert.DeserializeObject<LevelUpValidationResult>(message);
-        TopNotificationUI.Instance.ShowNotification(messege.messege);
+        TopNotificationUI.Instance.ShowNotification(messege.messege + "\n tỉ lệ thành công: " + messege.finalBreakthroughRate);
     }
     #endregion
 

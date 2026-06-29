@@ -10,6 +10,7 @@ public class LevelUpValidationResult
     public bool isCompleted;
     public int rewardPotentialPoint;
     public int rewardSkillPoint;
+    public float finalBreakthroughRate;
     public LevelUpConditionType conditionType;
     public LevelUpValidationResult() { }
     public LevelUpValidationResult(bool valid, string msg)

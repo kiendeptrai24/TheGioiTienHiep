@@ -16,6 +16,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
     [SerializeField] private TextMeshProUGUI realmTxt;
     [SerializeField] private TextMeshProUGUI effectDescriptionTxt;
     [SerializeField] private TextMeshProUGUI descriptionTxt;
+    [SerializeField] private TextMeshProUGUI rateTxt;
     [Space]
     [SerializeField] private Image nextItemIcon;
     [SerializeField] private TextMeshProUGUI nextTechniquenameTxt;
@@ -120,6 +121,7 @@ public class ItemChamDetailPageView : IItemDetailPageView
         {
             var uiCondition = Instantiate(conditionLevelupPrefab, contentCondition);
             uiCondition.Setup(noti.messege, noti.result);
+            rateTxt.text = $"Tỉ lệ thành công: {notifications.finalBreakthroughRate * 100}%";
             if (noti.result == false)
             {
                 canLevelup = false;
