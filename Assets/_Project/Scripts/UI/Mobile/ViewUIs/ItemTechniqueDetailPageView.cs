@@ -66,7 +66,7 @@ public class ItemTechniqueDetailPageView : IItemDetailPageView
         foreach (var noti in notifications.results)
         {
             var uiCondition = Instantiate(conditionLevelupPrefab, contentCondition);
-            uiCondition.Setup(noti.message, noti.result);
+            uiCondition.Setup(noti.messege, noti.result);
         }
     }
     public void RemoveAllNotification()

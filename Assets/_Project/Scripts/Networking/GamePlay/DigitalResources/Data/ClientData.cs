@@ -4,5 +4,5 @@ public class ClientData
 {
     public string playerId;
     public ulong clientId;
-    public NetworkObject playerObject;
+    public NetworkClient networkClient;
 }

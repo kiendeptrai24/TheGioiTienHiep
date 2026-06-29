@@ -47,6 +47,7 @@ public class RealmData : ItemData
     public int rewardSkillPoint;
     public float rate;
     public float increaseRate;
+    public float increaseRateMax;
     public long timeSeconds;
     override public ItemData Clone()
     {

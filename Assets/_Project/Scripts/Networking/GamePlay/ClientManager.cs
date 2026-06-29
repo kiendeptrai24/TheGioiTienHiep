@@ -46,7 +46,7 @@ public class ClientManager : SingletonNetwork<ClientManager>
         {
             playerId = playerId,
             clientId = clientId,
-            playerObject = NetworkManager.ConnectedClients[clientId].PlayerObject
+            networkClient = NetworkManager.ConnectedClients[clientId]
         };
         if (connectedClientsMap.ContainsKey(playerId))
         {
@@ -93,7 +93,15 @@ public class ClientManager : SingletonNetwork<ClientManager>
     {
         if (connectedClientsMap.TryGetValue(playerId, out var data))
         {
-            return data.playerObject;
+            return data.networkClient.PlayerObject;
+        }
+        return null;
+    }
+    public NetworkClient GetNetworkClient(string playerId)
+    {
+        if (connectedClientsMap.TryGetValue(playerId, out var data))
+        {
+            return data.networkClient;
         }
         return null;
     }

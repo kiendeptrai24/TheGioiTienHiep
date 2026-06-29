@@ -250,7 +250,7 @@ public static class DataMapper
         realmData.linhThachCost = dto.lThach;
         realmData.itemsCost = dto.item == null ? "" : dto.item;
         realmData.rate = DataParseUtils.ParsePercent(dto.rate);
-        realmData.increaseRate = DataParseUtils.ParsePercent(dto.increaseRate);
+        realmData.increaseRateMax = DataParseUtils.ParsePercent(dto.increaseRate);
         realmData.timeSeconds = DataParseUtils.ParseTimeToSeconds(dto.time);
 
         return realmData;

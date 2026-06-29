@@ -116,7 +116,7 @@ namespace TGTH.Mobile
             HeroData heroData = itemData as HeroData;
             if (heroData == null) return;
 
-            realmTxt.text = EnumTranslator.ToVietnamese(heroData.essenceData.realmType);
+            realmTxt.text = EnumTranslator.ToVietnamese(heroData.realmType);
             classTxt.text = EnumTranslator.ToVietnamese(heroData.essenceType);
             raceTxt.text = EnumTranslator.ToVietnamese(heroData.raceType);
         }

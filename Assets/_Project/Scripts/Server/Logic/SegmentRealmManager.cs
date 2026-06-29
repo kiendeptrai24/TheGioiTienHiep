@@ -48,6 +48,8 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
         realmDataSegment.startTime = upgradeState.startTime;
         realmDataSegment.endTime = upgradeState.endTime;
         realmDataSegment.result = upgradeState.result;
+        realmDataSegment.rewardPotentialPoint = upgradeState.rewardPotentialPoint;
+        realmDataSegment.rewardSkillPoint = upgradeState.rewardSkillPoint;
         realmDataSegment.isCompleted = false;
         _realmSegment.Add(realmDataSegment.playerId, realmDataSegment);
         _sortedQueue.Add(realmDataSegment);
@@ -97,31 +99,72 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
             result.startTime = upgradeState.startTime;
             result.result = upgradeState.result;
             result.isCompleted = upgradeState.isCompleted;
+            result.rewardPotentialPoint = upgradeState.rewardPotentialPoint;
+            result.rewardSkillPoint = upgradeState.rewardSkillPoint;
+            result.result = upgradeState.result;
             if (upgradeState.isCompleted)
             {
                 var nextRealm = GameDataCenterManager.Instance.GetItemById(upgradeState.upgradeId);
                 if (nextRealm == null)
                 {
-                    result.message = "Không tìm thấy cảnh tiếp theo";
+                    result.messege = "Không tìm thấy cảnh tiếp theo";
                 }
                 else
                 {
                     string res = result.result ? "Đột phá thành công" : "Đột phá thất bại";
                     string realmTxt = TextColorUtil.Color(EnumTranslator.ToVietnamese(nextRealm.realmType), Color.green);
                     string realm = result.result ? $"cảnh giới hiện tại là {realmTxt}" : "";
-                    result.message = $"{TextColorUtil.Color(res, Color.green)} {realm}";
+                    result.messege = $"{TextColorUtil.Color(res, Color.green)} {realm}";
+                    var playerObject = clientData.networkClient;
+                    var playerProfile = playerObject.PlayerObject.GetComponent<PlayerProfile>();
+                    string reward = "";
+                    reward = GetRewardMessege(upgradeState, result, reward);
+                    if (!string.IsNullOrEmpty(reward))
+                    {
+                        result.messege += $"\n{reward}";
+                    }
+                    if (result.result)
+                    {
+                        playerProfile.SetPotentialPoint(upgradeState.rewardPotentialPoint);
+                        playerProfile.SetSkillPoint(upgradeState.rewardSkillPoint);
+                    }
                 }
                 var json = JsonConvert.SerializeObject(result);
-                NotifiResultToClientRpc(json, RpcTargetUtils.Single(clientData.playerObject.OwnerClientId));
+                NotifiResultToClientRpc(json, RpcTargetUtils.Single(clientData.networkClient.PlayerObject.OwnerClientId));
                 RemoveRealmSegment(playerId);
             }
             else
             {
-                result.message = "đang bế quan";
+                result.messege = "đang bế quan";
                 var json = JsonConvert.SerializeObject(result);
-                NotifiResultToClientRpc(json, RpcTargetUtils.Single(clientData.playerObject.OwnerClientId));
+                NotifiResultToClientRpc(json, RpcTargetUtils.Single(clientData.networkClient.PlayerObject.OwnerClientId));
             }
         }
+    }
+
+    private static string GetRewardMessege(UpgradeState upgradeState, LevelUpValidationResult result, string reward)
+    {
+        if (result.result)
+        {
+            List<string> rewards = new List<string>();
+
+            if (upgradeState.rewardPotentialPoint > 0)
+            {
+                rewards.Add($"{TextColorUtil.Color(upgradeState.rewardPotentialPoint.ToString(), Color.green)} điểm tiềm năng");
+            }
+
+            if (upgradeState.rewardSkillPoint > 0)
+            {
+                rewards.Add($"{TextColorUtil.Color(upgradeState.rewardSkillPoint.ToString(), Color.green)} điểm kỹ năng");
+            }
+
+            if (rewards.Count > 0)
+            {
+                reward = $"Bạn nhận được {string.Join(" và ", rewards)}";
+            }
+        }
+
+        return reward;
     }
 
     public void DisconnectSegment(ClientData data)
@@ -133,7 +176,7 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
     {
         var messege = JsonConvert.DeserializeObject<LevelUpValidationResult>(message);
         if (messege == null) return;
-        TopNotificationUI.Instance.ShowNotification(messege.message);
+        TopNotificationUI.Instance.ShowNotification(messege.messege);
         if (messege.isCompleted)
         {
             if (messege.result)
@@ -157,6 +200,8 @@ public class SegmentRealmManager : SingletonNetwork<SegmentRealmManager>, ISegme
             upgradeState.startTime = messege.startTime;
             upgradeState.endTime = messege.endTime;
             upgradeState.result = messege.result;
+            upgradeState.rewardPotentialPoint = messege.rewardPotentialPoint;
+            upgradeState.rewardSkillPoint = messege.rewardSkillPoint;
             curUpdatestate = upgradeState;
             isUpdating = true;
             if (string.IsNullOrEmpty(upgradeState.playerId) == false)

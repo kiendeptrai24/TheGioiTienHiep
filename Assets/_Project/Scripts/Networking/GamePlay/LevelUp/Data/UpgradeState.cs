@@ -7,6 +7,8 @@ public class UpgradeState : IComparable<UpgradeState>
     public string upgradeId;
     public long startTime;
     public long endTime;
+    public int rewardPotentialPoint;
+    public int rewardSkillPoint;
     public bool isCompleted;
     public bool result;
     public int CompareTo(UpgradeState other)

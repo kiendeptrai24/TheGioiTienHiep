@@ -68,18 +68,16 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         }
 
         float roll = UnityEngine.Random.value;
+        float finalRate = GetFinalBreakthroughRate(playerResource, conditionData, nextRealm);
         ConsumeResources(playerResource, conditionData);
         resource.SetPlayerResource(playerResource);
         long startTime = TimeUtils.DateTimeOffset();
         long endTime = TimeUtils.DateTimeOffset(nextRealm.timeSeconds);
 
-        bool rollResut = roll <= nextRealm.rate;
+        bool rollResut = roll <= finalRate;
 
         string realmTxt = TextColorUtil.Color(EnumTranslator.ToVietnamese(nextRealm.realmType), Color.green);
         result = new LevelUpValidationResult(true, $"Đợi {TimeUtils.FormatRemainingTime(endTime)} để đột phá lên cảnh giới {realmTxt}");
-
-        playerProfile.SetPotentialPoint(nextRealm.rewardPotentialPoint);
-        playerProfile.SetSkillPoint(nextRealm.rewardSkillPoint);
 
         result.conditionType = LevelUpConditionType.ChampionLevel;
         result.endTime = endTime;
@@ -87,6 +85,8 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         result.result = rollResut;
         result.instanceId = nextRealm.instanceId;
         result.playerId = playerProfile.GetPlayerId().ToString();
+        result.rewardPotentialPoint = nextRealm.rewardPotentialPoint;
+        result.rewardSkillPoint = nextRealm.rewardSkillPoint;
         SegmentRealmManager.Instance.AddRealmSegment(result);
         SendMessegeToClientRpc(JsonConvert.SerializeObject(result), RpcTargetUtils.Single(playerObj.OwnerClientId));
     }
@@ -186,6 +186,33 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
         }
         return result;
     }
+
+    private float GetFinalBreakthroughRate(PlayerResource playerResource, LevelUpConditionData conditionData, RealmData nextRealm)
+    {
+        float baseRate = nextRealm.rate;
+        float bonusRate = GetBreakthroughRateBonus(playerResource, conditionData, nextRealm);
+        return Mathf.Clamp01(baseRate + bonusRate);
+    }
+
+    private float GetBreakthroughRateBonus(PlayerResource playerResource, LevelUpConditionData conditionData, RealmData nextRealm)
+    {
+        if (playerResource == null || conditionData == null)
+            return 0f;
+
+        int trucCoDanAmount = conditionData.GetTrucCoDan();
+        if (trucCoDanAmount <= 0)
+            return 0f;
+
+        ItemData trucCoDanData = GameDataCenterManager.Instance.GetItemById("ID_DANDUOC_TRUCCODAN");
+        if (trucCoDanData is PillData pillData && pillData.rate > 0f)
+        {
+            float rate = pillData.rate * trucCoDanAmount;
+            return Mathf.Min(rate, nextRealm.increaseRateMax);
+        }
+
+        return 0;
+    }
+
     private void ConsumeResources(PlayerResource playerResource, LevelUpConditionData condition)
     {
         if (!IsServer)
@@ -220,7 +247,7 @@ public class LevelUpValidator : SingletonNetwork<LevelUpValidator>
     {
 
         var messege = JsonConvert.DeserializeObject<LevelUpValidationResult>(message);
-        TopNotificationUI.Instance.ShowNotification(messege.message);
+        TopNotificationUI.Instance.ShowNotification(messege.messege);
     }
     #endregion
 
