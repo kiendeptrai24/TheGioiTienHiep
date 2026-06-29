@@ -1,12 +1,23 @@
-
 using System;
 using ExitGames.Client.Photon;
 using Photon.Chat.DemoChat;
+using PlayFab;
+using PlayFab.ClientModels;
 using UnityEngine;
+
 namespace Photon.Chat.TGTHChat
 {
     public class ChatManager : TGTHMonoBehaviour, IChatClientListener
     {
+        private Configuration config;
+        [Header("Photon Chat")]
+        [SerializeField] private string chatAppId = "YOUR_PHOTON_CHAT_APP_ID";
+        [SerializeField] private string chatAppVersion = "1.0";
+        [SerializeField] private string chatRegion = "ASIA";
+
+        [Header("References")]
+        [SerializeField] private ProfileManager profileManager;
+
         public enum ClientChatState
         {
             None,
@@ -14,6 +25,7 @@ namespace Photon.Chat.TGTHChat
             Connected,
             Disconnected
         }
+
         public enum UserStatus
         {
             Offline = 0,
@@ -24,9 +36,10 @@ namespace Photon.Chat.TGTHChat
             LookingForGroup = 5,
             Playing = 6
         }
-        [SerializeField] private ProfileManager profileManager;
+
         public ChatClient chatClient;
         public ClientChatState clientState;
+
         public event Action OnClientChatConnected;
         public event Action OnClientChatDisconnected;
 
@@ -34,19 +47,122 @@ namespace Photon.Chat.TGTHChat
         public event Action<string, object, string> OnPrivateMessage;
         public event Action<string, int, bool, object> OnFriendStatusUpdate;
 
+        private PlayfabDataManager playfabDataManager;
+
+        [SerializeField] private string playFabId;
+        [SerializeField] private string photonToken;
+        private PlayFabClientInstanceAPI clientApi;
+
         protected override void Awake()
         {
             base.Awake();
-        }
-        protected override void Start()
-        {
-            base.Start();
+
             clientState = ClientChatState.None;
+            config = Configuration.Instance;
+            if (!string.IsNullOrEmpty(config.PlayFabTitleId) && config.PlayFabTitleId != "YOUR_PLAYFAB_TITLE_ID")
+            {
+                PlayFabSettings.staticSettings.TitleId = config.PlayFabTitleId;
+            }
+
+            playfabDataManager = PlayfabDataManager.Instance;
+
+            if (playfabDataManager != null)
+            {
+                playfabDataManager.LoginSuccess += OnLoginSuccess;
+            }
+            else
+            {
+                Debug.LogError("[PhotonChat] PlayfabDataManager.Instance is null.");
+            }
+            chatAppId = ChatSettings.Instance.AppId;
+        }
+
+        private void Update()
+        {
+            chatClient?.Service();
+        }
+
+        private void OnLoginSuccess(AuthResult result)
+        {
+            playFabId = result.clientApi.authenticationContext.PlayFabId;
+            clientApi = result.clientApi;
+            if (string.IsNullOrEmpty(playFabId))
+            {
+                Debug.LogError("[PhotonChat] PlayFabId is null or empty.");
+                return;
+            }
+
+            Debug.Log($"[PhotonChat] PlayFab login success. PlayFabId: {playFabId}");
+
+            GetPhotonAuthenticationToken();
+        }
+
+        private void GetPhotonAuthenticationToken()
+        {
+            if (string.IsNullOrEmpty(chatAppId) || chatAppId == "YOUR_PHOTON_CHAT_APP_ID")
+            {
+                Debug.LogError("[PhotonChat] Photon Chat AppId is empty. Please set chatAppId in Inspector.");
+                return;
+            }
+
+            var request = new GetPhotonAuthenticationTokenRequest
+            {
+                PhotonApplicationId = chatAppId
+            };
+
+            clientApi.GetPhotonAuthenticationToken(
+                request,
+                OnGetPhotonTokenSuccess,
+                OnPlayFabError
+            );
+        }
+
+        private void OnGetPhotonTokenSuccess(GetPhotonAuthenticationTokenResult result)
+        {
+            photonToken = result.PhotonCustomAuthenticationToken;
+
+            if (string.IsNullOrEmpty(photonToken))
+            {
+                Debug.LogError("[PhotonChat] Photon token is null or empty.");
+                return;
+            }
+
+            Debug.Log("[PhotonChat] Photon token received.");
+
             ClientConnect();
+        }
+
+        private void OnPlayFabError(PlayFabError error)
+        {
+            Debug.LogError($"[PhotonChat] PlayFab error: {error.GenerateErrorReport()}");
         }
 
         public void ClientConnect()
         {
+            if (clientState == ClientChatState.Connecting || clientState == ClientChatState.Connected)
+            {
+                Debug.LogWarning("[PhotonChat] Chat client is already connecting or connected.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(playFabId))
+            {
+                Debug.LogError("[PhotonChat] Cannot connect. PlayFabId is null or empty.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(photonToken))
+            {
+                Debug.LogError("[PhotonChat] Cannot connect. Photon token is null or empty.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(chatAppId) || chatAppId == "YOUR_PHOTON_CHAT_APP_ID")
+            {
+                Debug.LogError("[PhotonChat] Cannot connect. Photon Chat AppId is empty.");
+                return;
+            }
+
             chatClient = new ChatClient(this);
 
 #if UNITY_WEBGL
@@ -55,99 +171,140 @@ namespace Photon.Chat.TGTHChat
             chatClient.UseBackgroundWorkerForSending = true;
 #endif
 
-            var auth = new AuthenticationValues(profileManager.GetProfile().userId);
+            AuthenticationValues authValues = new AuthenticationValues();
+            authValues.AuthType = CustomAuthenticationType.Custom;
+
+            // PlayFab + Photon Custom Authentication
+            authValues.AddAuthParameter("username", playFabId);
+            authValues.AddAuthParameter("token", photonToken);
+
+            // Photon Chat bắt buộc cần UserId
+            authValues.UserId = playFabId;
+
+            chatClient.ChatRegion = chatRegion;
+            chatClient.MessageLimit = 100;
 
             clientState = ClientChatState.Connecting;
-            chatClient.ChatRegion = "Asia";
-            chatClient.MessageLimit = 100;
-            bool ok = chatClient.Connect(ChatSettings.Instance.AppId, "1.0", auth);
+
+            bool connectResult = chatClient.Connect(chatAppId, chatAppVersion, authValues);
+
+            Debug.Log($"[PhotonChat] Connect result: {connectResult}");
         }
 
-        private void Update()
-        {
-            chatClient?.Service();
-        }
         public void ClientDisconnect()
         {
-            if (this.chatClient != null)
+            if (chatClient != null)
             {
-                this.chatClient.Disconnect();
+                if (clientState == ClientChatState.Connected)
+                {
+                    chatClient.SetOnlineStatus((int)UserStatus.Offline);
+                }
+
+                chatClient.Disconnect();
             }
+
             clientState = ClientChatState.Disconnected;
         }
-        public void OnDestroy()
+
+        private void OnDestroy()
         {
-            if (this.chatClient != null)
+            if (playfabDataManager != null)
             {
-                this.chatClient.Disconnect();
+                playfabDataManager.LoginSuccess -= OnLoginSuccess;
+            }
+
+            if (chatClient != null)
+            {
+                chatClient.Disconnect();
+                chatClient = null;
             }
         }
-        #region IChatClientListener implementation
+
+        #region IChatClientListener
 
         public void DebugReturn(DebugLevel level, string message)
         {
             Debug.LogWarning($"[PhotonChat] {level}: {message}");
         }
 
-        public void OnDisconnected()
-        {
-            clientState = ClientChatState.Disconnected;
-            chatClient.SetOnlineStatus((int)UserStatus.Online, profileManager.GetProfile().userName);
-            OnClientChatDisconnected?.Invoke();
-        }
-
         public void OnConnected()
         {
-            Debug.Log("[PhotonChat] Connected");
+            Debug.Log("[PhotonChat] Connected.");
 
             clientState = ClientChatState.Connected;
-            chatClient.SetOnlineStatus((int)UserStatus.Online, profileManager.GetProfile().userName);
+
+            string displayName = playFabId;
+
+            if (profileManager != null && profileManager.GetProfile() != null)
+            {
+                displayName = profileManager.GetProfile().userName;
+            }
+
+            chatClient.SetOnlineStatus((int)UserStatus.Online, displayName);
 
             chatClient.Subscribe(new[] { "Global" });
+
             OnClientChatConnected?.Invoke();
+        }
+
+        public void OnDisconnected()
+        {
+            Debug.Log("[PhotonChat] Disconnected.");
+
+            clientState = ClientChatState.Disconnected;
+
+            OnClientChatDisconnected?.Invoke();
         }
 
         public void OnChatStateChange(ChatState state)
         {
             Debug.Log($"[PhotonChat] State: {state}");
         }
+
         public void OnSubscribed(string[] channels, bool[] results)
         {
-
+            for (int i = 0; i < channels.Length; i++)
+            {
+                Debug.Log($"[PhotonChat] Subscribed channel: {channels[i]}, result: {results[i]}");
+            }
         }
 
         public void OnUnsubscribed(string[] channels)
         {
-
+            foreach (string channel in channels)
+            {
+                Debug.Log($"[PhotonChat] Unsubscribed channel: {channel}");
+            }
         }
 
         public void OnStatusUpdate(string user, int status, bool gotMessage, object message)
         {
-            Console.WriteLine("Status change for: {0} to: {1}", user, status);
+            Debug.Log($"[PhotonChat] Status update. User: {user}, Status: {status}, GotMessage: {gotMessage}, Message: {message}");
+
             OnFriendStatusUpdate?.Invoke(user, status, gotMessage, message);
         }
 
         public void OnUserSubscribed(string channel, string user)
         {
-
+            Debug.Log($"[PhotonChat] User subscribed. Channel: {channel}, User: {user}");
         }
 
         public void OnUserUnsubscribed(string channel, string user)
         {
-
+            Debug.Log($"[PhotonChat] User unsubscribed. Channel: {channel}, User: {user}");
         }
 
         void IChatClientListener.OnGetMessages(string channelName, string[] senders, object[] messages)
         {
-            Debug.Log("OnGetMessages: " + channelName);
+            Debug.Log($"[PhotonChat] OnGetMessages. Channel: {channelName}");
             OnGetMessages?.Invoke(channelName, senders, messages);
         }
 
         void IChatClientListener.OnPrivateMessage(string sender, object message, string channelName)
         {
+            Debug.Log($"[PhotonChat] Private message from: {sender}, Channel: {channelName}, Message: {message}");
             OnPrivateMessage?.Invoke(sender, message, channelName);
         }
         #endregion
     }
-
 }

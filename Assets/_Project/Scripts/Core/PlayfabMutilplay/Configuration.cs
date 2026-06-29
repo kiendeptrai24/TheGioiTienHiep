@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Configuration : Singleton<Configuration>
 {
+    public string PlayFabTitleId;
     public BuildType buildType;
     public string ipAddress = "";
     public ushort port = 0;

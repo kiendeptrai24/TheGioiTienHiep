@@ -189247,11 +189247,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29c6700b974f7c64aabae75d15a34b33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Configuration
+  PlayFabTitleId: B7AF4
   buildType: 0
   ipAddress: 20.124.107.156
   port: 30000
-  useEditor: 0
-  startwithHost: 1
+  useEditor: 1
+  startwithHost: 0
   isEditor: 0
   playFabDebugging: 0
 --- !u!4 &2017578317
@@ -417914,8 +417915,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cc96a626c1b663449d49f9bcca3a9b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Photon.Chat.TGTHChat.ChatManager
+  chatAppId: YOUR_PHOTON_CHAT_APP_ID
+  chatAppVersion: 1.0
+  chatRegion: ASIA
   profileManager: {fileID: 288381886591930417}
   clientState: 0
+  playFabId: 
+  photonToken: 
 --- !u!1 &6295828439615699200
 GameObject:
   m_ObjectHideFlags: 0
