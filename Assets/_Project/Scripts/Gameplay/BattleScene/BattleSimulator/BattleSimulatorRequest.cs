@@ -250,7 +250,12 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
                 battleEventEnd.curSpiritHero,
                 battleEventEnd.maxSpiritHero
             );
-
+            if (healthPercent <= 0f)
+            {
+                healthPercent = 1;
+                manaPercent = 1;
+                spiritPercent = 1;
+            }
             playerVital.SetViral(healthPercent, manaPercent, spiritPercent);
         }
         else
@@ -269,7 +274,12 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
                 battleEventEnd.curSpiritEnemy,
                 battleEventEnd.maxSpiritEnemy
             );
-
+            if (healthPercent <= 0f)
+            {
+                healthPercent = 1;
+                manaPercent = 1;
+                spiritPercent = 1;
+            }
             playerVital.SetViral(healthPercent, manaPercent, spiritPercent);
         }
     }
