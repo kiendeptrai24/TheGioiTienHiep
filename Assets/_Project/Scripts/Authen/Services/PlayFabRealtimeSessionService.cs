@@ -2,108 +2,104 @@ using System;
 using PlayFab;
 using PlayFab.ClientModels;
 
-public class PlayFabRealtimeSessionService
+// ─────────────────────────────────────────────────────────────────────────────
+// SessionApiClient
+// Giao tiếp với PlayFab CloudScript cho các thao tác session.
+// Server TỰ xác định user qua auth token – client KHÔNG gửi userId.
+// ─────────────────────────────────────────────────────────────────────────────
+public class SessionApiClient
 {
-    private readonly PlayFabClientInstanceAPI clientApi;
+    private PlayFabClientInstanceAPI _clientApi;
 
-    public PlayFabRealtimeSessionService(PlayFabClientInstanceAPI clientApi)
+    public void SetClientApi(PlayFabClientInstanceAPI clientApi)
     {
-        this.clientApi = clientApi;
+        _clientApi = clientApi;
     }
 
-    public void TryAcquireLock(string playFabId, string sessionId, string requestStartedAt, Action<CloudSessionRequestResult> onResult, Action<AuthError> onError)
+    // Tạo session sau khi đăng nhập PlayFab thành công.
+    // Server kiểm tra isOnline của user, nếu cần sẽ đợi 3 giây rồi tạo sessionId mới.
+    public void CreateSession(Action<SessionCreateResponse> onSuccess, Action<string> onError)
     {
-        ExecuteCloudScript<CloudSessionRequestResult>("RequestSession", new
-        {
-            playFabId,
-            sessionId,
-            requestStartedAt
-        }, result =>
-        {
-            if (result == null)
-            {
-                onError?.Invoke(new AuthError("PLAYFAB_SESSION_REQUEST_FAILED", "Khong the tao session online."));
-                return;
-            }
-
-            onResult?.Invoke(result);
-        }, onError);
+        Execute<SessionCreateResponse>("CreateSession",
+            new { requestStartedAt = DateTime.UtcNow.ToString("o") },
+            onSuccess, onError);
     }
 
-    public void RefreshLock(string playFabId, string sessionId, Action<CloudSessionHeartbeatResult> onSuccess, Action<AuthError> onError)
+    // Heartbeat mỗi 2 giây. Client chỉ gửi sessionId.
+    // Server so sánh sessionId với DB/cache; nếu khác → shouldLogout = true.
+    // Server tự tính trạng thái online qua lastHeartbeat timestamp.
+    public void SendHeartbeat(string sessionId,
+        Action<SessionHeartbeatResponse> onSuccess, Action<string> onError)
     {
-        ExecuteCloudScript<CloudSessionHeartbeatResult>("Heartbeat", new
-        {
-            playFabId,
-            sessionId
-        }, result =>
-        {
-            onSuccess?.Invoke(result);
-        }, onError);
+        Execute<SessionHeartbeatResponse>("SessionHeartbeat",
+            new SessionHeartbeatRequest { sessionId = sessionId },
+            onSuccess, onError);
     }
 
-    public void ReleaseLock(string sessionId, Action onSuccess, Action<AuthError> onError)
+    // Logout: server cập nhật isOnline = false và vô hiệu hóa sessionId.
+    public void LogoutSession(string sessionId,
+        Action<SessionLogoutResponse> onSuccess, Action<string> onError)
     {
-        ExecuteCloudScript<CloudSessionReleaseResult>("ReleaseSession", new
-        {
-            sessionId
-        }, _ => { onSuccess?.Invoke(); }, onError);
+        Execute<SessionLogoutResponse>("LogoutSession",
+            new SessionLogoutRequest { sessionId = sessionId },
+            onSuccess, onError);
     }
 
-    private void ExecuteCloudScript<TOut>(string functionName, object functionParameter, Action<TOut> onSuccess, Action<AuthError> onError)
+    private void Execute<TOut>(string function, object param,
+        Action<TOut> onSuccess, Action<string> onError)
     {
-        var request = new ExecuteCloudScriptRequest
+        if (_clientApi == null)
         {
-            FunctionName = functionName,
-            FunctionParameter = functionParameter,
+            onError?.Invoke("SessionApiClient: ClientApi chưa được khởi tạo.");
+            return;
+        }
+
+        _clientApi.ExecuteCloudScript<TOut>(new ExecuteCloudScriptRequest
+        {
+            FunctionName = function,
+            FunctionParameter = param,
             GeneratePlayStreamEvent = false
-        };
-
-        clientApi.ExecuteCloudScript<TOut>(request, result =>
+        },
+        result =>
         {
-            if (result.Error != null)
-            {
-                onError?.Invoke(new AuthError("PLAYFAB_CLOUDSCRIPT_ERROR", result.Error.Message));
-                return;
-            }
-
-            if (result.FunctionResult is TOut payload)
-            {
-                onSuccess?.Invoke(payload);
-                return;
-            }
-
-            onSuccess?.Invoke(default);
-        }, error =>
-        {
-            onError?.Invoke(new AuthError("PLAYFAB_CLOUDSCRIPT_REQUEST_FAILED", error.ErrorMessage));
-        });
+            if (result.Error != null) { onError?.Invoke(result.Error.Message); return; }
+            onSuccess?.Invoke(result.FunctionResult is TOut v ? v : default);
+        },
+        error => onError?.Invoke(error.ErrorMessage));
     }
 }
 
-[Serializable]
-public class CloudSessionRequestResult
+// ─── DTOs ───────────────────────────────────────────────────────────────────
+public class SessionCreateResponse
 {
     public bool success;
-    public string status;
-    public bool kickedPreviousSession;
-    public string previousSessionId;
-    public string activeSessionId;
+    public string sessionId;
+    public bool shouldWait;   // true → isOnline còn true, client đợi 3 giây rồi retry
     public string message;
-    public string errorCode;
 }
 
 [Serializable]
-public class CloudSessionHeartbeatResult
+public class SessionHeartbeatRequest
 {
-    public bool valid;
+    public string sessionId;
+}
+
+[Serializable]
+public class SessionHeartbeatResponse
+{
+    public bool isValid;
     public bool shouldLogout;
     public string reason;
 }
 
 [Serializable]
-public class CloudSessionReleaseResult
+public class SessionLogoutRequest
 {
-    public bool released;
-    public bool pendingActivated;
+    public string sessionId;
+}
+
+[Serializable]
+public class SessionLogoutResponse
+{
+    public bool success;
 }

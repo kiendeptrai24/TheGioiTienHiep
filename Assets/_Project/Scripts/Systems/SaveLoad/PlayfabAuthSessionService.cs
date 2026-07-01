@@ -1,191 +1,129 @@
 using System;
 using PlayFab;
 
+// ─────────────────────────────────────────────────────────────────────────────
+// PlayfabAuthSessionService
+// Điều phối toàn bộ vòng đời: đăng nhập PlayFab → tạo session → heartbeat → logout.
+// Server TỰ xác định user qua auth token – client KHÔNG gửi userId.
+// ─────────────────────────────────────────────────────────────────────────────
 public class PlayfabAuthSessionService
 {
-    private readonly PlayfabSessionState state;
-
-    private AuthFacade authFacade;
-    private PlayFabRealtimeSessionService realtimeSessionService;
+    private readonly PlayfabSessionState _state;
+    private readonly SessionApiClient _sessionApi;
+    private AuthFacade _authFacade;
 
     public PlayfabAuthSessionService(PlayfabSessionState state)
     {
-        this.state = state;
+        _state      = state;
+        _sessionApi = new SessionApiClient();
     }
 
-    public AuthFacade AuthFacade => authFacade;
-    public PlayFabClientInstanceAPI ClientApi => state.ClientApi;
-    public bool Ready => state.Ready;
-    public bool IsAuthenticated => state.IsAuthenticated;
-    public bool HasSessionLock => state.SessionLockAcquired;
-    public string SessionId => state.SessionId;
-    public string CurrentPlayFabId => state.CurrentPlayFabId;
+    public AuthFacade AuthFacade      => _authFacade;
+    public PlayFabClientInstanceAPI ClientApi => _state.ClientApi;
+    public bool IsAuthenticated       => _state.IsAuthenticated;
+    public string SessionId           => _state.SessionId;
+
+    // ── Khởi tạo ──────────────────────────────────────────────────────────────
 
     public void Configure()
     {
-        state.ClientApi = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
-        realtimeSessionService = new PlayFabRealtimeSessionService(state.ClientApi);
+        _state.ClientApi = new PlayFabClientInstanceAPI(PlayFabSettings.staticSettings);
+        _sessionApi.SetClientApi(_state.ClientApi);
 
         if (Configuration.Instance.startwithHost)
         {
-            authFacade = new AuthFacade(new PlayFabAuthCustomService(state.ClientApi, true));
-            state.Ready = true;
+            _authFacade = new AuthFacade(new PlayFabAuthCustomService(_state.ClientApi, true));
+            _state.Ready = true;
             return;
         }
 
         if (Configuration.Instance.IsClientBuild())
         {
-            authFacade = new AuthFacade(new PlayFabAuthService(state.ClientApi));
-            state.Ready = true;
+            _authFacade = new AuthFacade(new PlayFabAuthService(_state.ClientApi));
+            _state.Ready = true;
         }
     }
 
-    public bool ShouldAutoLoginClient()
-    {
-        return Configuration.Instance.IsClientBuild();
-    }
+    public bool ShouldAutoLoginClient() => Configuration.Instance.IsClientBuild();
 
-    public bool ShouldUseRealtimeSession()
-    {
-        return Configuration.Instance.IsClientBuild() || Configuration.Instance.startwithHost;
-    }
+    // ── Đăng nhập PlayFab (auth cơ bản) ───────────────────────────────────────
 
-    public void Login(LoginData loginData, Action<AuthResult> onSuccess, Action<AuthError> onError)
-    {
-        authFacade.Login(loginData, result => HandleLoginSuccess(result, onSuccess), onError);
-    }
+    public void Login(LoginData data, Action<AuthResult> onSuccess, Action<AuthError> onError)
+        => _authFacade.Login(data, r => OnPlayFabAuthDone(r, onSuccess), onError);
 
     public void AutoLogin(Action<AuthResult> onSuccess, Action<AuthError> onError)
-    {
-        authFacade.AutoLogin(result => HandleLoginSuccess(result, onSuccess), onError);
-    }
+        => _authFacade.AutoLogin(r => OnPlayFabAuthDone(r, onSuccess), onError);
 
     public void HostLogin(Action<AuthResult> onSuccess, Action<AuthError> onError)
-    {
-        authFacade.Login(new LoginData(), result => HandleLoginSuccess(result, onSuccess), onError);
-    }
+        => _authFacade.Login(new LoginData(), r => OnPlayFabAuthDone(r, onSuccess), onError);
 
+    // Xóa token PlayFab phía client
     public void Logout(Action<AuthResult> onSuccess, Action<AuthError> onError)
+        => _authFacade.Logout(onSuccess, onError);
+
+    private void OnPlayFabAuthDone(AuthResult result, Action<AuthResult> onSuccess)
     {
-        authFacade.Logout(onSuccess, onError);
-    }
-
-    public void PrepareAuthenticatedSession(AuthResult result)
-    {
-        state.SessionId = string.IsNullOrEmpty(result.sessionId) ? Guid.NewGuid().ToString() : result.sessionId;
-        result.sessionId = state.SessionId;
-        state.CurrentPlayFabId = result.userId;
-    }
-
-    public void AcquireRealtimeSession(AuthResult result, string requestStartedAt, Action<AuthResult> onSuccess, Action<AuthError> onError, Action<CloudSessionRequestResult> onWaiting = null)
-    {
-        if (!ShouldUseRealtimeSession())
-        {
-            onSuccess?.Invoke(result);
-            return;
-        }
-
-        PrepareAuthenticatedSession(result);
-        realtimeSessionService.TryAcquireLock(state.CurrentPlayFabId, state.SessionId, requestStartedAt, sessionResult =>
-        {
-            var isActive = sessionResult.success &&
-                (sessionResult.status == "ACTIVE" || string.IsNullOrEmpty(sessionResult.status));
-
-            if (isActive)
-            {
-                state.SessionLockAcquired = true;
-                state.HasLoggedIn = true;
-                onSuccess?.Invoke(result);
-                return;
-            }
-
-            if (!sessionResult.success && sessionResult.status == "WAITING")
-            {
-                onWaiting?.Invoke(sessionResult);
-                return;
-            }
-
-            onError?.Invoke(new AuthError("PLAYFAB_SESSION_REQUEST_FAILED", "Khong the tao session online."));
-        }, onError);
-    }
-
-    public void RefreshRealtimeSessionLock(Action<CloudSessionHeartbeatResult> onSuccess, Action<AuthError> onError)
-    {
-        if (!state.SessionLockAcquired ||
-            string.IsNullOrEmpty(state.CurrentPlayFabId) ||
-            string.IsNullOrEmpty(state.SessionId))
-        {
-            return;
-        }
-
-        realtimeSessionService.RefreshLock(state.CurrentPlayFabId, state.SessionId, onSuccess, onError);
-    }
-
-    public void ReleaseRealtimeSessionLock(Action onReleased, Action<AuthError> onError)
-    {
-        if (!state.SessionLockAcquired || string.IsNullOrEmpty(state.SessionId))
-        {
-            onReleased?.Invoke();
-            return;
-        }
-
-        realtimeSessionService.ReleaseLock(state.SessionId, () =>
-        {
-            state.SessionLockAcquired = false;
-            onReleased?.Invoke();
-        }, error =>
-        {
-            state.SessionLockAcquired = false;
-            onError?.Invoke(error);
-            onReleased?.Invoke();
-        });
-    }
-
-    public void RetryAcquireSession(AuthResult authResult, string requestStartedAt, Action<AuthResult> onSuccess, Action<AuthError> onError)
-    {
-        if (!ShouldUseRealtimeSession() || string.IsNullOrEmpty(state.SessionId))
-        {
-            onSuccess?.Invoke(authResult);
-            return;
-        }
-
-        realtimeSessionService.TryAcquireLock(state.CurrentPlayFabId, state.SessionId, requestStartedAt, sessionResult =>
-        {
-            var isActive = sessionResult.success &&
-                (sessionResult.status == "ACTIVE" || string.IsNullOrEmpty(sessionResult.status));
-
-            if (isActive)
-            {
-                state.SessionLockAcquired = true;
-                state.HasLoggedIn = true;
-                onSuccess?.Invoke(authResult);
-                return;
-            }
-
-            if (!sessionResult.success && sessionResult.status == "WAITING")
-            {
-                onError?.Invoke(new AuthError("SESSION_STILL_WAITING", string.IsNullOrEmpty(sessionResult.message) ? "Phien cuoc truoc van dang hoat dong." : sessionResult.message));
-                return;
-            }
-
-            onError?.Invoke(new AuthError("PLAYFAB_SESSION_REQUEST_FAILED", "Khong the tao session online."));
-        }, onError);
-    }
-
-    public void MarkLoggedOutLocally()
-    {
-        state.MarkLoggedOut();
-    }
-
-    public void ResetLocalSessionState()
-    {
-        state.ResetSession();
-    }
-
-    private void HandleLoginSuccess(AuthResult result, Action<AuthResult> onSuccess)
-    {
-        state.HasLoggedIn = false;
-        state.SessionLockAcquired = false;
+        // Lưu PlayFabId; reset session cũ trước khi tạo mới
+        _state.CurrentPlayFabId = result.userId;
+        _state.HasLoggedIn      = false;
+        _state.SessionId        = string.Empty;
         onSuccess?.Invoke(result);
     }
+
+    // ── Tạo session mới sau khi auth thành công ────────────────────────────────
+    // Server tạo sessionId mới, ghi đè session cũ.
+    // shouldWait = true → isOnline còn true, Manager sẽ đợi 3 giây rồi retry.
+
+    public void CreateSession(Action<SessionCreateResponse> onSuccess, Action<AuthError> onError)
+    {
+        _sessionApi.CreateSession(response =>
+        {
+            if (response == null || !response.success)
+            {
+                onError?.Invoke(new AuthError(
+                    response != null && response.shouldWait ? "SESSION_SHOULD_WAIT" : "SESSION_CREATE_FAILED",
+                    response?.message ?? "Không thể tạo phiên đăng nhập."));
+                return;
+            }
+
+            _state.SessionId   = response.sessionId;
+            _state.HasLoggedIn = true;
+            onSuccess?.Invoke(response);
+        },
+        errorMsg => onError?.Invoke(new AuthError("SESSION_CREATE_FAILED", errorMsg)));
+    }
+
+    // ── Heartbeat (gọi mỗi 2 giây) ────────────────────────────────────────────
+    // Client chỉ gửi sessionId; server tự tính online qua lastHeartbeat timestamp.
+
+    public void SendHeartbeat(Action<SessionHeartbeatResponse> onSuccess, Action<AuthError> onError)
+    {
+        if (!_state.IsAuthenticated) return;
+
+        _sessionApi.SendHeartbeat(_state.SessionId,
+            onSuccess,
+            errorMsg => onError?.Invoke(new AuthError("HEARTBEAT_FAILED", errorMsg)));
+    }
+
+    // ── Logout session (cập nhật server) ──────────────────────────────────────
+    // isOnline = false, vô hiệu hóa sessionId. Nếu lỗi thì vẫn logout cục bộ.
+
+    public void LogoutSession(Action onCompleted)
+    {
+        if (string.IsNullOrEmpty(_state.SessionId))
+        {
+            _state.MarkLoggedOut();
+            onCompleted?.Invoke();
+            return;
+        }
+
+        _sessionApi.LogoutSession(_state.SessionId,
+            _ => { _state.MarkLoggedOut(); onCompleted?.Invoke(); },
+            _ => { _state.MarkLoggedOut(); onCompleted?.Invoke(); }); // vẫn logout cục bộ khi lỗi
+    }
+
+    // ── Quản lý trạng thái cục bộ ─────────────────────────────────────────────
+
+    public void MarkLoggedOutLocally()  => _state.MarkLoggedOut();
+    public void ResetLocalSessionState() => _state.ResetSession();
 }

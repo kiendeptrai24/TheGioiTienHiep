@@ -1,180 +1,132 @@
-var SESSION_KEYS = {
-    sessionId: "sessionId",
-    isOnline: "isOnline",
-    lastHeartbeat: "lastHeartbeat"
-};
+// ─────────────────────────────────────────────────────────────────────────────
+//  Session CloudScript
+//  Server tự xác định user qua currentPlayerId (token PlayFab).
+//  Client KHÔNG gửi userId/playFabId.
+//
+//  Hàm:
+//    CreateSession    – tạo sessionId mới sau khi đăng nhập
+//    SessionHeartbeat – kiểm tra session hợp lệ mỗi 2 giây
+//    LogoutSession    – xóa sessionId, xóa lastHeartbeat
+// ─────────────────────────────────────────────────────────────────────────────
 
-var STALE_SESSION_TIMEOUT_SECONDS = 60;
-var FORCE_TAKEOVER_WAIT_SECONDS = 5;
-var SESSION_STATUS_ACTIVE = "ACTIVE";
-var SESSION_STATUS_WAITING = "WAITING";
+var SESSION_KEY_ID = "sessionId";
+var SESSION_KEY_HEARTBEAT = "lastHeartbeat";
 
-function getInternalValue(data, key, defaultValue) {
-    if (!data || !data.Data || !data.Data[key] || data.Data[key].Value === undefined || data.Data[key].Value === null) {
+// Ngưỡng xác định "đang online" khi CreateSession: 5 giây (2.5× heartbeat interval).
+// Nếu lastHeartbeat cách hiện tại ≤ ONLINE_THRESHOLD_SECONDS → tài khoản vẫn online.
+var ONLINE_THRESHOLD_SECONDS = 2;
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+function readUserData() {
+    return server.GetUserInternalData({ PlayFabId: currentPlayerId });
+}
+
+function getField(data, key, defaultValue) {
+    if (!data || !data.Data || !data.Data[key] || data.Data[key].Value === undefined) {
         return defaultValue;
     }
-
     return data.Data[key].Value;
 }
 
-function isSessionStale(lastHeartbeat, now) {
-    if (!lastHeartbeat) {
-        return true;
-    }
-
-    var diffSeconds = (new Date(now) - new Date(lastHeartbeat)) / 1000;
-    return diffSeconds > STALE_SESSION_TIMEOUT_SECONDS;
-}
-
-function hasWaitedLongEnough(requestStartedAt, now) {
-    if (!requestStartedAt) {
-        return false;
-    }
-
-    var diffSeconds = (new Date(now) - new Date(requestStartedAt)) / 1000;
-    return diffSeconds >= FORCE_TAKEOVER_WAIT_SECONDS;
-}
-
-function buildSessionResponse(success, status, previousSessionId, activeSessionId, message, errorCode) {
-    return {
-        success: success,
-        status: status,
-        kickedPreviousSession: false,
-        previousSessionId: previousSessionId || "",
-        activeSessionId: activeSessionId || "",
-        message: message || "",
-        errorCode: errorCode || ""
-    };
-}
-
-handlers.RequestSession = function (args, context) {
-    if (!args || !args.sessionId) {
-        throw "sessionId is required";
-    }
-
-    var now = new Date().toISOString();
-    var data = server.GetUserInternalData({
-        PlayFabId: currentPlayerId
+function generateSessionId() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0;
+        return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
     });
+}
 
-    var currentSessionId = getInternalValue(data, SESSION_KEYS.sessionId, "");
-    var currentIsOnline = getInternalValue(data, SESSION_KEYS.isOnline, "false") === "true";
-    var currentLastHeartbeat = getInternalValue(data, SESSION_KEYS.lastHeartbeat, "");
-    var currentSessionIsActive = currentIsOnline && currentSessionId !== "" && !isSessionStale(currentLastHeartbeat, now);
+function writeSession(sessionId) {
+    var data = { lastHeartbeat: new Date().toISOString() };
+    if (sessionId !== null) data[SESSION_KEY_ID] = sessionId;
+    server.UpdateUserInternalData({ PlayFabId: currentPlayerId, Data: data });
+}
 
-    if (currentSessionId === args.sessionId && currentIsOnline) {
+// ── CreateSession ─────────────────────────────────────────────────────────────
+//  Luồng:
+//  1. Đọc trạng thái hiện tại của user.
+//  2. Nếu isOnline=true VÀ session chưa stale → trả shouldWait=true.
+//     Client sẽ chờ 3 giây rồi gọi lại.
+//  3. Nếu isOnline=false HOẶC session stale → tạo sessionId mới, ghi đè,
+//     trả sessionId mới về client.
+
+handlers.CreateSession = function (args) {
+    var data = readUserData();
+    var storedSessionId = getField(data, SESSION_KEY_ID, "");
+    var lastHeartbeat = getField(data, SESSION_KEY_HEARTBEAT, "");
+
+    // Tài khoản đang online nếu có sessionId và heartbeat gần đây (≤ ONLINE_THRESHOLD_SECONDS)
+    var isCurrentlyOnline = storedSessionId !== "" && lastHeartbeat !== "" &&
+        ((new Date() - new Date(lastHeartbeat)) / 1000) <= ONLINE_THRESHOLD_SECONDS;
+
+    if (isCurrentlyOnline) {
+        return { success: false, sessionId: "", shouldWait: true, message: "Tài khoản đang online ở thiết bị khác. Đang chờ..." };
+    }
+
+    // Tạo sessionId mới, ghi đè session cũ
+    var newSessionId = generateSessionId();
+    writeSession(newSessionId);
+
+    return { success: true, sessionId: newSessionId, shouldWait: false, message: "" };
+};
+
+// ── SessionHeartbeat ──────────────────────────────────────────────────────────
+//  Client gửi: { sessionId, isOnline }
+//  Server so sánh sessionId với sessionId đang lưu.
+//  Nếu khác → shouldLogout=true (thiết bị khác đã đăng nhập và ghi đè).
+
+handlers.SessionHeartbeat = function (args) {
+    if (!args || !args.sessionId) {
+        return { isValid: false, shouldLogout: true, reason: "SESSION_ID_MISSING" };
+    }
+
+    var data = readUserData();
+    var storedSessionId = getField(data, SESSION_KEY_ID, "");
+
+    // sessionId không khớp → session bị ghi đè bởi thiết bị khác → kick ngay
+    if (storedSessionId !== args.sessionId) {
+        return { isValid: false, shouldLogout: true, reason: "SESSION_REVOKED" };
+    }
+
+    // Hợp lệ → cập nhật lastHeartbeat (server dùng timestamp này để tính online)
+    writeSession(null);
+
+    return { isValid: true, shouldLogout: false, reason: "" };
+};
+
+// ── LogoutSession ─────────────────────────────────────────────────────────────
+//  Client gửi: { sessionId }
+//  Server đặt isOnline=false và xóa sessionId.
+//  Chỉ xóa nếu sessionId khớp (tránh xóa phiên của thiết bị khác).
+
+handlers.LogoutSession = function (args) {
+    if (!args || !args.sessionId) {
+        return { success: false };
+    }
+
+    var data = readUserData();
+    var storedSessionId = getField(data, SESSION_KEY_ID, "");
+
+    // Chỉ logout nếu đúng session này đang giữ lock
+    if (storedSessionId === args.sessionId) {
         server.UpdateUserInternalData({
             PlayFabId: currentPlayerId,
             Data: {
-                sessionId: args.sessionId,
-                isOnline: "true",
-                lastHeartbeat: now
+                sessionId: "",
+                lastHeartbeat: ""
             }
         });
-
-        return buildSessionResponse(true, SESSION_STATUS_ACTIVE, "", args.sessionId, "", "");
     }
 
-    if (currentSessionIsActive && !hasWaitedLongEnough(args.requestStartedAt, now)) {
-        return buildSessionResponse(false, SESSION_STATUS_WAITING, currentSessionId, "", "Dang doi phien cu dong bo va dang xuat.", "");
-    }
-
-    var kickedPrevious = currentIsOnline && currentSessionId !== "" && currentSessionId !== args.sessionId;
-    server.UpdateUserInternalData({
-        PlayFabId: currentPlayerId,
-        Data: {
-            sessionId: args.sessionId,
-            isOnline: "true",
-            lastHeartbeat: now
-        }
-    });
-
-    var activeResponse = buildSessionResponse(true, SESSION_STATUS_ACTIVE, currentSessionId, args.sessionId, "", "");
-    activeResponse.kickedPreviousSession = kickedPrevious;
-    return activeResponse;
+    return { success: true };
 };
 
-handlers.Heartbeat = function (args, context) {
-    if (!args || !args.sessionId) {
-        throw "sessionId is required";
-    }
+// ── DeleteAllInternalData (debug only) ───────────────────────────────────────
 
-    var now = new Date().toISOString();
-    var data = server.GetUserInternalData({
-        PlayFabId: currentPlayerId
-    });
-
-    var currentSessionId = getInternalValue(data, SESSION_KEYS.sessionId, "");
-    var isOnline = getInternalValue(data, SESSION_KEYS.isOnline, "false") === "true";
-    var lastHeartbeat = getInternalValue(data, SESSION_KEYS.lastHeartbeat, "");
-
-    if (!isOnline || currentSessionId === "" || currentSessionId !== args.sessionId || isSessionStale(lastHeartbeat, now)) {
-        return {
-            valid: false,
-            shouldLogout: true,
-            reason: "SESSION_REVOKED"
-        };
-    }
-
+handlers.DeleteAllInternalData = function () {
     server.UpdateUserInternalData({
         PlayFabId: currentPlayerId,
-        Data: {
-            lastHeartbeat: now
-        }
+        Data: { sessionId: null, lastHeartbeat: null }
     });
-
-    return {
-        valid: true,
-        shouldLogout: false,
-        reason: ""
-    };
-};
-
-handlers.ReleaseSession = function (args, context) {
-    if (!args || !args.sessionId) {
-        throw "sessionId is required";
-    }
-
-    var data = server.GetUserInternalData({
-        PlayFabId: currentPlayerId
-    });
-
-    var currentSessionId = getInternalValue(data, SESSION_KEYS.sessionId, "");
-
-    if (currentSessionId !== args.sessionId) {
-        return {
-            released: false,
-            pendingActivated: false
-        };
-    }
-
-    server.UpdateUserInternalData({
-        PlayFabId: currentPlayerId,
-        Data: {
-            sessionId: "",
-            isOnline: "false",
-            lastHeartbeat: ""
-        }
-    });
-
-    return {
-        released: true,
-        pendingActivated: false
-    };
-};
-
-handlers.DeleteAllInternalData = function (args, context) {
-    server.UpdateUserInternalData({
-        PlayFabId: currentPlayerId,
-        Data: {
-            sessionId: null,
-            isOnline: null,
-            lastHeartbeat: null
-        }
-    });
-
-    return {
-        success: true,
-        message: "Da xoa tat ca Internal data"
-    };
+    return { success: true, message: "Đã xóa toàn bộ internal data." };
 };

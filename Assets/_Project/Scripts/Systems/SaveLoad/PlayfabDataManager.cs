@@ -1,13 +1,15 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using PlayFab;
 using UnityEngine;
 
 public class PlayfabDataManager : Singleton<PlayfabDataManager>
 {
-    private const float SessionHeartbeatIntervalSeconds = 20f;
-    private const float SessionRetryIntervalSeconds = 1f;
-    private const int MaxSessionRetryAttempts = 5;
+    // Heartbeat mỗi 2 giây
+    private const float HeartbeatIntervalSeconds = 2f;
+    // Thời gian chờ khi session trước còn online, rồi retry
+    private const float SessionWaitBeforeRetrySeconds = 3f;
     private const string CreateAccountScreenName = "CreateAccount";
     private const string CreateCharacterPanelName = "Panel (CreateNv)";
 
@@ -29,12 +31,11 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private GameDataCenterManager gameDataCenterManager;
     private bool isApplicationQuitting;
 
-    private AuthResult _pendingAuthResult;
+    private Coroutine _heartbeatCoroutine;
     private Coroutine _sessionRetryCoroutine;
     private bool _isChangingAccount;
     private bool _isAutoLoginInProgress;
     private bool _currentLoginIsAuto;
-    private string _sessionAcquireStartedAt;
 
     public bool ready => sessionState != null && sessionState.Ready;
     public bool IsAuthenticated => authSessionService != null && authSessionService.IsAuthenticated;
@@ -68,14 +69,14 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         if (Configuration.Instance.startwithHost)
         {
             BeginLoginFlow(false);
-            authSessionService.HostLogin(HandleLoginSuccess, HandleLoginError);
+            authSessionService.HostLogin(HandleAuthSuccess, HandleLoginError);
             return;
         }
 
         if (authSessionService.ShouldAutoLoginClient())
         {
             BeginLoginFlow(true);
-            authSessionService.AutoLogin(HandleLoginSuccess, HandleLoginError);
+            authSessionService.AutoLogin(HandleAuthSuccess, HandleLoginError);
         }
     }
     override protected void OnApplicationQuit()
@@ -90,13 +91,16 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     public void ShutDownPlayfab()
     {
         isApplicationQuitting = true;
+        StopHeartbeat();
         CancelSessionRetry();
-        MarkLoggedOutLocally();
-        ReleaseRealtimeSessionLock();
+        authSessionService.MarkLoggedOutLocally();
     }
 
     protected override void OnDestroy()
     {
+        StopHeartbeat();
+        CancelSessionRetry();
+
         if (gameDataCenterManager != null)
         {
             gameDataCenterManager.OnLoadGameDataCenterSuccessed -= OnDataCenterReady;
@@ -113,15 +117,14 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     public void Login(LoginData loginData)
     {
         BeginLoginFlow(false);
-        authSessionService.Login(loginData, HandleLoginSuccess, HandleLoginError);
+        authSessionService.Login(loginData, HandleAuthSuccess, HandleLoginError);
     }
 
     public void Logout()
     {
-        BeginSessionExit(() =>
-        {
-            authSessionService.Logout(_ => CompleteLogout(), _ => CompleteLogout());
-        });
+        StopHeartbeat();
+        authSessionService.LogoutSession(() =>
+            authSessionService.Logout(_ => CompleteLogout(), _ => CompleteLogout()));
     }
 
     public void ChangeAccount()
@@ -149,7 +152,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             return;
         }
 
-        StartSessionHeartbeat();
+        StartHeartbeat();
         remoteGameDataService.PrepareCharacterLoad(characterId);
         SceneLoadManager.Instance.LoadSceneLoading();
 
@@ -183,7 +186,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     public void onSuccess(AuthResult result)
     {
-        HandleLoginSuccess(result);
+        HandleAuthSuccess(result);
     }
 
     public void onError(AuthError error)
@@ -199,107 +202,240 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         }
     }
 
-    private void HandleLoginSuccess(AuthResult result)
+    // ── Auth → Tạo session ─────────────────────────────────────────────────────
+
+    // Gọi sau khi PlayFab auth thành công: dừng heartbeat cũ trước, sau đó tạo session mới.
+    // StopHeartbeat() ở đây tránh heartbeat phiên cũ giữ lastHeartbeat tươi và tự block CreateSession.
+    private void HandleAuthSuccess(AuthResult result)
     {
         EndLoginFlow();
+        StopHeartbeat(); // dừng heartbeat cũ trước khi tạo session mới
         gameDataCenterManager.onSuccess(result.clientApi);
-        _pendingAuthResult = result;
-        _sessionAcquireStartedAt = DateTime.UtcNow.ToString("o");
-
-        authSessionService.AcquireRealtimeSession(result, _sessionAcquireStartedAt, sessionResult =>
-        {
-            _pendingAuthResult = null;
-            _sessionAcquireStartedAt = null;
-            StartSessionHeartbeat();
-            LoginSuccess?.Invoke(sessionResult);
-
-            if (gameDataCenterManager.IsReady())
-            {
-                if (_isChangingAccount)
-                {
-                    _isChangingAccount = false;
-                    gameData.ClearNotCharacterData();
-                }
-                else
-                {
-                    gameData.Clear();
-                }
-                LoadCharacterDataChoose();
-            }
-        }, HandleLoginError, HandleSessionWaiting);
+        authSessionService.CreateSession(OnSessionCreateSuccess, OnSessionCreateError);
     }
+
+    private void OnSessionCreateSuccess(SessionCreateResponse response)
+    {
+        LoginStatusChanged?.Invoke("Đăng nhập thành công.");
+        StartHeartbeat();
+
+        var authResult = new AuthResult
+        {
+            userId = sessionState.CurrentPlayFabId,
+            sessionId = sessionState.SessionId
+        };
+        LoginSuccess?.Invoke(authResult);
+
+        if (gameDataCenterManager.IsReady())
+        {
+            if (_isChangingAccount)
+            {
+                _isChangingAccount = false;
+                gameData.ClearNotCharacterData();
+            }
+            else
+            {
+                gameData.Clear();
+            }
+            LoadCharacterDataChoose();
+        }
+    }
+
+    private void OnSessionCreateError(AuthError error)
+    {
+        if (error.code == "SESSION_SHOULD_WAIT")
+        {
+            // isOnline còn true → đợi 3 giây rồi retry
+            LoginStatusChanged?.Invoke(
+                string.IsNullOrEmpty(error.message)
+                    ? "Tài khoản đang online ở thiết bị khác. Đang chờ..."
+                    : error.message);
+
+            CancelSessionRetry();
+            _sessionRetryCoroutine = StartCoroutine(SessionShouldWaitRetryRoutine());
+            return;
+        }
+
+        ResetLocalSessionState();
+        LoginError?.Invoke(error);
+    }
+
+    private IEnumerator SessionShouldWaitRetryRoutine()
+    {
+        yield return new WaitForSeconds(SessionWaitBeforeRetrySeconds);
+
+        if (isApplicationQuitting) yield break;
+
+        while (!isApplicationQuitting)
+        {
+            Debug.Log("[PlayfabDataManager] Heartbeat phiên cũ còn mới, chờ 3 giây rồi thử login session lại.");
+
+            bool completed = false;
+            bool shouldRetry = false;
+            AuthError fatalError = null;
+
+            authSessionService.CreateSession(
+                response =>
+                {
+                    completed = true;
+                    _sessionRetryCoroutine = null;
+                    OnSessionCreateSuccess(response);
+                },
+                error =>
+                {
+                    completed = true;
+                    shouldRetry = error.code == "SESSION_SHOULD_WAIT";
+                    if (!shouldRetry)
+                    {
+                        fatalError = error;
+                    }
+                });
+
+            yield return new WaitUntil(() => completed);
+
+            if (fatalError == null && !shouldRetry)
+            {
+                _sessionRetryCoroutine = null;
+                yield break;
+            }
+
+            if (fatalError != null)
+            {
+                _sessionRetryCoroutine = null;
+                ResetLocalSessionState();
+                LoginError?.Invoke(fatalError);
+                yield break;
+            }
+
+            yield return new WaitForSeconds(SessionWaitBeforeRetrySeconds);
+        }
+
+        _sessionRetryCoroutine = null;
+    }
+
+    // ── Heartbeat mỗi 2 giây ──────────────────────────────────────────────────
+
+    // Đảm bảo chỉ 1 coroutine heartbeat chạy tại một thời điểm.
+    private void StartHeartbeat()
+    {
+        StopHeartbeat();
+        _heartbeatCoroutine = StartCoroutine(HeartbeatRoutine());
+    }
+
+    private void StopHeartbeat()
+    {
+        if (_heartbeatCoroutine != null)
+        {
+            StopCoroutine(_heartbeatCoroutine);
+            _heartbeatCoroutine = null;
+        }
+    }
+
+    private IEnumerator HeartbeatRoutine()
+    {
+        var wait = new WaitForSeconds(HeartbeatIntervalSeconds);
+
+        while (sessionState.IsAuthenticated && !isApplicationQuitting)
+        {
+            // Gửi heartbeat NGAY (kiểm tra session trước khi chờ).
+            // Lần đầu chạy: xác minh session vừa tạo còn hợp lệ không.
+            // Nếu thiết bị khác đã ghi đè sessionId → bị kick ngay, không chờ 2 giây.
+            bool done = false;
+
+            authSessionService.SendHeartbeat(
+                response =>
+                {
+                    done = true;
+                    if (response != null && response.shouldLogout)
+                    {
+                        Debug.LogWarning($"[PlayfabDataManager] Session bị kick: {response.reason}");
+                        HandleSessionInvalid();
+                    }
+                },
+                error =>
+                {
+                    done = true;
+                    // Chỉ log, không crash. Vòng tiếp theo sẽ thử lại.
+                    Debug.LogWarning($"[PlayfabDataManager] Heartbeat lỗi: {error.message}");
+                });
+
+            yield return new WaitUntil(() => done);
+
+            if (!sessionState.IsAuthenticated || isApplicationQuitting) yield break;
+
+            // Chờ 2 giây SAU khi heartbeat xong
+            yield return wait;
+        }
+    }
+
+    // ── Kick user khi session không hợp lệ ───────────────────────────────────
+
+    private void HandleSessionInvalid()
+    {
+        StopHeartbeat();
+        authSessionService.MarkLoggedOutLocally();
+        LoginStatusChanged?.Invoke("Tài khoản của bạn đã được đăng nhập ở nơi khác.");
+
+        var saveManager = SaveLoadManager.Instance != null
+            ? SaveLoadManager.Instance.saveManager as SaveLoadPlayfab
+            : null;
+
+        if (saveManager == null)
+        {
+            CompleteKick(false);
+            return;
+        }
+
+        saveManager.SaveGame(success =>
+        {
+            if (!success) Debug.LogWarning("[PlayfabDataManager] Save failed during remote kick.");
+            CompleteKick(success);
+        });
+    }
+
+    private void CompleteKick(bool savedOk)
+    {
+        authSessionService.LogoutSession(() =>
+        {
+            ResetLocalSessionState();
+            clientRuntimeService.ShutdownNetworkIfNeeded();
+            clientRuntimeService.ResetClientSystems();
+
+            LoginError?.Invoke(new AuthError("SESSION_REVOKED",
+                savedOk
+                    ? "Tài khoản của bạn đã được đăng nhập ở nơi khác."
+                    : "Tài khoản của bạn đã được đăng nhập ở nơi khác. Có lỗi khi lưu dữ liệu."));
+        });
+    }
+
+    // ── Xử lý lỗi login ───────────────────────────────────────────────────────
 
     private void HandleLoginError(AuthError error)
     {
         EndLoginFlow();
-        if (!sessionState.HasLoggedIn && !sessionState.SessionLockAcquired)
+        if (!sessionState.HasLoggedIn)
         {
             ResetLocalSessionState();
         }
-
-        _sessionAcquireStartedAt = null;
         LoginError?.Invoke(error);
     }
 
+    // ── Load dữ liệu ──────────────────────────────────────────────────────────
+
     private void LoadCharacterDataChoose()
     {
-        if (!IsAuthenticated)
-        {
-            return;
-        }
+        if (!IsAuthenticated) return;
 
         remoteGameDataService.ConfigureRemoteServices();
         remoteGameDataService.LoadCharacterSelectionData(characters =>
         {
-            if (!IsAuthenticated)
-            {
-                return;
-            }
-
+            if (!IsAuthenticated) return;
             OnLoadCharacterFormPlayfab?.Invoke(characters);
-
-            if (_isChangingAccount)
-            {
-                _isChangingAccount = false;
-            }
+            if (_isChangingAccount) _isChangingAccount = false;
         });
     }
 
-    private void StartSessionHeartbeat()
-    {
-        CancelInvoke(nameof(RefreshRealtimeSessionLock));
-        RefreshRealtimeSessionLock();
-        InvokeRepeating(nameof(RefreshRealtimeSessionLock), SessionHeartbeatIntervalSeconds, SessionHeartbeatIntervalSeconds);
-    }
-
-    private void RefreshRealtimeSessionLock()
-    {
-        authSessionService.RefreshRealtimeSessionLock(result =>
-        {
-            if (result != null && !result.valid && result.shouldLogout)
-            {
-                ForceLogoutFromRemoteSession();
-            }
-        }, error =>
-        {
-            Debug.LogWarning($"Refresh realtime session lock failed: {error.message}");
-        });
-    }
-
-    private void BeginSessionExit(Action onReleased)
-    {
-        MarkLoggedOutLocally();
-        ReleaseRealtimeSessionLock(onReleased);
-    }
-
-    private void ReleaseRealtimeSessionLock(Action onReleased = null)
-    {
-        CancelInvoke(nameof(RefreshRealtimeSessionLock));
-        authSessionService.ReleaseRealtimeSessionLock(onReleased, error =>
-        {
-            Debug.LogWarning($"Release realtime session lock failed: {error.message}");
-        });
-    }
+    // ── Logout cleanup ────────────────────────────────────────────────────────
 
     private void CompleteLogout()
     {
@@ -309,12 +445,6 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         clientRuntimeService.ResetClientSystems();
     }
 
-    private void MarkLoggedOutLocally()
-    {
-        authSessionService.MarkLoggedOutLocally();
-        CancelInvoke(nameof(RefreshRealtimeSessionLock));
-    }
-
     private void ResetLocalSessionState()
     {
         authSessionService.ResetLocalSessionState();
@@ -322,164 +452,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         clientRuntimeService.ClearBattleHistory();
     }
 
-    private void ForceLogoutFromRemoteSession()
-    {
-        authSessionService.MarkLoggedOutLocally();
-        LoginStatusChanged?.Invoke("Phat hien dang nhap o thiet bi khac. Dang luu du lieu truoc khi dang xuat...");
-        SaveBeforeRemoteKick(PostRemoteKick);
-    }
-
-    private void PostRemoteKick(bool saveSucceeded)
-    {
-        if (!saveSucceeded)
-        {
-            CancelInvoke(nameof(RefreshRealtimeSessionLock));
-            authSessionService.Logout(_ => CompleteRemoteKick(false), _ => CompleteRemoteKick(false));
-            return;
-        }
-
-        ReleaseRealtimeSessionLock(() =>
-        {
-            authSessionService.Logout(_ => CompleteRemoteKick(true), _ => CompleteRemoteKick(true));
-        });
-    }
-
-    private void CompleteRemoteKick(bool saveSucceeded)
-    {
-        ResetLocalSessionState();
-        clientRuntimeService.ShutdownNetworkIfNeeded();
-        clientRuntimeService.ResetClientSystems();
-
-        var message = saveSucceeded
-            ? "Tai khoan nay vua dang nhap o thiet bi khac."
-            : "Tai khoan nay vua dang nhap o thiet bi khac. Da co loi khi luu du lieu truoc khi dang xuat.";
-        LoginError?.Invoke(new AuthError("SESSION_REVOKED", message));
-    }
-
-    private void SaveBeforeRemoteKick(Action<bool> onCompleted)
-    {
-        var saveManager = SaveLoadManager.Instance != null ? SaveLoadManager.Instance.saveManager as SaveLoadPlayfab : null;
-        if (saveManager == null)
-        {
-            Debug.LogWarning("[PlayfabDataManager] SaveLoadPlayfab not found. Releasing session without save confirmation.");
-            onCompleted?.Invoke(false);
-            return;
-        }
-
-        saveManager.SaveGame(success =>
-        {
-            if (!success)
-            {
-                Debug.LogWarning("[PlayfabDataManager] Remote save failed during forced logout.");
-            }
-
-            onCompleted?.Invoke(success);
-        });
-    }
-
-    private void HandleSessionWaiting(CloudSessionRequestResult sessionResult)
-    {
-        LoginStatusChanged?.Invoke(string.IsNullOrEmpty(sessionResult.message)
-            ? "Dang dong bo du lieu va dang xuat phien cu..."
-            : sessionResult.message);
-        Debug.Log($"[PlayfabDataManager] Phien dang nhap khac dang hoat dong (session: {sessionResult.previousSessionId}). Dang cho giai phong...");
-
-        if (_sessionRetryCoroutine != null)
-        {
-            StopCoroutine(_sessionRetryCoroutine);
-        }
-
-        _sessionRetryCoroutine = StartCoroutine(SessionRetryRoutine());
-    }
-
-    private System.Collections.IEnumerator SessionRetryRoutine()
-    {
-        var authResult = _pendingAuthResult;
-        if (authResult == null)
-        {
-            Debug.LogError("[PlayfabDataManager] SessionRetryRoutine: No pending auth result!");
-            yield break;
-        }
-
-        var wait = new WaitForSeconds(SessionRetryIntervalSeconds);
-
-        for (int attempt = 1; attempt <= MaxSessionRetryAttempts; attempt++)
-        {
-            Debug.Log($"[PlayfabDataManager] Thu lai lay session... (lan {attempt}/{MaxSessionRetryAttempts})");
-            yield return wait;
-
-            if (isApplicationQuitting)
-            {
-                yield break;
-            }
-
-            bool completed = false;
-            bool succeeded = false;
-            AuthError fatalError = null;
-
-            authSessionService.RetryAcquireSession(authResult, _sessionAcquireStartedAt, result =>
-            {
-                succeeded = true;
-                completed = true;
-                _pendingAuthResult = null;
-                _sessionRetryCoroutine = null;
-                _sessionAcquireStartedAt = null;
-
-                Debug.Log("[PlayfabDataManager] Session da san sang, dang nhap thanh cong!");
-                StartSessionHeartbeat();
-                LoginSuccess?.Invoke(result);
-
-                if (gameDataCenterManager.IsReady())
-                {
-                    if (_isChangingAccount)
-                    {
-                        _isChangingAccount = false;
-                        gameData.ClearNotCharacterData();
-                    }
-                    else
-                    {
-                        gameData.Clear();
-                    }
-                    LoadCharacterDataChoose();
-                }
-            }, error =>
-            {
-                completed = true;
-                // If still waiting, continue the loop. Other errors will break.
-                if (error.code != "SESSION_STILL_WAITING")
-                {
-                    fatalError = error;
-                    Debug.LogError($"[PlayfabDataManager] Loi khi thu lai session: {error.message}");
-                }
-            });
-
-            // Wait for the async call to complete
-            yield return new WaitUntil(() => completed);
-
-            if (succeeded)
-            {
-                yield break;
-            }
-
-            if (fatalError != null)
-            {
-                _pendingAuthResult = null;
-                _sessionRetryCoroutine = null;
-                _sessionAcquireStartedAt = null;
-                ResetLocalSessionState();
-                LoginError?.Invoke(fatalError);
-                yield break;
-            }
-        }
-
-        // Max retries reached
-        Debug.LogError("[PlayfabDataManager] Het thoi gian cho session. Dang nhap that bai.");
-        _pendingAuthResult = null;
-        _sessionRetryCoroutine = null;
-        _sessionAcquireStartedAt = null;
-        ResetLocalSessionState();
-        LoginError?.Invoke(new AuthError("SESSION_TIMEOUT", "Khong the tiep quan session sau 5 giay. Vui long thu lai sau."));
-    }
+    // ── Flow management ───────────────────────────────────────────────────────
 
     private void CancelSessionRetry()
     {
@@ -488,8 +461,6 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             StopCoroutine(_sessionRetryCoroutine);
             _sessionRetryCoroutine = null;
         }
-        _pendingAuthResult = null;
-        _sessionAcquireStartedAt = null;
         EndLoginFlow();
     }
 
@@ -499,10 +470,9 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         _isAutoLoginInProgress = isAutoLogin;
     }
 
-    private void EndLoginFlow()
-    {
-        _isAutoLoginInProgress = false;
-    }
+    private void EndLoginFlow() => _isAutoLoginInProgress = false;
+
+    // ── Đổi nhân vật ─────────────────────────────────────────────────────────
 
     private void CompleteCharacterSwitch()
     {
