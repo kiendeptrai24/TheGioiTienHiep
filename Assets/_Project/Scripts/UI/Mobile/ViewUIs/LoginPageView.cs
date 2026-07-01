@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DuloGames.UI;
 using TMPro;
@@ -10,22 +11,39 @@ namespace TGTH.Mobile
     public class LoginPageView : TGTHMonoBehaviour
     {
         private const string MessagePrefix = "+ ";
+        private const string LoadingButtonText = "Đang tải";
+        private const float LoadingAnimationIntervalSeconds = 0.35f;
 
         [SerializeField] private Button loginBtn;
         [SerializeField] private Button navToRegisterBtn;
         [SerializeField] private TMP_InputField emailField;
         [SerializeField] private TMP_InputField passwordField;
         [SerializeField] private TextMeshProUGUI descriptionErrorTxt;
+        [SerializeField] private TextMeshProUGUI loginButtonText;
         public event Action<LoginData> OnLoginClicked;
+
+        private Coroutine loadingButtonCoroutine;
+        private string defaultLoginButtonText;
 
         protected override void Awake()
         {
             base.Awake();
+            if (loginButtonText == null && loginBtn != null)
+            {
+                loginButtonText = loginBtn.GetComponentInChildren<TextMeshProUGUI>();
+            }
+
+            if (loginButtonText != null)
+            {
+                defaultLoginButtonText = loginButtonText.text;
+            }
+
             loginBtn.onClick.AddListener(NotifyLoginClicked);
         }
 
         private void OnDestroy()
         {
+            StopLoadingButtonAnimation();
             loginBtn.onClick.RemoveListener(NotifyLoginClicked);
         }
 
@@ -91,6 +109,51 @@ namespace TGTH.Mobile
         {
             SetLoginInteractable(!inProgress);
             SetInputsInteractable(!inProgress);
+            SetLoadingButtonState(inProgress);
+        }
+
+        private void SetLoadingButtonState(bool inProgress)
+        {
+            if (loginButtonText == null)
+            {
+                return;
+            }
+
+            if (inProgress)
+            {
+                if (loadingButtonCoroutine == null)
+                {
+                    loadingButtonCoroutine = StartCoroutine(AnimateLoadingButtonText());
+                }
+                return;
+            }
+
+            StopLoadingButtonAnimation();
+            loginButtonText.text = defaultLoginButtonText;
+        }
+
+        private IEnumerator AnimateLoadingButtonText()
+        {
+            var wait = new WaitForSeconds(LoadingAnimationIntervalSeconds);
+            var dotCount = 1;
+
+            while (true)
+            {
+                loginButtonText.text = LoadingButtonText + new string('.', dotCount);
+                dotCount = dotCount % 3 + 1;
+                yield return wait;
+            }
+        }
+
+        private void StopLoadingButtonAnimation()
+        {
+            if (loadingButtonCoroutine == null)
+            {
+                return;
+            }
+
+            StopCoroutine(loadingButtonCoroutine);
+            loadingButtonCoroutine = null;
         }
 
     }
