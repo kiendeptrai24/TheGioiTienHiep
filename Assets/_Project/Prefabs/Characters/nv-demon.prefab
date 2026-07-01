@@ -245,6 +245,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1609,6 +1610,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2312,6 +2314,7 @@ SkinnedMeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -2735,7 +2738,7 @@ MonoBehaviour:
   RotationMaxInterpolationTime: 0.1
   ScaleLerpSmoothing: 1
   ScaleMaxInterpolationTime: 0.1
-  AuthorityMode: 0
+  AuthorityMode: 1
   TickSyncChildren: 0
   UseUnreliableDeltas: 0
   SyncPositionX: 1
@@ -2770,8 +2773,65 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OwnerNetworkAnimator
   ShowTopMostFoldoutHeaderGroup: 1
-  TransitionStateInfoList: []
+  NetworkAnimatorExpanded: 0
+  AuthorityMode: 0
   m_Animator: {fileID: 8435995078520018874}
+  TransitionStateInfoList: []
+  AnimatorParameterEntries:
+    ParameterEntries:
+    - name: VatLinhTien
+      NameHash: 581921993
+      Synchronize: 1
+      ParameterType: 4
+    - name: LinhTram
+      NameHash: -1031982957
+      Synchronize: 1
+      ParameterType: 4
+    - name: DonTram
+      NameHash: -1367893633
+      Synchronize: 1
+      ParameterType: 4
+    - name: LinhTien
+      NameHash: 795601084
+      Synchronize: 1
+      ParameterType: 4
+    - name: LIenKichChiThuat
+      NameHash: -402425646
+      Synchronize: 1
+      ParameterType: 4
+    - name: NhamChuan
+      NameHash: 267087255
+      Synchronize: 1
+      ParameterType: 4
+    - name: ToanLucNhatKich
+      NameHash: -4470015
+      Synchronize: 1
+      ParameterType: 4
+    - name: VuTien
+      NameHash: -338780655
+      Synchronize: 1
+      ParameterType: 4
+    - name: Atk_Range
+      NameHash: -403194643
+      Synchronize: 1
+      ParameterType: 4
+    - name: Atk_Melee
+      NameHash: -1147691771
+      Synchronize: 1
+      ParameterType: 4
+    - name: Move
+      NameHash: 1326225478
+      Synchronize: 1
+      ParameterType: 4
+    - name: Idle
+      NameHash: 2081823275
+      Synchronize: 1
+      ParameterType: 4
+    - name: IdleValue
+      NameHash: -836618266
+      Synchronize: 1
+      ParameterType: 1
+  AnimatorParametersExpanded: 0
 --- !u!114 &2085520971171571969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2986,6 +3046,7 @@ MonoBehaviour:
       rewardSkillPoint: 0
       rate: 0
       increaseRate: 0
+      increaseRateMax: 0
       timeSeconds: 0
     raceId: 
     raceType: 0
@@ -3453,6 +3514,7 @@ MonoBehaviour:
       rewardSkillPoint: 0
       rate: 0
       increaseRate: 0
+      increaseRateMax: 0
       timeSeconds: 0
     raceId: 
     raceType: 0
@@ -3715,6 +3777,7 @@ MonoBehaviour:
     rewardSkillPoint: 0
     rate: 0
     increaseRate: 0
+    increaseRateMax: 0
     timeSeconds: 0
   piritRange: 0
 --- !u!114 &5063865787291186438
@@ -4163,6 +4226,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0

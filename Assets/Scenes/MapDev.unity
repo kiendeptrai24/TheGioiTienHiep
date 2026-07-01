@@ -133895,6 +133895,84 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!1001 &1403052927
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1464608080841280862, guid: 080aa20957e81d74aa56ad27325253bd,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1383.2699
+      objectReference: {fileID: 0}
+    - target: {fileID: 1464608080841280862, guid: 080aa20957e81d74aa56ad27325253bd,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1264.5714
+      objectReference: {fileID: 0}
+    - target: {fileID: 1464608080841280862, guid: 080aa20957e81d74aa56ad27325253bd,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1464608080841280862, guid: 080aa20957e81d74aa56ad27325253bd,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1464608080841280862, guid: 080aa20957e81d74aa56ad27325253bd,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1464608080841280862, guid: 080aa20957e81d74aa56ad27325253bd,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1464608080841280862, guid: 080aa20957e81d74aa56ad27325253bd,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1464608080841280862, guid: 080aa20957e81d74aa56ad27325253bd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1464608080841280862, guid: 080aa20957e81d74aa56ad27325253bd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1464608080841280862, guid: 080aa20957e81d74aa56ad27325253bd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5149959034304339107, guid: 080aa20957e81d74aa56ad27325253bd,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3812650099
+      objectReference: {fileID: 0}
+    - target: {fileID: 8485762878776911598, guid: 080aa20957e81d74aa56ad27325253bd,
+        type: 3}
+      propertyPath: m_Name
+      value: nv-demon
+      objectReference: {fileID: 0}
+    - target: {fileID: 8485762878776911598, guid: 080aa20957e81d74aa56ad27325253bd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 080aa20957e81d74aa56ad27325253bd, type: 3}
 --- !u!1 &1404344248
 GameObject:
   m_ObjectHideFlags: 0
@@ -189666,7 +189744,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Configuration
   PlayFabTitleId: B7AF4
-  buildType: 1
+  buildType: 2
   ipAddress: 20.124.107.156
   port: 30000
   useEditor: 0
@@ -421469,6 +421547,7 @@ MonoBehaviour:
   emailField: {fileID: 7032990583142733987}
   passwordField: {fileID: 2991230164930934104}
   descriptionErrorTxt: {fileID: 992093101909135419}
+  loginButtonText: {fileID: 0}
 --- !u!114 &6377809080321958321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -523435,3 +523514,4 @@ SceneRoots:
   - {fileID: 1492513062}
   - {fileID: 1458571349}
   - {fileID: 1783085452}
+  - {fileID: 1403052927}

@@ -25,6 +25,7 @@ public class ActorController : TGTHNetworkBehaviour
     Vector2 inputDirection = Vector2.zero;
     private bool lockMove = false;
     private NetworkTransform nt;
+    private Vector2 _lastAppliedDirection = Vector2.zero;
     public NetworkVariable<Vector2> Direction = new(
         Vector2.zero,
         NetworkVariableReadPermission.Owner,
@@ -37,16 +38,47 @@ public class ActorController : TGTHNetworkBehaviour
     );
     public void SetAutoMove(Vector2 dir)
     {
-        _autoMove = true;
-        _autoDir = dir;
+        SetAutoMoveInternal(dir);
+
+        if (UsesServerAuthority || HasMovementAuthority)
+            return;
+
+        if (IsServer)
+            SetAutoMoveClientRpc(dir, RpcTarget.Single(OwnerClientId, RpcTargetUse.Temp));
     }
 
     public void ClearAutoMove()
     {
-        if (!IsServer) return;
-        _autoMove = false;
-        _autoDir = Vector2.zero;
-        StopServerRpc();
+        ClearAutoMoveInternal();
+
+        if (HasMovementAuthority)
+        {
+            StopMovement();
+            return;
+        }
+
+        if (UsesServerAuthority && IsOwner)
+        {
+            RequestStopServerRpc();
+            return;
+        }
+
+        if (!UsesServerAuthority && IsServer)
+            ClearAutoMoveClientRpc(RpcTarget.Single(OwnerClientId, RpcTargetUse.Temp));
+    }
+    public void TelePort(Vector3 pos, Quaternion rot, Vector3 scale)
+    {
+        if (HasMovementAuthority)
+        {
+            StartCoroutine(TeleportRoutine(pos, rot, scale));
+            return;
+        }
+
+        if (!UsesServerAuthority && IsServer)
+        {
+            ApplyMirrorTeleportState(pos, rot, scale);
+            TeleportClientRpc(pos, rot, scale, RpcTarget.Single(OwnerClientId, RpcTargetUse.Temp));
+        }
     }
     protected override void Awake()
     {
@@ -67,13 +99,45 @@ public class ActorController : TGTHNetworkBehaviour
 
     private void HandleDirectionChanged(Vector2 previousValue, Vector2 newValue)
     {
+        if (!UsesServerAuthority || HasMovementAuthority)
+            return;
+
+        _lastAppliedDirection = newValue;
         moveable.Move(newValue, moveSpeed);
     }
-    public void TelePort(Vector3 pos, Quaternion rot, Vector3 scale)
+    public bool UsesServerAuthority => nt == null || nt.IsServerAuthoritative();
+    public bool HasMovementAuthority
     {
-        if (!IsServer) return;
-        StartCoroutine(TeleportRoutine(pos, rot, scale));
+        get
+        {
+            if (!IsSpawned)
+                return false;
+
+            return UsesServerAuthority ? IsServer : IsOwner;
+        }
     }
+    private void SetAutoMoveInternal(Vector2 dir)
+    {
+        _autoMove = true;
+        _autoDir = dir;
+    }
+
+    private void ClearAutoMoveInternal()
+    {
+        _autoMove = false;
+        _autoDir = Vector2.zero;
+    }
+
+    private void ApplyMirrorTeleportState(Vector3 pos, Quaternion rot, Vector3 scale)
+    {
+        lockMove = true;
+        rig.linearVelocity = Vector3.zero;
+        rig.angularVelocity = Vector3.zero;
+        transform.SetPositionAndRotation(pos, rot);
+        transform.localScale = scale;
+        lockMove = false;
+    }
+
     private IEnumerator TeleportRoutine(Vector3 pos, Quaternion rot, Vector3 scale)
     {
         lockMove = true;
@@ -94,58 +158,131 @@ public class ActorController : TGTHNetworkBehaviour
     }
     private void TopDownControl()
     {
-        if (IsOwner)
+        if (UsesServerAuthority)
         {
-            if (inputManager == null) return;
-            inputDirection = inputManager.GetInputDirection();
-            if (inputDirection.sqrMagnitude < 0.0001f && OldDirection.Value.sqrMagnitude < 0.0001f)
+            if (HasMovementAuthority && _autoMove)
+            {
+                inputDirection = _autoDir;
+                if (inputDirection.sqrMagnitude < 0.0001f && _lastAppliedDirection.sqrMagnitude < 0.0001f)
+                    return;
+                MoveAuthority(inputDirection);
                 return;
-            RequestMoveServerRpc(inputDirection);
-        }
-        else if (IsServer)
-        {
-            if (_autoMove == false) return;
+            }
 
-            inputDirection = _autoDir;
-            if (inputDirection.sqrMagnitude < 0.0001f && OldDirection.Value.sqrMagnitude < 0.0001f)
+            if (IsOwner)
+            {
+                if (inputManager == null) return;
+                inputDirection = inputManager.GetInputDirection();
+                if (inputDirection.sqrMagnitude < 0.0001f && _lastAppliedDirection.sqrMagnitude < 0.0001f)
+                    return;
+                RequestMoveServerRpc(inputDirection);
                 return;
-            Move(inputDirection);
-        }
+            }
 
-    }
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-    public void RequestMoveServerRpc(Vector2 dir)
-    {
-        Move(dir);
-    }
-    private void Move(Vector2 dir)
-    {
-        if (!IsServer) return;
-        if (lockMove) return;
-        OldDirection.Value = Direction.Value;
-        if (dir.sqrMagnitude < 0.1f)
-        {
-            if (_autoMove == false)
-                Direction.Value = dir;
-            moveable.Move(Vector2.zero, 0);
             return;
         }
         else
         {
+            if (!IsOwner) return;
+
+            if (inputManager == null) return;
+
+            var manualDirection = inputManager.GetInputDirection();
+            inputDirection = _autoMove && manualDirection.sqrMagnitude < 0.0001f
+                ? _autoDir
+                : manualDirection;
+
+            if (inputDirection.sqrMagnitude < 0.0001f && _lastAppliedDirection.sqrMagnitude < 0.0001f)
+                return;
+
+            MoveAuthority(inputDirection);
+        }
+    }
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+    public void RequestMoveServerRpc(Vector2 dir)
+    {
+        if (!UsesServerAuthority)
+            return;
+
+        MoveAuthority(dir);
+    }
+    private void MoveAuthority(Vector2 dir)
+    {
+        if (!HasMovementAuthority) return;
+        if (lockMove) return;
+
+        if (UsesServerAuthority)
+            OldDirection.Value = Direction.Value;
+
+        if (dir.sqrMagnitude < 0.1f)
+        {
+            if (UsesServerAuthority && _autoMove == false)
+                Direction.Value = dir;
+            moveable.Move(Vector2.zero, 0);
+            _lastAppliedDirection = Vector2.zero;
+            return;
+        }
+
+        if (UsesServerAuthority)
+        {
             Direction.Value = dir;
         }
 
-        Vector2 inputDirection = dir;
-        moveable.Move(inputDirection, moveSpeed);
-        characterRotation.Rotate(new Vector3(inputDirection.x, 0, inputDirection.y), turnSpeed);
+        _lastAppliedDirection = dir;
+
+        Vector2 currentInputDirection = dir;
+        moveable.Move(currentInputDirection, moveSpeed);
+        characterRotation.Rotate(new Vector3(currentInputDirection.x, 0, currentInputDirection.y), turnSpeed);
     }
 
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Server)]
-    public void StopServerRpc()
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+    public void RequestStopServerRpc()
+    {
+        if (!UsesServerAuthority)
+            return;
+
+        StopMovement();
+    }
+
+    private void StopMovement()
     {
         moveable.Stop();
-        HandleDirectionChanged(Vector2.zero, Vector2.zero);
-        Direction.Value = Vector2.zero;
+        _lastAppliedDirection = Vector2.zero;
+
+        if (UsesServerAuthority)
+        {
+            HandleDirectionChanged(Vector2.zero, Vector2.zero);
+            Direction.Value = Vector2.zero;
+            OldDirection.Value = Vector2.zero;
+        }
+    }
+
+    [Rpc(SendTo.SpecifiedInParams)]
+    private void SetAutoMoveClientRpc(Vector2 dir, RpcParams rpcParams = default)
+    {
+        if (!IsOwner)
+            return;
+
+        SetAutoMoveInternal(dir);
+    }
+
+    [Rpc(SendTo.SpecifiedInParams)]
+    private void ClearAutoMoveClientRpc(RpcParams rpcParams = default)
+    {
+        if (!IsOwner)
+            return;
+
+        ClearAutoMoveInternal();
+        StopMovement();
+    }
+
+    [Rpc(SendTo.SpecifiedInParams)]
+    private void TeleportClientRpc(Vector3 pos, Quaternion rot, Vector3 scale, RpcParams rpcParams = default)
+    {
+        if (!IsOwner)
+            return;
+
+        StartCoroutine(TeleportRoutine(pos, rot, scale));
     }
 
     protected override void LoadComponent()

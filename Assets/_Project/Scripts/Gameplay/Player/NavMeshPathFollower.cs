@@ -29,7 +29,7 @@ public class NavMeshPathFollower : TGTHNetworkBehaviour
 
     private void FixedUpdate()
     {
-        if (!IsServer)
+        if (actorController == null || !actorController.HasMovementAuthority)
             return;
 
         // player tự input => hủy auto move
@@ -76,6 +76,12 @@ public class NavMeshPathFollower : TGTHNetworkBehaviour
     {
         if (!IsSpawned) return;
 
+        if (actorController != null && !actorController.UsesServerAuthority)
+        {
+            Move(newPath);
+            return;
+        }
+
         var dtoPath = newPath
             .Select(p => new Vector3Dto(p))
             .ToList();
@@ -104,6 +110,13 @@ public class NavMeshPathFollower : TGTHNetworkBehaviour
     public void RequesMove(List<Vector3> newPath)
     {
         if (!IsSpawned) return;
+
+        if (actorController != null && !actorController.UsesServerAuthority)
+        {
+            Move(newPath);
+            return;
+        }
+
         var dtoPath = newPath
            .Select(p => new Vector3Dto(p))
            .ToList();

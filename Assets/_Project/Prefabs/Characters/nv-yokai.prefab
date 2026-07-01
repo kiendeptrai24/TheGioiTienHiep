@@ -417,6 +417,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -584,6 +585,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -843,6 +845,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &2205446424275986306
 GameObject:
@@ -1340,6 +1343,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2340,7 +2344,7 @@ MonoBehaviour:
   RotationMaxInterpolationTime: 0.1
   ScaleLerpSmoothing: 1
   ScaleMaxInterpolationTime: 0.1
-  AuthorityMode: 0
+  AuthorityMode: 1
   TickSyncChildren: 0
   UseUnreliableDeltas: 0
   SyncPositionX: 1
@@ -2375,8 +2379,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OwnerNetworkAnimator
   ShowTopMostFoldoutHeaderGroup: 1
-  TransitionStateInfoList: []
+  NetworkAnimatorExpanded: 0
+  AuthorityMode: 0
   m_Animator: {fileID: 1864838253127508525}
+  TransitionStateInfoList: []
+  AnimatorParameterEntries:
+    ParameterEntries:
+    - name: Move
+      NameHash: 1326225478
+      Synchronize: 1
+      ParameterType: 4
+    - name: Idle
+      NameHash: 2081823275
+      Synchronize: 1
+      ParameterType: 4
+  AnimatorParametersExpanded: 0
 --- !u!114 &8369572596671532317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2591,6 +2608,7 @@ MonoBehaviour:
       rewardSkillPoint: 0
       rate: 0
       increaseRate: 0
+      increaseRateMax: 0
       timeSeconds: 0
     raceId: 
     raceType: 0
@@ -3058,6 +3076,7 @@ MonoBehaviour:
       rewardSkillPoint: 0
       rate: 0
       increaseRate: 0
+      increaseRateMax: 0
       timeSeconds: 0
     raceId: 
     raceType: 0
@@ -3320,6 +3339,7 @@ MonoBehaviour:
     rewardSkillPoint: 0
     rate: 0
     increaseRate: 0
+    increaseRateMax: 0
     timeSeconds: 0
   piritRange: 0
 --- !u!114 &323149461837376318
