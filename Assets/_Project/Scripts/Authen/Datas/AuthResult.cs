@@ -11,6 +11,8 @@ public class AuthResult
     public string accessToken;
     public string sessionId;
     public string message;
+    public bool shouldWaitBeforeEnter;
+    public float waitBeforeEnterSeconds;
     internal string ipAddress;
     internal int port;
 }

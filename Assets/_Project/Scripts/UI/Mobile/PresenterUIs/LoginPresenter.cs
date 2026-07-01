@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,18 +13,29 @@ namespace TGTH.Mobile
 
         private PlayfabDataManager playfabDataManager;
         private bool isLoginInProgress;
+        private bool hasNavigatedAfterLogin;
+        private bool isWaitingBeforeEnter;
+        private Coroutine waitBeforeEnterCoroutine;
         private float lastLoginClickTime = -10f;
 
         protected override void Awake()
         {
             base.Awake();
             playfabDataManager = PlayfabDataManager.Instance;
-            playfabDataManager.LoginSuccess += onSuccess;
-            playfabDataManager.LoginError += onError;
-            playfabDataManager.LoginStatusChanged += onStatusChanged;
-            playfabDataManager.OnLoadCharacterFormPlayfab += OnStartGame;
             view.OnLoginClicked += OnStartClicked;
             GetAccountCache();
+        }
+
+        private void OnEnable()
+        {
+            BindEvents();
+            SyncViewState();
+        }
+
+        private void OnDisable()
+        {
+            CancelWaitBeforeEnter();
+            UnbindEvents();
         }
 
         private void OnDestroy()
@@ -32,16 +44,6 @@ namespace TGTH.Mobile
             {
                 view.OnLoginClicked -= OnStartClicked;
             }
-
-            if (playfabDataManager == null)
-            {
-                return;
-            }
-
-            playfabDataManager.LoginSuccess -= onSuccess;
-            playfabDataManager.LoginError -= onError;
-            playfabDataManager.LoginStatusChanged -= onStatusChanged;
-            playfabDataManager.OnLoadCharacterFormPlayfab -= OnStartGame;
         }
 
         private void GetAccountCache()
@@ -54,14 +56,77 @@ namespace TGTH.Mobile
             }
         }
 
-        private void OnEnable()
+        private void BindEvents()
         {
+            if (playfabDataManager == null)
+            {
+                return;
+            }
+
+            playfabDataManager.LoginSuccess -= onSuccess;
+            playfabDataManager.LoginError -= onError;
+            playfabDataManager.LoginStatusChanged -= onStatusChanged;
+            playfabDataManager.OnLoadCharacterFormPlayfab -= OnStartGame;
+
+            playfabDataManager.LoginSuccess += onSuccess;
+            playfabDataManager.LoginError += onError;
+            playfabDataManager.LoginStatusChanged += onStatusChanged;
+            playfabDataManager.OnLoadCharacterFormPlayfab += OnStartGame;
+        }
+
+        private void UnbindEvents()
+        {
+            if (playfabDataManager == null)
+            {
+                return;
+            }
+
+            playfabDataManager.LoginSuccess -= onSuccess;
+            playfabDataManager.LoginError -= onError;
+            playfabDataManager.LoginStatusChanged -= onStatusChanged;
+            playfabDataManager.OnLoadCharacterFormPlayfab -= OnStartGame;
+        }
+
+        private void SyncViewState()
+        {
+            if (view == null)
+            {
+                return;
+            }
+
+            if (playfabDataManager == null)
+            {
+                view.HideMessege();
+                hasNavigatedAfterLogin = false;
+                SetLoginInProgress(false);
+                return;
+            }
+
+            if (playfabDataManager.IsAuthenticated)
+            {
+                SetLoginInProgress(true);
+                return;
+            }
+
+            if (playfabDataManager.IsAutoLoginInProgress || playfabDataManager.IsChangingAccount)
+            {
+                SetLoginInProgress(true);
+                return;
+            }
+
+            hasNavigatedAfterLogin = false;
+            isWaitingBeforeEnter = false;
             view.HideMessege();
             SetLoginInProgress(false);
         }
 
         private void OnStartGame(List<ItemData> list)
         {
+            if (!isActiveAndEnabled)
+            {
+                return;
+            }
+
             if (!playfabDataManager.IsAuthenticated)
             {
                 return;
@@ -72,7 +137,12 @@ namespace TGTH.Mobile
                 return;
             }
 
-            navigation.OnClick();
+            if (isWaitingBeforeEnter)
+            {
+                return;
+            }
+
+            NavigateToCharacterSelection();
         }
 
         private void OnStartClicked(LoginData data)
@@ -113,24 +183,51 @@ namespace TGTH.Mobile
             }
 
             lastLoginClickTime = Time.unscaledTime;
+            hasNavigatedAfterLogin = false;
+            isWaitingBeforeEnter = false;
             SetLoginInProgress(true);
             PlayfabDataManager.Instance.Login(data);
         }
 
         private void onSuccess(AuthResult result)
         {
-            SetLoginInProgress(false);
-            view.ShowMessege(result.message);
+            if (!isActiveAndEnabled || view == null)
+            {
+                return;
+            }
+
+            SetLoginInProgress(true);
+            if (result != null && result.shouldWaitBeforeEnter)
+            {
+                isWaitingBeforeEnter = true;
+                view.ShowMessege("Dang nhap thanh cong. Dang cho client cu thoat...");
+                CancelWaitBeforeEnter();
+                waitBeforeEnterCoroutine = StartCoroutine(WaitBeforeEnterRoutine(result.waitBeforeEnterSeconds));
+                return;
+            }
+
+            isWaitingBeforeEnter = false;
+            NavigateToCharacterSelection();
         }
 
         private void onError(AuthError error)
         {
+            if (!isActiveAndEnabled || view == null)
+            {
+                return;
+            }
+
             SetLoginInProgress(false);
             view.ShowMessege(error.message);
         }
 
         private void onStatusChanged(string message)
         {
+            if (!isActiveAndEnabled || view == null)
+            {
+                return;
+            }
+
             view.ShowMessege(message);
         }
 
@@ -141,6 +238,42 @@ namespace TGTH.Mobile
             {
                 view.SetLoginInProgress(inProgress);
             }
+        }
+
+        private void NavigateToCharacterSelection()
+        {
+            if (hasNavigatedAfterLogin || navigation == null || playfabDataManager == null)
+            {
+                return;
+            }
+
+            if (!playfabDataManager.IsAuthenticated || playfabDataManager.IsChangingAccount)
+            {
+                return;
+            }
+
+            isWaitingBeforeEnter = false;
+            hasNavigatedAfterLogin = true;
+            navigation.OnClick();
+            SetLoginInProgress(false);
+        }
+
+        private IEnumerator WaitBeforeEnterRoutine(float waitSeconds)
+        {
+            yield return new WaitForSeconds(waitSeconds > 0f ? waitSeconds : 3f);
+            waitBeforeEnterCoroutine = null;
+            NavigateToCharacterSelection();
+        }
+
+        private void CancelWaitBeforeEnter()
+        {
+            if (waitBeforeEnterCoroutine == null)
+            {
+                return;
+            }
+
+            StopCoroutine(waitBeforeEnterCoroutine);
+            waitBeforeEnterCoroutine = null;
         }
     }
 }

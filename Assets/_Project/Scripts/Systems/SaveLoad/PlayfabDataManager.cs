@@ -32,7 +32,6 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private bool isApplicationQuitting;
 
     private Coroutine _heartbeatCoroutine;
-    private Coroutine _sessionRetryCoroutine;
     private bool _isChangingAccount;
     private bool _isAutoLoginInProgress;
     private bool _currentLoginIsAuto;
@@ -46,6 +45,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     public AuthFacade GetAuthManager() => authSessionService.AuthFacade;
     public PlayFabClientInstanceAPI GetClientAPI() => authSessionService.ClientApi;
     public List<ItemData> GetCharactersData() => remoteGameDataService.GetCharactersData();
+    private AuthResult authResult;
 
     protected override void Awake()
     {
@@ -92,14 +92,12 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     {
         isApplicationQuitting = true;
         StopHeartbeat();
-        CancelSessionRetry();
         authSessionService.MarkLoggedOutLocally();
     }
 
     protected override void OnDestroy()
     {
         StopHeartbeat();
-        CancelSessionRetry();
 
         if (gameDataCenterManager != null)
         {
@@ -186,6 +184,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     public void onSuccess(AuthResult result)
     {
+        authResult = result;
         HandleAuthSuccess(result);
     }
 
@@ -211,19 +210,26 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         EndLoginFlow();
         StopHeartbeat(); // dừng heartbeat cũ trước khi tạo session mới
         gameDataCenterManager.onSuccess(result.clientApi);
-        authSessionService.CreateSession(OnSessionCreateSuccess, OnSessionCreateError);
+        authSessionService.CreateSession(false, OnSessionCreateSuccess, OnSessionCreateError);
     }
 
     private void OnSessionCreateSuccess(SessionCreateResponse response)
     {
-        LoginStatusChanged?.Invoke("Đăng nhập thành công.");
         StartHeartbeat();
 
         var authResult = new AuthResult
         {
             userId = sessionState.CurrentPlayFabId,
-            sessionId = sessionState.SessionId
+            sessionId = sessionState.SessionId,
+            shouldWaitBeforeEnter = response != null && response.shouldWait,
+            waitBeforeEnterSeconds = SessionWaitBeforeRetrySeconds,
+            message = "Đăng nhập thành công."
         };
+        LoginStatusChanged?.Invoke(authResult.message);
+        if (response != null && response.shouldWait && !string.IsNullOrEmpty(response.message))
+        {
+            LoginStatusChanged?.Invoke(response.message);
+        }
         LoginSuccess?.Invoke(authResult);
 
         if (gameDataCenterManager.IsReady())
@@ -243,74 +249,8 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     private void OnSessionCreateError(AuthError error)
     {
-        if (error.code == "SESSION_SHOULD_WAIT")
-        {
-            // isOnline còn true → đợi 3 giây rồi retry
-            LoginStatusChanged?.Invoke(
-                string.IsNullOrEmpty(error.message)
-                    ? "Tài khoản đang online ở thiết bị khác. Đang chờ..."
-                    : error.message);
-
-            CancelSessionRetry();
-            _sessionRetryCoroutine = StartCoroutine(SessionShouldWaitRetryRoutine());
-            return;
-        }
-
         ResetLocalSessionState();
         LoginError?.Invoke(error);
-    }
-
-    private IEnumerator SessionShouldWaitRetryRoutine()
-    {
-        yield return new WaitForSeconds(SessionWaitBeforeRetrySeconds);
-
-        if (isApplicationQuitting) yield break;
-
-        while (!isApplicationQuitting)
-        {
-            Debug.Log("[PlayfabDataManager] Heartbeat phiên cũ còn mới, chờ 3 giây rồi thử login session lại.");
-
-            bool completed = false;
-            bool shouldRetry = false;
-            AuthError fatalError = null;
-
-            authSessionService.CreateSession(
-                response =>
-                {
-                    completed = true;
-                    _sessionRetryCoroutine = null;
-                    OnSessionCreateSuccess(response);
-                },
-                error =>
-                {
-                    completed = true;
-                    shouldRetry = error.code == "SESSION_SHOULD_WAIT";
-                    if (!shouldRetry)
-                    {
-                        fatalError = error;
-                    }
-                });
-
-            yield return new WaitUntil(() => completed);
-
-            if (fatalError == null && !shouldRetry)
-            {
-                _sessionRetryCoroutine = null;
-                yield break;
-            }
-
-            if (fatalError != null)
-            {
-                _sessionRetryCoroutine = null;
-                ResetLocalSessionState();
-                LoginError?.Invoke(fatalError);
-                yield break;
-            }
-
-            yield return new WaitForSeconds(SessionWaitBeforeRetrySeconds);
-        }
-
-        _sessionRetryCoroutine = null;
     }
 
     // ── Heartbeat mỗi 2 giây ──────────────────────────────────────────────────
@@ -453,16 +393,6 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     }
 
     // ── Flow management ───────────────────────────────────────────────────────
-
-    private void CancelSessionRetry()
-    {
-        if (_sessionRetryCoroutine != null)
-        {
-            StopCoroutine(_sessionRetryCoroutine);
-            _sessionRetryCoroutine = null;
-        }
-        EndLoginFlow();
-    }
 
     private void BeginLoginFlow(bool isAutoLogin)
     {

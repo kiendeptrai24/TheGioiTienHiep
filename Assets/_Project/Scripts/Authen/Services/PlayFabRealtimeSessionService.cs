@@ -18,10 +18,14 @@ public class SessionApiClient
 
     // Tạo session sau khi đăng nhập PlayFab thành công.
     // Server kiểm tra isOnline của user, nếu cần sẽ đợi 3 giây rồi tạo sessionId mới.
-    public void CreateSession(Action<SessionCreateResponse> onSuccess, Action<string> onError)
+    public void CreateSession(bool forceOverride, Action<SessionCreateResponse> onSuccess, Action<string> onError)
     {
         Execute<SessionCreateResponse>("CreateSession",
-            new { requestStartedAt = DateTime.UtcNow.ToString("o") },
+            new SessionCreateRequest
+            {
+                requestStartedAt = DateTime.UtcNow.ToString("o"),
+                forceOverride = forceOverride
+            },
             onSuccess, onError);
     }
 
@@ -70,6 +74,14 @@ public class SessionApiClient
 }
 
 // ─── DTOs ───────────────────────────────────────────────────────────────────
+[Serializable]
+public class SessionCreateRequest
+{
+    public string requestStartedAt;
+    public bool forceOverride;
+}
+
+[Serializable]
 public class SessionCreateResponse
 {
     public bool success;

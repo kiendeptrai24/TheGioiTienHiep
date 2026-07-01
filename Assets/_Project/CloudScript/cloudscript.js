@@ -54,20 +54,24 @@ handlers.CreateSession = function (args) {
     var data = readUserData();
     var storedSessionId = getField(data, SESSION_KEY_ID, "");
     var lastHeartbeat = getField(data, SESSION_KEY_HEARTBEAT, "");
+    var forceOverride = !!(args && args.forceOverride);
 
     // Tài khoản đang online nếu có sessionId và heartbeat gần đây (≤ ONLINE_THRESHOLD_SECONDS)
     var isCurrentlyOnline = storedSessionId !== "" && lastHeartbeat !== "" &&
         ((new Date() - new Date(lastHeartbeat)) / 1000) <= ONLINE_THRESHOLD_SECONDS;
 
-    if (isCurrentlyOnline) {
-        return { success: false, sessionId: "", shouldWait: true, message: "Tài khoản đang online ở thiết bị khác. Đang chờ..." };
-    }
-
     // Tạo sessionId mới, ghi đè session cũ
     var newSessionId = generateSessionId();
     writeSession(newSessionId);
 
-    return { success: true, sessionId: newSessionId, shouldWait: false, message: "" };
+    return {
+        success: true,
+        sessionId: newSessionId,
+        shouldWait: isCurrentlyOnline && !forceOverride,
+        message: isCurrentlyOnline && !forceOverride
+            ? "Tài khoản đang online ở thiết bị khác. Đang chờ..."
+            : ""
+    };
 };
 
 // ── SessionHeartbeat ──────────────────────────────────────────────────────────

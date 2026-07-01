@@ -74,14 +74,14 @@ public class PlayfabAuthSessionService
     // Server tạo sessionId mới, ghi đè session cũ.
     // shouldWait = true → isOnline còn true, Manager sẽ đợi 3 giây rồi retry.
 
-    public void CreateSession(Action<SessionCreateResponse> onSuccess, Action<AuthError> onError)
+    public void CreateSession(bool forceOverride, Action<SessionCreateResponse> onSuccess, Action<AuthError> onError)
     {
-        _sessionApi.CreateSession(response =>
+        _sessionApi.CreateSession(forceOverride, response =>
         {
             if (response == null || !response.success)
             {
                 onError?.Invoke(new AuthError(
-                    response != null && response.shouldWait ? "SESSION_SHOULD_WAIT" : "SESSION_CREATE_FAILED",
+                    "SESSION_CREATE_FAILED",
                     response?.message ?? "Không thể tạo phiên đăng nhập."));
                 return;
             }
