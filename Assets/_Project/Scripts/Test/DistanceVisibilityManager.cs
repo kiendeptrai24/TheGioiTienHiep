@@ -109,7 +109,7 @@ public class DistanceVisibilityManager : SingletonNetwork<DistanceVisibilityMana
         var networkObject = checker.NetworkObject;
         if (networkObject == null || !networkObject.IsSpawned) return;
 
-        float maxDistance = checker.distance > 0f ? checker.distance : defaultMaxDistance;
+        float maxDistance = checker.VisibilityDistance > 0f ? checker.VisibilityDistance : defaultMaxDistance;
         float distance = Vector3.Distance(checker.transform.position, clientPlayerObject.transform.position);
         bool isVisible = networkObject.IsNetworkVisibleTo(clientId);
 
