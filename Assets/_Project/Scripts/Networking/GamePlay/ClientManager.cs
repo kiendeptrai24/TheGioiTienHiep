@@ -26,6 +26,10 @@ public class ClientManager : SingletonNetwork<ClientManager>
         if (NetworkManager.Singleton != null)
         {
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
+            NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
+            {
+                Debug.Log($"[ClientManager] Client {clientId} đã kết nối thành công.");
+            };
         }
     }
     private void OnDestroy()
@@ -34,6 +38,10 @@ public class ClientManager : SingletonNetwork<ClientManager>
         if (NetworkManager.Singleton != null)
         {
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
+            NetworkManager.Singleton.OnClientConnectedCallback -= (clientId) =>
+            {
+                Debug.Log($"[ClientManager] Client {clientId} đã kết nối thành công.");
+            };
         }
     }
     public void OnClientConnected(string playerId, ulong clientId)
