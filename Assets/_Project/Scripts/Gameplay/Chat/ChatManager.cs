@@ -84,8 +84,22 @@ namespace Photon.Chat.TGTHChat
 
         private void OnLoginSuccess(AuthResult result)
         {
-            playFabId = result.clientApi.authenticationContext.PlayFabId;
-            clientApi = result.clientApi;
+            clientApi = result.clientApi ?? playfabDataManager?.GetClientAPI();
+            playFabId = result.userId;
+
+            if (string.IsNullOrEmpty(playFabId) && clientApi != null)
+            {
+                playFabId = clientApi.authenticationContext != null
+                    ? clientApi.authenticationContext.PlayFabId
+                    : string.Empty;
+            }
+
+            if (clientApi == null)
+            {
+                Debug.LogError("[PhotonChat] ClientApi is null after login success.");
+                return;
+            }
+
             if (string.IsNullOrEmpty(playFabId))
             {
                 Debug.LogError("[PhotonChat] PlayFabId is null or empty.");

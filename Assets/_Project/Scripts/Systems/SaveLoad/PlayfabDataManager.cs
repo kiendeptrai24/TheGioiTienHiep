@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using PlayFab;
+using Unity.Netcode;
 using UnityEngine;
 
 public class PlayfabDataManager : Singleton<PlayfabDataManager>
@@ -30,6 +31,8 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private PlayfabClientRuntimeService clientRuntimeService;
     private GameDataCenterManager gameDataCenterManager;
     private bool isApplicationQuitting;
+    private bool _isWaitingForGameplayConnection;
+    private bool _isHandlingNetworkDisconnect;
 
     private Coroutine _heartbeatCoroutine;
     private bool _isChangingAccount;
@@ -59,6 +62,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         gameDataCenterManager = GameDataCenterManager.Instance;
         gameDataCenterManager.OnLoadGameDataCenterSuccessed += OnDataCenterReady;
         navigationToCharacterSelectionScreen = GetComponent<ActionNavigationSpecificScreen>();
+        RegisterNetworkCallbacks();
     }
 
     protected override void Start()
@@ -103,6 +107,8 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         {
             gameDataCenterManager.OnLoadGameDataCenterSuccessed -= OnDataCenterReady;
         }
+
+        UnregisterNetworkCallbacks();
 
         if (isApplicationQuitting)
         {
@@ -153,6 +159,8 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         StartHeartbeat();
         remoteGameDataService.PrepareCharacterLoad(characterId);
         SceneLoadManager.Instance.LoadSceneLoading();
+        RegisterNetworkCallbacks();
+        _isWaitingForGameplayConnection = false;
 
         remoteGameDataService.LoadGameData(loadedGameData =>
         {
@@ -164,7 +172,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             OnLoadGameFormPlayfab?.Invoke(loadedGameData);
             if (clientRuntimeService.TryStartNetworkSession())
             {
-                SceneLoadManager.Instance.UnLoadScene("LoadingScene");
+                _isWaitingForGameplayConnection = true;
             }
         });
     }
@@ -387,6 +395,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     private void ResetLocalSessionState()
     {
+        _isWaitingForGameplayConnection = false;
         authSessionService.ResetLocalSessionState();
         remoteGameDataService.ClearRemoteCache();
         clientRuntimeService.ClearBattleHistory();
@@ -406,6 +415,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     private void CompleteCharacterSwitch()
     {
+        _isWaitingForGameplayConnection = false;
         clientRuntimeService.ShutdownNetworkIfNeeded();
         clientRuntimeService.ResetClientSystems();
         gameData.ClearNotCharacterData();
@@ -423,5 +433,74 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
         var createAccountScreen = ScreenManagerHub.Instance.Get(CreateAccountScreenName);
         createAccountScreen.NavigateTo(CreateCharacterPanelName);
+    }
+
+    private void RegisterNetworkCallbacks()
+    {
+        if (NetworkManager.Singleton == null)
+        {
+            return;
+        }
+
+        NetworkManager.Singleton.OnClientConnectedCallback -= HandleNetcodeClientConnected;
+        NetworkManager.Singleton.OnClientDisconnectCallback -= HandleNetcodeClientDisconnected;
+        NetworkManager.Singleton.OnClientConnectedCallback += HandleNetcodeClientConnected;
+        NetworkManager.Singleton.OnClientDisconnectCallback += HandleNetcodeClientDisconnected;
+    }
+
+    private void UnregisterNetworkCallbacks()
+    {
+        if (NetworkManager.Singleton == null)
+        {
+            return;
+        }
+
+        NetworkManager.Singleton.OnClientConnectedCallback -= HandleNetcodeClientConnected;
+        NetworkManager.Singleton.OnClientDisconnectCallback -= HandleNetcodeClientDisconnected;
+    }
+
+    private void HandleNetcodeClientConnected(ulong clientId)
+    {
+        if (!_isWaitingForGameplayConnection || NetworkManager.Singleton == null)
+        {
+            return;
+        }
+
+        if (clientId != NetworkManager.Singleton.LocalClientId)
+        {
+            return;
+        }
+
+        _isWaitingForGameplayConnection = false;
+        SceneLoadManager.Instance.UnLoadScene("LoadingScene");
+    }
+
+    private void HandleNetcodeClientDisconnected(ulong clientId)
+    {
+        if (isApplicationQuitting || _isHandlingNetworkDisconnect || NetworkManager.Singleton == null)
+        {
+            return;
+        }
+
+        if (clientId != NetworkManager.Singleton.LocalClientId)
+        {
+            return;
+        }
+
+        _isHandlingNetworkDisconnect = true;
+        _isWaitingForGameplayConnection = false;
+
+        SceneLoadManager.Instance.UnLoadScene("LoadingScene");
+        clientRuntimeService.ShutdownNetworkIfNeeded();
+        clientRuntimeService.ResetClientSystems();
+        LoadCharacterDataChoose();
+        NavigateToCharacterSelection();
+
+        if (TopNotificationUI.Instance != null)
+        {
+            TopNotificationUI.Instance.ShowNotification("Mất kết nối với server");
+        }
+
+        _isHandlingNetworkDisconnect = false;
     }
 }
