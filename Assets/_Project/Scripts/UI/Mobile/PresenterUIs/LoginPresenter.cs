@@ -28,8 +28,16 @@ namespace TGTH.Mobile
 
         private void OnEnable()
         {
+            hasNavigatedAfterLogin = false;
             BindEvents();
             SyncViewState();
+
+            if (playfabDataManager != null &&
+                playfabDataManager.IsAuthenticated &&
+                !playfabDataManager.IsChangingAccount)
+            {
+                NavigateToCharacterSelection();
+            }
         }
 
         private void OnDisable()

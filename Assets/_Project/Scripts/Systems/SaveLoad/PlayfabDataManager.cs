@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using PlayFab;
 using Unity.Netcode;
+using Unity.Netcode.Transports;
 using UnityEngine;
 
 public class PlayfabDataManager : Singleton<PlayfabDataManager>
@@ -33,6 +34,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private bool isApplicationQuitting;
     private bool _isWaitingForGameplayConnection;
     private bool _isHandlingNetworkDisconnect;
+    private bool _suppressNextDisconnectForCharacterSwitch;
 
     private Coroutine _heartbeatCoroutine;
     private bool _isChangingAccount;
@@ -173,7 +175,10 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             if (clientRuntimeService.TryStartNetworkSession())
             {
                 _isWaitingForGameplayConnection = true;
+                return;
             }
+
+            HandleGameplayConnectionFailed("Khong ket noi duoc toi server", false);
         });
     }
 
@@ -346,8 +351,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         authSessionService.LogoutSession(() =>
         {
             ResetLocalSessionState();
-            clientRuntimeService.ShutdownNetworkIfNeeded();
-            clientRuntimeService.ResetClientSystems();
+            ShutdownToLoginPage();
 
             LoginError?.Invoke(new AuthError("SESSION_REVOKED",
                 savedOk
@@ -389,8 +393,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     {
         SaveLoadManager.Instance.SaveGame();
         ResetLocalSessionState();
-        clientRuntimeService.ShutdownNetworkIfNeeded();
-        clientRuntimeService.ResetClientSystems();
+        ShutdownToLoginPage();
     }
 
     private void ResetLocalSessionState()
@@ -416,6 +419,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private void CompleteCharacterSwitch()
     {
         _isWaitingForGameplayConnection = false;
+        _suppressNextDisconnectForCharacterSwitch = true;
         clientRuntimeService.ShutdownNetworkIfNeeded();
         clientRuntimeService.ResetClientSystems();
         gameData.ClearNotCharacterData();
@@ -444,8 +448,12 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
         NetworkManager.Singleton.OnClientConnectedCallback -= HandleNetcodeClientConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback -= HandleNetcodeClientDisconnected;
+        NetworkManager.Singleton.OnTransportFailure -= HandleNetcodeTransportFailure;
+        NetworkManager.Singleton.OnClientStopped -= HandleNetcodeClientStopped;
         NetworkManager.Singleton.OnClientConnectedCallback += HandleNetcodeClientConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback += HandleNetcodeClientDisconnected;
+        NetworkManager.Singleton.OnTransportFailure += HandleNetcodeTransportFailure;
+        NetworkManager.Singleton.OnClientStopped += HandleNetcodeClientStopped;
     }
 
     private void UnregisterNetworkCallbacks()
@@ -457,6 +465,8 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
         NetworkManager.Singleton.OnClientConnectedCallback -= HandleNetcodeClientConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback -= HandleNetcodeClientDisconnected;
+        NetworkManager.Singleton.OnTransportFailure -= HandleNetcodeTransportFailure;
+        NetworkManager.Singleton.OnClientStopped -= HandleNetcodeClientStopped;
     }
 
     private void HandleNetcodeClientConnected(ulong clientId)
@@ -487,19 +497,109 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
             return;
         }
 
+        if (_suppressNextDisconnectForCharacterSwitch)
+        {
+            _suppressNextDisconnectForCharacterSwitch = false;
+            return;
+        }
+
         _isHandlingNetworkDisconnect = true;
+        HandleGameplayConnectionClosed(ShouldShowServerConnectionLostMessage(NetworkManager.Singleton)
+            ? "Mất kết nối với server"
+            : null);
+    }
+
+    private void HandleNetcodeTransportFailure()
+    {
+        if (isApplicationQuitting || _isHandlingNetworkDisconnect || _suppressNextDisconnectForCharacterSwitch)
+        {
+            return;
+        }
+
+        if (_isWaitingForGameplayConnection)
+        {
+            HandleGameplayConnectionFailed("Không thể kết nối với server", false);
+            return;
+        }
+
+        HandleGameplayConnectionClosed("Mất kết nối với server");
+    }
+
+    private void HandleNetcodeClientStopped(bool isHostMode)
+    {
+        if (isHostMode || isApplicationQuitting || _isHandlingNetworkDisconnect || _suppressNextDisconnectForCharacterSwitch)
+        {
+            return;
+        }
+
+        if (_isWaitingForGameplayConnection)
+        {
+            HandleGameplayConnectionFailed("Khong ket noi duoc toi server", false);
+            return;
+        }
+
+        HandleGameplayConnectionClosed("Mất kết nối với server");
+    }
+
+    private static bool ShouldShowServerConnectionLostMessage(NetworkManager networkManager)
+    {
+        if (networkManager == null)
+        {
+            return false;
+        }
+
+        string disconnectReason = networkManager.DisconnectReason;
+        if (!string.IsNullOrEmpty(disconnectReason))
+        {
+            return disconnectReason.IndexOf("server shutting down", StringComparison.OrdinalIgnoreCase) >= 0
+                   || disconnectReason.IndexOf("timeout", StringComparison.OrdinalIgnoreCase) >= 0
+                   || disconnectReason.IndexOf("timed out", StringComparison.OrdinalIgnoreCase) >= 0
+                   || disconnectReason.IndexOf("closed by remote", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        return networkManager.DisconnectEvent == NetworkTransport.DisconnectEvents.ProtocolTimeout
+               || networkManager.DisconnectEvent == NetworkTransport.DisconnectEvents.ClosedByRemote
+               || networkManager.DisconnectEvent == NetworkTransport.DisconnectEvents.ProtocolError
+               || networkManager.DisconnectEvent == NetworkTransport.DisconnectEvents.MaxConnectionAttempts;
+    }
+
+    private void ShutdownToLoginPage()
+    {
+        var networkManager = NetworkManager.Singleton;
+        bool hasActiveSession = networkManager != null &&
+                                (networkManager.IsListening || networkManager.ShutdownInProgress);
+
+        clientRuntimeService.ShutdownNetworkIfNeeded();
+
+        if (!hasActiveSession)
+        {
+            clientRuntimeService.ResetClientSystems();
+        }
+    }
+
+    private void HandleGameplayConnectionFailed(string notificationMessage, bool requiresPendingConnection = true)
+    {
+        if (requiresPendingConnection && !_isWaitingForGameplayConnection)
+        {
+            return;
+        }
+
+        _isHandlingNetworkDisconnect = true;
+        HandleGameplayConnectionClosed(notificationMessage);
+    }
+
+    private void HandleGameplayConnectionClosed(string notificationMessage)
+    {
         _isWaitingForGameplayConnection = false;
+
+        if (!string.IsNullOrEmpty(notificationMessage) && TopNotificationUI.Instance != null)
+        {
+            TopNotificationUI.Instance.ShowNotification(notificationMessage);
+        }
 
         SceneLoadManager.Instance.UnLoadScene("LoadingScene");
         clientRuntimeService.ShutdownNetworkIfNeeded();
         clientRuntimeService.ResetClientSystems();
-        LoadCharacterDataChoose();
-        NavigateToCharacterSelection();
-
-        if (TopNotificationUI.Instance != null)
-        {
-            TopNotificationUI.Instance.ShowNotification("Mất kết nối với server");
-        }
 
         _isHandlingNetworkDisconnect = false;
     }
