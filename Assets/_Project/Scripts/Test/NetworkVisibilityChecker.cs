@@ -59,11 +59,6 @@ public class NetworkVisibilityChecker : TGTHNetworkBehaviour
     private void ApplyVisibilityRange(float newRange)
     {
         VisibilityDistance = Mathf.Max(0f, newRange);
-
-        if (IsServer)
-        {
-            DistanceVisibilityManager.Instance?.RefreshVisibilityForAllClients(this);
-        }
     }
     /// <summary>
     /// This is automatically invoked when spawning the network prefab
