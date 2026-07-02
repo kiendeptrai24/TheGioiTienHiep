@@ -54,7 +54,7 @@ handlers.CreateSession = function (args) {
     var data = readUserData();
     var storedSessionId = getField(data, SESSION_KEY_ID, "");
     var lastHeartbeat = getField(data, SESSION_KEY_HEARTBEAT, "");
-    var forceOverride = !!(args && args.forceOverride);
+    // var forceOverride = !!(args && args.forceOverride);
 
     // Tài khoản đang online nếu có sessionId và heartbeat gần đây (≤ ONLINE_THRESHOLD_SECONDS)
     var isCurrentlyOnline = storedSessionId !== "" && lastHeartbeat !== "" &&
@@ -67,8 +67,8 @@ handlers.CreateSession = function (args) {
     return {
         success: true,
         sessionId: newSessionId,
-        shouldWait: isCurrentlyOnline && !forceOverride,
-        message: isCurrentlyOnline && !forceOverride
+        shouldWait: isCurrentlyOnline,
+        message: isCurrentlyOnline
             ? "Tài khoản đang online ở thiết bị khác. Đang chờ..."
             : ""
     };

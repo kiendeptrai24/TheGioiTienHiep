@@ -156,24 +156,28 @@ namespace Photon.Chat.TGTHChat
             if (clientState == ClientChatState.Connecting || clientState == ClientChatState.Connected)
             {
                 Debug.LogWarning("[PhotonChat] Chat client is already connecting or connected.");
+                TopNotificationUI.Instance.ShowNotification("chat đã kết nối");
                 return;
             }
 
             if (string.IsNullOrEmpty(playFabId))
             {
                 Debug.LogError("[PhotonChat] Cannot connect. PlayFabId is null or empty.");
+                TopNotificationUI.Instance.ShowNotification("Không thể kết nối. PlayFabId trống.");
                 return;
             }
 
             if (string.IsNullOrEmpty(photonToken))
             {
                 Debug.LogError("[PhotonChat] Cannot connect. Photon token is null or empty.");
+                TopNotificationUI.Instance.ShowNotification("Không thể kết nối. Token trống.");
                 return;
             }
 
             if (string.IsNullOrEmpty(chatAppId) || chatAppId == "YOUR_PHOTON_CHAT_APP_ID")
             {
                 Debug.LogError("[PhotonChat] Cannot connect. Photon Chat AppId is empty.");
+                TopNotificationUI.Instance.ShowNotification("Không thể kết nối. Chat AppId trống.");
                 return;
             }
 

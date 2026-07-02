@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using TGTH.Mobile;
 using UnityEngine;
 namespace TGTH.Mobile
 {
@@ -22,6 +21,7 @@ namespace TGTH.Mobile
         [SerializeField] private UIItemSlotBase currentItemCharacter;
         [SerializeField] private string nameCharacter = "";
         private List<ItemData> itemDatas = new List<ItemData>();
+        private GameDataCenterManager gameDCM;
         public EssenceType curEssenceType;
         public List<EssneceTypeData> essenceTypes = new List<EssneceTypeData>();
         protected override void Awake()
@@ -36,7 +36,7 @@ namespace TGTH.Mobile
         }
         protected override void Start()
         {
-            var gameDCM = GameDataCenterManager.Instance;
+            gameDCM = GameDataCenterManager.Instance;
             gameDCM.OnLoadGameDataCenterSuccessed += OnGameBaseCharacterReady;
             if (gameDCM.IsReady())
             {
@@ -44,14 +44,24 @@ namespace TGTH.Mobile
             }
         }
 
+        private void OnDestroy()
+        {
+            if (gameDCM != null)
+            {
+                gameDCM.OnLoadGameDataCenterSuccessed -= OnGameBaseCharacterReady;
+            }
+        }
+
         private void OnGameBaseCharacterReady(GameDataCenter center)
         {
+            if (center == null) return;
             OnGameBaseCharacterReady(center.characterDatas);
         }
 
         private void OnGameBaseCharacterReady(List<HeroData> baseCharacterDatas)
         {
             if (baseCharacterDatas == null || baseCharacterDatas.Count == 0) return;
+            itemDatas.Clear();
             foreach (var item in baseCharacterDatas)
             {
                 itemDatas.Add(item);

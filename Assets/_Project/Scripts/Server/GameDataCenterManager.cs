@@ -76,16 +76,30 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
 
         LoadVersionRemove((sameVersion) =>
         {
-            if (sameVersion)
+            if (sameVersion && HasUsableLocalData())
                 LoadDataLocal();
             else
-                LoadDataRemote(clientApi);
+                LoadDataRemote(this.clientApi);
         });
+    }
+
+    private bool HasUsableLocalData()
+    {
+        return gameDatas != null
+            && gameDatas.characterDatas != null
+            && gameDatas.characterDatas.Count > 0;
     }
     private void LoadVersionRemove(Action<bool> callback)
     {
         if (Configuration.Instance.IsClientBuild())
         {
+            if (clientApi == null)
+            {
+                Debug.LogWarning("LoadVersionRemove: clientApi is null, fallback to local cache state.");
+                callback?.Invoke(HasUsableLocalData());
+                return;
+            }
+
             clientApi.GetTitleData(new GetTitleDataRequest
             {
                 Keys = new List<string> { "game_config" }
@@ -125,7 +139,11 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
 
                 callback?.Invoke(serverVersion == localVersion);
             },
-            error => Debug.LogError(error.GenerateErrorReport()));
+            error =>
+            {
+                Debug.LogError($"LoadVersionRemove: failed to load title data - {error.GenerateErrorReport()}");
+                callback?.Invoke(HasUsableLocalData());
+            });
         }
         else
         {
@@ -160,12 +178,23 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
 
                 callback?.Invoke(serverVersion == localVersion);
             },
-            error => Debug.LogError(error.GenerateErrorReport()));
+            error =>
+            {
+                Debug.LogError($"LoadVersionRemove: failed to load server title data - {error.GenerateErrorReport()}");
+                callback?.Invoke(HasUsableLocalData());
+            });
         }
     }
 
     private void LoadDataLocal()
     {
+        if (!HasUsableLocalData())
+        {
+            Debug.LogWarning("LoadDataLocal: local cache is empty or invalid, switching to remote load.");
+            LoadDataRemote(clientApi);
+            return;
+        }
+
         LoadAllData();
         LoadSprite();
         ConfigDataCenter();
@@ -182,6 +211,12 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
     {
         if (Configuration.Instance.IsClientBuild())
         {
+            if (clientApi == null)
+            {
+                Debug.LogError("LoadDataRemote: clientApi is null on client build.");
+                return;
+            }
+
             var service = new PlayFabClientGetDataServerService(clientApi);
             var loadDataRemote = new AllGameDataSerice(service);
             gameDatas = new GameDataCenter();
