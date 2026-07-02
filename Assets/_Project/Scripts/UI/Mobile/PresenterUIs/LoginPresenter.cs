@@ -36,7 +36,10 @@ namespace TGTH.Mobile
                 playfabDataManager.IsAuthenticated &&
                 !playfabDataManager.IsChangingAccount)
             {
-                NavigateToCharacterSelection();
+                if (!view.AcccountOrPasswordIsEmpty())
+                {
+                    NavigateToCharacterSelection();
+                }
             }
         }
 
@@ -101,7 +104,14 @@ namespace TGTH.Mobile
             {
                 return;
             }
-
+            if (view.AcccountOrPasswordIsEmpty())
+            {
+                hasNavigatedAfterLogin = false;
+                isWaitingBeforeEnter = false;
+                view.HideMessege();
+                SetLoginInProgress(false);
+                return;
+            }
             if (playfabDataManager == null)
             {
                 view.HideMessege();

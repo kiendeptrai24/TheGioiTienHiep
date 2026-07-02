@@ -21,7 +21,7 @@ namespace TGTH.Mobile
         [SerializeField] private TextMeshProUGUI descriptionErrorTxt;
         [SerializeField] private TextMeshProUGUI loginButtonText;
         public event Action<LoginData> OnLoginClicked;
-
+        
         private Coroutine loadingButtonCoroutine;
         private string defaultLoginButtonText;
 
@@ -40,7 +40,10 @@ namespace TGTH.Mobile
 
             loginBtn.onClick.AddListener(NotifyLoginClicked);
         }
-
+        public bool AcccountOrPasswordIsEmpty()
+        {
+            return string.IsNullOrEmpty(emailField.text) || string.IsNullOrEmpty(passwordField.text);
+        }
         private void OnDestroy()
         {
             StopLoadingButtonAnimation();
