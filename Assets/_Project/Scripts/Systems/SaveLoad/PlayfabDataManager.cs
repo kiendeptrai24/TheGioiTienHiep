@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using PlayFab;
 using Unity.Netcode;
-using Unity.Netcode.Transports;
 using UnityEngine;
 
 public class PlayfabDataManager : Singleton<PlayfabDataManager>
@@ -178,7 +177,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
                 return;
             }
 
-            HandleGameplayConnectionFailed("Khong ket noi duoc toi server", false);
+            HandleGameplayConnectionFailed("Không kết nối với server", false);
         });
     }
 
