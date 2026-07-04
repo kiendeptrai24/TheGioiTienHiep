@@ -44,9 +44,9 @@ public class BattlePlaybackUI : TGTHMonoBehaviour
     private void OnPauseToggled(bool isPause)
     {
         if (isPause)
-            pauseTxt.text = "Pause";
+            pauseTxt.text = "Dừng";
         else
-            pauseTxt.text = "Resume";
+            pauseTxt.text = "Tiếp tục";
         OnPauseClicked(isPause);
     }
 
