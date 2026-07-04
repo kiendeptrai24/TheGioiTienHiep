@@ -63,7 +63,7 @@ public class SpawnMine : SingletonNetwork<SpawnMine>, INetObjectRegistry
         Debug.Log($"[SpawnMine] Calling SpawnNetwork with {listPrefab.Count} prefab types, count={settings?.count}");
         spawnManager.SpawnNetwork(listPrefab, area, pattern, settings);
     }
-    
+
     private void RemoveAll()
     {
         if (!IsServer || IsSpawned == false) return;

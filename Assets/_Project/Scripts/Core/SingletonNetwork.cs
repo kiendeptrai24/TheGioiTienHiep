@@ -18,7 +18,7 @@ public class SingletonNetwork<T> : TGTHNetworkBehaviour where T : TGTHNetworkBeh
                 if (_instance == null)
                 {
                     _instance = FindFirstObjectByType<T>();
-                    
+
                     if (_instance == null)
                     {
                         GameObject singletonObj = new GameObject(typeof(T).Name);
