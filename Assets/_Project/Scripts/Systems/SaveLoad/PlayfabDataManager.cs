@@ -486,7 +486,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     private void HandleNetcodeClientDisconnected(ulong clientId)
     {
-        if (isApplicationQuitting || _isHandlingNetworkDisconnect || NetworkManager.Singleton == null)
+        if (isApplicationQuitting || _isHandlingNetworkDisconnect || _isChangingAccount || NetworkManager.Singleton == null)
         {
             return;
         }
@@ -510,7 +510,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     private void HandleNetcodeTransportFailure()
     {
-        if (isApplicationQuitting || _isHandlingNetworkDisconnect || _suppressNextDisconnectForCharacterSwitch)
+        if (isApplicationQuitting || _isHandlingNetworkDisconnect || _suppressNextDisconnectForCharacterSwitch || _isChangingAccount)
         {
             return;
         }
@@ -526,7 +526,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
 
     private void HandleNetcodeClientStopped(bool isHostMode)
     {
-        if (isHostMode || isApplicationQuitting || _isHandlingNetworkDisconnect || _suppressNextDisconnectForCharacterSwitch)
+        if (isHostMode || isApplicationQuitting || _isHandlingNetworkDisconnect || _suppressNextDisconnectForCharacterSwitch || _isChangingAccount)
         {
             return;
         }

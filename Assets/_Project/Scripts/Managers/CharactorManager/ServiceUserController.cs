@@ -10,6 +10,18 @@ public class ServiceUserController : TGTHNetworkBehaviour
     public override void OnNetworkSpawn()
     {
         prefabSelector = PlayerPrefabSelector.Instance;
+        if (IsServer)
+        {
+            if (prefabSelector == null)
+            {
+                Debug.LogError("PlayerPrefabSelector instance is not assigned.");
+                return;
+            }
+            else
+            {
+                Debug.Log("PlayerPrefabSelector instance found.");
+            }
+        }
         if (!IsOwner) return;
         playerNetManager = PlayerNetManager.Instance;
         isSpawned = false;
