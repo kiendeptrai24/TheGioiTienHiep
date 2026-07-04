@@ -74,8 +74,14 @@ public class NetworkVisibilityChecker : TGTHNetworkBehaviour
             return false;
         }
 
+        // Nếu client chưa có PlayerObject (vừa kết nối, chưa spawn) → không visible
+        if (!NetworkManager.ConnectedClients.TryGetValue(clientId, out var client) || client.PlayerObject == null)
+        {
+            return false;
+        }
+
         // We can do a simple distance check between the NetworkObject instance position and the client
-        return Vector3.Distance(NetworkManager.ConnectedClients[clientId].PlayerObject.transform.position, transform.position) <= VisibilityDistance;
+        return Vector3.Distance(client.PlayerObject.transform.position, transform.position) <= VisibilityDistance;
     }
 
     public override void OnNetworkSpawn()
