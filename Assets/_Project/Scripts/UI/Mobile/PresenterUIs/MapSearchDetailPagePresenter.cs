@@ -151,7 +151,7 @@ namespace TGTH.Mobile
             SetRealmType(value);
             if (resourceManager == null || statsData == null || playerNetManager == null) return;
 
-            view.items = resourceManager.GetItemsRange(playerNetManager.GetPos(), statsData.SpiritRange);
+            view.items = resourceManager.GetItemsRange(playerNetManager.GetPos(), 1000);
 
             if (view.items == null) return;
 

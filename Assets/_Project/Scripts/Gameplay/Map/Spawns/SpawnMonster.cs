@@ -15,14 +15,25 @@ public class SpawnMonster : SingletonNetwork<SpawnMonster>, INetObjectRegistry
     [SerializeField] public List<NetworkObject> monsterNetObjects = new();
     protected override void Awake()
     {
+        base.Awake();
         spawnManager = GetComponent<SpawnService>();
-        if (settings == null) return;
+        if (settings == null)
+        {
+            Debug.LogError("[SpawnMonster] SpawnSettings is null! Assign it in the inspector.");
+            return;
+        }
         settings.count = maxObject;
     }
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        if (!IsServer) return;
+        if (!IsServer)
+        {
+            Debug.Log($"[SpawnMonster] OnNetworkSpawn - not server, skipping spawn.");
+            return;
+        }
+
+        Debug.Log($"[SpawnMonster] OnNetworkSpawn - Server detected. Starting spawn sequence... (maxObject={maxObject}, listPrefab count={listPrefab?.Count ?? 0})");
         WaitToSpawn();
     }
     public override void OnNetworkDespawn()
@@ -42,9 +53,22 @@ public class SpawnMonster : SingletonNetwork<SpawnMonster>, INetObjectRegistry
 
     private void WaitToSpawn()
     {
+        if (listPrefab == null || listPrefab.Count == 0)
+        {
+            Debug.LogError("[SpawnMonster] listPrefab is null or empty! Cannot spawn monsters. Assign prefabs in the inspector.");
+            return;
+        }
+
+        if (spawnManager == null)
+        {
+            Debug.LogError("[SpawnMonster] spawnManager (SpawnService) is null! Make sure it's on the same GameObject.");
+            return;
+        }
+
         area = new RectSpawnArea(new Vector3(100, 0, 100), new Vector2(200, 200));
         pattern = new RandomSpawnPattern();
 
+        Debug.Log($"[SpawnMonster] Calling SpawnNetwork with {listPrefab.Count} prefab types, count={settings?.count}");
         spawnManager.SpawnNetwork(listPrefab, area, pattern, settings);
     }
     private void SpawnOne()

@@ -17,14 +17,25 @@ public class SpawnMine : SingletonNetwork<SpawnMine>, INetObjectRegistry
 
     protected override void Awake()
     {
+        base.Awake();
         spawnManager = GetComponent<SpawnService>();
-        if (settings == null) return;
+        if (settings == null)
+        {
+            Debug.LogError("[SpawnMine] SpawnSettings is null! Assign it in the inspector.");
+            return;
+        }
         settings.count = maxObject;
     }
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        if (!IsServer) return;
+        if (!IsServer)
+        {
+            Debug.Log($"[SpawnMine] OnNetworkSpawn - not server, skipping spawn.");
+            return;
+        }
+
+        Debug.Log($"[SpawnMine] OnNetworkSpawn - Server detected. Starting spawn sequence... (maxObject={maxObject}, listPrefab count={listPrefab?.Count ?? 0})");
         WaitToSpawn();
     }
     public override void OnNetworkDespawn()
@@ -34,9 +45,22 @@ public class SpawnMine : SingletonNetwork<SpawnMine>, INetObjectRegistry
     }
     private void WaitToSpawn()
     {
+        if (listPrefab == null || listPrefab.Count == 0)
+        {
+            Debug.LogError("[SpawnMine] listPrefab is null or empty! Cannot spawn mines. Assign prefabs in the inspector.");
+            return;
+        }
+
+        if (spawnManager == null)
+        {
+            Debug.LogError("[SpawnMine] spawnManager (SpawnService) is null! Make sure it's on the same GameObject.");
+            return;
+        }
+
         area = new RectSpawnArea(new Vector3(100, 0, 100), new Vector2(200, 200));
         pattern = new RandomSpawnPattern();
 
+        Debug.Log($"[SpawnMine] Calling SpawnNetwork with {listPrefab.Count} prefab types, count={settings?.count}");
         spawnManager.SpawnNetwork(listPrefab, area, pattern, settings);
     }
     

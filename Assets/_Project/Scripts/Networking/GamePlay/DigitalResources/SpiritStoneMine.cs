@@ -48,6 +48,10 @@ public class SpiritStoneMine : TGTHNetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        if (IsServer)
+        {
+            Debug.Log($"Mine Spawned: {NetworkObjectId}");
+        }
         SpawnMine.Instance.AddNetObject(NetworkObject);
         segmentMineManager = SegmentResourceManager.Instance;
         itemMapWorld = GetComponent<ResourceNode>();

@@ -14,6 +14,12 @@ public class EntityWorldController : TGTHNetworkBehaviour
     {
         base.Start();
     }
+    override public void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        if (!IsServer) return;
+        Debug.Log($"Monster Spawned: {NetworkObjectId}");
+    }
     private void Update()
     {
         if (!IsOwner || m_entitySM == null) return;

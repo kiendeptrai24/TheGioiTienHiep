@@ -22,12 +22,31 @@ public class SingletonNetwork<T> : TGTHNetworkBehaviour where T : TGTHNetworkBeh
                     if (_instance == null)
                     {
                         GameObject singletonObj = new GameObject(typeof(T).Name);
+                        // Đảm bảo GameObject có NetworkObject để IsServer hoạt động trên Dedicated Server
+                        if (singletonObj.GetComponent<NetworkObject>() == null)
+                        {
+                            singletonObj.AddComponent<NetworkObject>();
+                        }
                         _instance = singletonObj.AddComponent<T>();
+                        Debug.LogWarning($"[SingletonNetwork] Created new GameObject for '{typeof(T).Name}' (no scene instance found). IsServer={_instance.IsServer}");
                     }
                 }
                 return _instance;
             }
         }
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        _instance = this as T;
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        if (_instance == this as T)
+            _instance = null;
     }
 
     protected virtual void OnApplicationQuit()
@@ -38,5 +57,7 @@ public class SingletonNetwork<T> : TGTHNetworkBehaviour where T : TGTHNetworkBeh
     protected virtual void OnDestroy()
     {
         _isQuitting = true;
+        if (_instance == this as T)
+            _instance = null;
     }
 }

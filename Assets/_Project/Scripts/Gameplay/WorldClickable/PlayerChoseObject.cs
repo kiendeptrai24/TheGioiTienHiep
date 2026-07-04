@@ -46,9 +46,9 @@ public class PlayerChoseObject : Singleton<PlayerChoseObject>
         }
         if (safeZoneManager != null)
         {
-            if (safeZoneManager.OutSide(currentEntity.transform.position) || safeZoneManager.OutSide(playerNet.transform.position))
+            if (safeZoneManager.IsInside(currentEntity.transform.position) || safeZoneManager.IsInside(playerNet.transform.position))
             {
-                TopNotificationUI.Instance.ShowNotification("bạn hoặc đối phương đang ở ngoài khu vực an toàn, không thể chiến đấu");
+                TopNotificationUI.Instance.ShowNotification("bạn hoặc đối phương đang ở trong khu vực an toàn, không thể chiến đấu");
                 return;
             }
         }

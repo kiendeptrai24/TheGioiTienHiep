@@ -26,6 +26,12 @@ public class NetworkObjectPool : NetworkBehaviour
 
     Dictionary<GameObject, ObjectPool<NetworkObject>> m_PooledObjects = new Dictionary<GameObject, ObjectPool<NetworkObject>>();
 
+    /// <summary>
+    /// Trả về true khi pool đã được khởi tạo và sẵn sàng spawn object.
+    /// Dùng để tránh race condition khi spawner gọi GetNetworkObject trước khi pool OnNetworkSpawn chạy.
+    /// </summary>
+    public bool IsReady { get; private set; }
+
     public void Awake()
     {
         if (Singleton != null && Singleton != this)
@@ -47,11 +53,14 @@ public class NetworkObjectPool : NetworkBehaviour
         {
             RegisterPrefabInternal(configObject.Prefab, configObject.PrewarmCount);
         }
+        IsReady = true;
+        Debug.Log($"[NetworkObjectPool] Pool ready. Registered {m_PooledObjects.Count} prefab types for dedicated server.");
     }
 
     public override void OnNetworkDespawn()
     {
         if (!IsServer) return;
+        IsReady = false;
         // Unregisters all objects in PooledPrefabsList from the cache.
         foreach (var prefab in m_Prefabs)
         {
@@ -91,11 +100,33 @@ public class NetworkObjectPool : NetworkBehaviour
     /// <returns></returns>
     public NetworkObject GetNetworkObject(GameObject prefab, Vector3 position, Quaternion rotation, bool autoSpawn = true)
     {
-        if (!IsServer) return null;
+        if (!IsServer)
+        {
+            Debug.LogWarning($"[NetworkObjectPool] GetNetworkObject called but IsServer=false. prefab={prefab?.name}");
+            return null;
+        }
+
+        if (!IsReady)
+        {
+            Debug.LogError($"[NetworkObjectPool] Pool NOT READY yet! Cannot spawn '{prefab?.name}'. The pool OnNetworkSpawn has not completed. Use a coroutine delay before spawning.");
+            return null;
+        }
+
+        if (prefab == null)
+        {
+            Debug.LogError("[NetworkObjectPool] GetNetworkObject called with null prefab!");
+            return null;
+        }
+
+        if (!m_PooledObjects.ContainsKey(prefab))
+        {
+            Debug.LogError($"[NetworkObjectPool] Prefab '{prefab.name}' is NOT registered in PooledPrefabsList! Add it to the NetworkObjectPool's list.");
+            return null;
+        }
+
         NetworkObject networkObject = null;
         try
         {
-
             networkObject = m_PooledObjects[prefab].Get();
 
             var noTransform = networkObject.transform;
@@ -107,12 +138,11 @@ public class NetworkObjectPool : NetworkBehaviour
                 networkObject.Spawn();
 
             networkObject.TryRemoveParent();
-
         }
         catch (Exception ex)
         {
-            Debug.Log("Spawn error; " + ex);
-            throw ex;
+            Debug.LogError($"[NetworkObjectPool] Spawn error for prefab '{prefab?.name}': {ex}");
+            throw;
         }
         return networkObject;
     }
