@@ -5,6 +5,8 @@ namespace TGTH.Mobile
 {
     public class RegisterPresenter : TGTHMonoBehaviour
     {
+        private const string CreateAccountScreenName = "CreateAccount";
+
         [SerializeField] private RegisterPageView view;
         private AuthFacade authFacade;
         [SerializeField] private ActionNavigation navigation;
@@ -43,8 +45,16 @@ namespace TGTH.Mobile
 
         private void onSuccess(AuthResult result)
         {
+            PlayFabClientAPI.ForgetAllCredentials();
             TopNotificationUI.Instance.ShowNotification(result.message);
-            navigation.OnClick();
+            var createAccountScreen = ScreenManagerHub.Instance.Get(CreateAccountScreenName);
+            if (createAccountScreen != null)
+            {
+                createAccountScreen.ResetNavigation();
+                return;
+            }
+
+            navigation?.OnClick();
         }
     }
 }

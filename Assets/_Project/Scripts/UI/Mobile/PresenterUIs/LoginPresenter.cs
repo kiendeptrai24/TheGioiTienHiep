@@ -34,7 +34,8 @@ namespace TGTH.Mobile
 
             if (playfabDataManager != null &&
                 playfabDataManager.IsAuthenticated &&
-                !playfabDataManager.IsChangingAccount)
+                !playfabDataManager.IsChangingAccount &&
+                playfabDataManager.HasLoadedCharacterSelectionData)
             {
                 if (!view.AcccountOrPasswordIsEmpty())
                 {
@@ -225,7 +226,6 @@ namespace TGTH.Mobile
             }
 
             isWaitingBeforeEnter = false;
-            NavigateToCharacterSelection();
         }
 
         private void onError(AuthError error)
@@ -270,6 +270,11 @@ namespace TGTH.Mobile
                 return;
             }
 
+            if (!playfabDataManager.HasLoadedCharacterSelectionData)
+            {
+                return;
+            }
+
             isWaitingBeforeEnter = false;
             hasNavigatedAfterLogin = true;
             navigation.OnClick();
@@ -280,7 +285,12 @@ namespace TGTH.Mobile
         {
             yield return new WaitForSeconds(waitSeconds > 0f ? waitSeconds : 3f);
             waitBeforeEnterCoroutine = null;
-            NavigateToCharacterSelection();
+            isWaitingBeforeEnter = false;
+
+            if (playfabDataManager != null && playfabDataManager.HasLoadedCharacterSelectionData)
+            {
+                NavigateToCharacterSelection();
+            }
         }
 
         private void CancelWaitBeforeEnter()

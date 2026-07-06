@@ -39,12 +39,14 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private bool _isChangingAccount;
     private bool _isAutoLoginInProgress;
     private bool _currentLoginIsAuto;
+    private bool _hasLoadedCharacterSelectionData;
 
     public bool ready => sessionState != null && sessionState.Ready;
     public bool IsAuthenticated => authSessionService != null && authSessionService.IsAuthenticated;
     public bool IsChangingAccount => _isChangingAccount;
     public bool IsAutoLoginInProgress => _isAutoLoginInProgress;
     public bool CurrentLoginIsAuto => _currentLoginIsAuto;
+    public bool HasLoadedCharacterSelectionData => _hasLoadedCharacterSelectionData;
 
     public AuthFacade GetAuthManager() => authSessionService.AuthFacade;
     public PlayFabClientInstanceAPI GetClientAPI() => authSessionService.ClientApi;
@@ -60,8 +62,6 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
         remoteGameDataService = new PlayfabRemoteGameDataService(sessionState);
         clientRuntimeService = new PlayfabClientRuntimeService();
 
-        gameDataCenterManager = GameDataCenterManager.Instance;
-        gameDataCenterManager.OnLoadGameDataCenterSuccessed += OnDataCenterReady;
         navigationToCharacterSelectionScreen = GetComponent<ActionNavigationSpecificScreen>();
         RegisterNetworkCallbacks();
     }
@@ -69,6 +69,8 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     protected override void Start()
     {
         base.Start();
+        gameDataCenterManager = GameDataCenterManager.Instance;
+        gameDataCenterManager.OnLoadGameDataCenterSuccessed += OnDataCenterReady;
         authSessionService.Configure();
 
         if (Configuration.Instance.startwithHost)
@@ -221,6 +223,10 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     {
         EndLoginFlow();
         StopHeartbeat(); // dừng heartbeat cũ trước khi tạo session mới
+        if (gameDataCenterManager == null)
+        {
+            gameDataCenterManager = GameDataCenterManager.Instance;
+        }
         gameDataCenterManager.onSuccess(result.clientApi);
         authSessionService.CreateSession(false, OnSessionCreateSuccess, OnSessionCreateError);
     }
@@ -377,10 +383,12 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     {
         if (!IsAuthenticated) return;
 
+        _hasLoadedCharacterSelectionData = false;
         remoteGameDataService.ConfigureRemoteServices();
         remoteGameDataService.LoadCharacterSelectionData(characters =>
         {
             if (!IsAuthenticated) return;
+            _hasLoadedCharacterSelectionData = true;
             OnLoadCharacterFormPlayfab?.Invoke(characters);
             if (_isChangingAccount) _isChangingAccount = false;
         });
@@ -398,6 +406,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     private void ResetLocalSessionState()
     {
         _isWaitingForGameplayConnection = false;
+        _hasLoadedCharacterSelectionData = false;
         authSessionService.ResetLocalSessionState();
         remoteGameDataService.ClearRemoteCache();
         clientRuntimeService.ClearBattleHistory();
@@ -409,6 +418,7 @@ public class PlayfabDataManager : Singleton<PlayfabDataManager>
     {
         _currentLoginIsAuto = isAutoLogin;
         _isAutoLoginInProgress = isAutoLogin;
+        _hasLoadedCharacterSelectionData = false;
     }
 
     private void EndLoginFlow() => _isAutoLoginInProgress = false;

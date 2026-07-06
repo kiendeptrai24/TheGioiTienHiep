@@ -40,7 +40,7 @@ namespace TGTH.Mobile
             gameDCM.OnLoadGameDataCenterSuccessed += OnGameBaseCharacterReady;
             if (gameDCM.IsReady())
             {
-                OnGameBaseCharacterReady(gameDCM.GetDataCenter());
+                OnGameBaseCharacterReady(gameDCM.GetAllCharacters());
             }
         }
 

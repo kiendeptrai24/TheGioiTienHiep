@@ -438,7 +438,7 @@ public class GameDataCenterManager : Singleton<GameDataCenterManager>
         FileDataHandler<GameDataCenter> fileDataHandler = new FileDataHandler<GameDataCenter>(Application.persistentDataPath, fileName, encryptData);
         fileDataHandler.Delete();
     }
-    public List<ItemData> GetAllCharacters() => gameDatas.characterDatas.ToList<ItemData>();
+    public List<HeroData> GetAllCharacters() => gameDatas.characterDatas;
     public GameDataCenter GetDataCenter() => gameDatas;
     public List<ItemData> GetShopDatas() => shopItems;
     public List<HeroData> GetChampionDatas() => gameDatas.championItems;
