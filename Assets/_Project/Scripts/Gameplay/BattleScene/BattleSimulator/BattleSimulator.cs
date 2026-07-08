@@ -117,7 +117,7 @@ public static class BattleSimulator
         Vector2Int from = s.cell[a];
         Vector2Int step = from;
 
-        int cellTomove = 1;
+        float cellTomove = 1f;
         if (dist > myRange)
         {
             step = board.ChooseMoveStep(from, s.cell[target], s.units);
@@ -139,11 +139,11 @@ public static class BattleSimulator
                         from = from,
                         to = step
                     });
-                s.units[a].nextActionTime = t + board.moveInterval * cellTomove * moveSpeed + 0.5f;
+                s.units[a].nextActionTime = t + board.moveInterval * cellTomove * moveSpeed;
             }
         }
 
-        sched.ScheduleNextMove(a, t, board.moveInterval * cellTomove * moveSpeed + 0.5f);
+        sched.ScheduleNextMove(a, t, board.moveInterval * cellTomove * moveSpeed);
         return moved;
     }
 

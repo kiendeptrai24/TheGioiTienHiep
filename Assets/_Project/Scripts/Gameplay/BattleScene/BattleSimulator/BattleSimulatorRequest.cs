@@ -90,7 +90,7 @@ public class BattleSimulatorRequest : SingletonNetwork<BattleSimulatorRequest>
         {
             width = 5,
             height = 9,
-            moveInterval = 1f,
+            moveInterval = .1f,
             allowDiagonal = true
         };
 
