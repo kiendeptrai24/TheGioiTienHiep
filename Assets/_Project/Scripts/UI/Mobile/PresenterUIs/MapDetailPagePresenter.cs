@@ -8,6 +8,8 @@ namespace TGTH.Mobile
         [SerializeField] private MapDetailPageView view;
         [SerializeField] private MinimapIconClickRaycaster minimapIconClickRaycaster;
         private PathFinding pathFinding;
+        private int xPos = 0;
+        private int zPos = 0;
         protected override void Awake()
         {
             base.Awake();
@@ -17,14 +19,16 @@ namespace TGTH.Mobile
         {
             if (pathFinding == null) return;
             var result = pathFinding.FindPathWithPossition(pos);
+            xPos = (int)pos.x;
+            zPos = (int)pos.z;
             if (result.ok)
             {
                 pathFinding.StartFollowPath();
-                TopNotificationUI.Instance.ShowNotification($"Đang di chuyển đến vị trí ({pos.x}, {pos.z})");
+                TopNotificationUI.Instance.ShowNotification($"Đang di chuyển đến vị trí ({xPos}, {zPos})");
             }
             else
             {
-                TopNotificationUI.Instance.ShowNotification("Không tìm thấy đường");
+                TopNotificationUI.Instance.ShowNotification($"Không tìm thấy đường đến vị trí ({xPos}, {zPos})");
             }
         }
 

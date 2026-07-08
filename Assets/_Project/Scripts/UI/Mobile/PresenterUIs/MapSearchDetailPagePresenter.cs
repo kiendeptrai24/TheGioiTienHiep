@@ -118,7 +118,7 @@ namespace TGTH.Mobile
                 }
                 else
                 {
-                    TopNotificationUI.Instance.ShowNotification("Không tìm thấy đường");
+                    TopNotificationUI.Instance.ShowNotification($"Không tìm thấy đường đến vị trí ({xPos}, {yPos})");
                 }
 
             }

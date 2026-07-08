@@ -122,6 +122,10 @@ public class MinimapController : TGTHMonoBehaviour
 
             float newSize = curSize - scrollY * zoomSpeed;
             vcam.Lens.OrthographicSize = Mathf.Clamp(newSize, minZoom, maxZoom);
+
+            // Re-clamp target ngay sau khi zoom để không lệch ra ngoài bounds
+            if (target != null)
+                target.position = ClampToBoxCollider(target.position);
         }
     }
 
@@ -171,9 +175,24 @@ public class MinimapController : TGTHMonoBehaviour
             }
         }
 
+        // Thu hẹp vùng hợp lệ theo kích thước viewport để view không tràn ra ngoài bounds khi zoom
+        if (minimapManager != null && minimapManager.cinemachineCamera != null)
+        {
+            float orthoH = minimapManager.cinemachineCamera.Lens.OrthographicSize;
+            float camAspect = (minimapManager.minimapCamera != null) ? minimapManager.minimapCamera.aspect : 1f;
+            float orthoW = orthoH * camAspect;
+
+            min.x += orthoW; max.x -= orthoW;
+            min.z += orthoH; max.z -= orthoH;
+        }
+
+        // Đảm bảo min <= max (trường hợp zoom quá lớn so với bounds)
+        min.x = Mathf.Min(min.x, max.x);
+        min.z = Mathf.Min(min.z, max.z);
+
         pos.x = Mathf.Clamp(pos.x, min.x, max.x);
         pos.z = Mathf.Clamp(pos.z, min.z, max.z);
-        // giữ Y như cũ (hoặc bạn muốn cố định thì chỉnh ở đây)
+        // giữ Y như cũ
         return pos;
     }
 
