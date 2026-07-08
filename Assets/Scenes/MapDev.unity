@@ -21103,8 +21103,8 @@ MonoBehaviour:
   rootCanvas: {fileID: 7445379370004631891}
   zoomSpeed: 10
   minZoom: 5
-  defaultZoom: 100
-  maxZoom: 50
+  defaultZoom: 50
+  maxZoom: 100
   panSpeed: 5
   considerTargetSize: 1
   isFollowPlayer: 0
@@ -56298,8 +56298,8 @@ MonoBehaviour:
   rootCanvas: {fileID: 7445379370004631891}
   zoomSpeed: 10
   minZoom: 5
-  defaultZoom: 100
-  maxZoom: 50
+  defaultZoom: 50
+  maxZoom: 100
   panSpeed: 1
   considerTargetSize: 1
   isFollowPlayer: 1
@@ -89074,8 +89074,8 @@ MonoBehaviour:
   rootCanvas: {fileID: 7445379370004631891}
   zoomSpeed: 10
   minZoom: 5
-  defaultZoom: 100
-  maxZoom: 60
+  defaultZoom: 50
+  maxZoom: 100
   panSpeed: 5
   considerTargetSize: 1
   isFollowPlayer: 0
@@ -89134,8 +89134,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   input: {fileID: 0}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
   moveSpeed: 300
   stopDistance: 0.05
+  destinationXZ: {x: 0, y: 0, z: 0}
 --- !u!1 &954149087
 GameObject:
   m_ObjectHideFlags: 0
@@ -119397,6 +119401,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TGTH.Mobile.MapDetailPagePresenter
   view: {fileID: 1258343102}
+  minimapIconClickRaycaster: {fileID: 953256693}
 --- !u!114 &1258343102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119409,6 +119414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f3c4446dd1f94146bb4f6c32a1eebf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TGTH.Mobile.MapDetailPageView
+  findBtn: {fileID: 0}
 --- !u!1 &1258832596
 GameObject:
   m_ObjectHideFlags: 0
@@ -294748,36 +294754,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2715718488779254797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6465251496365333251}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: fb840e91cff016a41853c7fbefd14bba, type: 3}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &2716544587164661152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348491,7 +348467,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &4230722614646559676
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -416385,7 +416361,6 @@ GameObject:
   - component: {fileID: 4831382380855128653}
   - component: {fileID: 4132707475996716671}
   - component: {fileID: 8048000802328026371}
-  - component: {fileID: 7359934209414968178}
   m_Layer: 5
   m_Name: navbar
   m_TagString: Untagged
@@ -424973,7 +424948,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7257607346554377473}
   - component: {fileID: 1236792379943030668}
-  - component: {fileID: 2715718488779254797}
   - component: {fileID: 346287273740562110}
   - component: {fileID: 1341909325147045125}
   m_Layer: 5
@@ -456113,36 +456087,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4884493019047341327}
   m_CullTransparentMesh: 1
---- !u!114 &7359934209414968178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6238334112406191432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!222 &7360174692914850256
 CanvasRenderer:
   m_ObjectHideFlags: 0

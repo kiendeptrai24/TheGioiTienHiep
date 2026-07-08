@@ -63,7 +63,7 @@ namespace TGTH.Mobile
             {
                 try
                 {
-                    int result = int.Parse(xPosTxt.text);
+                    int result = int.Parse(yPosTxt.text);
                     OnYPosChanged?.Invoke(result);
                 }
                 catch (System.Exception)

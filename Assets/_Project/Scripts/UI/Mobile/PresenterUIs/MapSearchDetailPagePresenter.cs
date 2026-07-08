@@ -114,10 +114,11 @@ namespace TGTH.Mobile
                     navigationFindMapResult.SetScreenName("MapDetail");
                     pathFinding.StartFollowPath();
                     navigationFindMapResult.OnClick();
+                    TopNotificationUI.Instance.ShowNotification($"Đang di chuyển đến vị trí ({xPos}, {yPos})");
                 }
                 else
                 {
-                    Debug.Log("Không tìm thấy đường");
+                    TopNotificationUI.Instance.ShowNotification("Không tìm thấy đường");
                 }
 
             }

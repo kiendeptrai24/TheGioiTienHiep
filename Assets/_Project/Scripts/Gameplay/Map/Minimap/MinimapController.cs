@@ -50,6 +50,11 @@ public class MinimapController : TGTHMonoBehaviour
         if (minimapManager == null || minimapManager.cinemachineCamera == null || canInteract == false) return;
         minimapManager.cinemachineCamera.Lens.OrthographicSize = defaultZoom;
     }
+    private void OnDisable()
+    {
+        if (minimapManager == null || minimapManager.cinemachineCamera == null || canInteract == false) return;
+        minimapManager.cinemachineCamera.Lens.OrthographicSize = defaultZoom;
+    }
     private void OnDestroy()
     {
         if (MinimapManger.Instance != null)
